@@ -12,6 +12,7 @@ import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
 import type {
   JourneyMapItemMetadata,
   MeasuredScene,
+  NodeDecoratorMode,
   PositionedScene,
   RendererScene,
   SceneContainer,
@@ -35,7 +36,7 @@ import {
   type JourneyMapRoutingStages
 } from "./journeyMapRouting.js";
 import { measureScene } from "./pipeline.js";
-import { buildCardNode, buildDiagramRootContainer, buildPortSpec } from "./sceneBuilders.js";
+import { buildDiagramRootContainer, buildPortSpec, buildSharedNode } from "./sceneBuilders.js";
 import {
   renderPositionedSceneToPng,
   renderPositionedSceneToSvg,
@@ -107,47 +108,28 @@ function buildStageChrome(): SceneContainer["chrome"] {
   };
 }
 
-function buildJourneyStep(step: JourneyRenderStep, metadata: JourneyMapItemMetadata): SceneNode {
+function buildJourneyStep(
+  step: JourneyRenderStep,
+  metadata: JourneyMapItemMetadata,
+  nodeDecoratorMode: NodeDecoratorMode
+): SceneNode {
   if (metadata.kind !== "step") {
     throw new Error(`Journey Step ${step.id} received non-Step placement metadata.`);
   }
-  const duplicateTargetCounts = new Map<string, number>();
-  const content = [
-    {
-      id: `${step.id}__title`,
-      kind: "text" as const,
-      text: step.labelLines[0] ?? step.id,
-      textStyleRole: "title",
-      priority: "primary" as const
-    },
-    ...step.badges.map((badge) => {
-      const duplicateOrdinal = duplicateTargetCounts.get(badge.targetId) ?? 0;
-      duplicateTargetCounts.set(badge.targetId, duplicateOrdinal + 1);
-      return {
-        id: `${step.id}__badge__${badge.targetId}__${duplicateOrdinal}`,
-        kind: "metadata" as const,
-        text: badge.targetName && badge.targetName.length > 0 ? badge.targetName : badge.targetId,
-        textStyleRole: "metadata",
-        region: "secondary" as const,
-        priority: "secondary" as const
-      };
-    })
-  ];
 
   return {
-    ...buildCardNode({
-      id: step.id,
-      role: "journey_step",
+    ...buildSharedNode({
+      title: step.title,
+      decoratorMode: nodeDecoratorMode,
+      nodeType: "Step",
+      nodeId: step.id,
+      attributes: step.references.map(({ groupId, label, value }) => ({ groupId, label, value }))
+    }, {
       classes: [
         "journey_map",
         "journey_step",
         metadata.uncontained ? "journey_step_root" : "journey_step_contained"
       ],
-      widthPolicy: {
-        preferred: "standard",
-        allowed: ["standard", "wide"]
-      },
-      content,
       ports: [
         buildPortSpec(`${step.id}__flow_in`, "journey_flow_in", "west"),
         buildPortSpec(`${step.id}__flow_out`, "journey_flow_out", "east"),
@@ -163,7 +145,8 @@ function buildJourneyStep(step: JourneyRenderStep, metadata: JourneyMapItemMetad
 
 function buildJourneyStage(
   stage: JourneyRenderStage,
-  placement: JourneyScenePlacement
+  placement: JourneyScenePlacement,
+  nodeDecoratorMode: NodeDecoratorMode
 ): SceneContainer {
   const metadata = placement.metadataByItemId.get(stage.id);
   if (!metadata || metadata.kind !== "stage") {
@@ -211,21 +194,25 @@ function buildJourneyStage(
       if (!stepMetadata || stepMetadata.kind !== "step") {
         throw new Error(`Missing journey Step placement metadata for ${step.id}.`);
       }
-      return buildJourneyStep(step, stepMetadata);
+      return buildJourneyStep(step, stepMetadata, nodeDecoratorMode);
     }),
     ports: []
   };
 }
 
-function buildJourneyRootItem(item: JourneyMapRenderModel["rootItems"][number], placement: JourneyScenePlacement): SceneItem {
+function buildJourneyRootItem(
+  item: JourneyMapRenderModel["rootItems"][number],
+  placement: JourneyScenePlacement,
+  nodeDecoratorMode: NodeDecoratorMode
+): SceneItem {
   if (item.kind === "stage") {
-    return buildJourneyStage(item, placement);
+    return buildJourneyStage(item, placement, nodeDecoratorMode);
   }
   const metadata = placement.metadataByItemId.get(item.id);
   if (!metadata || metadata.kind !== "step") {
     throw new Error(`Missing journey Step placement metadata for ${item.id}.`);
   }
-  return buildJourneyStep(item, metadata);
+  return buildJourneyStep(item, metadata, nodeDecoratorMode);
 }
 
 function buildJourneyEdge(edge: JourneyRenderEdge, placement: JourneyScenePlacement): SceneEdge {
@@ -511,7 +498,12 @@ export function buildJourneyMapRendererSceneFromModel(
   detailId: string,
   layout: RendererJourneyMapLayoutConfig,
   themeId = "default",
-  diagnostics: readonly RendererDiagnostic[] = []
+  diagnostics: readonly RendererDiagnostic[] = [],
+  nodeDecoratorMode: NodeDecoratorMode = {
+    id: "none",
+    showNodeType: false,
+    showNodeId: false
+  }
 ): RendererScene {
   const placement = buildJourneyScenePlacement(model, layout);
   const edges = model.edges.map((edge) => buildJourneyEdge(edge, placement));
@@ -536,7 +528,7 @@ export function buildJourneyMapRendererSceneFromModel(
       viewId: "journey_map",
       layout: rootLayout,
       chrome: buildRootChrome(),
-      children: model.rootItems.map((item) => buildJourneyRootItem(item, placement)),
+      children: model.rootItems.map((item) => buildJourneyRootItem(item, placement, nodeDecoratorMode)),
       classes: ["journey_map"]
     }),
     viewMetadata: {
@@ -596,11 +588,18 @@ export function buildJourneyMapRendererScene(
     resolveDetailDisplayPolicy(view, settings.detailId)
   );
   const placement = buildJourneyScenePlacement(model, layout);
-  return buildJourneyMapRendererSceneFromModel(model, settings.detailId, layout, settings.themeId ?? "default", [
-    ...buildFirstParentDiagnostics(projection, view, placement),
-    ...buildStepOnlyDiagnostics(placement),
-    ...buildDisconnectedChainDiagnostics(model, placement)
-  ]);
+  return buildJourneyMapRendererSceneFromModel(
+    model,
+    settings.detailId,
+    layout,
+    settings.themeId ?? "default",
+    [
+      ...buildFirstParentDiagnostics(projection, view, placement),
+      ...buildStepOnlyDiagnostics(placement),
+      ...buildDisconnectedChainDiagnostics(model, placement)
+    ],
+    settings.nodeDecoratorMode
+  );
 }
 
 async function buildJourneyMapPreRoutingPipeline(

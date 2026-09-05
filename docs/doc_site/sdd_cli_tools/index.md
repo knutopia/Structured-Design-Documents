@@ -10,7 +10,7 @@ You do not need to learn the whole terminal to use the `sdd` CLI tool. You can c
 
 - When you see `<input>`, it means “the path to your `.sdd` file”.
 - When you use `--out`, you are choosing where the generated file should be written.
-- If you omit `--out` with `sdd show`, the preview file is written beside the input file as `<source>.<view>.<detail>[.<backend>].<format>`.
+- If you omit `--out` with `sdd show`, the preview file is written beside the input file as `<source>.<view>.<detail>[.decorators-<mode>][.<backend>].<format>`.
 
 If you want a visual result quickly, start with the next section and use the commands as written.
 
@@ -39,6 +39,7 @@ What to expect:
 - PNG is available with `--format png`.
 - `simple` is the default validation profile.
 - `compact` is the default render detail.
+- `none` is the default node decorator mode.
 
 For what it's worth, the [profile](../profiles.md) determines how much the completeness of an SDD is checked. The render detail determines how much detail is shown in the diagram.
 
@@ -102,14 +103,14 @@ pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./ou
 - Use when: you want a visible result, want to share diagrams, or want to check how a document renders at a given detail level.
 - Invocation: `pnpm sdd show <input> --view <view>`
 - Key inputs: an input `.sdd` file and a required `--view`; use `--view all` to render all diagram types covered by the document content
-- Common options: `--profile`, `--detail`, `--format`, and `--out`.
+- Common options: `--profile`, `--detail`, `--decorators`, `--format`, and `--out`.
 - Output: SVG by default, or PNG when `--format png` is provided.
 
-When `--profile` or `--detail` is omitted, `sdd show` resolves that setting from your user default and then the bundle fallback. The shipped v0.1 fallbacks are `simple` and `compact`; an explicit option overrides the saved preference for one invocation. Profile controls validation and detail controls rendering independently.
+When `--profile`, `--detail`, or `--decorators` is omitted, `sdd show` resolves that setting from your user default and then the bundle fallback. The shipped v0.1 fallbacks are `simple`, `compact`, and `none`; an explicit option overrides the saved preference for one invocation. Profile controls validation, detail controls rendering content, and decorators add orientation information independently.
 
 With `--view all`, `sdd show` generates only views that retain visible semantic content after the selected detail policy. Finding no applicable views is successful and writes no files. An explicit backend must support every available view, and `--dot-out` cannot be combined with `--view all`.
 
-If you omit `--out`, `sdd show` writes output beside the input file using `<source>.<view>.<detail>[.<backend>].<format>`. With `--view all --out ./diagram.svg`, the output template becomes files such as `diagram.ia_place_map.svg` and `diagram.journey_map.svg`.
+If you omit `--out`, `sdd show` writes output beside the input file using `<source>.<view>.<detail>[.decorators-<mode>][.<backend>].<format>`. The decorator segment is omitted for `none`. With `--view all --out ./diagram.svg`, the output template becomes files such as `diagram.ia_place_map.svg` and `diagram.journey_map.svg`.
 
 ### Detail Choice
 
@@ -127,6 +128,17 @@ If you omit `--out`, `sdd show` writes output beside the input file using `<sour
   summary is suppressed with `--diagnostics json` so machine-oriented output remains free of plain text.
 
 This is a good next step after drafting. A common pattern is to start by getting the structure right under `simple`, then move to `permissive` or `strict` as the document becomes more complete.
+
+### Decorator Choice
+
+Use `--decorators` to add orientation information to diagram nodes:
+
+- `none`: show no decorators
+- `type`: show each node's type
+- `id`: show each node's ID
+- `type,id`: show both the type and ID
+
+For example, `--decorators type,id` shows both values. When the option is omitted, `sdd show` uses your saved decorator default and then the bundle fallback. Save a preference with `pnpm sdd defaults set decorators type,id`.
 
 == sdd compile
 Examples:
@@ -156,6 +168,7 @@ To set a global default:
 ```bash
 pnpm sdd defaults set profile simple
 pnpm sdd defaults set detail compact
+pnpm sdd defaults set decorators type,id
 ```
 
 Revert to the bundle-provided values:
@@ -163,13 +176,14 @@ Revert to the bundle-provided values:
 ```bash
 pnpm sdd defaults unset profile
 pnpm sdd defaults unset detail
+pnpm sdd defaults unset decorators
 ```
 
-Validation profile is set to `simple` and render detail to `compact` as global defaults. Those global defaults are used by command line tools, unless a `--profile` or `--detail` setting is specified with the tool call.
+Validation profile is set to `simple`, render detail to `compact`, and decorators to `type,id` as global defaults. Those global defaults are used by command line tools unless an explicit setting is specified with the tool call.
 
 Each setting resolves independently in this order:
 
-1. `--profile` or `--detail` for the current invocation (command line option)
+1. `--profile`, `--detail`, or `--decorators` for the current invocation (command line option)
 2. your user-global SDD configuration
 3. the selected bundle's fallback
 

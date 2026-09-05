@@ -9,6 +9,7 @@ import { projectView } from "../src/projector/projectView.js";
 import type { Projection } from "../src/projector/types.js";
 import {
   buildJourneyMapRenderModel,
+  journeyReferenceRoleToAttributeLabel,
   type JourneyMapRenderModel,
   type JourneyRenderItem,
   type JourneyRenderStep
@@ -98,6 +99,12 @@ function findStep(model: JourneyMapRenderModel, stepId: string): JourneyRenderSt
 }
 
 describe("journey map render model", () => {
+  it("derives raw shared-attribute labels generically from stable reference roles", () => {
+    expect(journeyReferenceRoleToAttributeLabel("opportunity_ref")).toBe("opportunity ref");
+    expect(journeyReferenceRoleToAttributeLabel("policy_constraint_ref")).toBe("policy constraint ref");
+    expect(journeyReferenceRoleToAttributeLabel("api_v2_ref")).toBe("api v2 ref");
+  });
+
   it("preserves first projected parent, structural edge-line order, and interleaved root author order", async () => {
     const { model } = await buildFixture("ordering_ownership");
 
@@ -128,16 +135,16 @@ describe("journey map render model", () => {
     expect(model.edges).toHaveLength(projection.edges.filter((edge) => edge.type === "PRECEDES").length);
   });
 
-  it("exposes one typed resolved badge per visible reference while preserving legacy label lines", async () => {
+  it("exposes ordered structured references without presentation-formatted label lines", async () => {
     const simple = await buildFixture("primary", "simple");
     const permissive = await buildFixture("primary", "permissive");
     const strict = await buildFixture("primary", "strict");
 
     expect(findStep(simple.model, "J-201")).toMatchObject({
-      labelLines: ["Review the recommendation"],
-      badges: []
+      title: "Review the recommendation",
+      references: []
     });
-    const expectedBadges = [
+    const expectedReferences = [
       {
         kind: "reference",
         role: "opportunity_ref",
@@ -145,7 +152,9 @@ describe("journey map render model", () => {
         targetType: "Opportunity",
         targetName: "Clear total cost",
         sourceProp: "opportunity_refs",
-        label: "[Clear total cost]"
+        groupId: "opportunity_ref",
+        label: "opportunity ref",
+        value: "Clear total cost"
       },
       {
         kind: "reference",
@@ -154,18 +163,17 @@ describe("journey map render model", () => {
         targetType: "Opportunity",
         targetName: "Confidence before commitment",
         sourceProp: "opportunity_refs",
-        label: "[Confidence before commitment]"
+        groupId: "opportunity_ref",
+        label: "opportunity ref",
+        value: "Confidence before commitment"
       }
     ];
     for (const build of [permissive, strict]) {
       expect(findStep(build.model, "J-201")).toMatchObject({
-        labelLines: [
-          "Review the recommendation",
-          "[Clear total cost]",
-          "[Confidence before commitment]"
-        ],
-        badges: expectedBadges
+        title: "Review the recommendation",
+        references: expectedReferences
       });
+      expect(findStep(build.model, "J-201")).not.toHaveProperty("labelLines");
     }
     expect(permissive.model.edges).toEqual(strict.model.edges);
     expect(rootIds(simple.model.rootItems)).toEqual(rootIds(strict.model.rootItems));
@@ -181,11 +189,12 @@ describe("journey map render model", () => {
     delete reference!.target_name;
 
     const model = buildModel(projection, base.graph, base.bundle, base.view, "strict");
-    expect(findStep(model, "J-201").badges[0]).toMatchObject({
+    expect(findStep(model, "J-201").references[0]).toMatchObject({
       targetId: "OP-100",
-      label: "[OP-100]"
+      groupId: "opportunity_ref",
+      label: "opportunity ref",
+      value: "OP-100"
     });
-    expect(findStep(model, "J-201").labelLines[1]).toBe("[OP-100]");
   });
 
   it("derives stable duplicate identities and occurrence ordinals from authored semantics", async () => {
@@ -239,7 +248,7 @@ describe("journey map render model", () => {
     expect(mutated.edges.map((edge) => edge.id)).not.toEqual(base.model.edges.map((edge) => edge.id));
   });
 
-  it("changes typed badge visibility when the loaded profile-display contract changes", async () => {
+  it("changes typed reference visibility when the loaded profile-display contract changes", async () => {
     const base = await buildFixture("primary", "simple");
     const mutatedBundle = structuredClone(base.bundle) as Bundle;
     const mutatedView = journeyView(mutatedBundle);
@@ -250,8 +259,8 @@ describe("journey map render model", () => {
     detailDisplay.compact!.show_reference_badges = true;
 
     const mutated = buildModel(base.projection, base.graph, mutatedBundle, mutatedView, "simple");
-    expect(findStep(base.model, "J-201").badges).toEqual([]);
-    expect(findStep(mutated, "J-201").badges.map((badge) => badge.targetId)).toEqual(["OP-100", "OP-200"]);
+    expect(findStep(base.model, "J-201").references).toEqual([]);
+    expect(findStep(mutated, "J-201").references.map((reference) => reference.targetId)).toEqual(["OP-100", "OP-200"]);
   });
 
   it("keeps the locked validation diagnostics isolated by fixture and profile", async () => {

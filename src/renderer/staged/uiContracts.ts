@@ -15,25 +15,24 @@ import {
   type UiContractsViewStateItem
 } from "../uiContractsRenderModel.js";
 import type {
-  ContentBlock,
+  NodeDecoratorMode,
   RendererScene,
   SceneContainer,
   SceneEdge,
   SceneItem,
   SceneNode,
   PortSpec,
-  WidthPolicy,
   StagedRenderSettings
 } from "./contracts.js";
 import { createSceneDiagnostic, type RendererDiagnostic } from "./diagnostics.js";
 import { buildContentBlocksFromLabelLines } from "./labelLines.js";
 import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
 import {
-  buildCardNode,
   buildContainerContractPorts,
   buildContractTargetPorts,
   buildDiagramRootContainer,
-  buildTransitionPorts
+  buildTransitionPorts,
+  buildSharedNode
 } from "./sceneBuilders.js";
 import { buildChromeStyleClasses, buildEdgeStyleClasses } from "./styleClasses.js";
 import {
@@ -71,6 +70,7 @@ interface SceneBuildContext {
   containerSceneIdBySemanticNodeId: Map<string, string>;
   sceneItemKindById: Map<string, SceneItem["kind"]>;
   renderedLeafNodeIds: Set<string>;
+  nodeDecoratorMode: NodeDecoratorMode;
 }
 
 export interface UiContractsStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
@@ -99,41 +99,6 @@ function buildScopeChrome(): SceneContainer["chrome"] {
     },
     gutter: SCOPE_GAP
   };
-}
-
-function buildRenderableNodeWidthPolicy(
-  projectionNodeType: string | undefined
-): WidthPolicy {
-  switch (projectionNodeType) {
-    case "Event":
-      return {
-        preferred: "chip",
-        allowed: ["chip", "narrow", "standard"]
-      };
-    case "DataEntity":
-    case "SystemAction":
-      return {
-        preferred: "standard",
-        allowed: ["narrow", "standard", "wide"]
-      };
-    default:
-      return {
-        preferred: "narrow",
-        allowed: ["narrow", "standard", "wide"]
-      };
-  }
-}
-
-function buildLeafNodeContent(node: UiContractsRenderNode): ContentBlock[] {
-  return buildContentBlocksFromLabelLines(`${node.id}__content`, node.labelLines);
-}
-
-function buildLeafNodeClasses(node: UiContractsRenderNode): string[] {
-  return [
-    "semantic_node",
-    `shape-${node.shape.toLowerCase()}`,
-    ...buildChromeStyleClasses(node.style)
-  ];
 }
 
 function registerSceneItemKind(
@@ -180,14 +145,14 @@ function buildRenderableLeafNode(
 
   context.renderedLeafNodeIds.add(nodeId);
 
-  const node = buildCardNode({
-    id: nodeId,
-    role: projectionNode?.type?.toLowerCase() ?? "node",
-    classes: renderNode ? buildLeafNodeClasses(renderNode) : ["semantic_node", "fallback_node"],
-    widthPolicy: buildRenderableNodeWidthPolicy(projectionNode?.type),
-    content: renderNode
-      ? buildLeafNodeContent(renderNode)
-      : buildContentBlocksFromLabelLines(`${nodeId}__content`, [projectionNode?.name ?? nodeId]),
+  const node = buildSharedNode({
+    title: renderNode?.title ?? projectionNode?.name ?? nodeId,
+    decoratorMode: context.nodeDecoratorMode,
+    nodeType: projectionNode?.type ?? "Node",
+    nodeId,
+    attributes: renderNode?.attributes ?? []
+  }, {
+    classes: renderNode ? [] : ["fallback_node"],
     ports: buildLeafNodePorts(nodeId, projectionNode?.type)
   });
 
@@ -296,7 +261,7 @@ function buildViewStateGraphContainer(
     ["ViewState Graph"],
     items.map((item) => buildViewStateScene(item, context)),
     {
-      strategy: "elk_layered",
+      strategy: "layered",
       direction: "horizontal",
       gap: TRANSITION_GRAPH_GAP,
       crossAlignment: "start"
@@ -320,7 +285,7 @@ function buildStateGroupScene(
     item.labelLines,
     item.nodeIds.map((nodeId) => buildRenderableLeafNode(nodeId, context)),
     {
-      strategy: "elk_layered",
+      strategy: "layered",
       direction: "horizontal",
       gap: TRANSITION_GRAPH_GAP,
       crossAlignment: "start"
@@ -685,7 +650,12 @@ export function buildUiContractsRendererScene(
     endpointSceneIdByModelId: new Map(),
     containerSceneIdBySemanticNodeId: new Map(),
     sceneItemKindById: new Map(),
-    renderedLeafNodeIds: new Set()
+    renderedLeafNodeIds: new Set(),
+    nodeDecoratorMode: settings.nodeDecoratorMode ?? {
+      id: "none",
+      showNodeType: false,
+      showNodeId: false
+    }
   };
   const rootChildren = buildScopedSceneItems(prepared.model.rootItems, "root", context);
 

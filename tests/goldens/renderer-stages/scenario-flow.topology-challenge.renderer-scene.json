@@ -98,24 +98,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-010__content__line_0",
-                "kind": "text",
-                "text": "Select a Node",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Select a Node",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-010",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -237,24 +237,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-020__content__line_0",
-                "kind": "text",
-                "text": "Review Diagrams Containing Current Node",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Review Diagrams Containing Current Node",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-020",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -376,24 +376,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-021__content__line_0",
-                "kind": "text",
-                "text": "Select Diagram",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Select Diagram",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-021",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -515,24 +515,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-022__content__line_0",
-                "kind": "text",
-                "text": "View Node in New Diagram Context",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "View Node in New Diagram Context",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-022",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -712,24 +712,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-040__content__line_0",
-                "kind": "text",
-                "text": "Add Relationship",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Add Relationship",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-040",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -851,24 +851,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-041__content__line_0",
-                "kind": "text",
-                "text": "Add relationship, by node",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Add relationship, by node",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-041",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1164,24 +1164,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-042__content__line_0",
-                "kind": "text",
-                "text": "Add outgoing relationship",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Add outgoing relationship",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-042",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1477,24 +1477,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-043__content__line_0",
-                "kind": "text",
-                "text": "Add incoming relationship",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Add incoming relationship",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-043",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1898,24 +1898,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-030__content__line_0",
-                "kind": "text",
-                "text": "Select Diagram Content",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Select Diagram Content",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-030",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -2037,24 +2037,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-031__content__line_0",
-                "kind": "text",
-                "text": "Adjust View",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Adjust View",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-031",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -2176,24 +2176,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-032__content__line_0",
-                "kind": "text",
-                "text": "Name the New View",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Name the New View",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-032",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -2326,8 +2326,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2352,8 +2351,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2378,8 +2376,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2404,8 +2401,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2430,8 +2426,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2456,8 +2451,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2482,8 +2476,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2508,8 +2501,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"
@@ -2534,8 +2526,7 @@
       "routing": {
         "style": "orthogonal",
         "sourcePortRole": "flow_out",
-        "targetPortRole": "flow_in",
-        "authority": "flexible"
+        "targetPortRole": "flow_in"
       },
       "markers": {
         "end": "arrow"

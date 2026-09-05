@@ -87,7 +87,7 @@
               "state_graph"
             ],
             "layout": {
-              "strategy": "elk_layered",
+              "strategy": "layered",
               "direction": "horizontal",
               "gap": 24,
               "crossAlignment": "start"
@@ -124,30 +124,29 @@
                 "role": "state",
                 "primitive": "card",
                 "classes": [
-                  "semantic_node",
-                  "shape-ellipse"
+                  "semantic_node"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "ST-060a__content__line_0",
-                    "kind": "text",
-                    "text": "Case Review Ready",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
+                "content": [],
+                "sharedNode": {
+                  "title": "Case Review Ready",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "State",
+                  "nodeId": "ST-060a",
+                  "attributes": []
+                },
                 "ports": [
                   {
                     "id": "ST-060a__transition_in",
@@ -167,30 +166,29 @@
                 "role": "state",
                 "primitive": "card",
                 "classes": [
-                  "semantic_node",
-                  "shape-ellipse"
+                  "semantic_node"
                 ],
                 "widthPolicy": {
-                  "preferred": "narrow",
+                  "preferred": "standard",
                   "allowed": [
-                    "narrow",
-                    "standard",
-                    "wide"
+                    "standard"
                   ]
                 },
                 "overflowPolicy": {
-                  "kind": "escalate_width_band",
-                  "maxLines": 2
+                  "kind": "grow_height"
                 },
-                "content": [
-                  {
-                    "id": "ST-060b__content__line_0",
-                    "kind": "text",
-                    "text": "Case Review Submitted",
-                    "textStyleRole": "title",
-                    "priority": "primary"
-                  }
-                ],
+                "content": [],
+                "sharedNode": {
+                  "title": "Case Review Submitted",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "State",
+                  "nodeId": "ST-060b",
+                  "attributes": []
+                },
                 "ports": [
                   {
                     "id": "ST-060b__transition_in",
@@ -272,30 +270,29 @@
                     "role": "event",
                     "primitive": "card",
                     "classes": [
-                      "semantic_node",
-                      "shape-oval"
+                      "semantic_node"
                     ],
                     "widthPolicy": {
-                      "preferred": "chip",
+                      "preferred": "standard",
                       "allowed": [
-                        "chip",
-                        "narrow",
                         "standard"
                       ]
                     },
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
-                    "content": [
-                      {
-                        "id": "E-060__content__line_0",
-                        "kind": "text",
-                        "text": "Submit Review",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Submit Review",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "Event",
+                      "nodeId": "E-060",
+                      "attributes": []
+                    },
                     "ports": [
                       {
                         "id": "E-060__contract_in",
@@ -310,30 +307,29 @@
                     "role": "systemaction",
                     "primitive": "card",
                     "classes": [
-                      "semantic_node",
-                      "shape-component"
+                      "semantic_node"
                     ],
                     "widthPolicy": {
                       "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
-                    "content": [
-                      {
-                        "id": "SA-060__content__line_0",
-                        "kind": "text",
-                        "text": "Save Review",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Save Review",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "SystemAction",
+                      "nodeId": "SA-060",
+                      "attributes": []
+                    },
                     "ports": [
                       {
                         "id": "SA-060__contract_in",
@@ -348,30 +344,29 @@
                     "role": "dataentity",
                     "primitive": "card",
                     "classes": [
-                      "semantic_node",
-                      "shape-cylinder"
+                      "semantic_node"
                     ],
                     "widthPolicy": {
                       "preferred": "standard",
                       "allowed": [
-                        "narrow",
-                        "standard",
-                        "wide"
+                        "standard"
                       ]
                     },
                     "overflowPolicy": {
-                      "kind": "escalate_width_band",
-                      "maxLines": 2
+                      "kind": "grow_height"
                     },
-                    "content": [
-                      {
-                        "id": "D-060__content__line_0",
-                        "kind": "text",
-                        "text": "CaseRecord",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
+                    "content": [],
+                    "sharedNode": {
+                      "title": "CaseRecord",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "DataEntity",
+                      "nodeId": "D-060",
+                      "attributes": []
+                    },
                     "ports": [
                       {
                         "id": "D-060__contract_in",
@@ -391,7 +386,7 @@
                       "state_graph"
                     ],
                     "layout": {
-                      "strategy": "elk_layered",
+                      "strategy": "layered",
                       "direction": "horizontal",
                       "gap": 24,
                       "crossAlignment": "start"
@@ -428,30 +423,29 @@
                         "role": "state",
                         "primitive": "card",
                         "classes": [
-                          "semantic_node",
-                          "shape-ellipse"
+                          "semantic_node"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
-                        "content": [
-                          {
-                            "id": "ST-061a__content__line_0",
-                            "kind": "text",
-                            "text": "Panel Idle",
-                            "textStyleRole": "title",
-                            "priority": "primary"
-                          }
-                        ],
+                        "content": [],
+                        "sharedNode": {
+                          "title": "Panel Idle",
+                          "decoratorMode": {
+                            "id": "none",
+                            "showNodeType": false,
+                            "showNodeId": false
+                          },
+                          "nodeType": "State",
+                          "nodeId": "ST-061a",
+                          "attributes": []
+                        },
                         "ports": [
                           {
                             "id": "ST-061a__transition_in",
@@ -471,30 +465,29 @@
                         "role": "state",
                         "primitive": "card",
                         "classes": [
-                          "semantic_node",
-                          "shape-ellipse"
+                          "semantic_node"
                         ],
                         "widthPolicy": {
-                          "preferred": "narrow",
+                          "preferred": "standard",
                           "allowed": [
-                            "narrow",
-                            "standard",
-                            "wide"
+                            "standard"
                           ]
                         },
                         "overflowPolicy": {
-                          "kind": "escalate_width_band",
-                          "maxLines": 2
+                          "kind": "grow_height"
                         },
-                        "content": [
-                          {
-                            "id": "ST-061b__content__line_0",
-                            "kind": "text",
-                            "text": "Panel Dirty",
-                            "textStyleRole": "title",
-                            "priority": "primary"
-                          }
-                        ],
+                        "content": [],
+                        "sharedNode": {
+                          "title": "Panel Dirty",
+                          "decoratorMode": {
+                            "id": "none",
+                            "showNodeType": false,
+                            "showNodeId": false
+                          },
+                          "nodeType": "State",
+                          "nodeId": "ST-061b",
+                          "attributes": []
+                        },
                         "ports": [
                           {
                             "id": "ST-061b__transition_in",

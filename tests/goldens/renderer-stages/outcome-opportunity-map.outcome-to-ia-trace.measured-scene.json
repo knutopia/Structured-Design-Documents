@@ -73,81 +73,154 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-001__content__line_0",
+                "id": "I-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Billing Simplification"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 125.164,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 150.632,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               },
               {
-                "id": "I-001__content__line_1",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "I-001__attribute_0_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
                 "lines": [
-                  "Implemented by: P-001 Billing"
+                  "Implemented by"
                 ],
-                "x": 12,
-                "y": 34,
-                "width": 165.144,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 30.5,
+                "width": 74.81,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "I-001__attribute_0_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
+                "lines": [
+                  "P-001 Billing"
+                ],
+                "x": 15.5,
+                "y": 44.5,
+                "width": 69.828,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 63,
+                "title": {
+                  "id": "I-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Billing Simplification"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 150.632,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": [
+                  {
+                    "id": "implemented_by",
+                    "label": {
+                      "id": "I-001__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Implemented by"
+                      ],
+                      "x": 15.5,
+                      "y": 30.5,
+                      "width": 74.81,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "I-001__attribute_0_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "P-001 Billing"
+                        ],
+                        "x": 15.5,
+                        "y": 44.5,
+                        "width": 69.828,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 193,
+                    "height": 28
+                  }
+                ]
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 31
+                "y": 33
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 31
+                "y": 33
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 31
+                "y": 33
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 31
+                "y": 33
               },
               {
                 "id": "secondary_in",
@@ -161,19 +234,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 62
+                "y": 66
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 62
+            "height": 66
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 104,
+        "height": 137,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -220,37 +293,60 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-001__content__line_0",
+                "id": "OP-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Payment Friction"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 102.044,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 123.08,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "OP-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Payment Friction"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 123.08,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -304,7 +400,7 @@
         ],
         "ports": [],
         "width": 244,
-        "height": 104,
+        "height": 137,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -351,37 +447,60 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-001__content__line_0",
+                "id": "O-001__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Reduce Abandonment"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 166.768,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 161.328,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "O-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Reduce Abandonment"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 161.328,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -435,7 +554,7 @@
         ],
         "ports": [],
         "width": 244,
-        "height": 104,
+        "height": 137,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -482,96 +601,221 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-001__content__line_0",
+                "id": "M-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Checkout Completion Rate"
+                  "Checkout Completion",
+                  "Rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 160.934,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 156.84,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               },
               {
-                "id": "M-001__content__line_1",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "M-001__attribute_0_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
                 "lines": [
-                  "Experience: J-002 Confirm Payment"
+                  "Experience"
                 ],
-                "x": 12,
-                "y": 34,
-                "width": 198.498,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 49.5,
+                "width": 52.255,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
               },
               {
-                "id": "M-001__content__line_2",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "M-001__attribute_0_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
                 "lines": [
-                  "Event: E-001 Payment Submitted"
+                  "J-002 Confirm Payment"
                 ],
-                "x": 12,
-                "y": 56,
-                "width": 180.96,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 63.5,
+                "width": 130.248,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
+              },
+              {
+                "id": "M-001__attribute_1_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
+                "lines": [
+                  "Event"
+                ],
+                "x": 15.5,
+                "y": 81.5,
+                "width": 26.11,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "M-001__attribute_1_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
+                "lines": [
+                  "E-001 Payment Submitted"
+                ],
+                "x": 15.5,
+                "y": 95.5,
+                "width": 144.084,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 114,
+                "title": {
+                  "id": "M-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Checkout Completion",
+                    "Rate"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 156.84,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": [
+                  {
+                    "id": "experience",
+                    "label": {
+                      "id": "M-001__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Experience"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 52.255,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "M-001__attribute_0_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "J-002 Confirm Payment"
+                        ],
+                        "x": 15.5,
+                        "y": 63.5,
+                        "width": 130.248,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 49.5,
+                    "width": 193,
+                    "height": 28
+                  },
+                  {
+                    "id": "event",
+                    "label": {
+                      "id": "M-001__attribute_1_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 81.5,
+                      "width": 26.11,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "M-001__attribute_1_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "E-001 Payment Submitted"
+                        ],
+                        "x": 15.5,
+                        "y": 95.5,
+                        "width": 144.084,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 81.5,
+                    "width": 193,
+                    "height": 28
+                  }
+                ]
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 42
+                "y": 58.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 42
+                "y": 58.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 42
+                "y": 58.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 42
+                "y": 58.5
               },
               {
                 "id": "secondary_in",
@@ -585,26 +829,26 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 84
+                "y": 117
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 84
+            "height": 117
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 104,
+        "height": 137,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       }
     ],
     "ports": [],
     "width": 1116,
-    "height": 188
+    "height": 221
   },
   "edges": [
     {
@@ -630,8 +874,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -670,8 +913,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -710,8 +952,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [

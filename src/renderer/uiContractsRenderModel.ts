@@ -12,6 +12,13 @@ export interface UiContractsRenderNode {
   id: string;
   shape: string;
   style?: string;
+  title: string;
+  attributes: Array<{
+    groupId: string;
+    label: string;
+    value: string;
+  }>;
+  /** Retained for non-staged render-model consumers during migration. */
   labelLines: string[];
 }
 
@@ -867,13 +874,21 @@ export function buildUiContractsRenderData(
       const graphNode = graphNodesById.get(node.id);
       const display = nodeDisplay(node.type, effectiveTransitionNodeType);
       const labelLines = [node.name];
+      const attributes: UiContractsRenderNode["attributes"] = [];
       if (displayOptions.includeViewStateDataRequired && node.type === "ViewState" && graphNode?.props.data_required) {
         labelLines.push(`data: ${graphNode.props.data_required}`);
+        attributes.push({
+          groupId: "data_required",
+          label: "data",
+          value: graphNode.props.data_required
+        });
       }
       return {
         id: node.id,
         shape: display.shape,
         style: display.style,
+        title: node.name,
+        attributes,
         labelLines
       };
     });

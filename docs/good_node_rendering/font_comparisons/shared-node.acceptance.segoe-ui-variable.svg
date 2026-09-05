@@ -1,0 +1,284 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="504" height="514" viewBox="0 0 504 514" class="staged-svg view-shared_node detail-detailed theme-default theme-revision-segoe-ui-variable-local-one-off" data-view-id="shared_node" data-detail-id="detailed" data-theme-id="default">
+  <!-- One-off font comparison. Geometry, line breaks, and text coordinates are unchanged from the acceptance golden.
+       Uses the Windows-installed Segoe UI Variable font; Microsoft does not offer it as a general-purpose redistributable webfont.
+       Reference: https://learn.microsoft.com/windows/apps/design/signature-experiences/typography -->
+  <defs>
+    <style><![CDATA[
+    @font-face {
+      font-family: 'Segoe UI Variable Comparison';
+      src: local('Segoe UI Variable'), local('Segoe UI Variable Text');
+      font-style: normal;
+      font-weight: 300 700;
+      font-display: block;
+    }
+    .staged-svg { font-optical-sizing: auto; font-synthesis: none; }
+    ]]></style>
+    <style><![CDATA[
+    .staged-svg { background: transparent; }
+    .scene-container__chrome { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.5; }
+    .scene-container.primitive-root .scene-container__chrome { fill: #f7f8fb; }
+    .scene-container__header-band { fill: #dbe4f0; stroke: #94a3b8; stroke-width: 1.5; }
+    .scene-container.role-view_state .scene-container__chrome { fill: #ffffff; }
+    .scene-container.role-view_state .scene-container__header-band { fill: #ffffff; stroke: transparent; }
+    .scene-container.chrome-dashed .scene-container__chrome, .scene-container.chrome-dashed .scene-container__header-band, .scene-node.chrome-dashed .scene-node__chrome { stroke-dasharray: 8 6; }
+    .scene-container.chrome-dotted .scene-container__chrome, .scene-container.chrome-dotted .scene-container__header-band, .scene-node.chrome-dotted .scene-node__chrome { stroke-dasharray: 2 6; }
+    .scene-node__chrome { fill: #ffffff; stroke: #64748b; stroke-width: 1.5; }
+    .scene-node.primitive-badge .scene-node__chrome { fill: #dbeafe; stroke: #2563eb; }
+    .scene-node.primitive-connector_port .scene-node__chrome { fill: #ffffff; stroke: #2563eb; }
+    .scene-badge__chrome { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.5; }
+    .scene-edge__path { fill: none; stroke: #1d4ed8; stroke-width: 2; }
+    .scene-edge.edge-dashed .scene-edge__path { stroke-dasharray: 8 6; }
+    .scene-edge.edge-dotted .scene-edge__path { stroke-dasharray: 2 6; }
+    .scene-edge-label__box { fill: #ffffff; stroke: #93c5fd; stroke-width: 1.5; }
+    .scene-marker { fill: #1d4ed8; }
+    .scene-text { fill: #0f172a; }
+    .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
+    .staged-svg { --sdd-shared-node-font-family: 'Segoe UI Variable Comparison'; --sdd-shared-node-width: 224px; --sdd-shared-node-min-height: 48px; --sdd-shared-node-container-padding-top: 0px; --sdd-shared-node-container-padding-right: 0px; --sdd-shared-node-container-padding-bottom: 0px; --sdd-shared-node-container-padding-left: 0px; --sdd-shared-node-container-gap: 0px; --sdd-shared-node-radius: 14px; --sdd-shared-node-stroke-width: 1.5px; --sdd-shared-node-stroke-placement: inside; --sdd-shared-node-fill: #ffffff; --sdd-shared-node-stroke: #387575; --sdd-shared-node-text: #0f172a; --sdd-shared-node-decorator-height: 19px; --sdd-shared-node-decorator-gap: 4px; --sdd-shared-node-decorator-padding-top: 0px; --sdd-shared-node-decorator-padding-right: 14px; --sdd-shared-node-decorator-padding-bottom: 0px; --sdd-shared-node-decorator-padding-left: 14px; --sdd-shared-node-decorator-fill: #dbe4f0; --sdd-shared-node-body-padding-top: 6px; --sdd-shared-node-body-padding-right: 14px; --sdd-shared-node-body-padding-bottom: 6px; --sdd-shared-node-body-padding-left: 14px; --sdd-shared-node-body-gap: 4px; --sdd-shared-node-attribute-padding-top: 0px; --sdd-shared-node-attribute-padding-right: 0px; --sdd-shared-node-attribute-padding-bottom: 0px; --sdd-shared-node-attribute-padding-left: 0px; --sdd-shared-node-attribute-gap: 2px; --sdd-shared-node-decorator-font-size: 10px; --sdd-shared-node-decorator-font-weight: 600; --sdd-shared-node-decorator-line-height: 12px; --sdd-shared-node-decorator-letter-spacing: 0px; --sdd-shared-node-title-font-size: 16px; --sdd-shared-node-title-font-weight: 600; --sdd-shared-node-title-line-height: 19px; --sdd-shared-node-title-letter-spacing: -0.32px; --sdd-shared-node-attribute-label-font-size: 10px; --sdd-shared-node-attribute-label-font-weight: 400; --sdd-shared-node-attribute-label-line-height: 12px; --sdd-shared-node-attribute-label-letter-spacing: 0px; --sdd-shared-node-attribute-value-font-size: 12px; --sdd-shared-node-attribute-value-font-weight: 400; --sdd-shared-node-attribute-value-line-height: 14px; --sdd-shared-node-attribute-value-letter-spacing: 0px; }
+    .shared-node__chrome { fill: #ffffff; stroke: #387575; stroke-width: 1.5; }
+    .shared-node__decorator-header { fill: #dbe4f0; }
+    .shared-node .scene-text { fill: #0f172a; }
+    .view-shared_node .standalone_node_harness .scene-container__chrome { fill: #ffffff; stroke: transparent; }
+    .text-role-badge { font-family: 'Segoe UI Variable Comparison'; font-size: 12px; font-weight: 600; }
+    .text-role-edge_label { font-family: 'Segoe UI Variable Comparison'; font-size: 12px; font-weight: 400; }
+    .text-role-label { font-family: 'Segoe UI Variable Comparison'; font-size: 13px; font-weight: 400; }
+    .text-role-metadata { font-family: 'Segoe UI Variable Comparison'; font-size: 12px; font-weight: 400; }
+    .text-role-shared_node_attribute_label { font-family: 'Segoe UI Variable Comparison'; font-size: 10px; font-weight: 400; line-height: 12px; letter-spacing: 0px; }
+    .text-role-shared_node_attribute_value { font-family: 'Segoe UI Variable Comparison'; font-size: 12px; font-weight: 400; line-height: 14px; letter-spacing: 0px; }
+    .text-role-shared_node_decorator { font-family: 'Segoe UI Variable Comparison'; font-size: 10px; font-weight: 600; line-height: 12px; letter-spacing: 0px; }
+    .text-role-shared_node_title { font-family: 'Segoe UI Variable Comparison'; font-size: 16px; font-weight: 600; line-height: 19px; letter-spacing: -0.32px; }
+    .text-role-subtitle { font-family: 'Segoe UI Variable Comparison'; font-size: 13px; font-weight: 400; }
+    .text-role-title { font-family: 'Segoe UI Variable Comparison'; font-size: 16px; font-weight: 600; }
+    ]]></style>
+    <marker id="scene-marker-arrow-end" class="scene-marker" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+      <path class="scene-marker" d="M 0 0 L 10 5 L 0 10 z"/>
+    </marker>
+    <marker id="scene-marker-arrow-start" class="scene-marker" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
+      <path class="scene-marker" d="M 10 0 L 0 5 L 10 10 z"/>
+    </marker>
+  </defs>
+  <g class="paint-layer paint-chrome" data-paint-group="chrome">
+    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram shared_node standalone_node_harness" data-item-id="root" data-role="diagram_root">
+      <rect class="scene-container__chrome" x="0.75" y="0.75" width="502.5" height="512.5" rx="17.25" ry="17.25"/>
+    </g>
+  </g>
+  <g class="paint-layer paint-nodes" data-paint-group="nodes">
+    <g id="scene-node-c-010a" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="C-010a" data-role="component" data-node-density="dense">
+      <rect class="shared-node__chrome" x="16.75" y="16.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 17.5 36.5 L 17.5 30 Q 17.5 17.5 30 17.5 L 226 17.5 Q 238.5 17.5 238.5 30 L 238.5 36.5 Z"/>
+    </g>
+    <g id="scene-node-c-010b" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="C-010b" data-role="component" data-node-density="plain">
+      <rect class="shared-node__chrome" x="264.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+    </g>
+    <g id="scene-node-c-020a" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="C-020a" data-role="component" data-node-density="dense">
+      <rect class="shared-node__chrome" x="16.75" y="93.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 17.5 113.5 L 17.5 107 Q 17.5 94.5 30 94.5 L 226 94.5 Q 238.5 94.5 238.5 107 L 238.5 113.5 Z"/>
+    </g>
+    <g id="scene-node-c-020b" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="C-020b" data-role="component" data-node-density="dense">
+      <rect class="shared-node__chrome" x="264.75" y="93.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    </g>
+    <g id="scene-node-c-030a" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="C-030a" data-role="component" data-node-density="dense">
+      <rect class="shared-node__chrome" x="16.75" y="189.75" width="222.5" height="131.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 17.5 209.5 L 17.5 203 Q 17.5 190.5 30 190.5 L 226 190.5 Q 238.5 190.5 238.5 203 L 238.5 209.5 Z"/>
+    </g>
+    <g id="scene-node-c-030b" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="C-030b" data-role="component" data-node-density="dense">
+      <rect class="shared-node__chrome" x="264.75" y="189.75" width="222.5" height="112.5" rx="13.25" ry="13.25"/>
+    </g>
+    <g id="scene-node-c-040a" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="C-040a" data-role="component" data-node-density="dense">
+      <rect class="shared-node__chrome" x="16.75" y="346.75" width="222.5" height="150.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 17.5 366.5 L 17.5 360 Q 17.5 347.5 30 347.5 L 226 347.5 Q 238.5 347.5 238.5 360 L 238.5 366.5 Z"/>
+    </g>
+    <g id="scene-node-c-040b" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="C-040b" data-role="component" data-node-density="dense">
+      <rect class="shared-node__chrome" x="264.75" y="346.75" width="222.5" height="131.5" rx="13.25" ry="13.25"/>
+    </g>
+  </g>
+  <g class="paint-layer paint-labels" data-paint-group="labels">
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="C-010a" data-role="component">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="31.5" y="27" dominant-baseline="middle">
+            <tspan x="31.5" dy="0">Component</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="90.08" y="27" dominant-baseline="middle">
+            <tspan x="90.08" dy="0">C-010a</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="31.5" y="52" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">Node Title</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="C-010b" data-role="component">
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="279.5" y="40" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">Node Title</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="C-020a" data-role="component">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="31.5" y="104" dominant-baseline="middle">
+            <tspan x="31.5" dy="0">Component</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="90.08" y="104" dominant-baseline="middle">
+            <tspan x="90.08" dy="0">C-020a</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="31.5" y="129" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">Book a flight to a chosen</tspan>
+              <tspan x="31.5" dy="19">destination</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="C-020b" data-role="component">
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="279.5" y="110" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">Book a flight to a chosen</tspan>
+              <tspan x="279.5" dy="19">destination</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="C-030a" data-role="component">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="31.5" y="200" dominant-baseline="middle">
+            <tspan x="31.5" dy="0">Component</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="90.08" y="200" dominant-baseline="middle">
+            <tspan x="90.08" dy="0">C-030a</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="31.5" y="225" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">Node Title</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="description">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="31.5" y="244.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">description</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="31.5" y="259.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">First value</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="31.5" y="275.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">Second value</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="owner">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="31.5" y="292.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">owner</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="31.5" y="307.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">Design</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="C-030b" data-role="component">
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="279.5" y="206" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">Node Title</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="description">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="279.5" y="225.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">description</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="279.5" y="240.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">First value</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="279.5" y="256.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">Second value</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="owner">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="279.5" y="273.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">owner</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="279.5" y="288.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">Design</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="C-040a" data-role="component">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="31.5" y="357" dominant-baseline="middle">
+            <tspan x="31.5" dy="0">Component</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="90.08" y="357" dominant-baseline="middle">
+            <tspan x="90.08" dy="0">C-040a</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="31.5" y="382" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">Book a flight to a chosen</tspan>
+              <tspan x="31.5" dy="19">destination</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="description">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="31.5" y="420.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">description</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="31.5" y="435.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">First value</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="31.5" y="451.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">Second value</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="owner">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="31.5" y="468.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">owner</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="31.5" y="483.5" dominant-baseline="middle">
+              <tspan x="31.5" dy="0">Design</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="C-040b" data-role="component">
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="279.5" y="363" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">Book a flight to a chosen</tspan>
+              <tspan x="279.5" dy="19">destination</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="description">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="279.5" y="401.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">description</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="279.5" y="416.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">First value</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="279.5" y="432.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">Second value</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="owner">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="279.5" y="449.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">owner</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="279.5" y="464.5" dominant-baseline="middle">
+              <tspan x="279.5" dy="0">Design</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+  </g>
+  <g class="paint-layer paint-edges" data-paint-group="edges">
+  </g>
+  <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
+  </g>
+</svg>

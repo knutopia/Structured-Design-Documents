@@ -16,6 +16,7 @@ core:
 tool_defaults:
   validation_profile_id: simple
   render_detail_id: compact
+  node_decorator_mode_id: none
 
 profiles:
   - id: simple
@@ -33,6 +34,24 @@ render_details:
     intent: Low-noise rendering that emphasizes the primary structure.
   - id: detailed
     intent: Full rendering that includes supporting annotations and labels.
+
+node_decorator_modes:
+  - id: none
+    intent: Render nodes without orientation decorators.
+    show_node_type: false
+    show_node_id: false
+  - id: type
+    intent: Decorate nodes with their semantic type.
+    show_node_type: true
+    show_node_id: false
+  - id: id
+    intent: Decorate nodes with their stable node ID.
+    show_node_type: false
+    show_node_id: true
+  - id: type,id
+    intent: Decorate nodes with both their semantic type and stable node ID.
+    show_node_type: true
+    show_node_id: true
 
 examples:
   - path: examples/outcome_to_ia_trace.sdd

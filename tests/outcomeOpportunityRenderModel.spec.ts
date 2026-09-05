@@ -57,10 +57,12 @@ describe("outcome-opportunity render-model bundle authority", () => {
     const semanticColumns = view.conventions.renderer_defaults?.semantic_columns;
     const nodeChrome = view.conventions.renderer_defaults?.node_chrome;
     const connectors = view.conventions.renderer_defaults?.connectors;
+    const implementationAnnotations = view.conventions.renderer_defaults?.implementation_annotations;
 
     expect(semanticColumns?.fixed_order?.[0]).toBeDefined();
     expect(nodeChrome?.Opportunity).toBeDefined();
     expect(connectors?.edge_type_channels?.MEASURED_BY).toBeDefined();
+    expect(implementationAnnotations?.display).toBeDefined();
 
     semanticColumns!.fixed_order![0].label = "Workstreams";
     nodeChrome!.Opportunity!.visual_role = "mutated_opportunity_role";
@@ -71,6 +73,7 @@ describe("outcome-opportunity render-model bundle authority", () => {
       text: "tracked by"
     };
     connectors!.priority_order = ["MEASURED_BY", "SUPPORTS", "ADDRESSES", "IMPLEMENTED_BY", "INSTRUMENTED_AT"];
+    implementationAnnotations!.display!.label = "Delivered through";
 
     const model = await buildCanonicalModel(view);
 
@@ -85,6 +88,13 @@ describe("outcome-opportunity render-model bundle authority", () => {
       priority: 0
     });
     expect(model.connectorPriorityOrder[0]).toBe("MEASURED_BY");
+    expect(model.nodes.find((node) => node.id === "I-001")?.attributes).toEqual([
+      { groupId: "implemented_by", label: "Delivered through", value: "P-001 Billing" }
+    ]);
+    expect(model.nodes.find((node) => node.id === "M-001")?.attributes).toEqual([
+      { groupId: "experience", label: "experience", value: "J-002 Confirm Payment" },
+      { groupId: "event", label: "event", value: "E-001 Payment Submitted" }
+    ]);
   });
 
   it("rejects missing, extra, or reordered fixed semantic columns explicitly", async () => {

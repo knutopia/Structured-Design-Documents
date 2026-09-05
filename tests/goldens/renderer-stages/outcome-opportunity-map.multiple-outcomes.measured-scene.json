@@ -73,66 +73,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-001__content__line_0",
+                "id": "I-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Guided setup priority planner"
+                  "Guided setup priority",
+                  "planner"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 176.566,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 152.816,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Guided setup priority",
+                    "planner"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 152.816,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -146,19 +170,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -205,66 +229,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-001__content__line_0",
+                "id": "OP-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Users cannot see which setup",
-                  "steps matter"
+                  "Users cannot see which",
+                  "setup steps matter"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 178.841,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 169.912,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Users cannot see which",
+                    "setup steps matter"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 169.912,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -278,19 +326,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -337,37 +385,60 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-001__content__line_0",
+                "id": "O-001__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Shorten time to first value"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 196.4,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 188.4,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "O-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Shorten time to first value"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 188.4,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -421,7 +492,7 @@
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -468,67 +539,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-001__content__line_0",
+                "id": "M-001__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Median days to first completed",
-                  "workflow"
+                  "Median days to first",
+                  "completed workflow"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 186.076,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 148.04,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-001__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Median days to first",
+                    "completed workflow"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 148.04,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -542,20 +636,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
-              "status": "overflowed",
-              "detail": "Exceeded maxLines=1 even after moving secondary blocks."
+              "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -602,38 +695,60 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-002__content__line_0",
+                "id": "I-002__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Data readiness preflight"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 145.314,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 174.824,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "I-002__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Data readiness preflight"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 174.824,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -687,7 +802,7 @@
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -734,66 +849,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-002__content__line_0",
+                "id": "OP-002__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Imported data quality issues",
-                  "appear too late"
+                  "Imported data quality",
+                  "issues appear too late"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 170.248,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 157.984,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-002__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Imported data quality",
+                    "issues appear too late"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 157.984,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -807,19 +946,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -856,7 +995,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -903,38 +1042,60 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-002__content__line_0",
+                "id": "M-002__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Activation completion rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 157.853,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 189.632,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "M-002__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Activation completion rate"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 189.632,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -988,7 +1149,7 @@
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -1035,66 +1196,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-007__content__line_0",
+                "id": "I-007__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Operational handoff checklist"
+                  "Operational handoff",
+                  "checklist"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 178.386,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 145.104,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-007__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Operational handoff",
+                    "checklist"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 145.104,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1108,19 +1293,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:2"
       },
@@ -1167,66 +1352,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-007__content__line_0",
+                "id": "OP-007__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Handoff gaps hide next",
                   "ownership"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 140.472,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 168.088,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-007__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Handoff gaps hide next",
+                    "ownership"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 168.088,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1240,19 +1449,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:2"
       },
@@ -1289,7 +1498,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:2"
       },
@@ -1326,7 +1535,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:2"
       },
@@ -1373,67 +1582,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-003__content__line_0",
+                "id": "I-003__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Vocabulary mapping and",
                   "templates"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 149.825,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 179.976,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-003__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Vocabulary mapping and",
+                    "templates"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 179.976,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1447,19 +1679,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 84,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:3"
       },
@@ -1506,66 +1738,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-003__content__line_0",
+                "id": "OP-003__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Terminology does not match the",
-                  "team workflow"
+                  "Terminology does not",
+                  "match the team workflow"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 193.031,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 184.08,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-003__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Terminology does not",
+                    "match the team workflow"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 184.08,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1579,19 +1835,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 84,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:3"
       },
@@ -1638,66 +1894,90 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-002__content__line_0",
+                "id": "O-002__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Increase self-serve task",
                   "completion"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 180.448,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 173.088,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "O-002__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Increase self-serve task",
+                    "completion"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 173.088,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1711,19 +1991,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 64
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 64
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 84,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:3"
       },
@@ -1770,66 +2050,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-003__content__line_0",
+                "id": "M-003__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Self-serve task completion rate"
+                  "Self-serve task",
+                  "completion rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 189.079,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 113.6,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-003__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Self-serve task",
+                    "completion rate"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 113.6,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1843,19 +2147,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 84,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:3"
       },
@@ -1902,66 +2206,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-004__content__line_0",
+                "id": "I-004__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Exception triage workspace"
+                  "Exception triage",
+                  "workspace"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 167.323,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 118.92,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-004__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Exception triage",
+                    "workspace"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 118.92,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -1975,19 +2303,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:4"
       },
@@ -2034,66 +2362,92 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-004__content__line_0",
+                "id": "OP-004__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Exception handling requires",
-                  "support escalation"
+                  "Exception handling",
+                  "requires support",
+                  "escalation"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 168.974,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 139.296,
+                "height": 57,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 69,
+                "title": {
+                  "id": "OP-004__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Exception handling",
+                    "requires support",
+                    "escalation"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 139.296,
+                  "height": 57,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "secondary_in",
@@ -2107,19 +2461,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 72
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 72
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:4"
       },
@@ -2156,7 +2510,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:4"
       },
@@ -2203,67 +2557,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-004__content__line_0",
+                "id": "M-004__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Support deflection for",
                   "recoverable tasks"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 133.614,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 160.448,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-004__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Support deflection for",
+                    "recoverable tasks"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 160.448,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2277,20 +2654,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
-              "status": "overflowed",
-              "detail": "Exceeded maxLines=1 even after moving secondary blocks."
+              "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:4"
       },
@@ -2337,66 +2713,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-006__content__line_0",
+                "id": "I-006__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Controlled automation rollout"
+                  "Controlled automation",
+                  "rollout"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 177.541,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 162.568,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-006__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Controlled automation",
+                    "rollout"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 162.568,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2410,19 +2810,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:5"
       },
@@ -2469,66 +2869,92 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-2"
+              "band-band-outcome-2",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-006__content__line_0",
+                "id": "OP-006__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Teams need rollout controls",
-                  "before trusting automation"
+                  "Teams need rollout",
+                  "controls before trusting",
+                  "automation"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 167.213,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 171.96,
+                "height": 57,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 69,
+                "title": {
+                  "id": "OP-006__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Teams need rollout",
+                    "controls before trusting",
+                    "automation"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 171.96,
+                  "height": 57,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 36
               },
               {
                 "id": "secondary_in",
@@ -2542,19 +2968,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 72
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 72
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:5"
       },
@@ -2591,7 +3017,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:5"
       },
@@ -2628,7 +3054,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:5"
       },
@@ -2675,67 +3101,90 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-005__content__line_0",
+                "id": "I-005__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Recommendation evidence",
-                  "drawer"
+                  "Recommendation",
+                  "evidence drawer"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 162.468,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 127.648,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "I-005__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Recommendation",
+                    "evidence drawer"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 127.648,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2749,19 +3198,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 104,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:6"
       },
@@ -2808,66 +3257,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-005__content__line_0",
+                "id": "OP-005__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Recommendation evidence is",
-                  "hard to audit"
+                  "Recommendation",
+                  "evidence is hard to audit"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 175.338,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 175.064,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-005__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Recommendation",
+                    "evidence is hard to audit"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 175.064,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -2881,19 +3354,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 104,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:6"
       },
@@ -2940,67 +3413,92 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-003__content__line_0",
+                "id": "O-003__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Improve trust in",
                   "automated",
                   "recommendations"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 135.664,
-                "height": 60,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 131.184,
+                "height": 57,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 69,
+                "title": {
+                  "id": "O-003__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Improve trust in",
+                    "automated",
+                    "recommendations"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 131.184,
+                  "height": 57,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 42
+                "y": 36
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 42
+                "y": 36
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 42
+                "y": 36
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 42
+                "y": 36
               },
               {
                 "id": "secondary_in",
@@ -3014,19 +3512,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 84
+                "y": 72
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 84
+            "height": 72
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 104,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:6"
       },
@@ -3073,67 +3571,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-005__content__line_0",
+                "id": "M-005__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Recommendation acceptance",
-                  "rate"
+                  "Recommendation",
+                  "acceptance rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 178.743,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 127.648,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-005__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Recommendation",
+                    "acceptance rate"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 127.648,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -3147,20 +3668,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
-              "status": "overflowed",
-              "detail": "Exceeded maxLines=1 even after moving secondary blocks."
+              "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 104,
+        "height": 92,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:6"
       },
@@ -3197,7 +3717,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:7"
       },
@@ -3244,66 +3764,90 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-008__content__line_0",
+                "id": "OP-008__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Outcome history is not visible at",
-                  "review time"
+                  "Outcome history is not",
+                  "visible at review time"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 191.75,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 162.456,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "OP-008__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Outcome history is not",
+                    "visible at review time"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 162.456,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 28
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -3317,19 +3861,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 56
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 56
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:7"
       },
@@ -3366,7 +3910,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:7"
       },
@@ -3413,66 +3957,90 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-3"
+              "band-band-outcome-3",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-006__content__line_0",
+                "id": "M-006__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Recommendation reversal rate"
+                  "Recommendation reversal",
+                  "rate"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 184.555,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 189.72,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "M-006__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Recommendation reversal",
+                    "rate"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 189.72,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 24
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -3486,26 +4054,26 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 48
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 48
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 76,
+        "height": 73,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:7"
       }
     ],
     "ports": [],
     "width": 1116,
-    "height": 924
+    "height": 921
   },
   "edges": [
     {
@@ -3531,8 +4099,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3571,8 +4138,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3611,8 +4177,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3651,8 +4216,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3691,8 +4255,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3731,8 +4294,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3771,8 +4333,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3811,8 +4372,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3851,8 +4411,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3891,8 +4450,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3931,8 +4489,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -3971,8 +4528,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4011,8 +4567,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4051,8 +4606,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4091,8 +4645,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4131,8 +4684,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4171,8 +4723,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4211,8 +4762,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4251,8 +4801,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4291,8 +4840,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4331,8 +4879,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4371,8 +4918,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4411,8 +4957,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4451,8 +4996,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4491,8 +5035,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4531,8 +5074,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4571,8 +5113,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4611,8 +5152,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4651,8 +5191,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4691,8 +5230,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4731,8 +5269,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -4749,27 +5286,5 @@
       "ownerContainerId": "root"
     }
   ],
-  "diagnostics": [
-    {
-      "phase": "measure",
-      "code": "renderer.measure.secondary_area_exhausted",
-      "severity": "warn",
-      "message": "Node still exceeded maxLines=1 after moving secondary blocks. Falling back to grow_height.",
-      "targetId": "M-001"
-    },
-    {
-      "phase": "measure",
-      "code": "renderer.measure.secondary_area_exhausted",
-      "severity": "warn",
-      "message": "Node still exceeded maxLines=1 after moving secondary blocks. Falling back to grow_height.",
-      "targetId": "M-004"
-    },
-    {
-      "phase": "measure",
-      "code": "renderer.measure.secondary_area_exhausted",
-      "severity": "warn",
-      "message": "Node still exceeded maxLines=1 after moving secondary blocks. Falling back to grow_height.",
-      "targetId": "M-005"
-    }
-  ]
+  "diagnostics": []
 }

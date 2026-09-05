@@ -107,12 +107,15 @@
           {
             "kind": "node",
             "id": "J-601",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
-              "journey_step_contained"
+              "journey_step_contained",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "journeyMap": {
@@ -131,32 +134,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
                 "id": "J-601__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Enter secondary flow"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 159.32,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 153.56,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-601__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Enter secondary flow"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 153.56,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "J-601__flow_in",
@@ -198,12 +222,15 @@
           {
             "kind": "node",
             "id": "J-602",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
-              "journey_step_contained"
+              "journey_step_contained",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "journeyMap": {
@@ -222,32 +249,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
                 "id": "J-602__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Leave secondary flow"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 162.408,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 156.648,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-602__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Leave secondary flow"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 156.648,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "J-602__flow_in",
@@ -296,12 +344,15 @@
       {
         "kind": "node",
         "id": "J-590",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
-          "journey_step_root"
+          "journey_step_root",
+          "shared-node",
+          "shared-node-plain"
         ],
         "viewMetadata": {
           "journeyMap": {
@@ -314,32 +365,53 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "widthBand": "standard",
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
         "content": [
           {
             "id": "J-590__title",
             "kind": "text",
-            "textStyleRole": "title",
+            "textStyleRole": "shared_node_title",
             "lines": [
               "Root handoff"
             ],
-            "x": 12,
-            "y": 12,
-            "width": 97.464,
-            "height": 20,
-            "lineHeight": 20,
-            "region": "primary",
-            "priority": "primary"
+            "x": 15.5,
+            "y": 14.5,
+            "width": 93.944,
+            "height": 19,
+            "lineHeight": 19,
+            "region": "primary"
           }
         ],
+        "sharedNode": {
+          "density": "plain",
+          "body": {
+            "x": 1.5,
+            "y": 1.5,
+            "width": 221,
+            "height": 45,
+            "title": {
+              "id": "J-590__title",
+              "kind": "text",
+              "textStyleRole": "shared_node_title",
+              "lines": [
+                "Root handoff"
+              ],
+              "x": 15.5,
+              "y": 14.5,
+              "width": 93.944,
+              "height": 19,
+              "lineHeight": 19,
+              "region": "primary"
+            },
+            "attributeGroups": []
+          }
+        },
         "ports": [
           {
             "id": "J-590__flow_in",
@@ -431,12 +503,15 @@
           {
             "kind": "node",
             "id": "J-503",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
-              "journey_step_contained"
+              "journey_step_contained",
+              "shared-node",
+              "shared-node-dense"
             ],
             "viewMetadata": {
               "journeyMap": {
@@ -455,61 +530,83 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
                 "id": "J-503__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Shared",
                   "multiply-contained step"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 179.68,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 172.64,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "J-503__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Shared",
+                    "multiply-contained step"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 172.64,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "J-503__flow_in",
                 "role": "journey_flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "J-503__flow_out",
                 "role": "journey_flow_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "J-503__escape_in",
                 "role": "journey_escape_in",
                 "side": "south",
                 "x": 112,
-                "y": 64
+                "y": 53
               },
               {
                 "id": "J-503__escape_out",
                 "role": "journey_escape_out",
                 "side": "south",
                 "x": 112,
-                "y": 64
+                "y": 53
               }
             ],
             "overflow": {
@@ -518,17 +615,20 @@
             "x": 868,
             "y": 92,
             "width": 224,
-            "height": 64
+            "height": 53
           },
           {
             "kind": "node",
             "id": "J-502",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
-              "journey_step_contained"
+              "journey_step_contained",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "journeyMap": {
@@ -547,32 +647,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
                 "id": "J-502__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Middle-authored child"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 166.672,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 160.272,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-502__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Middle-authored child"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 160.272,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "J-502__flow_in",
@@ -614,12 +735,15 @@
           {
             "kind": "node",
             "id": "J-501",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
-              "journey_step_contained"
+              "journey_step_contained",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "journeyMap": {
@@ -638,32 +762,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
                 "id": "J-501__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Last-authored child"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 147.016,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 141.256,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-501__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Last-authored child"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 141.256,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "J-501__flow_in",
@@ -707,17 +852,20 @@
         "x": 848,
         "y": 32,
         "width": 760,
-        "height": 144
+        "height": 133
       },
       {
         "kind": "node",
         "id": "J-591",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
-          "journey_step_root"
+          "journey_step_root",
+          "shared-node",
+          "shared-node-plain"
         ],
         "viewMetadata": {
           "journeyMap": {
@@ -730,32 +878,53 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "widthBand": "standard",
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
         "content": [
           {
             "id": "J-591__title",
             "kind": "text",
-            "textStyleRole": "title",
+            "textStyleRole": "shared_node_title",
             "lines": [
               "Root return"
             ],
-            "x": 12,
-            "y": 12,
-            "width": 85.76,
-            "height": 20,
-            "lineHeight": 20,
-            "region": "primary",
-            "priority": "primary"
+            "x": 15.5,
+            "y": 14.5,
+            "width": 82.56,
+            "height": 19,
+            "lineHeight": 19,
+            "region": "primary"
           }
         ],
+        "sharedNode": {
+          "density": "plain",
+          "body": {
+            "x": 1.5,
+            "y": 1.5,
+            "width": 221,
+            "height": 45,
+            "title": {
+              "id": "J-591__title",
+              "kind": "text",
+              "textStyleRole": "shared_node_title",
+              "lines": [
+                "Root return"
+              ],
+              "x": 15.5,
+              "y": 14.5,
+              "width": 82.56,
+              "height": 19,
+              "lineHeight": 19,
+              "region": "primary"
+            },
+            "attributeGroups": []
+          }
+        },
         "ports": [
           {
             "id": "J-591__flow_in",
@@ -799,7 +968,7 @@
     "x": 0,
     "y": 0,
     "width": 1904,
-    "height": 208
+    "height": 197
   },
   "edges": [],
   "decorations": [],

@@ -35,6 +35,7 @@ import {
   validatePrimitiveContent
 } from "./primitives.js";
 import { resolveGridCells } from "./gridLayout.js";
+import { measureSharedNode, reflowMeasuredSharedNode } from "./sharedNode.js";
 import { reservedStackSlotHeight } from "./stackSlots.js";
 import { createTextMeasurementService, type TextMeasurementService } from "./textMeasurement.js";
 import { resolveRendererTheme, WIDTH_BAND_ORDER, type RendererTheme, type TextStyleToken } from "./theme.js";
@@ -782,8 +783,41 @@ function measureNodePorts(
 }
 
 function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
-  context.diagnostics.push(...validatePrimitiveContent(item.id, item.primitive, item.content, context.theme));
   const primitiveTheme = getNodePrimitiveTheme(context.theme, item.primitive);
+
+  if (item.sharedNode) {
+    const sharedNode = measureSharedNode({
+      node: item as SceneNode & { sharedNode: NonNullable<SceneNode["sharedNode"]> },
+      theme: context.theme,
+      diagnostics: context.diagnostics,
+      getTextStyle: (role) => getTextStyle(context, item.id, role),
+      wrapText: (text, maxWidth, style) => wrapTextBlock(text, maxWidth, style, context.measureText)
+    });
+
+    return {
+      kind: "node",
+      id: item.id,
+      role: item.role,
+      primitive: item.primitive,
+      classes: [...item.classes, "shared-node", `shared-node-${sharedNode.layout.density}`],
+      viewMetadata: cloneViewMetadata(item.viewMetadata),
+      widthPolicy: cloneWidthPolicy(item.widthPolicy),
+      widthBand: "standard",
+      overflowPolicy: cloneOverflowPolicy(item.overflowPolicy),
+      content: sharedNode.blocks,
+      sharedNode: sharedNode.layout,
+      ports: measureNodePorts(item, sharedNode.width, sharedNode.height, primitiveTheme.portInset),
+      overflow: {
+        status: "fits"
+      },
+      width: sharedNode.width,
+      height: sharedNode.height,
+      sharedWidthGroup: item.sharedWidthGroup,
+      sharedHeightGroup: item.sharedHeightGroup
+    };
+  }
+
+  context.diagnostics.push(...validatePrimitiveContent(item.id, item.primitive, item.content, context.theme));
 
   if (item.fixedSize) {
     const width = roundMetric(item.fixedSize.width);
@@ -930,7 +964,7 @@ function estimateContainerContentSize(container: MeasuredContainer): MeasuredSiz
       return estimateGridContentSize(container.children, container.layout, gap);
     case "stack":
     case "lanes":
-    case "elk_layered":
+    case "layered":
       return estimateLinearContentSize(container.children, container.layout.direction ?? "vertical", gap);
     case "manual":
       return {
@@ -981,6 +1015,9 @@ function collectSharedSizeGroups(
 
 function resizeMeasuredNode(node: MeasuredNode, context: MeasureContext): void {
   const primitiveTheme = getNodePrimitiveTheme(context.theme, node.primitive);
+  if (node.sharedNode) {
+    reflowMeasuredSharedNode(node.sharedNode, node.height);
+  }
   node.ports = measureNodePorts(node, node.width, node.height, primitiveTheme.portInset);
 }
 

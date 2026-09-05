@@ -38,8 +38,8 @@ function step(id: string): JourneyRenderStep {
   return {
     kind: "step",
     id,
-    labelLines: [id],
-    badges: [],
+    title: id,
+    references: [],
     orderAnchorId: id
   };
 }

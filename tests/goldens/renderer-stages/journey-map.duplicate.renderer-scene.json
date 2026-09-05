@@ -31,9 +31,10 @@
       {
         "kind": "node",
         "id": "J-801",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
           "journey_step_root"
@@ -41,23 +42,24 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
-        "content": [
-          {
-            "id": "J-801__title",
-            "kind": "text",
-            "text": "Choose a route",
-            "textStyleRole": "title",
-            "priority": "primary"
-          }
-        ],
+        "content": [],
+        "sharedNode": {
+          "title": "Choose a route",
+          "decoratorMode": {
+            "id": "none",
+            "showNodeType": false,
+            "showNodeId": false
+          },
+          "nodeType": "Step",
+          "nodeId": "J-801",
+          "attributes": []
+        },
         "ports": [
           {
             "id": "J-801__flow_in",
@@ -92,9 +94,10 @@
       {
         "kind": "node",
         "id": "J-802",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
           "journey_step_root"
@@ -102,23 +105,24 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
-        "content": [
-          {
-            "id": "J-802__title",
-            "kind": "text",
-            "text": "Continue",
-            "textStyleRole": "title",
-            "priority": "primary"
-          }
-        ],
+        "content": [],
+        "sharedNode": {
+          "title": "Continue",
+          "decoratorMode": {
+            "id": "none",
+            "showNodeType": false,
+            "showNodeId": false
+          },
+          "nodeType": "Step",
+          "nodeId": "J-802",
+          "attributes": []
+        },
         "ports": [
           {
             "id": "J-802__flow_in",

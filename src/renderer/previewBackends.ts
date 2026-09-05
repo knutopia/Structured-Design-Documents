@@ -62,6 +62,7 @@ export type PreviewArtifactSource =
     projection: Projection;
     detailId: string;
     themeId?: string;
+    nodeDecoratorModeId?: string;
   };
 
 export interface RenderPreviewArtifactRequest {
@@ -154,7 +155,27 @@ function createStagedProjectionPreviewBackend(
       );
       const settings: StagedRenderSettings = {
         detailId: request.source.detailId,
-        themeId
+        themeId,
+        nodeDecoratorMode: (() => {
+          const requestedModeId = request.source.nodeDecoratorModeId
+            ?? request.bundle.manifest.tool_defaults.node_decorator_mode_id;
+          const mode = request.bundle.manifest.node_decorator_modes.find(
+            (candidate) => candidate.id === requestedModeId
+          ) ?? request.bundle.manifest.node_decorator_modes.find(
+            (candidate) => candidate.id === request.bundle.manifest.tool_defaults.node_decorator_mode_id
+          );
+          return mode
+            ? {
+              id: mode.id,
+              showNodeType: mode.show_node_type,
+              showNodeId: mode.show_node_id
+            }
+            : {
+              id: "none",
+              showNodeType: false,
+              showNodeId: false
+            };
+        })()
       };
       if (request.format === "svg") {
         const rendered = await options.renderSvg(

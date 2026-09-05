@@ -89,12 +89,19 @@ function createContractResolutionBundle(
       },
       tool_defaults: {
         validation_profile_id: profiles[0]?.id ?? "simple",
-        render_detail_id: "compact"
+        render_detail_id: "compact",
+        node_decorator_mode_id: "none"
       },
       profiles,
       render_details: [
         { id: "compact", intent: "low noise" },
         { id: "detailed", intent: "full detail" }
+      ],
+      node_decorator_modes: [
+        { id: "none", intent: "no decorators", show_node_type: false, show_node_id: false },
+        { id: "type", intent: "node type", show_node_type: true, show_node_id: false },
+        { id: "id", intent: "node id", show_node_type: false, show_node_id: true },
+        { id: "type,id", intent: "node type and id", show_node_type: true, show_node_id: true }
       ]
     },
     syntax: {

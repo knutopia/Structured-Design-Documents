@@ -221,8 +221,9 @@ describe("staged ia_place_map", () => {
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
     expect(rendered.svg).not.toContain("/billing");
     expect(rendered.svg).not.toContain("auth");
-    expect(rendered.svg).not.toContain("entry_points:");
-    expect(rendered.svg).toContain("primary_nav: true");
+    expect(rendered.svg).not.toContain('data-attribute-group="entry_points"');
+    expect(rendered.svg).toContain('data-attribute-group="primary_nav"');
+    expect(rendered.svg).toContain(">true</tspan>");
     expect(rendered.positionedScene.root.children).toHaveLength(1);
 
     const billing = findPositionedItem(rendered.positionedScene.root, "P-010");

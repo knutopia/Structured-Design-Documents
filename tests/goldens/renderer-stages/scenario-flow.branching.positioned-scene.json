@@ -95,7 +95,9 @@
               "scenario-flow-lane-step",
               "scenario-flow-role-spine_step",
               "shape-diamond",
-              "type-step"
+              "type-step",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -114,33 +116,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "J-030__content__line_0",
+                "id": "J-030__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Choose Fulfillment"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 142.576,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 137.456,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-030__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Choose Fulfillment"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 137.456,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -198,8 +220,8 @@
         "x": 132,
         "y": 28,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 73,
+        "resolvedSlotHeight": 53,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:0"
       },
@@ -268,7 +290,9 @@
               "scenario-flow-lane-step",
               "scenario-flow-role-spine_step",
               "shape-box",
-              "type-step"
+              "type-step",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -287,33 +311,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "J-031__content__line_0",
+                "id": "J-031__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Enter Delivery Address"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 172.976,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 166.256,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-031__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Enter Delivery Address"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 166.256,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -371,8 +415,8 @@
         "x": 496,
         "y": 28,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 73,
+        "resolvedSlotHeight": 53,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:0"
       },
@@ -441,7 +485,9 @@
               "scenario-flow-lane-step",
               "scenario-flow-role-spine_step",
               "shape-diamond",
-              "type-step"
+              "type-step",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -460,33 +506,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "J-033__content__line_0",
+                "id": "J-033__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Choose Contact Method"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 181.16,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 174.76,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-033__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Choose Contact Method"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 174.76,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -534,18 +600,18 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 774,
+            "x": 790,
             "y": 38,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 764,
+        "x": 780,
         "y": 28,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 73,
+        "resolvedSlotHeight": 53,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:0"
       },
@@ -614,7 +680,9 @@
               "scenario-flow-lane-step",
               "scenario-flow-role-spine_step",
               "shape-box",
-              "type-step"
+              "type-step",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -633,33 +701,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "J-034__content__line_0",
+                "id": "J-034__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Confirm Email Notification"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 198.664,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 191.304,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-034__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Confirm Email Notification"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 191.304,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -707,18 +795,18 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 1186,
+            "x": 1202,
             "y": 38,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 1176,
+        "x": 1192,
         "y": 28,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 73,
+        "resolvedSlotHeight": 53,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:0"
       },
@@ -779,10 +867,10 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 136,
+        "y": 141,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 73,
+        "resolvedSlotHeight": 53,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:row:1"
       },
@@ -851,7 +939,9 @@
               "scenario-flow-lane-step",
               "scenario-flow-role-branch_step",
               "shape-box",
-              "type-step"
+              "type-step",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -870,33 +960,53 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "J-032__content__line_0",
+                "id": "J-032__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Choose Pickup Store"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 156.352,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 150.592,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "J-032__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Choose Pickup Store"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 150.592,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -945,17 +1055,17 @@
               "status": "fits"
             },
             "x": 506,
-            "y": 146,
+            "y": 151,
             "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 136,
+        "y": 141,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 73,
+        "resolvedSlotHeight": 53,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:1"
       },
@@ -1015,11 +1125,11 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 764,
-        "y": 136,
+        "x": 780,
+        "y": 141,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 73,
+        "resolvedSlotHeight": 53,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:row:1"
       },
@@ -1088,7 +1198,9 @@
               "scenario-flow-lane-step",
               "scenario-flow-role-branch_step",
               "shape-box",
-              "type-step"
+              "type-step",
+              "shared-node",
+              "shared-node-dense"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -1107,62 +1219,83 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "J-035__content__line_0",
+                "id": "J-035__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Review Pickup",
                   "Instructions"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 108.392,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 104.552,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "J-035__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Review Pickup",
+                    "Instructions"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 104.552,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "realization_in",
@@ -1176,24 +1309,24 @@
                 "role": "realization_out",
                 "side": "south",
                 "x": 112,
-                "y": 64
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 1186,
-            "y": 146,
+            "x": 1202,
+            "y": 151,
             "width": 224,
-            "height": 64
+            "height": 53
           }
         ],
         "ports": [],
-        "x": 1176,
-        "y": 136,
+        "x": 1192,
+        "y": 141,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 73,
+        "resolvedSlotHeight": 53,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:1"
       },
@@ -1262,7 +1395,9 @@
               "scenario-flow-lane-place",
               "scenario-flow-role-realized_place",
               "shape-box",
-              "type-place"
+              "type-place",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -1279,35 +1414,55 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "P-030__content__line_0",
+                "id": "P-030__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Fulfillment"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 82.616,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 79.736,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "P-030__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Fulfillment"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 79.736,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1320,7 +1475,7 @@
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
@@ -1334,21 +1489,21 @@
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
+                "x": 112,
                 "y": 48
               }
             ],
@@ -1356,17 +1511,17 @@
               "status": "fits"
             },
             "x": 142,
-            "y": 286,
-            "width": 168,
+            "y": 280,
+            "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 276,
+        "y": 270,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:2"
       },
@@ -1435,7 +1590,9 @@
               "scenario-flow-lane-place",
               "scenario-flow-role-realized_place",
               "shape-box",
-              "type-place"
+              "type-place",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -1452,35 +1609,55 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "P-031__content__line_0",
+                "id": "P-031__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Delivery Address"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 128.472,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 123.672,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "P-031__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Delivery Address"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 123.672,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1493,7 +1670,7 @@
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
@@ -1507,21 +1684,21 @@
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
+                "x": 112,
                 "y": 48
               }
             ],
@@ -1529,17 +1706,17 @@
               "status": "fits"
             },
             "x": 506,
-            "y": 286,
-            "width": 168,
+            "y": 280,
+            "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 276,
+        "y": 270,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:2"
       },
@@ -1608,7 +1785,9 @@
               "scenario-flow-lane-place",
               "scenario-flow-role-realized_place",
               "shape-box",
-              "type-place"
+              "type-place",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -1625,35 +1804,55 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "P-033__content__line_0",
+                "id": "P-033__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Contact Method"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 121.2,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 117.04,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "P-033__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Contact Method"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 117.04,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -1666,7 +1865,7 @@
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
@@ -1680,39 +1879,39 @@
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
+                "x": 112,
                 "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 774,
-            "y": 286,
-            "width": 168,
+            "x": 790,
+            "y": 280,
+            "width": 224,
             "height": 48
           }
         ],
         "ports": [],
-        "x": 764,
-        "y": 276,
+        "x": 780,
+        "y": 270,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:2"
       },
@@ -1781,7 +1980,9 @@
               "scenario-flow-lane-place",
               "scenario-flow-role-realized_place",
               "shape-box",
-              "type-place"
+              "type-place",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -1798,95 +1999,114 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "P-034__content__line_0",
+                "id": "P-034__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Email",
-                  "Confirmation"
+                  "Email Confirmation"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 98.264,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 139.08,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "P-034__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Email Confirmation"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 139.08,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
-                "y": 64
+                "x": 112,
+                "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 1186,
-            "y": 286,
-            "width": 168,
-            "height": 64
+            "x": 1202,
+            "y": 280,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
-        "x": 1176,
-        "y": 276,
+        "x": 1192,
+        "y": 270,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:2"
       },
@@ -1947,10 +2167,10 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 384,
+        "y": 362,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:row:3"
       },
@@ -2019,7 +2239,9 @@
               "scenario-flow-lane-place",
               "scenario-flow-role-realized_place",
               "shape-box",
-              "type-place"
+              "type-place",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -2036,35 +2258,55 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "P-032__content__line_0",
+                "id": "P-032__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Pickup Store"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 96.392,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 92.872,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "P-032__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Pickup Store"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 92.872,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -2077,7 +2319,7 @@
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
@@ -2091,21 +2333,21 @@
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
+                "x": 112,
                 "y": 48
               }
             ],
@@ -2113,17 +2355,17 @@
               "status": "fits"
             },
             "x": 506,
-            "y": 394,
-            "width": 168,
+            "y": 372,
+            "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 384,
+        "y": 362,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:3"
       },
@@ -2183,11 +2425,11 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 764,
-        "y": 384,
+        "x": 780,
+        "y": 362,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:row:3"
       },
@@ -2256,7 +2498,9 @@
               "scenario-flow-lane-place",
               "scenario-flow-role-realized_place",
               "shape-box",
-              "type-place"
+              "type-place",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -2273,95 +2517,114 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "P-035__content__line_0",
+                "id": "P-035__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Pickup",
-                  "Instructions"
+                  "Pickup Instructions"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 90.24,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 139.36,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "P-035__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Pickup Instructions"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 139.36,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
-                "y": 64
+                "x": 112,
+                "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 1186,
-            "y": 394,
-            "width": 168,
-            "height": 64
+            "x": 1202,
+            "y": 372,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
-        "x": 1176,
-        "y": 384,
+        "x": 1192,
+        "y": 362,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:3"
       },
@@ -2431,7 +2694,9 @@
               "scenario-flow-role-realized_view_state",
               "shape-box",
               "type-viewstate",
-              "chrome-dashed"
+              "chrome-dashed",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -2448,35 +2713,55 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "VS-030a__content__line_0",
+                "id": "VS-030a__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Fulfillment Choice"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 138.088,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 132.968,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "VS-030a__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Fulfillment Choice"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 132.968,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
@@ -2489,7 +2774,7 @@
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
@@ -2503,21 +2788,21 @@
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
+                "x": 224,
                 "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
+                "x": 112,
                 "y": 48
               }
             ],
@@ -2525,17 +2810,17 @@
               "status": "fits"
             },
             "x": 142,
-            "y": 502,
-            "width": 168,
+            "y": 464,
+            "width": 224,
             "height": 48
           }
         ],
         "ports": [],
         "x": 132,
-        "y": 492,
+        "y": 454,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:4"
       },
@@ -2605,7 +2890,9 @@
               "scenario-flow-role-realized_view_state",
               "shape-box",
               "type-viewstate",
-              "chrome-dashed"
+              "chrome-dashed",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -2622,95 +2909,114 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "VS-031a__content__line_0",
+                "id": "VS-031a__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Delivery Address",
-                  "Form"
+                  "Delivery Address Form"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 128.472,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 164.784,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "VS-031a__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Delivery Address Form"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 164.784,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
-                "y": 64
+                "x": 112,
+                "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 506,
-            "y": 502,
-            "width": 168,
-            "height": 64
+            "y": 464,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 492,
+        "y": 454,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:4"
       },
@@ -2780,7 +3086,9 @@
               "scenario-flow-role-realized_view_state",
               "shape-box",
               "type-viewstate",
-              "chrome-dashed"
+              "chrome-dashed",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -2797,95 +3105,114 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "VS-033a__content__line_0",
+                "id": "VS-033a__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Contact Method",
-                  "Choice"
+                  "Contact Method Choice"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 121.2,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 170.272,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "VS-033a__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Contact Method Choice"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 170.272,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
-                "y": 64
+                "x": 112,
+                "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 774,
-            "y": 502,
-            "width": 168,
-            "height": 64
+            "x": 790,
+            "y": 464,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
-        "x": 764,
-        "y": 492,
+        "x": 780,
+        "y": 454,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:4"
       },
@@ -2955,7 +3282,9 @@
               "scenario-flow-role-realized_view_state",
               "shape-box",
               "type-viewstate",
-              "chrome-dashed"
+              "chrome-dashed",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -2972,95 +3301,114 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "VS-034a__content__line_0",
+                "id": "VS-034a__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Email",
-                  "Confirmation State"
+                  "Email Confirmation State"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 143.08,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 181.976,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "VS-034a__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Email Confirmation State"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 181.976,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
-                "y": 64
+                "x": 112,
+                "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 1186,
-            "y": 502,
-            "width": 168,
-            "height": 64
+            "x": 1202,
+            "y": 464,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
-        "x": 1176,
-        "y": 492,
+        "x": 1192,
+        "y": 454,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:4"
       },
@@ -3121,10 +3469,10 @@
         "children": [],
         "ports": [],
         "x": 132,
-        "y": 600,
+        "y": 546,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:row:5"
       },
@@ -3194,7 +3542,9 @@
               "scenario-flow-role-realized_view_state",
               "shape-box",
               "type-viewstate",
-              "chrome-dashed"
+              "chrome-dashed",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -3211,95 +3561,114 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "VS-032a__content__line_0",
+                "id": "VS-032a__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Pickup Store",
-                  "Selector"
+                  "Pickup Store Selector"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 96.392,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 157.656,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "VS-032a__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Pickup Store Selector"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 157.656,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
-                "y": 64
+                "x": 112,
+                "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 506,
-            "y": 610,
-            "width": 168,
-            "height": 64
+            "y": 556,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
         "x": 496,
-        "y": 600,
+        "y": 546,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:5"
       },
@@ -3359,11 +3728,11 @@
         "headerContent": [],
         "children": [],
         "ports": [],
-        "x": 764,
-        "y": 600,
+        "x": 780,
+        "y": 546,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:placeholder",
         "sharedHeightGroup": "scenario_flow:row:5"
       },
@@ -3433,7 +3802,9 @@
               "scenario-flow-role-realized_view_state",
               "shape-box",
               "type-viewstate",
-              "chrome-dashed"
+              "chrome-dashed",
+              "shared-node",
+              "shared-node-plain"
             ],
             "viewMetadata": {
               "scenarioFlow": {
@@ -3450,95 +3821,114 @@
               }
             },
             "widthPolicy": {
-              "preferred": "narrow",
+              "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
-            "widthBand": "narrow",
+            "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "VS-035a__content__line_0",
+                "id": "VS-035a__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Pickup",
-                  "Instructions State"
+                  "Pickup Instructions State"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 134.968,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 182.168,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "VS-035a__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Pickup Instructions State"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 182.168,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "flow_in",
                 "role": "flow_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "flow_out",
                 "role": "flow_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 24
               },
               {
                 "id": "mirror_out",
                 "role": "mirror_out",
                 "side": "east",
-                "x": 168,
-                "y": 32
+                "x": 224,
+                "y": 24
               },
               {
                 "id": "realization_in",
                 "role": "realization_in",
                 "side": "north",
-                "x": 84,
+                "x": 112,
                 "y": 0
               },
               {
                 "id": "realization_out",
                 "role": "realization_out",
                 "side": "south",
-                "x": 84,
-                "y": 64
+                "x": 112,
+                "y": 48
               }
             ],
             "overflow": {
               "status": "fits"
             },
-            "x": 1186,
-            "y": 610,
-            "width": 168,
-            "height": 64
+            "x": 1202,
+            "y": 556,
+            "width": 224,
+            "height": 48
           }
         ],
         "ports": [],
-        "x": 1176,
-        "y": 600,
+        "x": 1192,
+        "y": 546,
         "width": 244,
-        "height": 84,
-        "resolvedSlotHeight": 64,
+        "height": 68,
+        "resolvedSlotHeight": 48,
         "sharedWidthGroup": "scenario_flow:cell:semantic",
         "sharedHeightGroup": "scenario_flow:row:5"
       }
@@ -3546,8 +3936,8 @@
     "ports": [],
     "x": 0,
     "y": 0,
-    "width": 1472,
-    "height": 712
+    "width": 1504,
+    "height": 642
   },
   "edges": [
     {
@@ -3619,7 +4009,7 @@
         "itemId": "J-032",
         "portId": "flow_in",
         "x": 506,
-        "y": 170
+        "y": 175
       },
       "route": {
         "style": "orthogonal",
@@ -3634,11 +4024,11 @@
           },
           {
             "x": 436,
-            "y": 170
+            "y": 175
           },
           {
             "x": 506,
-            "y": 170
+            "y": 175
           }
         ]
       },
@@ -3651,7 +4041,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 448,
-        "y": 105
+        "y": 115.5
       },
       "markers": {
         "end": "arrow"
@@ -3676,7 +4066,7 @@
       "to": {
         "itemId": "J-033",
         "portId": "flow_in",
-        "x": 774,
+        "x": 790,
         "y": 62
       },
       "route": {
@@ -3687,7 +4077,7 @@
             "y": 62
           },
           {
-            "x": 774,
+            "x": 790,
             "y": 62
           }
         ]
@@ -3709,24 +4099,24 @@
       "from": {
         "itemId": "J-033",
         "portId": "flow_out",
-        "x": 998,
+        "x": 1014,
         "y": 62
       },
       "to": {
         "itemId": "J-034",
         "portId": "flow_in",
-        "x": 1186,
+        "x": 1202,
         "y": 62
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 998,
+            "x": 1014,
             "y": 62
           },
           {
-            "x": 1186,
+            "x": 1202,
             "y": 62
           }
         ]
@@ -3739,7 +4129,7 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 1069.287,
+        "x": 1085.287,
         "y": 51
       },
       "markers": {
@@ -3759,33 +4149,33 @@
       "from": {
         "itemId": "J-033",
         "portId": "flow_out",
-        "x": 998,
+        "x": 1014,
         "y": 78
       },
       "to": {
         "itemId": "J-035",
         "portId": "flow_in",
-        "x": 1186,
-        "y": 178
+        "x": 1202,
+        "y": 177.5
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 998,
+            "x": 1014,
             "y": 78
           },
           {
-            "x": 1092,
+            "x": 1108,
             "y": 78
           },
           {
-            "x": 1092,
-            "y": 178
+            "x": 1108,
+            "y": 177.5
           },
           {
-            "x": 1186,
-            "y": 178
+            "x": 1202,
+            "y": 177.5
           }
         ]
       },
@@ -3797,8 +4187,8 @@
         "height": 22,
         "lineHeight": 14,
         "textStyleRole": "edge_label",
-        "x": 1104,
-        "y": 105
+        "x": 1120,
+        "y": 116.75
       },
       "markers": {
         "end": "arrow"
@@ -3817,25 +4207,25 @@
       "from": {
         "itemId": "P-030",
         "portId": "mirror_out",
-        "x": 310,
-        "y": 310
+        "x": 366,
+        "y": 304
       },
       "to": {
         "itemId": "P-031",
         "portId": "mirror_in",
         "x": 506,
-        "y": 310
+        "y": 304
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 310,
-            "y": 310
+            "x": 366,
+            "y": 304
           },
           {
             "x": 506,
-            "y": 310
+            "y": 304
           }
         ]
       },
@@ -3856,33 +4246,33 @@
       "from": {
         "itemId": "P-030",
         "portId": "mirror_out",
-        "x": 310,
-        "y": 326
+        "x": 366,
+        "y": 320
       },
       "to": {
         "itemId": "P-032",
         "portId": "mirror_in",
         "x": 506,
-        "y": 418
+        "y": 396
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 310,
-            "y": 326
+            "x": 366,
+            "y": 320
           },
           {
             "x": 436,
-            "y": 326
+            "y": 320
           },
           {
             "x": 436,
-            "y": 418
+            "y": 396
           },
           {
             "x": 506,
-            "y": 418
+            "y": 396
           }
         ]
       },
@@ -3903,25 +4293,25 @@
       "from": {
         "itemId": "P-033",
         "portId": "mirror_out",
-        "x": 942,
-        "y": 310
+        "x": 1014,
+        "y": 304
       },
       "to": {
         "itemId": "P-034",
         "portId": "mirror_in",
-        "x": 1186,
-        "y": 310
+        "x": 1202,
+        "y": 304
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 942,
-            "y": 310
+            "x": 1014,
+            "y": 304
           },
           {
-            "x": 1186,
-            "y": 310
+            "x": 1202,
+            "y": 304
           }
         ]
       },
@@ -3942,33 +4332,33 @@
       "from": {
         "itemId": "P-033",
         "portId": "mirror_out",
-        "x": 942,
-        "y": 326
+        "x": 1014,
+        "y": 320
       },
       "to": {
         "itemId": "P-035",
         "portId": "mirror_in",
-        "x": 1186,
-        "y": 426
+        "x": 1202,
+        "y": 396
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 942,
-            "y": 326
+            "x": 1014,
+            "y": 320
           },
           {
-            "x": 1092,
-            "y": 326
+            "x": 1108,
+            "y": 320
           },
           {
-            "x": 1092,
-            "y": 426
+            "x": 1108,
+            "y": 396
           },
           {
-            "x": 1186,
-            "y": 426
+            "x": 1202,
+            "y": 396
           }
         ]
       },
@@ -3989,25 +4379,25 @@
       "from": {
         "itemId": "VS-030a",
         "portId": "mirror_out",
-        "x": 310,
-        "y": 526
+        "x": 366,
+        "y": 488
       },
       "to": {
         "itemId": "VS-031a",
         "portId": "mirror_in",
         "x": 506,
-        "y": 526
+        "y": 488
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 310,
-            "y": 526
+            "x": 366,
+            "y": 488
           },
           {
             "x": 506,
-            "y": 526
+            "y": 488
           }
         ]
       },
@@ -4028,33 +4418,33 @@
       "from": {
         "itemId": "VS-030a",
         "portId": "mirror_out",
-        "x": 310,
-        "y": 542
+        "x": 366,
+        "y": 504
       },
       "to": {
         "itemId": "VS-032a",
         "portId": "mirror_in",
         "x": 506,
-        "y": 642
+        "y": 580
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 310,
-            "y": 542
+            "x": 366,
+            "y": 504
           },
           {
             "x": 436,
-            "y": 542
+            "y": 504
           },
           {
             "x": 436,
-            "y": 642
+            "y": 580
           },
           {
             "x": 506,
-            "y": 642
+            "y": 580
           }
         ]
       },
@@ -4075,25 +4465,25 @@
       "from": {
         "itemId": "VS-033a",
         "portId": "mirror_out",
-        "x": 942,
-        "y": 534
+        "x": 1014,
+        "y": 488
       },
       "to": {
         "itemId": "VS-034a",
         "portId": "mirror_in",
-        "x": 1186,
-        "y": 534
+        "x": 1202,
+        "y": 488
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 942,
-            "y": 534
+            "x": 1014,
+            "y": 488
           },
           {
-            "x": 1186,
-            "y": 534
+            "x": 1202,
+            "y": 488
           }
         ]
       },
@@ -4114,33 +4504,33 @@
       "from": {
         "itemId": "VS-033a",
         "portId": "mirror_out",
-        "x": 942,
-        "y": 550
+        "x": 1014,
+        "y": 504
       },
       "to": {
         "itemId": "VS-035a",
         "portId": "mirror_in",
-        "x": 1186,
-        "y": 642
+        "x": 1202,
+        "y": 580
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 942,
-            "y": 550
+            "x": 1014,
+            "y": 504
           },
           {
-            "x": 1092,
-            "y": 550
+            "x": 1108,
+            "y": 504
           },
           {
-            "x": 1092,
-            "y": 642
+            "x": 1108,
+            "y": 580
           },
           {
-            "x": 1186,
-            "y": 642
+            "x": 1202,
+            "y": 580
           }
         ]
       },
@@ -4169,7 +4559,7 @@
         "itemId": "P-030",
         "portId": "realization_in",
         "x": 254,
-        "y": 286
+        "y": 280
       },
       "route": {
         "style": "orthogonal",
@@ -4180,7 +4570,7 @@
           },
           {
             "x": 254,
-            "y": 286
+            "y": 280
           }
         ]
       },
@@ -4202,33 +4592,41 @@
       "from": {
         "itemId": "J-030",
         "portId": "realization_out",
-        "x": 328,
+        "x": 270,
         "y": 86
       },
       "to": {
         "itemId": "VS-030a",
         "portId": "realization_in",
         "x": 270,
-        "y": 502
+        "y": 464
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 328,
+            "x": 270,
             "y": 86
           },
           {
-            "x": 328,
-            "y": 352
+            "x": 270,
+            "y": 262
+          },
+          {
+            "x": 384,
+            "y": 262
+          },
+          {
+            "x": 384,
+            "y": 346
           },
           {
             "x": 270,
-            "y": 352
+            "y": 346
           },
           {
             "x": 270,
-            "y": 502
+            "y": 464
           }
         ]
       },
@@ -4257,7 +4655,7 @@
         "itemId": "P-031",
         "portId": "realization_in",
         "x": 618,
-        "y": 286
+        "y": 280
       },
       "route": {
         "style": "orthogonal",
@@ -4268,23 +4666,23 @@
           },
           {
             "x": 618,
-            "y": 128
+            "y": 133
           },
           {
             "x": 748,
-            "y": 128
+            "y": 133
           },
           {
             "x": 748,
-            "y": 212
+            "y": 217
           },
           {
             "x": 618,
-            "y": 212
+            "y": 217
           },
           {
             "x": 618,
-            "y": 286
+            "y": 280
           }
         ]
       },
@@ -4313,7 +4711,7 @@
         "itemId": "VS-031a",
         "portId": "realization_in",
         "x": 634,
-        "y": 502
+        "y": 464
       },
       "route": {
         "style": "orthogonal",
@@ -4324,23 +4722,23 @@
           },
           {
             "x": 634,
-            "y": 112
+            "y": 117
           },
           {
-            "x": 764,
-            "y": 112
+            "x": 780,
+            "y": 117
           },
           {
-            "x": 764,
-            "y": 460
-          },
-          {
-            "x": 634,
-            "y": 460
+            "x": 780,
+            "y": 438
           },
           {
             "x": 634,
-            "y": 502
+            "y": 438
+          },
+          {
+            "x": 634,
+            "y": 464
           }
         ]
       },
@@ -4362,33 +4760,41 @@
       "from": {
         "itemId": "J-032",
         "portId": "realization_out",
-        "x": 692,
-        "y": 194
+        "x": 650,
+        "y": 199
       },
       "to": {
         "itemId": "P-032",
         "portId": "realization_in",
         "x": 650,
-        "y": 394
+        "y": 372
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 692,
-            "y": 194
-          },
-          {
-            "x": 692,
-            "y": 352
+            "x": 650,
+            "y": 199
           },
           {
             "x": 650,
-            "y": 352
+            "y": 262
+          },
+          {
+            "x": 748,
+            "y": 262
+          },
+          {
+            "x": 748,
+            "y": 346
           },
           {
             "x": 650,
-            "y": 394
+            "y": 346
+          },
+          {
+            "x": 650,
+            "y": 372
           }
         ]
       },
@@ -4410,33 +4816,41 @@
       "from": {
         "itemId": "J-032",
         "portId": "realization_out",
-        "x": 708,
-        "y": 194
+        "x": 666,
+        "y": 199
       },
       "to": {
         "itemId": "VS-032a",
         "portId": "realization_in",
         "x": 666,
-        "y": 610
+        "y": 556
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 708,
-            "y": 194
-          },
-          {
-            "x": 708,
-            "y": 584
+            "x": 666,
+            "y": 199
           },
           {
             "x": 666,
-            "y": 584
+            "y": 246
+          },
+          {
+            "x": 764,
+            "y": 246
+          },
+          {
+            "x": 764,
+            "y": 530
           },
           {
             "x": 666,
-            "y": 610
+            "y": 530
+          },
+          {
+            "x": 666,
+            "y": 556
           }
         ]
       },
@@ -4458,25 +4872,25 @@
       "from": {
         "itemId": "J-033",
         "portId": "realization_out",
-        "x": 886,
+        "x": 902,
         "y": 86
       },
       "to": {
         "itemId": "P-033",
         "portId": "realization_in",
-        "x": 886,
-        "y": 286
+        "x": 902,
+        "y": 280
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 886,
+            "x": 902,
             "y": 86
           },
           {
-            "x": 886,
-            "y": 286
+            "x": 902,
+            "y": 280
           }
         ]
       },
@@ -4498,33 +4912,41 @@
       "from": {
         "itemId": "J-033",
         "portId": "realization_out",
-        "x": 960,
+        "x": 918,
         "y": 86
       },
       "to": {
         "itemId": "VS-033a",
         "portId": "realization_in",
-        "x": 902,
-        "y": 502
+        "x": 918,
+        "y": 464
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 960,
+            "x": 918,
             "y": 86
           },
           {
-            "x": 960,
-            "y": 352
+            "x": 918,
+            "y": 262
           },
           {
-            "x": 902,
-            "y": 352
+            "x": 1032,
+            "y": 262
           },
           {
-            "x": 902,
-            "y": 502
+            "x": 1032,
+            "y": 346
+          },
+          {
+            "x": 918,
+            "y": 346
+          },
+          {
+            "x": 918,
+            "y": 464
           }
         ]
       },
@@ -4546,41 +4968,41 @@
       "from": {
         "itemId": "J-034",
         "portId": "realization_out",
-        "x": 1298,
+        "x": 1314,
         "y": 86
       },
       "to": {
         "itemId": "P-034",
         "portId": "realization_in",
-        "x": 1298,
-        "y": 286
+        "x": 1314,
+        "y": 280
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1298,
+            "x": 1314,
             "y": 86
           },
           {
-            "x": 1298,
-            "y": 128
+            "x": 1314,
+            "y": 133
           },
           {
-            "x": 1428,
-            "y": 128
+            "x": 1444,
+            "y": 133
           },
           {
-            "x": 1428,
-            "y": 228
+            "x": 1444,
+            "y": 222
           },
           {
-            "x": 1298,
-            "y": 228
+            "x": 1314,
+            "y": 222
           },
           {
-            "x": 1298,
-            "y": 286
+            "x": 1314,
+            "y": 280
           }
         ]
       },
@@ -4602,41 +5024,41 @@
       "from": {
         "itemId": "J-034",
         "portId": "realization_out",
-        "x": 1314,
+        "x": 1330,
         "y": 86
       },
       "to": {
         "itemId": "VS-034a",
         "portId": "realization_in",
-        "x": 1314,
-        "y": 502
+        "x": 1330,
+        "y": 464
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1314,
+            "x": 1330,
             "y": 86
           },
           {
-            "x": 1314,
-            "y": 112
+            "x": 1330,
+            "y": 117
           },
           {
-            "x": 1444,
-            "y": 112
+            "x": 1476,
+            "y": 117
           },
           {
-            "x": 1444,
-            "y": 476
+            "x": 1476,
+            "y": 438
           },
           {
-            "x": 1314,
-            "y": 476
+            "x": 1330,
+            "y": 438
           },
           {
-            "x": 1314,
-            "y": 502
+            "x": 1330,
+            "y": 464
           }
         ]
       },
@@ -4658,33 +5080,41 @@
       "from": {
         "itemId": "J-035",
         "portId": "realization_out",
-        "x": 1372,
-        "y": 210
+        "x": 1346,
+        "y": 204
       },
       "to": {
         "itemId": "P-035",
         "portId": "realization_in",
-        "x": 1330,
-        "y": 394
+        "x": 1346,
+        "y": 372
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1372,
-            "y": 210
+            "x": 1346,
+            "y": 204
           },
           {
-            "x": 1372,
-            "y": 368
+            "x": 1346,
+            "y": 262
           },
           {
-            "x": 1330,
-            "y": 368
+            "x": 1444,
+            "y": 262
           },
           {
-            "x": 1330,
-            "y": 394
+            "x": 1444,
+            "y": 346
+          },
+          {
+            "x": 1346,
+            "y": 346
+          },
+          {
+            "x": 1346,
+            "y": 372
           }
         ]
       },
@@ -4706,33 +5136,41 @@
       "from": {
         "itemId": "J-035",
         "portId": "realization_out",
-        "x": 1388,
-        "y": 210
+        "x": 1362,
+        "y": 204
       },
       "to": {
         "itemId": "VS-035a",
         "portId": "realization_in",
-        "x": 1346,
-        "y": 610
+        "x": 1362,
+        "y": 556
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
-            "x": 1388,
-            "y": 210
+            "x": 1362,
+            "y": 204
           },
           {
-            "x": 1388,
-            "y": 584
+            "x": 1362,
+            "y": 246
           },
           {
-            "x": 1346,
-            "y": 584
+            "x": 1460,
+            "y": 246
           },
           {
-            "x": 1346,
-            "y": 610
+            "x": 1460,
+            "y": 530
+          },
+          {
+            "x": 1362,
+            "y": 530
+          },
+          {
+            "x": 1362,
+            "y": 556
           }
         ]
       },
@@ -4752,7 +5190,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 114,
+      "y": 111,
       "text": "Steps",
       "textStyleRole": "label"
     },
@@ -4766,11 +5204,11 @@
       "paintGroup": "chrome",
       "from": {
         "x": 24,
-        "y": 220
+        "y": 214
       },
       "to": {
-        "x": 1444,
-        "y": 220
+        "x": 1476,
+        "y": 214
       }
     },
     {
@@ -4782,7 +5220,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 362,
+      "y": 340,
       "text": "Places",
       "textStyleRole": "label"
     },
@@ -4796,11 +5234,11 @@
       "paintGroup": "chrome",
       "from": {
         "x": 24,
-        "y": 468
+        "y": 430
       },
       "to": {
-        "x": 1444,
-        "y": 468
+        "x": 1476,
+        "y": 430
       }
     },
     {
@@ -4812,7 +5250,7 @@
       ],
       "paintGroup": "labels",
       "x": 24,
-      "y": 578,
+      "y": 524,
       "text": "View States",
       "textStyleRole": "label"
     }

@@ -7,3 +7,7 @@ export function getBundleValidationProfileFallback(bundle: Bundle): string {
 export function getBundleRenderDetailFallback(bundle: Bundle): string {
   return bundle.manifest.tool_defaults.render_detail_id;
 }
+
+export function getBundleNodeDecoratorModeFallback(bundle: Bundle): string {
+  return bundle.manifest.tool_defaults.node_decorator_mode_id;
+}

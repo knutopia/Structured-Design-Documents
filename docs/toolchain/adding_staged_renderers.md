@@ -178,6 +178,15 @@ Do not update snapshots to normalize output that still violates these checks.
 ## Target Adapters Beyond SVG
 
 The current primary path is `PositionedScene -> SVG`, with PNG derived from SVG.
+
+The shared SVG backend paints the outermost container (`scene.root`), including
+any header-band chrome, with its stroke inside its positioned bounds. It insets
+the emitted rectangle by half the theme stroke width and reduces its dimensions
+and corner radii accordingly. The viewport and scene geometry stay unchanged;
+nested outlines keep centered strokes. This prevents clipping at the SVG bounds
+in importers without relying on stroke-alignment support. Positive-sized chrome
+that collapses under the inset is omitted with a backend warning.
+
 Future targets may include file formats or API handoffs such as Figma plugins,
 Miro, Mural, slide decks, or other diagramming systems.
 

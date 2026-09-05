@@ -1,5 +1,9 @@
 export { loadBundle } from "./bundle/loadBundle.js";
-export { getBundleRenderDetailFallback, getBundleValidationProfileFallback } from "./bundle/toolDefaults.js";
+export {
+  getBundleNodeDecoratorModeFallback,
+  getBundleRenderDetailFallback,
+  getBundleValidationProfileFallback
+} from "./bundle/toolDefaults.js";
 export { resolveBundleFieldReference, resolveProfileRuleField } from "./bundle/bundleReferences.js";
 export {
   canonicalizeJson,
@@ -118,6 +122,7 @@ export type {
   Bundle,
   BundleFieldReference,
   BundleManifest,
+  BundleManifestNodeDecoratorModeEntry,
   BundleManifestRenderDetailEntry,
   BundleManifestToolDefaults,
   GuidedAdditionViewConfig,

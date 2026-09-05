@@ -73,82 +73,156 @@
               "shape-box",
               "column-initiative",
               "placement-role-addressing_initiative",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "I-050__content__line_0",
+                "id": "I-050__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Review Queue Instrumentation"
+                  "Review Queue",
+                  "Instrumentation"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 184.906,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 116.6,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               },
               {
-                "id": "I-050__content__line_1",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "I-050__attribute_0_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
                 "lines": [
-                  "Implemented by: P-050 Risk Review",
-                  "Queue"
+                  "Implemented by"
                 ],
-                "x": 12,
-                "y": 34,
-                "width": 198.888,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 49.5,
+                "width": 74.81,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "I-050__attribute_0_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
+                "lines": [
+                  "P-050 Risk Review Queue"
+                ],
+                "x": 15.5,
+                "y": 63.5,
+                "width": 142.926,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 82,
+                "title": {
+                  "id": "I-050__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Review Queue",
+                    "Instrumentation"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 116.6,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": [
+                  {
+                    "id": "implemented_by",
+                    "label": {
+                      "id": "I-050__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Implemented by"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 74.81,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "I-050__attribute_0_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "P-050 Risk Review Queue"
+                        ],
+                        "x": 15.5,
+                        "y": 63.5,
+                        "width": 142.926,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 49.5,
+                    "width": 193,
+                    "height": 28
+                  }
+                ]
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 39
+                "y": 42.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 39
+                "y": 42.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 39
+                "y": 42.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 39
+                "y": 42.5
               },
               {
                 "id": "secondary_in",
@@ -162,19 +236,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 78
+                "y": 85
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 78
+            "height": 85
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 124,
+        "height": 105,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -221,37 +295,60 @@
               "shape-hexagon",
               "column-opportunity",
               "placement-role-supporting_opportunity",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "OP-050__content__line_0",
+                "id": "OP-050__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Review Queue Visibility"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 140.413,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 14.5,
+                "width": 168.648,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "OP-050__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Review Queue Visibility"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 168.648,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -305,7 +402,7 @@
         ],
         "ports": [],
         "width": 244,
-        "height": 124,
+        "height": 105,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -352,66 +449,90 @@
               "shape-ellipse",
               "column-outcome",
               "placement-role-anchor_outcome",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "O-050__content__line_0",
+                "id": "O-050__title",
                 "kind": "text",
-                "textStyleRole": "title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Reduce Risk Review",
                   "Delays"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 150.168,
-                "height": 40,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 144.728,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 50,
+                "title": {
+                  "id": "O-050__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Reduce Risk Review",
+                    "Delays"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 144.728,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 32
+                "y": 26.5
               },
               {
                 "id": "secondary_in",
@@ -425,19 +546,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 64
+                "y": 53
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 64
+            "height": 53
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 124,
+        "height": 105,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -484,97 +605,182 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-050__content__line_0",
+                "id": "M-050__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Alert Stream Coverage"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 137.904,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 166.192,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
               },
               {
-                "id": "M-050__content__line_1",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "M-050__attribute_0_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
                 "lines": [
-                  "Event: E-050 Alert Emitted"
-                ],
-                "x": 12,
-                "y": 38,
-                "width": 147.834,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "secondary",
-                "priority": "secondary"
-              },
-              {
-                "id": "M-050__content__line_2",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
-                "lines": [
-                  "Event: E-051 Review Completed",
                   "Event"
                 ],
-                "x": 12,
-                "y": 60,
-                "width": 174.888,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "secondary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 30.5,
+                "width": 26.11,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "M-050__attribute_0_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
+                "lines": [
+                  "E-050 Alert Emitted"
+                ],
+                "x": 15.5,
+                "y": 44.5,
+                "width": 110.958,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
+              },
+              {
+                "id": "M-050__attribute_0_value_1",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
+                "lines": [
+                  "E-051 Review Completed Event"
+                ],
+                "x": 15.5,
+                "y": 60.5,
+                "width": 172.26,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 79,
+                "title": {
+                  "id": "M-050__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Alert Stream Coverage"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 166.192,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": [
+                  {
+                    "id": "event",
+                    "label": {
+                      "id": "M-050__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 30.5,
+                      "width": 26.11,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "M-050__attribute_0_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "E-050 Alert Emitted"
+                        ],
+                        "x": 15.5,
+                        "y": 44.5,
+                        "width": 110.958,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      },
+                      {
+                        "id": "M-050__attribute_0_value_1",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "E-051 Review Completed Event"
+                        ],
+                        "x": 15.5,
+                        "y": 60.5,
+                        "width": 172.26,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 193,
+                    "height": 44
+                  }
+                ]
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 52
+                "y": 41
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 52
+                "y": 41
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 52
+                "y": 41
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 52
+                "y": 41
               },
               {
                 "id": "secondary_in",
@@ -588,20 +794,19 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 104
+                "y": 82
               }
             ],
             "overflow": {
-              "status": "fits",
-              "detail": "Moved secondary blocks into a secondary region."
+              "status": "fits"
             },
             "width": 224,
-            "height": 104
+            "height": 82
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 124,
+        "height": 105,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:0"
       },
@@ -638,7 +843,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 124,
+        "height": 137,
         "sharedWidthGroup": "outcome_opportunity_map:column:initiative",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -675,7 +880,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 124,
+        "height": 137,
         "sharedWidthGroup": "outcome_opportunity_map:column:opportunity",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -712,7 +917,7 @@
         "children": [],
         "ports": [],
         "width": 244,
-        "height": 124,
+        "height": 137,
         "sharedWidthGroup": "outcome_opportunity_map:column:outcome",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       },
@@ -759,97 +964,221 @@
               "shape-note",
               "column-metric",
               "placement-role-measuring_metric",
-              "band-band-outcome-1"
+              "band-band-outcome-1",
+              "shared-node",
+              "shared-node-dense"
             ],
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "widthBand": "standard",
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
             "content": [
               {
-                "id": "M-051__content__line_0",
+                "id": "M-051__title",
                 "kind": "text",
-                "textStyleRole": "label",
+                "textStyleRole": "shared_node_title",
                 "lines": [
-                  "Manual Review Completion"
+                  "Manual Review",
+                  "Completion"
                 ],
-                "x": 12,
-                "y": 12,
-                "width": 163.183,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "primary",
-                "priority": "primary"
+                "x": 15.5,
+                "y": 7.5,
+                "width": 109.608,
+                "height": 38,
+                "lineHeight": 19,
+                "region": "primary"
               },
               {
-                "id": "M-051__content__line_1",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "M-051__attribute_0_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
                 "lines": [
-                  "Experience: J-050 Review Risk Alert"
+                  "Experience"
                 ],
-                "x": 12,
-                "y": 38,
-                "width": 199.878,
-                "height": 16,
-                "lineHeight": 16,
-                "region": "secondary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 49.5,
+                "width": 52.255,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
               },
               {
-                "id": "M-051__content__line_2",
-                "kind": "metadata",
-                "textStyleRole": "metadata",
+                "id": "M-051__attribute_0_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
                 "lines": [
-                  "Event: E-051 Review Completed",
+                  "J-050 Review Risk Alert"
+                ],
+                "x": 15.5,
+                "y": 63.5,
+                "width": 131.628,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
+              },
+              {
+                "id": "M-051__attribute_1_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_label",
+                "lines": [
                   "Event"
                 ],
-                "x": 12,
-                "y": 60,
-                "width": 174.888,
-                "height": 32,
-                "lineHeight": 16,
-                "region": "secondary",
-                "priority": "secondary"
+                "x": 15.5,
+                "y": 81.5,
+                "width": 26.11,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "M-051__attribute_1_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_attribute_value",
+                "lines": [
+                  "E-051 Review Completed Event"
+                ],
+                "x": 15.5,
+                "y": 95.5,
+                "width": 172.26,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
               }
             ],
+            "sharedNode": {
+              "density": "dense",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 114,
+                "title": {
+                  "id": "M-051__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Manual Review",
+                    "Completion"
+                  ],
+                  "x": 15.5,
+                  "y": 7.5,
+                  "width": 109.608,
+                  "height": 38,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": [
+                  {
+                    "id": "experience",
+                    "label": {
+                      "id": "M-051__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Experience"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 52.255,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "M-051__attribute_0_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "J-050 Review Risk Alert"
+                        ],
+                        "x": 15.5,
+                        "y": 63.5,
+                        "width": 131.628,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 49.5,
+                    "width": 193,
+                    "height": 28
+                  },
+                  {
+                    "id": "event",
+                    "label": {
+                      "id": "M-051__attribute_1_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 81.5,
+                      "width": 26.11,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "M-051__attribute_1_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_value",
+                        "lines": [
+                          "E-051 Review Completed Event"
+                        ],
+                        "x": 15.5,
+                        "y": 95.5,
+                        "width": 172.26,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 15.5,
+                    "y": 81.5,
+                    "width": 193,
+                    "height": 28
+                  }
+                ]
+              }
+            },
             "ports": [
               {
                 "id": "intent_in",
                 "role": "intent_in",
                 "side": "west",
                 "x": 0,
-                "y": 52
+                "y": 58.5
               },
               {
                 "id": "intent_out",
                 "role": "intent_out",
                 "side": "east",
                 "x": 224,
-                "y": 52
+                "y": 58.5
               },
               {
                 "id": "measure_in",
                 "role": "measure_in",
                 "side": "west",
                 "x": 0,
-                "y": 52
+                "y": 58.5
               },
               {
                 "id": "measure_out",
                 "role": "measure_out",
                 "side": "east",
                 "x": 224,
-                "y": 52
+                "y": 58.5
               },
               {
                 "id": "secondary_in",
@@ -863,27 +1192,26 @@
                 "role": "secondary_out",
                 "side": "south",
                 "x": 112,
-                "y": 104
+                "y": 117
               }
             ],
             "overflow": {
-              "status": "fits",
-              "detail": "Moved secondary blocks into a secondary region."
+              "status": "fits"
             },
             "width": 224,
-            "height": 104
+            "height": 117
           }
         ],
         "ports": [],
         "width": 244,
-        "height": 124,
+        "height": 137,
         "sharedWidthGroup": "outcome_opportunity_map:column:metric",
         "sharedHeightGroup": "outcome_opportunity_map:row:1"
       }
     ],
     "ports": [],
     "width": 1116,
-    "height": 360
+    "height": 354
   },
   "edges": [
     {
@@ -909,8 +1237,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -949,8 +1276,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -989,8 +1315,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [
@@ -1029,8 +1354,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "lines": [

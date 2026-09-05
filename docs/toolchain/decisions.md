@@ -59,10 +59,10 @@ The Step 4 backend boundary is also now explicit:
 
 The Step 5 macro-layout boundary is now explicit too:
 
-- `src/renderer/staged/macroLayout.ts` owns the shared strategy registry for `stack`, `grid`, `lanes`, and `elk_layered`
+- `src/renderer/staged/macroLayout.ts` owns the shared strategy registry for `stack`, `grid`, `lanes`, and renderer-owned `layered`
 - container bounds and container-port offsets are now resolved during macro-layout rather than carried forward as placeholders
 - staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, target-biased bends where requested, minimum arrow marker clearance on terminal legs when geometry allows, and segment-aware edge-label placement
-- `elk_layered` layout now reserves spacing for owned edge labels so transition graphs can stay horizontal and readable without per-view routing hacks
+- `layered` layout reserves spacing for owned edge labels so transition graphs can stay horizontal and readable without per-view routing hacks
 - ordinary node and container ports remain internal routing anchors and are not painted in normal staged SVG output
 
 ## String-First Property Policy
@@ -136,15 +136,13 @@ Preview generation remains outside the core renderer contract:
 - shared preview typography and DPI defaults live in `views.yaml`, with per-view overrides only when needed
 - shared SVG font-embedding and SVG-to-PNG helpers are now reused by both the staged backend and `legacy_graphviz_preview`
 
-## Service Blueprint Renderer Reset
+## Renderer-Owned Layout And Routing
 
-- `service_blueprint` staged preview now runs through the ELK-authoritative staged renderer, and the rejected two-pass `elk_lanes` path remains obsolete.
-- The shipped `elkjs` bundle in this repo does not provide `Libavoid`, so the current toolchain does not have a standalone ELK obstacle router available.
-- `ELK Fixed` is not treated as a standalone router, and `interactive` or `semiInteractive` are not treated as a fixed-position rerouting contract.
-- `service_blueprint` may not snap nodes after ELK and then trust the pre-snap or partially-rerouted edge geometry.
-- `service_blueprint` may not use renderer-side routing fallback on the staged preview path.
-- If ELK routing is used for `service_blueprint`, `ELK Layered` must own final node placement and final routing in the same run.
-- Semantic lanes and semantic columns may still be renderer-owned inputs, but they must be materialized as ELK-visible structure rather than post-layout overrides.
+- Staged renderers do not use ELK or another external graph engine for placement or routing.
+- `service_blueprint` retains renderer-owned semantic lanes, columns, ports, and connector families while shared routing aggregates physical-segment constraints and validates final geometry.
+- `ui_contracts` uses the renderer-owned `layered` strategy: strongly connected components are condensed, ranks are assigned by longest path, and source/bundle order resolves ties deterministically.
+- `src/renderer/staged/routingCore/` owns shared geometry, stable physical-segment identity, constraint aggregation, track assignment, expansion contracts, and final acceptance. View adapters continue to own semantic route candidates and policies.
+- A staged route is accepted only after final validation; repaired routes must retain endpoints, remain orthogonal, clear non-endpoint nodes, and satisfy the view's sharing and crossing policy.
 
 ## Source-Ordered Structural Rendering
 

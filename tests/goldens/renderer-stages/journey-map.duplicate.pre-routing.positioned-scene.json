@@ -47,12 +47,15 @@
       {
         "kind": "node",
         "id": "J-801",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
-          "journey_step_root"
+          "journey_step_root",
+          "shared-node",
+          "shared-node-plain"
         ],
         "viewMetadata": {
           "journeyMap": {
@@ -65,32 +68,53 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "widthBand": "standard",
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
         "content": [
           {
             "id": "J-801__title",
             "kind": "text",
-            "textStyleRole": "title",
+            "textStyleRole": "shared_node_title",
             "lines": [
               "Choose a route"
             ],
-            "x": 12,
-            "y": 12,
-            "width": 112.904,
-            "height": 20,
-            "lineHeight": 20,
-            "region": "primary",
-            "priority": "primary"
+            "x": 15.5,
+            "y": 14.5,
+            "width": 108.744,
+            "height": 19,
+            "lineHeight": 19,
+            "region": "primary"
           }
         ],
+        "sharedNode": {
+          "density": "plain",
+          "body": {
+            "x": 1.5,
+            "y": 1.5,
+            "width": 221,
+            "height": 45,
+            "title": {
+              "id": "J-801__title",
+              "kind": "text",
+              "textStyleRole": "shared_node_title",
+              "lines": [
+                "Choose a route"
+              ],
+              "x": 15.5,
+              "y": 14.5,
+              "width": 108.744,
+              "height": 19,
+              "lineHeight": 19,
+              "region": "primary"
+            },
+            "attributeGroups": []
+          }
+        },
         "ports": [
           {
             "id": "J-801__flow_in",
@@ -132,12 +156,15 @@
       {
         "kind": "node",
         "id": "J-802",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
-          "journey_step_root"
+          "journey_step_root",
+          "shared-node",
+          "shared-node-plain"
         ],
         "viewMetadata": {
           "journeyMap": {
@@ -150,32 +177,53 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "widthBand": "standard",
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
         "content": [
           {
             "id": "J-802__title",
             "kind": "text",
-            "textStyleRole": "title",
+            "textStyleRole": "shared_node_title",
             "lines": [
               "Continue"
             ],
-            "x": 12,
-            "y": 12,
-            "width": 68.072,
-            "height": 20,
-            "lineHeight": 20,
-            "region": "primary",
-            "priority": "primary"
+            "x": 15.5,
+            "y": 14.5,
+            "width": 65.832,
+            "height": 19,
+            "lineHeight": 19,
+            "region": "primary"
           }
         ],
+        "sharedNode": {
+          "density": "plain",
+          "body": {
+            "x": 1.5,
+            "y": 1.5,
+            "width": 221,
+            "height": 45,
+            "title": {
+              "id": "J-802__title",
+              "kind": "text",
+              "textStyleRole": "shared_node_title",
+              "lines": [
+                "Continue"
+              ],
+              "x": 15.5,
+              "y": 14.5,
+              "width": 65.832,
+              "height": 19,
+              "lineHeight": 19,
+              "region": "primary"
+            },
+            "attributeGroups": []
+          }
+        },
         "ports": [
           {
             "id": "J-802__flow_in",

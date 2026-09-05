@@ -1,10 +1,12 @@
 import type { IaPlaceMapRenderModel, IaRenderItem, IaRenderPlace } from "./iaPlaceMapRenderModel.js";
+import { buildLegacyIaPlaceLabelLines } from "./placeLabelLines.js";
 import type {
   JourneyMapRenderModel,
   JourneyRenderItem,
   JourneyRenderStage,
   JourneyRenderStep
 } from "./journeyMapRenderModel.js";
+import { buildLegacyJourneyStepLabelLines } from "./journeyStepLabelLines.js";
 import type {
   OutcomeOpportunityMapRenderModel,
   OutcomeOpportunityRenderLane,
@@ -119,7 +121,9 @@ function renderInvisibleOrderChains(
 }
 
 function renderPlace(place: IaRenderPlace, indent: string, lines: string[]): void {
-  lines.push(`${indent}${quoteId(place.id)}${formatAttributes({ label: formatMultilineLabel(place.labelLines) })};`);
+  lines.push(`${indent}${quoteId(place.id)}${formatAttributes({
+    label: formatMultilineLabel(buildLegacyIaPlaceLabelLines(place.title, place.attributes))
+  })};`);
   renderItems(place.items, indent, lines);
 }
 
@@ -160,7 +164,9 @@ export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel, style?: Legacy
 }
 
 function renderJourneyStep(step: JourneyRenderStep, indent: string, lines: string[]): void {
-  lines.push(`${indent}${quoteId(step.id)}${formatAttributes({ label: formatMultilineLabel(step.labelLines) })};`);
+  lines.push(`${indent}${quoteId(step.id)}${formatAttributes({
+    label: formatMultilineLabel(buildLegacyJourneyStepLabelLines(step))
+  })};`);
 }
 
 function renderJourneyStage(stage: JourneyRenderStage, indent: string, lines: string[]): void {
@@ -208,7 +214,13 @@ export function renderJourneyMapDot(model: JourneyMapRenderModel, style?: Legacy
 }
 
 function renderOutcomeOpportunityNode(node: OutcomeOpportunityRenderNode, indent: string, lines: string[]): void {
-  lines.push(`${indent}${quoteId(node.id)}${formatAttributes({ shape: node.shape, label: formatMultilineLabel(node.labelLines) })};`);
+  const labelLines = [
+    node.title,
+    ...node.attributes.map((attribute) =>
+      `${attribute.label.charAt(0).toUpperCase()}${attribute.label.slice(1)}: ${attribute.value}`
+    )
+  ];
+  lines.push(`${indent}${quoteId(node.id)}${formatAttributes({ shape: node.shape, label: formatMultilineLabel(labelLines) })};`);
 }
 
 function renderOutcomeOpportunityLane(
@@ -263,7 +275,7 @@ function renderServiceBlueprintNode(node: ServiceBlueprintRenderNode, indent: st
     `${indent}${quoteId(node.id)}${formatAttributes({
       shape: node.shape,
       style: node.style,
-      label: formatMultilineLabel(node.labelLines)
+      label: formatMultilineLabel([node.title])
     })};`
   );
 }
@@ -332,7 +344,7 @@ function renderScenarioFlowNode(node: ScenarioFlowRenderNode, indent: string, li
     `${indent}${quoteId(node.id)}${formatAttributes({
       shape: node.shape,
       style: node.style,
-      label: formatMultilineLabel(node.labelLines)
+      label: formatMultilineLabel([node.title])
     })};`
   );
 }

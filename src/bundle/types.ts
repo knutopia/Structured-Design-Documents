@@ -11,6 +11,13 @@ export interface BundleManifestRenderDetailEntry {
   intent: string;
 }
 
+export interface BundleManifestNodeDecoratorModeEntry {
+  id: string;
+  intent: string;
+  show_node_type: boolean;
+  show_node_id: boolean;
+}
+
 export interface BundleManifestExample {
   path: string;
   compiled_snapshot: string;
@@ -20,6 +27,7 @@ export interface BundleManifestExample {
 export interface BundleManifestToolDefaults {
   validation_profile_id: string;
   render_detail_id: string;
+  node_decorator_mode_id: string;
 }
 
 export interface BundleManifest {
@@ -39,6 +47,7 @@ export interface BundleManifest {
   tool_defaults: BundleManifestToolDefaults;
   profiles: BundleManifestProfileEntry[];
   render_details: BundleManifestRenderDetailEntry[];
+  node_decorator_modes: BundleManifestNodeDecoratorModeEntry[];
   examples: BundleManifestExample[];
   compatibility: {
     requires_compiler_min: string;

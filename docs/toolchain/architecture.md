@@ -76,12 +76,12 @@ The staged artifact backend sits on top of those contracts:
 - staged PNG output is now a rasterization step derived from that SVG backend, not a separate scene renderer
 - backend-aware preview routing selects staged backends for accepted migrated views while keeping legacy backends selectable where preserved
 
-The staged macro-layout boundary now owns both manual placement and the first shared routed edge behaviors:
+The staged macro-layout boundary owns renderer-managed placement and shared routed-edge behavior. No staged view delegates placement or routing to ELK:
 
-- `src/renderer/staged/macroLayout.ts` owns the recursive strategy registry for `stack`, `grid`, `lanes`, and `elk_layered`
+- `src/renderer/staged/macroLayout.ts` owns the recursive renderer-managed strategies for `stack`, `grid`, `lanes`, and `layered`; the layered strategy ranks strongly connected components and then places ranks deterministically
 - container chrome, padding, header bands, bounds, and container-port offsets are resolved during layout rather than left at placeholder values
 - staged routing now resolves explicit ports, role-based port fallbacks, default box anchors, container-origin ports, deterministic orthogonal/stepped routes, target-biased bends where requested, minimum marker-leg clearance for arrow-ended routes when geometry allows, and segment-aware edge-label placement before SVG emission
-- `elk_layered` spacing now reserves room for owned edge labels so horizontal transition graphs can remain readable without view-specific SVG hacks
+- `src/renderer/staged/routingCore/` owns backend-neutral route geometry, physical-segment claims, deterministic track solving, bounded solve/validate/repair coordination, and final validation; view adapters retain semantic topology and routing policy
 
 Ports in those staged scene contracts are semantic routing anchors, not normal painted output. The staged SVG backend keeps explicit `connector_port` primitives visible when a view intentionally uses them, but ordinary node and container ports are internal geometry only.
 
@@ -238,7 +238,7 @@ Preview backends now split by view:
 
 - `staged_ia_place_map_preview` is the default preview backend for `ia_place_map`; it owns staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
 - `staged_ui_contracts_preview` is the default preview backend for `ui_contracts`; it owns the routed and balanced staged projection-to-scene rendering, staged SVG emission, and staged PNG derivation from that SVG
-- `staged_service_blueprint_preview` is the default selected preview backend for `service_blueprint`; it owns the renderer-derived middle layer, ELK-authoritative staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
+- `staged_service_blueprint_preview` is the default selected preview backend for `service_blueprint`; it owns the renderer-derived middle layer, deterministic lane/column placement, custom staged routing, staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `staged_scenario_flow_preview` is the default selected preview backend for `scenario_flow`; it owns the accepted custom staged lane-and-routing SVG emission and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `staged_outcome_opportunity_map_preview` is the default selected preview backend for `outcome_opportunity_map`; it owns the staged semantic-lane scene, custom opportunity routing, staged SVG emission, and staged PNG derivation from that SVG while explicit `legacy_graphviz_preview` remains available in parallel
 - `staged_journey_map_preview` is the default selected preview backend for `journey_map`; it owns source-ordered Stage/Step placement, dedicated orthogonal `PRECEDES` routing, deterministic crossing-continuity marks, staged SVG emission, and staged PNG derivation from that exact SVG
@@ -269,20 +269,21 @@ These views share one pattern:
 The per-view render models keep semantics centralized:
 
 - IA organizes source-ordered area and place hierarchies plus place annotations
-- journey maps turn `Stage CONTAINS Step` into stage containers and inline `opportunity_refs` badges
+- journey maps turn `Stage CONTAINS Step` into stage containers and retain structured Step references for shared-node attributes
 - outcome-opportunity maps turn type scope plus derived instrumentation annotations into deterministic semantic lanes
 - service blueprints turn derived lane groups plus typed relationship styling into preview-friendly operational rows
 - scenario flows turn decision-node annotations plus derived branch labels into readable step/place/view-state slices
 - ui contracts turn place containment plus grouped `scope_id` state detail into place-scoped contract clusters while keeping fallback-to-state behavior outside the DOT emitter and inside the staged scene builder
+- every eligible semantic leaf in these staged views uses the shared node component; structural containers, headers, connector labels, annotations, and routing-only items remain on their existing container or generic-content paths
 - inside the staged renderer, `ia_place_map` now uses manual hub/follower grouping and bottom-up owned-scope sizing: explicit containment creates owned child scope, forward local navigation may create same-scope follower scope, and local structure connectors use deterministic direct-vertical or shared-trunk routing without IA-specific ELK fallback
 - inside the staged renderer, `ui_contracts` now reserves internal gutter space for container-origin support edges, assigns those edges to an invisible label lane inside that gutter, and keeps containerized `ViewState` scopes visually aligned with leaf `ViewState` nodes
 - inside the staged renderer, `scenario_flow` now uses a custom lane-and-band layout with staged branch routing and debug corpus artifacts for pre-routing, edge-side selection, and gutter occupancy
 - inside the staged renderer, `outcome_opportunity_map` now uses deterministic semantic lanes plus staged opportunity routing with debug corpus artifacts for pre-routing, endpoint/template selection, and final gutter occupancy
-- inside the staged renderer, `journey_map` preserves source-ordered Stage/Step placement and first-parent ownership, then applies dedicated journey-only orthogonal routing, occupancy, bounded expansion, late endpoint ordering, and final crossing-continuity marks without an external routing engine
+- inside the staged renderer, `journey_map` preserves source-ordered Stage/Step placement and first-parent ownership; its adapter retains route archetypes, directional corridors, reciprocal-pair topology, Stage gates, bounded expansion ownership, late endpoint ordering, crossing minimization, and continuity marks while shared routing infrastructure aggregates physical-segment claims and assigns legal tracks
 
 Inside the staged renderer, `journey_map`, `outcome_opportunity_map`, `ui_contracts`, and `scenario_flow` keep renderer-stage goldens as internal contract coverage, and their accepted staged paths also serve their public staged preview backends.
 
-Dense Journey Maps may remain visually poor even when hard geometry passes; residual perpendicular crossings receive deterministic continuity marks and `renderer.routing.journey_map_unavoidable_crossing` warnings. A later shared-routing task must prefer a straight, single horizontal segment between unobstructed horizontally adjacent nodes. That is global staged-routing debt, not a journey-only patch.
+Dense Journey Maps may remain crossing-rich even when hard geometry passes; residual perpendicular crossings receive deterministic continuity marks and `renderer.routing.journey_map_unavoidable_crossing` warnings. Coincident logical crossings on the same painted segment share one physical continuity mark. The shared solver enforces track separation and bounded capacity, while reducing residual perpendicular crossings further remains a candidate/topology concern owned by the Journey adapter.
 
 Preview artifacts build on top of a backend-aware preview layer rather than expanding the engine render contract. In v0.1:
 

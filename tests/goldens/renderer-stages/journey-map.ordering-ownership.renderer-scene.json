@@ -73,9 +73,10 @@
           {
             "kind": "node",
             "id": "J-601",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -83,23 +84,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-601__title",
-                "kind": "text",
-                "text": "Enter secondary flow",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Enter secondary flow",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-601",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-601__flow_in",
@@ -140,9 +142,10 @@
           {
             "kind": "node",
             "id": "J-602",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -150,23 +153,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-602__title",
-                "kind": "text",
-                "text": "Leave secondary flow",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Leave secondary flow",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-602",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-602__flow_in",
@@ -210,9 +214,10 @@
       {
         "kind": "node",
         "id": "J-590",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
           "journey_step_root"
@@ -220,23 +225,24 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
-        "content": [
-          {
-            "id": "J-590__title",
-            "kind": "text",
-            "text": "Root handoff",
-            "textStyleRole": "title",
-            "priority": "primary"
-          }
-        ],
+        "content": [],
+        "sharedNode": {
+          "title": "Root handoff",
+          "decoratorMode": {
+            "id": "none",
+            "showNodeType": false,
+            "showNodeId": false
+          },
+          "nodeType": "Step",
+          "nodeId": "J-590",
+          "attributes": []
+        },
         "ports": [
           {
             "id": "J-590__flow_in",
@@ -313,9 +319,10 @@
           {
             "kind": "node",
             "id": "J-503",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -323,23 +330,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-503__title",
-                "kind": "text",
-                "text": "Shared multiply-contained step",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Shared multiply-contained step",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-503",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-503__flow_in",
@@ -380,9 +388,10 @@
           {
             "kind": "node",
             "id": "J-502",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -390,23 +399,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-502__title",
-                "kind": "text",
-                "text": "Middle-authored child",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Middle-authored child",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-502",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-502__flow_in",
@@ -447,9 +457,10 @@
           {
             "kind": "node",
             "id": "J-501",
-            "role": "journey_step",
+            "role": "step",
             "primitive": "card",
             "classes": [
+              "semantic_node",
               "journey_map",
               "journey_step",
               "journey_step_contained"
@@ -457,23 +468,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 2
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "J-501__title",
-                "kind": "text",
-                "text": "Last-authored child",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Last-authored child",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Step",
+              "nodeId": "J-501",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "J-501__flow_in",
@@ -517,9 +529,10 @@
       {
         "kind": "node",
         "id": "J-591",
-        "role": "journey_step",
+        "role": "step",
         "primitive": "card",
         "classes": [
+          "semantic_node",
           "journey_map",
           "journey_step",
           "journey_step_root"
@@ -527,23 +540,24 @@
         "widthPolicy": {
           "preferred": "standard",
           "allowed": [
-            "standard",
-            "wide"
+            "standard"
           ]
         },
         "overflowPolicy": {
-          "kind": "escalate_width_band",
-          "maxLines": 2
+          "kind": "grow_height"
         },
-        "content": [
-          {
-            "id": "J-591__title",
-            "kind": "text",
-            "text": "Root return",
-            "textStyleRole": "title",
-            "priority": "primary"
-          }
-        ],
+        "content": [],
+        "sharedNode": {
+          "title": "Root return",
+          "decoratorMode": {
+            "id": "none",
+            "showNodeType": false,
+            "showNodeId": false
+          },
+          "nodeType": "Step",
+          "nodeId": "J-591",
+          "attributes": []
+        },
         "ports": [
           {
             "id": "J-591__flow_in",

@@ -76,24 +76,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-001__content__line_0",
-                "kind": "text",
-                "text": "Guided setup priority planner",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Guided setup priority planner",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Initiative",
+              "nodeId": "I-001",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -179,23 +179,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-001__content__line_0",
-                "kind": "text",
-                "text": "Users cannot see which setup steps matter",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Users cannot see which setup steps matter",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-001",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -281,23 +282,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "O-001__content__line_0",
-                "kind": "text",
-                "text": "Shorten time to first value",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Shorten time to first value",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Outcome",
+              "nodeId": "O-001",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -383,24 +385,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-001__content__line_0",
-                "kind": "text",
-                "text": "Median days to first completed workflow",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Median days to first completed workflow",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Metric",
+              "nodeId": "M-001",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -486,24 +488,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-002__content__line_0",
-                "kind": "text",
-                "text": "Data readiness preflight",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Data readiness preflight",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Initiative",
+              "nodeId": "I-002",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -589,23 +591,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-002__content__line_0",
-                "kind": "text",
-                "text": "Imported data quality issues appear too late",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Imported data quality issues appear too late",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-002",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -725,24 +728,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-002__content__line_0",
-                "kind": "text",
-                "text": "Activation completion rate",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Activation completion rate",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Metric",
+              "nodeId": "M-002",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -828,24 +831,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-007__content__line_0",
-                "kind": "text",
-                "text": "Operational handoff checklist",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Operational handoff checklist",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Initiative",
+              "nodeId": "I-007",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -931,23 +934,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-007__content__line_0",
-                "kind": "text",
-                "text": "Handoff gaps hide next ownership",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Handoff gaps hide next ownership",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-007",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1101,24 +1105,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-003__content__line_0",
-                "kind": "text",
-                "text": "Vocabulary mapping and templates",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Vocabulary mapping and templates",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Initiative",
+              "nodeId": "I-003",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1204,23 +1208,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-003__content__line_0",
-                "kind": "text",
-                "text": "Terminology does not match the team workflow",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Terminology does not match the team workflow",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-003",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1306,23 +1311,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "O-002__content__line_0",
-                "kind": "text",
-                "text": "Increase self-serve task completion",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Increase self-serve task completion",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Outcome",
+              "nodeId": "O-002",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1408,24 +1414,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-003__content__line_0",
-                "kind": "text",
-                "text": "Self-serve task completion rate",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Self-serve task completion rate",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Metric",
+              "nodeId": "M-003",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1511,24 +1517,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-004__content__line_0",
-                "kind": "text",
-                "text": "Exception triage workspace",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Exception triage workspace",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Initiative",
+              "nodeId": "I-004",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1614,23 +1620,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-004__content__line_0",
-                "kind": "text",
-                "text": "Exception handling requires support escalation",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Exception handling requires support escalation",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-004",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1750,24 +1757,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-004__content__line_0",
-                "kind": "text",
-                "text": "Support deflection for recoverable tasks",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Support deflection for recoverable tasks",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Metric",
+              "nodeId": "M-004",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1853,24 +1860,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-006__content__line_0",
-                "kind": "text",
-                "text": "Controlled automation rollout",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Controlled automation rollout",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Initiative",
+              "nodeId": "I-006",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -1956,23 +1963,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-006__content__line_0",
-                "kind": "text",
-                "text": "Teams need rollout controls before trusting automation",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Teams need rollout controls before trusting automation",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-006",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -2126,24 +2134,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "I-005__content__line_0",
-                "kind": "text",
-                "text": "Recommendation evidence drawer",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Recommendation evidence drawer",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Initiative",
+              "nodeId": "I-005",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -2229,23 +2237,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-005__content__line_0",
-                "kind": "text",
-                "text": "Recommendation evidence is hard to audit",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Recommendation evidence is hard to audit",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-005",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -2331,23 +2340,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "O-003__content__line_0",
-                "kind": "text",
-                "text": "Improve trust in automated recommendations",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Improve trust in automated recommendations",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Outcome",
+              "nodeId": "O-003",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -2433,24 +2443,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-005__content__line_0",
-                "kind": "text",
-                "text": "Recommendation acceptance rate",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Recommendation acceptance rate",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Metric",
+              "nodeId": "M-005",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -2570,23 +2580,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "escalate_width_band",
-              "maxLines": 3
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "OP-008__content__line_0",
-                "kind": "text",
-                "text": "Outcome history is not visible at review time",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Outcome history is not visible at review time",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Opportunity",
+              "nodeId": "OP-008",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -2706,24 +2717,24 @@
             "widthPolicy": {
               "preferred": "standard",
               "allowed": [
-                "narrow",
-                "standard",
-                "wide"
+                "standard"
               ]
             },
             "overflowPolicy": {
-              "kind": "secondary_area",
-              "maxLines": 1
+              "kind": "grow_height"
             },
-            "content": [
-              {
-                "id": "M-006__content__line_0",
-                "kind": "text",
-                "text": "Recommendation reversal rate",
-                "textStyleRole": "label",
-                "priority": "primary"
-              }
-            ],
+            "content": [],
+            "sharedNode": {
+              "title": "Recommendation reversal rate",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Metric",
+              "nodeId": "M-006",
+              "attributes": []
+            },
             "ports": [
               {
                 "id": "intent_in",
@@ -2785,8 +2796,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -2816,8 +2826,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -2847,8 +2856,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -2878,8 +2886,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -2909,8 +2916,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -2940,8 +2946,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -2971,8 +2976,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -3002,8 +3006,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -3033,8 +3036,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -3064,8 +3066,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -3095,8 +3096,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -3126,8 +3126,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -3157,8 +3156,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "addresses",
@@ -3188,8 +3186,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3219,8 +3216,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3250,8 +3246,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3281,8 +3276,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3312,8 +3306,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3343,8 +3336,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3374,8 +3366,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3405,8 +3396,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3436,8 +3426,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3467,8 +3456,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3498,8 +3486,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3529,8 +3516,7 @@
         "style": "orthogonal",
         "sourcePortRole": "intent_out",
         "targetPortRole": "intent_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "supports",
@@ -3560,8 +3546,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
@@ -3591,8 +3576,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
@@ -3622,8 +3606,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
@@ -3653,8 +3636,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
@@ -3684,8 +3666,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
@@ -3715,8 +3696,7 @@
         "style": "orthogonal",
         "sourcePortRole": "measure_out",
         "targetPortRole": "measure_in",
-        "labelPlacement": "segment",
-        "authority": "flexible"
+        "labelPlacement": "segment"
       },
       "label": {
         "text": "measured by",
