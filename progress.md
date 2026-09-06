@@ -31,6 +31,10 @@ z
 
 - Caught 2 missing artifact updates
 
+## Sun 9-6
+
+- Designing hierarchical ui_contracts concepts with Astra
+
 ## Sat 9-5
 
 - Updated, reviewed canonical examples
