@@ -3135,8 +3135,64 @@ views:
           secondary_grouping_prop: scope_id
           secondary_render_mode: inset
           fallback_to_secondary_when_primary_absent: true
+        ui_contracts_presentation:
+          roles:
+            component: [Component]
+            place: [Place]
+            primary: [ViewState]
+            secondary: [State]
+            support: [Event, DataEntity, SystemAction]
+          relationships:
+            - {kind: containment, edge_type: CONTAINS, from: [Component], to: [Component], style: solid, label: Contains}
+            - {kind: ownership, edge_type: CONTAINS, from: [Place], to: [ViewState], style: solid}
+            - {kind: composition, edge_type: COMPOSED_OF, from: [Place, ViewState], to: [Component], style: solid, label: composed of}
+            - {kind: transition, edge_type: TRANSITIONS_TO, from: [ViewState], to: [ViewState], style: solid}
+            - {kind: transition, edge_type: TRANSITIONS_TO, from: [State], to: [State], style: solid, secondary_style: dashed}
+            - {kind: contract, edge_type: EMITS, from: [Component, ViewState, SystemAction], to: [Event], style: dashed, label: emits}
+            - {kind: contract, edge_type: DEPENDS_ON, from: [Component, ViewState], to: [SystemAction], style: solid, label: depends on}
+            - {kind: contract, edge_type: BINDS_TO, from: [Component], to: [DataEntity], style: dotted, label: binds to, field_property: field, field_label: 'binds field {value}'}
+          ownership: {primary_property: place_id, secondary_property: scope_id}
+          visibility:
+            hierarchy: show_component_hierarchy
+            secondary: show_secondary_state_groups_when_primary_view_state
+            support: show_supporting_contract_lane_when_primary_view_state
+            omit_empty_places: omit_empty_place_containers
+          hierarchy: {order: source_depth_first, reuse: first_expansion, locator_prefix: H}
+          content:
+            component:
+              - {property: description, label: description, visible_when: show_component_description}
+              - {property: inputs, label: inputs, visible_when: show_component_inputs_outputs}
+              - {property: outputs, label: outputs, visible_when: show_component_inputs_outputs}
+            place:
+              - {property: route_or_key, label: Route, visible_when: show_place_route_or_key}
+              - {property: access, label: Access, visible_when: show_place_access}
+              - {property: entry_points, label: Entry points, visible_when: show_place_entry_points}
+              - {property: primary_nav, label: Primary navigation, visible_when: show_place_primary_nav}
+            primary:
+              - {property: data_required, label: Data required, visible_when: show_view_state_data_required}
+            secondary: []
+            support: []
+          place_description: {property: description, visible_when: show_place_description}
+          labels:
+            hierarchy_root: 'Component hierarchy · {name}'
+            hierarchy_expansion: '{locator} · Repeated hierarchy'
+            hierarchy_reference: '{locator} · See {parent}'
+            component_scope: 'Component scope · {name}'
+            place_scope: 'Place scope · {name}'
+            standalone_scope: 'Contract scope · {name}'
+            target_register: Referenced targets
+          transition_label:
+            separator: ' '
+            parts:
+              - {field: event, template: '[{value}]', resolve_node_name: true}
+              - {field: guard, template: '{{value}}', resolve_node_name: false}
+              - {field: effect, template: '/ {value}', resolve_node_name: false}
         detail_display:
           compact:
+            show_component_hierarchy: true
+            show_component_description: false
+            show_component_inputs_outputs: false
+            show_place_description: false
             show_place_route_or_key: false
             show_place_access: false
             show_place_entry_points: false
@@ -3146,6 +3202,10 @@ views:
             show_supporting_contract_lane_when_primary_view_state: false
             omit_empty_place_containers: true
           detailed:
+            show_component_hierarchy: true
+            show_component_description: true
+            show_component_inputs_outputs: true
+            show_place_description: true
             show_place_route_or_key: true
             show_place_access: true
             show_place_entry_points: true

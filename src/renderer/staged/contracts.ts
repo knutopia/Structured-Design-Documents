@@ -211,6 +211,7 @@ export type JourneyMapItemMetadata =
     };
 
 export interface ViewMetadata {
+  uiContracts?: { kind: "enclosure"; title?: string; tone?: "inset" };
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
   outcomeOpportunity?: OutcomeOpportunityItemMetadata;
@@ -223,6 +224,7 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
   }
 
   return {
+    ...(viewMetadata.uiContracts ? { uiContracts: { ...viewMetadata.uiContracts } } : {}),
     ...(viewMetadata.serviceBlueprint
       ? {
         serviceBlueprint: {

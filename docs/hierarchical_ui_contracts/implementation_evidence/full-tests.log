@@ -1,0 +1,728 @@
+
+> sdd-toolchain@0.1.0 test /home/knut/projects/sdd
+> pnpm run build && vitest run
+
+
+> sdd-toolchain@0.1.0 build /home/knut/projects/sdd
+> tsc -p tsconfig.json
+
+
+ RUN  v2.1.9 /home/knut/projects/sdd
+
+ ✓ tests/cli.spec.ts (67 tests) 1834ms
+ ✓ tests/helperCli.spec.ts (67 tests) 1576ms
+ ✓ tests/sddSkillSource.spec.ts (9 tests) 488ms
+ ✓ tests/guidedAdditionV1Planner.spec.ts (26 tests) 18249ms
+   ✓ Guided Addition v1 new-document flow > starts at node types, skips placement, and completes the only top-level node 399ms
+   ✓ Guided Addition v1 route identity and constraint propagation > preserves four distinct route-first pages 899ms
+   ✓ Guided Addition v1 route identity and constraint propagation > runs relationship-first to an exactly constrained existing endpoint 400ms
+   ✓ Guided Addition v1 scoped filtering > selects, changes, and clears the relationship-first filter without changing route 333ms
+   ✓ Guided Addition v1 scoped filtering > filters standalone node types and starting nodes by bundle diagram scope 1126ms
+   ✓ Guided Addition v1 scoped filtering > preserves both incoming browse identities while selecting, changing, and clearing filters 1250ms
+   ✓ Guided Addition v1 forms and semantic organization > nests a new structural target and asks order only when siblings exist 626ms
+   ✓ Guided Addition v1 forms and semantic organization > auto-records only-child order for an empty structural parent 652ms
+   ✓ Guided Addition v1 forms and semantic organization > wraps an existing target in a new incoming structural source only after exact confirmation 797ms
+   ✓ Guided Addition v1 forms and semantic organization > leaves an existing target and offers graph-consistent new-source order 869ms
+   ✓ Guided Addition v1 forms and semantic organization > moves an existing structural target only after order and exact confirmation 336ms
+   ✓ Guided Addition v1 forms and semantic organization > completes a no-anchor standalone node without synthesizing relationship state 519ms
+   ✓ Guided Addition v1 forms and semantic organization > offers top-level organization for a new structural target and graph-consistent order for new behavioral nodes 1334ms
+   ✓ Guided Addition v1 forms and semantic organization > leaves an existing structural target in place without order or confirmation 601ms
+   ✓ Guided Addition v1 forms and semantic organization > uses exact optional node and relationship forms and normalizes blank optional values away 908ms
+   ✓ Guided Addition v1 forms and semantic organization > rejects form submissions whose identity or fields do not match the current page 358ms
+   ✓ Guided Addition v1 route convergence > uses exact zero, singular, and plural existing-relationship wording 1681ms
+   ✓ Guided Addition v1 route convergence > returns equivalent semantic additions through distinct selection-order routes 785ms
+   ✓ Guided Addition v1 route convergence > converges incoming routes without inversion and returns the accepted existing-node review 883ms
+ ✓ tests/stagedMacroLayout.spec.ts (15 tests) 1083ms
+   ✓ staged macro-layout > places stack containers with chrome, resolved ports, and segment-aware edge labels 480ms
+ ✓ tests/authoringMutations.spec.ts (11 tests) 4704ms
+   ✓ authoring mutations > uses exclusive creation when an absent target appears after verification 486ms
+   ✓ authoring mutations > bootstraps the first top-level insert on a newly created empty document and rejects other parse-invalid edits 371ms
+   ✓ authoring mutations > preserves header/property comments, appends properties before edges, keeps dry-runs local, and journals restore metadata on commit 363ms
+   ✓ authoring mutations > returns revision-bound insertion handles that change when the document revision changes 308ms
+   ✓ authoring mutations > inserts edges at the default position and removes edges and nested nodes on commit 378ms
+   ✓ authoring mutations > uses the bundle edge policy for placement-free insertion and preserves explicit overrides 713ms
+   ✓ authoring mutations > keeps compile diagnostics on compile-invalid apply results and returns validation/projection feedback 556ms
+ ✓ tests/outcomeOpportunityMapRouting.spec.ts (9 tests) 18917ms
+   ✓ outcome_opportunity_map routing step 2 > builds deterministic endpoint buckets and exterior same-band templates for the canonical trace 5170ms
+   ✓ outcome_opportunity_map routing step 2 > displaces crowded metric endpoints and uses a measured-column template for stacked metrics 4061ms
+   ✓ outcome_opportunity_map routing step 2 > routes projected secondary connectors through typed secondary ports without final labels 1943ms
+   ✓ outcome_opportunity_map routing step 2 > keeps dense multi-outcome routing orthogonal, separated, and label-visible 1466ms
+   ✓ outcome_opportunity_map routing step 2 > aggregates eligible shared multi-outcome support labels without per-edge repetition 960ms
+   ✓ outcome_opportunity_map routing step 2 > separates same-source east-edge address fan-out through local node-right bundles 2058ms
+   ✓ outcome_opportunity_map routing step 2 > keeps parking connectors deterministic and diagnosed 798ms
+   ✓ outcome_opportunity_map routing step 2 > produces final routed canonical proof cases with labels and no node-crossing routes 1729ms
+   ✓ outcome_opportunity_map routing step 2 > keeps shared cross-band nodes canonical while routing final connectors without duplication 728ms
+ ❯ tests/stagedServiceBlueprint.spec.ts (12 tests | 1 failed) 19995ms
+   × staged service_blueprint > renders the Step-only sdd_for_sdd blueprint without node intersections (compact) 6188ms
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   ✓ staged service_blueprint > renders the Step-only sdd_for_sdd blueprint without node intersections (detailed) 2965ms
+   ✓ staged service_blueprint > builds a fixed renderer-owned root grid for service_blueprint_slice 1751ms
+   ✓ staged service_blueprint > renders routing stages for the proof case with deterministic step-2, step-3, and final service_blueprint routes 1909ms
+   ✓ staged service_blueprint > orders connector plans by semantic band before physical column when the metadata diverges 879ms
+   ✓ staged service_blueprint > orders connector plans by slot order before physical column when the band metadata ties 1007ms
+   ✓ staged service_blueprint > matches staged renderer snapshots for the service_blueprint proof case and routing debug stages 1301ms
+   ✓ staged service_blueprint > preserves readable routing when a crowded bottom-gutter bundle is compressed 727ms
+   ✓ staged service_blueprint > merges routing-compatible same-node connectors after side resolution 849ms
+   ✓ staged service_blueprint > keeps incompatible same-node connectors separate and reports that choice explicitly 697ms
+   ✓ staged service_blueprint > appends a synthetic ungrouped lane shell when projection omits derived lane mapping 522ms
+   ✓ staged service_blueprint > keeps disconnected scene construction deterministic in lane order 1176ms
+ ✓ tests/authoringOrderingAndUndo.spec.ts (6 tests) 3901ms
+   ✓ authoring ordering and undo > reorders top-level nodes, moves leading trivia with the target, and rejects stale or invalid placements 1013ms
+   ✓ authoring ordering and undo > reorders only structural CONTAINS and COMPOSED_OF edges and rejects invalid structural placements 576ms
+   ✓ authoring ordering and undo > moves nested node blocks within the parent body stream without changing structural streams 544ms
+   ✓ authoring ordering and undo > undoes committed document updates in dry-run and commit mode and rejects revision mismatches after external edits 578ms
+ ✓ tests/additionProposalsV1.spec.ts (13 tests) 18939ms
+   ✓ Guided Addition v1 proposal executor > dry-runs an absent target, atomically creates it on commit, and records delete-on-undo 2023ms
+   ✓ Guided Addition v1 proposal executor > rejects a new-document proposal when the target appears and preserves its bytes 489ms
+   ✓ Guided Addition v1 proposal executor > applies outgoing and incoming non-structural source order with exact blank boundaries 2066ms
+   ✓ Guided Addition v1 proposal executor > applies T09 top-level and A03 nested structural targets exactly 1546ms
+   ✓ Guided Addition v1 proposal executor > applies A01 wrapper replacement and preserves the complete target subtree exactly once 807ms
+   ✓ Guided Addition v1 proposal executor > applies A02 new-source placement while leaving the existing target unchanged 743ms
+   ✓ Guided Addition v1 proposal executor > requires exact effects for moves and leaves existing targets in place 1262ms
+   ✓ Guided Addition v1 proposal executor > proves dry-run/commit parity, deterministic targets, and exact undo 1114ms
+   ✓ Guided Addition v1 proposal executor > uses the loaded bundle policy for the same placement-free v1 relationship operation 1318ms
+   ✓ Guided Addition v1 proposal executor > binds concrete warning acceptance to the exact proposal, bundle, revisions, result, and warning set 2021ms
+   ✓ Guided Addition v1 proposal executor > changes warning wording from bundle-only metadata 1673ms
+   ✓ Guided Addition v1 proposal executor > rejects stale identity, duplicate IDs, forged organization, and invalid canonical IDs 1131ms
+ ✓ tests/stagedOutcomeOpportunityMap.spec.ts (5 tests) 12390ms
+   ✓ staged outcome_opportunity_map > builds a RendererScene from the middle layer without final geometry 1903ms
+   ✓ staged outcome_opportunity_map > emits meaningful pre-routing artifacts with no semantic routes 1260ms
+   ✓ staged outcome_opportunity_map > keeps outcome annotations in measured shared attributes according to detail display 1502ms
+   ✓ staged outcome_opportunity_map > matches renderer-stage snapshots for canonical proof cases and routing debug stages 5691ms
+   ✓ staged outcome_opportunity_map > matches selected synthetic renderer-stage snapshots for routing risk cases 2030ms
+ ✓ tests/stagedUiContracts.spec.ts (6 tests) 4899ms
+   ✓ staged ui_contracts > matches committed staged snapshots for place_viewstate_transition in strict profile 2106ms
+   ✓ staged ui_contracts > omits empty place containers from simple staged ui_contracts scenes 858ms
+   ✓ staged ui_contracts > builds fallback-to-state structure without a synthetic ViewState graph 671ms
+   ✓ staged ui_contracts > keeps the shared supporting group structural in the staged scene 527ms
+   ✓ staged ui_contracts > keeps root places vertically balanced while dense places switch to a place grid 714ms
+ ✓ tests/cliDefaults.spec.ts (24 tests) 1153ms
+ ✓ tests/authoringContractMetadata.spec.ts (17 tests) 157ms
+ ✓ tests/journeyMapVisualAcceptance.spec.ts (13 tests) 38462ms
+   ✓ journey map Gate 6 visual acceptance > keeps the isolated same-Stage skip below the Step row with clear south ports 6363ms
+   ✓ journey map Gate 6 visual acceptance > keeps the long cross-Stage route locally clear and the root-Step chain visually direct 4804ms
+   ✓ journey map Gate 6 visual acceptance > uses direct and minimal-L branch fan-out with clear local and root-peripheral tracks 2994ms
+   ✓ journey map Gate 6 visual acceptance > removes the nominal join crossing with direct and minimal-L routes 1828ms
+   ✓ journey map Gate 6 visual acceptance > keeps backward routes peripheral while recording the shared ordering stem as readability debt 2025ms
+   ✓ journey map Gate 6 visual acceptance > keeps reciprocal and complex SCC routes peripheral while recording their shared tracks as readability debt 5600ms
+   ✓ journey map Gate 6 self-loop visual acceptance > separates the clockwise upper collar from the accepted backward track 1229ms
+   ✓ journey map Gate 6 duplicate occurrence visual acceptance > keeps three nominal tracks countable while isolating Gate 7 debt to terminal stubs 783ms
+   ✓ journey map Gate 7 duplicate endpoint visual proof > removes both shared terminal stubs and arrow overdraw with legal separated border endpoints 709ms
+   ✓ journey map Gate 7 ordering and primary endpoint visual proof > separates the incoming and outgoing J-501 south stems without a crossing 1074ms
+   ✓ journey map Gate 7 ordering and primary endpoint visual proof > gives stacked primary branches and joins distinct legal endpoint sides 1376ms
+   ✓ journey map Gate 7 reciprocal topology visual proof > renders both simple reciprocal SCCs as crossing-free nested arcs 1588ms
+   ✓ journey map dense shared-solver proof > keeps the dense SCC separated, marked, deterministic, and expansion-bounded 8078ms
+ ✓ tests/scenarioFlowRouting.spec.ts (6 tests) 18278ms
+   ✓ scenario_flow staged routing > routes proof-case connectors through explicit scenario-flow ports with deterministic priority 2547ms
+   ✓ scenario_flow staged routing > keeps same-column realization routing vertical and swerves only around blockers 1380ms
+   ✓ scenario_flow staged routing > groups consecutive same-column realization blockers into ordered wide swerves 1128ms
+   ✓ scenario_flow staged routing > routes mirror connectors at lower priority than Step flow without crossing proof-case nodes 849ms
+   ✓ scenario_flow staged routing > places branch labels for strict and permissive profiles and hides them for simple 11319ms
+   ✓ scenario_flow staged routing > returns step-2 and step-3 routing debug scenes, SVG, and PNG bytes 1047ms
+ ✓ tests/stagedJourneyMap.spec.ts (21 tests) 10799ms
+   ✓ staged journey map RendererScene > reads branch stacking from the loaded bundle rather than a renderer default 1387ms
+   ✓ staged journey map RendererScene > preserves the exact source-ordered root and Stage hierarchy, including empty, single, and root Steps 475ms
+   ✓ staged journey map RendererScene > builds shared attributes only from typed references and preserves detail-controlled ordering 714ms
+   ✓ staged journey map RendererScene > uses target IDs for nameless typed references and preserves repeated-role attribute order 349ms
+   ✓ staged journey map RendererScene > copies every render-model edge identity exactly once with semantic intent, ownership, and author order 1215ms
+   ✓ staged journey map RendererScene > assigns the locked lowest common semantic owner to every proof-corpus edge 1177ms
+   ✓ staged journey map RendererScene > emits only the locked generic scene diagnostics for the proof corpus 2258ms
+   ✓ staged journey map RendererScene > is deterministic, isolated across builds, and uses unique item and content IDs 412ms
+   ✓ staged journey map RendererScene > matches the accepted Gate 3 RendererScene evidence for ordering_ownership/strict 300ms
+ ✓ tests/journeyMapPreRouting.spec.ts (15 tests) 10887ms
+   ✓ journey map measurement and pre-routing placement > uses vendored shared-node measurement, fixed width, height growth, and grouped references 1866ms
+   ✓ journey map measurement and pre-routing placement > keeps headers and every Step inside natural-height, common-top Stage chrome 472ms
+   ✓ journey map measurement and pre-routing placement > preserves source order for primary/simple and aligns root Steps with the Stage content row 356ms
+   ✓ journey map measurement and pre-routing placement > preserves source order for primary/permissive and aligns root Steps with the Stage content row 326ms
+   ✓ journey map measurement and pre-routing placement > exposes deterministic adjacent, Stage-local, inter-item, and root-outer whitespace 573ms
+   ✓ journey map measurement and pre-routing placement > keeps placement independent from PRECEDES edge presence and array order 362ms
+   ✓ journey map measurement and pre-routing placement > retains every unrouted occurrence in measurement and emits a connector-free positioned proof 391ms
+   ✓ journey map measurement and pre-routing placement > renders deterministic no-edge SVG and a PNG derived from the exact same SVG 1285ms
+   ✓ journey map measurement and pre-routing placement > applies the accepted horizontal-scroll contract while retaining vertical fit and clean diagnostics 2060ms
+   ✓ journey map measurement and pre-routing placement > matches the accepted Gate 4 measurement and pre-routing evidence 1950ms
+ ✓ tests/guidedAdditionBundle.spec.ts (16 tests) 2456ms
+   ✓ guided addition bundle contract > changes prefix diagnostics when only the canonical authoring prefix changes 324ms
+   ✓ guided addition bundle contract > rejects invalid references, tokens, coverage, aliases, predicates, and edge-field rules 302ms
+ ✓ tests/renderedCorpus.spec.ts (14 tests) 8149ms
+   ✓ rendered example corpus > plans one collision-free directory per bundle render detail 1127ms
+   ✓ rendered example corpus > contains every committed artifact for each curated render pair 749ms
+   ✓ rendered example corpus > registers Home energy upgrade only as a Journey Map example 519ms
+   ✓ rendered example corpus > documents the promoted journey corpus in the generated README 668ms
+   ✓ rendered example corpus > keeps staged journey_map previews as the default corpus artifacts while preserving legacy siblings 531ms
+   ✓ rendered example corpus > keeps committed ui_contracts SVG previews free of visible newline escapes 383ms
+   ✓ rendered example corpus > keeps staged ia_place_map previews as the default corpus artifacts while preserving legacy preview siblings 426ms
+   ✓ rendered example corpus > keeps staged ui_contracts previews as the default corpus artifacts while preserving legacy preview siblings 549ms
+   ✓ rendered example corpus > keeps staged service_blueprint previews as the default corpus artifacts while preserving legacy preview siblings 471ms
+   ✓ rendered example corpus > keeps staged scenario_flow previews as the default corpus artifacts while preserving legacy and debug siblings 557ms
+   ✓ rendered example corpus > keeps staged outcome_opportunity_map previews as the default corpus artifacts while preserving legacy and debug siblings 864ms
+   ✓ rendered example corpus > does not add routed debug corpus siblings for views without staged routing debug artifacts 566ms
+   ✓ rendered example corpus > keeps forbidden place routing and access fields out of simple rendered corpus artifacts 730ms
+ ✓ tests/stagedRenderer.spec.ts (14 tests) 881ms
+   ✓ staged renderer contracts and harness > matches committed renderer-stage snapshots for the synthetic fixture scene 392ms
+ ✓ tests/stagedIaPlaceMap.spec.ts (9 tests) 8734ms
+   ✓ staged ia_place_map > matches committed staged snapshots for the mixed top-level IA source-order fixture 1841ms
+   ✓ staged ia_place_map > renders outcome_to_ia_trace through the staged SVG path with area headers and navigation arrows 1012ms
+   ✓ staged ia_place_map > applies simple-profile suppression while still indenting implicit top-level place sequences 726ms
+   ✓ staged ia_place_map > renders only forward local-structure connectors for recursive contain chains 1092ms
+   ✓ staged ia_place_map > assigns same-scope followers to the earliest preceding hub that navigates to them 662ms
+   ✓ staged ia_place_map > stops follower claiming at area boundaries, which are the current non-place scope entries 702ms
+   ✓ staged ia_place_map > keeps explicit contained children owned by their parent place even when that parent is a follower 573ms
+   ✓ staged ia_place_map > merges contains plus forward navigation into one local structure edge 792ms
+   ✓ staged ia_place_map > matches the reference-style hub and follower geometry for billSage_structure 1323ms
+ ✓ tests/previewWorkflow.spec.ts (19 tests) 20035ms
+   ✓ preview workflow > renders ia_place_map SVG previews through the staged backend by default 1870ms
+   ✓ preview workflow > renders ia_place_map PNG previews through the staged backend by default 863ms
+   ✓ preview workflow > renders outcome_to_ia_trace permissive PNG previews through the staged backend without overflow errors 1248ms
+   ✓ preview workflow > renders ui_contracts SVG previews through the staged backend by default 1176ms
+   ✓ preview workflow > renders ui_contracts PNG previews through the staged backend by default 872ms
+   ✓ preview workflow > omits empty ui_contracts place containers in simple staged previews and returns the coverage note 564ms
+   ✓ preview workflow > renders service_blueprint SVG previews through the staged backend by default 980ms
+   ✓ preview workflow > omits service_blueprint secondary edge labels in simple staged SVG previews 877ms
+   ✓ preview workflow > renders service_blueprint PNG previews through the staged backend by default 798ms
+   ✓ preview workflow > renders scenario_flow SVG previews through the staged backend by default 1275ms
+   ✓ preview workflow > renders scenario_flow PNG previews through the staged backend by default 1114ms
+   ✓ preview workflow > renders outcome_opportunity_map SVG previews through the staged backend by default 890ms
+   ✓ preview workflow > renders outcome_opportunity_map PNG previews through the staged backend by default 831ms
+   ✓ preview workflow > renders journey_map SVG previews through the staged backend with mapped diagnostics 912ms
+   ✓ preview workflow > renders journey_map PNG previews from the staged final scene by default 1019ms
+   ✓ preview workflow > renders journey_map SVG previews through the explicit legacy backend 1290ms
+   ✓ preview workflow > renders outcome_opportunity_map SVG previews through the explicit legacy backend 940ms
+   ✓ preview workflow > renders service_blueprint SVG previews through the explicit legacy backend 826ms
+   ✓ preview workflow > renders service_blueprint PNG previews through the explicit legacy backend 1681ms
+ ✓ tests/sddTextMate.spec.ts (14 tests) 3333ms
+   ✓ SDD TextMate tokenization > tokenizes every bundled example without foreign grammar scopes 1153ms
+ ✓ tests/sharedNodeRenderer.spec.ts (10 tests) 2923ms
+   ✓ shared node renderer > carries the CLI decorator selection through the staged preview request 2085ms
+ ✓ tests/authoringOutcomeAssessment.spec.ts (13 tests) 54ms
+ ✓ tests/guidedAdditionCli.spec.ts (11 tests) 13177ms
+   ✓ sdd add v1 transcript delivery > creates a missing document only after Save and skips redundant empty-document choices 2383ms
+   ✓ sdd add v1 transcript delivery > leaves a missing target absent after Cancel, prompt failure, anchored use, or rejected Save 2722ms
+   ✓ sdd add v1 transcript delivery > does not reinterpret non-ENOENT source failures as new documents 383ms
+   ✓ sdd add v1 transcript delivery > matches T16 and writes once after one warning-free Save 1571ms
+   ✓ sdd add v1 transcript delivery > matches T18 and performs no verification or write on Cancel 687ms
+   ✓ sdd add v1 transcript delivery > matches T17 and commits only with the exact duplicate-warning token 2212ms
+   ✓ sdd add v1 transcript delivery > returns Go back to the unchanged review and allows cancellation without writing 1221ms
+   ✓ sdd add v1 transcript delivery > renders contextual filter choices and never exposes forbidden implementation language 674ms
+   ✓ sdd add v1 transcript delivery > offers Back on non-initial menus and returns to the previous menu 590ms
+   ✓ sdd add v1 transcript delivery > does not offer Back on the very first menu 711ms
+ ✓ tests/routingCore.spec.ts (13 tests) 163ms
+ ✓ tests/journeyMapMiddleLayer.spec.ts (15 tests) 286ms
+ ✓ tests/scenarioFlowMiddleLayer.spec.ts (10 tests) 9911ms
+   ✓ scenario_flow middle layer > places the scenario_branching proof case into semantic chronology bands and branch tracks 1787ms
+   ✓ scenario_flow middle layer > derives persistent lineages in source order and reuses ended physical rows 1205ms
+   ✓ scenario_flow middle layer > classifies scenario-flow edge channels and prepares connector plans without route geometry 864ms
+   ✓ scenario_flow middle layer > emits deterministic diagnostics and author-order chronology when Step flow is absent 710ms
+   ✓ scenario_flow middle layer > places the canonical nested-branch and parallel-flow challenge into separated component rows 1606ms
+   ✓ scenario_flow middle layer > uses bundle-owned lane visibility, lane order, labels, and component spacing 654ms
+   ✓ scenario_flow middle layer > keeps joins on the earliest incoming lineage 785ms
+   ✓ scenario_flow middle layer > parks disconnected scoped nodes with deterministic diagnostics 785ms
+   ✓ scenario_flow middle layer > diagnoses Step cycles and falls back to deterministic author-order placement 719ms
+   ✓ scenario_flow middle layer > limits cycle fallback to the affected component 783ms
+ ✓ tests/authoringInspect.spec.ts (6 tests) 1347ms
+ ✓ tests/authoringIntents.spec.ts (5 tests) 4543ms
+   ✓ authoring intents > bootstraps newly created empty documents via author and returns derived operations plus created targets 1717ms
+   ✓ authoring intents > supports backward local_id refs across intents and allows follow-on low-level apply after commit 852ms
+ ✓ tests/outcomeOpportunityMapMiddleLayer.spec.ts (6 tests) 9035ms
+   ✓ outcome_opportunity_map middle layer > places outcome_to_ia_trace into one outcome band with bundle-derived connector channels 2094ms
+   ✓ outcome_opportunity_map middle layer > stacks metric_event_instrumentation metrics in stable same-band slots 1834ms
+   ✓ outcome_opportunity_map middle layer > keeps multiple outcomes as independent source-ordered bands without timeline edges 1279ms
+   ✓ outcome_opportunity_map middle layer > keeps shared opportunity, initiative, and metric nodes canonical while routing later edges back to them 1207ms
+   ✓ outcome_opportunity_map middle layer > creates dense metric fan-out slots and preserves projected secondary connector channels 1476ms
+   ✓ outcome_opportunity_map middle layer > parks nodes without outcome anchors in terminal deterministic parking bands 1135ms
+ ✓ tests/defaultsConfig.spec.ts (26 tests) 5505ms
+   ✓ defaults configuration mutation > does not include global configuration in bundle fingerprints 2353ms
+   ✓ defaults configuration mutation > leaves direct library rendering configuration-independent 2381ms
+ ✓ tests/stagedVisualAcceptance.spec.ts (5 tests) 19912ms
+   ✓ staged visual acceptance > keeps target ia_place_map artifacts free of fallback diagnostics, node-crossing routes, and weak target approaches 5066ms
+   ✓ staged visual acceptance > keeps target ui_contracts support-edge labels clear of headers, node boxes, each other, and route overlap 3425ms
+   ✓ staged visual acceptance > keeps the scenario_flow proof case free of forbidden diagnostics, node-crossing routes, and label collisions 2981ms
+   ✓ staged visual acceptance > keeps nested branches and a parallel scenario flow in separated horizontal row groups 1378ms
+   ✓ staged visual acceptance > keeps outcome_opportunity_map proof cases free of forbidden diagnostics, node-crossing routes, and label collisions 7057ms
+ ✓ tests/bundleRenderDetails.spec.ts (12 tests) 6623ms
+   ✓ bundle-owned render details > requires valid declarations and a known exact tool fallback 590ms
+   ✓ bundle-owned render details > requires a valid bundle-owned scenario-flow layout policy 516ms
+   ✓ bundle-owned render details > requires exact cell-sizing contracts for the two tiered grid backends 603ms
+   ✓ bundle-owned render details > fingerprints tier scope, alignment, and trailing-track policy independently 695ms
+   ✓ bundle-owned render details > includes fallback and per-view policy changes in the bundle fingerprint 577ms
+ ✓ tests/serviceBlueprintSharedNode.spec.ts (8 tests) 6319ms
+   ✓ service_blueprint shared-node adoption > propagates the 'type' decorator mode for every proof leaf type 666ms
+   ✓ service_blueprint shared-node adoption > renders shared SVG structure with explicit alphabetic baselines 927ms
+   ✓ service_blueprint shared-node adoption > emits element-level service-blueprint paint fallbacks for SVG importers 392ms
+ ✓ tests/journeyMapRendererStageSnapshots.spec.ts (10 tests) 47858ms
+   ✓ journey map accepted renderer-stage goldens > locks primary strict step-2, step-3, final, diagnostics, and SVG-derived PNG 4335ms
+   ✓ journey map accepted renderer-stage goldens > locks the primary compact detail final evidence 2895ms
+   ✓ journey map accepted renderer-stage goldens > locks the primary detailed detail final evidence 3099ms
+   ✓ journey map accepted renderer-stage goldens > locks ordering, ownership, validation, and renderer diagnostics 1695ms
+   ✓ journey map accepted renderer-stage goldens > locks topology step progression and diagnostics 2294ms
+   ✓ journey map accepted renderer-stage goldens > locks duplicate step progression and diagnostics 1016ms
+   ✓ journey map accepted renderer-stage goldens > accepts the compressed dense proof after shared assignment and bounded expansion 7393ms
+   ✓ journey map degraded diagnostic goldens > locks constructed structural failures 4961ms
+   ✓ journey map degraded diagnostic goldens > locks constructed geometry failures 2834ms
+   ✓ journey map degraded diagnostic goldens > locks constructed capacity, fallback, marker, and residual-crossing diagnostics 17330ms
+ ✓ tests/guidedAdditionContractMetadata.spec.ts (6 tests) 23481ms
+   ✓ Guided Addition v1 contract metadata > publishes the corrected v1 domain subjects and compilable schemas 7561ms
+   ✓ Guided Addition v1 contract metadata > validates real v1 snapshot, request, state, page, action, completion, proposal, and warning-aware apply values 11682ms
+ ✓ tests/stagedSpacingRegression.spec.ts (10 tests) 18297ms
+   ✓ spacing regression proof cases > trims the sdd_for_sdd Scenario Flow to occupied lane rows (compact) 3652ms
+   ✓ spacing regression proof cases > trims the sdd_for_sdd Scenario Flow to occupied lane rows (detailed) 2004ms
+   ✓ spacing regression proof cases > preserves leading/internal logical rows, stable cell IDs, and one tier for a shown empty lane 1014ms
+   ✓ spacing regression proof cases > grows only the occupied Service Blueprint lane for +0 parked policies 997ms
+   ✓ spacing regression proof cases > grows only the occupied Service Blueprint lane for 4 parked policies 1460ms
+   ✓ spacing regression proof cases > grows only the occupied Service Blueprint lane for 10 parked policies 1318ms
+   ✓ spacing regression proof cases > consumes both bundle tier scope and alignment at runtime, including the ungrouped lane 1478ms
+   ✓ spacing regression proof cases > refits Journey Map bounds after aligning 1 root branches without changing Stage geometry 1319ms
+   ✓ spacing regression proof cases > refits Journey Map bounds after aligning 3 root branches without changing Stage geometry 1048ms
+   ✓ spacing regression proof cases > refits Journey Map bounds after aligning 8 root branches without changing Stage geometry 1512ms
+ ✓ tests/uiContractsRenderModel.spec.ts (7 tests) 15195ms
+   ✓ ui_contracts render model ownership > renders view-state-owned supporting contracts inside the owning view state 4547ms
+   ✓ ui_contracts render model ownership > renders COMPOSED_OF inside a container without visible ui_contracts edges to the child component 2602ms
+   ✓ ui_contracts render model ownership > falls back to a shared supporting group when a support node has multiple structural owners 1923ms
+   ✓ ui_contracts render model ownership > keeps components plain when they have no nested state detail or supporting contracts 1798ms
+   ✓ ui_contracts render model ownership > omits empty place containers in simple and records coverage feedback in source order 1267ms
+   ✓ ui_contracts render model ownership > orders component-owned supporting contracts by top-level author order 1489ms
+   ✓ ui_contracts render model ownership > routes local supporting edges through the visible container title without support-to-support order chains 1560ms
+ ✓ tests/reparentNodeBlock.spec.ts (3 tests) 7400ms
+   ✓ reparent_node_block > moves a complete top-level subtree under another node and rebases all owned source 2319ms
+   ✓ reparent_node_block > moves nested nodes between parents and back to the top-level stream 1203ms
+   ✓ reparent_node_block > rejects self/descendant cycles, invalid destination anchors, same-parent use, and stale handles 1780ms
+ ❯ tests/helperCli.integration.spec.ts (5 tests | 3 failed) 89511ms
+   ✓ sdd-helper entrypoint integration > supports direct helper execution from nested repo directories for git-only and bundle-backed commands 9986ms
+   ✓ sdd-helper entrypoint integration > returns static and bundle-resolved contract detail from nested repo directories 9341ms
+   × sdd-helper entrypoint integration > proves Gate 6 authoring assessment scenarios through the built helper entrypoint 40074ms
+     → Test timed out in 40000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   × sdd-helper entrypoint integration > reports specific preview diagnostics for invalid intermediate documents and succeeds once the document is valid 15044ms
+     → Test timed out in 15000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   × sdd-helper entrypoint integration > returns unique materialized artifact paths for svg and png preview output 15061ms
+     → Test timed out in 15000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ❯ tests/journeyMapRenderModel.spec.ts (11 tests | 1 failed) 28728ms
+   ✓ journey map render model > preserves first projected parent, structural edge-line order, and interleaved root author order 4639ms
+   ✓ journey map render model > retains empty and single-Step Stages plus uncontained root Steps 2446ms
+   ✓ journey map render model > keeps a Step-only journey valid and preserves every projected duplicate occurrence 2423ms
+   ✓ journey map render model > exposes ordered structured references without presentation-formatted label lines 4823ms
+   ✓ journey map render model > uses the resolved target ID when a projection reference has no target name 1718ms
+   ✓ journey map render model > derives stable duplicate identities and occurrence ordinals from authored semantics 1411ms
+   ✓ journey map render model > stores authored PRECEDES order independently from projection edge order 2007ms
+   ✓ journey map render model > changes edge identity when the loaded bundle changes its identity fields 1890ms
+   ✓ journey map render model > changes typed reference visibility when the loaded profile-display contract changes 1395ms
+   × journey map render model > keeps the locked validation diagnostics isolated by fixture and profile 5949ms
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+ ✓ tests/render_detail_display.spec.ts (10 tests) 34926ms
+   ✓ detail-aware rendering > hides route, access, and entry-point annotations in compact detail ia_place_map while keeping primary_nav 7337ms
+   ✓ detail-aware rendering > hides route and access annotations in compact detail ia_place_map examples that do not use primary_nav 3508ms
+   ✓ detail-aware rendering > omits journey reference badges in compact detail 3619ms
+   ✓ detail-aware rendering > omits outcome-opportunity secondary annotations in compact detail 3315ms
+   ✓ detail-aware rendering > drops secondary service edge labels in compact detail while keeping the edges 2812ms
+   ✓ detail-aware rendering > drops scenario branch labels in compact detail 2760ms
+   ✓ detail-aware rendering > hides ui_contracts secondary overlays in compact detail when view states are primary 3169ms
+   ✓ detail-aware rendering > omits empty ui_contracts place containers in compact detail and reports a coverage note 2322ms
+   ✓ detail-aware rendering > keeps ui_contracts state groups visible in compact detail when state is the primary graph 3120ms
+   ✓ detail-aware rendering > keeps ui_contracts projection scope profile-agnostic while compact detail hides secondary render detail 2958ms
+ ✓ tests/iaPlaceMapSharedNode.spec.ts (6 tests) 7153ms
+   ✓ ia_place_map shared-node adoption > propagates Place type and ID decorators 876ms
+ ✓ tests/diagnostics.spec.ts (13 tests) 7872ms
+   ✓ diagnostics > groups repeated token-case diagnostics while retaining every source location 2338ms
+   ✓ diagnostics > reports syntax diagnostics for missing END 1470ms
+   ✓ diagnostics > reports compile diagnostics for duplicate node ids 896ms
+   ✓ diagnostics > reports validation diagnostics for invalid place access 1377ms
+   ✓ diagnostics > formats referential_integrity diagnostics with edge line locations when spans are available 1754ms
+ ✓ tests/scenarioFlowPreRouting.spec.ts (2 tests) 8880ms
+   ✓ scenario_flow pre-routing artifacts > builds a staged renderer scene with explicit ports and semantic edge declarations 4274ms
+   ✓ scenario_flow pre-routing artifacts > renders proof-case pre-routing cells, lane decorations, SVG, and PNG without positioned semantic edges 4603ms
+ ✓ tests/authoringContractResolution.spec.ts (6 tests) 2574ms
+ ✓ tests/guidedAdditionSnapshot.spec.ts (12 tests) 6839ms
+   ✓ guided document snapshot > creates a deterministic immutable new-document snapshot from bundle-owned version metadata 341ms
+   ✓ guided document snapshot > combines revision-bound structure with literal compiled graph semantics in source order 822ms
+   ✓ guided document snapshot > is byte-identical across repeated construction and newline normalization 1107ms
+   ✓ guided document snapshot > changes only revision-bound identity when source changes 721ms
+   ✓ guided document snapshot > changes only bundle identity when bundle semantics change 978ms
+   ✓ guided document snapshot > does not require validation-profile completeness 318ms
+   ✓ guided document snapshot > normalizes file-backed document_ref and path through the workspace adapter 515ms
+ ✓ tests/journeyMapBranchJoinRouting.spec.ts (5 tests) 16289ms
+   ✓ journey-map branch-join lineage routing > routes three unequal arms through ordered pre-join tracks in compact detail 7533ms
+   ✓ journey-map branch-join lineage routing > routes three unequal arms through ordered pre-join tracks in detailed detail 4049ms
+   ✓ journey-map branch-join lineage routing > returns nested joins to the correct parent lineage and expands the outer join gap 1832ms
+   ✓ journey-map branch-join lineage routing > routes sequential generic joins independently 1694ms
+   ✓ journey-map branch-join lineage routing > supports a root-level two-way join without inventing a diagram instance 1165ms
+ ✓ tests/serviceBlueprintMiddleLayer.spec.ts (5 tests) 10330ms
+   ✓ service_blueprint middle layer > anchors proof-case support nodes to A1 and realizes D-020 in an A1 spill slot 3848ms
+   ✓ service_blueprint middle layer > interleaves spill columns with their owning semantic bands 1913ms
+   ✓ service_blueprint middle layer > falls back to author order when customer steps do not declare PRECEDES 1873ms
+   ✓ service_blueprint middle layer > creates a deterministic degraded action spine when no customer steps exist 1383ms
+   ✓ service_blueprint middle layer > assigns disconnected action nodes to per-lane parking bands 1294ms
+ ✓ tests/authoringFoundation.spec.ts (4 tests) 432ms
+ ✓ tests/outcomeOpportunitySharedNode.spec.ts (6 tests) 7529ms
+   ✓ outcome_opportunity_map shared-node adoption > propagates type and ID decorators for all four semantic types 1029ms
+   ✓ outcome_opportunity_map shared-node adoption > consolidates repeated Event references and suppresses all optional attributes in compact detail 462ms
+   ✓ outcome_opportunity_map shared-node adoption > emits shared SVG structure and explicit alphabetic baselines 648ms
+ ✓ tests/viewRenderers.spec.ts (6 tests) 36ms
+ ✓ tests/parserContractMutationProof.spec.ts (7 tests) 1529ms
+ ✓ tests/journeyMapSharedNode.spec.ts (6 tests) 2884ms
+   ✓ journey_map shared-node adoption > groups repeated references and suppresses them in compact detail 493ms
+   ✓ journey_map shared-node adoption > emits shared SVG structure, portable root canvas chrome, and explicit baselines 364ms
+ ✓ tests/cyclicFlowPolicy.spec.ts (9 tests) 3179ms
+   ✓ bundle-driven cyclic_flow_policy > recognizes an internal PRECEDES edge annotation under strict without a Step.kind workaround 404ms
+   ✓ bundle-driven cyclic_flow_policy > changes behavior when bundle annotation target, marker, or coverage changes 520ms
+ ✓ tests/scenarioFlowSharedNode.spec.ts (7 tests) 3139ms
+   ✓ scenario_flow shared-node adoption > propagates the 'type' decorator mode for every scenario leaf type 364ms
+   ✓ scenario_flow shared-node adoption > renders shared SVG structure with alphabetic baselines and a dashed ViewState outline 523ms
+ ✓ tests/serviceBlueprintPreRouting.spec.ts (2 tests) 4742ms
+   ✓ service_blueprint pre-routing artifacts > render the fixed grid with decorations and without semantic edges 2752ms
+   ✓ service_blueprint pre-routing artifacts > succeeds before routing while later routing stages and the final staged render stay available 1986ms
+ ✓ tests/previewStyle.spec.ts (5 tests) 23ms
+ ✓ tests/guidedAdditionCatalog.spec.ts (10 tests) 2856ms
+   ✓ guided addition bundle fingerprint > is byte-stable and excludes environment paths 379ms
+   ✓ guided addition bundle fingerprint > includes every declared semantic artifact 727ms
+ ✓ tests/bundleToolDefaults.spec.ts (10 tests) 5315ms
+   ✓ bundle tool defaults > uses one effective profile for omitted and explicit library rendering 1507ms
+   ✓ bundle tool defaults > changes public omitted-profile behavior from a bundle-only mutation 1831ms
+ ✓ tests/stagedGridLayout.spec.ts (10 tests) 270ms
+ ✓ tests/authoringDirectoryServices.spec.ts (3 tests) 4224ms
+   ✓ authoring directory services > searches compile-valid graph content, skips compile-invalid files, and sorts matches deterministically 615ms
+   ✓ authoring directory services > renders preview payloads with mapped svg and png artifacts 2273ms
+ ✓ tests/uiContractsPresentationModel.spec.ts (8 tests) 6327ms
+   ✓ bundle-driven UI contracts presentation > preserves the complete fixture's identity and relationship sets 1441ms
+   ✓ bundle-driven UI contracts presentation > expands H1 once and retains both immediate parents and the child 517ms
+   ✓ bundle-driven UI contracts presentation > delivers declared Place metadata and keeps trigger/guard/effect text when support nodes are hidden 809ms
+   ✓ bundle-driven UI contracts presentation > honors bundle-only label, attribute, endpoint-selector, and visibility mutations 1109ms
+   ✓ bundle-driven UI contracts presentation > keeps State-only fallback and preserves structure-only compact scopes 575ms
+   ✓ bundle-driven UI contracts presentation > reports cycles even when there are no hierarchy roots 372ms
+ ✓ tests/parserDocumentBlockParsing.spec.ts (8 tests) 1891ms
+ ✓ tests/viewProjectionSemantics.spec.ts (5 tests) 5984ms
+   ✓ view projection semantics > maps service blueprint lane aliases and type defaults into derived lanes 1776ms
+   ✓ view projection semantics > derives scenario flow branch labels with guard, event, then target-name precedence 1049ms
+   ✓ view projection semantics > keeps ViewState as the primary ui_contracts graph and groups scoped State detail 1024ms
+   ✓ view projection semantics > falls back to scoped State graphs when ui_contracts has no ViewState nodes 1329ms
+   ✓ view projection semantics > derives outcome-opportunity implementation references for out-of-scope initiative targets 802ms
+ ✓ tests/docsShowSource.spec.ts (17 tests) 2407ms
+   ✓ showSource Markdown-it plugin > preserves full-file rendering, filename labels, and dependency tracking 868ms
+   ✓ showSource Markdown-it plugin > supports single and spaced multi-range highlights 330ms
+ ✓ tests/authoringGitHelpers.spec.ts (4 tests) 1493ms
+   ✓ authoring git helpers > reports all in-scope .sdd paths while keeping status entries sparse and destination-oriented 386ms
+   ✓ authoring git helpers > commits only explicit .sdd paths and leaves unrelated changes untouched 492ms
+   ✓ authoring git helpers > completes rename commits when the explicit path is the rename destination 370ms
+ ✓ tests/parserSyntaxAlignment.spec.ts (14 tests) 1384ms
+ ✓ tests/parserSyntaxRuntime.spec.ts (12 tests) 1059ms
+ ✓ tests/stagedSvgBackend.spec.ts (7 tests) 131ms
+ ✓ tests/connectorLabelPlacement.spec.ts (6 tests) 84ms
+ ✓ tests/diagramTypeNodeEdgeReference.spec.ts (1 test) 1024ms
+   ✓ diagram type node-and-edge reference > tracks staged renderer views and their bundle-owned endpoint contracts 1019ms
+ ✓ tests/render_dot.spec.ts (5 tests) 13503ms
+   ✓ renderSource dot > renders curated manifest-backed views to stable DOT output 9870ms
+   ✓ renderSource dot > single-escapes multiline ui_contracts labels in DOT output 795ms
+   ✓ renderSource dot > renders component containers only when ui_contracts detail is visible 989ms
+   ✓ renderSource dot > uses event names in ui_contracts transition labels when event annotations resolve 1266ms
+   ✓ renderSource dot > uses invisible endpoint anchors for containerized ui_contracts owners and keeps local support edges constrained 578ms
+ ✓ tests/stagedRootStroke.spec.ts (15 tests) 20070ms
+   ✓ staged root inside strokes > keeps the 'ia_place_map' outline inside its exported bounds 1956ms
+   ✓ staged root inside strokes > keeps the 'ui_contracts' outline inside its exported bounds 1394ms
+   ✓ staged root inside strokes > keeps the 'scenario_flow' outline inside its exported bounds 13528ms
+   ✓ staged root inside strokes > keeps the 'service_blueprint' outline inside its exported bounds 929ms
+   ✓ staged root inside strokes > keeps the 'outcome_opportunity_map' outline inside its exported bounds 1016ms
+   ✓ staged root inside strokes > keeps the 'journey_map' outline inside its exported bounds 1107ms
+ ✓ tests/outcomeOpportunityRenderModel.spec.ts (2 tests) 2871ms
+   ✓ outcome-opportunity render-model bundle authority > drives columns, chrome, and connector metadata from bundle renderer defaults 2157ms
+   ✓ outcome-opportunity render-model bundle authority > rejects missing, extra, or reordered fixed semantic columns explicitly 710ms
+ ✓ tests/parserLineClassification.spec.ts (9 tests) 1367ms
+ ✓ tests/docsSideBySide.spec.ts (8 tests) 659ms
+ ❯ tests/uiContractsTopology.spec.ts (14 tests | 5 failed) 7781ms
+   × B5 topology acceptance > branch 1075ms
+     → expected [ …(2) ] to deeply equal []
+   × B5 topology acceptance > merge 521ms
+     → expected [ Array(1) ] to deeply equal []
+   × B5 topology acceptance > diamond 361ms
+     → expected [ …(3) ] to deeply equal []
+   × B5 topology acceptance > cycle 313ms
+     → expected [ …(14) ] to deeply equal []
+   × B5 topology acceptance > self_loop 248ms
+     → expected [ Array(1) ] to deeply equal []
+   ✓ B5 topology acceptance > disconnected 372ms
+   ✓ B5 topology acceptance > three_parents_children 532ms
+   ✓ B5 topology acceptance > composition_fanout 425ms
+   ✓ B5 topology acceptance > parallel_bindings 399ms
+   ✓ B5 topology acceptance > keeps local composition and contracts fixed when sequences grow horizontally 1157ms
+   ✓ B5 topology acceptance > keeps duplicate identities separate, expands nested reuse once, and honors source edits and fallback order 643ms
+ ❯ tests/journeyMapRouting.spec.ts (63 tests | 1 failed) 167028ms
+   ✓ journey map Gate 5 basic routing > preserves the three locked basic primary occurrences and explicitly defers later branch/join work 5427ms
+   × journey map Gate 5 basic routing > preserves exact fixture partitions as later accepted Gate 6 families accumulate 5230ms
+     → Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+   ✓ journey map Gate 5 basic routing > builds typed owners, priorities, direct horizontal families, side buckets, and simple Stage gates 627ms
+   ✓ journey map Gate 5 basic routing > produces orthogonal exterior routes with legal gates and clear obstacles 5291ms
+   ✓ journey map Gate 5 basic routing > keeps profile-dependent target geometry deterministic without changing the routed family 1419ms
+   ✓ journey map Gate 5 basic routing > renders deterministic partial step-2 SVG and PNG from the exact same SVG 2267ms
+   ✓ journey map Gate 5 basic routing > emits locked structural diagnostics for missing endpoints, omissions, duplicate IDs, and diagonals 516ms
+   ✓ journey map Gate 5 basic routing > independently rejects route-family metadata mutations for every selected remediation family 475ms
+   ✓ journey map Gate 5 basic routing > keeps balanced direct endpoint reservations deterministic under measured-edge reordering 409ms
+   ✓ journey map Gate 7 typed occupancy extraction > extracts every locked resource kind with complete recomputable records across all profile-runs 6305ms
+   ✓ journey map Gate 7 typed occupancy extraction > keeps every accepted Gate 6 plan and route byte-for-byte immutable while extracting occupancy 5129ms
+   ✓ journey map Gate 7 typed occupancy extraction > keeps duplicate resolution deterministic under measured-edge reversal and derives final PNG from final SVG 362ms
+   ✓ journey map Gate 7 typed occupancy extraction > keeps stacked branch and join endpoints distinct across direct and minimal-L sides 358ms
+   ✓ journey map Gate 7 typed occupancy extraction > separates simple reciprocal SCCs as nested arcs while preserving the accepted self-loop 412ms
+   ✓ journey map Gate 7 typed occupancy extraction > accepts the dense proof with shared assignment and no replacement geometry violation 8463ms
+   ✓ journey map Gate 7 typed occupancy extraction > independently rejects every resolved occupancy, reconstruction, and expansion mutation 5843ms
+   ✓ journey map Gate 6 non-adjacent same-Stage routing > retains the isolated ordering skip while later accepted families are added 6173ms
+   ✓ journey map Gate 6 non-adjacent same-Stage routing > renders deterministic family debug SVG/PNG while retaining accepted earlier route structures 1957ms
+   ✓ journey map Gate 6 non-adjacent same-Stage routing > fails visibly instead of falling back when a south port or baseline bypass space is unavailable 545ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > routes exactly the two locked primary proof occurrences with stable identity and priority 324ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > uses a right-edge east egress and span-local root track while keeping the adjacent root chain direct 346ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > derives the span-local track from positioned bounds without changing semantic routing 1099ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > keeps G-200 dimensions independent of the accepted long cross-Stage edge 475ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > derives span-local clearance only from horizontally overlapping root items 493ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > separates overlapping root-span claims downward and requests bounded root expansion 430ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > diagnoses a full-row east-egress fallback when the local track loses a route comparison 417ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > fails visibly instead of reverting to south egress and diagnoses malformed contracts 739ms
+   ✓ journey map Gate 6 branch fan-out routing > applies forward source-branch precedence to exactly two primary and three topology occurrences 9857ms
+   ✓ journey map Gate 6 branch fan-out routing > builds a direct upper branch and a legal two-segment south-to-west lower branch 629ms
+   ✓ journey map Gate 6 branch fan-out routing > routes topology fan-out through one-sided gates and a root-peripheral branch track 550ms
+   ✓ journey map Gate 6 branch fan-out routing > derives primary branch geometry across profiles without changing classification 1804ms
+   ✓ journey map Gate 6 branch fan-out routing > fails branch construction and validation visibly without activating Gate 7 fallbacks 2087ms
+   ✓ journey map Gate 6 join fan-in routing > routes exactly the two authored primary joins and preserves every accepted earlier plan 13346ms
+   ✓ journey map Gate 6 join fan-in routing > builds a direct upper join and a legal two-segment east-to-south lower join across profiles 6990ms
+   ✓ journey map Gate 6 join fan-in routing > fails malformed joins visibly and defers unsupported join morphologies without Gate 7 behavior 1872ms
+   ✓ journey map Gate 6 backward routing > routes exactly the three non-cyclic backward occurrences after every accepted earlier family 10944ms
+   ✓ journey map Gate 6 backward routing > builds south-port Stage-local and reverse root-outer templates with exact controls 4060ms
+   ✓ journey map Gate 6 backward routing > fails malformed backward contracts visibly and keeps duplicates and Gate 7 blocked 2384ms
+   ✓ journey map Gate 6 shape-aware cycle routing > classifies both reciprocal topology components from graph shape without claiming the self-loop 1076ms
+   ✓ journey map Gate 6 shape-aware cycle routing > applies uniform Alternative B to the complex compressed SCC while retaining full component pressure 8900ms
+   ✓ journey map Gate 6 shape-aware cycle routing > keeps SCC identity and geometry deterministic under edge reordering and annotation-only changes 18051ms
+   ✓ journey map Gate 6 shape-aware cycle routing > rejects malformed SCC metadata independently of route-family declarations 4736ms
+   ✓ journey map Gate 6 shape-aware cycle routing > rejects insufficient cycle capacity and does not misclassify reciprocal occurrences 708ms
+   ✓ journey map Gate 6 self-loop routing > routes the unique topology self-loop through the accepted east-west upper collar 542ms
+   ✓ journey map Gate 6 self-loop routing > keeps self-loop identity and geometry deterministic across profiles, edge order, and annotation-only data 2215ms
+   ✓ journey map Gate 6 self-loop routing > rejects malformed self-loop contracts, missing capacity, and duplicate occurrences visibly 2013ms
+   ✓ journey map Gate 6 self-loop routing > renders deterministic self-loop SVG and derives PNG from that exact SVG 1631ms
+   ✓ journey map Gate 6 duplicate occurrence routing > routes the complete duplicate group as the accepted direct/upper/lower nominal fan 304ms
+   ✓ journey map Gate 6 duplicate occurrence routing > keeps group assignment deterministic and recovers the canonical direct base for one occurrence 310ms
+   ✓ journey map Gate 6 duplicate occurrence routing > rejects malformed fan contracts and fails supported groups atomically 398ms
+   ✓ journey map Gate 6 duplicate occurrence routing > defers every duplicate morphology outside the accepted adjacent root-Step group 770ms
+   ✓ journey map Gate 6 duplicate occurrence routing > renders deterministic duplicate-fan SVG and derives PNG from that exact SVG 479ms
+   ✓ journey map Gate 8 crossing continuity and terminal diagnostics > exposes the accepted final scene through byte-identical staged SVG and SVG-derived PNG wrappers 940ms
+   ✓ journey map Gate 8 crossing continuity and terminal diagnostics > locks the seven-run diagnostic matrix and marks only residual final crossings 6156ms
+   ✓ journey map Gate 8 crossing continuity and terminal diagnostics > collects strict interior perpendicular crossings but excludes touches and collinear runs 309ms
+ ✓ tests/renderDetailEquivalence.spec.ts (4 tests) 17284ms
+   ✓ Stage 4 render-detail identity > keeps display independent from successful validation profiles 12959ms
+   ✓ Stage 4 render-detail identity > keeps validation diagnostics fixed when only detail changes 2567ms
+   ✓ Stage 4 render-detail identity > makes omitted detail and per-view policy behavior bundle-owned 729ms
+ ✓ tests/projectionServicePublicApi.spec.ts (6 tests) 4946ms
+   ✓ projection service public API > exports the required projection types from the root package entrypoint 1818ms
+   ✓ projection service public API > projects source through the same compile and project path as compileSource plus projectView 1159ms
+   ✓ projection service public API > returns compile diagnostics without a projection when compilation fails 522ms
+   ✓ projection service public API > surfaces project.unknown_view from the public source-to-projection API 623ms
+   ✓ projection service public API > surfaces project.schema_validation_failed from the public source-to-projection API 816ms
+ ✓ tests/prepareProjectionForRender.spec.ts (4 tests) 4499ms
+   ✓ prepareProjectionForRender > returns non-ui_contracts projections unchanged with no notes 1928ms
+   ✓ prepareProjectionForRender > adds ui_contracts coverage notes and metadata in compact detail 897ms
+   ✓ prepareProjectionForRender > makes ui_contracts applicability detail-aware for an otherwise empty Place 879ms
+   ✓ prepareProjectionForRender > does not mutate the raw projectView result when renderer preparation is applied 792ms
+ ✓ tests/previewArtifacts.spec.ts (4 tests) 82ms
+ ✓ tests/docsDropdownSwitch.spec.ts (9 tests) 679ms
+ ✓ tests/parserStatementParsing.spec.ts (5 tests) 1197ms
+ ✓ tests/stagedStackSlots.spec.ts (4 tests) 58ms
+ ✓ tests/uiContractsB5Scopes.spec.ts (2 tests) 6288ms
+   ✓ production scene builders reproduce B5 scopes > rebuilds all twelve configurations from authored semantics 4008ms
+   ✓ production scene builders reproduce B5 scopes > continues to reject 33px labeled stems and 11px branch legs 801ms
+ ✓ tests/uiContractsContainer.spec.ts (2 tests) 1570ms
+   ✓ native B5 container headers > adds native titles to all twelve B5 inputs without moving nodes, connectors, or labels 1331ms
+ ✓ tests/guidedAdditionPublishedDocs.spec.ts (4 tests) 19ms
+ ✓ tests/stagedScenarioFlow.spec.ts (2 tests) 4947ms
+   ✓ staged scenario_flow > matches committed staged snapshots for scenario_branching strict 3808ms
+   ✓ staged scenario_flow > matches committed staged snapshots for flow_journey_topology_challenge strict 1136ms
+ ✓ tests/projectionOrchestrationReuse.spec.ts (5 tests) 5389ms
+   ✓ projection orchestration reuse > keeps the public source convenience path aligned with raw graph projection 2231ms
+   ✓ projection orchestration reuse > keeps raw public projection free of renderer-owned compact-detail coverage shaping 948ms
+   ✓ projection orchestration reuse > applies ui_contracts compact-detail shaping only through prepareProjectionForRender 670ms
+   ✓ projection orchestration reuse > proves renderSource layers renderer preparation on top of the raw public projection 563ms
+   ✓ projection orchestration reuse > proves renderSourcePreview layers renderer preparation on top of the raw public projection 971ms
+ ✓ tests/docsShowRepoLink.spec.ts (9 tests) 1097ms
+   ✓ showRepoLink Markdown-it plugin > keeps a following showSource directive as a separate block 471ms
+ ✓ tests/stagedFonts.spec.ts (5 tests) 825ms
+   ✓ staged renderer font faces > keeps measurement, embedded SVG, and PNG faces metrically conformant 491ms
+ ✓ tests/authoringPreviewMaterialization.spec.ts (4 tests) 137ms
+ ✓ tests/authoringReadServices.spec.ts (3 tests) 1282ms
+   ✓ authoring read services > returns ValidationResource for the current persisted document 353ms
+ ✓ tests/stagedSceneBuilders.spec.ts (2 tests) 15ms
+ ✓ tests/uiContractsFanoutProof.spec.ts (10 tests) 8051ms
+   ✓ single-source contract fan-out feasibility > C-430, decorators none 2272ms
+   ✓ single-source contract fan-out feasibility > C-420, decorators none 830ms
+   ✓ single-source contract fan-out feasibility > C-450, decorators none 622ms
+   ✓ single-source contract fan-out feasibility > long-binding, decorators none 700ms
+   ✓ single-source contract fan-out feasibility > eight-targets, decorators none 654ms
+   ✓ single-source contract fan-out feasibility > C-430, decorators type,id 753ms
+   ✓ single-source contract fan-out feasibility > C-420, decorators type,id 594ms
+   ✓ single-source contract fan-out feasibility > C-450, decorators type,id 530ms
+   ✓ single-source contract fan-out feasibility > long-binding, decorators type,id 616ms
+   ✓ single-source contract fan-out feasibility > eight-targets, decorators type,id 471ms
+ ✓ tests/guidedAdditionV1Architecture.spec.ts (3 tests) 69ms
+ ✓ tests/project_ia_place_map.spec.ts (2 tests) 2315ms
+   ✓ projectView ia_place_map > projects the outcome_to_ia_trace IA slice with node annotations 1510ms
+   ✓ projectView ia_place_map > projects the place_viewstate_transition IA slice with omissions and metadata annotations 800ms
+ ✓ tests/previewArtifactPaths.spec.ts (5 tests) 25ms
+ ✓ tests/validate.spec.ts (6 tests) 6086ms
+   ✓ validateGraph > loads the simple profile from the bundle manifest 896ms
+   ✓ validateGraph > validates all manifest examples under the simple profile with zero errors 1950ms
+   ✓ validateGraph > validates all manifest examples under the strict profile with zero errors 1495ms
+   ✓ validateGraph > accepts the BillSage draft example under simple 633ms
+   ✓ validateGraph > flags the BillSage draft example under strict for missing governance metadata 436ms
+   ✓ validateGraph > attaches source spans to referential_integrity diagnostics 671ms
+ ✓ tests/journeyMapBranchStacking.spec.ts (1 test) 2737ms
+   ✓ journey-map branch stacking > uses the existing topology challenge as a test-only nested and disconnected proof 2732ms
+ ✓ tests/helperCliWriter.spec.ts (3 tests) 30ms
+ ✓ tests/authorOrder.spec.ts (1 test) 1478ms
+   ✓ compiled graph author order > captures top-level declaration order and typed structural edge order without serializing metadata 1473ms
+ ✓ tests/uiContractsB5Replay.spec.ts (14 tests) 1405ms
+   ✓ B5 immutable acceptance baseline > reproduces b5_component.compact with independent geometry acceptance 397ms
+ ✓ tests/render_source_order.spec.ts (2 tests) 2553ms
+   ✓ source-ordered IA rendering > renders DOT using source order for top-level and contained siblings 1687ms
+   ✓ source-ordered IA rendering > renders Mermaid using source order for top-level and contained siblings 863ms
+ ✓ tests/projectionSnapshots.spec.ts (2 tests) 5346ms
+   ✓ projectView projection snapshots > matches every manifest-declared projection snapshot 4554ms
+   ✓ projectView projection snapshots > uses the journey bundle reference sort instead of a hidden projection default 789ms
+ ✓ tests/previewArtifacts.fontRegression.spec.ts (1 test) 82ms
+ ✓ tests/cliDecoratorDocs.spec.ts (1 test) 7ms
+ ✓ tests/bundleSyntax.spec.ts (1 test) 687ms
+ ✓ tests/compile.spec.ts (1 test) 1943ms
+   ✓ compileSource > matches the compiled snapshots for all manifest examples 1940ms
+ ✓ tests/uiContractsComplete.spec.ts (8 tests) 17561ms
+   ✓ complete native B5 sheet > compact / none 2412ms
+   ✓ complete native B5 sheet > compact / type 1493ms
+   ✓ complete native B5 sheet > compact / id 1396ms
+   ✓ complete native B5 sheet > compact / type,id 1299ms
+   ✓ complete native B5 sheet > detailed / none 2805ms
+   ✓ complete native B5 sheet > detailed / type 2539ms
+   ✓ complete native B5 sheet > detailed / id 2295ms
+   ✓ complete native B5 sheet > detailed / type,id 1602ms
+ ✓ tests/render_mermaid.spec.ts (1 test) 5454ms
+   ✓ renderSource mermaid > renders curated manifest-backed views to stable Mermaid output 5445ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/helperCli.integration.spec.ts > sdd-helper entrypoint integration > proves Gate 6 authoring assessment scenarios through the built helper entrypoint
+Error: Test timed out in 40000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/11]⎯
+
+ FAIL  tests/helperCli.integration.spec.ts > sdd-helper entrypoint integration > reports specific preview diagnostics for invalid intermediate documents and succeeds once the document is valid
+ FAIL  tests/helperCli.integration.spec.ts > sdd-helper entrypoint integration > returns unique materialized artifact paths for svg and png preview output
+Error: Test timed out in 15000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/11]⎯
+
+ FAIL  tests/journeyMapRenderModel.spec.ts > journey map render model > keeps the locked validation diagnostics isolated by fixture and profile
+ FAIL  tests/journeyMapRouting.spec.ts > journey map Gate 5 basic routing > preserves exact fixture partitions as later accepted Gate 6 families accumulate
+ FAIL  tests/stagedServiceBlueprint.spec.ts > staged service_blueprint > renders the Step-only sdd_for_sdd blueprint without node intersections (compact)
+Error: Test timed out in 5000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/11]⎯
+
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > branch
+AssertionError: expected [ …(2) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "renderer.routing.ui_contracts_collinear_overlap: Connectors \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-101%22%5D:0\" and \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-102%22%5D:0\" have 50.961px of overlapping horizontal span at 0px separation.",
++   "collinear_overlap: Connectors \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-101%22%5D:0\" and \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-102%22%5D:0\" have 50.961px of overlapping horizontal span at 0px separation.",
++ ]
+
+ ❯ tests/uiContractsTopology.spec.ts:52:20
+     50|     await writeFile(`/tmp/sdd-b5-topology/${name}.json`, JSON.stringif…
+     51|     await writeFile(`/tmp/sdd-b5-topology/${name}.svg`, (await renderP…
+     52|     expect(issues).toEqual([]);
+       |                    ^
+     53|     expect(new Set(builder.occurrenceSemanticIds.values())).toEqual(ne…
+     54|     if (name === "parallel_bindings") expect(model.relationships.map(e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/11]⎯
+
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > merge
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > self_loop
+AssertionError: expected [ Array(1) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "collinear_overlap: Connectors \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-102%22%5D:0\" and \"scope:C-100:sequence:secondary:relationship:%5B%22ST-101%22%2C%22TRANSITIONS_TO%22%2C%22ST-102%22%5D:0\" have 50.961px of overlapping horizontal span at 0px separation.",
++ ]
+
+ ❯ tests/uiContractsTopology.spec.ts:52:20
+     50|     await writeFile(`/tmp/sdd-b5-topology/${name}.json`, JSON.stringif…
+     51|     await writeFile(`/tmp/sdd-b5-topology/${name}.svg`, (await renderP…
+     52|     expect(issues).toEqual([]);
+       |                    ^
+     53|     expect(new Set(builder.occurrenceSemanticIds.values())).toEqual(ne…
+     54|     if (name === "parallel_bindings") expect(model.relationships.map(e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/11]⎯
+
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > diamond
+AssertionError: expected [ …(3) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "renderer.routing.ui_contracts_collinear_overlap: Connectors \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-101%22%5D:0\" and \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-102%22%5D:0\" have 51.108px of overlapping horizontal span at 0px separation.",
++   "collinear_overlap: Connectors \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-101%22%5D:0\" and \"scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-102%22%5D:0\" have 51.108px of overlapping horizontal span at 0px separation.",
++   "collinear_overlap: Connectors \"scope:C-100:sequence:secondary:relationship:%5B%22ST-101%22%2C%22TRANSITIONS_TO%22%2C%22ST-103%22%5D:0\" and \"scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-103%22%5D:0\" have 51.108px of overlapping horizontal span at 0px separation.",
++ ]
+
+ ❯ tests/uiContractsTopology.spec.ts:52:20
+     50|     await writeFile(`/tmp/sdd-b5-topology/${name}.json`, JSON.stringif…
+     51|     await writeFile(`/tmp/sdd-b5-topology/${name}.svg`, (await renderP…
+     52|     expect(issues).toEqual([]);
+       |                    ^
+     53|     expect(new Set(builder.occurrenceSemanticIds.values())).toEqual(ne…
+     54|     if (name === "parallel_bindings") expect(model.relationships.map(e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/11]⎯
+
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > cycle
+AssertionError: expected [ …(14) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "renderer.routing.ui_contracts_endpoint_intrusion: Connector \"scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0\" arrives through target box \"occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D\".",
++   "renderer.routing.ui_contracts_endpoint_intrusion: Connector \"scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0\" departs into source box \"occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-102%22%5D\".",
++   "renderer.routing.ui_contracts_node_intersection: Connector \"scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0\" segment 1 intersects non-endpoint box \"occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-101%22%5D\".",
++   "endpoint_intrusion: Connector \"scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0\" departs into source box \"occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-102%22%5D\".",
++   "endpoint_intrusion: Connector \"scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0\" arrives through target box \"occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D\".",
++   "node_intersection: Connector \"scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0\" segment 1 intersects non-endpoint box \"occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-101%22%5D\".",
++   "label/node: scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-101%22%5D:0, occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
++   "label/node: scope:C-100:sequence:secondary:relationship:%5B%22ST-101%22%2C%22TRANSITIONS_TO%22%2C%22ST-102%22%5D:0, occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-102%22%5D",
++   "label/node: scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0, occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-101%22%5D",
++   "route/interior: scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0, occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-102%22%5D",
++   "route/interior: scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0, occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
++   "route/interior: scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0, occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-101%22%5D",
++   "route/interior: scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0, occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-102%22%5D",
++   "route/interior: scope:C-100:sequence:secondary:relationship:%5B%22ST-102%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0, occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
++ ]
+
+ ❯ tests/uiContractsTopology.spec.ts:52:20
+     50|     await writeFile(`/tmp/sdd-b5-topology/${name}.json`, JSON.stringif…
+     51|     await writeFile(`/tmp/sdd-b5-topology/${name}.svg`, (await renderP…
+     52|     expect(issues).toEqual([]);
+       |                    ^
+     53|     expect(new Set(builder.occurrenceSemanticIds.values())).toEqual(ne…
+     54|     if (name === "parallel_bindings") expect(model.relationships.map(e…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/11]⎯
+
+ Test Files  5 failed | 111 passed (116)
+      Tests  11 failed | 1087 passed (1098)
+   Start at  12:34:18
+   Duration  202.05s (transform 33.32s, setup 0ms, collect 228.25s, tests 1012.79s, environment 148ms, prepare 53.66s)
+
+ ELIFECYCLE  Test failed. See above for more details.

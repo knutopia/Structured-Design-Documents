@@ -1,5 +1,6 @@
 import { sortDiagnostics } from "../diagnostics/types.js";
 import { isRendererCellSizingConfig } from "./rendererCellSizing.js";
+import { uiContractsPresentationProblems } from "./uiContractsPresentation.js";
 import type { Diagnostic } from "../types.js";
 import { resolveBundleFieldReference, resolveProfileRuleField } from "./bundleReferences.js";
 import type {
@@ -466,6 +467,12 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
         "bundle.render_batch.applicability_shape",
         `Rendering view '${view.id}' must declare batch_applicability as { kind: visible_semantic_node_count, minimum: positive integer }`
       );
+    }
+    // This backend owns the presentation shape; node/edge identifiers remain bundle data.
+    if (view.id === "ui_contracts" || rendererDefaults.ui_contracts_presentation !== undefined) {
+      for (const problem of uiContractsPresentationProblems(rendererDefaults.ui_contracts_presentation, detailDisplay)) {
+        add("bundle.ui_contracts.presentation_shape", `View '${view.id}': ${problem}`);
+      }
     }
     // These staged backends require the shared cell-sizing contract.
     if ((view.id === "scenario_flow" || view.id === "service_blueprint"

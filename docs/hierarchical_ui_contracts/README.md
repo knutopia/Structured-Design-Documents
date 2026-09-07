@@ -1,10 +1,62 @@
 # Component containment: B — enclosure overview and local context
 
-## Current SVG proofs: headerless compact nodes and tighter spacing
+## Implementation in progress — Stage 6 blocked
 
-The current **B3** set removes compact node headers, retains titled containers,
+The [accepted implementation plan](staged_ui_contracts_b5_implementation_plan.md)
+has been implemented through its Stage 5 proof gates. The [implementation ledger](b5_implementation_evidence.md)
+records the passing complete-sheet matrix and the transition topology failures
+that prevent public activation. Shared placement/routing and public previews
+remain unchanged.
+
+Review the new native complete-sheet evidence: [compact, no decorators](implementation_evidence/stage5/compact.none.svg),
+[detailed, no decorators](implementation_evidence/stage5/detailed.none.svg), and
+[detailed, type and ID](implementation_evidence/stage5/detailed.type-id.svg).
+These are acceptance evidence for Departure Desk, not refreshed public goldens.
+
+## Current B5 proofs: clean connectors, corrected headers, independent decorators
+
+B5 preserves the verified B4 spacing, removes visible junction circles, and
+corrects container-header paint. Detailed content does not enable node headers:
+the plain filenames use `--decorators none`; explicit decorated variants use
+`--decorators type,id`. See the [B5 review guide](b5_visual_refinements.md).
+
+| Case | Compact, no decorators | Detailed, no decorators | Detailed, type and ID |
+| --- | --- | --- | --- |
+| Two parents and one child | [SVG](b5_component.compact.svg) | [SVG](b5_component.detailed.svg) | [SVG](b5_component.detailed.decorators-type-id.svg) |
+| Four children | [SVG](b5_children.compact.svg) | [SVG](b5_children.detailed.svg) | [SVG](b5_children.detailed.decorators-type-id.svg) |
+| Place and ViewState sequences | [SVG](b5_place.compact.svg) | [SVG](b5_place.detailed.svg) | [SVG](b5_place.detailed.decorators-type-id.svg) |
+
+These remain focused excerpts, not Complete Sheets. Shared renderer code and the
+SDD are unchanged. Extra right-edge width from the shared layout's retained
+measurement estimate is documented, not cropped away.
+
+## Previous B4 spacing proofs: unchanged shared pipeline
+
+The **B4** focused proofs use the existing measurement, layout, routing,
+validation, and SVG backend. No shared renderer code changed. Read the
+[solution and verification guide](b4_shared_pipeline_spacing.md).
+
+- Two parents and one child: [compact](b4_component.compact.svg) and
+  [detailed with a five-step State sequence](b4_component.detailed.svg).
+- Four children: [compact](b4_children.compact.svg) and
+  [detailed with two State sequences](b4_children.detailed.svg).
+- Place composition and two ViewState sequences:
+  [compact](b4_place.compact.svg), [detailed](b4_place.detailed.svg), and
+  [shortened detailed control](b4_place.short.detailed.svg).
+- [Pipeline inputs, positioned outputs, and verification evidence](b4_pipeline_evidence.json).
+
+These are focused spacing excerpts, not complete UI-contract sheets. The
+overview and outgoing-contract sections have not been regenerated in B4.
+
+## Withdrawn B3 spacing proofs
+
+The **B3** set removes compact node headers, retains titled containers,
 and tightens sequence and local containment gaps without shrinking nodes or text.
-Read the [spacing review and routing findings](b3_spacing_review.md).
+Its spacing conclusions are **withdrawn**: positions and routes were manually
+chosen, and the proposed per-connection gap policy bypassed existing behavior.
+The user has explicitly ruled out shared routing changes. The
+[original spacing review](b3_spacing_review.md) is historical, not implementation
+guidance. Headerless compact nodes remain the accepted appearance direction.
 
 - Clean complete sheets: [compact SVG](b3_complete.compact.svg) and
   [detailed SVG](b3_complete.detailed.svg).

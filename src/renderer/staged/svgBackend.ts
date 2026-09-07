@@ -12,6 +12,7 @@ import type {
   SceneContainerPrimitive,
   SceneNodePrimitive
 } from "./contracts.js";
+import { paintUiContractsContainer } from "./uiContractsContainer.js";
 import {
   createBackendDiagnostic,
   sortRendererDiagnostics,
@@ -237,6 +238,9 @@ function renderContainerChrome(
   theme: RendererTheme,
   isSceneRoot: boolean
 ): string | undefined {
+  if (container.viewMetadata?.uiContracts?.kind === "enclosure") {
+    return paintUiContractsContainer(container, theme);
+  }
   const classList = buildItemClassList("container", container.primitive, container.role, container.classes, "chrome");
   const lines = [
     `<g id="scene-container-${sanitizeToken(container.id)}" class="${classList}" data-item-id="${escapeXml(container.id)}" data-role="${escapeXml(container.role)}">`

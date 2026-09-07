@@ -1,4 +1,5 @@
 import { cloneEdgeViewMetadata, cloneViewMetadata } from "./contracts.js";
+import { measureUiContractsHeader } from "./uiContractsContainer.js";
 import type {
   ChromeSpec,
   ContentBlock,
@@ -390,6 +391,9 @@ function measureContainerHeaderContent(
   container: SceneContainer,
   chrome: ChromeSpec
 ): ContainerHeaderLayoutResult {
+  if (container.viewMetadata?.uiContracts?.kind === "enclosure") {
+    return measureUiContractsHeader(container, context.theme, context.measureText);
+  }
   const headerContent = container.headerContent ?? [];
   if (headerContent.length === 0) {
     return {

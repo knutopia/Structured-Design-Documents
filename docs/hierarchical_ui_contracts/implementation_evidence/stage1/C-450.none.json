@@ -1,0 +1,1415 @@
+{
+  "testCase": "C-450",
+  "decorators": "none",
+  "geometry": [],
+  "occurrences": [
+    [
+      "source",
+      "C-450"
+    ],
+    [
+      "target:0",
+      "D-410"
+    ],
+    [
+      "target:1",
+      "SA-410"
+    ]
+  ],
+  "relationships": [
+    [
+      "contract:0",
+      [
+        "contract:0"
+      ]
+    ],
+    [
+      "contract:1",
+      [
+        "contract:1:lead",
+        "contract:1"
+      ]
+    ]
+  ],
+  "rendererScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "fanout_proof",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 0,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "headerBandHeight": 0
+      },
+      "children": [
+        {
+          "kind": "container",
+          "id": "contract-group",
+          "role": "fanout_proof",
+          "primitive": "stack",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 24,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "container",
+              "id": "target-row:0",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 131.748,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 10,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "source",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Trail Lens",
+                    "decoratorMode": {
+                      "id": "none",
+                      "showNodeType": false,
+                      "showNodeId": false
+                    },
+                    "nodeType": "Component",
+                    "nodeId": "C-450",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-out:0",
+                      "role": "contract_out",
+                      "side": "east",
+                      "offset": 24
+                    },
+                    {
+                      "id": "contract-out:1",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 200
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:0",
+                  "role": "dataentity",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "LoadRecord",
+                    "decoratorMode": {
+                      "id": "none",
+                      "showNodeType": false,
+                      "showNodeId": false
+                    },
+                    "nodeType": "DataEntity",
+                    "nodeId": "D-410",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 24
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            },
+            {
+              "kind": "container",
+              "id": "target-row:1",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 155.748,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 10,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 200
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:1",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:1",
+                  "role": "systemaction",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Store draft",
+                    "decoratorMode": {
+                      "id": "none",
+                      "showNodeType": false,
+                      "showNodeId": false
+                    },
+                    "nodeType": "SystemAction",
+                    "nodeId": "SA-410",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 24
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            }
+          ],
+          "ports": []
+        }
+      ],
+      "ports": []
+    },
+    "edges": [
+      {
+        "id": "contract:1:lead",
+        "role": "depends_on",
+        "classes": [],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:1"
+        },
+        "to": {
+          "itemId": "anchor:1",
+          "portId": "in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:0",
+        "role": "binds_to",
+        "classes": [
+          "edge-dotted"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:0"
+        },
+        "to": {
+          "itemId": "target:0",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "binds field status",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:1",
+        "role": "depends_on",
+        "classes": [],
+        "from": {
+          "itemId": "anchor:1",
+          "portId": "out"
+        },
+        "to": {
+          "itemId": "target:1",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "depends on",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "measuredScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "fanout_proof",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 0,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "contract-group",
+          "role": "fanout_proof",
+          "primitive": "stack",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 24,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "gutter": 12,
+            "headerBandHeight": 0
+          },
+          "headerContent": [],
+          "children": [
+            {
+              "kind": "container",
+              "id": "target-row:0",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 131.748,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 10,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "source",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-plain"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "source__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Trail Lens"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 70.352,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "plain",
+                    "body": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 45,
+                      "title": {
+                        "id": "source__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Trail Lens"
+                        ],
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 70.352,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-out:0",
+                      "role": "contract_out",
+                      "side": "east",
+                      "offset": 24,
+                      "x": 224,
+                      "y": 24
+                    },
+                    {
+                      "id": "contract-out:1",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 200,
+                      "x": 200,
+                      "y": 48
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 48
+                },
+                {
+                  "kind": "node",
+                  "id": "target:0",
+                  "role": "dataentity",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-plain"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:0__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 87.512,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "plain",
+                    "body": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 45,
+                      "title": {
+                        "id": "target:0__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "LoadRecord"
+                        ],
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 87.512,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 24,
+                      "x": 0,
+                      "y": 24
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 48
+                }
+              ],
+              "ports": [],
+              "width": 579.748,
+              "height": 58
+            },
+            {
+              "kind": "container",
+              "id": "target-row:1",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 155.748,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 10,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 200
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:1",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:1",
+                  "role": "systemaction",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-plain"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:1__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Store draft"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 79,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "plain",
+                    "body": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 45,
+                      "title": {
+                        "id": "target:1__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Store draft"
+                        ],
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 79,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 24,
+                      "x": 0,
+                      "y": 24
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 48
+                }
+              ],
+              "ports": [],
+              "width": 579.748,
+              "height": 58
+            }
+          ],
+          "ports": [],
+          "width": 579.748,
+          "height": 140
+        }
+      ],
+      "ports": [],
+      "width": 611.748,
+      "height": 172
+    },
+    "edges": [
+      {
+        "id": "contract:1:lead",
+        "role": "depends_on",
+        "classes": [],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:1",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "anchor:1",
+          "portId": "in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:0",
+        "role": "binds_to",
+        "classes": [
+          "edge-dotted"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:0",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:0",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "binds field status"
+          ],
+          "width": 107.748,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:1",
+        "role": "depends_on",
+        "classes": [],
+        "from": {
+          "itemId": "anchor:1",
+          "portId": "out",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:1",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "depends on"
+          ],
+          "width": 76.482,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "positionedScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "fanout_proof",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 0,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "contract-group",
+          "role": "fanout_proof",
+          "primitive": "stack",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 24,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "gutter": 12,
+            "headerBandHeight": 0
+          },
+          "headerContent": [],
+          "children": [
+            {
+              "kind": "container",
+              "id": "target-row:0",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 131.748,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 10,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "source",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-plain"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "source__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Trail Lens"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 70.352,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "plain",
+                    "body": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 45,
+                      "title": {
+                        "id": "source__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Trail Lens"
+                        ],
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 70.352,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-out:0",
+                      "role": "contract_out",
+                      "side": "east",
+                      "offset": 24,
+                      "x": 224,
+                      "y": 24
+                    },
+                    {
+                      "id": "contract-out:1",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 200,
+                      "x": 200,
+                      "y": 48
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 16,
+                  "y": 26,
+                  "width": 224,
+                  "height": 48
+                },
+                {
+                  "kind": "node",
+                  "id": "target:0",
+                  "role": "dataentity",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-plain"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:0__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 87.512,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "plain",
+                    "body": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 45,
+                      "title": {
+                        "id": "target:0__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "LoadRecord"
+                        ],
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 87.512,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 24,
+                      "x": 0,
+                      "y": 24
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 371.748,
+                  "y": 26,
+                  "width": 224,
+                  "height": 48
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 16,
+              "width": 579.748,
+              "height": 58
+            },
+            {
+              "kind": "container",
+              "id": "target-row:1",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 155.748,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 10,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 200
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:1",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "x": 216,
+                  "y": 132,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:1",
+                  "role": "systemaction",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-plain"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:1__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Store draft"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 79,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "plain",
+                    "body": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 45,
+                      "title": {
+                        "id": "target:1__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Store draft"
+                        ],
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 79,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 24,
+                      "x": 0,
+                      "y": 24
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 371.748,
+                  "y": 108,
+                  "width": 224,
+                  "height": 48
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 98,
+              "width": 579.748,
+              "height": 58
+            }
+          ],
+          "ports": [],
+          "x": 16,
+          "y": 16,
+          "width": 579.748,
+          "height": 140
+        }
+      ],
+      "ports": [],
+      "x": 0,
+      "y": 0,
+      "width": 611.748,
+      "height": 172
+    },
+    "edges": [
+      {
+        "id": "contract:1:lead",
+        "role": "depends_on",
+        "classes": [],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:1",
+          "x": 216,
+          "y": 74
+        },
+        "to": {
+          "itemId": "anchor:1",
+          "portId": "in",
+          "x": 216,
+          "y": 132
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 216,
+              "y": 74
+            },
+            {
+              "x": 216,
+              "y": 132
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:0",
+        "role": "binds_to",
+        "classes": [
+          "edge-dotted"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:0",
+          "x": 240,
+          "y": 50
+        },
+        "to": {
+          "itemId": "target:0",
+          "portId": "contract-in",
+          "x": 371.748,
+          "y": 50
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 240,
+              "y": 50
+            },
+            {
+              "x": 371.748,
+              "y": 50
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "binds field status"
+          ],
+          "width": 107.748,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 252,
+          "y": 16
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:1",
+        "role": "depends_on",
+        "classes": [],
+        "from": {
+          "itemId": "anchor:1",
+          "portId": "out",
+          "x": 216,
+          "y": 132
+        },
+        "to": {
+          "itemId": "target:1",
+          "portId": "contract-in",
+          "x": 371.748,
+          "y": 132
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 216,
+              "y": 132
+            },
+            {
+              "x": 371.748,
+              "y": 132
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "depends on"
+          ],
+          "width": 76.482,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 255.633,
+          "y": 98
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      }
+    ],
+    "decorations": [],
+    "diagnostics": [],
+    "paintOrder": [
+      "chrome",
+      "nodes",
+      "labels",
+      "edges",
+      "edge_labels"
+    ]
+  }
+}

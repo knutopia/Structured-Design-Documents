@@ -31,6 +31,11 @@ z
 
 - Caught 2 missing artifact updates
 
+## Mon 9-7
+
+- Implementing hierarchical ui_contracts
+- Manually debugging routing
+
 ## Sun 9-6
 
 - Designing hierarchical ui_contracts concepts with Astra

@@ -1,0 +1,4412 @@
+{
+  "rendererScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "headerBandHeight": 0
+      },
+      "children": [
+        {
+          "kind": "container",
+          "id": "scope:P-410",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:P-410:composition:P-410",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D",
+                  "role": "place",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Departure Desk",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Place",
+                    "nodeId": "P-410",
+                    "attributes": [
+                      {
+                        "groupId": "route_or_key",
+                        "label": "Route",
+                        "value": "/departures"
+                      },
+                      {
+                        "groupId": "access",
+                        "label": "Access",
+                        "value": "auth"
+                      },
+                      {
+                        "groupId": "entry_points",
+                        "label": "Entry points",
+                        "value": "link:/departures"
+                      },
+                      {
+                        "groupId": "primary_nav",
+                        "label": "Primary navigation",
+                        "value": "true"
+                      }
+                    ]
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Load Workbench",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Component",
+                    "nodeId": "C-410",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-410:sequence:primary",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 21.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Staging",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "ViewState",
+                    "nodeId": "VS-410a",
+                    "attributes": [
+                      {
+                        "groupId": "data_required",
+                        "label": "Data required",
+                        "value": "LoadRecord"
+                      }
+                    ]
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Released",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "ViewState",
+                    "nodeId": "VS-410b",
+                    "attributes": [
+                      {
+                        "groupId": "data_required",
+                        "label": "Data required",
+                        "value": "LoadRecord"
+                      }
+                    ]
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Crew message",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "ViewState",
+                    "nodeId": "VS-415a",
+                    "attributes": [
+                      {
+                        "groupId": "data_required",
+                        "label": "Data required",
+                        "value": "LoadRecord"
+                      }
+                    ]
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Crew review",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "ViewState",
+                    "nodeId": "VS-415b",
+                    "attributes": [
+                      {
+                        "groupId": "data_required",
+                        "label": "Data required",
+                        "value": "LoadRecord"
+                      }
+                    ]
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north"
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south"
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east"
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west"
+            }
+          ],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Place scope · Departure Desk"
+            }
+          }
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north"
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south"
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east"
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west"
+        }
+      ]
+    },
+    "edges": [
+      {
+        "id": "scope:P-410:composition:P-410:relationship:%5B%22P-410%22%2C%22COMPOSED_OF%22%2C%22C-410%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D",
+          "portId": "east"
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D",
+          "portId": "west"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "composed of",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "scope:P-410:sequence:primary:relationship:%5B%22VS-410a%22%2C%22TRANSITIONS_TO%22%2C%22VS-410b%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D",
+          "portId": "east"
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D",
+          "portId": "west"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "[Release load] {seal_valid} / SA-440",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "scope:P-410:sequence:primary:relationship:%5B%22VS-415a%22%2C%22TRANSITIONS_TO%22%2C%22VS-415b%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D",
+          "portId": "east"
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D",
+          "portId": "west"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "[Crew review opened]",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "measuredScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "scope:P-410",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Place scope · Departure Desk"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:P-410:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Place scope · Departure Desk"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 137.585,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:P-410:composition:P-410",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D",
+                  "role": "place",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Place"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.32,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "P-410"
+                      ],
+                      "x": 45.82,
+                      "y": 1.5,
+                      "width": 27.01,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Departure Desk"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 114.056,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Route"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 27.465,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "/departures"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 65.46,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_1_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Access"
+                      ],
+                      "x": 15.5,
+                      "y": 81.5,
+                      "width": 33.5,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_1_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "auth"
+                      ],
+                      "x": 15.5,
+                      "y": 95.5,
+                      "width": 25.188,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_2_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Entry Points"
+                      ],
+                      "x": 15.5,
+                      "y": 113.5,
+                      "width": 56.275,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_2_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "link:/departures"
+                      ],
+                      "x": 15.5,
+                      "y": 127.5,
+                      "width": 88.452,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_3_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Primary Navigation"
+                      ],
+                      "x": 15.5,
+                      "y": 145.5,
+                      "width": 88.325,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_3_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "true"
+                      ],
+                      "x": 15.5,
+                      "y": 159.5,
+                      "width": 23.124,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Place"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.32,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "P-410"
+                          ],
+                          "x": 45.82,
+                          "y": 1.5,
+                          "width": 27.01,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 159,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Departure Desk"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 114.056,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "route_or_key",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Route"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 27.465,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "/departures"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 65.46,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        },
+                        {
+                          "id": "access",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_1_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Access"
+                            ],
+                            "x": 15.5,
+                            "y": 81.5,
+                            "width": 33.5,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_1_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "auth"
+                              ],
+                              "x": 15.5,
+                              "y": 95.5,
+                              "width": 25.188,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 81.5,
+                          "width": 193,
+                          "height": 28
+                        },
+                        {
+                          "id": "entry_points",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_2_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Entry Points"
+                            ],
+                            "x": 15.5,
+                            "y": 113.5,
+                            "width": 56.275,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_2_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "link:/departures"
+                              ],
+                              "x": 15.5,
+                              "y": 127.5,
+                              "width": 88.452,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 113.5,
+                          "width": 193,
+                          "height": 28
+                        },
+                        {
+                          "id": "primary_nav",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_3_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Primary Navigation"
+                            ],
+                            "x": 15.5,
+                            "y": 145.5,
+                            "width": 88.325,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_3_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "true"
+                              ],
+                              "x": 15.5,
+                              "y": 159.5,
+                              "width": 23.124,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 145.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 181
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 90.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 181
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "C-410"
+                      ],
+                      "x": 74.08,
+                      "y": 1.5,
+                      "width": 27.82,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Load Workbench"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 121.424,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "C-410"
+                          ],
+                          "x": 74.08,
+                          "y": 1.5,
+                          "width": 27.82,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Load Workbench"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 121.424,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 472,
+              "height": 188.5
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-410:sequence:primary",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 21.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "VS-410a"
+                      ],
+                      "x": 68.11,
+                      "y": 1.5,
+                      "width": 39.96,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Staging"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 57.704,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Data Required"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 66.155,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 66.936,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "VS-410a"
+                          ],
+                          "x": 68.11,
+                          "y": 1.5,
+                          "width": 39.96,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 63,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Staging"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 57.704,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "data_required",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Data Required"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 66.155,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "LoadRecord"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 66.936,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 85
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 42.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 42.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 85
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "VS-410b"
+                      ],
+                      "x": 68.11,
+                      "y": 1.5,
+                      "width": 40.39,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Released"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 67.288,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Data Required"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 66.155,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 66.936,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "VS-410b"
+                          ],
+                          "x": 68.11,
+                          "y": 1.5,
+                          "width": 40.39,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 63,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Released"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 67.288,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "data_required",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Data Required"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 66.155,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "LoadRecord"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 66.936,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 85
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 42.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 42.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 85
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "VS-415a"
+                      ],
+                      "x": 68.11,
+                      "y": 1.5,
+                      "width": 40.255,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Crew message"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 106.976,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Data Required"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 66.155,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 66.936,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "VS-415a"
+                          ],
+                          "x": 68.11,
+                          "y": 1.5,
+                          "width": 40.255,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 63,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Crew message"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 106.976,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "data_required",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Data Required"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 66.155,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "LoadRecord"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 66.936,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 85
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 42.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 42.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 85
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "VS-415b"
+                      ],
+                      "x": 68.11,
+                      "y": 1.5,
+                      "width": 40.685,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Crew review"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 88.808,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Data Required"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 66.155,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 66.936,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "VS-415b"
+                          ],
+                          "x": 68.11,
+                          "y": 1.5,
+                          "width": 40.685,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 63,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Crew review"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 88.808,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "data_required",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Data Required"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 66.155,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "LoadRecord"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 66.936,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 85
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 42.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 42.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 85
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 968,
+              "height": 106.5
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "width": 1000,
+          "height": 362
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "width": 1032,
+      "height": 394
+    },
+    "edges": [
+      {
+        "id": "scope:P-410:composition:P-410:relationship:%5B%22P-410%22%2C%22COMPOSED_OF%22%2C%22C-410%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D",
+          "portId": "east",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D",
+          "portId": "west",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "composed of"
+          ],
+          "width": 83.622,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "scope:P-410:sequence:primary:relationship:%5B%22VS-410a%22%2C%22TRANSITIONS_TO%22%2C%22VS-410b%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D",
+          "portId": "east",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D",
+          "portId": "west",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "[Release load] {seal_valid} /",
+            "SA-440"
+          ],
+          "width": 163.704,
+          "height": 36,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "scope:P-410:sequence:primary:relationship:%5B%22VS-415a%22%2C%22TRANSITIONS_TO%22%2C%22VS-415b%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D",
+          "portId": "east",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D",
+          "portId": "west",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "[Crew review opened]"
+          ],
+          "width": 131.778,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "positionedScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "scope:P-410",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Place scope · Departure Desk"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:P-410:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Place scope · Departure Desk"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 137.585,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:P-410:composition:P-410",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D",
+                  "role": "place",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Place"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.32,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "P-410"
+                      ],
+                      "x": 45.82,
+                      "y": 1.5,
+                      "width": 27.01,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Departure Desk"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 114.056,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Route"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 27.465,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "/departures"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 65.46,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_1_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Access"
+                      ],
+                      "x": 15.5,
+                      "y": 81.5,
+                      "width": 33.5,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_1_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "auth"
+                      ],
+                      "x": 15.5,
+                      "y": 95.5,
+                      "width": 25.188,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_2_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Entry Points"
+                      ],
+                      "x": 15.5,
+                      "y": 113.5,
+                      "width": 56.275,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_2_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "link:/departures"
+                      ],
+                      "x": 15.5,
+                      "y": 127.5,
+                      "width": 88.452,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_3_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Primary Navigation"
+                      ],
+                      "x": 15.5,
+                      "y": 145.5,
+                      "width": 88.325,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_3_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "true"
+                      ],
+                      "x": 15.5,
+                      "y": 159.5,
+                      "width": 23.124,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Place"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.32,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "P-410"
+                          ],
+                          "x": 45.82,
+                          "y": 1.5,
+                          "width": 27.01,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 159,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Departure Desk"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 114.056,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "route_or_key",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Route"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 27.465,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "/departures"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 65.46,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        },
+                        {
+                          "id": "access",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_1_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Access"
+                            ],
+                            "x": 15.5,
+                            "y": 81.5,
+                            "width": 33.5,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_1_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "auth"
+                              ],
+                              "x": 15.5,
+                              "y": 95.5,
+                              "width": 25.188,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 81.5,
+                          "width": 193,
+                          "height": 28
+                        },
+                        {
+                          "id": "entry_points",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_2_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Entry Points"
+                            ],
+                            "x": 15.5,
+                            "y": 113.5,
+                            "width": 56.275,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_2_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "link:/departures"
+                              ],
+                              "x": 15.5,
+                              "y": 127.5,
+                              "width": 88.452,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 113.5,
+                          "width": 193,
+                          "height": 28
+                        },
+                        {
+                          "id": "primary_nav",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_3_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Primary Navigation"
+                            ],
+                            "x": 15.5,
+                            "y": 145.5,
+                            "width": 88.325,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D__attribute_3_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "true"
+                              ],
+                              "x": 15.5,
+                              "y": 159.5,
+                              "width": 23.124,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 145.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 181
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 90.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 58.5,
+                  "width": 224,
+                  "height": 181
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "C-410"
+                      ],
+                      "x": 74.08,
+                      "y": 1.5,
+                      "width": 27.82,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Load Workbench"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 121.424,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "C-410"
+                          ],
+                          "x": 74.08,
+                          "y": 1.5,
+                          "width": 27.82,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Load Workbench"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 121.424,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 363.622,
+                  "y": 58.5,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 277.811,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 277.811,
+                  "y": 188.5
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 555.622,
+                  "y": 94.25
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 94.25
+                }
+              ],
+              "x": 32,
+              "y": 51,
+              "width": 555.622,
+              "height": 188.5
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-410:sequence:primary",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 21.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "VS-410a"
+                      ],
+                      "x": 68.11,
+                      "y": 1.5,
+                      "width": 39.96,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Staging"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 57.704,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Data Required"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 66.155,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 66.936,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "VS-410a"
+                          ],
+                          "x": 68.11,
+                          "y": 1.5,
+                          "width": 39.96,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 63,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Staging"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 57.704,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "data_required",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Data Required"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 66.155,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "LoadRecord"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 66.936,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 85
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 42.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 42.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 277,
+                  "width": 224,
+                  "height": 85
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "VS-410b"
+                      ],
+                      "x": 68.11,
+                      "y": 1.5,
+                      "width": 40.39,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Released"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 67.288,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Data Required"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 66.155,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 66.936,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "VS-410b"
+                          ],
+                          "x": 68.11,
+                          "y": 1.5,
+                          "width": 40.39,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 63,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Released"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 67.288,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "data_required",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Data Required"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 66.155,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "LoadRecord"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 66.936,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 85
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 42.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 42.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 443.704,
+                  "y": 277,
+                  "width": 224,
+                  "height": 85
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "VS-415a"
+                      ],
+                      "x": 68.11,
+                      "y": 1.5,
+                      "width": 40.255,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Crew message"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 106.976,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Data Required"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 66.155,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 66.936,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "VS-415a"
+                          ],
+                          "x": 68.11,
+                          "y": 1.5,
+                          "width": 40.255,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 63,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Crew message"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 106.976,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "data_required",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Data Required"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 66.155,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "LoadRecord"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 66.936,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 85
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 42.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 42.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 386,
+                  "width": 224,
+                  "height": 85
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "VS-415b"
+                      ],
+                      "x": 68.11,
+                      "y": 1.5,
+                      "width": 40.685,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Crew review"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 88.808,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_label",
+                      "lines": [
+                        "Data Required"
+                      ],
+                      "x": 15.5,
+                      "y": 49.5,
+                      "width": 66.155,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__attribute_0_value_0",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_attribute_value",
+                      "lines": [
+                        "LoadRecord"
+                      ],
+                      "x": 15.5,
+                      "y": 63.5,
+                      "width": 66.936,
+                      "height": 14,
+                      "lineHeight": 14,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "VS-415b"
+                          ],
+                          "x": 68.11,
+                          "y": 1.5,
+                          "width": 40.685,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 63,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Crew review"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 88.808,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": [
+                        {
+                          "id": "data_required",
+                          "label": {
+                            "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__attribute_0_label",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_label",
+                            "lines": [
+                              "Data Required"
+                            ],
+                            "x": 15.5,
+                            "y": 49.5,
+                            "width": 66.155,
+                            "height": 12,
+                            "lineHeight": 12,
+                            "region": "primary"
+                          },
+                          "values": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D__attribute_0_value_0",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_attribute_value",
+                              "lines": [
+                                "LoadRecord"
+                              ],
+                              "x": 15.5,
+                              "y": 63.5,
+                              "width": 66.936,
+                              "height": 14,
+                              "lineHeight": 14,
+                              "region": "primary"
+                            }
+                          ],
+                          "x": 15.5,
+                          "y": 49.5,
+                          "width": 193,
+                          "height": 28
+                        }
+                      ]
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 85
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 42.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 42.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 443.704,
+                  "y": 386,
+                  "width": 224,
+                  "height": 85
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 484,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 484,
+                  "y": 215.5
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 968,
+                  "y": 107.75
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 107.75
+                }
+              ],
+              "x": 32,
+              "y": 255.5,
+              "width": 968,
+              "height": 215.5
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 500,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 500,
+              "y": 471
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 1000,
+              "y": 235.5
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 235.5
+            }
+          ],
+          "x": 16,
+          "y": 16,
+          "width": 1000,
+          "height": 471
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north",
+          "x": 516,
+          "y": 0
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south",
+          "x": 516,
+          "y": 503
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east",
+          "x": 1032,
+          "y": 251.5
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west",
+          "x": 0,
+          "y": 251.5
+        }
+      ],
+      "x": 0,
+      "y": 0,
+      "width": 1032,
+      "height": 503
+    },
+    "edges": [
+      {
+        "id": "scope:P-410:composition:P-410:relationship:%5B%22P-410%22%2C%22COMPOSED_OF%22%2C%22C-410%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22focal%22%2C%22P-410%22%5D",
+          "portId": "east",
+          "x": 256,
+          "y": 85
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22composition_target%22%2C%22scope%3AP-410%3Acomposition%3AP-410%22%2C%22relationship%3A%255B%2522P-410%2522%252C%2522COMPOSED_OF%2522%252C%2522C-410%2522%255D%3A0%22%2C%22C-410%22%5D",
+          "portId": "west",
+          "x": 363.622,
+          "y": 85
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 256,
+              "y": 85
+            },
+            {
+              "x": 363.622,
+              "y": 85
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "composed of"
+          ],
+          "width": 83.622,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 268,
+          "y": 51
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "scope:P-410:sequence:primary:relationship:%5B%22VS-410a%22%2C%22TRANSITIONS_TO%22%2C%22VS-410b%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410a%22%5D",
+          "portId": "east",
+          "x": 256,
+          "y": 319.5
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-410b%22%5D",
+          "portId": "west",
+          "x": 443.704,
+          "y": 319.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 256,
+              "y": 319.5
+            },
+            {
+              "x": 443.704,
+              "y": 319.5
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "[Release load] {seal_valid} /",
+            "SA-440"
+          ],
+          "width": 163.704,
+          "height": 36,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 268,
+          "y": 271.5
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "scope:P-410:sequence:primary:relationship:%5B%22VS-415a%22%2C%22TRANSITIONS_TO%22%2C%22VS-415b%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415a%22%5D",
+          "portId": "east",
+          "x": 256,
+          "y": 428.5
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-410%22%2C%22sequence%22%2C%22scope%3AP-410%3Asequence%3Aprimary%22%2C%22VS-415b%22%5D",
+          "portId": "west",
+          "x": 443.704,
+          "y": 428.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 256,
+              "y": 428.5
+            },
+            {
+              "x": 443.704,
+              "y": 428.5
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "[Crew review opened]"
+          ],
+          "width": 131.778,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 283.963,
+          "y": 394.5
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      }
+    ],
+    "decorations": [],
+    "diagnostics": [],
+    "paintOrder": [
+      "chrome",
+      "nodes",
+      "labels",
+      "edges",
+      "edge_labels"
+    ]
+  },
+  "geometry": [],
+  "relationships": [
+    [
+      "relationship:%5B%22P-410%22%2C%22COMPOSED_OF%22%2C%22C-410%22%5D:0",
+      [
+        "scope:P-410:composition:P-410:relationship:%5B%22P-410%22%2C%22COMPOSED_OF%22%2C%22C-410%22%5D:0"
+      ]
+    ],
+    [
+      "relationship:%5B%22VS-410a%22%2C%22TRANSITIONS_TO%22%2C%22VS-410b%22%5D:0",
+      [
+        "scope:P-410:sequence:primary:relationship:%5B%22VS-410a%22%2C%22TRANSITIONS_TO%22%2C%22VS-410b%22%5D:0"
+      ]
+    ],
+    [
+      "relationship:%5B%22VS-415a%22%2C%22TRANSITIONS_TO%22%2C%22VS-415b%22%5D:0",
+      [
+        "scope:P-410:sequence:primary:relationship:%5B%22VS-415a%22%2C%22TRANSITIONS_TO%22%2C%22VS-415b%22%5D:0"
+      ]
+    ]
+  ]
+}

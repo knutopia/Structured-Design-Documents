@@ -1,5 +1,11 @@
 # B3: headerless compact nodes and measured spacing
 
+> Withdrawn as a spacing/implementation proof. The user rejected changes to
+> shared routing, and B3 did not run its manually positioned routes through the
+> shared pipeline. Its per-connection spacing recommendation below is rejected,
+> not pending implementation. Use the [B4 pipeline-backed findings](b4_shared_pipeline_spacing.md)
+> instead. This document and its SVGs remain historical records.
+
 This pass refines the B2 SVG proofs; it does not change the SDD, renderer, bundle,
 or CLI. B2 remains available as review history. Its
 [detail-policy analysis](b2_detail_policy.md) still applies, except that B3's
