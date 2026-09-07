@@ -87,11 +87,11 @@ Area A-200 "Current Projects"
 
 Rendered outputs (click to open full size):
 
-<a href="./small_app_example/small_app_ia_1.png">
-  <img src="./small_app_example/small_app_ia_1.png" alt="Small app IA / Place Map" height="260">
+<a href="./small_app_example/small_app.ia_place_map.detailed.png">
+  <img src="./small_app_example/small_app.ia_place_map.detailed.png" alt="Small app IA / Place Map" height="260">
 </a>
-<a href="./small_app_example/small_app_uic_1.png">
-  <img src="./small_app_example/small_app_uic_1.png" alt="Small app UI Contract" height="260">
+<a href="./small_app_example/small_app.ui_contracts.detailed.png">
+  <img src="./small_app_example/small_app.ui_contracts.detailed.png" alt="Small app UI Contract" height="260">
 </a>
 
 See also: [Service Blueprint Slice example](docs/doc_site/service_blueprint_slice_example/) for a service blueprint view that connects customer steps to frontstage, backstage, support, system, and policy lanes.

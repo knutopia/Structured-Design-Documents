@@ -34,10 +34,10 @@ for a compact list of content available to each diagram type.
   :::
   ::::
 
-  :::: details billSage app <Badge type="info" text="Detail: Compact" vertical="top" />
+  :::: details billSage app <Badge type="info" text="Detail: Compact" vertical="top" /><Badge type="info" text="Decorators: Type, ID" vertical="top" />
   :::tabs
   == Information Architecture Diagram
-  ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.compact.svg)
+  ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.compact.decorators-type-id.svg)
   == Source
   showRepoLink /real_world_exploration/billSage_example
   showSource ../../../real_world_exploration/billSage_example/billSage_simple_structure.sdd {3, 8, 13, 15-18, 26, 27, 37, 39, 40, 44, 47, 49, 50, 59, 64, 76, 78, 79, 86, 88, 89, 95, 98, 99, 106, 108, 109}

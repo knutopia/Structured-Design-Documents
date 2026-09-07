@@ -48,7 +48,7 @@ Here is a small SDD example showing a dashboard, a project area, and a few linke
 === Information Architecture
 :::tabs key:ab
 == Diagram
-![small app information architecture diagram](./small_app_example/small_app_ia_1.png)
+![small app information architecture diagram](./small_app_example/small_app.ia_place_map.detailed.decorators-type-id.png)
 == SDD Source
 Highlights on information architecture content
 showRepoLink docs/doc_site/small_app_example {pos: up}
@@ -56,7 +56,7 @@ showSource ./small_app_example/small_app.sdd {10, 12, 25, 27-30, 32, 39, 40, 54,
 === UI Contracts Diagram
 :::tabs key:ab
 == Diagram
-![small app ui contracts diagram](./small_app_example/small_app_uic_1.png)
+![small app ui contracts diagram](./small_app_example/small_app.ui_contracts.detailed.png)
 == SDD Source
 Highlights on UI contracts content
 showRepoLink docs/doc_site/small_app_example {pos: up}
@@ -93,4 +93,3 @@ The *SDD Helper Guide* describes how the sdd-helper supports the sdd-skill behin
 - Original document outlining the idea: [Structured Design Artifacts to Advance the Software Product Design Practice](initial_concepts/Structured%20Design%20Artifacts%20to%20Advance%20the%20Software%20Product%20Design%20Practice.md)
 
 - [Strategic Potential of SDD in the Product Lifecycle](<strategic_potential/>)
-

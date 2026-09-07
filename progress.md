@@ -34,6 +34,7 @@ z
 ## Sun 9-6
 
 - Designing hierarchical ui_contracts concepts with Astra
+- Updated some example diagrams to show --decorators
 
 ## Sat 9-5
 

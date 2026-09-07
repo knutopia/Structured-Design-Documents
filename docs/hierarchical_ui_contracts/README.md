@@ -1,8 +1,29 @@
 # Component containment: B — enclosure overview and local context
 
-## Current SVG proofs: titled containers and render detail
+## Current SVG proofs: headerless compact nodes and tighter spacing
 
-The current **B2** set follows the user's Figma container design, uses titled
+The current **B3** set removes compact node headers, retains titled containers,
+and tightens sequence and local containment gaps without shrinking nodes or text.
+Read the [spacing review and routing findings](b3_spacing_review.md).
+
+- Clean complete sheets: [compact SVG](b3_complete.compact.svg) and
+  [detailed SVG](b3_complete.detailed.svg).
+- Component scope: [compact SVG](b3_component.compact.svg) and
+  [detailed SVG](b3_component.detailed.svg).
+- Place scope: [compact SVG](b3_place.compact.svg) and
+  [detailed SVG](b3_place.detailed.svg).
+- Enclosure overview: [compact SVG](b3_overview.svg) and
+  [detailed SVG](b3_overview.detailed.svg).
+- Context Excerpts: [compact/detailed comparison](b3_detail.context.svg),
+  [horizontal growth](b3_horizontal_growth.context.svg), and
+  [overview explanation](b3_overview.context.svg).
+
+The 51-node, 45-edge fixture is unchanged. These remain design proofs, not an
+implementation of Component containment or a production routing change.
+
+## Previous B2 SVG proofs: titled containers and render detail
+
+The previous **B2** set follows the user's Figma container design, uses titled
 outer containers, and compares proposed compact/detailed content. Read the
 [detail policy and proof guide](b2_detail_policy.md).
 

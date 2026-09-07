@@ -1,5 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="624" height="352" viewBox="0 0 624 352" class="staged-svg view-ia_place_map detail-compact theme-default theme-revision-public-sans-v0-2" data-view-id="ia_place_map" data-detail-id="compact" data-theme-id="default">
-  <defs>
+<svg xmlns="http://www.w3.org/2000/svg" class="staged-svg view-shared_node" width="760" height="517.55" viewBox="0 0 760 517.55"><title>b3_component.compact</title><defs>
     <style><![CDATA[
     @font-face {
       font-family: 'Public Sans';
@@ -36,12 +35,12 @@
     .scene-marker { fill: #1d4ed8; }
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
-    .scene-container__chrome--canvas { fill: #f7f8fb; }
     .staged-svg { --sdd-shared-node-font-family: 'Public Sans'; --sdd-shared-node-width: 224px; --sdd-shared-node-min-height: 48px; --sdd-shared-node-container-padding-top: 0px; --sdd-shared-node-container-padding-right: 0px; --sdd-shared-node-container-padding-bottom: 0px; --sdd-shared-node-container-padding-left: 0px; --sdd-shared-node-container-gap: 0px; --sdd-shared-node-radius: 14px; --sdd-shared-node-stroke-width: 1.5px; --sdd-shared-node-stroke-placement: inside; --sdd-shared-node-fill: #ffffff; --sdd-shared-node-stroke: #387575; --sdd-shared-node-text: #0f172a; --sdd-shared-node-decorator-height: 19px; --sdd-shared-node-decorator-gap: 4px; --sdd-shared-node-decorator-padding-top: 0px; --sdd-shared-node-decorator-padding-right: 14px; --sdd-shared-node-decorator-padding-bottom: 0px; --sdd-shared-node-decorator-padding-left: 14px; --sdd-shared-node-decorator-fill: #dbe4f0; --sdd-shared-node-body-padding-top: 6px; --sdd-shared-node-body-padding-right: 14px; --sdd-shared-node-body-padding-bottom: 6px; --sdd-shared-node-body-padding-left: 14px; --sdd-shared-node-body-gap: 4px; --sdd-shared-node-attribute-padding-top: 0px; --sdd-shared-node-attribute-padding-right: 0px; --sdd-shared-node-attribute-padding-bottom: 0px; --sdd-shared-node-attribute-padding-left: 0px; --sdd-shared-node-attribute-gap: 2px; --sdd-shared-node-decorator-font-size: 10px; --sdd-shared-node-decorator-font-weight: 600; --sdd-shared-node-decorator-line-height: 12px; --sdd-shared-node-decorator-letter-spacing: 0px; --sdd-shared-node-title-font-size: 16px; --sdd-shared-node-title-font-weight: 600; --sdd-shared-node-title-line-height: 19px; --sdd-shared-node-title-letter-spacing: -0.32px; --sdd-shared-node-attribute-label-font-size: 10px; --sdd-shared-node-attribute-label-font-weight: 400; --sdd-shared-node-attribute-label-line-height: 12px; --sdd-shared-node-attribute-label-letter-spacing: 0px; --sdd-shared-node-attribute-value-font-size: 12px; --sdd-shared-node-attribute-value-font-weight: 400; --sdd-shared-node-attribute-value-line-height: 14px; --sdd-shared-node-attribute-value-letter-spacing: 0px; }
     .shared-node__chrome { fill: #ffffff; stroke: none; }
     .shared-node__decorator-header { fill: #dbe4f0; }
     .shared-node__outline { fill: none; stroke: #387575; stroke-width: 1.5; }
     .shared-node .scene-text { fill: #0f172a; }
+    .view-shared_node .standalone_node_harness .scene-container__chrome { fill: #ffffff; stroke: transparent; }
     .text-role-badge { font-family: 'Public Sans'; font-size: 12px; font-weight: 600; }
     .text-role-edge_label { font-family: 'Public Sans'; font-size: 12px; font-weight: 400; }
     .text-role-label { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
@@ -59,106 +58,97 @@
     <marker id="scene-marker-arrow-start" class="scene-marker" viewBox="0 0 10 10" refX="1" refY="5" markerWidth="10" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto">
       <path class="scene-marker" d="M 10 0 L 0 5 L 10 10 z"/>
     </marker>
-  </defs>
-  <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="622.5" height="350.5" rx="17.25" ry="17.25"/>
-    </g>
-    <g id="scene-container-a-010" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-010" data-role="area">
-      <rect class="scene-container__chrome" x="296" y="24" width="304" height="304" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="296" y="24" width="304" height="40" rx="16" ry="16"/>
-    </g>
-  </g>
-  <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-p-010" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-010" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="24.75" y="24.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="24.75" y="24.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-p-020" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-020" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="312.75" y="80.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="312.75" y="80.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-p-030" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-1 shared-node shared-node-plain" data-item-id="P-030" data-role="place" data-node-density="plain">
-      <rect class="shared-node__chrome" x="360.75" y="178.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="360.75" y="178.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-p-040" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-040" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="312.75" y="246.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="312.75" y="246.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
+  </defs><rect width="760" height="517.55" fill="white"/><text x="24" y="33" font-family="Public Sans" font-size="13" font-weight="400" fill="#475569">UI contracts · B · compact · Clean proof</text><text x="24" y="72.55" font-family="Public Sans" font-size="25" font-weight="600" fill="#0f172a">Seal Check</text><g data-container-role="scope"><rect x="24" y="107.3" width="712" height="380.25" rx="7" fill="#f4f7fb"/><clipPath id="frame-59"><rect x="24" y="107.3" width="712" height="380.25" rx="7"/></clipPath><rect x="24" y="107.3" width="712" height="19" fill="#dbe4f0" clip-path="url(#frame-59)"/><text x="38" y="120.3" font-family="Public Sans" font-size="10" font-weight="600" fill="#0f172a">Component scope · Seal Check</text><rect x="24" y="107.3" width="712" height="380.25" rx="7" fill="none" stroke="#aebdce" stroke-width="1.5"/></g><text x="48" y="164.3" font-family="Public Sans" font-size="15" font-weight="600" fill="#475569">Parent components</text><g transform="translate(32,171.55)"><g class="paint-layer paint-nodes" data-paint-group="nodes">
+    <g id="copy-52-scene-node-c-420" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="C-420" data-role="component" data-node-density="plain">
+      <rect class="shared-node__chrome" x="16.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="16.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-010" data-role="place">
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="C-420" data-role="component">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="39.5" y="46.8">
-              <tspan x="39.5" y="46.8">Dashboard</tspan>
-            </text>
-        </g>
-        <g class="shared-node__attribute-group" data-attribute-group="primary_nav">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="39.5" y="64.125">
-              <tspan x="39.5" y="64.125">Primary_nav</tspan>
-            </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="39.5" y="79.85">
-              <tspan x="39.5" y="79.85">true</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-010" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="312" y="50">
-          <tspan x="312" dy="0">Mechanic's Scheduling</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-020" data-role="place">
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="327.5" y="102.8">
-              <tspan x="327.5" y="102.8">Open Shifts</tspan>
-            </text>
-        </g>
-        <g class="shared-node__attribute-group" data-attribute-group="primary_nav">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="327.5" y="120.125">
-              <tspan x="327.5" y="120.125">Primary_nav</tspan>
-            </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="327.5" y="135.85">
-              <tspan x="327.5" y="135.85">true</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-1 shared-node shared-node-plain shared-node__labels" data-item-id="P-030" data-role="place">
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="375.5" y="207.8">
-              <tspan x="375.5" y="207.8">Shift Detail</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-040" data-role="place">
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="327.5" y="268.8">
-              <tspan x="327.5" y="268.8">My Schedule</tspan>
-            </text>
-        </g>
-        <g class="shared-node__attribute-group" data-attribute-group="primary_nav">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="327.5" y="286.125">
-              <tspan x="327.5" y="286.125">Primary_nav</tspan>
-            </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="327.5" y="301.85">
-              <tspan x="327.5" y="301.85">true</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="31.5" y="45.8">
+              <tspan x="31.5" y="45.8">Cargo Sheet</tspan>
             </text>
         </g>
       </g>
     </g>
   </g>
-  <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-p-020__nav__p-030" class="scene-edge role-navigation route-orthogonal paint-edges ia_local_structure follower_edge merged_navigation shared_trunk" data-edge-id="P-020__nav__P-030" data-role="navigation">
-      <path class="scene-edge__path" d="M 336 146 L 336 202 L 360 202" marker-end="url(#scene-marker-arrow-end)"/>
+  </g><g transform="translate(380,171.55)"><g class="paint-layer paint-nodes" data-paint-group="nodes">
+    <g id="copy-53-scene-node-c-470" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="C-470" data-role="component" data-node-density="plain">
+      <rect class="shared-node__chrome" x="16.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="16.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+    </g>
+  </g>
+  <g class="paint-layer paint-labels" data-paint-group="labels">
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="C-470" data-role="component">
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="31.5" y="45.8">
+              <tspan x="31.5" y="45.8">Arrival Review</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+  </g>
+  </g><g transform="translate(204,289.55)"><g class="paint-layer paint-nodes" data-paint-group="nodes">
+    <g id="copy-54-scene-node-c-430" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="C-430" data-role="component" data-node-density="plain">
+      <rect class="shared-node__chrome" x="16.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="16.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+    </g>
+  </g>
+  <g class="paint-layer paint-labels" data-paint-group="labels">
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="C-430" data-role="component">
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="31.5" y="45.8">
+              <tspan x="31.5" y="45.8">Seal Check</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+  </g>
+  </g><text x="48" y="380.55" font-family="Public Sans" font-size="15" font-weight="600" fill="#475569">Child component</text><g transform="translate(204,401.55)"><g class="paint-layer paint-nodes" data-paint-group="nodes">
+    <g id="copy-57-scene-node-c-431" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="C-431" data-role="component" data-node-density="plain">
+      <rect class="shared-node__chrome" x="16.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="16.75" y="16.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+    </g>
+  </g>
+  <g class="paint-layer paint-labels" data-paint-group="labels">
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="C-431" data-role="component">
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="31.5" y="45.8">
+              <tspan x="31.5" y="45.8">Seal Code Input</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+  </g>
+  </g><g class="paint-layer paint-edges" data-paint-group="edges">
+    <g id="scene-edge-contains-c-420-c-430--55" class="scene-edge role-contains route-orthogonal paint-edges" data-edge-id="CONTAINS:C-420:C-430:-55" data-role="contains">
+      <path class="scene-edge__path" d="M 160 235.55 L 160 251.55 L 332 251.55 L 332 305.55" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-contains-c-470-c-430--56" class="scene-edge role-contains route-orthogonal paint-edges" data-edge-id="CONTAINS:C-470:C-430:-56" data-role="contains">
+      <path class="scene-edge__path" d="M 508 235.55 L 508 251.55 L 332 251.55 L 332 305.55" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-contains-c-430-c-431--58" class="scene-edge role-contains route-orthogonal paint-edges" data-edge-id="CONTAINS:C-430:C-431:-58" data-role="contains">
+      <path class="scene-edge__path" d="M 332 353.55 L 332 417.55" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
+    <g class="scene-edge-label role-contains" data-edge-id="CONTAINS:C-420:C-430:-55" data-role="contains">
+      <rect class="scene-edge-label__box" x="344" y="267.55" width="61.242" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="350" y="278.55" dominant-baseline="middle">
+          <tspan x="350" dy="0">Contains</tspan>
+        </text>
+    </g>
+    <g class="scene-edge-label role-contains" data-edge-id="CONTAINS:C-430:C-431:-58" data-role="contains">
+      <rect class="scene-edge-label__box" x="344" y="374.55" width="61.242" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="350" y="385.55" dominant-baseline="middle">
+          <tspan x="350" dy="0">Contains</tspan>
+        </text>
+    </g>
   </g>
 </svg>
