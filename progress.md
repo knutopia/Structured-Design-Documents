@@ -39,6 +39,7 @@ z
 
 - Hierarchical ui_contracts implemented, reviewing details
 - Restored broken skill doc page
+- Created ui contracts renderer guide
 
 ## Mon 9-7
 

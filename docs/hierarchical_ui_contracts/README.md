@@ -2,6 +2,10 @@
 
 ## B5 implementation and acceptance
 
+Start with the [current renderer guide](ui_contracts_renderer_guide.md) for diagram anatomy,
+containment and reuse, detail/decorator behavior, illustrated examples, and the
+implementation map.
+
 The [accepted implementation plan](staged_ui_contracts_b5_implementation_plan.md)
 now drives the public staged SVG/PNG path. The [implementation ledger](b5_implementation_evidence.md)
 and [final acceptance report](b5_implementation_acceptance.md) record the stage
