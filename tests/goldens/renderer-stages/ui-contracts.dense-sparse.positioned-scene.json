@@ -2652,245 +2652,6 @@
       },
       {
         "kind": "container",
-        "id": "scope:C-702",
-        "role": "ui_contracts_group",
-        "primitive": "cluster",
-        "classes": [],
-        "viewMetadata": {
-          "uiContracts": {
-            "kind": "enclosure",
-            "title": "Component scope · Summary Card"
-          }
-        },
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 16,
-          "crossAlignment": "start"
-        },
-        "chrome": {
-          "padding": {
-            "top": 16,
-            "right": 16,
-            "bottom": 16,
-            "left": 16
-          },
-          "gutter": 12,
-          "headerBandHeight": 19
-        },
-        "headerContent": [
-          {
-            "id": "scope:C-702:title",
-            "kind": "text",
-            "textStyleRole": "shared_node_decorator",
-            "lines": [
-              "Component scope · Summary Card"
-            ],
-            "x": 14,
-            "y": 3,
-            "width": 162.445,
-            "height": 12,
-            "lineHeight": 12,
-            "region": "primary"
-          }
-        ],
-        "children": [
-          {
-            "kind": "container",
-            "id": "scope:C-702:neighborhood",
-            "role": "ui_contracts_group",
-            "primitive": "stack",
-            "classes": [],
-            "layout": {
-              "strategy": "stack",
-              "direction": "vertical",
-              "gap": 12,
-              "crossAlignment": "center"
-            },
-            "chrome": {
-              "padding": {
-                "top": 0,
-                "right": 0,
-                "bottom": 0,
-                "left": 0
-              },
-              "gutter": 12,
-              "headerBandHeight": 0
-            },
-            "headerContent": [],
-            "children": [
-              {
-                "kind": "node",
-                "id": "occurrence:%5B%22scope%3AC-702%22%2C%22focal%22%2C%22C-702%22%5D",
-                "role": "component",
-                "primitive": "card",
-                "classes": [
-                  "semantic_node",
-                  "shared-node",
-                  "shared-node-plain"
-                ],
-                "widthPolicy": {
-                  "preferred": "standard",
-                  "allowed": [
-                    "standard"
-                  ]
-                },
-                "widthBand": "standard",
-                "overflowPolicy": {
-                  "kind": "grow_height"
-                },
-                "content": [
-                  {
-                    "id": "occurrence:%5B%22scope%3AC-702%22%2C%22focal%22%2C%22C-702%22%5D__title",
-                    "kind": "text",
-                    "textStyleRole": "shared_node_title",
-                    "lines": [
-                      "Summary Card"
-                    ],
-                    "x": 15.5,
-                    "y": 14.5,
-                    "width": 109.184,
-                    "height": 19,
-                    "lineHeight": 19,
-                    "region": "primary"
-                  }
-                ],
-                "sharedNode": {
-                  "density": "plain",
-                  "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
-                    "height": 45,
-                    "title": {
-                      "id": "occurrence:%5B%22scope%3AC-702%22%2C%22focal%22%2C%22C-702%22%5D__title",
-                      "kind": "text",
-                      "textStyleRole": "shared_node_title",
-                      "lines": [
-                        "Summary Card"
-                      ],
-                      "x": 15.5,
-                      "y": 14.5,
-                      "width": 109.184,
-                      "height": 19,
-                      "lineHeight": 19,
-                      "region": "primary"
-                    },
-                    "attributeGroups": []
-                  }
-                },
-                "ports": [
-                  {
-                    "id": "north",
-                    "role": "north",
-                    "side": "north",
-                    "x": 112,
-                    "y": 0
-                  },
-                  {
-                    "id": "south",
-                    "role": "south",
-                    "side": "south",
-                    "x": 112,
-                    "y": 48
-                  },
-                  {
-                    "id": "east",
-                    "role": "east",
-                    "side": "east",
-                    "x": 224,
-                    "y": 24
-                  },
-                  {
-                    "id": "west",
-                    "role": "west",
-                    "side": "west",
-                    "x": 0,
-                    "y": 24
-                  }
-                ],
-                "overflow": {
-                  "status": "fits"
-                },
-                "x": 32,
-                "y": 1238,
-                "width": 224,
-                "height": 48
-              }
-            ],
-            "ports": [
-              {
-                "id": "north",
-                "role": "north",
-                "side": "north",
-                "x": 112,
-                "y": 0
-              },
-              {
-                "id": "south",
-                "role": "south",
-                "side": "south",
-                "x": 112,
-                "y": 48
-              },
-              {
-                "id": "east",
-                "role": "east",
-                "side": "east",
-                "x": 224,
-                "y": 24
-              },
-              {
-                "id": "west",
-                "role": "west",
-                "side": "west",
-                "x": 0,
-                "y": 24
-              }
-            ],
-            "x": 32,
-            "y": 1238,
-            "width": 224,
-            "height": 48
-          }
-        ],
-        "ports": [
-          {
-            "id": "north",
-            "role": "north",
-            "side": "north",
-            "x": 128,
-            "y": 0
-          },
-          {
-            "id": "south",
-            "role": "south",
-            "side": "south",
-            "x": 128,
-            "y": 99
-          },
-          {
-            "id": "east",
-            "role": "east",
-            "side": "east",
-            "x": 256,
-            "y": 49.5
-          },
-          {
-            "id": "west",
-            "role": "west",
-            "side": "west",
-            "x": 0,
-            "y": 49.5
-          }
-        ],
-        "x": 16,
-        "y": 1203,
-        "width": 256,
-        "height": 99
-      },
-      {
-        "kind": "container",
         "id": "target-register",
         "role": "ui_contracts_group",
         "primitive": "cluster",
@@ -3028,7 +2789,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1365,
+            "y": 1238,
             "width": 224,
             "height": 48
           },
@@ -3126,7 +2887,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1429,
+            "y": 1302,
             "width": 224,
             "height": 48
           }
@@ -3162,7 +2923,7 @@
           }
         ],
         "x": 16,
-        "y": 1330,
+        "y": 1203,
         "width": 256,
         "height": 163
       }
@@ -3180,27 +2941,27 @@
         "role": "south",
         "side": "south",
         "x": 321.874,
-        "y": 1509
+        "y": 1382
       },
       {
         "id": "east",
         "role": "east",
         "side": "east",
         "x": 643.748,
-        "y": 754.5
+        "y": 691
       },
       {
         "id": "west",
         "role": "west",
         "side": "west",
         "x": 0,
-        "y": 754.5
+        "y": 691
       }
     ],
     "x": 0,
     "y": 0,
     "width": 643.748,
-    "height": 1509
+    "height": 1382
   },
   "edges": [
     {

@@ -2,9 +2,10 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { beforeAll, describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import { buildUiContractsPresentationModel } from "../src/renderer/uiContractsPresentationModel.js";
+import { buildUiContractsPresentationModel, type UiContractsHierarchy } from "../src/renderer/uiContractsPresentationModel.js";
 import { UiContractsSceneBuilder } from "../src/renderer/staged/uiContractsPresentationScene.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
+import type { PositionedItem } from "../src/renderer/staged/contracts.js";
 import { renderPositionedSceneToPng } from "../src/renderer/staged/svgBackend.js";
 import { assessUiContractsCoverage, assessUiContractsGeometry, flattenUiContractsItems } from "./uiContractsB5Acceptance.js";
 
@@ -15,6 +16,55 @@ beforeAll(async () => {
 });
 
 describe("complete native B5 sheet", () => {
+  for (const detail of ["compact", "detailed"]) it(`preserves scene nesting for a suppressed chain with siblings / ${detail}`, async () => {
+    const compiled = compileSource({ path: "/tmp/suppressed-chain.sdd", text: `SDD-TEXT 0.1
+Component C-001 "Root"
+  CONTAINS C-002 "Branch"
+  CONTAINS C-003 "Root sibling"
+END
+Component C-002 "Branch"
+  CONTAINS C-004 "Twig"
+END
+Component C-003 "Root sibling"
+END
+Component C-004 "Twig"
+  CONTAINS C-005 "First leaf"
+  CONTAINS C-006 "Second leaf"
+END
+Component C-005 "First leaf"
+END
+Component C-006 "Second leaf"
+END
+` }, bundle);
+    expect(compiled.diagnostics).toEqual([]);
+    const view = bundle.views.views.find(view => view.id === "ui_contracts")!;
+    const projection = projectView(compiled.graph!, bundle, view.id).projection!;
+    const model = buildUiContractsPresentationModel(projection, compiled.graph!, view, detail);
+    expect(model.scopes).toEqual([]);
+    const builder = new UiContractsSceneBuilder(detail, { id: "none", showNodeType: false, showNodeId: false });
+    const { positionedScene } = await runStagedRendererPipeline(builder.complete(model));
+
+    // Inspect actual enclosure membership and bounds, independently of model.overview
+    // and structuralRelationshipIds. Flattening or reparenting cards must fail even
+    // when every semantic identity still has a scene occurrence.
+    const nesting = (item: PositionedItem): unknown => {
+      if (item.kind === "node") return builder.occurrenceSemanticIds.get(item.id);
+      expect(item.viewMetadata?.uiContracts?.kind).toBe("enclosure");
+      for (const child of item.children) {
+        expect(child.x).toBeGreaterThanOrEqual(item.x);
+        expect(child.y).toBeGreaterThanOrEqual(item.y);
+        expect(child.x + child.width).toBeLessThanOrEqual(item.x + item.width);
+        expect(child.y + child.height).toBeLessThanOrEqual(item.y + item.height);
+      }
+      return item.children.map(nesting);
+    };
+    expect(positionedScene.root.children.map(nesting)).toEqual([
+      ["C-001", ["C-002", ["C-004", ["C-005", "C-006"]], "C-003"]]
+    ]);
+    expect(positionedScene.edges).toEqual([]);
+    expect(assessUiContractsGeometry(positionedScene)).toEqual([]);
+  });
+
   for (const detail of ["compact", "detailed"]) for (const decorators of ["none", "type", "id", "type,id"]) it(`${detail} / ${decorators}`, async () => {
     const view = bundle.views.views.find(view => view.id === "ui_contracts")!;
     const projection = projectView(graph, bundle, view.id).projection!;
@@ -26,7 +76,14 @@ describe("complete native B5 sheet", () => {
     const coverage = assessUiContractsCoverage({ expectedNodeIds: model.visibleSemanticNodeIds,
       occurrences: builder.occurrenceSemanticIds, expectedRelationshipIds: model.relationships.filter(edge => !structural.has(edge.id)).map(edge => edge.id),
       relationshipSegments: builder.relationshipSegments, scene: result.positionedScene });
-    for (const edge of model.relationships.filter(edge => structural.has(edge.id))) {
+    const walk = (item: UiContractsHierarchy): UiContractsHierarchy[] => [item, ...item.children.flatMap(walk)];
+    const hierarchy = model.overview.flatMap(walk);
+    for (const edge of model.relationships.filter(edge => structural.has(edge.id) && edge.kind === "containment")) {
+      expect(hierarchy.some(item => item.node.semanticId === edge.from
+        && item.children.some(child => child.node.semanticId === edge.to))).toBe(true);
+    }
+    expect(new Set(builder.occurrenceSemanticIds.keys())).toEqual(new Set(model.occurrences.map(node => node.id)));
+    for (const edge of model.relationships.filter(edge => edge.kind === "ownership")) {
       expect(model.scopes.some(scope => scope.focal.semanticId === edge.from && scope.sequences.some(sequence => sequence.nodes.some(node => node.semanticId === edge.to)))).toBe(true);
     }
     const expectedNodes = detail === "detailed" ? projection.nodes.map(node => node.id)

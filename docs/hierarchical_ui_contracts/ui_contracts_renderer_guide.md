@@ -13,7 +13,7 @@ The following invariants anchor this guide:
 - **Projection remains the semantic boundary.** View-owned scene construction supplies groups, ports, and reservations to the shared staged pipeline; it does not replace shared placement or routing. See the [renderer architecture](../toolchain/architecture.md) and [acceptance report](b5_implementation_acceptance.md).
 - **Detail and decorators are independent.** Both details preserve Component hierarchy and primary ViewState transitions. Compact's State fallback is decided across the projection, not separately in each scope.
 
-The illustrations below reuse implemented output. The Stage 7 images are public-preview artifacts from the unchanged [Departure Desk source](departure_desk.sdd); focused Stage 6 resumed images show accepted topology corrections. The `b2_*` through `b5_*` exploration files remain historical visual references and should not be mistaken for current public output.
+The illustrations below reuse implemented output from before redundant Component scope suppression; they may show local scopes that current rendering omits. The Stage 7 images are public-preview artifacts from the unchanged [Departure Desk source](departure_desk.sdd); focused Stage 6 resumed images show accepted topology corrections. The `b2_*` through `b5_*` exploration files remain historical visual references and should not be mistaken for current public output.
 
 ## The complete sheet
 
@@ -29,7 +29,7 @@ Each section takes the width its contents require. A long transition sequence ca
 
 A titled `Component hierarchy · <name>` enclosure starts each root. The Component card identifies the root; nested enclosures express its descendants. Sibling leaves share an enclosure, and alternating pale fills help distinguish nesting depth. Enclosures are structural graphics, not additional semantic nodes or oversized Component cards.
 
-Read the nesting together with the local scopes: a Component's local scope explicitly shows its immediate parents above it and immediate children below it. This provides a direct check on parentage in a large overview.
+Read the nesting together with the local scopes: a retained Component scope explicitly shows its immediate parents above it and immediate children below it. This provides a direct check on parentage in a large overview.
 
 ### Reuse and H locators
 
@@ -62,7 +62,11 @@ A `Component scope · <name>` frame starts with the focal Component's immediate 
 - The focal Component in the middle.
 - All immediate children below it.
 
-`Contains` arrows point from parent to child. Multiple parents or children use connecting bars with a common labelled stem. Junction anchors are invisible; connector turns have no circular junction markers. A leaf still has a local scope, even when its only content is its focal card and parent context.
+`Contains` arrows point from parent to child. Multiple parents or children use connecting bars with a common labelled stem. Junction anchors are invisible; connector turns have no circular junction markers.
+
+Redundant Component scopes are suppressed **after detail selection** when they have no visible sequences or outgoing contracts, the focal card adds no attributes beyond its overview card, they have at most one immediate parent, and their immediate children are already shown together in an expanded overview occurrence. Visible compositions also retain a scope. A leaf has no children to add; an isolated Component can appear only in the overview. Scopes remain when the overview cannot preserve their content. Components with multiple parents always retain their scopes because bringing those parents together provides useful local context.
+
+This is a renderer composition decision based on selected visible content, not a change to bundle policy. A scope can disappear in compact and remain in detailed when attributes or contracts become visible. Suppression removes repeated occurrences only: every visible identity and relationship remains represented, with overview nesting preserving containment.
 
 Visible State sequences and outgoing contract groups follow this neighborhood. States belong to the scope named by `scope_id`; Component containment does not cause a parent's states or contracts to be inherited by its children.
 
@@ -112,7 +116,8 @@ Supporting nodes with outgoing contracts can receive their own `Contract scope �
 
 | Content | `compact` | `detailed` |
 | --- | --- | --- |
-| Component overview and local parent/child relationships | Shown | Shown |
+| Component hierarchy relationships | Preserved in overview and retained scopes | Preserved in overview and retained scopes |
+| Redundant Component scopes | Omitted after detail selection | Omitted after detail selection |
 | ViewState sequences and explicit composition | Shown | Shown |
 | Component description, inputs, outputs | Omitted | Shown when authored on the focal Component |
 | Place primary navigation | Shown when authored | Shown when authored |

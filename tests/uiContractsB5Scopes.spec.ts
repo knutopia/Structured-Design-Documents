@@ -19,7 +19,19 @@ function build(proof: any) {
   const view = bundle.views.views.find(view => view.id === "ui_contracts")!;
   const model = buildUiContractsPresentationModel(projectView(graph, bundle, view.id).projection!, graph, view, proof.detail);
   const id = proof.file.includes("component") ? "C-430" : proof.file.includes("children") ? "C-410" : "P-410";
-  const scope = structuredClone(model.scopes.find(scope => scope.focal.semanticId === id)!);
+  let selected = model.scopes.find(scope => scope.focal.semanticId === id);
+  // The historical compact child-only scope is now suppressed in complete sheets.
+  // Retain its independent neighborhood geometry proof using the detailed scope
+  // with the attributes absent from its compact card removed.
+  if (!selected && proof.file.includes("children") && proof.detail === "compact") {
+    selected = structuredClone(buildUiContractsPresentationModel(projectView(graph, bundle, view.id).projection!, graph, view, "detailed")
+      .scopes.find(scope => scope.focal.semanticId === id)!);
+    selected.focal.attributes = [];
+    selected.sequences = [];
+    selected.compositions = [];
+    selected.contracts = [];
+  }
+  const scope = structuredClone(selected!);
   scope.compositions = scope.compositions.filter(group => group.source.id === scope.focal.id);
   if (proof.file.includes(".short.")) {
     scope.sequences[0].nodes = scope.sequences[0].nodes.filter((_, index) => [0, 1, 5, 6].includes(index));

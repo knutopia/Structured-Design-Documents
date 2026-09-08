@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="643.748" height="1509" viewBox="0 0 643.748 1509" class="staged-svg view-ui_contracts detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="ui_contracts" data-detail-id="detailed" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="643.748" height="1382" viewBox="0 0 643.748 1382" class="staged-svg view-ui_contracts detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="ui_contracts" data-detail-id="detailed" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -102,19 +102,12 @@
       <path class="ui-contracts-container__title-band" d="M 17.5 939 L 17.5 934 Q 17.5 921.5 30 921.5 L 613.748 921.5 Q 626.248 921.5 626.248 934 L 626.248 939 Z" fill="#dbe4f0" stroke="none"/>
       <rect class="ui-contracts-container__outline" x="16.75" y="920.75" width="610.248" height="253.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-702">
-      <style>g[data-item-id="scope\3a C-702"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1203" width="256" height="99" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1222 L 17.5 1217 Q 17.5 1204.5 30 1204.5 L 258 1204.5 Q 270.5 1204.5 270.5 1217 L 270.5 1222 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1203.75" width="254.5" height="97.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
     <g class="ui-contracts-container" data-item-id="target-register">
       <style>g[data-item-id="target-register"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1330" width="256" height="163" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1349 L 17.5 1344 Q 17.5 1331.5 30 1331.5 L 258 1331.5 Q 270.5 1331.5 270.5 1344 L 270.5 1349 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1330.75" width="254.5" height="161.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+      <rect class="ui-contracts-container__body" x="16" y="1203" width="256" height="163" rx="14" fill="#f4f7fb" stroke="none"/>
+      <path class="ui-contracts-container__title-band" d="M 17.5 1222 L 17.5 1217 Q 17.5 1204.5 30 1204.5 L 258 1204.5 Q 270.5 1204.5 270.5 1217 L 270.5 1222 Z" fill="#dbe4f0" stroke="none"/>
+      <rect class="ui-contracts-container__outline" x="16.75" y="1203.75" width="254.5" height="161.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
@@ -170,17 +163,13 @@
       <rect class="shared-node__chrome" x="388.498" y="1111.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
       <rect class="shared-node__outline" x="388.498" y="1111.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-702-22-2c-22focal-22-2c-22c-702-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22scope%3AC-702%22%2C%22focal%22%2C%22C-702%22%5D" data-role="component" data-node-density="plain">
+    <g id="scene-node-occurrence-5b-22target-register-22-2c-22register-22-2c-22e-700-22-5d" class="scene-node primitive-card role-event paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D" data-role="event" data-node-density="plain">
       <rect class="shared-node__chrome" x="32.75" y="1238.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
       <rect class="shared-node__outline" x="32.75" y="1238.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22target-register-22-2c-22register-22-2c-22e-700-22-5d" class="scene-node primitive-card role-event paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D" data-role="event" data-node-density="plain">
-      <rect class="shared-node__chrome" x="32.75" y="1365.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="32.75" y="1365.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-    </g>
     <g id="scene-node-occurrence-5b-22target-register-22-2c-22register-22-2c-22d-700-22-5d" class="scene-node primitive-card role-dataentity paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D" data-role="dataentity" data-node-density="plain">
-      <rect class="shared-node__chrome" x="32.75" y="1429.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="32.75" y="1429.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="32.75" y="1302.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="32.75" y="1302.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
@@ -395,30 +384,16 @@
         </g>
       </g>
     </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-702" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1216">
-          <tspan x="30" dy="0">Component scope · Summary Card</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-702%22%2C%22focal%22%2C%22C-702%22%5D" data-role="component">
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1267.8">
-              <tspan x="47.5" y="1267.8">Summary Card</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
     <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="target-register" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1343">
+      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1216">
           <tspan x="30" dy="0">Referenced targets</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-event paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D" data-role="event">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1394.8">
-              <tspan x="47.5" y="1394.8">Submit Review</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1267.8">
+              <tspan x="47.5" y="1267.8">Submit Review</tspan>
             </text>
         </g>
       </g>
@@ -426,8 +401,8 @@
     <g class="scene-node primitive-card role-dataentity paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D" data-role="dataentity">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1458.8">
-              <tspan x="47.5" y="1458.8">ReviewRecord</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1331.8">
+              <tspan x="47.5" y="1331.8">ReviewRecord</tspan>
             </text>
         </g>
       </g>

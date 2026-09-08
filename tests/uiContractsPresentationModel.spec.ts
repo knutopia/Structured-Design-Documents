@@ -94,20 +94,114 @@ describe("bundle-driven UI contracts presentation", () => {
     expect(collectBundleDiagnostics(cloned).some(d => d.message.includes("show_component_hierarchy"))).toBe(true);
   });
 
-  it("keeps State-only fallback and preserves structure-only compact scopes", async () => {
+  it("keeps State-only fallback and suppresses structure-only compact scopes", async () => {
     const text = await readFile("bundle/v0.1/examples/ui_state_fallback.sdd", "utf8");
     const compact = model(text, "compact");
     expect(compact.scopes.some(scope => scope.sequences.length)).toBe(true);
     expect(compact.register.nodes.length).toBeGreaterThan(0);
     const structure = model('SDD-TEXT 0.1\nComponent C-001 "Parent"\n  CONTAINS C-002 "Child"\nEND\nComponent C-002 "Child"\nEND\n', "compact");
-    expect(structure.scopes).toHaveLength(2);
-    expect(structure.scopes[0].children[0].semanticId).toBe("C-002");
+    expect(structure.scopes).toEqual([]);
+    expect(structure.overview[0].children[0].node.semanticId).toBe("C-002");
+  });
+
+  it("suppresses isolated, chain, and sibling scopes without stale occurrences or lost containment", () => {
+    const result = model(`SDD-TEXT 0.1
+Component C-001 "Root"
+  CONTAINS C-002 "Branch"
+  CONTAINS C-003 "Sibling"
+END
+Component C-002 "Branch"
+  CONTAINS C-004 "Leaf"
+END
+Component C-003 "Sibling"
+END
+Component C-004 "Leaf"
+END
+Component C-005 "Isolated"
+END
+`);
+    expect(result.scopes).toEqual([]);
+    expect(result.occurrences.every(node => node.scopeId === "overview")).toBe(true);
+    expect(new Set(result.occurrences.map(node => node.semanticId))).toEqual(new Set(result.visibleSemanticNodeIds));
+    const hierarchy = result.overview.flatMap(walk);
+    for (const edge of result.relationships) {
+      expect(result.structuralRelationshipIds).toContain(edge.id);
+      expect(hierarchy.some(item => item.node.semanticId === edge.from
+        && item.children.some(child => child.node.semanticId === edge.to))).toBe(true);
+    }
+    expect(result.omissions).toEqual([]);
+    expect(result.notes).toEqual([]);
+  });
+
+  it("retains reused leaves with multiple parents", () => {
+    const result = model(`SDD-TEXT 0.1
+Component C-001 "One"
+  CONTAINS C-003 "Shared"
+END
+Component C-002 "Two"
+  CONTAINS C-003 "Shared"
+END
+Component C-003 "Shared"
+END
+`, "compact");
+    expect(result.scopes.map(scope => scope.focal.semanticId)).toEqual(["C-003"]);
+    expect(result.scopes[0].parents.map(node => node.semanticId)).toEqual(["C-001", "C-002"]);
+  });
+
+  it("uses selected attributes and contracts rather than detail names to retain scopes", () => {
+    const text = `SDD-TEXT 0.1
+Place P-001 "Page"
+  CONTAINS VS-001 "View"
+END
+ViewState VS-001 "View"
+  place_id=P-001
+END
+Component C-001 "Attributed"
+  description="Useful context"
+END
+Component C-002 "Contract"
+  BINDS_TO D-001 "Data"
+END
+DataEntity D-001 "Data"
+END
+`;
+    expect(model(text, "compact").scopes.filter(scope => scope.kind === "component")).toEqual([]);
+    expect(model(text).scopes.filter(scope => scope.kind === "component").map(scope => scope.focal.semanticId)).toEqual(["C-001", "C-002"]);
+    const spec = structuredClone(view);
+    const policies = spec.conventions.renderer_defaults!.detail_display as Record<string, Record<string, boolean>>;
+    policies.compact.show_component_description = true;
+    expect(model(text, "compact", spec).scopes.filter(scope => scope.kind === "component").map(scope => scope.focal.semanticId)).toEqual(["C-001"]);
+  });
+
+  it("retains a single visible State even without transitions", () => {
+    const result = model(`SDD-TEXT 0.1
+Component C-001 "Owner"
+END
+State ST-001 "Ready"
+  scope_id=C-001
+END
+`, "compact");
+    expect(result.scopes).toHaveLength(1);
+    expect(result.scopes[0].sequences[0].nodes.map(node => node.semanticId)).toEqual(["ST-001"]);
+    expect(result.scopes[0].sequences[0].edges).toEqual([]);
+  });
+
+  it("retains structure-only scopes when overview visibility is disabled", () => {
+    const spec = structuredClone(view);
+    const policies = spec.conventions.renderer_defaults!.detail_display as Record<string, Record<string, boolean>>;
+    policies.detailed.show_component_hierarchy = false;
+    const result = model('SDD-TEXT 0.1\nComponent C-001 "Isolated"\nEND\n', "detailed", spec);
+    expect(result.overview).toEqual([]);
+    expect(result.scopes.map(scope => scope.focal.semanticId)).toEqual(["C-001"]);
+    expect(result.structuralRelationshipIds).toEqual([]);
   });
 
   it("reports cycles even when there are no hierarchy roots", () => {
     const result = model('SDD-TEXT 0.1\nComponent C-001 "One"\n  CONTAINS C-002 "Two"\nEND\nComponent C-002 "Two"\n  CONTAINS C-001 "One"\nEND\n');
     expect(result.diagnostics.some(diagnostic => diagnostic.code === "renderer.scene.ui_contracts_containment_cycle" && diagnostic.severity === "error")).toBe(true);
     expect(result.overview).toEqual([]);
+    expect(result.structuralRelationshipIds).toEqual([]);
+    expect(result.scopes).toHaveLength(2);
   });
 
   it("keeps legacy preparation as the default while exposing staged preparation explicitly", () => {

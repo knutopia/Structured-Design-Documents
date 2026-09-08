@@ -41,6 +41,7 @@ export interface UiContractsPresentationModel {
   overview: UiContractsHierarchy[]; scopes: UiContractsScope[];
   register: { id: string; title: string; nodes: UiContractsOccurrence[] };
   occurrences: UiContractsOccurrence[]; relationships: UiContractsRelationship[];
+  /** Relationships represented by scope ownership or actual overview nesting rather than requiring arrows. */
   structuralRelationshipIds: string[]; visibleSemanticNodeIds: string[];
   omissions: Array<{ id: string; reason: string }>; omittedPlaceIds: string[];
   notes: string[]; diagnostics: RendererDiagnostic[];
@@ -199,6 +200,19 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
   };
   overview.forEach(updateReferences);
 
+  // Only actual overview nesting supplies structural containment coverage.
+  const overviewById = new Map<string, UiContractsHierarchy[]>();
+  const overviewContainmentIds = new Set<string>();
+  const indexOverview = (item: UiContractsHierarchy): void => {
+    overviewById.set(item.node.semanticId, [...(overviewById.get(item.node.semanticId) ?? []), item]);
+    for (const child of item.children) {
+      hierarchyEdges.filter(edge => edge.from === item.node.semanticId && edge.to === child.node.semanticId)
+        .forEach(edge => overviewContainmentIds.add(edge.id));
+      indexOverview(child);
+    }
+  };
+  overview.forEach(indexOverview);
+
   const ownerOf = (id: string): string | undefined => {
     if (roleOf(id) === "primary") return relationships.find(edge => edge.kind === "ownership" && edge.to === id)?.from
       ?? graphNodes.get(id)?.props[config.ownership.primary_property];
@@ -230,6 +244,7 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     if (kind === "place" && enabled(config.visibility.omit_empty_places) && !hasContent) {
       omittedPlaceIds.push(ownerId); visible.delete(ownerId); omissions.push({ id: ownerId, reason: "empty_place" }); continue;
     }
+    const occurrenceStart = occurrences.length;
     const focal = occurrence(ownerId, id, "focal", [], true);
     const parents = kind === "component" ? parentsOf(ownerId).map(parent => occurrence(parent, id, "parent", [])) : [];
     const children = kind === "component" ? childrenOf(ownerId).map(child => occurrence(child, id, "child", [])) : [];
@@ -241,6 +256,16 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     const compositions = [makeGroup(ownerId, "composition", id, kind === "place" ? focal : undefined),
       ...sequences.flatMap(sequence => sequence.nodes.filter(node => roleOf(node.semanticId) === "primary").map(node => makeGroup(node.semanticId, "composition", id)))].filter((group): group is UiContractsLocalGroup => group !== undefined);
     const contracts = [makeGroup(ownerId, "contract", id), ...sequences.flatMap(sequence => sequence.nodes.map(node => makeGroup(node.semanticId, "contract", id)))].filter((group): group is UiContractsLocalGroup => group !== undefined);
+    const overviewCoversFocal = (overviewById.get(ownerId) ?? []).some(item => !item.referenceTo
+      && focal.attributes.every(attribute => item.node.attributes.some(other => other.groupId === attribute.groupId
+        && other.label === attribute.label && other.value === attribute.value))
+      && children.every(child => item.children.some(other => other.node.semanticId === child.semanticId)));
+    if (kind === "component" && !sequences.length && !contracts.length && !compositions.length
+      && parents.length <= 1 && overviewCoversFocal
+      && containment.every(edge => overviewContainmentIds.has(edge.relationshipId))) {
+      occurrences.splice(occurrenceStart);
+      continue;
+    }
     scopes.push({ id, kind, title: format(config.labels[kind === "place" ? "place_scope" : "component_scope"], { name: focal.title }), focal,
       parents, children, containment, sequences, compositions, contracts,
       ...(kind === "place" && enabled(config.place_description.visible_when) ? { description: graphNodes.get(ownerId)?.props[config.place_description.property] } : {}) });
@@ -275,7 +300,8 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
   const register = { id: "target-register", title: config.labels.target_register,
     nodes: supportIds.map(id => occurrence(id, "target-register", "register", [])) };
   const notes = omittedPlaceIds.length ? [`Omitted empty ui_contracts containers in compact detail: ${omittedPlaceIds.map(id => nodes.get(id)!.name).join(", ")}.`] : [];
+  const localContainmentIds = new Set(scopes.flatMap(scope => scope.containment.map(edge => edge.relationshipId)));
   return { overview, scopes, register, occurrences, relationships,
-    structuralRelationshipIds: relationships.filter(edge => edge.kind === "ownership").map(edge => edge.id),
+    structuralRelationshipIds: relationships.filter(edge => edge.kind === "ownership" || overviewContainmentIds.has(edge.id) && !localContainmentIds.has(edge.id)).map(edge => edge.id),
     visibleSemanticNodeIds: order(visible), omittedPlaceIds, omissions, notes, diagnostics };
 }

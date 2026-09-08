@@ -1,0 +1,159 @@
+<svg width="717" height="853" viewBox="0 0 717 853" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="717" height="853" fill="#1E1E1E"/>
+<g id="Emphasized Node">
+<path d="M40 42C40 40.8954 40.8954 40 42 40H675C676.105 40 677 40.8954 677 42V811C677 812.105 676.105 813 675 813H42C40.8954 813 40 812.105 40 811V42Z" fill="#444444"/>
+<path d="M42 40V41H675V40V39H42V40ZM677 42H676V811H677H678V42H677ZM675 813V812H42V813V814H675V813ZM40 811H41V42H40H39V811H40ZM42 813V812C41.4477 812 41 811.552 41 811H40H39C39 812.657 40.3432 814 42 814V813ZM677 811H676C676 811.552 675.552 812 675 812V813V814C676.657 814 678 812.657 678 811H677ZM675 40V41C675.552 41 676 41.4477 676 42H677H678C678 40.3431 676.657 39 675 39V40ZM42 40V39C40.3431 39 39 40.3431 39 42H40H41C41 41.4477 41.4477 41 42 41V40Z" fill="white" fill-opacity="0.1"/>
+<g id="Set of Containers, Nodes with 1 Emphasized Node">
+<g id="Node-Based Container">
+<rect x="190.75" y="190.75" width="335.5" height="471.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="190.75" y="190.75" width="335.5" height="471.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot" clip-path="url(#clip0_2004_193)">
+<rect width="334" height="19" transform="translate(191.5 191.5)" fill="white"/>
+<g id="Title Header">
+<rect width="334" height="19" transform="translate(191.5 191.5)" fill="#DBE4F0"/>
+<text id="Container Title" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="205.5" y="204.625">Component hierarchy - Parent 0</tspan></text>
+</g>
+</g>
+<g id="content section">
+<g id="Node (emphasized, stroke width=2)">
+<rect x="208.5" y="227.5" width="223" height="52" rx="13" fill="white"/>
+<rect x="208.5" y="227.5" width="223" height="52" rx="13" stroke="#387575" stroke-width="2"/>
+<g id="header slot_2" clip-path="url(#clip1_2004_193)">
+<rect width="221" height="19" transform="translate(209.5 228.5)" fill="white"/>
+<g id="Decorator Header">
+<rect width="221" height="19" transform="translate(209.5 228.5)" fill="#DBE4F0"/>
+<text id="node type" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="223.5" y="241.625">Component </tspan></text>
+<text id="node ID" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="282.5" y="241.625">C-100</tspan></text>
+</g>
+</g>
+<g id="node body">
+<g id="Node Title (bold for emphasis)">
+<text id="Long Node Title occupying more than a single line" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="-0.02em"><tspan x="223.5" y="268.8">Parent 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node-Based Container_2">
+<rect x="208.25" y="297.25" width="300.5" height="347.5" rx="7.25" fill="white"/>
+<rect x="208.25" y="297.25" width="300.5" height="347.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot_3" clip-path="url(#clip2_2004_193)">
+<rect width="299" height="19" transform="translate(209 298)" fill="white"/>
+<g id="Title Header_2">
+<rect width="299" height="19" transform="translate(209 298)" fill="#DBE4F0"/>
+<text id="Container Title_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="223" y="311.125">H1 (Repeated Hierarchy)</tspan></text>
+</g>
+</g>
+<g id="content section_2">
+<g id="Node">
+<rect x="225.75" y="333.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="225.75" y="333.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_4" clip-path="url(#clip3_2004_193)">
+<rect width="221" height="19" transform="translate(226.5 334.5)" fill="white"/>
+<g id="Decorator Header_2">
+<rect width="221" height="19" transform="translate(226.5 334.5)" fill="#DBE4F0"/>
+<text id="node type_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="240.5" y="347.625">Component </tspan></text>
+<text id="node ID_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="299.5" y="347.625">C-110</tspan></text>
+</g>
+</g>
+<g id="node body_2">
+<g id="Node Title">
+<text id="Long Node Title occupying more than a single line_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="240.5" y="374.8">Focal</tspan></text>
+</g>
+</g>
+</g>
+<g id="Container w horizontal offset">
+<g id="Hierarchy Container">
+<rect x="229.75" y="402.75" width="257.5" height="224.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="229.75" y="402.75" width="257.5" height="224.5" rx="7.25" stroke="#C7D0D9" stroke-width="1.5"/>
+<g id="Node_2">
+<rect x="247.25" y="420.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="247.25" y="420.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_5" clip-path="url(#clip4_2004_193)">
+<rect width="221" height="19" transform="translate(248 421)" fill="white"/>
+<g id="Decorator Header_3">
+<rect width="221" height="19" transform="translate(248 421)" fill="#DBE4F0"/>
+<text id="node type_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="262" y="434.125">Component </tspan></text>
+<text id="node ID_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="321" y="434.125">C-120</tspan></text>
+</g>
+</g>
+<g id="node body_3">
+<g id="Node Title_2">
+<text id="Long Node Title occupying more than a single line_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="262" y="461.3">Child 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_3">
+<rect x="247.25" y="489.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="247.25" y="489.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_6" clip-path="url(#clip5_2004_193)">
+<rect width="221" height="19" transform="translate(248 490)" fill="white"/>
+<g id="Decorator Header_4">
+<rect width="221" height="19" transform="translate(248 490)" fill="#DBE4F0"/>
+<text id="node type_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="262" y="503.125">Component </tspan></text>
+<text id="node ID_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="321" y="503.125">C-121</tspan></text>
+</g>
+</g>
+<g id="node body_4">
+<g id="Node Title_3">
+<text id="Long Node Title occupying more than a single line_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="262" y="530.3">Child 1</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_4">
+<rect x="247.25" y="558.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="247.25" y="558.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_7" clip-path="url(#clip6_2004_193)">
+<rect width="221" height="19" transform="translate(248 559)" fill="white"/>
+<g id="Decorator Header_5">
+<rect width="221" height="19" transform="translate(248 559)" fill="#DBE4F0"/>
+<text id="node type_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="262" y="572.125">Component </tspan></text>
+<text id="node ID_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="321" y="572.125">C-122</tspan></text>
+</g>
+</g>
+<g id="node body_5">
+<g id="Node Title_4">
+<text id="Long Node Title occupying more than a single line_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="262" y="599.3">Child 2</tspan></text>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Rectangle">
+<rect x="40" y="4" width="106.117" height="30" rx="3" fill="#444444"/>
+<rect x="40.5" y="4.5" width="105.117" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Emphasized Node_2" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="46" y="21.5">Emphasized Node</tspan></text>
+<g id="Rectangle_2">
+<rect x="40" y="4" width="106.117" height="30" rx="3" fill="#444444"/>
+<rect x="40.5" y="4.5" width="105.117" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Emphasized Node_3" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="46" y="21.5">Emphasized Node</tspan></text>
+<defs>
+<clipPath id="clip0_2004_193">
+<rect width="334" height="19" fill="white" transform="translate(191.5 191.5)"/>
+</clipPath>
+<clipPath id="clip1_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(209.5 228.5)"/>
+</clipPath>
+<clipPath id="clip2_2004_193">
+<rect width="299" height="19" fill="white" transform="translate(209 298)"/>
+</clipPath>
+<clipPath id="clip3_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(226.5 334.5)"/>
+</clipPath>
+<clipPath id="clip4_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(248 421)"/>
+</clipPath>
+<clipPath id="clip5_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(248 490)"/>
+</clipPath>
+<clipPath id="clip6_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(248 559)"/>
+</clipPath>
+</defs>
+</svg>

@@ -2,10 +2,7 @@
 
 ## Open Issues
 
--thin out containment display for ui_contracts
 -composed_of was better before: examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/compact_detail/place_viewstate_transition.ui_contracts.svg
-
--component_scope and component_hierarchy redundant in docs/sdd_app_planning/sdd_for_sdd.ui_contracts.compact.decorators-type-id.svg
 
 -doc examples updates to new routing, nodes
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
@@ -40,6 +37,7 @@ z
 - Hierarchical ui_contracts implemented, reviewing details
 - Restored broken skill doc page
 - Created ui contracts renderer guide
+- Reduced redundancy in diagram
 
 ## Mon 9-7
 
