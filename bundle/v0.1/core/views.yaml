@@ -24,6 +24,10 @@ preview_defaults:
         measurement_font_asset: assets/fonts/PublicSans-SemiBold.otf
         svg_font_asset: assets/fonts/PublicSans-SemiBold.woff
         png_font_asset: assets/fonts/PublicSans-SemiBold.otf
+      - font_weight: 700
+        measurement_font_asset: assets/fonts/PublicSans-Bold.otf
+        svg_font_asset: assets/fonts/PublicSans-Bold.woff
+        png_font_asset: assets/fonts/PublicSans-Bold.otf
     dpi: 192
 
 # normative_defaults describe the default semantic reading that projection/render tooling should explain or honor.

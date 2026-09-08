@@ -25,6 +25,7 @@ interface DiagramRootContainerOptions {
 }
 
 export interface SharedNodeRequest {
+  emphasized?: boolean;
   title: string;
   decoratorMode: NodeDecoratorMode;
   nodeType: string;
@@ -134,6 +135,7 @@ export function buildSharedNode(
     },
     content: [],
     sharedNode: {
+      ...(request.emphasized ? { emphasized: true } : {}),
       title: request.title,
       decoratorMode: { ...request.decoratorMode },
       nodeType: request.nodeType,

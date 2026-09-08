@@ -38,6 +38,7 @@ z
 - Restored broken skill doc page
 - Created ui contracts renderer guide
 - Reduced redundancy in diagram
+- Emphasized shared node
 
 ## Mon 9-7
 

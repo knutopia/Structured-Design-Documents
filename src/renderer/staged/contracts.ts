@@ -391,6 +391,7 @@ export interface SharedNodeAttribute {
 
 /** Semantic input for the renderer-owned shared node composition. */
 export interface SharedNodeContent {
+  emphasized?: boolean;
   title: string;
   decoratorMode: NodeDecoratorMode;
   nodeType?: string;
@@ -533,6 +534,9 @@ export interface MeasuredSharedNodeRegion {
 }
 
 export interface MeasuredSharedNodeLayout {
+  emphasized?: boolean;
+  /** Bottom enclosure reserved during natural measurement for height reflow. */
+  bottomInset?: number;
   density: "plain" | "dense";
   decorator?: MeasuredSharedNodeRegion & {
     items: MeasuredContentBlock[];

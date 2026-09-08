@@ -57,6 +57,20 @@ export interface SharedNodeTheme {
   };
 }
 
+export type SharedNodeStyleDelta<T> = {
+  [K in keyof T]?: T[K] extends object ? SharedNodeStyleDelta<T[K]> : T[K];
+};
+
+/** Global emphasis deltas, applied over the current regular shared-node theme. */
+export interface SharedNodeEmphasisTheme extends SharedNodeStyleDelta<SharedNodeTheme> {
+  textStyles?: {
+    title?: Partial<TextStyleToken>;
+    decorator?: Partial<TextStyleToken>;
+    attributeLabel?: Partial<TextStyleToken>;
+    attributeValue?: Partial<TextStyleToken>;
+  };
+}
+
 export interface PrimitiveTextRule {
   allowedKinds: ContentBlockKind[];
   movableSecondaryKinds: ContentBlockKind[];
@@ -131,6 +145,7 @@ export interface RendererTheme {
   edgeLabelMaxWidth: number;
   textStyles: Record<string, TextStyleToken>;
   sharedNode: SharedNodeTheme;
+  sharedNodeEmphasis?: SharedNodeEmphasisTheme;
   nodePrimitives: Record<SceneNodePrimitive, NodePrimitiveTheme>;
   containerPrimitives: Record<SceneContainerPrimitive, ContainerPrimitiveTheme>;
   paint: RendererPaintTheme;
@@ -166,6 +181,13 @@ const defaultTheme: RendererTheme = {
       measurementFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-SemiBold.otf"),
       svgFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-SemiBold.woff"),
       pngFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-SemiBold.otf")
+    },
+    {
+      fontWeight: 700,
+      fontStyle: "normal",
+      measurementFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-Bold.otf"),
+      svgFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-Bold.woff"),
+      pngFontAssetPath: path.resolve(bundledFontsRoot, "PublicSans-Bold.otf")
     }
   ],
   dpi: 192,
@@ -435,6 +457,51 @@ const defaultTheme: RendererTheme = {
   }
 };
 
+function mergeStyleDelta<T extends object>(base: T, delta: SharedNodeStyleDelta<T>): T {
+  const result = { ...base };
+  for (const key of Object.keys(delta) as Array<keyof T>) {
+    const value = delta[key];
+    if (value === undefined) continue;
+    result[key] = (typeof value === "object" && value !== null
+      ? mergeStyleDelta(base[key] as object, value)
+      : value) as T[typeof key];
+  }
+  return result;
+}
+
+/** Resolve once per consumer; never mutate the registered regular theme. */
+export function resolveSharedNodeTheme(theme: RendererTheme, emphasized = false): RendererTheme {
+  if (!emphasized) return theme;
+  const { textStyles: textDeltas = {}, ...nodeDelta } = theme.sharedNodeEmphasis ?? {};
+  const sharedNode = mergeStyleDelta({ ...theme.sharedNode, strokeWidth: 2 }, nodeDelta);
+  const textStyles = { ...theme.textStyles };
+  const resolveRole = (slot: keyof typeof textDeltas, role: string): string => {
+    const resolvedRole = `shared_node_emphasized_${slot}`;
+    textStyles[resolvedRole] = mergeStyleDelta({
+      ...(theme.textStyles[role] ?? theme.textStyles.label),
+      ...(slot === "title" ? { fontWeight: 700 } : {})
+    }, textDeltas[slot] ?? {});
+    return resolvedRole;
+  };
+  return {
+    ...theme,
+    textStyles,
+    sharedNode: {
+      ...sharedNode,
+      titleTextStyleRole: resolveRole("title", sharedNode.titleTextStyleRole),
+      decorator: {
+        ...sharedNode.decorator,
+        textStyleRole: resolveRole("decorator", sharedNode.decorator.textStyleRole)
+      },
+      attribute: {
+        ...sharedNode.attribute,
+        labelTextStyleRole: resolveRole("attributeLabel", sharedNode.attribute.labelTextStyleRole),
+        valueTextStyleRole: resolveRole("attributeValue", sharedNode.attribute.valueTextStyleRole)
+      }
+    }
+  };
+}
+
 interface RendererThemeRegistryEntry {
   theme: RendererTheme;
   unknownThemeId?: string;
@@ -456,7 +523,7 @@ export interface ResolvedRendererTheme {
 
 function getRequiredFontWeights(theme: RendererTheme): number[] {
   return [...new Set(
-    Object.values(theme.textStyles).map((style) => style.fontWeight)
+    Object.values(resolveSharedNodeTheme(theme, true).textStyles).map((style) => style.fontWeight)
   )].sort((left, right) => left - right);
 }
 
