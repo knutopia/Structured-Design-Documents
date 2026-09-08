@@ -1,5 +1,7 @@
 # Stage 6 Visual Issues & Solutions
 
+*See [local figma exports](/home/knut/projects/sdd/docs/hierarchical_ui_contracts/stage_6_issues_visual_references) if Figma MCP connection fails.*
+
 ## Visual Guidance for Identified Issues
 
 - Self-loop routing failure (in [self_loop.svg](/home/knut/projects/sdd/docs/hierarchical_ui_contracts/implementation_evidence/stage6/self_loop.svg) ):

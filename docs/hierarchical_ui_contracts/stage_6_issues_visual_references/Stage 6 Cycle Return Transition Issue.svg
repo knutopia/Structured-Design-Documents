@@ -1,0 +1,873 @@
+<svg width="2898" height="2114" viewBox="0 0 2898 2114" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="2898" height="2114" fill="#1E1E1E"/>
+<g id="Stage 6 Cycle Return Transition Issue">
+<path d="M40 42C40 40.8955 40.8954 40 42 40H2856C2857.1 40 2858 40.8954 2858 42V2072C2858 2073.1 2857.1 2074 2856 2074H42C40.8954 2074 40 2073.1 40 2072V42Z" fill="#444444"/>
+<path d="M42 40V41H2856V40V39H42V40ZM2858 42H2857V2072H2858H2859V42H2858ZM2856 2074V2073H42V2074V2075H2856V2074ZM40 2072H41V42H40H39V2072H40ZM42 2074V2073C41.4477 2073 41 2072.55 41 2072H40H39C39 2073.66 40.3431 2075 42 2075V2074ZM2858 2072H2857C2857 2072.55 2856.55 2073 2856 2073V2074V2075C2857.66 2075 2859 2073.66 2859 2072H2858ZM2856 40V41C2856.55 41 2857 41.4477 2857 42H2858H2859C2859 40.3432 2857.66 39 2856 39V40ZM42 40V39C40.3431 39 39 40.3432 39 42H40H41C41 41.4477 41.4477 41 42 41V40Z" fill="white" fill-opacity="0.1"/>
+<g id="Intended Design: Linear Sequence, Horizontal Loop">
+<path d="M1508 145C1508 143.895 1508.9 143 1510 143H2756C2757.1 143 2758 143.895 2758 145V2072C2758 2073.1 2757.1 2074 2756 2074H1510C1508.9 2074 1508 2073.1 1508 2072V145Z" fill="#444444"/>
+<path d="M1510 143V144H2756V143V142H1510V143ZM2758 145H2757V2072H2758H2759V145H2758ZM2756 2074V2073H1510V2074V2075H2756V2074ZM1508 2072H1509V145H1508H1507V2072H1508ZM1510 2074V2073C1509.45 2073 1509 2072.55 1509 2072H1508H1507C1507 2073.66 1508.34 2075 1510 2075V2074ZM2758 2072H2757C2757 2072.55 2756.55 2073 2756 2073V2074V2075C2757.66 2075 2759 2073.66 2759 2072H2758ZM2756 143V144C2756.55 144 2757 144.448 2757 145H2758H2759C2759 143.343 2757.66 142 2756 142V143ZM1510 143V142C1508.34 142 1507 143.343 1507 145H1508H1509C1509 144.448 1509.45 144 1510 144V143Z" fill="white" fill-opacity="0.1"/>
+<g id="Back-Connector Above">
+<rect width="1050" height="454" transform="translate(1608 243)" fill="white"/>
+<g id="Node-Based Container">
+<rect x="1624.75" y="259.75" width="257.5" height="105.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="1624.75" y="259.75" width="257.5" height="105.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot" clip-path="url(#clip0_2004_193)">
+<rect width="256" height="19" transform="translate(1625.5 260.5)" fill="white"/>
+<g id="Title Header">
+<rect width="256" height="19" transform="translate(1625.5 260.5)" fill="#DBE4F0"/>
+<text id="Container Title" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1639.5" y="273.625">Component hierarchy - Controller</tspan></text>
+</g>
+</g>
+<g id="content section">
+<g id="Node">
+<rect x="1642.25" y="296.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1642.25" y="296.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_2" clip-path="url(#clip1_2004_193)">
+<rect width="221" height="19" transform="translate(1643 297)" fill="white"/>
+<g id="Decorator Header">
+<rect width="221" height="19" transform="translate(1643 297)" fill="#DBE4F0"/>
+<text id="node type" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1657" y="310.125">Component </tspan></text>
+<text id="node ID" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1716" y="310.125">C-100</tspan></text>
+</g>
+</g>
+<g id="node body">
+<g id="Node Title">
+<text id="Long Node Title occupying more than a single line" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1657" y="337.3">Controller</tspan></text>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Node-Based Container_2">
+<rect x="1624.75" y="391.75" width="975.5" height="230.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="1624.75" y="391.75" width="975.5" height="230.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot_3" clip-path="url(#clip2_2004_193)">
+<rect width="974" height="19" transform="translate(1625.5 392.5)" fill="white"/>
+<g id="Title Header_2">
+<rect width="974" height="19" transform="translate(1625.5 392.5)" fill="#DBE4F0"/>
+<text id="Container Title_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1639.5" y="405.625">Component scope - Controller</tspan></text>
+</g>
+</g>
+<g id="content section_2">
+<g id="Node_2">
+<rect x="1658.25" y="428.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1658.25" y="428.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_4" clip-path="url(#clip3_2004_193)">
+<rect width="221" height="19" transform="translate(1659 429)" fill="white"/>
+<g id="Decorator Header_2">
+<rect width="221" height="19" transform="translate(1659 429)" fill="#DBE4F0"/>
+<text id="node type_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1673" y="442.125">Component </tspan></text>
+<text id="node ID_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1732" y="442.125">C-100</tspan></text>
+</g>
+</g>
+<g id="node body_2">
+<g id="Node Title_2">
+<text id="Long Node Title occupying more than a single line_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1673" y="469.3">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="horizontal node sequence with back-connector above">
+<g id="horizontal node sequence">
+<g id="Node_3">
+<rect x="1658.25" y="553.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1658.25" y="553.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_5" clip-path="url(#clip4_2004_193)">
+<rect width="221" height="19" transform="translate(1659 554)" fill="white"/>
+<g id="Decorator Header_3">
+<rect width="221" height="19" transform="translate(1659 554)" fill="#DBE4F0"/>
+<text id="node type_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1673" y="567.125">State</tspan></text>
+<text id="node ID_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1703" y="567.125">ST-100</tspan></text>
+</g>
+</g>
+<g id="node body_3">
+<g id="Node Title_3">
+<text id="Long Node Title occupying more than a single line_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1673" y="594.3">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_4">
+<rect x="1984.25" y="553.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1984.25" y="553.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_6" clip-path="url(#clip5_2004_193)">
+<rect width="221" height="19" transform="translate(1985 554)" fill="white"/>
+<g id="Decorator Header_4">
+<rect width="221" height="19" transform="translate(1985 554)" fill="#DBE4F0"/>
+<text id="node type_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1999" y="567.125">State</tspan></text>
+<text id="node ID_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2029" y="567.125">ST-101</tspan></text>
+</g>
+</g>
+<g id="node body_4">
+<g id="Node Title_4">
+<text id="Long Node Title occupying more than a single line_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1999" y="594.3">State 1</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_5">
+<rect x="2310.25" y="553.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="2310.25" y="553.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_7" clip-path="url(#clip6_2004_193)">
+<rect width="221" height="19" transform="translate(2311 554)" fill="white"/>
+<g id="Decorator Header_5">
+<rect width="221" height="19" transform="translate(2311 554)" fill="#DBE4F0"/>
+<text id="node type_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2325" y="567.125">State</tspan></text>
+<text id="node ID_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2355" y="567.125">ST-102</tspan></text>
+</g>
+</g>
+<g id="node body_5">
+<g id="Node Title_5">
+<text id="Long Node Title occupying more than a single line_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="2325" y="594.3">State 2</tspan></text>
+</g>
+</g>
+</g>
+</g>
+<g id="horizontal node sequence connectors &#34;Above&#34;">
+<g id="Group">
+<path id="Vector" d="M1961.99 547.5H1902.5C1898.08 547.5 1894.5 551.082 1894.5 555.5V561.5C1894.5 565.918 1898.08 569.5 1902.5 569.5H1961.99C1966.41 569.5 1969.99 565.918 1969.99 561.5V555.5C1969.99 551.082 1966.41 547.5 1961.99 547.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_0_1}" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="1900.5" y="562.85">{ready_0_1}</tspan></text>
+</g>
+<g id="Group_2">
+<path id="Vector_2" d="M2287.96 547.5H2228.5C2224.08 547.5 2220.5 551.082 2220.5 555.5V561.5C2220.5 565.918 2224.08 569.5 2228.5 569.5H2287.96C2292.38 569.5 2295.96 565.918 2295.96 561.5V555.5C2295.96 551.082 2292.38 547.5 2287.96 547.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_1_2}" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="2226.5" y="563.35">{ready_1_2}</tspan></text>
+</g>
+<g id="Group_3">
+<path id="Vector_3" d="M2126.5 497.5H2064.5C2060.08 497.5 2056.5 501.082 2056.5 505.5V511.5C2056.5 515.918 2060.08 519.5 2064.5 519.5H2126.5C2130.92 519.5 2134.5 515.918 2134.5 511.5V505.5C2134.5 501.082 2130.92 497.5 2126.5 497.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_2_0}" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="2062.5" y="512.85">{ready_2_0}</tspan></text>
+</g>
+<path id="Vector_4" d="M1881.5 578.5C1880.95 578.5 1880.5 578.948 1880.5 579.5C1880.5 580.052 1880.95 580.5 1881.5 580.5V579.5V578.5ZM1983.5 579.5L1973.5 573.726V585.274L1983.5 579.5ZM1881.5 579.5V580.5H1974.5V579.5V578.5H1881.5V579.5Z" fill="#1D4ED8"/>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-101-22-2c-22transitions_to-22-2c-22st-102-22-5d-0">
+<path id="Vector_5" d="M2207.5 578.5C2206.95 578.5 2206.5 578.948 2206.5 579.5C2206.5 580.052 2206.95 580.5 2207.5 580.5V579.5V578.5ZM2309.5 579.5L2299.5 573.726V585.274L2309.5 579.5ZM2207.5 579.5V580.5H2300.5V579.5V578.5H2207.5V579.5Z" fill="#1D4ED8"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-102-22-2c-22transitions_to-22-2c-22st-100-22-5d-0">
+<path id="Vector_6" d="M2549.5 529.5H2550.5V528.5H2549.5V529.5ZM1641.5 529.5V528.5H1640.5V529.5H1641.5ZM1657.5 579.5L1647.5 573.726V585.274L1657.5 579.5ZM2549.5 579.5V580.5H2550.5V579.5H2549.5ZM1641.5 579.5H1640.5V580.5H1641.5V579.5ZM2549.5 529.5V528.5H1641.5V529.5V530.5H2549.5V529.5ZM2533.5 579.5V580.5H2549.5V579.5V578.5H2533.5V579.5ZM2549.5 579.5H2550.5V529.5H2549.5H2548.5V579.5H2549.5ZM1641.5 529.5H1640.5V579.5H1641.5H1642.5V529.5H1641.5ZM1641.5 579.5V580.5H1648.5V579.5V578.5H1641.5V579.5Z" fill="#1D4ED8"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Back-Connector Below">
+<rect width="1050" height="454" transform="translate(1608 799)" fill="white"/>
+<g id="Node-Based Container_3">
+<rect x="1624.75" y="815.75" width="257.5" height="105.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="1624.75" y="815.75" width="257.5" height="105.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot_8" clip-path="url(#clip7_2004_193)">
+<rect width="256" height="19" transform="translate(1625.5 816.5)" fill="white"/>
+<g id="Title Header_3">
+<rect width="256" height="19" transform="translate(1625.5 816.5)" fill="#DBE4F0"/>
+<text id="Container Title_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1639.5" y="829.625">Component hierarchy - Controller</tspan></text>
+</g>
+</g>
+<g id="content section_3">
+<g id="Node_6">
+<rect x="1642.25" y="852.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1642.25" y="852.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_9" clip-path="url(#clip8_2004_193)">
+<rect width="221" height="19" transform="translate(1643 853)" fill="white"/>
+<g id="Decorator Header_6">
+<rect width="221" height="19" transform="translate(1643 853)" fill="#DBE4F0"/>
+<text id="node type_6" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1657" y="866.125">Component </tspan></text>
+<text id="node ID_6" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1716" y="866.125">C-100</tspan></text>
+</g>
+</g>
+<g id="node body_6">
+<g id="Node Title_6">
+<text id="Long Node Title occupying more than a single line_6" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1657" y="893.3">Controller</tspan></text>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Node-Based Container_4">
+<rect x="1624.75" y="947.75" width="975.5" height="229.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="1624.75" y="947.75" width="975.5" height="229.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot_10" clip-path="url(#clip9_2004_193)">
+<rect width="974" height="19" transform="translate(1625.5 948.5)" fill="white"/>
+<g id="Title Header_4">
+<rect width="974" height="19" transform="translate(1625.5 948.5)" fill="#DBE4F0"/>
+<text id="Container Title_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1639.5" y="961.625">Component scope - Controller</tspan></text>
+</g>
+</g>
+<g id="content section_4">
+<g id="Node_7">
+<rect x="1658.25" y="984.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1658.25" y="984.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_11" clip-path="url(#clip10_2004_193)">
+<rect width="221" height="19" transform="translate(1659 985)" fill="white"/>
+<g id="Decorator Header_7">
+<rect width="221" height="19" transform="translate(1659 985)" fill="#DBE4F0"/>
+<text id="node type_7" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1673" y="998.125">Component </tspan></text>
+<text id="node ID_7" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1732" y="998.125">C-100</tspan></text>
+</g>
+</g>
+<g id="node body_7">
+<g id="Node Title_7">
+<text id="Long Node Title occupying more than a single line_7" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1673" y="1025.3">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="horizontal node sequence with back-connector below">
+<g id="horizontal node sequence_2">
+<g id="Node_8">
+<rect x="1658.25" y="1061.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1658.25" y="1061.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_12" clip-path="url(#clip11_2004_193)">
+<rect width="221" height="19" transform="translate(1659 1062)" fill="white"/>
+<g id="Decorator Header_8">
+<rect width="221" height="19" transform="translate(1659 1062)" fill="#DBE4F0"/>
+<text id="node type_8" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1673" y="1075.12">State</tspan></text>
+<text id="node ID_8" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1703" y="1075.12">ST-100</tspan></text>
+</g>
+</g>
+<g id="node body_8">
+<g id="Node Title_8">
+<text id="Long Node Title occupying more than a single line_8" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1673" y="1102.3">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_9">
+<rect x="1984.25" y="1061.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1984.25" y="1061.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_13" clip-path="url(#clip12_2004_193)">
+<rect width="221" height="19" transform="translate(1985 1062)" fill="white"/>
+<g id="Decorator Header_9">
+<rect width="221" height="19" transform="translate(1985 1062)" fill="#DBE4F0"/>
+<text id="node type_9" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1999" y="1075.12">State</tspan></text>
+<text id="node ID_9" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2029" y="1075.12">ST-101</tspan></text>
+</g>
+</g>
+<g id="node body_9">
+<g id="Node Title_9">
+<text id="Long Node Title occupying more than a single line_9" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1999" y="1102.3">State 1</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_10">
+<rect x="2310.25" y="1061.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="2310.25" y="1061.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_14" clip-path="url(#clip13_2004_193)">
+<rect width="221" height="19" transform="translate(2311 1062)" fill="white"/>
+<g id="Decorator Header_10">
+<rect width="221" height="19" transform="translate(2311 1062)" fill="#DBE4F0"/>
+<text id="node type_10" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2325" y="1075.12">State</tspan></text>
+<text id="node ID_10" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2355" y="1075.12">ST-102</tspan></text>
+</g>
+</g>
+<g id="node body_10">
+<g id="Node Title_10">
+<text id="Long Node Title occupying more than a single line_10" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="2325" y="1102.3">State 2</tspan></text>
+</g>
+</g>
+</g>
+</g>
+<g id="horizontal node sequence connectors &#34;Above&#34;_2">
+<g id="Group_4">
+<path id="Vector_7" d="M1961.99 1054H1902.5C1898.08 1054 1894.5 1057.58 1894.5 1062V1068C1894.5 1072.42 1898.08 1076 1902.5 1076H1961.99C1966.41 1076 1969.99 1072.42 1969.99 1068V1062C1969.99 1057.58 1966.41 1054 1961.99 1054Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_0_1}_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="1900.5" y="1069.35">{ready_0_1}</tspan></text>
+</g>
+<g id="Group_5">
+<path id="Vector_8" d="M2287.96 1054H2228.5C2224.08 1054 2220.5 1057.58 2220.5 1062V1068C2220.5 1072.42 2224.08 1076 2228.5 1076H2287.96C2292.38 1076 2295.96 1072.42 2295.96 1068V1062C2295.96 1057.58 2292.38 1054 2287.96 1054Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_1_2}_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="2226.5" y="1069.85">{ready_1_2}</tspan></text>
+</g>
+<g id="Group_6">
+<path id="Vector_9" d="M2126.5 1137H2064.5C2060.08 1137 2056.5 1140.58 2056.5 1145V1151C2056.5 1155.42 2060.08 1159 2064.5 1159H2126.5C2130.92 1159 2134.5 1155.42 2134.5 1151V1145C2134.5 1140.58 2130.92 1137 2126.5 1137Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_2_0}_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="2062.5" y="1152.35">{ready_2_0}</tspan></text>
+</g>
+<path id="Vector_10" d="M1881.5 1085C1880.95 1085 1880.5 1085.45 1880.5 1086C1880.5 1086.55 1880.95 1087 1881.5 1087V1086V1085ZM1983.5 1086L1973.5 1080.23V1091.77L1983.5 1086ZM1881.5 1086V1087H1974.5V1086V1085H1881.5V1086Z" fill="#1D4ED8"/>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-101-22-2c-22transitions_to-22-2c-22st-102-22-5d-0_2">
+<path id="Vector_11" d="M2207.5 1085C2206.95 1085 2206.5 1085.45 2206.5 1086C2206.5 1086.55 2206.95 1087 2207.5 1087V1086V1085ZM2309.5 1086L2299.5 1080.23V1091.77L2309.5 1086ZM2207.5 1086V1087H2300.5V1086V1085H2207.5V1086Z" fill="#1D4ED8"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-102-22-2c-22transitions_to-22-2c-22st-100-22-5d-0_2">
+<path id="Vector_12" d="M2549.5 1127.5V1128.5H2550.5V1127.5L2549.5 1127.5ZM1641.5 1127.5L1640.5 1127.5L1640.5 1128.5H1641.5V1127.5ZM1657.5 1086L1647.5 1080.23V1091.77L1657.5 1086ZM2549.5 1086L2550.5 1086V1085H2549.5V1086ZM1641.5 1086V1085H1640.5L1640.5 1086L1641.5 1086ZM2549.5 1127.5V1126.5H1641.5V1127.5V1128.5H2549.5V1127.5ZM2533.5 1086V1087H2549.5V1086V1085H2533.5V1086ZM2549.5 1086L2548.5 1086L2548.5 1127.5L2549.5 1127.5L2550.5 1127.5L2550.5 1086L2549.5 1086ZM1641.5 1127.5L1642.5 1127.5L1642.5 1086L1641.5 1086L1640.5 1086L1640.5 1127.5L1641.5 1127.5ZM1641.5 1086V1087H1648.5V1086V1085H1641.5V1086Z" fill="#1D4ED8"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Horizontal Node Sequence Components">
+<rect width="1050" height="550" transform="translate(1608 1387)" fill="white"/>
+<g id="horizontal node sequence with back-connector above_2">
+<g id="horizontal node sequence_3">
+<g id="Node_11">
+<rect x="1658.75" y="1561.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1658.75" y="1561.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_15" clip-path="url(#clip14_2004_193)">
+<rect width="221" height="19" transform="translate(1659.5 1562.5)" fill="white"/>
+<g id="Decorator Header_11">
+<rect width="221" height="19" transform="translate(1659.5 1562.5)" fill="#DBE4F0"/>
+<text id="node type_11" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1673.5" y="1575.62">State</tspan></text>
+<text id="node ID_11" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1703.5" y="1575.62">ST-100</tspan></text>
+</g>
+</g>
+<g id="node body_11">
+<g id="Node Title_11">
+<text id="Long Node Title occupying more than a single line_11" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1673.5" y="1602.8">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_12">
+<rect x="1984.75" y="1561.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1984.75" y="1561.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_16" clip-path="url(#clip15_2004_193)">
+<rect width="221" height="19" transform="translate(1985.5 1562.5)" fill="white"/>
+<g id="Decorator Header_12">
+<rect width="221" height="19" transform="translate(1985.5 1562.5)" fill="#DBE4F0"/>
+<text id="node type_12" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1999.5" y="1575.62">State</tspan></text>
+<text id="node ID_12" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2029.5" y="1575.62">ST-101</tspan></text>
+</g>
+</g>
+<g id="node body_12">
+<g id="Node Title_12">
+<text id="Long Node Title occupying more than a single line_12" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1999.5" y="1602.8">State 1</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_13">
+<rect x="2310.75" y="1561.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="2310.75" y="1561.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_17" clip-path="url(#clip16_2004_193)">
+<rect width="221" height="19" transform="translate(2311.5 1562.5)" fill="white"/>
+<g id="Decorator Header_13">
+<rect width="221" height="19" transform="translate(2311.5 1562.5)" fill="#DBE4F0"/>
+<text id="node type_13" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2325.5" y="1575.62">State</tspan></text>
+<text id="node ID_13" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2355.5" y="1575.62">ST-102</tspan></text>
+</g>
+</g>
+<g id="node body_13">
+<g id="Node Title_13">
+<text id="Long Node Title occupying more than a single line_13" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="2325.5" y="1602.8">State 2</tspan></text>
+</g>
+</g>
+</g>
+</g>
+<g id="horizontal node sequence connectors &#34;Above&#34;_3">
+<g id="Group_7">
+<path id="Vector_13" d="M1962.49 1556H1903C1898.58 1556 1895 1559.58 1895 1564V1570C1895 1574.42 1898.58 1578 1903 1578H1962.49C1966.91 1578 1970.49 1574.42 1970.49 1570V1564C1970.49 1559.58 1966.91 1556 1962.49 1556Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_0_1}_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="1901" y="1571.35">{ready_0_1}</tspan></text>
+</g>
+<g id="Group_8">
+<path id="Vector_14" d="M2288.46 1556H2229C2224.58 1556 2221 1559.58 2221 1564V1570C2221 1574.42 2224.58 1578 2229 1578H2288.46C2292.88 1578 2296.46 1574.42 2296.46 1570V1564C2296.46 1559.58 2292.88 1556 2288.46 1556Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_1_2}_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="2227" y="1571.85">{ready_1_2}</tspan></text>
+</g>
+<g id="Group_9">
+<path id="Vector_15" d="M2127 1506H2065C2060.58 1506 2057 1509.58 2057 1514V1520C2057 1524.42 2060.58 1528 2065 1528H2127C2131.42 1528 2135 1524.42 2135 1520V1514C2135 1509.58 2131.42 1506 2127 1506Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_2_0}_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="2063" y="1521.35">{ready_2_0}</tspan></text>
+</g>
+<path id="Vector_16" d="M1882 1587C1881.45 1587 1881 1587.45 1881 1588C1881 1588.55 1881.45 1589 1882 1589V1588V1587ZM1984 1588L1974 1582.23V1593.77L1984 1588ZM1882 1588V1589H1975V1588V1587H1882V1588Z" fill="#1D4ED8"/>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-101-22-2c-22transitions_to-22-2c-22st-102-22-5d-0_3">
+<path id="Vector_17" d="M2208 1587C2207.45 1587 2207 1587.45 2207 1588C2207 1588.55 2207.45 1589 2208 1589V1588V1587ZM2310 1588L2300 1582.23V1593.77L2310 1588ZM2208 1588V1589H2301V1588V1587H2208V1588Z" fill="#1D4ED8"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-102-22-2c-22transitions_to-22-2c-22st-100-22-5d-0_3">
+<path id="Vector_18" d="M2550 1538H2551V1537H2550V1538ZM1642 1538V1537H1641V1538H1642ZM1658 1588L1648 1582.23V1593.77L1658 1588ZM2550 1588V1589H2551V1588H2550ZM1642 1588H1641V1589H1642V1588ZM2550 1538V1537H1642V1538V1539H2550V1538ZM2534 1588V1589H2550V1588V1587H2534V1588ZM2550 1588H2551V1538H2550H2549V1588H2550ZM1642 1538H1641V1588H1642H1643V1538H1642ZM1642 1588V1589H1649V1588V1587H1642V1588Z" fill="#1D4ED8"/>
+</g>
+</g>
+</g>
+<g id="horizontal node sequence with back-connector below_2">
+<g id="horizontal node sequence_4">
+<g id="Node_14">
+<rect x="1658.75" y="1757.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1658.75" y="1757.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_18" clip-path="url(#clip17_2004_193)">
+<rect width="221" height="19" transform="translate(1659.5 1758.5)" fill="white"/>
+<g id="Decorator Header_14">
+<rect width="221" height="19" transform="translate(1659.5 1758.5)" fill="#DBE4F0"/>
+<text id="node type_14" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1673.5" y="1771.62">State</tspan></text>
+<text id="node ID_14" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1703.5" y="1771.62">ST-100</tspan></text>
+</g>
+</g>
+<g id="node body_14">
+<g id="Node Title_14">
+<text id="Long Node Title occupying more than a single line_14" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1673.5" y="1798.8">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_15">
+<rect x="1984.75" y="1757.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="1984.75" y="1757.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_19" clip-path="url(#clip18_2004_193)">
+<rect width="221" height="19" transform="translate(1985.5 1758.5)" fill="white"/>
+<g id="Decorator Header_15">
+<rect width="221" height="19" transform="translate(1985.5 1758.5)" fill="#DBE4F0"/>
+<text id="node type_15" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1999.5" y="1771.62">State</tspan></text>
+<text id="node ID_15" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2029.5" y="1771.62">ST-101</tspan></text>
+</g>
+</g>
+<g id="node body_15">
+<g id="Node Title_15">
+<text id="Long Node Title occupying more than a single line_15" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1999.5" y="1798.8">State 1</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node_16">
+<rect x="2310.75" y="1757.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="2310.75" y="1757.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_20" clip-path="url(#clip19_2004_193)">
+<rect width="221" height="19" transform="translate(2311.5 1758.5)" fill="white"/>
+<g id="Decorator Header_16">
+<rect width="221" height="19" transform="translate(2311.5 1758.5)" fill="#DBE4F0"/>
+<text id="node type_16" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2325.5" y="1771.62">State</tspan></text>
+<text id="node ID_16" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="2355.5" y="1771.62">ST-102</tspan></text>
+</g>
+</g>
+<g id="node body_16">
+<g id="Node Title_16">
+<text id="Long Node Title occupying more than a single line_16" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="2325.5" y="1798.8">State 2</tspan></text>
+</g>
+</g>
+</g>
+</g>
+<g id="horizontal node sequence connectors &#34;Above&#34;_4">
+<g id="Group_10">
+<path id="Vector_19" d="M1962.49 1750.5H1903C1898.58 1750.5 1895 1754.08 1895 1758.5V1764.5C1895 1768.92 1898.58 1772.5 1903 1772.5H1962.49C1966.91 1772.5 1970.49 1768.92 1970.49 1764.5V1758.5C1970.49 1754.08 1966.91 1750.5 1962.49 1750.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_0_1}_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="1901" y="1765.85">{ready_0_1}</tspan></text>
+</g>
+<g id="Group_11">
+<path id="Vector_20" d="M2288.46 1750.5H2229C2224.58 1750.5 2221 1754.08 2221 1758.5V1764.5C2221 1768.92 2224.58 1772.5 2229 1772.5H2288.46C2292.88 1772.5 2296.46 1768.92 2296.46 1764.5V1758.5C2296.46 1754.08 2292.88 1750.5 2288.46 1750.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_1_2}_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="2227" y="1766.35">{ready_1_2}</tspan></text>
+</g>
+<g id="Group_12">
+<path id="Vector_21" d="M2127 1833.5H2065C2060.58 1833.5 2057 1837.08 2057 1841.5V1847.5C2057 1851.92 2060.58 1855.5 2065 1855.5H2127C2131.42 1855.5 2135 1851.92 2135 1847.5V1841.5C2135 1837.08 2131.42 1833.5 2127 1833.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_2_0}_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="2063" y="1848.85">{ready_2_0}</tspan></text>
+</g>
+<path id="Vector_22" d="M1882 1781.5C1881.45 1781.5 1881 1781.95 1881 1782.5C1881 1783.05 1881.45 1783.5 1882 1783.5V1782.5V1781.5ZM1984 1782.5L1974 1776.73V1788.27L1984 1782.5ZM1882 1782.5V1783.5H1975V1782.5V1781.5H1882V1782.5Z" fill="#1D4ED8"/>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-101-22-2c-22transitions_to-22-2c-22st-102-22-5d-0_4">
+<path id="Vector_23" d="M2208 1781.5C2207.45 1781.5 2207 1781.95 2207 1782.5C2207 1783.05 2207.45 1783.5 2208 1783.5V1782.5V1781.5ZM2310 1782.5L2300 1776.73V1788.27L2310 1782.5ZM2208 1782.5V1783.5H2301V1782.5V1781.5H2208V1782.5Z" fill="#1D4ED8"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-102-22-2c-22transitions_to-22-2c-22st-100-22-5d-0_4">
+<path id="Vector_24" d="M2550 1824V1825H2551V1824L2550 1824ZM1642 1824L1641 1824L1641 1825H1642V1824ZM1658 1782.5L1648 1776.73V1788.27L1658 1782.5ZM2550 1782.5L2551 1782.5V1781.5H2550V1782.5ZM1642 1782.5V1781.5H1641L1641 1782.5L1642 1782.5ZM2550 1824V1823H1642V1824V1825H2550V1824ZM2534 1782.5V1783.5H2550V1782.5V1781.5H2534V1782.5ZM2550 1782.5L2549 1782.5L2549 1824L2550 1824L2551 1824L2551 1782.5L2550 1782.5ZM1642 1824L1643 1824L1643 1782.5L1642 1782.5L1641 1782.5L1641 1824L1642 1824ZM1642 1782.5V1783.5H1649V1782.5V1781.5H1642V1782.5Z" fill="#1D4ED8"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Current Implementation">
+<path d="M140 142C140 140.895 140.895 140 142 140H1370C1371.1 140 1372 140.895 1372 142V1473.5C1372 1474.6 1371.1 1475.5 1370 1475.5H142C140.895 1475.5 140 1474.6 140 1473.5V142Z" fill="#444444"/>
+<path d="M142 140V141H1370V140V139H142V140ZM1372 142H1371V1473.5H1372H1373V142H1372ZM1370 1475.5V1474.5H142V1475.5V1476.5H1370V1475.5ZM140 1473.5H141V142H140H139V1473.5H140ZM142 1475.5V1474.5C141.448 1474.5 141 1474.05 141 1473.5H140H139C139 1475.16 140.343 1476.5 142 1476.5V1475.5ZM1372 1473.5H1371C1371 1474.05 1370.55 1474.5 1370 1474.5V1475.5V1476.5C1371.66 1476.5 1373 1475.16 1373 1473.5H1372ZM1370 140V141C1370.55 141 1371 141.448 1371 142H1372H1373C1373 140.343 1371.66 139 1370 139V140ZM142 140V139C140.343 139 139 140.343 139 142H140H141C141 141.448 141.448 141 142 141V140Z" fill="white" fill-opacity="0.1"/>
+<g id="Current Implementation: Failed Routing">
+<rect width="784" height="514.5" transform="translate(240 240)" fill="white"/>
+<g id="Group_13">
+<g id="Group_14">
+<path id="Vector_25" d="M498 256H270C262.268 256 256 262.268 256 270V346C256 353.732 262.268 360 270 360H498C505.732 360 512 353.732 512 346V270C512 262.268 505.732 256 498 256Z" fill="#F4F7FB"/>
+<path id="Vector_26" d="M257.5 275V270C257.5 261.667 261.667 257.5 270 257.5H498C506.333 257.5 510.5 261.667 510.5 270V275H257.5Z" fill="#DBE4F0"/>
+<path id="Vector_27" d="M498 256.75H270C262.682 256.75 256.75 262.682 256.75 270V346C256.75 353.318 262.682 359.25 270 359.25H498C505.318 359.25 511.25 353.318 511.25 346V270C511.25 262.682 505.318 256.75 498 256.75Z" stroke="#AEBDCE" stroke-width="1.5"/>
+</g>
+<g id="Group_15">
+<path id="Vector_28" d="M994 388H270C262.268 388 256 394.268 256 402V724.5C256 732.232 262.268 738.5 270 738.5H994C1001.73 738.5 1008 732.232 1008 724.5V402C1008 394.268 1001.73 388 994 388Z" fill="#F4F7FB"/>
+<path id="Vector_29" d="M257.5 407V402C257.5 393.667 261.667 389.5 270 389.5H994C1002.33 389.5 1006.5 393.667 1006.5 402V407H257.5Z" fill="#DBE4F0"/>
+<path id="Vector_30" d="M994 388.75H270C262.682 388.75 256.75 394.682 256.75 402V724.5C256.75 731.818 262.682 737.75 270 737.75H994C1001.32 737.75 1007.25 731.818 1007.25 724.5V402C1007.25 394.682 1001.32 388.75 994 388.75Z" stroke="#AEBDCE" stroke-width="1.5"/>
+</g>
+</g>
+<g id="Group_16">
+<g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-100-22-5d">
+<path id="Vector_31" d="M482 291.75H286C278.682 291.75 272.75 297.682 272.75 305V330C272.75 337.318 278.682 343.25 286 343.25H482C489.318 343.25 495.25 337.318 495.25 330V305C495.25 297.682 489.318 291.75 482 291.75Z" fill="white"/>
+<path id="Vector_32" d="M273.5 311.5V305C273.5 296.667 277.667 292.5 286 292.5H482C490.333 292.5 494.5 296.667 494.5 305V311.5H273.5Z" fill="#DBE4F0"/>
+<path id="Vector_33" d="M482 291.75H286C278.682 291.75 272.75 297.682 272.75 305V330C272.75 337.318 278.682 343.25 286 343.25H482C489.318 343.25 495.25 337.318 495.25 330V305C495.25 297.682 489.318 291.75 482 291.75Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22focal-22-2c-22c-100-22-5d">
+<path id="Vector_34" d="M482 423.75H286C278.682 423.75 272.75 429.682 272.75 437V462C272.75 469.318 278.682 475.25 286 475.25H482C489.318 475.25 495.25 469.318 495.25 462V437C495.25 429.682 489.318 423.75 482 423.75Z" fill="white"/>
+<path id="Vector_35" d="M273.5 443.5V437C273.5 428.667 277.667 424.5 286 424.5H482C490.333 424.5 494.5 428.667 494.5 437V443.5H273.5Z" fill="#DBE4F0"/>
+<path id="Vector_36" d="M482 423.75H286C278.682 423.75 272.75 429.682 272.75 437V462C272.75 469.318 278.682 475.25 286 475.25H482C489.318 475.25 495.25 469.318 495.25 462V437C495.25 429.682 489.318 423.75 482 423.75Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22sequence-22-2c-22scope-3ac-100-3asequence-3asecondary-22-2c-22st-100-22-5d">
+<path id="Vector_37" d="M482 516.25H286C278.682 516.25 272.75 522.182 272.75 529.5V554.5C272.75 561.818 278.682 567.75 286 567.75H482C489.318 567.75 495.25 561.818 495.25 554.5V529.5C495.25 522.182 489.318 516.25 482 516.25Z" fill="white"/>
+<path id="Vector_38" d="M273.5 536V529.5C273.5 521.167 277.667 517 286 517H482C490.333 517 494.5 521.167 494.5 529.5V536H273.5Z" fill="#DBE4F0"/>
+<path id="Vector_39" d="M482 516.25H286C278.682 516.25 272.75 522.182 272.75 529.5V554.5C272.75 561.818 278.682 567.75 286 567.75H482C489.318 567.75 495.25 561.818 495.25 554.5V529.5C495.25 522.182 489.318 516.25 482 516.25Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22sequence-22-2c-22scope-3ac-100-3asequence-3asecondary-22-2c-22st-101-22-5d">
+<path id="Vector_40" d="M482 593.25H286C278.682 593.25 272.75 599.182 272.75 606.5V631.5C272.75 638.818 278.682 644.75 286 644.75H482C489.318 644.75 495.25 638.818 495.25 631.5V606.5C495.25 599.182 489.318 593.25 482 593.25Z" fill="white"/>
+<path id="Vector_41" d="M273.5 613V606.5C273.5 598.167 277.667 594 286 594H482C490.333 594 494.5 598.167 494.5 606.5V613H273.5Z" fill="#DBE4F0"/>
+<path id="Vector_42" d="M482 593.25H286C278.682 593.25 272.75 599.182 272.75 606.5V631.5C272.75 638.818 278.682 644.75 286 644.75H482C489.318 644.75 495.25 638.818 495.25 631.5V606.5C495.25 599.182 489.318 593.25 482 593.25Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22sequence-22-2c-22scope-3ac-100-3asequence-3asecondary-22-2c-22st-102-22-5d">
+<path id="Vector_43" d="M482 670.25H286C278.682 670.25 272.75 676.182 272.75 683.5V708.5C272.75 715.818 278.682 721.75 286 721.75H482C489.318 721.75 495.25 715.818 495.25 708.5V683.5C495.25 676.182 489.318 670.25 482 670.25Z" fill="white"/>
+<path id="Vector_44" d="M273.5 690V683.5C273.5 675.167 277.667 671 286 671H482C490.333 671 494.5 675.167 494.5 683.5V690H273.5Z" fill="#DBE4F0"/>
+<path id="Vector_45" d="M482 670.25H286C278.682 670.25 272.75 676.182 272.75 683.5V708.5C272.75 715.818 278.682 721.75 286 721.75H482C489.318 721.75 495.25 715.818 495.25 708.5V683.5C495.25 676.182 489.318 670.25 482 670.25Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+</g>
+<g id="Group_17">
+<g id="Group_18">
+<text id="Component hierarchy &#194;&#183; Controller" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="270" y="268.625">Component hierarchy &#xb7; Controller</tspan></text>
+</g>
+<g id="Group_19">
+<g id="Group_20">
+<text id="Component" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="305.25">Component</tspan></text>
+<text id="C-100" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="346.08" y="305.25">C-100</tspan></text>
+</g>
+<g id="Group_21">
+<g id="Group_22">
+<text id="Controller" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="332.1">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_23">
+<text id="Component scope &#194;&#183; Controller" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="270" y="400.625">Component scope &#xb7; Controller</tspan></text>
+</g>
+<g id="Group_24">
+<g id="Group_25">
+<text id="Component_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="437.25">Component</tspan></text>
+<text id="C-100_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="346.08" y="437.25">C-100</tspan></text>
+</g>
+<g id="Group_26">
+<g id="Group_27">
+<text id="Controller_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="464.1">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_28">
+<g id="Group_29">
+<text id="State" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="529.75">State</tspan></text>
+<text id="ST-100" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="317.175" y="529.75">ST-100</tspan></text>
+</g>
+<g id="Group_30">
+<g id="Group_31">
+<text id="State 0" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="556.6">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_32">
+<g id="Group_33">
+<text id="State_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="606.75">State</tspan></text>
+<text id="ST-101" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="317.175" y="606.75">ST-101</tspan></text>
+</g>
+<g id="Group_34">
+<g id="Group_35">
+<text id="State 1" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="633.6">State 1</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_36">
+<g id="Group_37">
+<text id="State_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="683.75">State</tspan></text>
+<text id="ST-102" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="317.175" y="683.75">ST-102</tspan></text>
+</g>
+<g id="Group_38">
+<g id="Group_39">
+<text id="State 2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="710.6">State 2</tspan></text>
+</g>
+</g>
+</g>
+</g>
+<g id="Group_40">
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-100-22-2c-22transitions_to-22-2c-22st-101-22-5d-0">
+<path id="Vector_46" d="M496 542H512V275H256V619H272" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-101-22-2c-22transitions_to-22-2c-22st-102-22-5d-0_5">
+<path id="Vector_47" d="M496 619H512V738.5H256V696H272" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-102-22-2c-22transitions_to-22-2c-22st-100-22-5d-0_5">
+<path id="Vector_48" d="M496 696H384V542H272" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+</g>
+<g id="Group_41">
+<g id="Group_42">
+<path id="Vector_49" d="M335.492 436H276C271.582 436 268 439.582 268 444V450C268 454.418 271.582 458 276 458H335.492C339.91 458 343.492 454.418 343.492 450V444C343.492 439.582 339.91 436 335.492 436Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_0_1}_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="274" y="446.35">{ready_0_1}</tspan></text>
+</g>
+<g id="Group_43">
+<path id="Vector_50" d="M413.731 704.5H354.269C349.85 704.5 346.269 708.082 346.269 712.5V718.5C346.269 722.918 349.85 726.5 354.269 726.5H413.731C418.149 726.5 421.731 722.918 421.731 718.5V712.5C421.731 708.082 418.149 704.5 413.731 704.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_1_2}_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="352.269" y="714.85">{ready_1_2}</tspan></text>
+</g>
+<g id="Group_44">
+<path id="Vector_51" d="M466 608H404C399.582 608 396 611.582 396 616V622C396 626.418 399.582 630 404 630H466C470.418 630 474 626.418 474 622V616C474 611.582 470.418 608 466 608Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_2_0}_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="402" y="618.35">{ready_2_0}</tspan></text>
+</g>
+</g>
+</g>
+<g id="For Reference: diamond.svg succeeds">
+<rect width="1032" height="437.5" transform="translate(240 938)" fill="white"/>
+<g id="Group_45">
+<g id="Group_46">
+<path id="Vector_52" d="M498 954H270C262.268 954 256 960.268 256 968V1044C256 1051.73 262.268 1058 270 1058H498C505.732 1058 512 1051.73 512 1044V968C512 960.268 505.732 954 498 954Z" fill="#F4F7FB"/>
+<path id="Vector_53" d="M257.5 973V968C257.5 959.667 261.667 955.5 270 955.5H498C506.333 955.5 510.5 959.667 510.5 968V973H257.5Z" fill="#DBE4F0"/>
+<path id="Vector_54" d="M498 954.75H270C262.682 954.75 256.75 960.682 256.75 968V1044C256.75 1051.32 262.682 1057.25 270 1057.25H498C505.318 1057.25 511.25 1051.32 511.25 1044V968C511.25 960.682 505.318 954.75 498 954.75Z" stroke="#AEBDCE" stroke-width="1.5"/>
+</g>
+<g id="Group_47">
+<path id="Vector_55" d="M1242 1086H270C262.268 1086 256 1092.27 256 1100V1345.5C256 1353.23 262.268 1359.5 270 1359.5H1242C1249.73 1359.5 1256 1353.23 1256 1345.5V1100C1256 1092.27 1249.73 1086 1242 1086Z" fill="#F4F7FB"/>
+<path id="Vector_56" d="M257.5 1105V1100C257.5 1091.67 261.667 1087.5 270 1087.5H1242C1250.33 1087.5 1254.5 1091.67 1254.5 1100V1105H257.5Z" fill="#DBE4F0"/>
+<path id="Vector_57" d="M1242 1086.75H270C262.682 1086.75 256.75 1092.68 256.75 1100V1345.5C256.75 1352.82 262.682 1358.75 270 1358.75H1242C1249.32 1358.75 1255.25 1352.82 1255.25 1345.5V1100C1255.25 1092.68 1249.32 1086.75 1242 1086.75Z" stroke="#AEBDCE" stroke-width="1.5"/>
+</g>
+</g>
+<g id="Group_48">
+<g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-100-22-5d_2">
+<path id="Vector_58" d="M482 989.75H286C278.682 989.75 272.75 995.682 272.75 1003V1028C272.75 1035.32 278.682 1041.25 286 1041.25H482C489.318 1041.25 495.25 1035.32 495.25 1028V1003C495.25 995.682 489.318 989.75 482 989.75Z" fill="white"/>
+<path id="Vector_59" d="M273.5 1009.5V1003C273.5 994.667 277.667 990.5 286 990.5H482C490.333 990.5 494.5 994.667 494.5 1003V1009.5H273.5Z" fill="#DBE4F0"/>
+<path id="Vector_60" d="M482 989.75H286C278.682 989.75 272.75 995.682 272.75 1003V1028C272.75 1035.32 278.682 1041.25 286 1041.25H482C489.318 1041.25 495.25 1035.32 495.25 1028V1003C495.25 995.682 489.318 989.75 482 989.75Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22focal-22-2c-22c-100-22-5d_2">
+<path id="Vector_61" d="M482 1121.75H286C278.682 1121.75 272.75 1127.68 272.75 1135V1160C272.75 1167.32 278.682 1173.25 286 1173.25H482C489.318 1173.25 495.25 1167.32 495.25 1160V1135C495.25 1127.68 489.318 1121.75 482 1121.75Z" fill="white"/>
+<path id="Vector_62" d="M273.5 1141.5V1135C273.5 1126.67 277.667 1122.5 286 1122.5H482C490.333 1122.5 494.5 1126.67 494.5 1135V1141.5H273.5Z" fill="#DBE4F0"/>
+<path id="Vector_63" d="M482 1121.75H286C278.682 1121.75 272.75 1127.68 272.75 1135V1160C272.75 1167.32 278.682 1173.25 286 1173.25H482C489.318 1173.25 495.25 1167.32 495.25 1160V1135C495.25 1127.68 489.318 1121.75 482 1121.75Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22sequence-22-2c-22scope-3ac-100-3asequence-3asecondary-22-2c-22st-100-22-5d_2">
+<path id="Vector_64" d="M482 1214.25H286C278.682 1214.25 272.75 1220.18 272.75 1227.5V1252.5C272.75 1259.82 278.682 1265.75 286 1265.75H482C489.318 1265.75 495.25 1259.82 495.25 1252.5V1227.5C495.25 1220.18 489.318 1214.25 482 1214.25Z" fill="white"/>
+<path id="Vector_65" d="M273.5 1234V1227.5C273.5 1219.17 277.667 1215 286 1215H482C490.333 1215 494.5 1219.17 494.5 1227.5V1234H273.5Z" fill="#DBE4F0"/>
+<path id="Vector_66" d="M482 1214.25H286C278.682 1214.25 272.75 1220.18 272.75 1227.5V1252.5C272.75 1259.82 278.682 1265.75 286 1265.75H482C489.318 1265.75 495.25 1259.82 495.25 1252.5V1227.5C495.25 1220.18 489.318 1214.25 482 1214.25Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22sequence-22-2c-22scope-3ac-100-3asequence-3asecondary-22-2c-22st-101-22-5d_2">
+<path id="Vector_67" d="M808.216 1214.25H612.216C604.898 1214.25 598.966 1220.18 598.966 1227.5V1252.5C598.966 1259.82 604.898 1265.75 612.216 1265.75H808.216C815.534 1265.75 821.466 1259.82 821.466 1252.5V1227.5C821.466 1220.18 815.534 1214.25 808.216 1214.25Z" fill="white"/>
+<path id="Vector_68" d="M599.716 1234V1227.5C599.716 1219.17 603.882 1215 612.216 1215H808.216C816.549 1215 820.716 1219.17 820.716 1227.5V1234H599.716Z" fill="#DBE4F0"/>
+<path id="Vector_69" d="M808.216 1214.25H612.216C604.898 1214.25 598.966 1220.18 598.966 1227.5V1252.5C598.966 1259.82 604.898 1265.75 612.216 1265.75H808.216C815.534 1265.75 821.466 1259.82 821.466 1252.5V1227.5C821.466 1220.18 815.534 1214.25 808.216 1214.25Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22sequence-22-2c-22scope-3ac-100-3asequence-3asecondary-22-2c-22st-102-22-5d_2">
+<path id="Vector_70" d="M808.216 1291.25H612.216C604.898 1291.25 598.966 1297.18 598.966 1304.5V1329.5C598.966 1336.82 604.898 1342.75 612.216 1342.75H808.216C815.534 1342.75 821.466 1336.82 821.466 1329.5V1304.5C821.466 1297.18 815.534 1291.25 808.216 1291.25Z" fill="white"/>
+<path id="Vector_71" d="M599.716 1311V1304.5C599.716 1296.17 603.882 1292 612.216 1292H808.216C816.549 1292 820.716 1296.17 820.716 1304.5V1311H599.716Z" fill="#DBE4F0"/>
+<path id="Vector_72" d="M808.216 1291.25H612.216C604.898 1291.25 598.966 1297.18 598.966 1304.5V1329.5C598.966 1336.82 604.898 1342.75 612.216 1342.75H808.216C815.534 1342.75 821.466 1336.82 821.466 1329.5V1304.5C821.466 1297.18 815.534 1291.25 808.216 1291.25Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22sequence-22-2c-22scope-3ac-100-3asequence-3asecondary-22-2c-22st-103-22-5d">
+<path id="Vector_73" d="M1134.43 1214.25H938.432C931.114 1214.25 925.182 1220.18 925.182 1227.5V1252.5C925.182 1259.82 931.114 1265.75 938.432 1265.75H1134.43C1141.75 1265.75 1147.68 1259.82 1147.68 1252.5V1227.5C1147.68 1220.18 1141.75 1214.25 1134.43 1214.25Z" fill="white"/>
+<path id="Vector_74" d="M925.932 1234V1227.5C925.932 1219.17 930.098 1215 938.432 1215H1134.43C1142.76 1215 1146.93 1219.17 1146.93 1227.5V1234H925.932Z" fill="#DBE4F0"/>
+<path id="Vector_75" d="M1134.43 1214.25H938.432C931.114 1214.25 925.182 1220.18 925.182 1227.5V1252.5C925.182 1259.82 931.114 1265.75 938.432 1265.75H1134.43C1141.75 1265.75 1147.68 1259.82 1147.68 1252.5V1227.5C1147.68 1220.18 1141.75 1214.25 1134.43 1214.25Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+</g>
+<g id="Group_49">
+<g id="Group_50">
+<text id="Component hierarchy &#194;&#183; Controller_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="270" y="966.625">Component hierarchy &#xb7; Controller</tspan></text>
+</g>
+<g id="Group_51">
+<g id="Group_52">
+<text id="Component_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="1003.25">Component</tspan></text>
+<text id="C-100_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="346.08" y="1003.25">C-100</tspan></text>
+</g>
+<g id="Group_53">
+<g id="Group_54">
+<text id="Controller_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="1030.1">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_55">
+<text id="Component scope &#194;&#183; Controller_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="270" y="1098.62">Component scope &#xb7; Controller</tspan></text>
+</g>
+<g id="Group_56">
+<g id="Group_57">
+<text id="Component_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="1135.25">Component</tspan></text>
+<text id="C-100_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="346.08" y="1135.25">C-100</tspan></text>
+</g>
+<g id="Group_58">
+<g id="Group_59">
+<text id="Controller_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="1162.1">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_60">
+<g id="Group_61">
+<text id="State_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="1227.75">State</tspan></text>
+<text id="ST-100_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="317.175" y="1227.75">ST-100</tspan></text>
+</g>
+<g id="Group_62">
+<g id="Group_63">
+<text id="State 0_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="287.5" y="1254.6">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_64">
+<g id="Group_65">
+<text id="State_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="613.716" y="1227.75">State</tspan></text>
+<text id="ST-101_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="643.391" y="1227.75">ST-101</tspan></text>
+</g>
+<g id="Group_66">
+<g id="Group_67">
+<text id="State 1_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="613.716" y="1254.6">State 1</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_68">
+<g id="Group_69">
+<text id="State_6" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="613.716" y="1304.75">State</tspan></text>
+<text id="ST-102_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="643.391" y="1304.75">ST-102</tspan></text>
+</g>
+<g id="Group_70">
+<g id="Group_71">
+<text id="State 2_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="613.716" y="1331.6">State 2</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_72">
+<g id="Group_73">
+<text id="State_7" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="939.932" y="1227.75">State</tspan></text>
+<text id="ST-103" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="969.606" y="1227.75">ST-103</tspan></text>
+</g>
+<g id="Group_74">
+<g id="Group_75">
+<text id="State 3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="939.932" y="1254.6">State 3</tspan></text>
+</g>
+</g>
+</g>
+</g>
+<g id="Group_76">
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-100-22-2c-22transitions_to-22-2c-22st-101-22-5d-0_2">
+<path id="Vector_76" d="M496 1240H598.216" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-100-22-2c-22transitions_to-22-2c-22st-102-22-5d-0">
+<path id="Vector_77" d="M496 1240H547.108V1317H598.216" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-101-22-2c-22transitions_to-22-2c-22st-103-22-5d-0">
+<path id="Vector_78" d="M822.216 1240H924.432" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-102-22-2c-22transitions_to-22-2c-22st-103-22-5d-0">
+<path id="Vector_79" d="M822.216 1317H873.324V1240H924.432" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+</g>
+<g id="Group_77">
+<g id="Group_78">
+<path id="Vector_80" d="M576.854 1206H517.362C512.944 1206 509.362 1209.58 509.362 1214V1220C509.362 1224.42 512.944 1228 517.362 1228H576.854C581.273 1228 584.854 1224.42 584.854 1220V1214C584.854 1209.58 581.273 1206 576.854 1206Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_0_1}_6" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="515.362" y="1216.35">{ready_0_1}</tspan></text>
+</g>
+<g id="Group_79">
+<path id="Vector_81" d="M629.03 1267.5H567.108C562.69 1267.5 559.108 1271.08 559.108 1275.5V1281.5C559.108 1285.92 562.69 1289.5 567.108 1289.5H629.03C633.449 1289.5 637.03 1285.92 637.03 1281.5V1275.5C637.03 1271.08 633.449 1267.5 629.03 1267.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_0_2}" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="565.108" y="1277.85">{ready_0_2}</tspan></text>
+</g>
+<g id="Group_80">
+<path id="Vector_82" d="M903.179 1206H843.471C839.052 1206 835.471 1209.58 835.471 1214V1220C835.471 1224.42 839.052 1228 843.471 1228H903.179C907.597 1228 911.179 1224.42 911.179 1220V1214C911.179 1209.58 907.597 1206 903.179 1206Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_1_3}" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="841.471" y="1216.35">{ready_1_3}</tspan></text>
+</g>
+<g id="Group_81">
+<path id="Vector_83" d="M955.54 1267.5H893.324C888.906 1267.5 885.324 1271.08 885.324 1275.5V1281.5C885.324 1285.92 888.906 1289.5 893.324 1289.5H955.54C959.959 1289.5 963.54 1285.92 963.54 1281.5V1275.5C963.54 1271.08 959.959 1267.5 955.54 1267.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="{ready_2_3}" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="891.324" y="1277.85">{ready_2_3}</tspan></text>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Rectangle">
+<rect x="1611" y="246" width="132.617" height="30" rx="3" fill="white"/>
+<rect x="1611.5" y="246.5" width="131.617" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Back-Connector Above_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="1617" y="263.5">Back-Connector Above</tspan></text>
+<g id="Rectangle_2">
+<rect x="1611" y="802" width="131.167" height="30" rx="3" fill="white"/>
+<rect x="1611.5" y="802.5" width="130.167" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Back-Connector Below_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="1617" y="819.5">Back-Connector Below</tspan></text>
+<g id="Rectangle_3">
+<rect x="1611" y="1390" width="220.567" height="30" rx="3" fill="white"/>
+<rect x="1611.5" y="1390.5" width="219.567" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Horizontal Node Sequence Components_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="1617" y="1407.5">Horizontal Node Sequence Components</tspan></text>
+<g id="Rectangle_4">
+<rect x="243" y="243" width="214.733" height="30" rx="3" fill="white"/>
+<rect x="243.5" y="243.5" width="213.733" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Current Implementation: Failed Routing_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="249" y="260.5">Current Implementation: Failed Routing</tspan></text>
+<g id="Rectangle_5">
+<rect x="243" y="941" width="209.983" height="30" rx="3" fill="white"/>
+<rect x="243.5" y="941.5" width="208.983" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="For Reference: diamond.svg succeeds_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="249" y="958.5">For Reference: diamond.svg succeeds</tspan></text>
+<g id="Rectangle_6">
+<rect x="1511" y="146" width="278.417" height="30" rx="3" fill="#444444"/>
+<rect x="1511.5" y="146.5" width="277.417" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Intended Design: Linear Sequence, Horizontal Loop_2" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="1517" y="163.5">Intended Design: Linear Sequence, Horizontal Loop</tspan></text>
+<g id="Rectangle_7">
+<rect x="143" y="143" width="134.717" height="30" rx="3" fill="#444444"/>
+<rect x="143.5" y="143.5" width="133.717" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Current Implementation_2" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="149" y="160.5">Current Implementation</tspan></text>
+<g id="Rectangle_8">
+<rect x="40" y="4" width="206.367" height="30" rx="3" fill="#444444"/>
+<rect x="40.5" y="4.5" width="205.367" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Stage 6 Cycle Return Transition Issue_2" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="46" y="21.5">Stage 6 Cycle Return Transition Issue</tspan></text>
+<g id="Rectangle_9">
+<rect x="1611" y="246" width="132.617" height="30" rx="3" fill="white"/>
+<rect x="1611.5" y="246.5" width="131.617" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Back-Connector Above_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="1617" y="263.5">Back-Connector Above</tspan></text>
+<g id="Rectangle_10">
+<rect x="1611" y="802" width="131.167" height="30" rx="3" fill="white"/>
+<rect x="1611.5" y="802.5" width="130.167" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Back-Connector Below_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="1617" y="819.5">Back-Connector Below</tspan></text>
+<g id="Rectangle_11">
+<rect x="1611" y="1390" width="220.567" height="30" rx="3" fill="white"/>
+<rect x="1611.5" y="1390.5" width="219.567" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Horizontal Node Sequence Components_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="1617" y="1407.5">Horizontal Node Sequence Components</tspan></text>
+<g id="Rectangle_12">
+<rect x="243" y="243" width="214.733" height="30" rx="3" fill="white"/>
+<rect x="243.5" y="243.5" width="213.733" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Current Implementation: Failed Routing_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="249" y="260.5">Current Implementation: Failed Routing</tspan></text>
+<g id="Rectangle_13">
+<rect x="243" y="941" width="209.983" height="30" rx="3" fill="white"/>
+<rect x="243.5" y="941.5" width="208.983" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="For Reference: diamond.svg succeeds_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="249" y="958.5">For Reference: diamond.svg succeeds</tspan></text>
+<g id="Rectangle_14">
+<rect x="1511" y="146" width="278.417" height="30" rx="3" fill="#444444"/>
+<rect x="1511.5" y="146.5" width="277.417" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Intended Design: Linear Sequence, Horizontal Loop_3" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="1517" y="163.5">Intended Design: Linear Sequence, Horizontal Loop</tspan></text>
+<g id="Rectangle_15">
+<rect x="143" y="143" width="134.717" height="30" rx="3" fill="#444444"/>
+<rect x="143.5" y="143.5" width="133.717" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Current Implementation_3" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="149" y="160.5">Current Implementation</tspan></text>
+<g id="Rectangle_16">
+<rect x="40" y="4" width="206.367" height="30" rx="3" fill="#444444"/>
+<rect x="40.5" y="4.5" width="205.367" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Stage 6 Cycle Return Transition Issue_3" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="46" y="21.5">Stage 6 Cycle Return Transition Issue</tspan></text>
+<defs>
+<clipPath id="clip0_2004_193">
+<rect width="256" height="19" fill="white" transform="translate(1625.5 260.5)"/>
+</clipPath>
+<clipPath id="clip1_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1643 297)"/>
+</clipPath>
+<clipPath id="clip2_2004_193">
+<rect width="974" height="19" fill="white" transform="translate(1625.5 392.5)"/>
+</clipPath>
+<clipPath id="clip3_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1659 429)"/>
+</clipPath>
+<clipPath id="clip4_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1659 554)"/>
+</clipPath>
+<clipPath id="clip5_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1985 554)"/>
+</clipPath>
+<clipPath id="clip6_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(2311 554)"/>
+</clipPath>
+<clipPath id="clip7_2004_193">
+<rect width="256" height="19" fill="white" transform="translate(1625.5 816.5)"/>
+</clipPath>
+<clipPath id="clip8_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1643 853)"/>
+</clipPath>
+<clipPath id="clip9_2004_193">
+<rect width="974" height="19" fill="white" transform="translate(1625.5 948.5)"/>
+</clipPath>
+<clipPath id="clip10_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1659 985)"/>
+</clipPath>
+<clipPath id="clip11_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1659 1062)"/>
+</clipPath>
+<clipPath id="clip12_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1985 1062)"/>
+</clipPath>
+<clipPath id="clip13_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(2311 1062)"/>
+</clipPath>
+<clipPath id="clip14_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1659.5 1562.5)"/>
+</clipPath>
+<clipPath id="clip15_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1985.5 1562.5)"/>
+</clipPath>
+<clipPath id="clip16_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(2311.5 1562.5)"/>
+</clipPath>
+<clipPath id="clip17_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1659.5 1758.5)"/>
+</clipPath>
+<clipPath id="clip18_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(1985.5 1758.5)"/>
+</clipPath>
+<clipPath id="clip19_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(2311.5 1758.5)"/>
+</clipPath>
+</defs>
+</svg>

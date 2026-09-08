@@ -54,7 +54,6 @@ Available node types: `Place`, `ViewState`, `Component`, `State`, `Event`,
 | `Place` | `Place CONTAINS Place` | The staged renderer does not emit this hierarchy | **A — entirely hidden** |
 | `ViewState` | `ViewState EMITS Event` | Supporting contract suppressed | **D\* — conditional strict node** |
 | `ViewState` | `ViewState DEPENDS_ON SystemAction` | Supporting contract suppressed | **D\* — conditional strict node** |
-| `Component` | `Component CONTAINS Component` | The staged renderer does not emit this hierarchy | **A — entirely hidden** |
 | `Component` | `Component EMITS Event` | Supporting contract suppressed | **D\* — conditional strict node** |
 | `Component` | `Component DEPENDS_ON SystemAction` | Supporting contract suppressed | **D\* — conditional strict node** |
 | `Component` | `Component BINDS_TO DataEntity` | Supporting contract suppressed | **D\* — conditional strict node** |
@@ -69,8 +68,16 @@ Available node types: `Place`, `ViewState`, `Component`, `State`, `Event`,
 | `SystemAction` | `Process DEPENDS_ON SystemAction` | Source `Process` is outside the view | **A — entirely hidden** |
 | `SystemAction` | `SystemAction EMITS Event` | Supporting-contract nodes suppressed | **D\* — conditional strict node** |
 
-`Place CONTAINS ViewState` and `Place` or `ViewState COMPOSED_OF Component`
-are visible structurally as containment rather than as drawn connectors.
+In staged SVG/PNG, `Component CONTAINS Component` is visible in both compact and
+detailed output: an enclosure overview shows the hierarchy, and local scopes
+draw labeled parent/child connectors. `Place CONTAINS ViewState` remains visible
+through scope membership. `Place` and `ViewState COMPOSED_OF Component` use
+labeled connectors to lightweight Component references. Legacy DOT/Mermaid and
+Graphviz retain their earlier structural presentation.
+
+Rendering uses `--detail`, independently of `--profile`. The historical
+`simple`/`strict` columns describe the guided-authoring matrix; for current
+render content selection, see [UI Contracts](./index.md#ui-contracts).
 
 The **D\*** guidance behavior is encoded as ordered `simple` rules using the
 bundle predicate `document_has_node_type: ViewState`, followed by an

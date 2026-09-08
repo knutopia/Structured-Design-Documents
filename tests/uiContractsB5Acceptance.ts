@@ -40,6 +40,11 @@ export function assessUiContractsGeometry(scene: PositionedScene): string[] {
   for (const node of nodes) {
     if (node.width !== 224) issues.push(`node width: ${node.id}`);
     if (!inside(node, scene.root)) issues.push(`node bounds: ${node.id}`);
+    if (node.kind === "node" && node.sharedNode?.decorator) {
+      for (const block of node.sharedNode.decorator.items) if (!inside(block, node.sharedNode.decorator)) {
+        issues.push(`semantic decorator bounds: ${block.id}`);
+      }
+    }
   }
   for (let i = 0; i < nodes.length; i++) for (let j = i + 1; j < nodes.length; j++) {
     if (overlaps(nodes[i], nodes[j])) issues.push(`node overlap: ${nodes[i].id}, ${nodes[j].id}`);

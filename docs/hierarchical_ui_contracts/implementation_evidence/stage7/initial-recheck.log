@@ -1,0 +1,40 @@
+
+ RUN  v2.1.9 /home/knut/projects/sdd
+
+ ✓ tests/journeyMapRenderModel.spec.ts (11 tests) 6329ms
+   ✓ journey map render model > preserves first projected parent, structural edge-line order, and interleaved root author order 794ms
+   ✓ journey map render model > retains empty and single-Step Stages plus uncontained root Steps 451ms
+   ✓ journey map render model > keeps a Step-only journey valid and preserves every projected duplicate occurrence 350ms
+   ✓ journey map render model > exposes ordered structured references without presentation-formatted label lines 985ms
+   ✓ journey map render model > stores authored PRECEDES order independently from projection edge order 343ms
+   ✓ journey map render model > changes edge identity when the loaded bundle changes its identity fields 333ms
+   ✓ journey map render model > changes typed reference visibility when the loaded profile-display contract changes 306ms
+   ✓ journey map render model > keeps the locked validation diagnostics isolated by fixture and profile 2183ms
+ ❯ tests/stagedRootStroke.spec.ts (15 tests | 1 failed) 9938ms
+   ✓ staged root inside strokes > keeps the 'ia_place_map' outline inside its exported bounds 2194ms
+   × staged root inside strokes > keeps the 'ui_contracts' outline inside its exported bounds 898ms
+     → expected 19 to be close to 272, received difference is 253, but expected 0.0005
+   ✓ staged root inside strokes > keeps the 'scenario_flow' outline inside its exported bounds 5453ms
+   ✓ staged root inside strokes > keeps the 'service_blueprint' outline inside its exported bounds 405ms
+   ✓ staged root inside strokes > keeps the 'outcome_opportunity_map' outline inside its exported bounds 389ms
+   ✓ staged root inside strokes > keeps the 'journey_map' outline inside its exported bounds 435ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/stagedRootStroke.spec.ts > staged root inside strokes > keeps the 'ui_contracts' outline inside its exported bounds
+AssertionError: expected 19 to be close to 272, received difference is 253, but expected 0.0005
+ ❯ tests/stagedRootStroke.spec.ts:170:50
+    168|         expect(outline.x - 0.75).toBeCloseTo(item.x, 3);
+    169|         expect(outline.y - 0.75).toBeCloseTo(item.y, 3);
+    170|         expect(outline.x + outline.width + 0.75).toBeCloseTo(item.x + …
+       |                                                  ^
+    171|         expect(outline.y + outline.height + 0.75).toBeCloseTo(item.y +…
+    172|         expect(item.x).toBeGreaterThanOrEqual(root.x);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  1 failed | 25 passed (26)
+   Start at  23:36:52
+   Duration  22.68s (transform 3.65s, setup 0ms, collect 5.33s, tests 16.27s, environment 1ms, prepare 344ms)
+

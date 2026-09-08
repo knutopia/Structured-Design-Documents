@@ -124,7 +124,8 @@ function projectCompiledGraph(
   bundle: Bundle,
   view: ViewSpec,
   detailId: string,
-  diagnostics: Diagnostic[]
+  diagnostics: Diagnostic[],
+  target: "legacy" | "staged"
 ): PreparedProjectionForRender | undefined {
   const projected = projectView(graph, bundle, view.id);
   diagnostics.push(...projected.diagnostics);
@@ -132,7 +133,7 @@ function projectCompiledGraph(
     return undefined;
   }
 
-  return prepareProjectionForRender(view, projected.projection, graph, detailId);
+  return prepareProjectionForRender(view, projected.projection, graph, detailId, target);
 }
 
 export function prepareCompiledGraphPreview(
@@ -157,7 +158,8 @@ export function prepareCompiledGraphPreview(
 
   const prepared = hasErrors(diagnostics)
     ? undefined
-    : projectCompiledGraph(graph, bundle, view, options.detailId, diagnostics);
+    : projectCompiledGraph(graph, bundle, view, options.detailId, diagnostics,
+      getPreviewBackend(previewCapability.backendId).backendClass === "staged" ? "staged" : "legacy");
 
   return {
     profileId: options.profileId,

@@ -40,7 +40,7 @@ export function paintUiContractsContainer(container: PositionedContainer, theme:
     // Scope this font declaration to this container's measured title only.
     `  <style>g[data-item-id="${cssId}"] .text-role-${t.titleStyleRole} { font-family: '${style.fontFamily}'; font-size: ${style.fontSize}px; font-weight: ${style.fontWeight}; letter-spacing: ${style.letterSpacing ?? 0}px; }</style>`,
     `  <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>`,
-    `  <rect class="ui-contracts-container__body" x="${number(x)}" y="${number(y)}" width="${number(width)}" height="${number(height)}" rx="${t.radius}" fill="${container.viewMetadata?.uiContracts?.tone === "inset" ? "#ffffff" : t.bodyFill}" stroke="none"/>`
+    `  <rect class="ui-contracts-container__body" x="${number(x)}" y="${number(y)}" width="${number(width)}" height="${number(height)}" rx="${t.radius}" fill="${container.viewMetadata?.uiContracts?.tone === "inset" ? "#ffffff" : container.viewMetadata?.uiContracts?.tone === "hierarchy" ? "#f1f5f9" : t.bodyFill}" stroke="none"/>`
   ];
   if (container.headerContent.length) {
     const path = `M ${number(left)} ${number(bottom)} L ${number(left)} ${number(top + radius)} Q ${number(left)} ${number(top)} ${number(left + radius)} ${number(top)} L ${number(right - radius)} ${number(top)} Q ${number(right)} ${number(top)} ${number(right)} ${number(top + radius)} L ${number(right)} ${number(bottom)} Z`;

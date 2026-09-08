@@ -1,0 +1,432 @@
+<svg width="1456" height="1233" viewBox="0 0 1456 1233" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="1456" height="1233" fill="#1E1E1E"/>
+<g id="Stage 6 Self-Loop Routing Issue">
+<path d="M40 42C40 40.8954 40.8954 40 42 40H1414C1415.1 40 1416 40.8954 1416 42V1191C1416 1192.1 1415.1 1193 1414 1193H42C40.8955 1193 40 1192.1 40 1191V42Z" fill="#444444"/>
+<path d="M42 40V41H1414V40V39H42V40ZM1416 42H1415V1191H1416H1417V42H1416ZM1414 1193V1192H42V1193V1194H1414V1193ZM40 1191H41V42H40H39V1191H40ZM42 1193V1192C41.4477 1192 41 1191.55 41 1191H40H39C39 1192.66 40.3432 1194 42 1194V1193ZM1416 1191H1415C1415 1191.55 1414.55 1192 1414 1192V1193V1194C1415.66 1194 1417 1192.66 1417 1191H1416ZM1414 40V41C1414.55 41 1415 41.4477 1415 42H1416H1417C1417 40.3431 1415.66 39 1414 39V40ZM42 40V39C40.3431 39 39 40.3432 39 42H40H41C41 41.4477 41.4477 41 42 41V40Z" fill="white" fill-opacity="0.1"/>
+<g id="Intended Design: Local In-Container Routing (&#34;Above&#34;)">
+<rect width="369" height="454" transform="translate(503 140)" fill="white"/>
+<g id="Node-Based Container">
+<rect x="519.75" y="156.75" width="257.5" height="105.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="519.75" y="156.75" width="257.5" height="105.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot" clip-path="url(#clip0_2004_193)">
+<rect width="256" height="19" transform="translate(520.5 157.5)" fill="white"/>
+<g id="Title Header">
+<rect width="256" height="19" transform="translate(520.5 157.5)" fill="#DBE4F0"/>
+<text id="Container Title" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="534.5" y="170.625">Component hierarchy - Controller</tspan></text>
+</g>
+</g>
+<g id="content section">
+<g id="Node">
+<rect x="537.25" y="193.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="537.25" y="193.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_2" clip-path="url(#clip1_2004_193)">
+<rect width="221" height="19" transform="translate(538 194)" fill="white"/>
+<g id="Decorator Header">
+<rect width="221" height="19" transform="translate(538 194)" fill="#DBE4F0"/>
+<text id="node type" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="552" y="207.125">Component </tspan></text>
+<text id="node ID" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="611" y="207.125">C-100</tspan></text>
+</g>
+</g>
+<g id="node body">
+<g id="Node Title">
+<text id="Long Node Title occupying more than a single line" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="552" y="234.3">Controller</tspan></text>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Node-Based Container_2">
+<rect x="519.75" y="288.75" width="289.5" height="219.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="519.75" y="288.75" width="289.5" height="219.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot_3" clip-path="url(#clip2_2004_193)">
+<rect width="288" height="19" transform="translate(520.5 289.5)" fill="white"/>
+<g id="Title Header_2">
+<rect width="288" height="19" transform="translate(520.5 289.5)" fill="#DBE4F0"/>
+<text id="Container Title_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="534.5" y="302.625">Component scope - Controller</tspan></text>
+</g>
+</g>
+<g id="content section_2">
+<g id="Node_2">
+<rect x="553.25" y="325.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="553.25" y="325.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_4" clip-path="url(#clip3_2004_193)">
+<rect width="221" height="19" transform="translate(554 326)" fill="white"/>
+<g id="Decorator Header_2">
+<rect width="221" height="19" transform="translate(554 326)" fill="#DBE4F0"/>
+<text id="node type_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="568" y="339.125">Component </tspan></text>
+<text id="node ID_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="627" y="339.125">C-100</tspan></text>
+</g>
+</g>
+<g id="node body_2">
+<g id="Node Title_2">
+<text id="Long Node Title occupying more than a single line_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="568" y="366.3">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node with Connector Above">
+<g id="Node_3">
+<rect x="553.25" y="439.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="553.25" y="439.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_5" clip-path="url(#clip4_2004_193)">
+<rect width="221" height="19" transform="translate(554 440)" fill="white"/>
+<g id="Decorator Header_3">
+<rect width="221" height="19" transform="translate(554 440)" fill="#DBE4F0"/>
+<text id="node type_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="568" y="453.125">State</tspan></text>
+<text id="node ID_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="598" y="453.125">ST-100</tspan></text>
+</g>
+</g>
+<g id="node body_3">
+<g id="Node Title_3">
+<text id="Long Node Title occupying more than a single line_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="568" y="480.3">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="connector &#38; label">
+<g id="Group">
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-100-22-2c-22transitions_to-22-2c-22st-100-22-5d-0">
+<path id="Vector" d="M792.5 465.5V466.5H793.5V465.5H792.5ZM792.5 423.5H793.5V422.5H792.5V423.5ZM536.5 423.5V422.5H535.5V423.5H536.5ZM536.5 465.5H535.5V466.5H536.5V465.5ZM552.5 465.5L542.5 459.726V471.274L552.5 465.5ZM776.5 465.5V466.5H792.5V465.5V464.5H776.5V465.5ZM792.5 465.5H793.5V423.5H792.5H791.5V465.5H792.5ZM792.5 423.5V422.5H536.5V423.5V424.5H792.5V423.5ZM536.5 423.5H535.5V465.5H536.5H537.5V423.5H536.5ZM536.5 465.5V466.5H543.5V465.5V464.5H536.5V465.5Z" fill="#1D4ED8"/>
+</g>
+</g>
+<g id="Group_2">
+<path id="Vector_2" d="M699.442 393.5H629.5C625.082 393.5 621.5 397.082 621.5 401.5V407.5C621.5 411.918 625.082 415.5 629.5 415.5H699.442C703.86 415.5 707.442 411.918 707.442 407.5V401.5C707.442 397.082 703.86 393.5 699.442 393.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="transitions to" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="627.5" y="408.85">transitions to</tspan></text>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Intended Design: Local In-Container Routing (&#34;Below&#34;)">
+<rect width="369" height="454" transform="translate(947 140)" fill="white"/>
+<g id="Node-Based Container_3">
+<rect x="963.75" y="156.75" width="257.5" height="105.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="963.75" y="156.75" width="257.5" height="105.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot_6" clip-path="url(#clip5_2004_193)">
+<rect width="256" height="19" transform="translate(964.5 157.5)" fill="white"/>
+<g id="Title Header_3">
+<rect width="256" height="19" transform="translate(964.5 157.5)" fill="#DBE4F0"/>
+<text id="Container Title_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="978.5" y="170.625">Component hierarchy - Controller</tspan></text>
+</g>
+</g>
+<g id="content section_3">
+<g id="Node_4">
+<rect x="981.25" y="193.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="981.25" y="193.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_7" clip-path="url(#clip6_2004_193)">
+<rect width="221" height="19" transform="translate(982 194)" fill="white"/>
+<g id="Decorator Header_4">
+<rect width="221" height="19" transform="translate(982 194)" fill="#DBE4F0"/>
+<text id="node type_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="996" y="207.125">Component </tspan></text>
+<text id="node ID_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1055" y="207.125">C-100</tspan></text>
+</g>
+</g>
+<g id="node body_4">
+<g id="Node Title_4">
+<text id="Long Node Title occupying more than a single line_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="996" y="234.3">Controller</tspan></text>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Node-Based Container_4">
+<rect x="963.75" y="288.75" width="289.5" height="220.5" rx="7.25" fill="#F1F5F9"/>
+<rect x="963.75" y="288.75" width="289.5" height="220.5" rx="7.25" stroke="#B5C1CD" stroke-width="1.5"/>
+<g id="header slot_8" clip-path="url(#clip7_2004_193)">
+<rect width="288" height="19" transform="translate(964.5 289.5)" fill="white"/>
+<g id="Title Header_4">
+<rect width="288" height="19" transform="translate(964.5 289.5)" fill="#DBE4F0"/>
+<text id="Container Title_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="978.5" y="302.625">Component scope - Controller</tspan></text>
+</g>
+</g>
+<g id="content section_4">
+<g id="Node_5">
+<rect x="997.25" y="325.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="997.25" y="325.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_9" clip-path="url(#clip8_2004_193)">
+<rect width="221" height="19" transform="translate(998 326)" fill="white"/>
+<g id="Decorator Header_5">
+<rect width="221" height="19" transform="translate(998 326)" fill="#DBE4F0"/>
+<text id="node type_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1012" y="339.125">Component </tspan></text>
+<text id="node ID_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1071" y="339.125">C-100</tspan></text>
+</g>
+</g>
+<g id="node body_5">
+<g id="Node Title_5">
+<text id="Long Node Title occupying more than a single line_5" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1012" y="366.3">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node with Connector Below">
+<g id="Node_6">
+<rect x="997.25" y="394.25" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="997.25" y="394.25" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_10" clip-path="url(#clip9_2004_193)">
+<rect width="221" height="19" transform="translate(998 395)" fill="white"/>
+<g id="Decorator Header_6">
+<rect width="221" height="19" transform="translate(998 395)" fill="#DBE4F0"/>
+<text id="node type_6" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1012" y="408.125">State</tspan></text>
+<text id="node ID_6" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="1042" y="408.125">ST-100</tspan></text>
+</g>
+</g>
+<g id="node body_6">
+<g id="Node Title_6">
+<text id="Long Node Title occupying more than a single line_6" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="1012" y="435.3">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="connector &#38; label_2">
+<g id="Group_3">
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-100-22-2c-22transitions_to-22-2c-22st-100-22-5d-0_2">
+<path id="Vector_3" d="M1236.5 420.5V419.5H1237.5V420.5H1236.5ZM1236.5 462.5H1237.5V463.5H1236.5V462.5ZM980.5 462.5V463.5H979.5V462.5H980.5ZM980.5 420.5H979.5V419.5H980.5V420.5ZM996.5 420.5L986.5 426.274V414.726L996.5 420.5ZM1220.5 420.5V419.5H1236.5V420.5V421.5H1220.5V420.5ZM1236.5 420.5H1237.5V462.5H1236.5H1235.5V420.5H1236.5ZM1236.5 462.5V463.5H980.5V462.5V461.5H1236.5V462.5ZM980.5 462.5H979.5V420.5H980.5H981.5V462.5H980.5ZM980.5 420.5V419.5H987.5V420.5V421.5H980.5V420.5Z" fill="#1D4ED8"/>
+</g>
+</g>
+<g id="Group_4">
+<path id="Vector_4" d="M1143.44 470.5H1073.5C1069.08 470.5 1065.5 474.082 1065.5 478.5V484.5C1065.5 488.918 1069.08 492.5 1073.5 492.5H1143.44C1147.86 492.5 1151.44 488.918 1151.44 484.5V478.5C1151.44 474.082 1147.86 470.5 1143.44 470.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="transitions to_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="1071.5" y="485.85">transitions to</tspan></text>
+</g>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Node-with-Connector Component">
+<rect width="369" height="344" transform="translate(503 749)" fill="white"/>
+<g id="Node with Connector Above_2">
+<g id="Node_7">
+<rect x="536.75" y="830.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="536.75" y="830.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_11" clip-path="url(#clip10_2004_193)">
+<rect width="221" height="19" transform="translate(537.5 831.5)" fill="white"/>
+<g id="Decorator Header_7">
+<rect width="221" height="19" transform="translate(537.5 831.5)" fill="#DBE4F0"/>
+<text id="node type_7" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="551.5" y="844.625">State</tspan></text>
+<text id="node ID_7" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="581.5" y="844.625">ST-100</tspan></text>
+</g>
+</g>
+<g id="node body_7">
+<g id="Node Title_7">
+<text id="Long Node Title occupying more than a single line_7" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="551.5" y="871.8">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="connector &#38; label_3">
+<g id="Group_5">
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-100-22-2c-22transitions_to-22-2c-22st-100-22-5d-0_3">
+<path id="Vector_5" d="M776 857V858H777V857H776ZM776 815H777V814H776V815ZM520 815V814H519V815H520ZM520 857H519V858H520V857ZM536 857L526 851.226V862.774L536 857ZM760 857V858H776V857V856H760V857ZM776 857H777V815H776H775V857H776ZM776 815V814H520V815V816H776V815ZM520 815H519V857H520H521V815H520ZM520 857V858H527V857V856H520V857Z" fill="#1D4ED8"/>
+</g>
+</g>
+<g id="Group_6">
+<path id="Vector_6" d="M682.942 785H613C608.582 785 605 788.582 605 793V799C605 803.418 608.582 807 613 807H682.942C687.36 807 690.942 803.418 690.942 799V793C690.942 788.582 687.36 785 682.942 785Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="transitions to_3" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="611" y="800.35">transitions to</tspan></text>
+</g>
+</g>
+</g>
+<g id="Node with Connector Below_2">
+<g id="Node_8">
+<rect x="536.75" y="958.75" width="222.5" height="51.5" rx="13.25" fill="white"/>
+<rect x="536.75" y="958.75" width="222.5" height="51.5" rx="13.25" stroke="#387575" stroke-width="1.5"/>
+<g id="header slot_12" clip-path="url(#clip11_2004_193)">
+<rect width="221" height="19" transform="translate(537.5 959.5)" fill="white"/>
+<g id="Decorator Header_8">
+<rect width="221" height="19" transform="translate(537.5 959.5)" fill="#DBE4F0"/>
+<text id="node type_8" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="551.5" y="972.625">State</tspan></text>
+<text id="node ID_8" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="600" letter-spacing="0em"><tspan x="581.5" y="972.625">ST-100</tspan></text>
+</g>
+</g>
+<g id="node body_8">
+<g id="Node Title_8">
+<text id="Long Node Title occupying more than a single line_8" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="600" letter-spacing="-0.02em"><tspan x="551.5" y="999.8">State 0</tspan></text>
+</g>
+</g>
+</g>
+<g id="connector &#38; label_4">
+<g id="Group_7">
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-100-22-2c-22transitions_to-22-2c-22st-100-22-5d-0_4">
+<path id="Vector_7" d="M776 985V984H777V985H776ZM776 1027H777V1028H776V1027ZM520 1027V1028H519V1027H520ZM520 985H519V984H520V985ZM536 985L526 990.774V979.226L536 985ZM760 985V984H776V985V986H760V985ZM776 985H777V1027H776H775V985H776ZM776 1027V1028H520V1027V1026H776V1027ZM520 1027H519V985H520H521V1027H520ZM520 985V984H527V985V986H520V985Z" fill="#1D4ED8"/>
+</g>
+</g>
+<g id="Group_8">
+<path id="Vector_8" d="M682.942 1035H613C608.582 1035 605 1038.58 605 1043V1049C605 1053.42 608.582 1057 613 1057H682.942C687.36 1057 690.942 1053.42 690.942 1049V1043C690.942 1038.58 687.36 1035 682.942 1035Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+<text id="transitions to_4" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="12" letter-spacing="0em"><tspan x="611" y="1050.35">transitions to</tspan></text>
+</g>
+</g>
+</g>
+</g>
+<g id="Current Implementation: Failed Routing">
+<rect width="288" height="360.5" transform="translate(140 140)" fill="white"/>
+<g id="self_loop 1" clip-path="url(#clip12_2004_193)">
+<g id="Group_9">
+<g id="Group_10">
+<path id="Vector_9" d="M398 156H170C162.268 156 156 162.268 156 170V246C156 253.732 162.268 260 170 260H398C405.732 260 412 253.732 412 246V170C412 162.268 405.732 156 398 156Z" fill="#F4F7FB"/>
+<path id="Vector_10" d="M157.5 175V170C157.5 161.667 161.667 157.5 170 157.5H398C406.333 157.5 410.5 161.667 410.5 170V175H157.5Z" fill="#DBE4F0"/>
+<path id="Vector_11" d="M398 156.75H170C162.682 156.75 156.75 162.682 156.75 170V246C156.75 253.318 162.682 259.25 170 259.25H398C405.318 259.25 411.25 253.318 411.25 246V170C411.25 162.682 405.318 156.75 398 156.75Z" stroke="#AEBDCE" stroke-width="1.5"/>
+</g>
+<g id="Group_11">
+<path id="Vector_12" d="M398 288H170C162.268 288 156 294.268 156 302V470.5C156 478.232 162.268 484.5 170 484.5H398C405.732 484.5 412 478.232 412 470.5V302C412 294.268 405.732 288 398 288Z" fill="#F4F7FB"/>
+<path id="Vector_13" d="M157.5 307V302C157.5 293.667 161.667 289.5 170 289.5H398C406.333 289.5 410.5 293.667 410.5 302V307H157.5Z" fill="#DBE4F0"/>
+<path id="Vector_14" d="M398 288.75H170C162.682 288.75 156.75 294.682 156.75 302V470.5C156.75 477.818 162.682 483.75 170 483.75H398C405.318 483.75 411.25 477.818 411.25 470.5V302C411.25 294.682 405.318 288.75 398 288.75Z" stroke="#AEBDCE" stroke-width="1.5"/>
+</g>
+</g>
+<g id="Group_12">
+<g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-100-22-5d">
+<path id="Vector_15" d="M382 191.75H186C178.682 191.75 172.75 197.682 172.75 205V230C172.75 237.318 178.682 243.25 186 243.25H382C389.318 243.25 395.25 237.318 395.25 230V205C395.25 197.682 389.318 191.75 382 191.75Z" fill="white"/>
+<path id="Vector_16" d="M173.5 211.5V205C173.5 196.667 177.667 192.5 186 192.5H382C390.333 192.5 394.5 196.667 394.5 205V211.5H173.5Z" fill="#DBE4F0"/>
+<path id="Vector_17" d="M382 191.75H186C178.682 191.75 172.75 197.682 172.75 205V230C172.75 237.318 178.682 243.25 186 243.25H382C389.318 243.25 395.25 237.318 395.25 230V205C395.25 197.682 389.318 191.75 382 191.75Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22focal-22-2c-22c-100-22-5d">
+<path id="Vector_18" d="M382 323.75H186C178.682 323.75 172.75 329.682 172.75 337V362C172.75 369.318 178.682 375.25 186 375.25H382C389.318 375.25 395.25 369.318 395.25 362V337C395.25 329.682 389.318 323.75 382 323.75Z" fill="white"/>
+<path id="Vector_19" d="M173.5 343.5V337C173.5 328.667 177.667 324.5 186 324.5H382C390.333 324.5 394.5 328.667 394.5 337V343.5H173.5Z" fill="#DBE4F0"/>
+<path id="Vector_20" d="M382 323.75H186C178.682 323.75 172.75 329.682 172.75 337V362C172.75 369.318 178.682 375.25 186 375.25H382C389.318 375.25 395.25 369.318 395.25 362V337C395.25 329.682 389.318 323.75 382 323.75Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+<g id="scene-node-occurrence-5b-22scope-3ac-100-22-2c-22sequence-22-2c-22scope-3ac-100-3asequence-3asecondary-22-2c-22st-100-22-5d">
+<path id="Vector_21" d="M382 416.25H186C178.682 416.25 172.75 422.182 172.75 429.5V454.5C172.75 461.818 178.682 467.75 186 467.75H382C389.318 467.75 395.25 461.818 395.25 454.5V429.5C395.25 422.182 389.318 416.25 382 416.25Z" fill="white"/>
+<path id="Vector_22" d="M173.5 436V429.5C173.5 421.167 177.667 417 186 417H382C390.333 417 394.5 421.167 394.5 429.5V436H173.5Z" fill="#DBE4F0"/>
+<path id="Vector_23" d="M382 416.25H186C178.682 416.25 172.75 422.182 172.75 429.5V454.5C172.75 461.818 178.682 467.75 186 467.75H382C389.318 467.75 395.25 461.818 395.25 454.5V429.5C395.25 422.182 389.318 416.25 382 416.25Z" stroke="#387575" stroke-width="1.5"/>
+</g>
+</g>
+<g id="Group_13">
+<g id="Group_14">
+<text id="Component hierarchy &#194;&#183; Controller" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="170" y="168.625">Component hierarchy &#xb7; Controller</tspan></text>
+</g>
+<g id="Group_15">
+<g id="Group_16">
+<text id="Component" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="187.5" y="205.25">Component</tspan></text>
+<text id="C-100" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="246.08" y="205.25">C-100</tspan></text>
+</g>
+<g id="Group_17">
+<g id="Group_18">
+<text id="Controller" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="187.5" y="232.1">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_19">
+<text id="Component scope &#194;&#183; Controller" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="170" y="300.625">Component scope &#xb7; Controller</tspan></text>
+</g>
+<g id="Group_20">
+<g id="Group_21">
+<text id="Component_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="187.5" y="337.25">Component</tspan></text>
+<text id="C-100_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="246.08" y="337.25">C-100</tspan></text>
+</g>
+<g id="Group_22">
+<g id="Group_23">
+<text id="Controller_2" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="187.5" y="364.1">Controller</tspan></text>
+</g>
+</g>
+</g>
+<g id="Group_24">
+<g id="Group_25">
+<text id="State" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="187.5" y="429.75">State</tspan></text>
+<text id="ST-100" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="10" font-weight="bold" letter-spacing="0em"><tspan x="217.175" y="429.75">ST-100</tspan></text>
+</g>
+<g id="Group_26">
+<g id="Group_27">
+<text id="State 0" fill="#0F172A" style="white-space: pre" xml:space="preserve" font-family="Public Sans" font-size="16" font-weight="bold" letter-spacing="0em"><tspan x="187.5" y="456.6">State 0</tspan></text>
+</g>
+</g>
+</g>
+</g>
+<g id="Group_28">
+<g id="scene-edge-scope-c-100-sequence-secondary-relationship-5b-22st-100-22-2c-22transitions_to-22-2c-22st-100-22-5d-0_5">
+<path id="Vector_24" d="M396 442H412V175H156V442H172" stroke="#1D4ED8" stroke-width="2"/>
+</g>
+</g>
+<g id="Group_29">
+<g id="Group_30">
+<path id="Vector_25" d="M493.952 297.5H432C427.582 297.5 424 301.082 424 305.5V311.5C424 315.918 427.582 319.5 432 319.5H493.952C498.37 319.5 501.952 315.918 501.952 311.5V305.5C501.952 301.082 498.37 297.5 493.952 297.5Z" fill="white" stroke="#93C5FD" stroke-width="1.5"/>
+</g>
+</g>
+</g>
+</g>
+</g>
+<g id="Rectangle">
+<rect x="506" y="143" width="293.9" height="30" rx="3" fill="white"/>
+<rect x="506.5" y="143.5" width="292.9" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Intended Design: Local In-Container Routing (&#34;Above&#34;)_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="512" y="160.5">Intended Design: Local In-Container Routing (&#34;Above&#34;)</tspan></text>
+<g id="Rectangle_2">
+<rect x="950" y="143" width="293.317" height="30" rx="3" fill="white"/>
+<rect x="950.5" y="143.5" width="292.317" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Intended Design: Local In-Container Routing (&#34;Below&#34;)_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="956" y="160.5">Intended Design: Local In-Container Routing (&#34;Below&#34;)</tspan></text>
+<g id="Rectangle_3">
+<rect x="506" y="752" width="190.733" height="30" rx="3" fill="white"/>
+<rect x="506.5" y="752.5" width="189.733" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Node-with-Connector Component_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="512" y="769.5">Node-with-Connector Component</tspan></text>
+<g id="Rectangle_4">
+<rect x="143" y="143" width="214.733" height="30" rx="3" fill="white"/>
+<rect x="143.5" y="143.5" width="213.733" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Current Implementation: Failed Routing_2" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="149" y="160.5">Current Implementation: Failed Routing</tspan></text>
+<g id="Rectangle_5">
+<rect x="40" y="4" width="179.2" height="30" rx="3" fill="#444444"/>
+<rect x="40.5" y="4.5" width="178.2" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Stage 6 Self-Loop Routing Issue_2" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="46" y="21.5">Stage 6 Self-Loop Routing Issue</tspan></text>
+<g id="Rectangle_6">
+<rect x="506" y="143" width="293.9" height="30" rx="3" fill="white"/>
+<rect x="506.5" y="143.5" width="292.9" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Intended Design: Local In-Container Routing (&#34;Above&#34;)_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="512" y="160.5">Intended Design: Local In-Container Routing (&#34;Above&#34;)</tspan></text>
+<g id="Rectangle_7">
+<rect x="950" y="143" width="293.317" height="30" rx="3" fill="white"/>
+<rect x="950.5" y="143.5" width="292.317" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Intended Design: Local In-Container Routing (&#34;Below&#34;)_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="956" y="160.5">Intended Design: Local In-Container Routing (&#34;Below&#34;)</tspan></text>
+<g id="Rectangle_8">
+<rect x="506" y="752" width="190.733" height="30" rx="3" fill="white"/>
+<rect x="506.5" y="752.5" width="189.733" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Node-with-Connector Component_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="512" y="769.5">Node-with-Connector Component</tspan></text>
+<g id="Rectangle_9">
+<rect x="143" y="143" width="214.733" height="30" rx="3" fill="white"/>
+<rect x="143.5" y="143.5" width="213.733" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Current Implementation: Failed Routing_3" fill="black" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="149" y="160.5">Current Implementation: Failed Routing</tspan></text>
+<g id="Rectangle_10">
+<rect x="40" y="4" width="179.2" height="30" rx="3" fill="#444444"/>
+<rect x="40.5" y="4.5" width="178.2" height="29" rx="2.5" stroke="white" stroke-opacity="0.0980392"/>
+</g>
+<text id="Stage 6 Self-Loop Routing Issue_3" fill="white" style="white-space: pre" xml:space="preserve" font-family="Inter" font-size="11" letter-spacing="0em"><tspan x="46" y="21.5">Stage 6 Self-Loop Routing Issue</tspan></text>
+<defs>
+<clipPath id="clip0_2004_193">
+<rect width="256" height="19" fill="white" transform="translate(520.5 157.5)"/>
+</clipPath>
+<clipPath id="clip1_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(538 194)"/>
+</clipPath>
+<clipPath id="clip2_2004_193">
+<rect width="288" height="19" fill="white" transform="translate(520.5 289.5)"/>
+</clipPath>
+<clipPath id="clip3_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(554 326)"/>
+</clipPath>
+<clipPath id="clip4_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(554 440)"/>
+</clipPath>
+<clipPath id="clip5_2004_193">
+<rect width="256" height="19" fill="white" transform="translate(964.5 157.5)"/>
+</clipPath>
+<clipPath id="clip6_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(982 194)"/>
+</clipPath>
+<clipPath id="clip7_2004_193">
+<rect width="288" height="19" fill="white" transform="translate(964.5 289.5)"/>
+</clipPath>
+<clipPath id="clip8_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(998 326)"/>
+</clipPath>
+<clipPath id="clip9_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(998 395)"/>
+</clipPath>
+<clipPath id="clip10_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(537.5 831.5)"/>
+</clipPath>
+<clipPath id="clip11_2004_193">
+<rect width="221" height="19" fill="white" transform="translate(537.5 959.5)"/>
+</clipPath>
+<clipPath id="clip12_2004_193">
+<rect width="288" height="360.5" fill="white" transform="translate(140 140)"/>
+</clipPath>
+</defs>
+</svg>

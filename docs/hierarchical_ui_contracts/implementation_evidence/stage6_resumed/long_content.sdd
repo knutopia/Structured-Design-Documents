@@ -1,0 +1,36 @@
+SDD-TEXT 0.1
+Place P-100 "A long place title that must expand its container title bar without widening any semantic node"
+  description="A detailed description that remains constrained to the native semantic node width even when the transition sequence is considerably wider."
+  route_or_key=/some/very/long/route/for/this/place
+  access=auth
+  entry_points="link:/some/very/long/route"
+  primary_nav=true
+  CONTAINS VS-100 "Review"
+  CONTAINS VS-101 "Ready"
+END
+ViewState VS-100 "A deliberately long view state name that wraps across several native lines"
+  place_id=P-100
+  data_required="First record, second record, third record, fourth record"
+  COMPOSED_OF C-100 "Form"
+  TRANSITIONS_TO VS-101 "Ready" [E-100] {all_records_confirmed_and_review_completed} / SA-100
+END
+ViewState VS-101 "Ready"
+  place_id=P-100
+  COMPOSED_OF C-100 "Form"
+END
+Component C-100 "Form with a long descriptive name that wraps"
+  description="Review all fields and update the complete form before committing the changes."
+  inputs="First record, second record, third record"
+  outputs="Validated first record, validated second record"
+  BINDS_TO D-100 "Record" field=a_long_nested_field_name_used_for_binding
+  EMITS E-100 "A long event name used in complete transition annotations"
+END
+DataEntity D-100 "Record"
+
+END
+Event E-100 "A long event name used in complete transition annotations"
+
+END
+SystemAction SA-100 "Commit all changes"
+
+END

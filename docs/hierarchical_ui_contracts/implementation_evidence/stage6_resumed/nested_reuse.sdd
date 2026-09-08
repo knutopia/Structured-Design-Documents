@@ -1,0 +1,21 @@
+SDD-TEXT 0.1
+Component C-100 "Root"
+  CONTAINS C-110 "Reusable"
+  CONTAINS C-120 "Second branch"
+END
+Component C-101 "Disconnected root"
+
+END
+Component C-110 "Reusable"
+  CONTAINS C-130 "Nested reusable"
+END
+Component C-120 "Second branch"
+  CONTAINS C-110 "Reusable"
+  CONTAINS C-130 "Nested reusable"
+END
+Component C-130 "Nested reusable"
+  CONTAINS C-140 "Deep leaf"
+END
+Component C-140 "Deep leaf"
+
+END

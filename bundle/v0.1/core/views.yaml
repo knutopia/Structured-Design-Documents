@@ -2675,33 +2675,33 @@ views:
             role: supporting
             display_by_profile:
               simple:
-                - presence: hidden
-                  label: not_applicable
+                - presence: connector
+                  label: visible
               strict:
-                - presence: hidden
-                  label: not_applicable
+                - presence: connector
+                  label: visible
           - from: Place
             type: COMPOSED_OF
             to: Component
             role: primary
             display_by_profile:
               simple:
-                - presence: structural
-                  label: not_applicable
+                - presence: connector
+                  label: visible
               strict:
-                - presence: structural
-                  label: not_applicable
+                - presence: connector
+                  label: visible
           - from: ViewState
             type: COMPOSED_OF
             to: Component
             role: primary
             display_by_profile:
               simple:
-                - presence: structural
-                  label: not_applicable
+                - presence: connector
+                  label: visible
               strict:
-                - presence: structural
-                  label: not_applicable
+                - presence: connector
+                  label: visible
           - from: Step
             type: PRECEDES
             to: Step

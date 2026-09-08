@@ -1,0 +1,2827 @@
+{
+  "detail": "detailed",
+  "decorators": "type,id",
+  "model": {
+    "overview": [
+      {
+        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+        "node": {
+          "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "semanticId": "C-100",
+          "scopeId": "overview",
+          "role": "hierarchy",
+          "path": [],
+          "title": "Controller",
+          "nodeType": "Component",
+          "attributes": []
+        },
+        "children": [],
+        "title": "Component hierarchy · Controller"
+      }
+    ],
+    "scopes": [
+      {
+        "id": "scope:C-100",
+        "kind": "component",
+        "title": "Component scope · Controller",
+        "focal": {
+          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+          "semanticId": "C-100",
+          "scopeId": "scope:C-100",
+          "role": "focal",
+          "path": [],
+          "title": "Controller",
+          "nodeType": "Component",
+          "attributes": []
+        },
+        "parents": [],
+        "children": [],
+        "containment": [],
+        "sequences": [
+          {
+            "id": "scope:C-100:sequence:secondary",
+            "nodes": [
+              {
+                "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+                "semanticId": "ST-100",
+                "scopeId": "scope:C-100",
+                "role": "sequence",
+                "path": [
+                  "scope:C-100:sequence:secondary"
+                ],
+                "title": "State 0",
+                "nodeType": "State",
+                "attributes": []
+              }
+            ],
+            "edges": [
+              {
+                "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0",
+                "relationshipId": "relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0",
+                "from": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+                "to": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+                "kind": "transition",
+                "label": "{ready_0_0}",
+                "style": "solid"
+              }
+            ]
+          }
+        ],
+        "compositions": [],
+        "contracts": []
+      }
+    ],
+    "register": {
+      "id": "target-register",
+      "title": "Referenced targets",
+      "nodes": []
+    },
+    "occurrences": [
+      {
+        "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+        "semanticId": "C-100",
+        "scopeId": "overview",
+        "role": "hierarchy",
+        "path": [],
+        "title": "Controller",
+        "nodeType": "Component",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+        "semanticId": "C-100",
+        "scopeId": "scope:C-100",
+        "role": "focal",
+        "path": [],
+        "title": "Controller",
+        "nodeType": "Component",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+        "semanticId": "ST-100",
+        "scopeId": "scope:C-100",
+        "role": "sequence",
+        "path": [
+          "scope:C-100:sequence:secondary"
+        ],
+        "title": "State 0",
+        "nodeType": "State",
+        "attributes": []
+      }
+    ],
+    "relationships": [
+      {
+        "id": "relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0",
+        "from": "ST-100",
+        "to": "ST-100",
+        "type": "TRANSITIONS_TO",
+        "kind": "transition",
+        "label": "{ready_0_0}",
+        "style": "solid",
+        "sourceOrder": 0
+      }
+    ],
+    "structuralRelationshipIds": [],
+    "visibleSemanticNodeIds": [
+      "C-100",
+      "ST-100"
+    ],
+    "omittedPlaceIds": [],
+    "omissions": [],
+    "notes": [],
+    "diagnostics": []
+  },
+  "issues": [],
+  "coverage": [],
+  "occurrences": [
+    [
+      "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+      "C-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+      "C-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+      "ST-100"
+    ]
+  ],
+  "relationships": [
+    [
+      "relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0",
+      [
+        "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:0",
+        "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:1",
+        "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:2",
+        "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:3",
+        "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:4"
+      ]
+    ]
+  ],
+  "rendererScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "headerBandHeight": 0
+      },
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [],
+              "sharedNode": {
+                "title": "Controller",
+                "decoratorMode": {
+                  "id": "type,id",
+                  "showNodeType": true,
+                  "showNodeId": true
+                },
+                "nodeType": "Component",
+                "nodeId": "C-100",
+                "attributes": []
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north"
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south"
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east"
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west"
+            }
+          ],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Controller",
+              "tone": "hierarchy"
+            }
+          }
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Controller",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Component",
+                    "nodeId": "C-100",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            },
+            {
+              "kind": "container",
+              "id": "scope:C-100:sequence:secondary:return-region",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 0,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 68,
+                  "right": 18,
+                  "bottom": 0,
+                  "left": 18
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "scope:C-100:sequence:secondary",
+                  "role": "ui_contracts_group",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "layered",
+                    "direction": "horizontal",
+                    "gap": 24,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 16,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [
+                    {
+                      "kind": "node",
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+                      "role": "state",
+                      "primitive": "card",
+                      "classes": [
+                        "semantic_node"
+                      ],
+                      "widthPolicy": {
+                        "preferred": "standard",
+                        "allowed": [
+                          "standard"
+                        ]
+                      },
+                      "overflowPolicy": {
+                        "kind": "grow_height"
+                      },
+                      "content": [],
+                      "sharedNode": {
+                        "title": "State 0",
+                        "decoratorMode": {
+                          "id": "type,id",
+                          "showNodeType": true,
+                          "showNodeId": true
+                        },
+                        "nodeType": "State",
+                        "nodeId": "ST-100",
+                        "attributes": []
+                      },
+                      "ports": [
+                        {
+                          "id": "north",
+                          "role": "north",
+                          "side": "north"
+                        },
+                        {
+                          "id": "south",
+                          "role": "south",
+                          "side": "south"
+                        },
+                        {
+                          "id": "east",
+                          "role": "east",
+                          "side": "east"
+                        },
+                        {
+                          "id": "west",
+                          "role": "west",
+                          "side": "west"
+                        }
+                      ]
+                    }
+                  ],
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source",
+                  "role": "return_channel",
+                  "side": "east",
+                  "offset": 110.5
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east",
+                  "role": "return_channel",
+                  "side": "east",
+                  "offset": 50
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west",
+                  "role": "return_channel",
+                  "side": "west",
+                  "offset": 50
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target",
+                  "role": "return_channel",
+                  "side": "west",
+                  "offset": 110.5
+                }
+              ]
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north"
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south"
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east"
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west"
+            }
+          ],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Controller"
+            }
+          }
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north"
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south"
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east"
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west"
+        }
+      ],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      }
+    },
+    "edges": [
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+          "portId": "east"
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "markers": {},
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:1",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source"
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {},
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:2",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east"
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "{ready_0_0}",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {},
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:3",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west"
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {},
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:4",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target"
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+          "portId": "west"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      }
+    ],
+    "diagnostics": []
+  },
+  "measuredScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      },
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Controller",
+              "tone": "hierarchy"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component hierarchy · Controller"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 155.945,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node",
+                "shared-node",
+                "shared-node-dense"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "widthBand": "standard",
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "Component"
+                  ],
+                  "x": 15.5,
+                  "y": 1.5,
+                  "width": 54.58,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_id",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "C-100"
+                  ],
+                  "x": 74.08,
+                  "y": 1.5,
+                  "width": 26.915,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Controller"
+                  ],
+                  "x": 15.5,
+                  "y": 26.5,
+                  "width": 73.608,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                }
+              ],
+              "sharedNode": {
+                "density": "dense",
+                "decorator": {
+                  "x": 1.5,
+                  "y": 1.5,
+                  "width": 221,
+                  "height": 19,
+                  "items": [
+                    {
+                      "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "C-100"
+                      ],
+                      "x": 74.08,
+                      "y": 1.5,
+                      "width": 26.915,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    }
+                  ]
+                },
+                "body": {
+                  "x": 1.5,
+                  "y": 20.5,
+                  "width": 221,
+                  "height": 31,
+                  "title": {
+                    "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Controller"
+                    ],
+                    "x": 15.5,
+                    "y": 26.5,
+                    "width": 73.608,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  "attributeGroups": []
+                }
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 53
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 26.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 26.5
+                }
+              ],
+              "overflow": {
+                "status": "fits"
+              },
+              "width": 224,
+              "height": 53
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "width": 256,
+          "height": 104
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Controller"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:C-100:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component scope · Controller"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 139.81,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "C-100"
+                      ],
+                      "x": 74.08,
+                      "y": 1.5,
+                      "width": 26.915,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Controller"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 73.608,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "C-100"
+                          ],
+                          "x": 74.08,
+                          "y": 1.5,
+                          "width": 26.915,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Controller"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 73.608,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 224,
+              "height": 53
+            },
+            {
+              "kind": "container",
+              "id": "scope:C-100:sequence:secondary:return-region",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 0,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 68,
+                  "right": 18,
+                  "bottom": 0,
+                  "left": 18
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "scope:C-100:sequence:secondary",
+                  "role": "ui_contracts_group",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "layered",
+                    "direction": "horizontal",
+                    "gap": 24,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 16,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [
+                    {
+                      "kind": "node",
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+                      "role": "state",
+                      "primitive": "card",
+                      "classes": [
+                        "semantic_node",
+                        "shared-node",
+                        "shared-node-dense"
+                      ],
+                      "widthPolicy": {
+                        "preferred": "standard",
+                        "allowed": [
+                          "standard"
+                        ]
+                      },
+                      "widthBand": "standard",
+                      "overflowPolicy": {
+                        "kind": "grow_height"
+                      },
+                      "content": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "State"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 25.675,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ST-100"
+                          ],
+                          "x": 45.175,
+                          "y": 1.5,
+                          "width": 32.23,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "State 0"
+                          ],
+                          "x": 15.5,
+                          "y": 26.5,
+                          "width": 52.896,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        }
+                      ],
+                      "sharedNode": {
+                        "density": "dense",
+                        "decorator": {
+                          "x": 1.5,
+                          "y": 1.5,
+                          "width": 221,
+                          "height": 19,
+                          "items": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__decorator_type",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_decorator",
+                              "lines": [
+                                "State"
+                              ],
+                              "x": 15.5,
+                              "y": 1.5,
+                              "width": 25.675,
+                              "height": 19,
+                              "lineHeight": 12,
+                              "region": "primary"
+                            },
+                            {
+                              "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__decorator_id",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_decorator",
+                              "lines": [
+                                "ST-100"
+                              ],
+                              "x": 45.175,
+                              "y": 1.5,
+                              "width": 32.23,
+                              "height": 19,
+                              "lineHeight": 12,
+                              "region": "primary"
+                            }
+                          ]
+                        },
+                        "body": {
+                          "x": 1.5,
+                          "y": 20.5,
+                          "width": 221,
+                          "height": 31,
+                          "title": {
+                            "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__title",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_title",
+                            "lines": [
+                              "State 0"
+                            ],
+                            "x": 15.5,
+                            "y": 26.5,
+                            "width": 52.896,
+                            "height": 19,
+                            "lineHeight": 19,
+                            "region": "primary"
+                          },
+                          "attributeGroups": []
+                        }
+                      },
+                      "ports": [
+                        {
+                          "id": "north",
+                          "role": "north",
+                          "side": "north",
+                          "x": 112,
+                          "y": 0
+                        },
+                        {
+                          "id": "south",
+                          "role": "south",
+                          "side": "south",
+                          "x": 112,
+                          "y": 53
+                        },
+                        {
+                          "id": "east",
+                          "role": "east",
+                          "side": "east",
+                          "x": 224,
+                          "y": 26.5
+                        },
+                        {
+                          "id": "west",
+                          "role": "west",
+                          "side": "west",
+                          "x": 0,
+                          "y": 26.5
+                        }
+                      ],
+                      "overflow": {
+                        "status": "fits"
+                      },
+                      "width": 224,
+                      "height": 53
+                    }
+                  ],
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 224,
+                  "height": 69
+                }
+              ],
+              "ports": [
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source",
+                  "role": "return_channel",
+                  "side": "east",
+                  "offset": 110.5,
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east",
+                  "role": "return_channel",
+                  "side": "east",
+                  "offset": 50,
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west",
+                  "role": "return_channel",
+                  "side": "west",
+                  "offset": 50,
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target",
+                  "role": "return_channel",
+                  "side": "west",
+                  "offset": 110.5,
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 260,
+              "height": 137
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "width": 292,
+          "height": 257
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "width": 324,
+      "height": 421
+    },
+    "edges": [
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+          "portId": "east",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "markers": {},
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:1",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {},
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:2",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "{ready_0_0}"
+          ],
+          "width": 77.952,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {},
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:3",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {},
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:4",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+          "portId": "west",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "ownerContainerId": "scope:C-100:sequence:secondary:return-region"
+      }
+    ],
+    "diagnostics": []
+  },
+  "positionedScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      },
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Controller",
+              "tone": "hierarchy"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component hierarchy · Controller"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 155.945,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node",
+                "shared-node",
+                "shared-node-dense"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "widthBand": "standard",
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "Component"
+                  ],
+                  "x": 15.5,
+                  "y": 1.5,
+                  "width": 54.58,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_id",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "C-100"
+                  ],
+                  "x": 74.08,
+                  "y": 1.5,
+                  "width": 26.915,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Controller"
+                  ],
+                  "x": 15.5,
+                  "y": 26.5,
+                  "width": 73.608,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                }
+              ],
+              "sharedNode": {
+                "density": "dense",
+                "decorator": {
+                  "x": 1.5,
+                  "y": 1.5,
+                  "width": 221,
+                  "height": 19,
+                  "items": [
+                    {
+                      "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "C-100"
+                      ],
+                      "x": 74.08,
+                      "y": 1.5,
+                      "width": 26.915,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    }
+                  ]
+                },
+                "body": {
+                  "x": 1.5,
+                  "y": 20.5,
+                  "width": 221,
+                  "height": 31,
+                  "title": {
+                    "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Controller"
+                    ],
+                    "x": 15.5,
+                    "y": 26.5,
+                    "width": 73.608,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  "attributeGroups": []
+                }
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 53
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 26.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 26.5
+                }
+              ],
+              "overflow": {
+                "status": "fits"
+              },
+              "x": 32,
+              "y": 51,
+              "width": 224,
+              "height": 53
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 128,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 128,
+              "y": 104
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 256,
+              "y": 52
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 52
+            }
+          ],
+          "x": 16,
+          "y": 16,
+          "width": 256,
+          "height": 104
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Controller"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:C-100:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component scope · Controller"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 139.81,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "C-100"
+                      ],
+                      "x": 74.08,
+                      "y": 1.5,
+                      "width": 26.915,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Controller"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 73.608,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "C-100"
+                          ],
+                          "x": 74.08,
+                          "y": 1.5,
+                          "width": 26.915,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Controller"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 73.608,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 183,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 53
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 26.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 26.5
+                }
+              ],
+              "x": 32,
+              "y": 183,
+              "width": 224,
+              "height": 53
+            },
+            {
+              "kind": "container",
+              "id": "scope:C-100:sequence:secondary:return-region",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 0,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 68,
+                  "right": 18,
+                  "bottom": 0,
+                  "left": 18
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "scope:C-100:sequence:secondary",
+                  "role": "ui_contracts_group",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "layered",
+                    "direction": "horizontal",
+                    "gap": 24,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 16,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [
+                    {
+                      "kind": "node",
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+                      "role": "state",
+                      "primitive": "card",
+                      "classes": [
+                        "semantic_node",
+                        "shared-node",
+                        "shared-node-dense"
+                      ],
+                      "widthPolicy": {
+                        "preferred": "standard",
+                        "allowed": [
+                          "standard"
+                        ]
+                      },
+                      "widthBand": "standard",
+                      "overflowPolicy": {
+                        "kind": "grow_height"
+                      },
+                      "content": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "State"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 25.675,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ST-100"
+                          ],
+                          "x": 45.175,
+                          "y": 1.5,
+                          "width": 32.23,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "State 0"
+                          ],
+                          "x": 15.5,
+                          "y": 26.5,
+                          "width": 52.896,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        }
+                      ],
+                      "sharedNode": {
+                        "density": "dense",
+                        "decorator": {
+                          "x": 1.5,
+                          "y": 1.5,
+                          "width": 221,
+                          "height": 19,
+                          "items": [
+                            {
+                              "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__decorator_type",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_decorator",
+                              "lines": [
+                                "State"
+                              ],
+                              "x": 15.5,
+                              "y": 1.5,
+                              "width": 25.675,
+                              "height": 19,
+                              "lineHeight": 12,
+                              "region": "primary"
+                            },
+                            {
+                              "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__decorator_id",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_decorator",
+                              "lines": [
+                                "ST-100"
+                              ],
+                              "x": 45.175,
+                              "y": 1.5,
+                              "width": 32.23,
+                              "height": 19,
+                              "lineHeight": 12,
+                              "region": "primary"
+                            }
+                          ]
+                        },
+                        "body": {
+                          "x": 1.5,
+                          "y": 20.5,
+                          "width": 221,
+                          "height": 31,
+                          "title": {
+                            "id": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D__title",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_title",
+                            "lines": [
+                              "State 0"
+                            ],
+                            "x": 15.5,
+                            "y": 26.5,
+                            "width": 52.896,
+                            "height": 19,
+                            "lineHeight": 19,
+                            "region": "primary"
+                          },
+                          "attributeGroups": []
+                        }
+                      },
+                      "ports": [
+                        {
+                          "id": "north",
+                          "role": "north",
+                          "side": "north",
+                          "x": 112,
+                          "y": 0
+                        },
+                        {
+                          "id": "south",
+                          "role": "south",
+                          "side": "south",
+                          "x": 112,
+                          "y": 53
+                        },
+                        {
+                          "id": "east",
+                          "role": "east",
+                          "side": "east",
+                          "x": 224,
+                          "y": 26.5
+                        },
+                        {
+                          "id": "west",
+                          "role": "west",
+                          "side": "west",
+                          "x": 0,
+                          "y": 26.5
+                        }
+                      ],
+                      "overflow": {
+                        "status": "fits"
+                      },
+                      "x": 50,
+                      "y": 336,
+                      "width": 224,
+                      "height": 53
+                    }
+                  ],
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 69
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 34.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 34.5
+                    }
+                  ],
+                  "x": 50,
+                  "y": 320,
+                  "width": 224,
+                  "height": 69
+                }
+              ],
+              "ports": [
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source",
+                  "role": "return_channel",
+                  "side": "east",
+                  "offset": 110.5,
+                  "x": 260,
+                  "y": 110.5
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east",
+                  "role": "return_channel",
+                  "side": "east",
+                  "offset": 50,
+                  "x": 260,
+                  "y": 50
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west",
+                  "role": "return_channel",
+                  "side": "west",
+                  "offset": 50,
+                  "x": 0,
+                  "y": 50
+                },
+                {
+                  "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target",
+                  "role": "return_channel",
+                  "side": "west",
+                  "offset": 110.5,
+                  "x": 0,
+                  "y": 110.5
+                }
+              ],
+              "x": 32,
+              "y": 252,
+              "width": 260,
+              "height": 137
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 146,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 146,
+              "y": 257
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 292,
+              "y": 128.5
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 128.5
+            }
+          ],
+          "x": 16,
+          "y": 148,
+          "width": 292,
+          "height": 257
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north",
+          "x": 162,
+          "y": 0
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south",
+          "x": 162,
+          "y": 421
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east",
+          "x": 324,
+          "y": 210.5
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west",
+          "x": 0,
+          "y": 210.5
+        }
+      ],
+      "x": 0,
+      "y": 0,
+      "width": 324,
+      "height": 421
+    },
+    "edges": [
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+          "portId": "east",
+          "x": 274,
+          "y": 362.5
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source",
+          "x": 292,
+          "y": 362.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 274,
+              "y": 362.5
+            },
+            {
+              "x": 292,
+              "y": 362.5
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:1",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:source",
+          "x": 292,
+          "y": 362.5
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east",
+          "x": 292,
+          "y": 302
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 292,
+              "y": 362.5
+            },
+            {
+              "x": 292,
+              "y": 302
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:2",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-east",
+          "x": 292,
+          "y": 302
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west",
+          "x": 32,
+          "y": 302
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 292,
+              "y": 302
+            },
+            {
+              "x": 32,
+              "y": 302
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "{ready_0_0}"
+          ],
+          "width": 77.952,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 123.024,
+          "y": 268
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:3",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:upper-west",
+          "x": 32,
+          "y": 302
+        },
+        "to": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target",
+          "x": 32,
+          "y": 362.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 32,
+              "y": 302
+            },
+            {
+              "x": 32,
+              "y": 362.5
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:return:4",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "scope:C-100:sequence:secondary:return-region",
+          "portId": "scope:C-100:sequence:secondary:relationship:%5B%22ST-100%22%2C%22TRANSITIONS_TO%22%2C%22ST-100%22%5D:0:target",
+          "x": 32,
+          "y": 362.5
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AC-100%22%2C%22sequence%22%2C%22scope%3AC-100%3Asequence%3Asecondary%22%2C%22ST-100%22%5D",
+          "portId": "west",
+          "x": 50,
+          "y": 362.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 32,
+              "y": 362.5
+            },
+            {
+              "x": 50,
+              "y": 362.5
+            }
+          ]
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      }
+    ],
+    "decorations": [],
+    "diagnostics": [],
+    "paintOrder": [
+      "chrome",
+      "nodes",
+      "labels",
+      "edges",
+      "edge_labels"
+    ]
+  }
+}

@@ -116,7 +116,7 @@ describe("preview workflow", () => {
     }
 
     expect(result.artifact.text).toContain('class="staged-svg');
-    expect(result.artifact.text).toContain("ViewState Graph");
+    expect(result.artifact.text).toContain("Component hierarchy");
     expect(result.artifact.sourceArtifacts?.dot).toBeUndefined();
   });
 

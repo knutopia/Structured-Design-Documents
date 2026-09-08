@@ -57,7 +57,7 @@ END
 # ViewState TRANSITIONS_TO ViewState
 
 Component C-001 "Component Name"
-  CONTAINS C-002 "a Component" # (hidden)
+  CONTAINS C-002 "a Component"
   EMITS E-001 "an Event" # (shown with strict profile)
   DEPENDS_ON SA-001 "a SystemAction" # (shown with strict profile)
   BINDS_TO D-001 "a DataEntity" # (shown with strict profile)
@@ -93,6 +93,9 @@ END
 # Incoming edges for SystemAction:
 # Process, ViewState, Component DEPENDS_ON SystemAction
 ```
+Shows Component containment in an enclosure overview and local parent/child scopes.  
+Composition uses labeled reference connectors.  Supporting contracts and secondary State sequences appear in detailed
+output, or in compact output when the projection uses the State-only fallback.
 
 == Scenario Flow
 

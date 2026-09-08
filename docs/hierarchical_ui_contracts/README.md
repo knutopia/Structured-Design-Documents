@@ -1,17 +1,21 @@
 # Component containment: B — enclosure overview and local context
 
-## Implementation in progress — Stage 6 blocked
+## B5 implementation and acceptance
 
 The [accepted implementation plan](staged_ui_contracts_b5_implementation_plan.md)
-has been implemented through its Stage 5 proof gates. The [implementation ledger](b5_implementation_evidence.md)
-records the passing complete-sheet matrix and the transition topology failures
-that prevent public activation. Shared placement/routing and public previews
-remain unchanged.
+now drives the public staged SVG/PNG path. The [implementation ledger](b5_implementation_evidence.md)
+and [final acceptance report](b5_implementation_acceptance.md) record the stage
+gates, option matrix, compatibility checks and protected-file audit.
 
-Review the new native complete-sheet evidence: [compact, no decorators](implementation_evidence/stage5/compact.none.svg),
-[detailed, no decorators](implementation_evidence/stage5/detailed.none.svg), and
-[detailed, type and ID](implementation_evidence/stage5/detailed.type-id.svg).
-These are acceptance evidence for Departure Desk, not refreshed public goldens.
+The [resumed Stage 6 review](stage_6_resumed_acceptance.md) documents the corrected
+transition routes, shared sibling enclosures and arrow clearance. Long-ID
+shared-node decorator overflow is explicitly accepted for this port; a future
+`(long ID)` replacement remains outside scope.
+
+Public-path Departure Desk proofs: [compact, no decorators](implementation_evidence/stage7/departure_desk/compact.none.svg),
+[detailed, no decorators](implementation_evidence/stage7/departure_desk/detailed.none.svg), and
+[detailed, type and ID](implementation_evidence/stage7/departure_desk/detailed.type-id.svg).
+The original B2–B5 explorations remain preserved below.
 
 ## Current B5 proofs: clean connectors, corrected headers, independent decorators
 

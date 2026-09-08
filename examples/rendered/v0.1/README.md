@@ -46,9 +46,9 @@ All corpus inputs are validated with the bundle-derived `simple` profile before 
 
 `ui_contracts` visual review checklist:
 
-- top-level Place containers remain vertically balanced even when content density varies sharply
-- synthetic `ViewState Graph` and fallback `State graph` regions read horizontally inside their owning scope
-- contract edges that emerge from containers stay readable without collapsing sibling grid or stack placement
+- Component hierarchy and local parent/child scopes appear in both detail settings
+- ViewState and fallback State sequences read horizontally inside intrinsic-width local scopes
+- single-source contract references, hierarchy locators and native container title bars remain readable
 - default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed
 
 `service_blueprint` visual review checklist:

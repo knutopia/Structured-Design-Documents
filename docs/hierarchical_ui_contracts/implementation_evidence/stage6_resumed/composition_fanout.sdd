@@ -1,0 +1,15 @@
+SDD-TEXT 0.1
+Place P-100 "Place"
+  COMPOSED_OF C-100 "One"
+  COMPOSED_OF C-101 "Two"
+  COMPOSED_OF C-102 "Three"
+END
+Component C-100 "One"
+
+END
+Component C-101 "Two"
+
+END
+Component C-102 "Three"
+
+END

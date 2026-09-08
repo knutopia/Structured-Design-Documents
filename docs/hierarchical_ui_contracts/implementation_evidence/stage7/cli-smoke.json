@@ -1,0 +1,116 @@
+{
+  "isolatedDirectory": "/tmp/sdd-b5-cli-xvtqrv65",
+  "checks": [
+    {
+      "args": [
+        "defaults",
+        "set",
+        "decorators",
+        "type"
+      ],
+      "exitCode": 0,
+      "stdout": "Set decorators to 'type' in user defaults at /tmp/sdd-b5-cli-xvtqrv65/config/sdd/config.yaml.\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "show",
+        "bundle/v0.1/examples/place_viewstate_transition.sdd",
+        "--view",
+        "ui_contracts",
+        "--detail",
+        "compact",
+        "--out",
+        "/tmp/sdd-b5-cli-xvtqrv65/preference.svg"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Omitted empty ui_contracts containers in compact detail: Confirmation.\nWrote /tmp/sdd-b5-cli-xvtqrv65/preference.svg\n"
+    },
+    {
+      "args": [
+        "show",
+        "bundle/v0.1/examples/place_viewstate_transition.sdd",
+        "--view",
+        "ui_contracts",
+        "--detail",
+        "compact",
+        "--decorators",
+        "none",
+        "--out",
+        "/tmp/sdd-b5-cli-xvtqrv65/override.svg"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Omitted empty ui_contracts containers in compact detail: Confirmation.\nWrote /tmp/sdd-b5-cli-xvtqrv65/override.svg\n"
+    },
+    {
+      "args": [
+        "show",
+        "bundle/v0.1/examples/place_viewstate_transition.sdd",
+        "--view",
+        "ui_contracts",
+        "--detail",
+        "detailed",
+        "--decorators",
+        "type,id",
+        "--format",
+        "png",
+        "--out",
+        "/tmp/sdd-b5-cli-xvtqrv65/decorated.png"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Wrote /tmp/sdd-b5-cli-xvtqrv65/decorated.png\n"
+    },
+    {
+      "args": [
+        "render",
+        "bundle/v0.1/examples/place_viewstate_transition.sdd",
+        "--view",
+        "ui_contracts",
+        "--detail",
+        "detailed",
+        "--format",
+        "dot",
+        "--out",
+        "/tmp/sdd-b5-cli-xvtqrv65/legacy.dot"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Wrote /tmp/sdd-b5-cli-xvtqrv65/legacy.dot\n"
+    },
+    {
+      "args": [
+        "render",
+        "bundle/v0.1/examples/place_viewstate_transition.sdd",
+        "--view",
+        "ui_contracts",
+        "--detail",
+        "detailed",
+        "--format",
+        "mermaid",
+        "--out",
+        "/tmp/sdd-b5-cli-xvtqrv65/legacy.mmd"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Wrote /tmp/sdd-b5-cli-xvtqrv65/legacy.mmd\n"
+    },
+    {
+      "args": [
+        "show",
+        "/tmp/sdd-b5-cli-xvtqrv65/structure.sdd",
+        "--view",
+        "all",
+        "--detail",
+        "compact",
+        "--out",
+        "/tmp/sdd-b5-cli-xvtqrv65/batch.svg"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Wrote /tmp/sdd-b5-cli-xvtqrv65/batch.ui_contracts.svg\nGenerated 1 diagram(s). Skipped 5 without visible content: outcome_opportunity_map, journey_map, service_blueprint, ia_place_map, scenario_flow.\n"
+    }
+  ]
+}

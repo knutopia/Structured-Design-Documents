@@ -1,0 +1,11 @@
+SDD-TEXT 0.1
+Component C-100 "Form"
+  BINDS_TO D-100 "Record" field=first
+  BINDS_TO D-100 "Record" field=second
+END
+DataEntity D-100 "Record"
+
+END
+State ST-100 "Ready"
+  scope_id=C-100
+END

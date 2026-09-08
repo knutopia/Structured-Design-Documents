@@ -1,0 +1,1547 @@
+{
+  "detail": "compact",
+  "decorators": "type",
+  "model": {
+    "overview": [
+      {
+        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+        "node": {
+          "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "semanticId": "C-100",
+          "scopeId": "overview",
+          "role": "hierarchy",
+          "path": [],
+          "title": "Form",
+          "nodeType": "Component",
+          "attributes": []
+        },
+        "children": [],
+        "title": "Component hierarchy · Form"
+      }
+    ],
+    "scopes": [
+      {
+        "id": "scope:C-100",
+        "kind": "component",
+        "title": "Component scope · Form",
+        "focal": {
+          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+          "semanticId": "C-100",
+          "scopeId": "scope:C-100",
+          "role": "focal",
+          "path": [],
+          "title": "Form",
+          "nodeType": "Component",
+          "attributes": []
+        },
+        "parents": [],
+        "children": [],
+        "containment": [],
+        "sequences": [],
+        "compositions": [],
+        "contracts": []
+      }
+    ],
+    "register": {
+      "id": "target-register",
+      "title": "Referenced targets",
+      "nodes": []
+    },
+    "occurrences": [
+      {
+        "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+        "semanticId": "C-100",
+        "scopeId": "overview",
+        "role": "hierarchy",
+        "path": [],
+        "title": "Form",
+        "nodeType": "Component",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+        "semanticId": "C-100",
+        "scopeId": "scope:C-100",
+        "role": "focal",
+        "path": [],
+        "title": "Form",
+        "nodeType": "Component",
+        "attributes": []
+      }
+    ],
+    "relationships": [],
+    "structuralRelationshipIds": [],
+    "visibleSemanticNodeIds": [
+      "C-100"
+    ],
+    "omittedPlaceIds": [],
+    "omissions": [
+      {
+        "id": "E-100",
+        "reason": "detail_policy"
+      },
+      {
+        "id": "SA-100",
+        "reason": "detail_policy"
+      },
+      {
+        "id": "relationship:%5B%22C-100%22%2C%22DEPENDS_ON%22%2C%22SA-100%22%5D:0",
+        "reason": "detail_policy"
+      },
+      {
+        "id": "relationship:%5B%22SA-100%22%2C%22EMITS%22%2C%22E-100%22%5D:0",
+        "reason": "detail_policy"
+      }
+    ],
+    "notes": [],
+    "diagnostics": []
+  },
+  "issues": [],
+  "coverage": [],
+  "occurrences": [
+    [
+      "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+      "C-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+      "C-100"
+    ]
+  ],
+  "relationships": [],
+  "rendererScene": {
+    "viewId": "ui_contracts",
+    "detailId": "compact",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "headerBandHeight": 0
+      },
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [],
+              "sharedNode": {
+                "title": "Form",
+                "decoratorMode": {
+                  "id": "type",
+                  "showNodeType": true,
+                  "showNodeId": false
+                },
+                "nodeType": "Component",
+                "nodeId": "C-100",
+                "attributes": []
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north"
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south"
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east"
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west"
+            }
+          ],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Form",
+              "tone": "hierarchy"
+            }
+          }
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Form",
+                    "decoratorMode": {
+                      "id": "type",
+                      "showNodeType": true,
+                      "showNodeId": false
+                    },
+                    "nodeType": "Component",
+                    "nodeId": "C-100",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north"
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south"
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east"
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west"
+            }
+          ],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Form"
+            }
+          }
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north"
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south"
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east"
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west"
+        }
+      ],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      }
+    },
+    "edges": [],
+    "diagnostics": []
+  },
+  "measuredScene": {
+    "viewId": "ui_contracts",
+    "detailId": "compact",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      },
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Form",
+              "tone": "hierarchy"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component hierarchy · Form"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 132.555,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node",
+                "shared-node",
+                "shared-node-dense"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "widthBand": "standard",
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "Component"
+                  ],
+                  "x": 15.5,
+                  "y": 1.5,
+                  "width": 54.58,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Form"
+                  ],
+                  "x": 15.5,
+                  "y": 26.5,
+                  "width": 38.104,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                }
+              ],
+              "sharedNode": {
+                "density": "dense",
+                "decorator": {
+                  "x": 1.5,
+                  "y": 1.5,
+                  "width": 221,
+                  "height": 19,
+                  "items": [
+                    {
+                      "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    }
+                  ]
+                },
+                "body": {
+                  "x": 1.5,
+                  "y": 20.5,
+                  "width": 221,
+                  "height": 31,
+                  "title": {
+                    "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Form"
+                    ],
+                    "x": 15.5,
+                    "y": 26.5,
+                    "width": 38.104,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  "attributeGroups": []
+                }
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 53
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 26.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 26.5
+                }
+              ],
+              "overflow": {
+                "status": "fits"
+              },
+              "width": 224,
+              "height": 53
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "width": 256,
+          "height": 104
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Form"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:C-100:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component scope · Form"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 116.42,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 38.104,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Form"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 38.104,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 224,
+              "height": 53
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "width": 256,
+          "height": 104
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "width": 288,
+      "height": 268
+    },
+    "edges": [],
+    "diagnostics": []
+  },
+  "positionedScene": {
+    "viewId": "ui_contracts",
+    "detailId": "compact",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      },
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Form",
+              "tone": "hierarchy"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component hierarchy · Form"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 132.555,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node",
+                "shared-node",
+                "shared-node-dense"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "widthBand": "standard",
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "Component"
+                  ],
+                  "x": 15.5,
+                  "y": 1.5,
+                  "width": 54.58,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Form"
+                  ],
+                  "x": 15.5,
+                  "y": 26.5,
+                  "width": 38.104,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                }
+              ],
+              "sharedNode": {
+                "density": "dense",
+                "decorator": {
+                  "x": 1.5,
+                  "y": 1.5,
+                  "width": 221,
+                  "height": 19,
+                  "items": [
+                    {
+                      "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    }
+                  ]
+                },
+                "body": {
+                  "x": 1.5,
+                  "y": 20.5,
+                  "width": 221,
+                  "height": 31,
+                  "title": {
+                    "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Form"
+                    ],
+                    "x": 15.5,
+                    "y": 26.5,
+                    "width": 38.104,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  "attributeGroups": []
+                }
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 53
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 26.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 26.5
+                }
+              ],
+              "overflow": {
+                "status": "fits"
+              },
+              "x": 32,
+              "y": 51,
+              "width": 224,
+              "height": 53
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 128,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 128,
+              "y": 104
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 256,
+              "y": 52
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 52
+            }
+          ],
+          "x": 16,
+          "y": 16,
+          "width": 256,
+          "height": 104
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Form"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:C-100:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component scope · Form"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 116.42,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 38.104,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Form"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 38.104,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 183,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 53
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 26.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 26.5
+                }
+              ],
+              "x": 32,
+              "y": 183,
+              "width": 224,
+              "height": 53
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 128,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 128,
+              "y": 104
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 256,
+              "y": 52
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 52
+            }
+          ],
+          "x": 16,
+          "y": 148,
+          "width": 256,
+          "height": 104
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north",
+          "x": 144,
+          "y": 0
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south",
+          "x": 144,
+          "y": 268
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east",
+          "x": 288,
+          "y": 134
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west",
+          "x": 0,
+          "y": 134
+        }
+      ],
+      "x": 0,
+      "y": 0,
+      "width": 288,
+      "height": 268
+    },
+    "edges": [],
+    "decorations": [],
+    "diagnostics": [],
+    "paintOrder": [
+      "chrome",
+      "nodes",
+      "labels",
+      "edges",
+      "edge_labels"
+    ]
+  }
+}

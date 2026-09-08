@@ -1,0 +1,16 @@
+
+ RUN  v2.1.9 /home/knut/projects/sdd
+
+ ✓ tests/stagedRootStroke.spec.ts (15 tests) 8347ms
+   ✓ staged root inside strokes > keeps the 'ia_place_map' outline inside its exported bounds 1014ms
+   ✓ staged root inside strokes > keeps the 'ui_contracts' outline inside its exported bounds 632ms
+   ✓ staged root inside strokes > keeps the 'scenario_flow' outline inside its exported bounds 5309ms
+   ✓ staged root inside strokes > keeps the 'service_blueprint' outline inside its exported bounds 441ms
+   ✓ staged root inside strokes > keeps the 'outcome_opportunity_map' outline inside its exported bounds 398ms
+   ✓ staged root inside strokes > keeps the 'journey_map' outline inside its exported bounds 459ms
+
+ Test Files  1 passed (1)
+      Tests  15 passed (15)
+   Start at  23:38:12
+   Duration  13.62s (transform 3.37s, setup 0ms, collect 4.64s, tests 8.35s, environment 0ms, prepare 179ms)
+

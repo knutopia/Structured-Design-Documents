@@ -34,7 +34,7 @@ The prompt generates the SDD file (Structured Design Document) and the informati
 :::tabs
 == Information Architecture Diagram
 Information architecture from that first prompt:
-![](examples/shop_sched_exploration.ia_place_map.detailed.svg)
+![](examples/shop_sched_exploration.ia_place_map.compact.svg)
 == Source
 showSource examples/shop_sched_exploration.sdd
 :::
@@ -66,7 +66,7 @@ Also add descriptions. Update the IA.
 :::tabs
 == Information Architecture Diagram
 Rendered output from the admin-area follow-up:
-![](examples/shop_sched_exploration_2.ia_place_map.detailed.svg)
+![](examples/shop_sched_exploration_2.ia_place_map.compact.svg)
 == Source
 showSource examples/shop_sched_exploration_2.sdd {35-51}
 == Source Detail
@@ -109,7 +109,7 @@ Show the UI contracts.
 :::tabs
 == UI Contracts Diagram
 Rendered output from the UI-contracts follow-up, showing the viewState sequence:
-![](examples/shop_sched_exploration_3.ui_contracts.detailed.svg)
+![](examples/shop_sched_exploration_3.ui_contracts.compact.svg)
 == Source
 showSource examples/shop_sched_exploration_3.sdd {26-39}
 == Source Detail
@@ -140,14 +140,16 @@ Added viewStates within Shift Detail:
 ### Simple Follow-Up Edit
 
 The same style also works for smaller follow-ups:
-
+```text
+Using $sdd skill, rename "Open Shifts" to "Available Shifts" and update the IA diagram.
+```
 
 #### Output
 
 :::tabs
 == Information Architecture Diagram
 Renamed "Open Shifts" in "Mechanic's Scheduling" to "Available Shifts":
-![](examples/shop_sched_exploration_4.ia_place_map.detailed.svg)
+![](examples/shop_sched_exploration_4.ia_place_map.compact.svg)
 == Source
 showSource examples/shop_sched_exploration_4.sdd {15}
 == Source Detail
@@ -179,11 +181,11 @@ Using $sdd-skill, show the information architecture.
 The agent, guided by the skill, then calls the `sdd show` command. You could also call the show command directly in a terminal, without using the skill:
 
 ```console
-bash:$ pnpm sdd show shop_sched_exploration_4.sdd --view ia_place_map --profile simple --detail detailed --format png
+bash:$ pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --detail compact --format png --out "shop_sched_exploration_IA_as_a.png"
 
-Wrote /home/knut/projects/sdd/shop_sched_exploration_4.ia_place_map.detailed.png
+Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 ```
-![](examples/shop_sched_exploration_4.ia_place_map.detailed.png)
+![](examples/shop_sched_exploration_4_IA_as_a.png)
 
 This works when the SDD contains the type of content that appears in the type of diagram that you ask for: to render an information architecture, the SDD must contain places (and optionally areas) - otherwise, there is nothing to `show`.
 

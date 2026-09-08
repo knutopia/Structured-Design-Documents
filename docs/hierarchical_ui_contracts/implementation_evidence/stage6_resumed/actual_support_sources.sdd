@@ -1,0 +1,10 @@
+SDD-TEXT 0.1
+Component C-100 "Form"
+  DEPENDS_ON SA-100 "Action"
+END
+SystemAction SA-100 "Action"
+  EMITS E-100 "Finished"
+END
+Event E-100 "Finished"
+
+END

@@ -1,0 +1,64 @@
+
+ RUN  v2.1.9 /home/knut/projects/sdd
+
+ ✓ tests/journeyMapRouting.spec.ts (63 tests) 51651ms
+   ✓ journey map Gate 5 basic routing > preserves the three locked basic primary occurrences and explicitly defers later branch/join work 1028ms
+   ✓ journey map Gate 5 basic routing > preserves exact fixture partitions as later accepted Gate 6 families accumulate 2791ms
+   ✓ journey map Gate 5 basic routing > keeps profile-dependent target geometry deterministic without changing the routed family 604ms
+   ✓ journey map Gate 5 basic routing > renders deterministic partial step-2 SVG and PNG from the exact same SVG 1313ms
+   ✓ journey map Gate 5 basic routing > emits locked structural diagnostics for missing endpoints, omissions, duplicate IDs, and diagonals 390ms
+   ✓ journey map Gate 7 typed occupancy extraction > extracts every locked resource kind with complete recomputable records across all profile-runs 3099ms
+   ✓ journey map Gate 7 typed occupancy extraction > keeps every accepted Gate 6 plan and route byte-for-byte immutable while extracting occupancy 2257ms
+   ✓ journey map Gate 7 typed occupancy extraction > accepts the dense proof with shared assignment and no replacement geometry violation 3296ms
+   ✓ journey map Gate 7 typed occupancy extraction > independently rejects every resolved occupancy, reconstruction, and expansion mutation 2303ms
+   ✓ journey map Gate 6 non-adjacent same-Stage routing > retains the isolated ordering skip while later accepted families are added 2182ms
+   ✓ journey map Gate 6 non-adjacent same-Stage routing > renders deterministic family debug SVG/PNG while retaining accepted earlier route structures 773ms
+   ✓ journey map Gate 6 long cross-Stage and root-Step routing > derives the span-local track from positioned bounds without changing semantic routing 442ms
+   ✓ journey map Gate 6 branch fan-out routing > applies forward source-branch precedence to exactly two primary and three topology occurrences 2154ms
+   ✓ journey map Gate 6 branch fan-out routing > derives primary branch geometry across profiles without changing classification 412ms
+   ✓ journey map Gate 6 branch fan-out routing > fails branch construction and validation visibly without activating Gate 7 fallbacks 427ms
+   ✓ journey map Gate 6 join fan-in routing > routes exactly the two authored primary joins and preserves every accepted earlier plan 2736ms
+   ✓ journey map Gate 6 join fan-in routing > builds a direct upper join and a legal two-segment east-to-south lower join across profiles 1814ms
+   ✓ journey map Gate 6 backward routing > routes exactly the three non-cyclic backward occurrences after every accepted earlier family 3156ms
+   ✓ journey map Gate 6 backward routing > builds south-port Stage-local and reverse root-outer templates with exact controls 1066ms
+   ✓ journey map Gate 6 backward routing > fails malformed backward contracts visibly and keeps duplicates and Gate 7 blocked 637ms
+   ✓ journey map Gate 6 shape-aware cycle routing > applies uniform Alternative B to the complex compressed SCC while retaining full component pressure 1705ms
+   ✓ journey map Gate 6 shape-aware cycle routing > keeps SCC identity and geometry deterministic under edge reordering and annotation-only changes 5099ms
+   ✓ journey map Gate 6 shape-aware cycle routing > rejects malformed SCC metadata independently of route-family declarations 1704ms
+   ✓ journey map Gate 6 self-loop routing > keeps self-loop identity and geometry deterministic across profiles, edge order, and annotation-only data 498ms
+   ✓ journey map Gate 6 self-loop routing > rejects malformed self-loop contracts, missing capacity, and duplicate occurrences visibly 772ms
+   ✓ journey map Gate 6 self-loop routing > renders deterministic self-loop SVG and derives PNG from that exact SVG 711ms
+   ✓ journey map Gate 6 duplicate occurrence routing > defers every duplicate morphology outside the accepted adjacent root-Step group 338ms
+   ✓ journey map Gate 8 crossing continuity and terminal diagnostics > exposes the accepted final scene through byte-identical staged SVG and SVG-derived PNG wrappers 357ms
+   ✓ journey map Gate 8 crossing continuity and terminal diagnostics > locks the seven-run diagnostic matrix and marks only residual final crossings 2337ms
+ ✓ tests/stagedServiceBlueprint.spec.ts (12 tests) 5502ms
+   ✓ staged service_blueprint > renders the Step-only sdd_for_sdd blueprint without node intersections (compact) 981ms
+   ✓ staged service_blueprint > renders the Step-only sdd_for_sdd blueprint without node intersections (detailed) 454ms
+   ✓ staged service_blueprint > builds a fixed renderer-owned root grid for service_blueprint_slice 313ms
+   ✓ staged service_blueprint > renders routing stages for the proof case with deterministic step-2, step-3, and final service_blueprint routes 724ms
+   ✓ staged service_blueprint > orders connector plans by semantic band before physical column when the metadata diverges 338ms
+   ✓ staged service_blueprint > orders connector plans by slot order before physical column when the band metadata ties 332ms
+   ✓ staged service_blueprint > matches staged renderer snapshots for the service_blueprint proof case and routing debug stages 542ms
+   ✓ staged service_blueprint > preserves readable routing when a crowded bottom-gutter bundle is compressed 324ms
+   ✓ staged service_blueprint > merges routing-compatible same-node connectors after side resolution 353ms
+   ✓ staged service_blueprint > keeps incompatible same-node connectors separate and reports that choice explicitly 336ms
+   ✓ staged service_blueprint > keeps disconnected scene construction deterministic in lane order 534ms
+ ✓ tests/helperCli.integration.spec.ts (5 tests) 54811ms
+   ✓ sdd-helper entrypoint integration > supports direct helper execution from nested repo directories for git-only and bundle-backed commands 4880ms
+   ✓ sdd-helper entrypoint integration > returns static and bundle-resolved contract detail from nested repo directories 6193ms
+   ✓ sdd-helper entrypoint integration > proves Gate 6 authoring assessment scenarios through the built helper entrypoint 23739ms
+   ✓ sdd-helper entrypoint integration > reports specific preview diagnostics for invalid intermediate documents and succeeds once the document is valid 7688ms
+   ✓ sdd-helper entrypoint integration > returns unique materialized artifact paths for svg and png preview output 12308ms
+ ✓ tests/journeyMapRenderModel.spec.ts (11 tests) 7929ms
+   ✓ journey map render model > preserves first projected parent, structural edge-line order, and interleaved root author order 1905ms
+   ✓ journey map render model > retains empty and single-Step Stages plus uncontained root Steps 991ms
+   ✓ journey map render model > keeps a Step-only journey valid and preserves every projected duplicate occurrence 746ms
+   ✓ journey map render model > exposes ordered structured references without presentation-formatted label lines 941ms
+   ✓ journey map render model > changes typed reference visibility when the loaded profile-display contract changes 317ms
+   ✓ journey map render model > keeps the locked validation diagnostics isolated by fixture and profile 1894ms
+
+ Test Files  4 passed (4)
+      Tests  91 passed (91)
+   Start at  12:38:04
+   Duration  129.87s (transform 4.01s, setup 0ms, collect 7.21s, tests 119.89s, environment 2ms, prepare 842ms)
+

@@ -46,9 +46,24 @@ for a compact list of content available to each diagram type.
 
 ## UI Contracts
 
-  UI composition and state changes, per Place (and optionally per component).
+  Component hierarchy, UI composition and state changes, with local Place and Component scopes.
 
-  In this view, Places and View States act as containers for UI structure; View State or component State transitions show behavior inside those scopes, with events, data bindings, and system dependencies shown as supporting contracts.
+  The overview shows Component containment with nested enclosures. Each Component also has a local scope containing all immediate parents and children. A reused subtree expands at its first authored occurrence; later references use locators such as `H1 · See Cargo Sheet`. Composition into a Place or ViewState does not create a Component parent.
+
+  Place and Component scopes show horizontal state sequences, composition references, and outgoing contracts from one source reference. A final register lists supporting targets, including Events used only in transition labels. Container titles and hierarchy locators stay visible with every decorator setting.
+
+  | Content | Compact | Detailed |
+  | --- | --- | --- |
+  | Hierarchy and immediate parent/child context | Shown | Shown |
+  | ViewState sequences and complete transition labels | Shown | Shown |
+  | Secondary State sequences and supporting contracts | Hidden when ViewStates are present | Shown |
+  | State-only fallback sequences and contracts | Shown | Shown |
+  | Place primary navigation | Shown when supplied | Shown when supplied |
+  | Place route, access, entry points and description | Hidden | Shown when supplied |
+  | ViewState required data; focal Component description, inputs and outputs | Hidden | Shown when supplied |
+  | Empty Place scopes | Omitted with a coverage note | Retained |
+
+  References remain name-only. `--decorators none`, `type`, `id`, or `type,id` independently controls semantic-node headers in either detail. Omitting the option uses the user preference, then the bundle fallback. Very long IDs can currently overflow that shared header; replacing them with `(long ID)` is deferred. Legacy DOT/Mermaid and Graphviz keep their previous design.
 
   Examples: 
   :::: details place_viewstate_transition_example <Badge type="info" text="Detail: Detailed" vertical="top" />

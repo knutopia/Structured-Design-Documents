@@ -93,9 +93,9 @@ function buildReadmeContent(
   lines.push("");
   lines.push("`ui_contracts` visual review checklist:");
   lines.push("");
-  lines.push("- top-level Place containers remain vertically balanced even when content density varies sharply");
-  lines.push("- synthetic `ViewState Graph` and fallback `State graph` regions read horizontally inside their owning scope");
-  lines.push("- contract edges that emerge from containers stay readable without collapsing sibling grid or stack placement");
+  lines.push("- Component hierarchy and local parent/child scopes appear in both detail settings");
+  lines.push("- ViewState and fallback State sequences read horizontally inside intrinsic-width local scopes");
+  lines.push("- single-source contract references, hierarchy locators and native container title bars remain readable");
   lines.push("- default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed");
   lines.push("");
   lines.push("`service_blueprint` visual review checklist:");

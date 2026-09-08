@@ -1,0 +1,21 @@
+SDD-TEXT 0.1
+Component C-100 "Controller"
+
+END
+State ST-100 "State 0"
+  scope_id=C-100
+  TRANSITIONS_TO ST-101 "State 1" {ready_0_1}
+  TRANSITIONS_TO ST-102 "State 2" {ready_0_2}
+END
+State ST-101 "State 1"
+  scope_id=C-100
+  TRANSITIONS_TO ST-103 "State 3" {ready_1_3}
+END
+State ST-102 "State 2"
+  scope_id=C-100
+  TRANSITIONS_TO ST-103 "State 3" {ready_2_3}
+END
+State ST-103 "State 3"
+  scope_id=C-100
+
+END

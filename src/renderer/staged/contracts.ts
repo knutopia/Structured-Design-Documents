@@ -211,7 +211,7 @@ export type JourneyMapItemMetadata =
     };
 
 export interface ViewMetadata {
-  uiContracts?: { kind: "enclosure"; title?: string; tone?: "inset" };
+  uiContracts?: { kind: "enclosure" | "sheet"; title?: string; tone?: "inset" | "hierarchy" };
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
   outcomeOpportunity?: OutcomeOpportunityItemMetadata;

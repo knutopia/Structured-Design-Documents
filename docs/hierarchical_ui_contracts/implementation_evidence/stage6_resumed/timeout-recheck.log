@@ -1,0 +1,15 @@
+
+ RUN  v2.1.9 /home/knut/projects/sdd
+
+ ✓ tests/stagedVisualAcceptance.spec.ts (5 tests) 4779ms
+   ✓ staged visual acceptance > keeps target ia_place_map artifacts free of fallback diagnostics, node-crossing routes, and weak target approaches 1782ms
+   ✓ staged visual acceptance > keeps target ui_contracts support-edge labels clear of headers, node boxes, each other, and route overlap 664ms
+   ✓ staged visual acceptance > keeps the scenario_flow proof case free of forbidden diagnostics, node-crossing routes, and label collisions 577ms
+   ✓ staged visual acceptance > keeps nested branches and a parallel scenario flow in separated horizontal row groups 345ms
+   ✓ staged visual acceptance > keeps outcome_opportunity_map proof cases free of forbidden diagnostics, node-crossing routes, and label collisions 1407ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  18:38:40
+   Duration  9.14s (transform 2.54s, setup 0ms, collect 3.66s, tests 4.78s, environment 0ms, prepare 196ms)
+

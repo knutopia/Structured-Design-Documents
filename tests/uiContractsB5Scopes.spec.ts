@@ -39,7 +39,7 @@ const geometry = (scene: PositionedScene) => ({
 });
 
 describe("production scene builders reproduce B5 scopes", () => {
-  it("rebuilds all twelve configurations from authored semantics", async () => {
+  it("preserves all twelve B5 geometries except the newly approved 18px child-arrow approach", async () => {
     for (const proof of evidence.proofs) {
       const builder = build(proof), result = await runStagedRendererPipeline(builder.scene);
       const issues = assessUiContractsGeometry(result.positionedScene);
@@ -47,7 +47,18 @@ describe("production scene builders reproduce B5 scopes", () => {
       await writeFile(`/tmp/sdd-b5-scopes/${proof.file}.json`, JSON.stringify({ ...result, geometry: issues, relationships: [...builder.relationshipSegments] }, null, 2));
       await writeFile(`/tmp/sdd-b5-scopes/${proof.file}.svg`, (await renderPositionedSceneToSvg(result.positionedScene)).svg);
       expect(issues, proof.file).toEqual([]);
-      expect(geometry(result.positionedScene), proof.file).toEqual(geometry(proof.positionedScene));
+      const actual = geometry(result.positionedScene);
+      // Stage 6 visual guidance explicitly requests breathing room behind child
+      // arrowheads. The only geometry change is the 12 -> 18px terminal leg.
+      if (proof.file.includes("children")) {
+        const childTop = Math.min(...actual.nodes.filter(node => node.semanticId !== "C-410" && node.semanticId.startsWith("C-")).map(node => node.y));
+        actual.nodes.forEach(node => { if (node.y >= childTop) node.y -= 6; });
+        actual.edges.forEach(edge => {
+          edge.route = edge.route.map(point => ({ ...point, y: point.y >= childTop ? point.y - 6 : point.y }));
+          if (edge.label && edge.label.y >= childTop) edge.label = { ...edge.label, y: edge.label.y - 6 };
+        });
+      }
+      expect(actual, proof.file).toEqual(geometry(proof.positionedScene));
       expect(result.positionedScene.root.width, proof.file).toBe(proof.width);
     }
   });

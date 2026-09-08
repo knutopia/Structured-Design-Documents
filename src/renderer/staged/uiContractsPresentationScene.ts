@@ -6,8 +6,9 @@ import { measureScene } from "./pipeline.js";
 import { DEFAULT_ROUTING_POLICY } from "./routingCore/contracts.js";
 import { buildUiContractsFanout } from "./uiContractsFanout.js";
 import { createSceneDiagnostic } from "./diagnostics.js";
+import { buildUiContractsTransitionRegion } from "./uiContractsTransitions.js";
 
-export const UI_CONTRACTS_SPACING = { padding: 16, localGap: 16, siblingGap: 24, sectionGap: 28, layerGap: 24 } as const;
+export const UI_CONTRACTS_SPACING = { padding: 16, localGap: 16, siblingGap: 24, sectionGap: 28, layerGap: 24, arrowApproach: 18 } as const;
 
 export function uiContractsStack(id: string, children: SceneItem[], direction: "horizontal" | "vertical" = "vertical", gap = 0): SceneContainer {
   return { kind: "container", id, role: "ui_contracts_group", primitive: "stack", classes: [],
@@ -32,6 +33,7 @@ export class UiContractsSceneBuilder {
   readonly labelMeasure: ReturnType<typeof createEdgeLabelMeasurementService>;
   constructor(detailId: string, readonly decorators: NodeDecoratorMode, themeId = "default") {
     this.scene = { viewId: "ui_contracts", detailId, themeId, root: uiContractsStack("root", [], "vertical", UI_CONTRACTS_SPACING.sectionGap), edges: [], diagnostics: [] };
+    this.scene.root.viewMetadata = { uiContracts: { kind: "sheet" } };
     const p = UI_CONTRACTS_SPACING.padding;
     this.scene.root.chrome.padding = { top: p, right: p, bottom: p, left: p };
     this.labelMeasure = createEdgeLabelMeasurementService(themeId, this.scene.diagnostics);
@@ -83,7 +85,7 @@ export class UiContractsSceneBuilder {
         return anchor;
       });
       const columns = nodes.map((node, index) => {
-        const column = uiContractsStack(`${id}:column:${index}`, incoming ? [node, anchors[index]] : [anchors[index], node], "vertical", DEFAULT_ROUTING_POLICY.minTerminalLeg);
+        const column = uiContractsStack(`${id}:column:${index}`, incoming ? [node, anchors[index]] : [anchors[index], node], "vertical", incoming ? DEFAULT_ROUTING_POLICY.minTerminalLeg : UI_CONTRACTS_SPACING.arrowApproach);
         column.layout.crossAlignment = "center";
         if (incoming) column.chrome.padding.top = maxHeight - sizes[index].height;
         const relations = selected.filter(edge => incoming ? edge.from === node.id : edge.to === node.id).map(edge => edge.relationshipId);
@@ -111,10 +113,17 @@ export class UiContractsSceneBuilder {
     return group;
   }
   sequence(sequence: UiContractsSequence): SceneContainer {
+    return buildUiContractsTransitionRegion(this, sequence) ?? this.layeredSequence(sequence);
+  }
+  layeredSequence(sequence: UiContractsSequence): SceneContainer {
     const nodes = sequence.nodes.map(node => this.node(node)), edges = sequence.edges.map(edge => this.edge(edge));
     const sizes = new Map(this.measure(nodes).map(node => [node.id, node]));
+    const alignedOffset = Math.min(...[...sizes.values()].map(node => node.height)) / 2;
+    if (new Set([...sizes.values()].map(node => node.height)).size > 1) {
+      for (const node of nodes) for (const port of node.ports) if (port.side === "east" || port.side === "west") port.offset = alignedOffset;
+    }
     const outsets = edges.map(edge => edge.label ? this.labelMeasure(edge.label, edge.id).height + DEFAULT_ROUTING_POLICY.minTerminalLeg
-      - Math.min(sizes.get(edge.from.itemId)!.height, sizes.get(edge.to.itemId)!.height) / 2 : 0);
+      - alignedOffset : 0);
     const group = uiContractsStack(sequence.id, nodes, "horizontal", UI_CONTRACTS_SPACING.layerGap);
     group.layout.strategy = "layered";
     group.chrome.padding.top = Math.max(0, ...outsets) + UI_CONTRACTS_SPACING.padding;
@@ -161,10 +170,26 @@ export class UiContractsSceneBuilder {
     if (complete) content.push(...scope.contracts.map(group => this.fanout(group)));
     return uiContractsEnclosure(scope.id, content, scope.title);
   }
-  hierarchy(item: UiContractsHierarchy, root = true): SceneContainer {
-    const children: SceneItem[] = [this.node(item.node), ...item.children.map(child => this.hierarchy(child, false))];
-    const enclosure = uiContractsEnclosure(item.id, children, item.title);
-    if (!root) enclosure.viewMetadata!.uiContracts!.tone = "inset";
+  private hierarchyChildren(parent: UiContractsHierarchy, depth: number): SceneContainer | undefined {
+    if (!parent.children.length) return undefined;
+    if (parent.children.length === 1 && parent.children[0].title) return this.hierarchy(parent.children[0], depth);
+    const content: SceneItem[] = [];
+    for (const child of parent.children) {
+      if (child.title) content.push(this.hierarchy(child, depth + 1));
+      else {
+        content.push(this.node(child.node));
+        const descendants = this.hierarchyChildren(child, depth + 1);
+        if (descendants) content.push(descendants);
+      }
+    }
+    const enclosure = uiContractsEnclosure(`${parent.id}:siblings`, content);
+    enclosure.viewMetadata!.uiContracts!.tone = depth % 2 ? "inset" : "hierarchy";
+    return enclosure;
+  }
+  hierarchy(item: UiContractsHierarchy, depth = 0): SceneContainer {
+    const descendants = this.hierarchyChildren(item, depth + 1);
+    const enclosure = uiContractsEnclosure(item.id, [this.node(item.node), ...(descendants ? [descendants] : [])], item.title);
+    enclosure.viewMetadata!.uiContracts!.tone = depth % 2 ? "inset" : "hierarchy";
     return enclosure;
   }
   complete(model: UiContractsPresentationModel): RendererScene {

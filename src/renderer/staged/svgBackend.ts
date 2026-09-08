@@ -13,6 +13,7 @@ import type {
   SceneNodePrimitive
 } from "./contracts.js";
 import { paintUiContractsContainer } from "./uiContractsContainer.js";
+import { paintUiContractsArrowheads } from "./uiContractsArrowheads.js";
 import {
   createBackendDiagnostic,
   sortRendererDiagnostics,
@@ -671,7 +672,7 @@ function resolveMarkerAttributes(edge: PositionedEdge): string {
   return attributes.length > 0 ? ` ${attributes.join(" ")}` : "";
 }
 
-function renderEdge(edge: PositionedEdge, diagnostics: RendererDiagnostic[]): string | undefined {
+function renderEdge(edge: PositionedEdge, diagnostics: RendererDiagnostic[], theme: RendererTheme, portableUiArrows = false): string | undefined {
   const path = buildRoutePath(edge, diagnostics);
   if (!path) {
     return undefined;
@@ -687,7 +688,8 @@ function renderEdge(edge: PositionedEdge, diagnostics: RendererDiagnostic[]): st
 
   return [
     `<g id="scene-edge-${sanitizeToken(edge.id)}" class="${classList}" data-edge-id="${escapeXml(edge.id)}" data-role="${escapeXml(edge.role)}">`,
-    `  <path class="scene-edge__path" d="${path}"${resolveMarkerAttributes(edge)}/>`,
+    `  <path class="scene-edge__path" d="${path}"${portableUiArrows ? "" : resolveMarkerAttributes(edge)}/>`,
+    ...(portableUiArrows ? paintUiContractsArrowheads(edge, theme).map(markup => `  ${markup}`) : []),
     "</g>"
   ].join("\n");
 }
@@ -911,7 +913,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
   collectPaintElements(scene.root, groups, diagnostics, theme, measurement, true);
 
   for (const edge of scene.edges) {
-    const rendered = renderEdge(edge, diagnostics);
+    const rendered = renderEdge(edge, diagnostics, theme, scene.root.viewMetadata?.uiContracts?.kind === "sheet");
     if (rendered) {
       groups.edges.push(rendered);
     }

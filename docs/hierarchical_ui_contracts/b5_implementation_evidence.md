@@ -1,11 +1,12 @@
 # B5 implementation evidence
 
-Implementation follows the [accepted plan](staged_ui_contracts_b5_implementation_plan.md).
-This is a stage ledger, not a declaration that the complete port is finished.
+Current status: complete through Stage 7, with the user's accepted long-ID
+limitation. All 1,216 tests pass and the documentation site builds. See the
+[acceptance report](b5_implementation_acceptance.md). Earlier blocked entries
+below are preserved as stage history.
 
-**Current status: Stage 6 blocked. Stages 0–5 pass their bounded gates.** The new
-scene builder has not replaced public staged SVG/PNG entrypoints. Five transition
-topology cases fail acceptance; no goldens or public rendered examples changed.
+Implementation follows the [accepted plan](staged_ui_contracts_b5_implementation_plan.md).
+This ledger preserves the decisions and evidence recorded at each stage.
 
 ## Stage 0 — passed
 
@@ -191,3 +192,84 @@ remain unfinished because this stage did not pass.
 Public renderer code in `staged/uiContracts.ts`, preview workflow selection,
 legacy rendering and unrelated views remain at their existing implementations.
 The new preparation target exists but public workflows still use the default.
+
+## Stage 6 resumed — original failures resolved; long-ID gate blocked
+
+The user's [visual solutions](stage_6_visual_issues_solutions.md) supplied the
+accepted route and enclosure treatment. The new scene inputs now pass the
+branch, merge, diamond, cycle and self-loop cases in all eight option settings.
+Sibling leaves share an enclosure, child arrow approaches are 18px, and view-owned
+SVG paint emits ordinary arrow paths for import compatibility. Native title bars
+remain clean. Shared placement/routing, semantic-node rendering and original
+reference/golden hashes remain unchanged.
+
+The broader matrix passes nested reuse, disconnected roots, long content and
+relationship provenance checks. However, four long-ID combinations expose native
+shared-node decorator overflow. The 32-character semantic ID is valid source;
+combined type/ID text reaches local x=268 in its fixed 224px semantic node. Both
+native diagnostics and visible PNG overflow fail acceptance. This requires a
+decision about the frozen shared-node overflow policy before Stage 7 may begin.
+
+See [the resumed acceptance report](stage_6_resumed_acceptance.md) for the exact
+input, options, geometry, code boundary, corrected visuals and resume conditions.
+The initial Stage 6 failure evidence above is retained as history; its five
+transition failures no longer describe the current implementation. Overall
+Stage 6 remains blocked, and the public port remains incomplete.
+
+Verification: the focused run passed 152/156 tests; all four failures concern the
+long semantic IDs. The complete `TMPDIR=/tmp pnpm test` build succeeded and ran
+1,206 tests: 1,201 passed, those same four failed, and one unrelated IA Place Map
+test timed out. The complete five-test visual-acceptance suite passed on an
+isolated single-worker rerun. No test limits changed. Full logs, the 120-option
+topology matrix (116 passing, four blocked), native SVG/PNG, model/scene records,
+coverage and the clean 49-source/49-reference/156-golden audit are retained under
+`implementation_evidence/stage6_resumed/`. Documentation-site build and public
+artifact refresh remain Stage 7 work, deferred by this acceptance gate.
+
+## Stage 6 acceptance decision — passed with an explicit limitation
+
+The user accepted long-ID overflow for this implementation and specified a
+future `(long ID)` replacement outside the port's scope. Shared-node behavior
+remains unchanged. The long-ID fixture now permits only the existing decorator
+overflow warning and matching text-bounds finding; all raw evidence remains
+recorded. The shared routing validator and every other acceptance check remain
+strict. The topology matrix has 120 accepted combinations, four of which retain
+that explicit limitation. This decision cleared the Stage 7 gate.
+
+## Stage 7 — passed
+
+The public staged SVG/PNG entrypoints use the B5 presentation model and scene
+builders. Preview preparation selects staged or legacy coverage from the chosen
+backend; structure-only Component diagrams remain applicable in compact batch
+output. Legacy text/Graphviz keeps its existing model and behavior. Bundle
+guidance and relationship documentation now reflect visible containment and
+composition references.
+
+The complete Departure Desk design passes all eight public detail/decorator
+combinations. CLI smoke checks with isolated preferences verify user defaults,
+explicit overrides, PNG, legacy DOT/Mermaid and batch applicability. The actual
+helper preview produces the B5 SVG without diagnostics. Native container titles,
+outlines, arrowheads and updated examples were visually reviewed. Ten accepted
+staged UI-contract snapshots and sixteen staged SVG/PNG examples were refreshed.
+
+The full `TMPDIR=/tmp pnpm test` integration run exposed an outdated test's
+expectation of an outer sheet outline and a Journey Map timeout. The outline
+test now checks B5's visible enclosure strokes and distinguishes the SVG `width`
+attribute from `stroke-width`. Both affected suites pass. The final full run,
+`TMPDIR=/tmp pnpm test --maxWorkers=1 --minWorkers=1`, passes **1,216 tests in
+117 files**. Test timeouts were not changed. `TMPDIR=/tmp pnpm docs:build` passes
+with the existing chunk-size advisory.
+
+The protected-file audit confirms all 49 frozen source hashes, all 49 design
+references and the unchanged Departure Desk checksum. Only the ten intended
+staged UI-contract goldens differ from the 156 original golden hashes. Another
+416 tracked legacy/unrelated generated artifacts match HEAD. See
+[Stage 7 evidence](implementation_evidence/stage7/) and the
+[final acceptance report](b5_implementation_acceptance.md).
+
+Satisfied: complete public design, semantic/provenance coverage, all option
+variations, native title bars, single-source contracts, frozen shared placement
+and routing, and legacy compatibility. Retained with explicit acceptance:
+long-ID overflow and B5's native right-edge excess. Actual Figma import remains
+unverified because the connector tool limit prevented live access; ordinary SVG
+arrow paths are verified. The port is complete within that accepted scope.

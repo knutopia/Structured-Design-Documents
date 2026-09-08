@@ -1,0 +1,25 @@
+{
+  "kind": "sdd-preview",
+  "path": "bundle/v0.1/examples/place_viewstate_transition.sdd",
+  "revision": "rev_03d2f370b965b4b73fbe6ae9eb8f0b1b15bcf53f680f8c73511b2e56d4ea3a94",
+  "view_id": "ui_contracts",
+  "profile_id": "simple",
+  "detail_id": "detailed",
+  "backend_id": "staged_ui_contracts_preview",
+  "format": "svg",
+  "mime_type": "image/svg+xml",
+  "artifact_path": "/tmp/unique-previews/20260908-043419Z-xZT2r6/place_viewstate_transition.ui_contracts.detailed.svg",
+  "notes": [],
+  "diagnostics": [],
+  "assessment": {
+    "kind": "sdd-authoring-outcome-assessment",
+    "outcome": "acceptable",
+    "layer": "success",
+    "can_commit": false,
+    "can_render": true,
+    "should_stop": false,
+    "next_action": "Use the rendered preview artifact.",
+    "blocking_diagnostics": [],
+    "summary": "The preview rendered successfully."
+  }
+}
