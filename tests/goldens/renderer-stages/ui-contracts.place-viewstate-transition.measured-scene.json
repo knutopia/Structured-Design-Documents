@@ -33,15 +33,14 @@
     "children": [
       {
         "kind": "container",
-        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D",
+        "id": "components-without-containment",
         "role": "ui_contracts_group",
         "primitive": "cluster",
         "classes": [],
         "viewMetadata": {
           "uiContracts": {
             "kind": "enclosure",
-            "title": "Component hierarchy · Billing Form",
-            "tone": "hierarchy"
+            "title": "Components without hierarchy"
           }
         },
         "layout": {
@@ -62,15 +61,15 @@
         },
         "headerContent": [
           {
-            "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D:title",
+            "id": "components-without-containment:title",
             "kind": "text",
             "textStyleRole": "shared_node_decorator",
             "lines": [
-              "Component hierarchy · Billing Form"
+              "Components without hierarchy"
             ],
             "x": 14,
             "y": 3,
-            "width": 165.175,
+            "width": 160.975,
             "height": 12,
             "lineHeight": 12,
             "region": "primary"
@@ -79,14 +78,13 @@
         "children": [
           {
             "kind": "node",
-            "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-010%22%5D",
             "role": "component",
             "primitive": "card",
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain",
-              "shared-node--emphasized"
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -100,15 +98,15 @@
             },
             "content": [
               {
-                "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D__title",
+                "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-010%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_emphasized_title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Billing Form"
                 ],
-                "x": 16,
+                "x": 15.5,
                 "y": 14.5,
-                "width": 89.048,
+                "width": 87.736,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -116,22 +114,21 @@
             ],
             "sharedNode": {
               "density": "plain",
-              "emphasized": true,
               "body": {
-                "x": 2,
-                "y": 2,
-                "width": 220,
-                "height": 44,
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
                 "title": {
-                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D__title",
+                  "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-010%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_emphasized_title",
+                  "textStyleRole": "shared_node_title",
                   "lines": [
                     "Billing Form"
                   ],
-                  "x": 16,
+                  "x": 15.5,
                   "y": 14.5,
-                  "width": 89.048,
+                  "width": 87.736,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -174,97 +171,16 @@
             },
             "width": 224,
             "height": 48
-          }
-        ],
-        "ports": [
-          {
-            "id": "north",
-            "role": "north",
-            "side": "north",
-            "x": 0,
-            "y": 0
           },
-          {
-            "id": "south",
-            "role": "south",
-            "side": "south",
-            "x": 0,
-            "y": 0
-          },
-          {
-            "id": "east",
-            "role": "east",
-            "side": "east",
-            "x": 0,
-            "y": 0
-          },
-          {
-            "id": "west",
-            "role": "west",
-            "side": "west",
-            "x": 0,
-            "y": 0
-          }
-        ],
-        "width": 256,
-        "height": 99
-      },
-      {
-        "kind": "container",
-        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-011%22%5D",
-        "role": "ui_contracts_group",
-        "primitive": "cluster",
-        "classes": [],
-        "viewMetadata": {
-          "uiContracts": {
-            "kind": "enclosure",
-            "title": "Component hierarchy · Submit Button",
-            "tone": "hierarchy"
-          }
-        },
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 16,
-          "crossAlignment": "start"
-        },
-        "chrome": {
-          "padding": {
-            "top": 16,
-            "right": 16,
-            "bottom": 16,
-            "left": 16
-          },
-          "gutter": 12,
-          "headerBandHeight": 19
-        },
-        "headerContent": [
-          {
-            "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-011%22%5D:title",
-            "kind": "text",
-            "textStyleRole": "shared_node_decorator",
-            "lines": [
-              "Component hierarchy · Submit Button"
-            ],
-            "x": 14,
-            "y": 3,
-            "width": 176.435,
-            "height": 12,
-            "lineHeight": 12,
-            "region": "primary"
-          }
-        ],
-        "children": [
           {
             "kind": "node",
-            "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-011%22%5D",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-011%22%5D",
             "role": "component",
             "primitive": "card",
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain",
-              "shared-node--emphasized"
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -278,15 +194,15 @@
             },
             "content": [
               {
-                "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-011%22%5D__title",
+                "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-011%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_emphasized_title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Submit Button"
                 ],
-                "x": 16,
+                "x": 15.5,
                 "y": 14.5,
-                "width": 107.088,
+                "width": 105.432,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -294,22 +210,21 @@
             ],
             "sharedNode": {
               "density": "plain",
-              "emphasized": true,
               "body": {
-                "x": 2,
-                "y": 2,
-                "width": 220,
-                "height": 44,
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
                 "title": {
-                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-011%22%5D__title",
+                  "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-011%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_emphasized_title",
+                  "textStyleRole": "shared_node_title",
                   "lines": [
                     "Submit Button"
                   ],
-                  "x": 16,
+                  "x": 15.5,
                   "y": 14.5,
-                  "width": 107.088,
+                  "width": 105.432,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -385,7 +300,7 @@
           }
         ],
         "width": 256,
-        "height": 99
+        "height": 163
       },
       {
         "kind": "container",
@@ -4092,7 +4007,7 @@
       }
     ],
     "width": 643.748,
-    "height": 1962
+    "height": 1899
   },
   "edges": [
     {

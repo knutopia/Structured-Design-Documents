@@ -208,7 +208,9 @@ export class UiContractsSceneBuilder {
   complete(model: UiContractsPresentationModel): RendererScene {
     this.scene.diagnostics.push(...model.diagnostics);
     if (model.diagnostics.some(d => d.severity === "error")) return this.scene;
-    this.scene.root.children = [...model.overview.map(item => this.hierarchy(item)), ...model.scopes.map(scope => this.scope(scope, true))];
+    this.scene.root.children = [...model.overview.map(item => this.hierarchy(item)),
+      ...(model.isolatedComponents.nodes.length ? [uiContractsEnclosure(model.isolatedComponents.id,
+        model.isolatedComponents.nodes.map(node => this.node(node)), model.isolatedComponents.title)] : []), ...model.scopes.map(scope => this.scope(scope, true))];
     if (model.register.nodes.length) this.scene.root.children.push(uiContractsEnclosure(model.register.id, model.register.nodes.map(node => this.node(node)), model.register.title));
     const represented = new Set(this.occurrenceSemanticIds.values());
     for (const id of model.visibleSemanticNodeIds) if (!represented.has(id)) this.scene.diagnostics.push(createSceneDiagnostic(

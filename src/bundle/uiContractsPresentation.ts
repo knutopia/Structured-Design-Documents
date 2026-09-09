@@ -28,9 +28,10 @@ export function uiContractsPresentationProblems(value: unknown, policies?: unkno
   const visibility = value.visibility;
   if (!isRecord(visibility) || !["hierarchy", "secondary", "support", "omit_empty_places"].every(key => text(visibility[key]))) errors.push("visibility must declare detail switches");
   if (!isRecord(value.hierarchy) || value.hierarchy.order !== "source_depth_first" || value.hierarchy.reuse !== "first_expansion" || !text(value.hierarchy.locator_prefix)) errors.push("hierarchy must declare source_depth_first / first_expansion and a locator prefix");
+  if (!isRecord(value.hierarchy) || !["grouped", "individual_roots"].includes(String(value.hierarchy.isolated_components))) errors.push("hierarchy.isolated_components must be grouped or individual_roots");
   if (!isRecord(value.place_description) || !text(value.place_description.property) || !text(value.place_description.visible_when)) errors.push("place_description must declare property and visibility");
   const labels = value.labels;
-  if (!isRecord(labels) || !["hierarchy_root", "hierarchy_expansion", "hierarchy_reference", "component_scope", "place_scope", "standalone_scope", "target_register"].every(key => text(labels[key]))) errors.push("labels must declare all scope and reference templates");
+  if (!isRecord(labels) || !["isolated_components", "hierarchy_root", "hierarchy_expansion", "hierarchy_reference", "component_scope", "place_scope", "standalone_scope", "target_register"].every(key => text(labels[key]))) errors.push("labels must declare all scope and reference templates");
   if (!isRecord(value.transition_label) || typeof value.transition_label.separator !== "string"
     || !Array.isArray(value.transition_label.parts) || !value.transition_label.parts.every(part => isRecord(part)
       && ["event", "guard", "effect"].includes(String(part.field)) && text(part.template) && typeof part.resolve_node_name === "boolean")) errors.push("transition_label must declare annotation templates");

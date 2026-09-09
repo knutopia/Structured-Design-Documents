@@ -77,10 +77,10 @@
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-060\25 22\25 5D"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
+    <g class="ui-contracts-container" data-item-id="components-without-containment">
+      <style>g[data-item-id="components-without-containment"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="16" width="256" height="99" rx="14" fill="#f1f5f9" stroke="none"/>
+      <rect class="ui-contracts-container__body" x="16" y="16" width="256" height="99" rx="14" fill="#f4f7fb" stroke="none"/>
       <path class="ui-contracts-container__title-band" d="M 17.5 35 L 17.5 30 Q 17.5 17.5 30 17.5 L 258 17.5 Q 270.5 17.5 270.5 30 L 270.5 35 Z" fill="#dbe4f0" stroke="none"/>
       <rect class="ui-contracts-container__outline" x="16.75" y="16.75" width="254.5" height="97.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
@@ -107,9 +107,9 @@
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-060-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain shared-node--emphasized" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D" data-role="component" data-node-density="plain">
-      <rect class="shared-node__chrome" x="33" y="52" width="222" height="46" rx="13" ry="13"/>
-      <rect class="shared-node__outline" x="33" y="52" width="222" height="46" rx="13" ry="13"/>
+    <g id="scene-node-occurrence-5b-22components-without-containment-22-2c-22overview-22-2c-22c-060-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-060%22%5D" data-role="component" data-node-density="plain">
+      <rect class="shared-node__chrome" x="32.75" y="51.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="32.75" y="51.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ap-060-22-2c-22focal-22-2c-22p-060-22-5d" class="scene-node primitive-card role-place paint-nodes semantic_node shared-node shared-node-dense shared-node--emphasized" data-item-id="occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D" data-role="place" data-node-density="dense">
       <rect class="shared-node__chrome" x="33" y="189" width="222" height="97" rx="13" ry="13"/>
@@ -172,16 +172,16 @@
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D" data-role="ui_contracts_group">
+    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="components-without-containment" data-role="ui_contracts_group">
       <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="29">
-          <tspan x="30" dy="0">Component hierarchy · Review Panel</tspan>
+          <tspan x="30" dy="0">Components without hierarchy</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node--emphasized shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-060%22%5D" data-role="component">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="80.8">
-              <tspan x="48" y="80.8">Review Panel</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="80.8">
+              <tspan x="47.5" y="80.8">Review Panel</tspan>
             </text>
         </g>
       </g>

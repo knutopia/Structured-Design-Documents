@@ -40,6 +40,7 @@ z
 - Reduced redundancy in diagram
 - Emphasized shared node
 - Added emphasized node to ui_contracts
+- Components without hierarchy
 
 ## Mon 9-7
 

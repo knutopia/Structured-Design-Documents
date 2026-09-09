@@ -33,15 +33,14 @@
     "children": [
       {
         "kind": "container",
-        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D",
+        "id": "components-without-containment",
         "role": "ui_contracts_group",
         "primitive": "cluster",
         "classes": [],
         "viewMetadata": {
           "uiContracts": {
             "kind": "enclosure",
-            "title": "Component hierarchy · Review Form",
-            "tone": "hierarchy"
+            "title": "Components without hierarchy"
           }
         },
         "layout": {
@@ -62,15 +61,15 @@
         },
         "headerContent": [
           {
-            "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D:title",
+            "id": "components-without-containment:title",
             "kind": "text",
             "textStyleRole": "shared_node_decorator",
             "lines": [
-              "Component hierarchy · Review Form"
+              "Components without hierarchy"
             ],
             "x": 14,
             "y": 3,
-            "width": 168.29,
+            "width": 160.975,
             "height": 12,
             "lineHeight": 12,
             "region": "primary"
@@ -79,14 +78,13 @@
         "children": [
           {
             "kind": "node",
-            "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-700%22%5D",
             "role": "component",
             "primitive": "card",
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain",
-              "shared-node--emphasized"
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -100,15 +98,15 @@
             },
             "content": [
               {
-                "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D__title",
+                "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-700%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_emphasized_title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Review Form"
                 ],
-                "x": 16,
+                "x": 15.5,
                 "y": 14.5,
-                "width": 93.952,
+                "width": 93.04,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -116,22 +114,21 @@
             ],
             "sharedNode": {
               "density": "plain",
-              "emphasized": true,
               "body": {
-                "x": 2,
-                "y": 2,
-                "width": 220,
-                "height": 44,
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
                 "title": {
-                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D__title",
+                  "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-700%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_emphasized_title",
+                  "textStyleRole": "shared_node_title",
                   "lines": [
                     "Review Form"
                   ],
-                  "x": 16,
+                  "x": 15.5,
                   "y": 14.5,
-                  "width": 93.952,
+                  "width": 93.04,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -176,99 +173,16 @@
             "y": 51,
             "width": 224,
             "height": 48
-          }
-        ],
-        "ports": [
-          {
-            "id": "north",
-            "role": "north",
-            "side": "north",
-            "x": 128,
-            "y": 0
           },
-          {
-            "id": "south",
-            "role": "south",
-            "side": "south",
-            "x": 128,
-            "y": 99
-          },
-          {
-            "id": "east",
-            "role": "east",
-            "side": "east",
-            "x": 256,
-            "y": 49.5
-          },
-          {
-            "id": "west",
-            "role": "west",
-            "side": "west",
-            "x": 0,
-            "y": 49.5
-          }
-        ],
-        "x": 16,
-        "y": 16,
-        "width": 256,
-        "height": 99
-      },
-      {
-        "kind": "container",
-        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D",
-        "role": "ui_contracts_group",
-        "primitive": "cluster",
-        "classes": [],
-        "viewMetadata": {
-          "uiContracts": {
-            "kind": "enclosure",
-            "title": "Component hierarchy · Summary Card",
-            "tone": "hierarchy"
-          }
-        },
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 16,
-          "crossAlignment": "start"
-        },
-        "chrome": {
-          "padding": {
-            "top": 16,
-            "right": 16,
-            "bottom": 16,
-            "left": 16
-          },
-          "gutter": 12,
-          "headerBandHeight": 19
-        },
-        "headerContent": [
-          {
-            "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D:title",
-            "kind": "text",
-            "textStyleRole": "shared_node_decorator",
-            "lines": [
-              "Component hierarchy · Summary Card"
-            ],
-            "x": 14,
-            "y": 3,
-            "width": 178.58,
-            "height": 12,
-            "lineHeight": 12,
-            "region": "primary"
-          }
-        ],
-        "children": [
           {
             "kind": "node",
-            "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-702%22%5D",
             "role": "component",
             "primitive": "card",
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain",
-              "shared-node--emphasized"
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -282,15 +196,15 @@
             },
             "content": [
               {
-                "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D__title",
+                "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-702%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_emphasized_title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Summary Card"
                 ],
-                "x": 16,
+                "x": 15.5,
                 "y": 14.5,
-                "width": 110.712,
+                "width": 109.184,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -298,22 +212,21 @@
             ],
             "sharedNode": {
               "density": "plain",
-              "emphasized": true,
               "body": {
-                "x": 2,
-                "y": 2,
-                "width": 220,
-                "height": 44,
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
                 "title": {
-                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D__title",
+                  "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-702%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_emphasized_title",
+                  "textStyleRole": "shared_node_title",
                   "lines": [
                     "Summary Card"
                   ],
-                  "x": 16,
+                  "x": 15.5,
                   "y": 14.5,
-                  "width": 110.712,
+                  "width": 109.184,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -355,7 +268,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 178,
+            "y": 115,
             "width": 224,
             "height": 48
           }
@@ -373,27 +286,27 @@
             "role": "south",
             "side": "south",
             "x": 128,
-            "y": 99
+            "y": 163
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
             "x": 256,
-            "y": 49.5
+            "y": 81.5
           },
           {
             "id": "west",
             "role": "west",
             "side": "west",
             "x": 0,
-            "y": 49.5
+            "y": 81.5
           }
         ],
         "x": 16,
-        "y": 143,
+        "y": 16,
         "width": 256,
-        "height": 99
+        "height": 163
       },
       {
         "kind": "container",
@@ -692,7 +605,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 315,
+                "y": 252,
                 "width": 224,
                 "height": 99
               },
@@ -791,7 +704,7 @@
                   "status": "fits"
                 },
                 "x": 363.622,
-                "y": 315,
+                "y": 252,
                 "width": 224,
                 "height": 48
               }
@@ -827,7 +740,7 @@
               }
             ],
             "x": 32,
-            "y": 305,
+            "y": 242,
             "width": 555.622,
             "height": 109
           },
@@ -1015,7 +928,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 447,
+                "y": 384,
                 "width": 224,
                 "height": 66
               },
@@ -1179,7 +1092,7 @@
                   "status": "fits"
                 },
                 "x": 381.778,
-                "y": 447,
+                "y": 384,
                 "width": 224,
                 "height": 66
               }
@@ -1215,7 +1128,7 @@
               }
             ],
             "x": 32,
-            "y": 430,
+            "y": 367,
             "width": 573.778,
             "height": 83
           }
@@ -1251,7 +1164,7 @@
           }
         ],
         "x": 16,
-        "y": 270,
+        "y": 207,
         "width": 605.778,
         "height": 259
       },
@@ -1527,7 +1440,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 592,
+            "y": 529,
             "width": 224,
             "height": 99
           }
@@ -1563,7 +1476,7 @@
           }
         ],
         "x": 16,
-        "y": 557,
+        "y": 494,
         "width": 256,
         "height": 150
       },
@@ -1864,7 +1777,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 780,
+                "y": 717,
                 "width": 224,
                 "height": 99
               },
@@ -1963,7 +1876,7 @@
                   "status": "fits"
                 },
                 "x": 363.622,
-                "y": 780,
+                "y": 717,
                 "width": 224,
                 "height": 48
               }
@@ -1999,7 +1912,7 @@
               }
             ],
             "x": 32,
-            "y": 770,
+            "y": 707,
             "width": 555.622,
             "height": 109
           }
@@ -2035,7 +1948,7 @@
           }
         ],
         "x": 16,
-        "y": 735,
+        "y": 672,
         "width": 587.622,
         "height": 160
       },
@@ -2204,7 +2117,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 958,
+                "y": 895,
                 "width": 224,
                 "height": 48
               }
@@ -2240,7 +2153,7 @@
               }
             ],
             "x": 32,
-            "y": 958,
+            "y": 895,
             "width": 224,
             "height": 48
           },
@@ -2374,7 +2287,7 @@
                       "status": "fits"
                     },
                     "x": 32,
-                    "y": 1032,
+                    "y": 969,
                     "width": 224,
                     "height": 48
                   },
@@ -2452,14 +2365,14 @@
                       "status": "fits"
                     },
                     "x": 387.748,
-                    "y": 1032,
+                    "y": 969,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 1022,
+                "y": 959,
                 "width": 579.748,
                 "height": 58
               },
@@ -2530,7 +2443,7 @@
                       }
                     ],
                     "x": 232,
-                    "y": 1138,
+                    "y": 1075,
                     "width": 0,
                     "height": 0
                   },
@@ -2608,21 +2521,21 @@
                       "status": "fits"
                     },
                     "x": 387.748,
-                    "y": 1114,
+                    "y": 1051,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 1104,
+                "y": 1041,
                 "width": 579.748,
                 "height": 58
               }
             ],
             "ports": [],
             "x": 32,
-            "y": 1022,
+            "y": 959,
             "width": 579.748,
             "height": 140
           }
@@ -2658,7 +2571,7 @@
           }
         ],
         "x": 16,
-        "y": 923,
+        "y": 860,
         "width": 611.748,
         "height": 255
       },
@@ -2801,7 +2714,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1241,
+            "y": 1178,
             "width": 224,
             "height": 48
           },
@@ -2899,7 +2812,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1305,
+            "y": 1242,
             "width": 224,
             "height": 48
           }
@@ -2935,7 +2848,7 @@
           }
         ],
         "x": 16,
-        "y": 1206,
+        "y": 1143,
         "width": 256,
         "height": 163
       }
@@ -2953,27 +2866,27 @@
         "role": "south",
         "side": "south",
         "x": 321.874,
-        "y": 1385
+        "y": 1322
       },
       {
         "id": "east",
         "role": "east",
         "side": "east",
         "x": 643.748,
-        "y": 692.5
+        "y": 661
       },
       {
         "id": "west",
         "role": "west",
         "side": "west",
         "x": 0,
-        "y": 692.5
+        "y": 661
       }
     ],
     "x": 0,
     "y": 0,
     "width": 643.748,
-    "height": 1385
+    "height": 1322
   },
   "edges": [
     {
@@ -2984,24 +2897,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 339
+        "y": 276
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22composition_target%22%2C%22scope%3AP-700%3Acomposition%3AP-700%22%2C%22relationship%3A%255B%2522P-700%2522%252C%2522COMPOSED_OF%2522%252C%2522C-700%2522%255D%3A0%22%2C%22C-700%22%5D",
         "portId": "west",
         "x": 363.622,
-        "y": 339
+        "y": 276
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 339
+            "y": 276
           },
           {
             "x": 363.622,
-            "y": 339
+            "y": 276
           }
         ]
       },
@@ -3014,7 +2927,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 305
+        "y": 242
       },
       "markers": {
         "end": "arrow"
@@ -3029,24 +2942,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700a%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 480
+        "y": 417
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700b%22%5D",
         "portId": "west",
         "x": 381.778,
-        "y": 480
+        "y": 417
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 480
+            "y": 417
           },
           {
             "x": 381.778,
-            "y": 480
+            "y": 417
           }
         ]
       },
@@ -3059,7 +2972,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 446
+        "y": 383
       },
       "markers": {
         "end": "arrow"
@@ -3074,24 +2987,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 804
+        "y": 741
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-702%22%2C%22composition_target%22%2C%22scope%3AP-702%3Acomposition%3AP-702%22%2C%22relationship%3A%255B%2522P-702%2522%252C%2522COMPOSED_OF%2522%252C%2522C-702%2522%255D%3A0%22%2C%22C-702%22%5D",
         "portId": "west",
         "x": 363.622,
-        "y": 804
+        "y": 741
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 804
+            "y": 741
           },
           {
             "x": 363.622,
-            "y": 804
+            "y": 741
           }
         ]
       },
@@ -3104,7 +3017,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 770
+        "y": 707
       },
       "markers": {
         "end": "arrow"
@@ -3121,24 +3034,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_source%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22C-700%22%5D",
         "portId": "contract-out:1",
         "x": 232,
-        "y": 1080
+        "y": 1017
       },
       "to": {
         "itemId": "scope:C-700:contract:C-700:anchor:1",
         "portId": "in",
         "x": 232,
-        "y": 1138
+        "y": 1075
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 232,
-            "y": 1080
+            "y": 1017
           },
           {
             "x": 232,
-            "y": 1138
+            "y": 1075
           }
         ]
       },
@@ -3155,24 +3068,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_source%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22C-700%22%5D",
         "portId": "contract-out:0",
         "x": 256,
-        "y": 1056
+        "y": 993
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522BINDS_TO%2522%252C%2522D-700%2522%255D%3A0%22%2C%22D-700%22%5D",
         "portId": "contract-in",
         "x": 387.748,
-        "y": 1056
+        "y": 993
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 1056
+            "y": 993
           },
           {
             "x": 387.748,
-            "y": 1056
+            "y": 993
           }
         ]
       },
@@ -3185,7 +3098,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 1022
+        "y": 959
       },
       "markers": {
         "end": "arrow"
@@ -3202,24 +3115,24 @@
         "itemId": "scope:C-700:contract:C-700:anchor:1",
         "portId": "out",
         "x": 232,
-        "y": 1138
+        "y": 1075
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522EMITS%2522%252C%2522E-700%2522%255D%3A0%22%2C%22E-700%22%5D",
         "portId": "contract-in",
         "x": 387.748,
-        "y": 1138
+        "y": 1075
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 232,
-            "y": 1138
+            "y": 1075
           },
           {
             "x": 387.748,
-            "y": 1138
+            "y": 1075
           }
         ]
       },
@@ -3232,7 +3145,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 288.439,
-        "y": 1104
+        "y": 1041
       },
       "markers": {
         "end": "arrow"

@@ -3161,7 +3161,7 @@ views:
             secondary: show_secondary_state_groups_when_primary_view_state
             support: show_supporting_contract_lane_when_primary_view_state
             omit_empty_places: omit_empty_place_containers
-          hierarchy: {order: source_depth_first, reuse: first_expansion, locator_prefix: H}
+          hierarchy: {order: source_depth_first, reuse: first_expansion, locator_prefix: H, isolated_components: grouped}
           content:
             component:
               - {property: description, label: description, visible_when: show_component_description}
@@ -3178,6 +3178,7 @@ views:
             support: []
           place_description: {property: description, visible_when: show_place_description}
           labels:
+            isolated_components: Components without hierarchy
             hierarchy_root: 'Component hierarchy · {name}'
             hierarchy_expansion: '{locator} · Repeated hierarchy'
             hierarchy_reference: '{locator} · See {parent}'

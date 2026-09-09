@@ -13,21 +13,25 @@ The following invariants anchor this guide:
 - **Projection remains the semantic boundary.** View-owned scene construction supplies groups, ports, and reservations to the shared staged pipeline; it does not replace shared placement or routing. See the [renderer architecture](../toolchain/architecture.md) and [acceptance report](b5_implementation_acceptance.md).
 - **Detail and decorators are independent.** Both details preserve Component hierarchy and primary ViewState transitions. Compact's State fallback is decided across the projection, not separately in each scope.
 
-The illustrations below reuse implemented output from before redundant Component scope suppression; they may show local scopes that current rendering omits. The Stage 7 images are public-preview artifacts from the unchanged [Departure Desk source](departure_desk.sdd); focused Stage 6 resumed images show accepted topology corrections. The `b2_*` through `b5_*` exploration files remain historical visual references and should not be mistaken for current public output.
+The complete-sheet illustrations below include redundant Component scope suppression and grouping of Components without hierarchy. Other illustrations and the decorator reference matrix retain historical output and may show scopes or singleton hierarchy enclosures that current rendering omits. The Stage 7 images are public-preview artifacts from the unchanged [Departure Desk source](departure_desk.sdd); focused Stage 6 resumed images show accepted topology corrections. The `b2_*` through `b5_*` exploration files remain historical visual references and should not be mistaken for current public output.
 
 ## The complete sheet
 
-Sections appear vertically: Component hierarchy roots first, then Place scopes, Component scopes, any additional standalone contract/transition scopes, and finally the referenced-target register when supporting targets are visible. Within these groups the model preserves authored ordering rather than sorting everything alphabetically.
+Sections appear vertically: Component hierarchy roots first, then Components without hierarchy when nonempty, then Place scopes, Component scopes, any additional standalone contract/transition scopes, and finally the referenced-target register when supporting targets are visible. Within these groups the model preserves authored ordering rather than sorting everything alphabetically.
 
 Each section takes the width its contents require. A long transition sequence can therefore make one section much wider than the hierarchy overview. The sheet has no outer frame; the visible frames belong to individual scopes and hierarchy enclosures. Large diagrams are intended for zooming and scrolling.
 
-![Current compact Departure Desk sheet, with hierarchy overview and local scopes](implementation_evidence/stage7/departure_desk/compact.none.svg)
+![Current compact Departure Desk sheet, with hierarchy overview and local scopes](implementation_evidence/isolated_components/departure_desk/compact.none.svg)
 
-[Open the compact SVG at full size](implementation_evidence/stage7/departure_desk/compact.none.svg). With ViewStates present, this compact sheet omits secondary State sequences and supporting contracts, but retains the hierarchy and local parent/child neighborhoods.
+[Open the compact SVG at full size](implementation_evidence/isolated_components/departure_desk/compact.none.svg). With ViewStates present, this compact sheet omits secondary State sequences and supporting contracts, but retains the hierarchy and local parent/child neighborhoods.
 
 ## Component hierarchy overview
 
-A titled `Component hierarchy · <name>` enclosure starts each root. The Component card identifies the root; nested enclosures express its descendants. Sibling leaves share an enclosure, and alternating pale fills help distinguish nesting depth. Enclosures are structural graphics, not additional semantic nodes or oversized Component cards.
+A titled `Component hierarchy · <name>` enclosure starts each root with containment descendants. The Component card identifies the root; nested enclosures express its descendants. Sibling leaves share an enclosure, and alternating pale fills help distinguish nesting depth. Enclosures are structural graphics, not additional semantic nodes or oversized Component cards.
+
+Components with neither incoming nor outgoing bundle-selected containment relationships share one **Components without hierarchy** enclosure. Ordinary cards appear in authored order, without individual hierarchy frames or containment connectors. Composition and outgoing contracts do not exclude a Component from this group; Crew Note is an example. The enclosure is omitted when empty and follows the hierarchy visibility switch in both details.
+
+The bundle's `hierarchy.isolated_components: grouped` policy selects this grouping; `individual_roots` retains the former per-root presentation. `labels.isolated_components` supplies the caption. The presentation model consumes both settings, and scene construction places the group before local scopes.
 
 Read the nesting together with the local scopes: a retained Component scope explicitly shows its immediate parents above it and immediate children below it. This provides a direct check on parentage in a large overview.
 
@@ -64,7 +68,7 @@ A `Component scope · <name>` frame starts with the focal Component's immediate 
 
 `Contains` arrows point from parent to child. Multiple parents or children use connecting bars with a common labelled stem. Junction anchors are invisible; connector turns have no circular junction markers.
 
-Redundant Component scopes are suppressed **after detail selection** when they have no visible sequences or outgoing contracts, the focal card adds no attributes beyond its overview card, they have at most one immediate parent, and their immediate children are already shown together in an expanded overview occurrence. Visible compositions also retain a scope. A leaf has no children to add; an isolated Component can appear only in the overview. Scopes remain when the overview cannot preserve their content. Components with multiple parents always retain their scopes because bringing those parents together provides useful local context.
+Redundant Component scopes are suppressed **after detail selection** when they have no visible sequences or outgoing contracts, the focal card adds no attributes beyond its overview card, they have at most one immediate parent, and their immediate children are already shown together in an expanded overview occurrence. Visible compositions also retain a scope. A leaf has no children to add; an isolated Component can appear only in Components without hierarchy. Its card supplies overview coverage for scope suppression; attributes, transitions, or contracts that add visible content still retain a local scope. Scopes remain when the overview cannot preserve their content. Components with multiple parents always retain their scopes because bringing those parents together provides useful local context.
 
 This is a renderer composition decision based on selected visible content, not a change to bundle policy. A scope can disappear in compact and remain in detailed when attributes or contracts become visible. Suppression removes repeated occurrences only: every visible identity and relationship remains represented, with overview nesting preserving containment.
 
@@ -106,9 +110,9 @@ The final `Referenced targets` section lists visible Event, DataEntity, and Syst
 
 Supporting nodes with outgoing contracts can receive their own `Contract scope · <name>` section. Unowned nodes and cross-scope transitions also receive explicit standalone context when needed, so they are not silently lost merely because they do not fit a normal Place or Component scope.
 
-![Current detailed Departure Desk sheet including State sequences, outgoing contracts and referenced targets](implementation_evidence/stage7/departure_desk/detailed.none.svg)
+![Current detailed Departure Desk sheet including State sequences, outgoing contracts and referenced targets](implementation_evidence/isolated_components/departure_desk/detailed.none.svg)
 
-[Open the detailed SVG at full size](implementation_evidence/stage7/departure_desk/detailed.none.svg). Compare Seal Check's local parents with its two overview occurrences, then follow its own bindings and emissions to their local target references.
+[Open the detailed SVG at full size](implementation_evidence/isolated_components/departure_desk/detailed.none.svg). Compare Seal Check's local parents with its two overview occurrences, then follow its own bindings and emissions to their local target references.
 
 ## Detail and decorators
 

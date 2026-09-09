@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="643.748" height="1385" viewBox="0 0 643.748 1385" class="staged-svg view-ui_contracts detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="ui_contracts" data-detail-id="detailed" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="643.748" height="1322" viewBox="0 0 643.748 1322" class="staged-svg view-ui_contracts detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="ui_contracts" data-detail-id="detailed" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -77,173 +77,161 @@
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-700\25 22\25 5D"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
+    <g class="ui-contracts-container" data-item-id="components-without-containment">
+      <style>g[data-item-id="components-without-containment"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="16" width="256" height="99" rx="14" fill="#f1f5f9" stroke="none"/>
+      <rect class="ui-contracts-container__body" x="16" y="16" width="256" height="163" rx="14" fill="#f4f7fb" stroke="none"/>
       <path class="ui-contracts-container__title-band" d="M 17.5 35 L 17.5 30 Q 17.5 17.5 30 17.5 L 258 17.5 Q 270.5 17.5 270.5 30 L 270.5 35 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="16.75" width="254.5" height="97.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-702\25 22\25 5D"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="143" width="256" height="99" rx="14" fill="#f1f5f9" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 162 L 17.5 157 Q 17.5 144.5 30 144.5 L 258 144.5 Q 270.5 144.5 270.5 157 L 270.5 162 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="143.75" width="254.5" height="97.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+      <rect class="ui-contracts-container__outline" x="16.75" y="16.75" width="254.5" height="161.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
     <g class="ui-contracts-container" data-item-id="scope:P-700">
       <style>g[data-item-id="scope\3a P-700"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="270" width="605.778" height="259" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 289 L 17.5 284 Q 17.5 271.5 30 271.5 L 607.778 271.5 Q 620.278 271.5 620.278 284 L 620.278 289 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="270.75" width="604.278" height="257.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+      <rect class="ui-contracts-container__body" x="16" y="207" width="605.778" height="259" rx="14" fill="#f4f7fb" stroke="none"/>
+      <path class="ui-contracts-container__title-band" d="M 17.5 226 L 17.5 221 Q 17.5 208.5 30 208.5 L 607.778 208.5 Q 620.278 208.5 620.278 221 L 620.278 226 Z" fill="#dbe4f0" stroke="none"/>
+      <rect class="ui-contracts-container__outline" x="16.75" y="207.75" width="604.278" height="257.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
     <g class="ui-contracts-container" data-item-id="scope:P-701">
       <style>g[data-item-id="scope\3a P-701"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="557" width="256" height="150" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 576 L 17.5 571 Q 17.5 558.5 30 558.5 L 258 558.5 Q 270.5 558.5 270.5 571 L 270.5 576 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="557.75" width="254.5" height="148.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+      <rect class="ui-contracts-container__body" x="16" y="494" width="256" height="150" rx="14" fill="#f4f7fb" stroke="none"/>
+      <path class="ui-contracts-container__title-band" d="M 17.5 513 L 17.5 508 Q 17.5 495.5 30 495.5 L 258 495.5 Q 270.5 495.5 270.5 508 L 270.5 513 Z" fill="#dbe4f0" stroke="none"/>
+      <rect class="ui-contracts-container__outline" x="16.75" y="494.75" width="254.5" height="148.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
     <g class="ui-contracts-container" data-item-id="scope:P-702">
       <style>g[data-item-id="scope\3a P-702"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="735" width="587.622" height="160" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 754 L 17.5 749 Q 17.5 736.5 30 736.5 L 589.622 736.5 Q 602.122 736.5 602.122 749 L 602.122 754 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="735.75" width="586.122" height="158.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+      <rect class="ui-contracts-container__body" x="16" y="672" width="587.622" height="160" rx="14" fill="#f4f7fb" stroke="none"/>
+      <path class="ui-contracts-container__title-band" d="M 17.5 691 L 17.5 686 Q 17.5 673.5 30 673.5 L 589.622 673.5 Q 602.122 673.5 602.122 686 L 602.122 691 Z" fill="#dbe4f0" stroke="none"/>
+      <rect class="ui-contracts-container__outline" x="16.75" y="672.75" width="586.122" height="158.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
     <g class="ui-contracts-container" data-item-id="scope:C-700">
       <style>g[data-item-id="scope\3a C-700"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="923" width="611.748" height="255" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 942 L 17.5 937 Q 17.5 924.5 30 924.5 L 613.748 924.5 Q 626.248 924.5 626.248 937 L 626.248 942 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="923.75" width="610.248" height="253.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+      <rect class="ui-contracts-container__body" x="16" y="860" width="611.748" height="255" rx="14" fill="#f4f7fb" stroke="none"/>
+      <path class="ui-contracts-container__title-band" d="M 17.5 879 L 17.5 874 Q 17.5 861.5 30 861.5 L 613.748 861.5 Q 626.248 861.5 626.248 874 L 626.248 879 Z" fill="#dbe4f0" stroke="none"/>
+      <rect class="ui-contracts-container__outline" x="16.75" y="860.75" width="610.248" height="253.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
     <g class="ui-contracts-container" data-item-id="target-register">
       <style>g[data-item-id="target-register"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1206" width="256" height="163" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1225 L 17.5 1220 Q 17.5 1207.5 30 1207.5 L 258 1207.5 Q 270.5 1207.5 270.5 1220 L 270.5 1225 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1206.75" width="254.5" height="161.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+      <rect class="ui-contracts-container__body" x="16" y="1143" width="256" height="163" rx="14" fill="#f4f7fb" stroke="none"/>
+      <path class="ui-contracts-container__title-band" d="M 17.5 1162 L 17.5 1157 Q 17.5 1144.5 30 1144.5 L 258 1144.5 Q 270.5 1144.5 270.5 1157 L 270.5 1162 Z" fill="#dbe4f0" stroke="none"/>
+      <rect class="ui-contracts-container__outline" x="16.75" y="1143.75" width="254.5" height="161.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-700-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain shared-node--emphasized" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D" data-role="component" data-node-density="plain">
-      <rect class="shared-node__chrome" x="33" y="52" width="222" height="46" rx="13" ry="13"/>
-      <rect class="shared-node__outline" x="33" y="52" width="222" height="46" rx="13" ry="13"/>
+    <g id="scene-node-occurrence-5b-22components-without-containment-22-2c-22overview-22-2c-22c-700-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-700%22%5D" data-role="component" data-node-density="plain">
+      <rect class="shared-node__chrome" x="32.75" y="51.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="32.75" y="51.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-702-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain shared-node--emphasized" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D" data-role="component" data-node-density="plain">
-      <rect class="shared-node__chrome" x="33" y="179" width="222" height="46" rx="13" ry="13"/>
-      <rect class="shared-node__outline" x="33" y="179" width="222" height="46" rx="13" ry="13"/>
+    <g id="scene-node-occurrence-5b-22components-without-containment-22-2c-22overview-22-2c-22c-702-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-702%22%5D" data-role="component" data-node-density="plain">
+      <rect class="shared-node__chrome" x="32.75" y="115.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="32.75" y="115.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ap-700-22-2c-22focal-22-2c-22p-700-22-5d" class="scene-node primitive-card role-place paint-nodes semantic_node shared-node shared-node-dense shared-node--emphasized" data-item-id="occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="33" y="316" width="222" height="97" rx="13" ry="13"/>
-      <rect class="shared-node__outline" x="33" y="316" width="222" height="97" rx="13" ry="13"/>
+      <rect class="shared-node__chrome" x="33" y="253" width="222" height="97" rx="13" ry="13"/>
+      <rect class="shared-node__outline" x="33" y="253" width="222" height="97" rx="13" ry="13"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ap-700-22-2c-22composition_target-22-2c-22scope-3ap-700-3acomposition-3ap-700-22-2c-22relationship-3a-255b-2522p-700-2522-252c-2522composed_of-2522-252c-2522c-700-2522-255d-3a0-22-2c-22c-700-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22scope%3AP-700%22%2C%22composition_target%22%2C%22scope%3AP-700%3Acomposition%3AP-700%22%2C%22relationship%3A%255B%2522P-700%2522%252C%2522COMPOSED_OF%2522%252C%2522C-700%2522%255D%3A0%22%2C%22C-700%22%5D" data-role="component" data-node-density="plain">
-      <rect class="shared-node__chrome" x="364.372" y="315.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="364.372" y="315.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="364.372" y="252.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="364.372" y="252.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ap-700-22-2c-22sequence-22-2c-22scope-3ap-700-3asequence-3aprimary-22-2c-22vs-700a-22-5d" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700a%22%5D" data-role="viewstate" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="447.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="32.75" y="447.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="32.75" y="384.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="32.75" y="384.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ap-700-22-2c-22sequence-22-2c-22scope-3ap-700-3asequence-3aprimary-22-2c-22vs-700b-22-5d" class="scene-node primitive-card role-viewstate paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700b%22%5D" data-role="viewstate" data-node-density="dense">
-      <rect class="shared-node__chrome" x="382.528" y="447.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="382.528" y="447.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="382.528" y="384.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="382.528" y="384.75" width="222.5" height="64.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ap-701-22-2c-22focal-22-2c-22p-701-22-5d" class="scene-node primitive-card role-place paint-nodes semantic_node shared-node shared-node-dense shared-node--emphasized" data-item-id="occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="33" y="593" width="222" height="97" rx="13" ry="13"/>
-      <rect class="shared-node__outline" x="33" y="593" width="222" height="97" rx="13" ry="13"/>
+      <rect class="shared-node__chrome" x="33" y="530" width="222" height="97" rx="13" ry="13"/>
+      <rect class="shared-node__outline" x="33" y="530" width="222" height="97" rx="13" ry="13"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ap-702-22-2c-22focal-22-2c-22p-702-22-5d" class="scene-node primitive-card role-place paint-nodes semantic_node shared-node shared-node-dense shared-node--emphasized" data-item-id="occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="33" y="781" width="222" height="97" rx="13" ry="13"/>
-      <rect class="shared-node__outline" x="33" y="781" width="222" height="97" rx="13" ry="13"/>
+      <rect class="shared-node__chrome" x="33" y="718" width="222" height="97" rx="13" ry="13"/>
+      <rect class="shared-node__outline" x="33" y="718" width="222" height="97" rx="13" ry="13"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ap-702-22-2c-22composition_target-22-2c-22scope-3ap-702-3acomposition-3ap-702-22-2c-22relationship-3a-255b-2522p-702-2522-252c-2522composed_of-2522-252c-2522c-702-2522-255d-3a0-22-2c-22c-702-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22scope%3AP-702%22%2C%22composition_target%22%2C%22scope%3AP-702%3Acomposition%3AP-702%22%2C%22relationship%3A%255B%2522P-702%2522%252C%2522COMPOSED_OF%2522%252C%2522C-702%2522%255D%3A0%22%2C%22C-702%22%5D" data-role="component" data-node-density="plain">
-      <rect class="shared-node__chrome" x="364.372" y="780.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="364.372" y="780.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="364.372" y="717.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="364.372" y="717.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ac-700-22-2c-22focal-22-2c-22c-700-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain shared-node--emphasized" data-item-id="occurrence:%5B%22scope%3AC-700%22%2C%22focal%22%2C%22C-700%22%5D" data-role="component" data-node-density="plain">
-      <rect class="shared-node__chrome" x="33" y="959" width="222" height="46" rx="13" ry="13"/>
-      <rect class="shared-node__outline" x="33" y="959" width="222" height="46" rx="13" ry="13"/>
+      <rect class="shared-node__chrome" x="33" y="896" width="222" height="46" rx="13" ry="13"/>
+      <rect class="shared-node__outline" x="33" y="896" width="222" height="46" rx="13" ry="13"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ac-700-22-2c-22contract_source-22-2c-22scope-3ac-700-3acontract-3ac-700-22-2c-22c-700-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22scope%3AC-700%22%2C%22contract_source%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22C-700%22%5D" data-role="component" data-node-density="plain">
-      <rect class="shared-node__chrome" x="32.75" y="1032.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="32.75" y="1032.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="32.75" y="969.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="32.75" y="969.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ac-700-22-2c-22contract_target-22-2c-22scope-3ac-700-3acontract-3ac-700-22-2c-22relationship-3a-255b-2522c-700-2522-252c-2522binds_to-2522-252c-2522d-700-2522-255d-3a0-22-2c-22d-700-22-5d" class="scene-node primitive-card role-dataentity paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522BINDS_TO%2522%252C%2522D-700%2522%255D%3A0%22%2C%22D-700%22%5D" data-role="dataentity" data-node-density="plain">
-      <rect class="shared-node__chrome" x="388.498" y="1032.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="388.498" y="1032.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="388.498" y="969.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="388.498" y="969.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22scope-3ac-700-22-2c-22contract_target-22-2c-22scope-3ac-700-3acontract-3ac-700-22-2c-22relationship-3a-255b-2522c-700-2522-252c-2522emits-2522-252c-2522e-700-2522-255d-3a0-22-2c-22e-700-22-5d" class="scene-node primitive-card role-event paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522EMITS%2522%252C%2522E-700%2522%255D%3A0%22%2C%22E-700%22%5D" data-role="event" data-node-density="plain">
-      <rect class="shared-node__chrome" x="388.498" y="1114.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="388.498" y="1114.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="388.498" y="1051.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="388.498" y="1051.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22target-register-22-2c-22register-22-2c-22e-700-22-5d" class="scene-node primitive-card role-event paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D" data-role="event" data-node-density="plain">
-      <rect class="shared-node__chrome" x="32.75" y="1241.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="32.75" y="1241.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="32.75" y="1178.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="32.75" y="1178.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-occurrence-5b-22target-register-22-2c-22register-22-2c-22d-700-22-5d" class="scene-node primitive-card role-dataentity paint-nodes semantic_node shared-node shared-node-plain" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D" data-role="dataentity" data-node-density="plain">
-      <rect class="shared-node__chrome" x="32.75" y="1305.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="32.75" y="1305.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="32.75" y="1242.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="32.75" y="1242.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D" data-role="ui_contracts_group">
+    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="components-without-containment" data-role="ui_contracts_group">
       <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="29">
-          <tspan x="30" dy="0">Component hierarchy · Review Form</tspan>
+          <tspan x="30" dy="0">Components without hierarchy</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node--emphasized shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-700%22%5D" data-role="component">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="80.8">
-              <tspan x="48" y="80.8">Review Form</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="80.8">
+              <tspan x="47.5" y="80.8">Review Form</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="156">
-          <tspan x="30" dy="0">Component hierarchy · Summary Card</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node--emphasized shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-702%22%5D" data-role="component">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="207.8">
-              <tspan x="48" y="207.8">Summary Card</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="144.8">
+              <tspan x="47.5" y="144.8">Summary Card</tspan>
             </text>
         </g>
       </g>
     </g>
     <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:P-700" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="283">
+      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="220">
           <tspan x="30" dy="0">Place scope · Dense Review</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-place paint-labels semantic_node shared-node shared-node-dense shared-node--emphasized shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D" data-role="place">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="338.3">
-              <tspan x="48" y="338.3">Dense Review</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="275.3">
+              <tspan x="48" y="275.3">Dense Review</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="route_or_key">
-          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="355.625">
-              <tspan x="48" y="355.625">Route</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="292.625">
+              <tspan x="48" y="292.625">Route</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="371.35">
-              <tspan x="48" y="371.35">/dense</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="308.35">
+              <tspan x="48" y="308.35">/dense</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="access">
-          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="387.625">
-              <tspan x="48" y="387.625">Access</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="324.625">
+              <tspan x="48" y="324.625">Access</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="403.35">
-              <tspan x="48" y="403.35">auth</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="340.35">
+              <tspan x="48" y="340.35">auth</tspan>
             </text>
         </g>
       </g>
@@ -251,8 +239,8 @@
     <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-700%22%2C%22composition_target%22%2C%22scope%3AP-700%3Acomposition%3AP-700%22%2C%22relationship%3A%255B%2522P-700%2522%252C%2522COMPOSED_OF%2522%252C%2522C-700%2522%255D%3A0%22%2C%22C-700%22%5D" data-role="component">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="344.8">
-              <tspan x="379.122" y="344.8">Review Form</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="281.8">
+              <tspan x="379.122" y="281.8">Review Form</tspan>
             </text>
         </g>
       </g>
@@ -260,16 +248,16 @@
     <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700a%22%5D" data-role="viewstate">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="469.8">
-              <tspan x="47.5" y="469.8">Editing</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="406.8">
+              <tspan x="47.5" y="406.8">Editing</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="data_required">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="47.5" y="487.125">
-              <tspan x="47.5" y="487.125">Data Required</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="47.5" y="424.125">
+              <tspan x="47.5" y="424.125">Data Required</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="47.5" y="502.85">
-              <tspan x="47.5" y="502.85">DraftRecord</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="47.5" y="439.85">
+              <tspan x="47.5" y="439.85">DraftRecord</tspan>
             </text>
         </g>
       </g>
@@ -277,76 +265,76 @@
     <g class="scene-node primitive-card role-viewstate paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700b%22%5D" data-role="viewstate">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="397.278" y="469.8">
-              <tspan x="397.278" y="469.8">Done</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="397.278" y="406.8">
+              <tspan x="397.278" y="406.8">Done</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="data_required">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="397.278" y="487.125">
-              <tspan x="397.278" y="487.125">Data Required</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="397.278" y="424.125">
+              <tspan x="397.278" y="424.125">Data Required</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="397.278" y="502.85">
-              <tspan x="397.278" y="502.85">Receipt</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="397.278" y="439.85">
+              <tspan x="397.278" y="439.85">Receipt</tspan>
             </text>
         </g>
       </g>
     </g>
     <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:P-701" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="570">
+      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="507">
           <tspan x="30" dy="0">Place scope · Sparse Review</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-place paint-labels semantic_node shared-node shared-node-dense shared-node--emphasized shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D" data-role="place">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="615.3">
-              <tspan x="48" y="615.3">Sparse Review</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="552.3">
+              <tspan x="48" y="552.3">Sparse Review</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="route_or_key">
-          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="632.625">
-              <tspan x="48" y="632.625">Route</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="569.625">
+              <tspan x="48" y="569.625">Route</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="648.35">
-              <tspan x="48" y="648.35">/sparse</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="585.35">
+              <tspan x="48" y="585.35">/sparse</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="access">
-          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="664.625">
-              <tspan x="48" y="664.625">Access</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="601.625">
+              <tspan x="48" y="601.625">Access</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="680.35">
-              <tspan x="48" y="680.35">auth</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="617.35">
+              <tspan x="48" y="617.35">auth</tspan>
             </text>
         </g>
       </g>
     </g>
     <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:P-702" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="748">
+      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="685">
           <tspan x="30" dy="0">Place scope · Summary Review</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-place paint-labels semantic_node shared-node shared-node-dense shared-node--emphasized shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D" data-role="place">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="803.3">
-              <tspan x="48" y="803.3">Summary Review</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="740.3">
+              <tspan x="48" y="740.3">Summary Review</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="route_or_key">
-          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="820.625">
-              <tspan x="48" y="820.625">Route</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="757.625">
+              <tspan x="48" y="757.625">Route</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="836.35">
-              <tspan x="48" y="836.35">/summary</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="773.35">
+              <tspan x="48" y="773.35">/summary</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="access">
-          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="852.625">
-              <tspan x="48" y="852.625">Access</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributelabel block-kind-text block-region-primary shared-node__attribute-label" x="48" y="789.625">
+              <tspan x="48" y="789.625">Access</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="868.35">
-              <tspan x="48" y="868.35">auth</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_attributevalue block-kind-text block-region-primary shared-node__attribute-value" x="48" y="805.35">
+              <tspan x="48" y="805.35">auth</tspan>
             </text>
         </g>
       </g>
@@ -354,22 +342,22 @@
     <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-702%22%2C%22composition_target%22%2C%22scope%3AP-702%3Acomposition%3AP-702%22%2C%22relationship%3A%255B%2522P-702%2522%252C%2522COMPOSED_OF%2522%252C%2522C-702%2522%255D%3A0%22%2C%22C-702%22%5D" data-role="component">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="809.8">
-              <tspan x="379.122" y="809.8">Summary Card</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="746.8">
+              <tspan x="379.122" y="746.8">Summary Card</tspan>
             </text>
         </g>
       </g>
     </g>
     <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-700" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="936">
+      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="873">
           <tspan x="30" dy="0">Component scope · Review Form</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node--emphasized shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-700%22%2C%22focal%22%2C%22C-700%22%5D" data-role="component">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="987.8">
-              <tspan x="48" y="987.8">Review Form</tspan>
+          <text class="scene-text text-role-shared_node_emphasized_title block-kind-text block-region-primary shared-node__title-text" x="48" y="924.8">
+              <tspan x="48" y="924.8">Review Form</tspan>
             </text>
         </g>
       </g>
@@ -377,8 +365,8 @@
     <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-700%22%2C%22contract_source%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22C-700%22%5D" data-role="component">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1061.8">
-              <tspan x="47.5" y="1061.8">Review Form</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="998.8">
+              <tspan x="47.5" y="998.8">Review Form</tspan>
             </text>
         </g>
       </g>
@@ -386,8 +374,8 @@
     <g class="scene-node primitive-card role-dataentity paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522BINDS_TO%2522%252C%2522D-700%2522%255D%3A0%22%2C%22D-700%22%5D" data-role="dataentity">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="403.248" y="1061.8">
-              <tspan x="403.248" y="1061.8">ReviewRecord</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="403.248" y="998.8">
+              <tspan x="403.248" y="998.8">ReviewRecord</tspan>
             </text>
         </g>
       </g>
@@ -395,22 +383,22 @@
     <g class="scene-node primitive-card role-event paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522EMITS%2522%252C%2522E-700%2522%255D%3A0%22%2C%22E-700%22%5D" data-role="event">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="403.248" y="1143.8">
-              <tspan x="403.248" y="1143.8">Submit Review</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="403.248" y="1080.8">
+              <tspan x="403.248" y="1080.8">Submit Review</tspan>
             </text>
         </g>
       </g>
     </g>
     <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="target-register" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1219">
+      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1156">
           <tspan x="30" dy="0">Referenced targets</tspan>
         </text>
     </g>
     <g class="scene-node primitive-card role-event paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D" data-role="event">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1270.8">
-              <tspan x="47.5" y="1270.8">Submit Review</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1207.8">
+              <tspan x="47.5" y="1207.8">Submit Review</tspan>
             </text>
         </g>
       </g>
@@ -418,8 +406,8 @@
     <g class="scene-node primitive-card role-dataentity paint-labels semantic_node shared-node shared-node-plain shared-node__labels" data-item-id="occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D" data-role="dataentity">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1334.8">
-              <tspan x="47.5" y="1334.8">ReviewRecord</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1271.8">
+              <tspan x="47.5" y="1271.8">ReviewRecord</tspan>
             </text>
         </g>
       </g>
@@ -427,57 +415,57 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-scope-p-700-composition-p-700-relationship-5b-22p-700-22-2c-22composed_of-22-2c-22c-700-22-5d-0" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-700:composition:P-700:relationship:%5B%22P-700%22%2C%22COMPOSED_OF%22%2C%22C-700%22%5D:0" data-role="composition">
-      <path class="scene-edge__path" d="M 256 339 L 363.622 339"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 339 L 354.622 344 L 354.622 334 Z" fill="#1d4ed8" stroke="none"/>
+      <path class="scene-edge__path" d="M 256 276 L 363.622 276"/>
+      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 276 L 354.622 281 L 354.622 271 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-scope-p-700-sequence-primary-relationship-5b-22vs-700a-22-2c-22transitions_to-22-2c-22vs-700b-22-5d-0" class="scene-edge role-transition route-orthogonal paint-edges" data-edge-id="scope:P-700:sequence:primary:relationship:%5B%22VS-700a%22%2C%22TRANSITIONS_TO%22%2C%22VS-700b%22%5D:0" data-role="transition">
-      <path class="scene-edge__path" d="M 256 480 L 381.778 480"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 382.778 480 L 372.778 485 L 372.778 475 Z" fill="#1d4ed8" stroke="none"/>
+      <path class="scene-edge__path" d="M 256 417 L 381.778 417"/>
+      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 382.778 417 L 372.778 422 L 372.778 412 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-scope-p-702-composition-p-702-relationship-5b-22p-702-22-2c-22composed_of-22-2c-22c-702-22-5d-0" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-702:composition:P-702:relationship:%5B%22P-702%22%2C%22COMPOSED_OF%22%2C%22C-702%22%5D:0" data-role="composition">
-      <path class="scene-edge__path" d="M 256 804 L 363.622 804"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 804 L 354.622 809 L 354.622 799 Z" fill="#1d4ed8" stroke="none"/>
+      <path class="scene-edge__path" d="M 256 741 L 363.622 741"/>
+      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 741 L 354.622 746 L 354.622 736 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-scope-c-700-contract-c-700-relationship-5b-22c-700-22-2c-22emits-22-2c-22e-700-22-5d-0-lead" class="scene-edge role-contract route-orthogonal paint-edges edge-dashed" data-edge-id="scope:C-700:contract:C-700:relationship:%5B%22C-700%22%2C%22EMITS%22%2C%22E-700%22%5D:0:lead" data-role="contract">
-      <path class="scene-edge__path" d="M 232 1080 L 232 1138"/>
+      <path class="scene-edge__path" d="M 232 1017 L 232 1075"/>
     </g>
     <g id="scene-edge-scope-c-700-contract-c-700-relationship-5b-22c-700-22-2c-22binds_to-22-2c-22d-700-22-5d-0" class="scene-edge role-contract route-orthogonal paint-edges edge-dotted" data-edge-id="scope:C-700:contract:C-700:relationship:%5B%22C-700%22%2C%22BINDS_TO%22%2C%22D-700%22%5D:0" data-role="contract">
-      <path class="scene-edge__path" d="M 256 1056 L 387.748 1056"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 388.748 1056 L 378.748 1061 L 378.748 1051 Z" fill="#1d4ed8" stroke="none"/>
+      <path class="scene-edge__path" d="M 256 993 L 387.748 993"/>
+      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 388.748 993 L 378.748 998 L 378.748 988 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-scope-c-700-contract-c-700-relationship-5b-22c-700-22-2c-22emits-22-2c-22e-700-22-5d-0" class="scene-edge role-contract route-orthogonal paint-edges edge-dashed" data-edge-id="scope:C-700:contract:C-700:relationship:%5B%22C-700%22%2C%22EMITS%22%2C%22E-700%22%5D:0" data-role="contract">
-      <path class="scene-edge__path" d="M 232 1138 L 387.748 1138"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 388.748 1138 L 378.748 1143 L 378.748 1133 Z" fill="#1d4ed8" stroke="none"/>
+      <path class="scene-edge__path" d="M 232 1075 L 387.748 1075"/>
+      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 388.748 1075 L 378.748 1080 L 378.748 1070 Z" fill="#1d4ed8" stroke="none"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
     <g class="scene-edge-label role-composition" data-edge-id="scope:P-700:composition:P-700:relationship:%5B%22P-700%22%2C%22COMPOSED_OF%22%2C%22C-700%22%5D:0" data-role="composition">
-      <rect class="scene-edge-label__box" x="268" y="305" width="83.622" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="316" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="268" y="242" width="83.622" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="253" dominant-baseline="middle">
           <tspan x="274" dy="0">composed of</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transition" data-edge-id="scope:P-700:sequence:primary:relationship:%5B%22VS-700a%22%2C%22TRANSITIONS_TO%22%2C%22VS-700b%22%5D:0" data-role="transition">
-      <rect class="scene-edge-label__box" x="268" y="446" width="101.778" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="457" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="268" y="383" width="101.778" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="394" dominant-baseline="middle">
           <tspan x="274" dy="0">[Submit Review]</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-composition" data-edge-id="scope:P-702:composition:P-702:relationship:%5B%22P-702%22%2C%22COMPOSED_OF%22%2C%22C-702%22%5D:0" data-role="composition">
-      <rect class="scene-edge-label__box" x="268" y="770" width="83.622" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="781" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="268" y="707" width="83.622" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="718" dominant-baseline="middle">
           <tspan x="274" dy="0">composed of</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-contract edge-dotted" data-edge-id="scope:C-700:contract:C-700:relationship:%5B%22C-700%22%2C%22BINDS_TO%22%2C%22D-700%22%5D:0" data-role="contract">
-      <rect class="scene-edge-label__box" x="268" y="1022" width="107.748" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="1033" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="268" y="959" width="107.748" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="970" dominant-baseline="middle">
           <tspan x="274" dy="0">binds field status</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-contract edge-dashed" data-edge-id="scope:C-700:contract:C-700:relationship:%5B%22C-700%22%2C%22EMITS%22%2C%22E-700%22%5D:0" data-role="contract">
-      <rect class="scene-edge-label__box" x="288.439" y="1104" width="42.87" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="294.439" y="1115" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="288.439" y="1041" width="42.87" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="294.439" y="1052" dominant-baseline="middle">
           <tspan x="294.439" dy="0">emits</tspan>
         </text>
     </g>

@@ -36,12 +36,57 @@ describe("bundle-driven UI contracts presentation", () => {
     expect(new Set(detailed.occurrences.map(node => node.semanticId))).toEqual(new Set(detailed.visibleSemanticNodeIds));
     expect(new Set(compact.occurrences.map(node => node.semanticId))).toEqual(new Set(compact.visibleSemanticNodeIds));
     expect(compact.overview).toEqual(detailed.overview);
+    expect(compact.isolatedComponents).toEqual(detailed.isolatedComponents);
+    expect(compact.isolatedComponents.nodes.map(node => node.semanticId)).toEqual(["C-460"]);
     expect(detailed.occurrences.map(node => node.id).length).toBe(new Set(detailed.occurrences.map(node => node.id)).size);
+  });
+
+  it("groups isolated components in authored order while preserving composition and scopes", () => {
+    const text = `SDD-TEXT 0.1
+Component C-020 "Zulu"
+END
+Component C-010 "Alpha"
+END
+Place P-001 "Page"
+  COMPOSED_OF C-010 "Alpha"
+END
+`;
+    for (const detail of ["compact", "detailed"]) {
+      const result = model(text, detail);
+      expect(result.overview).toEqual([]);
+      expect(result.isolatedComponents.nodes.map(node => node.semanticId)).toEqual(["C-020", "C-010"]);
+      expect(result.isolatedComponents.title).toBe("Components without hierarchy");
+      expect(result.scopes.map(scope => scope.focal.semanticId)).toEqual(["P-001"]);
+      expect(result.scopes[0].compositions[0].targets[0].semanticId).toBe("C-010");
+      expect(new Set(result.occurrences.map(node => node.semanticId))).toEqual(new Set(result.visibleSemanticNodeIds));
+    }
+    expect(model('SDD-TEXT 0.1\nComponent C-001 "Parent"\n  CONTAINS C-002 "Child"\nEND\nComponent C-002 "Child"\nEND\n').isolatedComponents.nodes).toEqual([]);
+    const spec = structuredClone(view), config = spec.conventions.renderer_defaults!.ui_contracts_presentation!;
+    config.labels.isolated_components = "Uncontained cards";
+    expect(model(text, "compact", spec).isolatedComponents.title).toBe("Uncontained cards");
+    config.hierarchy.isolated_components = "individual_roots";
+    expect(model(text, "compact", spec).overview).toHaveLength(2);
+    expect(model(text, "compact", spec).isolatedComponents.nodes).toEqual([]);
+    config.hierarchy.isolated_components = "grouped";
+    config.relationships.find(rule => rule.kind === "containment")!.edge_type = "COMPOSED_OF";
+    const reselected = model('SDD-TEXT 0.1\nComponent C-001 "Parent"\n  CONTAINS C-002 "Child"\nEND\nComponent C-002 "Child"\nEND\n', "compact", spec);
+    expect(reselected.isolatedComponents.nodes.map(node => node.semanticId)).toEqual(["C-001", "C-002"]);
+    expect(reselected.overview).toEqual([]);
+  });
+
+  it("requires the isolated-component bundle policy and caption", () => {
+    for (const field of ["policy", "caption"]) {
+      const cloned = structuredClone(bundle);
+      const config = cloned.views.views.find(view => view.id === "ui_contracts")!.conventions.renderer_defaults!.ui_contracts_presentation!;
+      if (field === "policy") delete (config.hierarchy as Partial<typeof config.hierarchy>).isolated_components;
+      else delete (config.labels as Partial<typeof config.labels>).isolated_components;
+      expect(() => validateLoadedBundle(cloned)).toThrow(BundleValidationError);
+    }
   });
 
   it("expands H1 once and retains both immediate parents and the child", () => {
     const result = model(), hierarchy = result.overview.flatMap(walk);
-    expect(result.overview.map(item => item.node.semanticId)).toEqual(["C-410", "C-460"]);
+    expect(result.overview.map(item => item.node.semanticId)).toEqual(["C-410"]);
     const seals = hierarchy.filter(item => item.node.semanticId === "C-430");
     expect(seals).toHaveLength(2);
     expect(seals[0].locator).toBe("H1");
@@ -78,6 +123,7 @@ describe("bundle-driven UI contracts presentation", () => {
     policies.detailed.show_component_hierarchy = false;
     result = model(source, "detailed", spec);
     expect(result.overview).toEqual([]);
+    expect(result.isolatedComponents.nodes).toEqual([]);
     expect(result.scopes.every(scope => scope.parents.length === 0 && scope.children.length === 0)).toBe(true);
     config.relationships.find(rule => rule.kind === "composition")!.from = ["Component"];
     expect(model(source, "detailed", spec).scopes.every(scope => scope.compositions.length === 0)).toBe(true);
@@ -121,7 +167,7 @@ Component C-005 "Isolated"
 END
 `);
     expect(result.scopes).toEqual([]);
-    expect(result.occurrences.every(node => node.scopeId === "overview")).toBe(true);
+    expect(result.occurrences.every(node => ["overview", "components-without-containment"].includes(node.scopeId))).toBe(true);
     expect(new Set(result.occurrences.map(node => node.semanticId))).toEqual(new Set(result.visibleSemanticNodeIds));
     const hierarchy = result.overview.flatMap(walk);
     for (const edge of result.relationships) {

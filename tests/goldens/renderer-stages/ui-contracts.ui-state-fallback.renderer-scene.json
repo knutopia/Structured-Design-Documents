@@ -26,7 +26,7 @@
     "children": [
       {
         "kind": "container",
-        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D",
+        "id": "components-without-containment",
         "role": "ui_contracts_group",
         "primitive": "cluster",
         "classes": [],
@@ -48,7 +48,7 @@
         "children": [
           {
             "kind": "node",
-            "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-060%22%5D",
             "role": "component",
             "primitive": "card",
             "classes": [
@@ -65,7 +65,6 @@
             },
             "content": [],
             "sharedNode": {
-              "emphasized": true,
               "title": "Review Panel",
               "decoratorMode": {
                 "id": "none",
@@ -125,8 +124,7 @@
         "viewMetadata": {
           "uiContracts": {
             "kind": "enclosure",
-            "title": "Component hierarchy · Review Panel",
-            "tone": "hierarchy"
+            "title": "Components without hierarchy"
           }
         }
       },

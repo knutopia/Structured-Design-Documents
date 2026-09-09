@@ -38,6 +38,7 @@ export interface UiContractsScope {
   description?: string;
 }
 export interface UiContractsPresentationModel {
+  isolatedComponents: { id: string; title: string; nodes: UiContractsOccurrence[] };
   overview: UiContractsHierarchy[]; scopes: UiContractsScope[];
   register: { id: string; title: string; nodes: UiContractsOccurrence[] };
   occurrences: UiContractsOccurrence[]; relationships: UiContractsRelationship[];
@@ -183,8 +184,13 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     item.children = children.map(child => overviewOccurrence(child, id, [...path, id]));
     return item;
   };
+  const isolatedIds = new Set(config.hierarchy.isolated_components === "grouped"
+    ? componentIds.filter(id => !parentsOf(id).length && !childrenOf(id).length) : []);
+  const isolatedComponents = { id: "components-without-containment", title: config.labels.isolated_components,
+    nodes: showHierarchy && !diagnostics.some(d => d.severity === "error")
+      ? componentIds.filter(id => isolatedIds.has(id)).map(id => occurrence(id, "components-without-containment", "overview", [])) : [] };
   const overview = showHierarchy && !diagnostics.some(d => d.severity === "error")
-    ? componentIds.filter(id => !parentsOf(id).length).map(id => overviewOccurrence(id, undefined, [])) : [];
+    ? componentIds.filter(id => !parentsOf(id).length && !isolatedIds.has(id)).map(id => overviewOccurrence(id, undefined, [])) : [];
   // Reuse may be discovered in a different order than first expansion.
   [...expanded.values()].filter(item => item.locator).forEach((item, index) => {
     item.locator = `${config.hierarchy.locator_prefix}${index + 1}`;
@@ -256,7 +262,11 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     const compositions = [makeGroup(ownerId, "composition", id, kind === "place" ? focal : undefined),
       ...sequences.flatMap(sequence => sequence.nodes.filter(node => roleOf(node.semanticId) === "primary").map(node => makeGroup(node.semanticId, "composition", id)))].filter((group): group is UiContractsLocalGroup => group !== undefined);
     const contracts = [makeGroup(ownerId, "contract", id), ...sequences.flatMap(sequence => sequence.nodes.map(node => makeGroup(node.semanticId, "contract", id)))].filter((group): group is UiContractsLocalGroup => group !== undefined);
-    const overviewCoversFocal = (overviewById.get(ownerId) ?? []).some(item => !item.referenceTo
+    const overviewCandidates = [
+      ...(overviewById.get(ownerId) ?? []),
+      ...isolatedComponents.nodes.filter(node => node.semanticId === ownerId).map(node => ({ node, children: [], referenceTo: undefined }))
+    ];
+    const overviewCoversFocal = overviewCandidates.some(item => !item.referenceTo
       && focal.attributes.every(attribute => item.node.attributes.some(other => other.groupId === attribute.groupId
         && other.label === attribute.label && other.value === attribute.value))
       && children.every(child => item.children.some(other => other.node.semanticId === child.semanticId)));
@@ -301,7 +311,7 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     nodes: supportIds.map(id => occurrence(id, "target-register", "register", [])) };
   const notes = omittedPlaceIds.length ? [`Omitted empty ui_contracts containers in compact detail: ${omittedPlaceIds.map(id => nodes.get(id)!.name).join(", ")}.`] : [];
   const localContainmentIds = new Set(scopes.flatMap(scope => scope.containment.map(edge => edge.relationshipId)));
-  return { overview, scopes, register, occurrences, relationships,
+  return { overview, isolatedComponents, scopes, register, occurrences, relationships,
     structuralRelationshipIds: relationships.filter(edge => edge.kind === "ownership" || overviewContainmentIds.has(edge.id) && !localContainmentIds.has(edge.id)).map(edge => edge.id),
     visibleSemanticNodeIds: order(visible), omittedPlaceIds, omissions, notes, diagnostics };
 }

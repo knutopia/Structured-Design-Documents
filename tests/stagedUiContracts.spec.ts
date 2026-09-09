@@ -29,7 +29,7 @@ describe("public staged UI contracts B5 renderer", () => {
     ["tests/fixtures/render/ui_contracts_dense_sparse_staged.sdd", "dense-sparse"]
   ]) it(`preserves accepted complete-sheet snapshots for ${name}`, async () => {
     const { rendererScene, rendered } = await artifacts(fixture);
-    expect(rendered.svg).toContain("Component hierarchy");
+    expect(rendered.svg).toContain("Components without hierarchy");
     expect(rendered.svg).toContain('class="ui-contracts-container__title-band"');
     expect(rendered.svg).not.toContain('class="scene-port');
     expect(rendered.svg).not.toMatch(/marker-(?:start|end)=/);
@@ -40,6 +40,25 @@ describe("public staged UI contracts B5 renderer", () => {
     }
     await expectRendererStageSnapshot(`ui-contracts.${name}.positioned-scene.json`, rendered.positionedScene);
     await expectRendererStageTextSnapshot(`ui-contracts.${name}.svg`, rendered.svg);
+  });
+
+  for (const detailId of ["compact", "detailed"]) it(`renders isolated cards directly in a single enclosure / ${detailId}`, () => {
+    const graph = compileSource({ path: "/tmp/isolated.sdd", text: 'SDD-TEXT 0.1\nComponent C-020 "Zulu"\nEND\nComponent C-010 "Alpha"\nEND\n' }, bundle).graph!;
+    const view = structuredClone(bundle.views.views.find(view => view.id === "ui_contracts")!);
+    const projection = projectView(graph, bundle, view.id).projection!;
+    view.conventions.renderer_defaults!.ui_contracts_presentation!.labels.isolated_components = "Uncontained cards";
+    const scene = buildUiContractsRendererScene(projection, graph, view, { detailId });
+    expect(scene.diagnostics).toEqual([]);
+    expect(scene.edges).toEqual([]);
+    expect(scene.root.children).toHaveLength(1);
+    const group = scene.root.children[0];
+    expect(group.kind).toBe("container");
+    if (group.kind !== "container") throw new Error("Missing shared enclosure");
+    expect(group.viewMetadata?.uiContracts?.title).toBe("Uncontained cards");
+    expect(group.children.map(child => child.kind)).toEqual(["node", "node"]);
+    expect(group.children.map(child => child.id)).toEqual([
+      expect.stringContaining("C-020"), expect.stringContaining("C-010")
+    ]);
   });
 
   it("uses staged coverage for structural compact diagrams while preserving legacy preparation", () => {
@@ -57,7 +76,7 @@ describe("public staged UI contracts B5 renderer", () => {
   it("omits only empty Place scopes in compact detail and retains the coverage note", async () => {
     const { rendererScene, rendered, graph, view } = await artifacts("tests/fixtures/render/ui_contracts_empty_places.sdd", "compact");
     expect(rendererScene.root.children.filter(node => node.id.startsWith("scope:P-")).map(node => node.id)).toEqual(["scope:P-100", "scope:P-210", "scope:P-220"]);
-    expect(rendered.svg).toContain("Component hierarchy");
+    expect(rendered.svg).toContain("Components without hierarchy");
     expect(rendered.svg).not.toContain("Behavior Details");
     const prepared = prepareCompiledGraphPreview("/tmp/empty.sdd", graph, bundle, { viewId: view.id, format: "svg", profileId: "simple", detailId: "compact" });
     expect(prepared.prepared!.notes).toEqual(["Omitted empty ui_contracts containers in compact detail: Behavior Details, Dataset Details, Projects by Period."]);
@@ -104,6 +123,15 @@ describe("public staged UI contracts B5 renderer", () => {
     expect(result.artifact?.format).toBe("svg");
     if (result.artifact?.format !== "svg") throw new Error("Missing staged SVG");
     const svg = result.artifact.text;
+    expect(svg).toContain("Components without hierarchy");
+    expect(svg).not.toContain("Component hierarchy · Crew Note");
+    const graph = compileSource(input, bundle).graph!;
+    const view = bundle.views.views.find(view => view.id === "ui_contracts")!;
+    const scene = buildUiContractsRendererScene(projectView(graph, bundle, view.id).projection!, graph, view, { detailId });
+    expect(scene.diagnostics.filter(d => d.severity === "error")).toEqual([]);
+    const groupIndex = scene.root.children.findIndex(item => item.id === "components-without-containment");
+    expect(groupIndex).toBe(1);
+    expect(scene.root.children[groupIndex + 1].id).toMatch(/^scope:P-/);
     expect(svg).toContain("H1 · Repeated hierarchy");
     expect(svg).toContain("H1 · See Cargo Sheet");
     const decoratorText = [...svg.matchAll(/<text[^>]*shared-node__decorator-item[^>]*>([\s\S]*?)<\/text>/g)].map(match => match[1]);

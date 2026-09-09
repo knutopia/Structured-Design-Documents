@@ -33,15 +33,14 @@
     "children": [
       {
         "kind": "container",
-        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D",
+        "id": "components-without-containment",
         "role": "ui_contracts_group",
         "primitive": "cluster",
         "classes": [],
         "viewMetadata": {
           "uiContracts": {
             "kind": "enclosure",
-            "title": "Component hierarchy · Review Panel",
-            "tone": "hierarchy"
+            "title": "Components without hierarchy"
           }
         },
         "layout": {
@@ -62,15 +61,15 @@
         },
         "headerContent": [
           {
-            "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D:title",
+            "id": "components-without-containment:title",
             "kind": "text",
             "textStyleRole": "shared_node_decorator",
             "lines": [
-              "Component hierarchy · Review Panel"
+              "Components without hierarchy"
             ],
             "x": 14,
             "y": 3,
-            "width": 170.55,
+            "width": 160.975,
             "height": 12,
             "lineHeight": 12,
             "region": "primary"
@@ -79,14 +78,13 @@
         "children": [
           {
             "kind": "node",
-            "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-060%22%5D",
             "role": "component",
             "primitive": "card",
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain",
-              "shared-node--emphasized"
+              "shared-node-plain"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -100,15 +98,15 @@
             },
             "content": [
               {
-                "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D__title",
+                "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-060%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_emphasized_title",
+                "textStyleRole": "shared_node_title",
                 "lines": [
                   "Review Panel"
                 ],
-                "x": 16,
+                "x": 15.5,
                 "y": 14.5,
-                "width": 97.272,
+                "width": 96.336,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -116,22 +114,21 @@
             ],
             "sharedNode": {
               "density": "plain",
-              "emphasized": true,
               "body": {
-                "x": 2,
-                "y": 2,
-                "width": 220,
-                "height": 44,
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
                 "title": {
-                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D__title",
+                  "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-060%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_emphasized_title",
+                  "textStyleRole": "shared_node_title",
                   "lines": [
                     "Review Panel"
                   ],
-                  "x": 16,
+                  "x": 15.5,
                   "y": 14.5,
-                  "width": 97.272,
+                  "width": 96.336,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"

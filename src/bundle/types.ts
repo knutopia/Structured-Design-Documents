@@ -506,10 +506,10 @@ export interface UiContractsPresentationConfig {
   content: Record<UiContractsPresentationRole, UiContractsAttributeConfig[]>;
   ownership: { primary_property: string; secondary_property: string };
   visibility: { hierarchy: string; secondary: string; support: string; omit_empty_places: string };
-  hierarchy: { order: "source_depth_first"; reuse: "first_expansion"; locator_prefix: string };
+  hierarchy: { order: "source_depth_first"; reuse: "first_expansion"; locator_prefix: string; isolated_components: "grouped" | "individual_roots" };
   place_description: { property: string; visible_when: string };
   labels: {
-    hierarchy_root: string; hierarchy_expansion: string; hierarchy_reference: string;
+    isolated_components: string; hierarchy_root: string; hierarchy_expansion: string; hierarchy_reference: string;
     component_scope: string; place_scope: string; standalone_scope: string; target_register: string;
   };
   transition_label: {
