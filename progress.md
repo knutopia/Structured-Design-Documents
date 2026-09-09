@@ -2,8 +2,6 @@
 
 ## Open Issues
 
--composed_of was better before: examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/compact_detail/place_viewstate_transition.ui_contracts.svg
-
 -doc examples updates to new routing, nodes
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
@@ -41,6 +39,8 @@ z
 - Emphasized shared node
 - Added emphasized node to ui_contracts
 - Components without hierarchy
+- Added gen-x script for canonical examples
+- Cleaned up ui contracts doc text
 
 ## Mon 9-7
 

@@ -48,25 +48,6 @@ for a compact list of content available to each diagram type.
 
   Component hierarchy, UI composition and state changes, with local Place and Component scopes.
 
-  The overview shows Component containment with nested enclosures. Each Component also has a local scope containing all immediate parents and children. A reused subtree expands at its first authored occurrence; later references use locators such as `H1 · See Cargo Sheet`. Composition into a Place or ViewState does not create a Component parent.
-
-  Place and Component scopes show horizontal state sequences, composition references, and outgoing contracts from one source reference. A final register lists supporting targets, including Events used only in transition labels. Container titles and hierarchy locators stay visible with every decorator setting.
-
-  The main node in each Place or Component scope and the root of each top-level Component hierarchy use emphasized shared-node styling. Other occurrences, nested hierarchy nodes, and reference cards retain regular styling.
-
-  | Content | Compact | Detailed |
-  | --- | --- | --- |
-  | Hierarchy and immediate parent/child context | Shown | Shown |
-  | ViewState sequences and complete transition labels | Shown | Shown |
-  | Secondary State sequences and supporting contracts | Hidden when ViewStates are present | Shown |
-  | State-only fallback sequences and contracts | Shown | Shown |
-  | Place primary navigation | Shown when supplied | Shown when supplied |
-  | Place route, access, entry points and description | Hidden | Shown when supplied |
-  | ViewState required data; focal Component description, inputs and outputs | Hidden | Shown when supplied |
-  | Empty Place scopes | Omitted with a coverage note | Retained |
-
-  References remain name-only. `--decorators none`, `type`, `id`, or `type,id` independently controls semantic-node headers in either detail. Omitting the option uses the user preference, then the bundle fallback. Very long IDs can currently overflow that shared header; replacing them with `(long ID)` is deferred. Legacy DOT/Mermaid and Graphviz keep their previous design.
-
   Examples: 
   :::: details place_viewstate_transition_example <Badge type="info" text="Detail: Detailed" vertical="top" />
   
@@ -89,7 +70,11 @@ for a compact list of content available to each diagram type.
   showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/ui_state_fallback.sdd {3, 9, 12, 16-20, 23, 26, 31, 34, 38, 41, 46, 49, 53-58, 60-66, 68-73}
   :::
   ::::
+  The overview shows Component containment with nested enclosures. Each Component also has a local scope containing all immediate parents and children.  
 
+  Place and Component scopes show horizontal state sequences, composition references, and outgoing contracts from one source reference. A final register lists supporting targets, including Events used only in transition labels. Container titles and hierarchy locators stay visible with every decorator setting.
+  See [diagram detail levels](ui_contracts_diagram_detail_levels.md) for UI Contracts.
+  
 ## Scenario Flow
 
   Step-by-step UI-level activities (but *without* collapsing the world into screens). 
