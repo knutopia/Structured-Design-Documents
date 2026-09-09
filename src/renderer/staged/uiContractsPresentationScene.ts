@@ -27,6 +27,7 @@ export function uiContractsEnclosure(id: string, children: SceneItem[], title?: 
 
 /** Scene construction supplies dimensions, ports, and reservations, never coordinates or routes. */
 export class UiContractsSceneBuilder {
+  private emphasizedOccurrenceId?: string;
   readonly scene: RendererScene;
   readonly relationshipSegments = new Map<string, string[]>();
   readonly occurrenceSemanticIds = new Map<string, string>();
@@ -41,7 +42,14 @@ export class UiContractsSceneBuilder {
   node(occurrence: UiContractsOccurrence): SceneNode {
     this.occurrenceSemanticIds.set(occurrence.id, occurrence.semanticId);
     return { ...buildSharedNode({ nodeId: occurrence.semanticId, nodeType: occurrence.nodeType, title: occurrence.title,
-      decoratorMode: this.decorators, attributes: occurrence.attributes }, { ports: buildCardinalPorts() }), id: occurrence.id };
+      decoratorMode: this.decorators, attributes: occurrence.attributes,
+      emphasized: occurrence.id === this.emphasizedOccurrenceId }, { ports: buildCardinalPorts() }), id: occurrence.id };
+  }
+  private withEmphasizedOccurrence<T>(id: string | undefined, build: () => T): T {
+    const previous = this.emphasizedOccurrenceId;
+    this.emphasizedOccurrenceId = id;
+    try { return build(); }
+    finally { this.emphasizedOccurrenceId = previous; }
   }
   measure(items: SceneItem[]) {
     const result = measureScene({ ...this.scene, root: uiContractsStack("measurement", items), edges: [] });
@@ -157,6 +165,10 @@ export class UiContractsSceneBuilder {
     return result.root.children[0] as SceneContainer;
   }
   scope(scope: UiContractsScope, complete = false): SceneContainer {
+    return this.withEmphasizedOccurrence(scope.kind === "standalone" ? undefined : scope.focal.id,
+      () => this.scopeContent(scope, complete));
+  }
+  private scopeContent(scope: UiContractsScope, complete: boolean): SceneContainer {
     const ownComposition = scope.compositions.find(group => group.source.id === scope.focal.id);
     const first = scope.kind === "component" ? this.neighborhood(scope) : ownComposition ? this.composition(ownComposition) : this.node(scope.focal);
     const sequenceIds = new Set(scope.sequences.flatMap(sequence => sequence.nodes.map(node => node.id)));
@@ -188,7 +200,8 @@ export class UiContractsSceneBuilder {
   }
   hierarchy(item: UiContractsHierarchy, depth = 0): SceneContainer {
     const descendants = this.hierarchyChildren(item, depth + 1);
-    const enclosure = uiContractsEnclosure(item.id, [this.node(item.node), ...(descendants ? [descendants] : [])], item.title);
+    const root = this.withEmphasizedOccurrence(depth === 0 ? item.node.id : undefined, () => this.node(item.node));
+    const enclosure = uiContractsEnclosure(item.id, [root, ...(descendants ? [descendants] : [])], item.title);
     enclosure.viewMetadata!.uiContracts!.tone = depth % 2 ? "inset" : "hierarchy";
     return enclosure;
   }

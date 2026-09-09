@@ -65,6 +65,7 @@
             },
             "content": [],
             "sharedNode": {
+              "emphasized": true,
               "title": "Review Panel",
               "decoratorMode": {
                 "id": "none",
@@ -192,6 +193,7 @@
                 },
                 "content": [],
                 "sharedNode": {
+                  "emphasized": true,
                   "title": "Case Review",
                   "decoratorMode": {
                     "id": "none",
@@ -582,6 +584,7 @@
                 },
                 "content": [],
                 "sharedNode": {
+                  "emphasized": true,
                   "title": "Review Panel",
                   "decoratorMode": {
                     "id": "none",

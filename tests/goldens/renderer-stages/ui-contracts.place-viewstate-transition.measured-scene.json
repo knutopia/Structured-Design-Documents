@@ -85,7 +85,8 @@
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain"
+              "shared-node-plain",
+              "shared-node--emphasized"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -101,13 +102,13 @@
               {
                 "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_title",
+                "textStyleRole": "shared_node_emphasized_title",
                 "lines": [
                   "Billing Form"
                 ],
-                "x": 15.5,
+                "x": 16,
                 "y": 14.5,
-                "width": 87.736,
+                "width": 89.048,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -115,21 +116,22 @@
             ],
             "sharedNode": {
               "density": "plain",
+              "emphasized": true,
               "body": {
-                "x": 1.5,
-                "y": 1.5,
-                "width": 221,
-                "height": 45,
+                "x": 2,
+                "y": 2,
+                "width": 220,
+                "height": 44,
                 "title": {
                   "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_title",
+                  "textStyleRole": "shared_node_emphasized_title",
                   "lines": [
                     "Billing Form"
                   ],
-                  "x": 15.5,
+                  "x": 16,
                   "y": 14.5,
-                  "width": 87.736,
+                  "width": 89.048,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -261,7 +263,8 @@
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain"
+              "shared-node-plain",
+              "shared-node--emphasized"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -277,13 +280,13 @@
               {
                 "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-011%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_title",
+                "textStyleRole": "shared_node_emphasized_title",
                 "lines": [
                   "Submit Button"
                 ],
-                "x": 15.5,
+                "x": 16,
                 "y": 14.5,
-                "width": 105.432,
+                "width": 107.088,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -291,21 +294,22 @@
             ],
             "sharedNode": {
               "density": "plain",
+              "emphasized": true,
               "body": {
-                "x": 1.5,
-                "y": 1.5,
-                "width": 221,
-                "height": 45,
+                "x": 2,
+                "y": 2,
+                "width": 220,
+                "height": 44,
                 "title": {
                   "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-011%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_title",
+                  "textStyleRole": "shared_node_emphasized_title",
                   "lines": [
                     "Submit Button"
                   ],
-                  "x": 15.5,
+                  "x": 16,
                   "y": 14.5,
-                  "width": 105.432,
+                  "width": 107.088,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -460,7 +464,8 @@
                 "classes": [
                   "semantic_node",
                   "shared-node",
-                  "shared-node-dense"
+                  "shared-node-dense",
+                  "shared-node--emphasized"
                 ],
                 "widthPolicy": {
                   "preferred": "standard",
@@ -476,13 +481,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "shared_node_title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
                       "Billing"
                     ],
-                    "x": 15.5,
-                    "y": 7.5,
-                    "width": 46.536,
+                    "x": 16,
+                    "y": 8,
+                    "width": 47.424,
                     "height": 19,
                     "lineHeight": 19,
                     "region": "primary"
@@ -490,12 +495,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Route"
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
+                    "x": 16,
+                    "y": 31,
                     "width": 27.465,
                     "height": 12,
                     "lineHeight": 12,
@@ -504,12 +509,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_0_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "/billing"
                     ],
-                    "x": 15.5,
-                    "y": 44.5,
+                    "x": 16,
+                    "y": 45,
                     "width": 38.886,
                     "height": 14,
                     "lineHeight": 14,
@@ -518,12 +523,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_1_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Access"
                     ],
-                    "x": 15.5,
-                    "y": 62.5,
+                    "x": 16,
+                    "y": 63,
                     "width": 33.5,
                     "height": 12,
                     "lineHeight": 12,
@@ -532,12 +537,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_1_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "auth"
                     ],
-                    "x": 15.5,
-                    "y": 76.5,
+                    "x": 16,
+                    "y": 77,
                     "width": 25.188,
                     "height": 14,
                     "lineHeight": 14,
@@ -546,12 +551,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_2_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Entry Points"
                     ],
-                    "x": 15.5,
-                    "y": 94.5,
+                    "x": 16,
+                    "y": 95,
                     "width": 56.275,
                     "height": 12,
                     "lineHeight": 12,
@@ -560,13 +565,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_2_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "link:/billing,notification:payment_f",
                       "ailed"
                     ],
-                    "x": 15.5,
-                    "y": 108.5,
+                    "x": 16,
+                    "y": 109,
                     "width": 189.846,
                     "height": 28,
                     "lineHeight": 14,
@@ -575,12 +580,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_3_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Primary Navigation"
                     ],
-                    "x": 15.5,
-                    "y": 140.5,
+                    "x": 16,
+                    "y": 141,
                     "width": 88.325,
                     "height": 12,
                     "lineHeight": 12,
@@ -589,12 +594,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_3_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "true"
                     ],
-                    "x": 15.5,
-                    "y": 154.5,
+                    "x": 16,
+                    "y": 155,
                     "width": 23.124,
                     "height": 14,
                     "lineHeight": 14,
@@ -603,21 +608,22 @@
                 ],
                 "sharedNode": {
                   "density": "dense",
+                  "emphasized": true,
                   "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
                     "height": 173,
                     "title": {
                       "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__title",
                       "kind": "text",
-                      "textStyleRole": "shared_node_title",
+                      "textStyleRole": "shared_node_emphasized_title",
                       "lines": [
                         "Billing"
                       ],
-                      "x": 15.5,
-                      "y": 7.5,
-                      "width": 46.536,
+                      "x": 16,
+                      "y": 8,
+                      "width": 47.424,
                       "height": 19,
                       "lineHeight": 19,
                       "region": "primary"
@@ -628,12 +634,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_0_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Route"
                           ],
-                          "x": 15.5,
-                          "y": 30.5,
+                          "x": 16,
+                          "y": 31,
                           "width": 27.465,
                           "height": 12,
                           "lineHeight": 12,
@@ -643,21 +649,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_0_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "/billing"
                             ],
-                            "x": 15.5,
-                            "y": 44.5,
+                            "x": 16,
+                            "y": 45,
                             "width": 38.886,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 30.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -665,12 +671,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_1_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Access"
                           ],
-                          "x": 15.5,
-                          "y": 62.5,
+                          "x": 16,
+                          "y": 63,
                           "width": 33.5,
                           "height": 12,
                           "lineHeight": 12,
@@ -680,21 +686,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_1_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "auth"
                             ],
-                            "x": 15.5,
-                            "y": 76.5,
+                            "x": 16,
+                            "y": 77,
                             "width": 25.188,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 62.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -702,12 +708,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_2_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Entry Points"
                           ],
-                          "x": 15.5,
-                          "y": 94.5,
+                          "x": 16,
+                          "y": 95,
                           "width": 56.275,
                           "height": 12,
                           "lineHeight": 12,
@@ -717,22 +723,22 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_2_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "link:/billing,notification:payment_f",
                               "ailed"
                             ],
-                            "x": 15.5,
-                            "y": 108.5,
+                            "x": 16,
+                            "y": 109,
                             "width": 189.846,
                             "height": 28,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 94.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 95,
+                        "width": 192,
                         "height": 42
                       },
                       {
@@ -740,12 +746,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_3_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Primary Navigation"
                           ],
-                          "x": 15.5,
-                          "y": 140.5,
+                          "x": 16,
+                          "y": 141,
                           "width": 88.325,
                           "height": 12,
                           "lineHeight": 12,
@@ -755,21 +761,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_3_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "true"
                             ],
-                            "x": 15.5,
-                            "y": 154.5,
+                            "x": 16,
+                            "y": 155,
                             "width": 23.124,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 140.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 141,
+                        "width": 192,
                         "height": 28
                       }
                     ]
@@ -788,7 +794,7 @@
                     "role": "south",
                     "side": "south",
                     "x": 112,
-                    "y": 176
+                    "y": 177
                   },
                   {
                     "id": "east",
@@ -803,14 +809,14 @@
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 88
+                    "y": 88.5
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
                 "width": 224,
-                "height": 176
+                "height": 177
               },
               {
                 "kind": "node",
@@ -941,7 +947,7 @@
               }
             ],
             "width": 472,
-            "height": 186
+            "height": 187
           },
           {
             "kind": "node",
@@ -1648,7 +1654,7 @@
           }
         ],
         "width": 504,
-        "height": 456
+        "height": 457
       },
       {
         "kind": "container",
@@ -1703,7 +1709,8 @@
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-dense"
+              "shared-node-dense",
+              "shared-node--emphasized"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -1719,13 +1726,13 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_title",
+                "textStyleRole": "shared_node_emphasized_title",
                 "lines": [
                   "Confirmation"
                 ],
-                "x": 15.5,
-                "y": 7.5,
-                "width": 95.064,
+                "x": 16,
+                "y": 8,
+                "width": 96.664,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -1733,12 +1740,12 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_0_label",
                 "kind": "text",
-                "textStyleRole": "shared_node_attribute_label",
+                "textStyleRole": "shared_node_emphasized_attributeLabel",
                 "lines": [
                   "Route"
                 ],
-                "x": 15.5,
-                "y": 30.5,
+                "x": 16,
+                "y": 31,
                 "width": 27.465,
                 "height": 12,
                 "lineHeight": 12,
@@ -1747,12 +1754,12 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_0_value_0",
                 "kind": "text",
-                "textStyleRole": "shared_node_attribute_value",
+                "textStyleRole": "shared_node_emphasized_attributeValue",
                 "lines": [
                   "/confirmation"
                 ],
-                "x": 15.5,
-                "y": 44.5,
+                "x": 16,
+                "y": 45,
                 "width": 74.718,
                 "height": 14,
                 "lineHeight": 14,
@@ -1761,12 +1768,12 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_1_label",
                 "kind": "text",
-                "textStyleRole": "shared_node_attribute_label",
+                "textStyleRole": "shared_node_emphasized_attributeLabel",
                 "lines": [
                   "Access"
                 ],
-                "x": 15.5,
-                "y": 62.5,
+                "x": 16,
+                "y": 63,
                 "width": 33.5,
                 "height": 12,
                 "lineHeight": 12,
@@ -1775,12 +1782,12 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_1_value_0",
                 "kind": "text",
-                "textStyleRole": "shared_node_attribute_value",
+                "textStyleRole": "shared_node_emphasized_attributeValue",
                 "lines": [
                   "role:billing_agent"
                 ],
-                "x": 15.5,
-                "y": 76.5,
+                "x": 16,
+                "y": 77,
                 "width": 97.152,
                 "height": 14,
                 "lineHeight": 14,
@@ -1789,21 +1796,22 @@
             ],
             "sharedNode": {
               "density": "dense",
+              "emphasized": true,
               "body": {
-                "x": 1.5,
-                "y": 1.5,
-                "width": 221,
+                "x": 2,
+                "y": 2,
+                "width": 220,
                 "height": 95,
                 "title": {
                   "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_title",
+                  "textStyleRole": "shared_node_emphasized_title",
                   "lines": [
                     "Confirmation"
                   ],
-                  "x": 15.5,
-                  "y": 7.5,
-                  "width": 95.064,
+                  "x": 16,
+                  "y": 8,
+                  "width": 96.664,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -1814,12 +1822,12 @@
                     "label": {
                       "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_0_label",
                       "kind": "text",
-                      "textStyleRole": "shared_node_attribute_label",
+                      "textStyleRole": "shared_node_emphasized_attributeLabel",
                       "lines": [
                         "Route"
                       ],
-                      "x": 15.5,
-                      "y": 30.5,
+                      "x": 16,
+                      "y": 31,
                       "width": 27.465,
                       "height": 12,
                       "lineHeight": 12,
@@ -1829,21 +1837,21 @@
                       {
                         "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_0_value_0",
                         "kind": "text",
-                        "textStyleRole": "shared_node_attribute_value",
+                        "textStyleRole": "shared_node_emphasized_attributeValue",
                         "lines": [
                           "/confirmation"
                         ],
-                        "x": 15.5,
-                        "y": 44.5,
+                        "x": 16,
+                        "y": 45,
                         "width": 74.718,
                         "height": 14,
                         "lineHeight": 14,
                         "region": "primary"
                       }
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
-                    "width": 193,
+                    "x": 16,
+                    "y": 31,
+                    "width": 192,
                     "height": 28
                   },
                   {
@@ -1851,12 +1859,12 @@
                     "label": {
                       "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_1_label",
                       "kind": "text",
-                      "textStyleRole": "shared_node_attribute_label",
+                      "textStyleRole": "shared_node_emphasized_attributeLabel",
                       "lines": [
                         "Access"
                       ],
-                      "x": 15.5,
-                      "y": 62.5,
+                      "x": 16,
+                      "y": 63,
                       "width": 33.5,
                       "height": 12,
                       "lineHeight": 12,
@@ -1866,21 +1874,21 @@
                       {
                         "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_1_value_0",
                         "kind": "text",
-                        "textStyleRole": "shared_node_attribute_value",
+                        "textStyleRole": "shared_node_emphasized_attributeValue",
                         "lines": [
                           "role:billing_agent"
                         ],
-                        "x": 15.5,
-                        "y": 76.5,
+                        "x": 16,
+                        "y": 77,
                         "width": 97.152,
                         "height": 14,
                         "lineHeight": 14,
                         "region": "primary"
                       }
                     ],
-                    "x": 15.5,
-                    "y": 62.5,
-                    "width": 193,
+                    "x": 16,
+                    "y": 63,
+                    "width": 192,
                     "height": 28
                   }
                 ]
@@ -1899,28 +1907,28 @@
                 "role": "south",
                 "side": "south",
                 "x": 112,
-                "y": 98
+                "y": 99
               },
               {
                 "id": "east",
                 "role": "east",
                 "side": "east",
                 "x": 224,
-                "y": 49
+                "y": 49.5
               },
               {
                 "id": "west",
                 "role": "west",
                 "side": "west",
                 "x": 0,
-                "y": 49
+                "y": 49.5
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "width": 224,
-            "height": 98
+            "height": 99
           },
           {
             "kind": "node",
@@ -1993,7 +2001,7 @@
           }
         ],
         "width": 256,
-        "height": 181
+        "height": 182
       },
       {
         "kind": "container",
@@ -2072,7 +2080,8 @@
                 "classes": [
                   "semantic_node",
                   "shared-node",
-                  "shared-node-dense"
+                  "shared-node-dense",
+                  "shared-node--emphasized"
                 ],
                 "widthPolicy": {
                   "preferred": "standard",
@@ -2088,13 +2097,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "shared_node_title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
                       "Billing Form"
                     ],
-                    "x": 15.5,
-                    "y": 7.5,
-                    "width": 87.736,
+                    "x": 16,
+                    "y": 8,
+                    "width": 89.048,
                     "height": 19,
                     "lineHeight": 19,
                     "region": "primary"
@@ -2102,12 +2111,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Description"
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
+                    "x": 16,
+                    "y": 31,
                     "width": 52.96,
                     "height": 12,
                     "lineHeight": 12,
@@ -2116,12 +2125,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_0_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "Form collecting billing details"
                     ],
-                    "x": 15.5,
-                    "y": 44.5,
+                    "x": 16,
+                    "y": 45,
                     "width": 164.652,
                     "height": 14,
                     "lineHeight": 14,
@@ -2130,12 +2139,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_1_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Inputs"
                     ],
-                    "x": 15.5,
-                    "y": 62.5,
+                    "x": 16,
+                    "y": 63,
                     "width": 29.28,
                     "height": 12,
                     "lineHeight": 12,
@@ -2144,12 +2153,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_1_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "BillingFields"
                     ],
-                    "x": 15.5,
-                    "y": 76.5,
+                    "x": 16,
+                    "y": 77,
                     "width": 69.03,
                     "height": 14,
                     "lineHeight": 14,
@@ -2158,12 +2167,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_2_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Outputs"
                     ],
-                    "x": 15.5,
-                    "y": 94.5,
+                    "x": 16,
+                    "y": 95,
                     "width": 37.715,
                     "height": 12,
                     "lineHeight": 12,
@@ -2172,12 +2181,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_2_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "SubmitRequested"
                     ],
-                    "x": 15.5,
-                    "y": 108.5,
+                    "x": 16,
+                    "y": 109,
                     "width": 100.242,
                     "height": 14,
                     "lineHeight": 14,
@@ -2186,21 +2195,22 @@
                 ],
                 "sharedNode": {
                   "density": "dense",
+                  "emphasized": true,
                   "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
                     "height": 127,
                     "title": {
                       "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__title",
                       "kind": "text",
-                      "textStyleRole": "shared_node_title",
+                      "textStyleRole": "shared_node_emphasized_title",
                       "lines": [
                         "Billing Form"
                       ],
-                      "x": 15.5,
-                      "y": 7.5,
-                      "width": 87.736,
+                      "x": 16,
+                      "y": 8,
+                      "width": 89.048,
                       "height": 19,
                       "lineHeight": 19,
                       "region": "primary"
@@ -2211,12 +2221,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_0_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Description"
                           ],
-                          "x": 15.5,
-                          "y": 30.5,
+                          "x": 16,
+                          "y": 31,
                           "width": 52.96,
                           "height": 12,
                           "lineHeight": 12,
@@ -2226,21 +2236,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_0_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "Form collecting billing details"
                             ],
-                            "x": 15.5,
-                            "y": 44.5,
+                            "x": 16,
+                            "y": 45,
                             "width": 164.652,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 30.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -2248,12 +2258,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_1_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Inputs"
                           ],
-                          "x": 15.5,
-                          "y": 62.5,
+                          "x": 16,
+                          "y": 63,
                           "width": 29.28,
                           "height": 12,
                           "lineHeight": 12,
@@ -2263,21 +2273,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_1_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "BillingFields"
                             ],
-                            "x": 15.5,
-                            "y": 76.5,
+                            "x": 16,
+                            "y": 77,
                             "width": 69.03,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 62.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -2285,12 +2295,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_2_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Outputs"
                           ],
-                          "x": 15.5,
-                          "y": 94.5,
+                          "x": 16,
+                          "y": 95,
                           "width": 37.715,
                           "height": 12,
                           "lineHeight": 12,
@@ -2300,21 +2310,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_2_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "SubmitRequested"
                             ],
-                            "x": 15.5,
-                            "y": 108.5,
+                            "x": 16,
+                            "y": 109,
                             "width": 100.242,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 94.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 95,
+                        "width": 192,
                         "height": 28
                       }
                     ]
@@ -2333,28 +2343,28 @@
                     "role": "south",
                     "side": "south",
                     "x": 112,
-                    "y": 130
+                    "y": 131
                   },
                   {
                     "id": "east",
                     "role": "east",
                     "side": "east",
                     "x": 224,
-                    "y": 65
+                    "y": 65.5
                   },
                   {
                     "id": "west",
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 65
+                    "y": 65.5
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
                 "width": 224,
-                "height": 130
+                "height": 131
               }
             ],
             "ports": [
@@ -2388,7 +2398,7 @@
               }
             ],
             "width": 224,
-            "height": 130
+            "height": 131
           },
           {
             "kind": "container",
@@ -3040,7 +3050,7 @@
           }
         ],
         "width": 611.748,
-        "height": 441
+        "height": 442
       },
       {
         "kind": "container",
@@ -3119,7 +3129,8 @@
                 "classes": [
                   "semantic_node",
                   "shared-node",
-                  "shared-node-dense"
+                  "shared-node-dense",
+                  "shared-node--emphasized"
                 ],
                 "widthPolicy": {
                   "preferred": "standard",
@@ -3135,13 +3146,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "shared_node_title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
                       "Submit Button"
                     ],
-                    "x": 15.5,
-                    "y": 7.5,
-                    "width": 105.432,
+                    "x": 16,
+                    "y": 8,
+                    "width": 107.088,
                     "height": 19,
                     "lineHeight": 19,
                     "region": "primary"
@@ -3149,12 +3160,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Description"
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
+                    "x": 16,
+                    "y": 31,
                     "width": 52.96,
                     "height": 12,
                     "lineHeight": 12,
@@ -3163,12 +3174,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_0_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "Primary submit action"
                     ],
-                    "x": 15.5,
-                    "y": 44.5,
+                    "x": 16,
+                    "y": 45,
                     "width": 121.962,
                     "height": 14,
                     "lineHeight": 14,
@@ -3177,12 +3188,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_1_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Inputs"
                     ],
-                    "x": 15.5,
-                    "y": 62.5,
+                    "x": 16,
+                    "y": 63,
                     "width": 29.28,
                     "height": 12,
                     "lineHeight": 12,
@@ -3191,12 +3202,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_1_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "Click"
                     ],
-                    "x": 15.5,
-                    "y": 76.5,
+                    "x": 16,
+                    "y": 77,
                     "width": 27.99,
                     "height": 14,
                     "lineHeight": 14,
@@ -3205,12 +3216,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_2_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Outputs"
                     ],
-                    "x": 15.5,
-                    "y": 94.5,
+                    "x": 16,
+                    "y": 95,
                     "width": 37.715,
                     "height": 12,
                     "lineHeight": 12,
@@ -3219,12 +3230,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_2_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "SubmitClicked"
                     ],
-                    "x": 15.5,
-                    "y": 108.5,
+                    "x": 16,
+                    "y": 109,
                     "width": 81.924,
                     "height": 14,
                     "lineHeight": 14,
@@ -3233,21 +3244,22 @@
                 ],
                 "sharedNode": {
                   "density": "dense",
+                  "emphasized": true,
                   "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
                     "height": 127,
                     "title": {
                       "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__title",
                       "kind": "text",
-                      "textStyleRole": "shared_node_title",
+                      "textStyleRole": "shared_node_emphasized_title",
                       "lines": [
                         "Submit Button"
                       ],
-                      "x": 15.5,
-                      "y": 7.5,
-                      "width": 105.432,
+                      "x": 16,
+                      "y": 8,
+                      "width": 107.088,
                       "height": 19,
                       "lineHeight": 19,
                       "region": "primary"
@@ -3258,12 +3270,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_0_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Description"
                           ],
-                          "x": 15.5,
-                          "y": 30.5,
+                          "x": 16,
+                          "y": 31,
                           "width": 52.96,
                           "height": 12,
                           "lineHeight": 12,
@@ -3273,21 +3285,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_0_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "Primary submit action"
                             ],
-                            "x": 15.5,
-                            "y": 44.5,
+                            "x": 16,
+                            "y": 45,
                             "width": 121.962,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 30.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -3295,12 +3307,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_1_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Inputs"
                           ],
-                          "x": 15.5,
-                          "y": 62.5,
+                          "x": 16,
+                          "y": 63,
                           "width": 29.28,
                           "height": 12,
                           "lineHeight": 12,
@@ -3310,21 +3322,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_1_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "Click"
                             ],
-                            "x": 15.5,
-                            "y": 76.5,
+                            "x": 16,
+                            "y": 77,
                             "width": 27.99,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 62.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -3332,12 +3344,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_2_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Outputs"
                           ],
-                          "x": 15.5,
-                          "y": 94.5,
+                          "x": 16,
+                          "y": 95,
                           "width": 37.715,
                           "height": 12,
                           "lineHeight": 12,
@@ -3347,21 +3359,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_2_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "SubmitClicked"
                             ],
-                            "x": 15.5,
-                            "y": 108.5,
+                            "x": 16,
+                            "y": 109,
                             "width": 81.924,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 94.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 95,
+                        "width": 192,
                         "height": 28
                       }
                     ]
@@ -3380,28 +3392,28 @@
                     "role": "south",
                     "side": "south",
                     "x": 112,
-                    "y": 130
+                    "y": 131
                   },
                   {
                     "id": "east",
                     "role": "east",
                     "side": "east",
                     "x": 224,
-                    "y": 65
+                    "y": 65.5
                   },
                   {
                     "id": "west",
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 65
+                    "y": 65.5
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
                 "width": 224,
-                "height": 130
+                "height": 131
               }
             ],
             "ports": [
@@ -3435,7 +3447,7 @@
               }
             ],
             "width": 224,
-            "height": 130
+            "height": 131
           },
           {
             "kind": "container",
@@ -3679,7 +3691,7 @@
           }
         ],
         "width": 546.87,
-        "height": 255
+        "height": 256
       },
       {
         "kind": "container",
@@ -4080,7 +4092,7 @@
       }
     ],
     "width": 643.748,
-    "height": 1958
+    "height": 1962
   },
   "edges": [
     {

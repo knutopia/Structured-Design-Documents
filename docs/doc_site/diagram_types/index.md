@@ -52,6 +52,8 @@ for a compact list of content available to each diagram type.
 
   Place and Component scopes show horizontal state sequences, composition references, and outgoing contracts from one source reference. A final register lists supporting targets, including Events used only in transition labels. Container titles and hierarchy locators stay visible with every decorator setting.
 
+  The main node in each Place or Component scope and the root of each top-level Component hierarchy use emphasized shared-node styling. Other occurrences, nested hierarchy nodes, and reference cards retain regular styling.
+
   | Content | Compact | Detailed |
   | --- | --- | --- |
   | Hierarchy and immediate parent/child context | Shown | Shown |

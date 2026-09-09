@@ -65,6 +65,7 @@
             },
             "content": [],
             "sharedNode": {
+              "emphasized": true,
               "title": "Billing Form",
               "decoratorMode": {
                 "id": "none",
@@ -170,6 +171,7 @@
             },
             "content": [],
             "sharedNode": {
+              "emphasized": true,
               "title": "Submit Button",
               "decoratorMode": {
                 "id": "none",
@@ -297,6 +299,7 @@
                 },
                 "content": [],
                 "sharedNode": {
+                  "emphasized": true,
                   "title": "Billing",
                   "decoratorMode": {
                     "id": "none",
@@ -839,6 +842,7 @@
             },
             "content": [],
             "sharedNode": {
+              "emphasized": true,
               "title": "Confirmation",
               "decoratorMode": {
                 "id": "none",
@@ -1001,6 +1005,7 @@
                 },
                 "content": [],
                 "sharedNode": {
+                  "emphasized": true,
                   "title": "Billing Form",
                   "decoratorMode": {
                     "id": "none",
@@ -1549,6 +1554,7 @@
                 },
                 "content": [],
                 "sharedNode": {
+                  "emphasized": true,
                   "title": "Submit Button",
                   "decoratorMode": {
                     "id": "none",

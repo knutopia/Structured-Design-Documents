@@ -5,7 +5,7 @@ import { projectView } from "../src/projector/projectView.js";
 import { buildUiContractsPresentationModel, type UiContractsHierarchy } from "../src/renderer/uiContractsPresentationModel.js";
 import { UiContractsSceneBuilder } from "../src/renderer/staged/uiContractsPresentationScene.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
-import type { PositionedItem } from "../src/renderer/staged/contracts.js";
+import type { PositionedItem, SceneItem } from "../src/renderer/staged/contracts.js";
 import { renderPositionedSceneToPng } from "../src/renderer/staged/svgBackend.js";
 import { assessUiContractsCoverage, assessUiContractsGeometry, flattenUiContractsItems } from "./uiContractsB5Acceptance.js";
 
@@ -71,6 +71,26 @@ END
     const model = buildUiContractsPresentationModel(projection, graph, view, detail);
     const builder = new UiContractsSceneBuilder(detail, { id: decorators, showNodeType: decorators.includes("type"), showNodeId: decorators.includes("id") });
     const result = await runStagedRendererPipeline(builder.complete(model));
+    const emphasizedIds = new Set([
+      ...model.overview.map(item => item.node.id),
+      ...model.scopes.filter(scope => scope.kind !== "standalone").map(scope => scope.focal.id)
+    ]);
+    expect(model.scopes.some(scope => scope.kind === "place" && scope.focal.title === "Departure Desk")).toBe(true);
+    expect(model.overview.some(item => item.node.title === "Load Workbench")).toBe(true);
+    const checkEmphasis = (item: SceneItem): void => {
+      if (item.kind === "container") item.children.forEach(checkEmphasis);
+      else if (item.sharedNode) expect(item.sharedNode.emphasized === true, item.id).toBe(emphasizedIds.has(item.id));
+    };
+    checkEmphasis(builder.scene.root);
+    for (const scene of [result.measuredScene, result.positionedScene]) {
+      const visit = (item: typeof scene.root | (typeof scene.root.children)[number]): void => {
+        if (item.kind === "container") item.children.forEach(visit);
+        else if (item.sharedNode) expect(item.sharedNode.emphasized === true, item.id).toBe(emphasizedIds.has(item.id));
+      };
+      visit(scene.root);
+    }
+    // Reusing the builder outside an enclosure must not retain its focal emphasis.
+    expect(builder.node(model.scopes[0].focal).sharedNode?.emphasized).toBeUndefined();
     const geometry = assessUiContractsGeometry(result.positionedScene);
     const structural = new Set(model.structuralRelationshipIds);
     const coverage = assessUiContractsCoverage({ expectedNodeIds: model.visibleSemanticNodeIds,

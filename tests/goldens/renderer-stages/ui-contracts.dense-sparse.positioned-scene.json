@@ -85,7 +85,8 @@
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain"
+              "shared-node-plain",
+              "shared-node--emphasized"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -101,13 +102,13 @@
               {
                 "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_title",
+                "textStyleRole": "shared_node_emphasized_title",
                 "lines": [
                   "Review Form"
                 ],
-                "x": 15.5,
+                "x": 16,
                 "y": 14.5,
-                "width": 93.04,
+                "width": 93.952,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -115,21 +116,22 @@
             ],
             "sharedNode": {
               "density": "plain",
+              "emphasized": true,
               "body": {
-                "x": 1.5,
-                "y": 1.5,
-                "width": 221,
-                "height": 45,
+                "x": 2,
+                "y": 2,
+                "width": 220,
+                "height": 44,
                 "title": {
                   "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-700%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_title",
+                  "textStyleRole": "shared_node_emphasized_title",
                   "lines": [
                     "Review Form"
                   ],
-                  "x": 15.5,
+                  "x": 16,
                   "y": 14.5,
-                  "width": 93.04,
+                  "width": 93.952,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -265,7 +267,8 @@
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain"
+              "shared-node-plain",
+              "shared-node--emphasized"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -281,13 +284,13 @@
               {
                 "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_title",
+                "textStyleRole": "shared_node_emphasized_title",
                 "lines": [
                   "Summary Card"
                 ],
-                "x": 15.5,
+                "x": 16,
                 "y": 14.5,
-                "width": 109.184,
+                "width": 110.712,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -295,21 +298,22 @@
             ],
             "sharedNode": {
               "density": "plain",
+              "emphasized": true,
               "body": {
-                "x": 1.5,
-                "y": 1.5,
-                "width": 221,
-                "height": 45,
+                "x": 2,
+                "y": 2,
+                "width": 220,
+                "height": 44,
                 "title": {
                   "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-702%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_title",
+                  "textStyleRole": "shared_node_emphasized_title",
                   "lines": [
                     "Summary Card"
                   ],
-                  "x": 15.5,
+                  "x": 16,
                   "y": 14.5,
-                  "width": 109.184,
+                  "width": 110.712,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -468,7 +472,8 @@
                 "classes": [
                   "semantic_node",
                   "shared-node",
-                  "shared-node-dense"
+                  "shared-node-dense",
+                  "shared-node--emphasized"
                 ],
                 "widthPolicy": {
                   "preferred": "standard",
@@ -484,13 +489,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "shared_node_title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
                       "Dense Review"
                     ],
-                    "x": 15.5,
-                    "y": 7.5,
-                    "width": 100.872,
+                    "x": 16,
+                    "y": 8,
+                    "width": 101.888,
                     "height": 19,
                     "lineHeight": 19,
                     "region": "primary"
@@ -498,12 +503,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Route"
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
+                    "x": 16,
+                    "y": 31,
                     "width": 27.465,
                     "height": 12,
                     "lineHeight": 12,
@@ -512,12 +517,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__attribute_0_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "/dense"
                     ],
-                    "x": 15.5,
-                    "y": 44.5,
+                    "x": 16,
+                    "y": 45,
                     "width": 37.896,
                     "height": 14,
                     "lineHeight": 14,
@@ -526,12 +531,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__attribute_1_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Access"
                     ],
-                    "x": 15.5,
-                    "y": 62.5,
+                    "x": 16,
+                    "y": 63,
                     "width": 33.5,
                     "height": 12,
                     "lineHeight": 12,
@@ -540,12 +545,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__attribute_1_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "auth"
                     ],
-                    "x": 15.5,
-                    "y": 76.5,
+                    "x": 16,
+                    "y": 77,
                     "width": 25.188,
                     "height": 14,
                     "lineHeight": 14,
@@ -554,21 +559,22 @@
                 ],
                 "sharedNode": {
                   "density": "dense",
+                  "emphasized": true,
                   "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
                     "height": 95,
                     "title": {
                       "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__title",
                       "kind": "text",
-                      "textStyleRole": "shared_node_title",
+                      "textStyleRole": "shared_node_emphasized_title",
                       "lines": [
                         "Dense Review"
                       ],
-                      "x": 15.5,
-                      "y": 7.5,
-                      "width": 100.872,
+                      "x": 16,
+                      "y": 8,
+                      "width": 101.888,
                       "height": 19,
                       "lineHeight": 19,
                       "region": "primary"
@@ -579,12 +585,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__attribute_0_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Route"
                           ],
-                          "x": 15.5,
-                          "y": 30.5,
+                          "x": 16,
+                          "y": 31,
                           "width": 27.465,
                           "height": 12,
                           "lineHeight": 12,
@@ -594,21 +600,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__attribute_0_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "/dense"
                             ],
-                            "x": 15.5,
-                            "y": 44.5,
+                            "x": 16,
+                            "y": 45,
                             "width": 37.896,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 30.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -616,12 +622,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__attribute_1_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Access"
                           ],
-                          "x": 15.5,
-                          "y": 62.5,
+                          "x": 16,
+                          "y": 63,
                           "width": 33.5,
                           "height": 12,
                           "lineHeight": 12,
@@ -631,21 +637,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D__attribute_1_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "auth"
                             ],
-                            "x": 15.5,
-                            "y": 76.5,
+                            "x": 16,
+                            "y": 77,
                             "width": 25.188,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 62.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
                         "height": 28
                       }
                     ]
@@ -664,7 +670,7 @@
                     "role": "south",
                     "side": "south",
                     "x": 112,
-                    "y": 98
+                    "y": 99
                   },
                   {
                     "id": "east",
@@ -679,7 +685,7 @@
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 49
+                    "y": 49.5
                   }
                 ],
                 "overflow": {
@@ -688,7 +694,7 @@
                 "x": 32,
                 "y": 315,
                 "width": 224,
-                "height": 98
+                "height": 99
               },
               {
                 "kind": "node",
@@ -803,27 +809,27 @@
                 "role": "south",
                 "side": "south",
                 "x": 277.811,
-                "y": 108
+                "y": 109
               },
               {
                 "id": "east",
                 "role": "east",
                 "side": "east",
                 "x": 555.622,
-                "y": 54
+                "y": 54.5
               },
               {
                 "id": "west",
                 "role": "west",
                 "side": "west",
                 "x": 0,
-                "y": 54
+                "y": 54.5
               }
             ],
             "x": 32,
             "y": 305,
             "width": 555.622,
-            "height": 108
+            "height": 109
           },
           {
             "kind": "container",
@@ -1009,7 +1015,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 446,
+                "y": 447,
                 "width": 224,
                 "height": 66
               },
@@ -1173,7 +1179,7 @@
                   "status": "fits"
                 },
                 "x": 381.778,
-                "y": 446,
+                "y": 447,
                 "width": 224,
                 "height": 66
               }
@@ -1209,7 +1215,7 @@
               }
             ],
             "x": 32,
-            "y": 429,
+            "y": 430,
             "width": 573.778,
             "height": 83
           }
@@ -1227,27 +1233,27 @@
             "role": "south",
             "side": "south",
             "x": 302.889,
-            "y": 258
+            "y": 259
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
             "x": 605.778,
-            "y": 129
+            "y": 129.5
           },
           {
             "id": "west",
             "role": "west",
             "side": "west",
             "x": 0,
-            "y": 129
+            "y": 129.5
           }
         ],
         "x": 16,
         "y": 270,
         "width": 605.778,
-        "height": 258
+        "height": 259
       },
       {
         "kind": "container",
@@ -1302,7 +1308,8 @@
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-dense"
+              "shared-node-dense",
+              "shared-node--emphasized"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -1318,13 +1325,13 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_title",
+                "textStyleRole": "shared_node_emphasized_title",
                 "lines": [
                   "Sparse Review"
                 ],
-                "x": 15.5,
-                "y": 7.5,
-                "width": 106.616,
+                "x": 16,
+                "y": 8,
+                "width": 107.784,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -1332,12 +1339,12 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__attribute_0_label",
                 "kind": "text",
-                "textStyleRole": "shared_node_attribute_label",
+                "textStyleRole": "shared_node_emphasized_attributeLabel",
                 "lines": [
                   "Route"
                 ],
-                "x": 15.5,
-                "y": 30.5,
+                "x": 16,
+                "y": 31,
                 "width": 27.465,
                 "height": 12,
                 "lineHeight": 12,
@@ -1346,12 +1353,12 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__attribute_0_value_0",
                 "kind": "text",
-                "textStyleRole": "shared_node_attribute_value",
+                "textStyleRole": "shared_node_emphasized_attributeValue",
                 "lines": [
                   "/sparse"
                 ],
-                "x": 15.5,
-                "y": 44.5,
+                "x": 16,
+                "y": 45,
                 "width": 41.502,
                 "height": 14,
                 "lineHeight": 14,
@@ -1360,12 +1367,12 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__attribute_1_label",
                 "kind": "text",
-                "textStyleRole": "shared_node_attribute_label",
+                "textStyleRole": "shared_node_emphasized_attributeLabel",
                 "lines": [
                   "Access"
                 ],
-                "x": 15.5,
-                "y": 62.5,
+                "x": 16,
+                "y": 63,
                 "width": 33.5,
                 "height": 12,
                 "lineHeight": 12,
@@ -1374,12 +1381,12 @@
               {
                 "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__attribute_1_value_0",
                 "kind": "text",
-                "textStyleRole": "shared_node_attribute_value",
+                "textStyleRole": "shared_node_emphasized_attributeValue",
                 "lines": [
                   "auth"
                 ],
-                "x": 15.5,
-                "y": 76.5,
+                "x": 16,
+                "y": 77,
                 "width": 25.188,
                 "height": 14,
                 "lineHeight": 14,
@@ -1388,21 +1395,22 @@
             ],
             "sharedNode": {
               "density": "dense",
+              "emphasized": true,
               "body": {
-                "x": 1.5,
-                "y": 1.5,
-                "width": 221,
+                "x": 2,
+                "y": 2,
+                "width": 220,
                 "height": 95,
                 "title": {
                   "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_title",
+                  "textStyleRole": "shared_node_emphasized_title",
                   "lines": [
                     "Sparse Review"
                   ],
-                  "x": 15.5,
-                  "y": 7.5,
-                  "width": 106.616,
+                  "x": 16,
+                  "y": 8,
+                  "width": 107.784,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -1413,12 +1421,12 @@
                     "label": {
                       "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__attribute_0_label",
                       "kind": "text",
-                      "textStyleRole": "shared_node_attribute_label",
+                      "textStyleRole": "shared_node_emphasized_attributeLabel",
                       "lines": [
                         "Route"
                       ],
-                      "x": 15.5,
-                      "y": 30.5,
+                      "x": 16,
+                      "y": 31,
                       "width": 27.465,
                       "height": 12,
                       "lineHeight": 12,
@@ -1428,21 +1436,21 @@
                       {
                         "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__attribute_0_value_0",
                         "kind": "text",
-                        "textStyleRole": "shared_node_attribute_value",
+                        "textStyleRole": "shared_node_emphasized_attributeValue",
                         "lines": [
                           "/sparse"
                         ],
-                        "x": 15.5,
-                        "y": 44.5,
+                        "x": 16,
+                        "y": 45,
                         "width": 41.502,
                         "height": 14,
                         "lineHeight": 14,
                         "region": "primary"
                       }
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
-                    "width": 193,
+                    "x": 16,
+                    "y": 31,
+                    "width": 192,
                     "height": 28
                   },
                   {
@@ -1450,12 +1458,12 @@
                     "label": {
                       "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__attribute_1_label",
                       "kind": "text",
-                      "textStyleRole": "shared_node_attribute_label",
+                      "textStyleRole": "shared_node_emphasized_attributeLabel",
                       "lines": [
                         "Access"
                       ],
-                      "x": 15.5,
-                      "y": 62.5,
+                      "x": 16,
+                      "y": 63,
                       "width": 33.5,
                       "height": 12,
                       "lineHeight": 12,
@@ -1465,21 +1473,21 @@
                       {
                         "id": "occurrence:%5B%22scope%3AP-701%22%2C%22focal%22%2C%22P-701%22%5D__attribute_1_value_0",
                         "kind": "text",
-                        "textStyleRole": "shared_node_attribute_value",
+                        "textStyleRole": "shared_node_emphasized_attributeValue",
                         "lines": [
                           "auth"
                         ],
-                        "x": 15.5,
-                        "y": 76.5,
+                        "x": 16,
+                        "y": 77,
                         "width": 25.188,
                         "height": 14,
                         "lineHeight": 14,
                         "region": "primary"
                       }
                     ],
-                    "x": 15.5,
-                    "y": 62.5,
-                    "width": 193,
+                    "x": 16,
+                    "y": 63,
+                    "width": 192,
                     "height": 28
                   }
                 ]
@@ -1498,30 +1506,30 @@
                 "role": "south",
                 "side": "south",
                 "x": 112,
-                "y": 98
+                "y": 99
               },
               {
                 "id": "east",
                 "role": "east",
                 "side": "east",
                 "x": 224,
-                "y": 49
+                "y": 49.5
               },
               {
                 "id": "west",
                 "role": "west",
                 "side": "west",
                 "x": 0,
-                "y": 49
+                "y": 49.5
               }
             ],
             "overflow": {
               "status": "fits"
             },
             "x": 32,
-            "y": 591,
+            "y": 592,
             "width": 224,
-            "height": 98
+            "height": 99
           }
         ],
         "ports": [
@@ -1537,27 +1545,27 @@
             "role": "south",
             "side": "south",
             "x": 128,
-            "y": 149
+            "y": 150
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
             "x": 256,
-            "y": 74.5
+            "y": 75
           },
           {
             "id": "west",
             "role": "west",
             "side": "west",
             "x": 0,
-            "y": 74.5
+            "y": 75
           }
         ],
         "x": 16,
-        "y": 556,
+        "y": 557,
         "width": 256,
-        "height": 149
+        "height": 150
       },
       {
         "kind": "container",
@@ -1636,7 +1644,8 @@
                 "classes": [
                   "semantic_node",
                   "shared-node",
-                  "shared-node-dense"
+                  "shared-node-dense",
+                  "shared-node--emphasized"
                 ],
                 "widthPolicy": {
                   "preferred": "standard",
@@ -1652,13 +1661,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "shared_node_title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
                       "Summary Review"
                     ],
-                    "x": 15.5,
-                    "y": 7.5,
-                    "width": 125.992,
+                    "x": 16,
+                    "y": 8,
+                    "width": 127.464,
                     "height": 19,
                     "lineHeight": 19,
                     "region": "primary"
@@ -1666,12 +1675,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Route"
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
+                    "x": 16,
+                    "y": 31,
                     "width": 27.465,
                     "height": 12,
                     "lineHeight": 12,
@@ -1680,12 +1689,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__attribute_0_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "/summary"
                     ],
-                    "x": 15.5,
-                    "y": 44.5,
+                    "x": 16,
+                    "y": 45,
                     "width": 55.974,
                     "height": 14,
                     "lineHeight": 14,
@@ -1694,12 +1703,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__attribute_1_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Access"
                     ],
-                    "x": 15.5,
-                    "y": 62.5,
+                    "x": 16,
+                    "y": 63,
                     "width": 33.5,
                     "height": 12,
                     "lineHeight": 12,
@@ -1708,12 +1717,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__attribute_1_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "auth"
                     ],
-                    "x": 15.5,
-                    "y": 76.5,
+                    "x": 16,
+                    "y": 77,
                     "width": 25.188,
                     "height": 14,
                     "lineHeight": 14,
@@ -1722,21 +1731,22 @@
                 ],
                 "sharedNode": {
                   "density": "dense",
+                  "emphasized": true,
                   "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
                     "height": 95,
                     "title": {
                       "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__title",
                       "kind": "text",
-                      "textStyleRole": "shared_node_title",
+                      "textStyleRole": "shared_node_emphasized_title",
                       "lines": [
                         "Summary Review"
                       ],
-                      "x": 15.5,
-                      "y": 7.5,
-                      "width": 125.992,
+                      "x": 16,
+                      "y": 8,
+                      "width": 127.464,
                       "height": 19,
                       "lineHeight": 19,
                       "region": "primary"
@@ -1747,12 +1757,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__attribute_0_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Route"
                           ],
-                          "x": 15.5,
-                          "y": 30.5,
+                          "x": 16,
+                          "y": 31,
                           "width": 27.465,
                           "height": 12,
                           "lineHeight": 12,
@@ -1762,21 +1772,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__attribute_0_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "/summary"
                             ],
-                            "x": 15.5,
-                            "y": 44.5,
+                            "x": 16,
+                            "y": 45,
                             "width": 55.974,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 30.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -1784,12 +1794,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__attribute_1_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Access"
                           ],
-                          "x": 15.5,
-                          "y": 62.5,
+                          "x": 16,
+                          "y": 63,
                           "width": 33.5,
                           "height": 12,
                           "lineHeight": 12,
@@ -1799,21 +1809,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D__attribute_1_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "auth"
                             ],
-                            "x": 15.5,
-                            "y": 76.5,
+                            "x": 16,
+                            "y": 77,
                             "width": 25.188,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 62.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
                         "height": 28
                       }
                     ]
@@ -1832,7 +1842,7 @@
                     "role": "south",
                     "side": "south",
                     "x": 112,
-                    "y": 98
+                    "y": 99
                   },
                   {
                     "id": "east",
@@ -1847,16 +1857,16 @@
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 49
+                    "y": 49.5
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 778,
+                "y": 780,
                 "width": 224,
-                "height": 98
+                "height": 99
               },
               {
                 "kind": "node",
@@ -1953,7 +1963,7 @@
                   "status": "fits"
                 },
                 "x": 363.622,
-                "y": 778,
+                "y": 780,
                 "width": 224,
                 "height": 48
               }
@@ -1971,27 +1981,27 @@
                 "role": "south",
                 "side": "south",
                 "x": 277.811,
-                "y": 108
+                "y": 109
               },
               {
                 "id": "east",
                 "role": "east",
                 "side": "east",
                 "x": 555.622,
-                "y": 54
+                "y": 54.5
               },
               {
                 "id": "west",
                 "role": "west",
                 "side": "west",
                 "x": 0,
-                "y": 54
+                "y": 54.5
               }
             ],
             "x": 32,
-            "y": 768,
+            "y": 770,
             "width": 555.622,
-            "height": 108
+            "height": 109
           }
         ],
         "ports": [
@@ -2007,27 +2017,27 @@
             "role": "south",
             "side": "south",
             "x": 293.811,
-            "y": 159
+            "y": 160
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
             "x": 587.622,
-            "y": 79.5
+            "y": 80
           },
           {
             "id": "west",
             "role": "west",
             "side": "west",
             "x": 0,
-            "y": 79.5
+            "y": 80
           }
         ],
         "x": 16,
-        "y": 733,
+        "y": 735,
         "width": 587.622,
-        "height": 159
+        "height": 160
       },
       {
         "kind": "container",
@@ -2106,7 +2116,8 @@
                 "classes": [
                   "semantic_node",
                   "shared-node",
-                  "shared-node-plain"
+                  "shared-node-plain",
+                  "shared-node--emphasized"
                 ],
                 "widthPolicy": {
                   "preferred": "standard",
@@ -2122,13 +2133,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-700%22%2C%22focal%22%2C%22C-700%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "shared_node_title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
                       "Review Form"
                     ],
-                    "x": 15.5,
+                    "x": 16,
                     "y": 14.5,
-                    "width": 93.04,
+                    "width": 93.952,
                     "height": 19,
                     "lineHeight": 19,
                     "region": "primary"
@@ -2136,21 +2147,22 @@
                 ],
                 "sharedNode": {
                   "density": "plain",
+                  "emphasized": true,
                   "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
-                    "height": 45,
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
+                    "height": 44,
                     "title": {
                       "id": "occurrence:%5B%22scope%3AC-700%22%2C%22focal%22%2C%22C-700%22%5D__title",
                       "kind": "text",
-                      "textStyleRole": "shared_node_title",
+                      "textStyleRole": "shared_node_emphasized_title",
                       "lines": [
                         "Review Form"
                       ],
-                      "x": 15.5,
+                      "x": 16,
                       "y": 14.5,
-                      "width": 93.04,
+                      "width": 93.952,
                       "height": 19,
                       "lineHeight": 19,
                       "region": "primary"
@@ -2192,7 +2204,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 955,
+                "y": 958,
                 "width": 224,
                 "height": 48
               }
@@ -2228,7 +2240,7 @@
               }
             ],
             "x": 32,
-            "y": 955,
+            "y": 958,
             "width": 224,
             "height": 48
           },
@@ -2362,7 +2374,7 @@
                       "status": "fits"
                     },
                     "x": 32,
-                    "y": 1029,
+                    "y": 1032,
                     "width": 224,
                     "height": 48
                   },
@@ -2440,14 +2452,14 @@
                       "status": "fits"
                     },
                     "x": 387.748,
-                    "y": 1029,
+                    "y": 1032,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 1019,
+                "y": 1022,
                 "width": 579.748,
                 "height": 58
               },
@@ -2518,7 +2530,7 @@
                       }
                     ],
                     "x": 232,
-                    "y": 1135,
+                    "y": 1138,
                     "width": 0,
                     "height": 0
                   },
@@ -2596,21 +2608,21 @@
                       "status": "fits"
                     },
                     "x": 387.748,
-                    "y": 1111,
+                    "y": 1114,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 1101,
+                "y": 1104,
                 "width": 579.748,
                 "height": 58
               }
             ],
             "ports": [],
             "x": 32,
-            "y": 1019,
+            "y": 1022,
             "width": 579.748,
             "height": 140
           }
@@ -2646,7 +2658,7 @@
           }
         ],
         "x": 16,
-        "y": 920,
+        "y": 923,
         "width": 611.748,
         "height": 255
       },
@@ -2789,7 +2801,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1238,
+            "y": 1241,
             "width": 224,
             "height": 48
           },
@@ -2887,7 +2899,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1302,
+            "y": 1305,
             "width": 224,
             "height": 48
           }
@@ -2923,7 +2935,7 @@
           }
         ],
         "x": 16,
-        "y": 1203,
+        "y": 1206,
         "width": 256,
         "height": 163
       }
@@ -2941,27 +2953,27 @@
         "role": "south",
         "side": "south",
         "x": 321.874,
-        "y": 1382
+        "y": 1385
       },
       {
         "id": "east",
         "role": "east",
         "side": "east",
         "x": 643.748,
-        "y": 691
+        "y": 692.5
       },
       {
         "id": "west",
         "role": "west",
         "side": "west",
         "x": 0,
-        "y": 691
+        "y": 692.5
       }
     ],
     "x": 0,
     "y": 0,
     "width": 643.748,
-    "height": 1382
+    "height": 1385
   },
   "edges": [
     {
@@ -3017,24 +3029,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700a%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 479
+        "y": 480
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700b%22%5D",
         "portId": "west",
         "x": 381.778,
-        "y": 479
+        "y": 480
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 479
+            "y": 480
           },
           {
             "x": 381.778,
-            "y": 479
+            "y": 480
           }
         ]
       },
@@ -3047,7 +3059,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 445
+        "y": 446
       },
       "markers": {
         "end": "arrow"
@@ -3062,24 +3074,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 802
+        "y": 804
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-702%22%2C%22composition_target%22%2C%22scope%3AP-702%3Acomposition%3AP-702%22%2C%22relationship%3A%255B%2522P-702%2522%252C%2522COMPOSED_OF%2522%252C%2522C-702%2522%255D%3A0%22%2C%22C-702%22%5D",
         "portId": "west",
         "x": 363.622,
-        "y": 802
+        "y": 804
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 802
+            "y": 804
           },
           {
             "x": 363.622,
-            "y": 802
+            "y": 804
           }
         ]
       },
@@ -3092,7 +3104,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 768
+        "y": 770
       },
       "markers": {
         "end": "arrow"
@@ -3109,24 +3121,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_source%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22C-700%22%5D",
         "portId": "contract-out:1",
         "x": 232,
-        "y": 1077
+        "y": 1080
       },
       "to": {
         "itemId": "scope:C-700:contract:C-700:anchor:1",
         "portId": "in",
         "x": 232,
-        "y": 1135
+        "y": 1138
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 232,
-            "y": 1077
+            "y": 1080
           },
           {
             "x": 232,
-            "y": 1135
+            "y": 1138
           }
         ]
       },
@@ -3143,24 +3155,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_source%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22C-700%22%5D",
         "portId": "contract-out:0",
         "x": 256,
-        "y": 1053
+        "y": 1056
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522BINDS_TO%2522%252C%2522D-700%2522%255D%3A0%22%2C%22D-700%22%5D",
         "portId": "contract-in",
         "x": 387.748,
-        "y": 1053
+        "y": 1056
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 1053
+            "y": 1056
           },
           {
             "x": 387.748,
-            "y": 1053
+            "y": 1056
           }
         ]
       },
@@ -3173,7 +3185,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 1019
+        "y": 1022
       },
       "markers": {
         "end": "arrow"
@@ -3190,24 +3202,24 @@
         "itemId": "scope:C-700:contract:C-700:anchor:1",
         "portId": "out",
         "x": 232,
-        "y": 1135
+        "y": 1138
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522EMITS%2522%252C%2522E-700%2522%255D%3A0%22%2C%22E-700%22%5D",
         "portId": "contract-in",
         "x": 387.748,
-        "y": 1135
+        "y": 1138
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 232,
-            "y": 1135
+            "y": 1138
           },
           {
             "x": 387.748,
-            "y": 1135
+            "y": 1138
           }
         ]
       },
@@ -3220,7 +3232,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 288.439,
-        "y": 1101
+        "y": 1104
       },
       "markers": {
         "end": "arrow"

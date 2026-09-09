@@ -39,6 +39,7 @@ z
 - Created ui contracts renderer guide
 - Reduced redundancy in diagram
 - Emphasized shared node
+- Added emphasized node to ui_contracts
 
 ## Mon 9-7
 

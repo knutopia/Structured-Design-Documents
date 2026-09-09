@@ -85,7 +85,8 @@
             "classes": [
               "semantic_node",
               "shared-node",
-              "shared-node-plain"
+              "shared-node-plain",
+              "shared-node--emphasized"
             ],
             "widthPolicy": {
               "preferred": "standard",
@@ -101,13 +102,13 @@
               {
                 "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D__title",
                 "kind": "text",
-                "textStyleRole": "shared_node_title",
+                "textStyleRole": "shared_node_emphasized_title",
                 "lines": [
                   "Review Panel"
                 ],
-                "x": 15.5,
+                "x": 16,
                 "y": 14.5,
-                "width": 96.336,
+                "width": 97.272,
                 "height": 19,
                 "lineHeight": 19,
                 "region": "primary"
@@ -115,21 +116,22 @@
             ],
             "sharedNode": {
               "density": "plain",
+              "emphasized": true,
               "body": {
-                "x": 1.5,
-                "y": 1.5,
-                "width": 221,
-                "height": 45,
+                "x": 2,
+                "y": 2,
+                "width": 220,
+                "height": 44,
                 "title": {
                   "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D__title",
                   "kind": "text",
-                  "textStyleRole": "shared_node_title",
+                  "textStyleRole": "shared_node_emphasized_title",
                   "lines": [
                     "Review Panel"
                   ],
-                  "x": 15.5,
+                  "x": 16,
                   "y": 14.5,
-                  "width": 96.336,
+                  "width": 97.272,
                   "height": 19,
                   "lineHeight": 19,
                   "region": "primary"
@@ -284,7 +286,8 @@
                 "classes": [
                   "semantic_node",
                   "shared-node",
-                  "shared-node-dense"
+                  "shared-node-dense",
+                  "shared-node--emphasized"
                 ],
                 "widthPolicy": {
                   "preferred": "standard",
@@ -300,13 +303,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "shared_node_title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
                       "Case Review"
                     ],
-                    "x": 15.5,
-                    "y": 7.5,
-                    "width": 91.408,
+                    "x": 16,
+                    "y": 8,
+                    "width": 92.312,
                     "height": 19,
                     "lineHeight": 19,
                     "region": "primary"
@@ -314,12 +317,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Route"
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
+                    "x": 16,
+                    "y": 31,
                     "width": 27.465,
                     "height": 12,
                     "lineHeight": 12,
@@ -328,12 +331,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__attribute_0_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "/cases/review"
                     ],
-                    "x": 15.5,
-                    "y": 44.5,
+                    "x": 16,
+                    "y": 45,
                     "width": 76.704,
                     "height": 14,
                     "lineHeight": 14,
@@ -342,12 +345,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__attribute_1_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Access"
                     ],
-                    "x": 15.5,
-                    "y": 62.5,
+                    "x": 16,
+                    "y": 63,
                     "width": 33.5,
                     "height": 12,
                     "lineHeight": 12,
@@ -356,12 +359,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__attribute_1_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "auth"
                     ],
-                    "x": 15.5,
-                    "y": 76.5,
+                    "x": 16,
+                    "y": 77,
                     "width": 25.188,
                     "height": 14,
                     "lineHeight": 14,
@@ -370,21 +373,22 @@
                 ],
                 "sharedNode": {
                   "density": "dense",
+                  "emphasized": true,
                   "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
                     "height": 95,
                     "title": {
                       "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__title",
                       "kind": "text",
-                      "textStyleRole": "shared_node_title",
+                      "textStyleRole": "shared_node_emphasized_title",
                       "lines": [
                         "Case Review"
                       ],
-                      "x": 15.5,
-                      "y": 7.5,
-                      "width": 91.408,
+                      "x": 16,
+                      "y": 8,
+                      "width": 92.312,
                       "height": 19,
                       "lineHeight": 19,
                       "region": "primary"
@@ -395,12 +399,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__attribute_0_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Route"
                           ],
-                          "x": 15.5,
-                          "y": 30.5,
+                          "x": 16,
+                          "y": 31,
                           "width": 27.465,
                           "height": 12,
                           "lineHeight": 12,
@@ -410,21 +414,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__attribute_0_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "/cases/review"
                             ],
-                            "x": 15.5,
-                            "y": 44.5,
+                            "x": 16,
+                            "y": 45,
                             "width": 76.704,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 30.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -432,12 +436,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__attribute_1_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Access"
                           ],
-                          "x": 15.5,
-                          "y": 62.5,
+                          "x": 16,
+                          "y": 63,
                           "width": 33.5,
                           "height": 12,
                           "lineHeight": 12,
@@ -447,21 +451,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D__attribute_1_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "auth"
                             ],
-                            "x": 15.5,
-                            "y": 76.5,
+                            "x": 16,
+                            "y": 77,
                             "width": 25.188,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 62.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
                         "height": 28
                       }
                     ]
@@ -480,7 +484,7 @@
                     "role": "south",
                     "side": "south",
                     "x": 112,
-                    "y": 98
+                    "y": 99
                   },
                   {
                     "id": "east",
@@ -495,14 +499,14 @@
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 49
+                    "y": 49.5
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
                 "width": 224,
-                "height": 98
+                "height": 99
               },
               {
                 "kind": "node",
@@ -633,7 +637,7 @@
               }
             ],
             "width": 472,
-            "height": 108
+            "height": 109
           },
           {
             "kind": "node",
@@ -957,7 +961,7 @@
           }
         ],
         "width": 504,
-        "height": 297
+        "height": 298
       },
       {
         "kind": "container",
@@ -1036,7 +1040,8 @@
                 "classes": [
                   "semantic_node",
                   "shared-node",
-                  "shared-node-dense"
+                  "shared-node-dense",
+                  "shared-node--emphasized"
                 ],
                 "widthPolicy": {
                   "preferred": "standard",
@@ -1052,13 +1057,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "shared_node_title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
                       "Review Panel"
                     ],
-                    "x": 15.5,
-                    "y": 7.5,
-                    "width": 96.336,
+                    "x": 16,
+                    "y": 8,
+                    "width": 97.272,
                     "height": 19,
                     "lineHeight": 19,
                     "region": "primary"
@@ -1066,12 +1071,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_0_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Description"
                     ],
-                    "x": 15.5,
-                    "y": 30.5,
+                    "x": 16,
+                    "y": 31,
                     "width": 52.96,
                     "height": 12,
                     "lineHeight": 12,
@@ -1080,13 +1085,13 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_0_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "Panel for reviewing and",
                       "submitting a case"
                     ],
-                    "x": 15.5,
-                    "y": 44.5,
+                    "x": 16,
+                    "y": 45,
                     "width": 130.95,
                     "height": 28,
                     "lineHeight": 14,
@@ -1095,12 +1100,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_1_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Inputs"
                     ],
-                    "x": 15.5,
-                    "y": 76.5,
+                    "x": 16,
+                    "y": 77,
                     "width": 29.28,
                     "height": 12,
                     "lineHeight": 12,
@@ -1109,12 +1114,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_1_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "CaseRecord"
                     ],
-                    "x": 15.5,
-                    "y": 90.5,
+                    "x": 16,
+                    "y": 91,
                     "width": 67.278,
                     "height": 14,
                     "lineHeight": 14,
@@ -1123,12 +1128,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_2_label",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_label",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
                       "Outputs"
                     ],
-                    "x": 15.5,
-                    "y": 108.5,
+                    "x": 16,
+                    "y": 109,
                     "width": 37.715,
                     "height": 12,
                     "lineHeight": 12,
@@ -1137,12 +1142,12 @@
                   {
                     "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_2_value_0",
                     "kind": "text",
-                    "textStyleRole": "shared_node_attribute_value",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
                     "lines": [
                       "ReviewSubmitted"
                     ],
-                    "x": 15.5,
-                    "y": 122.5,
+                    "x": 16,
+                    "y": 123,
                     "width": 97.824,
                     "height": 14,
                     "lineHeight": 14,
@@ -1151,21 +1156,22 @@
                 ],
                 "sharedNode": {
                   "density": "dense",
+                  "emphasized": true,
                   "body": {
-                    "x": 1.5,
-                    "y": 1.5,
-                    "width": 221,
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
                     "height": 141,
                     "title": {
                       "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__title",
                       "kind": "text",
-                      "textStyleRole": "shared_node_title",
+                      "textStyleRole": "shared_node_emphasized_title",
                       "lines": [
                         "Review Panel"
                       ],
-                      "x": 15.5,
-                      "y": 7.5,
-                      "width": 96.336,
+                      "x": 16,
+                      "y": 8,
+                      "width": 97.272,
                       "height": 19,
                       "lineHeight": 19,
                       "region": "primary"
@@ -1176,12 +1182,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_0_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Description"
                           ],
-                          "x": 15.5,
-                          "y": 30.5,
+                          "x": 16,
+                          "y": 31,
                           "width": 52.96,
                           "height": 12,
                           "lineHeight": 12,
@@ -1191,22 +1197,22 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_0_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "Panel for reviewing and",
                               "submitting a case"
                             ],
-                            "x": 15.5,
-                            "y": 44.5,
+                            "x": 16,
+                            "y": 45,
                             "width": 130.95,
                             "height": 28,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 30.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
                         "height": 42
                       },
                       {
@@ -1214,12 +1220,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_1_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Inputs"
                           ],
-                          "x": 15.5,
-                          "y": 76.5,
+                          "x": 16,
+                          "y": 77,
                           "width": 29.28,
                           "height": 12,
                           "lineHeight": 12,
@@ -1229,21 +1235,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_1_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "CaseRecord"
                             ],
-                            "x": 15.5,
-                            "y": 90.5,
+                            "x": 16,
+                            "y": 91,
                             "width": 67.278,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 76.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 77,
+                        "width": 192,
                         "height": 28
                       },
                       {
@@ -1251,12 +1257,12 @@
                         "label": {
                           "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_2_label",
                           "kind": "text",
-                          "textStyleRole": "shared_node_attribute_label",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
                           "lines": [
                             "Outputs"
                           ],
-                          "x": 15.5,
-                          "y": 108.5,
+                          "x": 16,
+                          "y": 109,
                           "width": 37.715,
                           "height": 12,
                           "lineHeight": 12,
@@ -1266,21 +1272,21 @@
                           {
                             "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D__attribute_2_value_0",
                             "kind": "text",
-                            "textStyleRole": "shared_node_attribute_value",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
                             "lines": [
                               "ReviewSubmitted"
                             ],
-                            "x": 15.5,
-                            "y": 122.5,
+                            "x": 16,
+                            "y": 123,
                             "width": 97.824,
                             "height": 14,
                             "lineHeight": 14,
                             "region": "primary"
                           }
                         ],
-                        "x": 15.5,
-                        "y": 108.5,
-                        "width": 193,
+                        "x": 16,
+                        "y": 109,
+                        "width": 192,
                         "height": 28
                       }
                     ]
@@ -1299,28 +1305,28 @@
                     "role": "south",
                     "side": "south",
                     "x": 112,
-                    "y": 144
+                    "y": 145
                   },
                   {
                     "id": "east",
                     "role": "east",
                     "side": "east",
                     "x": 224,
-                    "y": 72
+                    "y": 72.5
                   },
                   {
                     "id": "west",
                     "role": "west",
                     "side": "west",
                     "x": 0,
-                    "y": 72
+                    "y": 72.5
                   }
                 ],
                 "overflow": {
                   "status": "fits"
                 },
                 "width": 224,
-                "height": 144
+                "height": 145
               }
             ],
             "ports": [
@@ -1354,7 +1360,7 @@
               }
             ],
             "width": 224,
-            "height": 144
+            "height": 145
           },
           {
             "kind": "container",
@@ -2164,7 +2170,7 @@
           }
         ],
         "width": 611.748,
-        "height": 523
+        "height": 524
       },
       {
         "kind": "container",
@@ -2565,7 +2571,7 @@
       }
     ],
     "width": 643.748,
-    "height": 1262
+    "height": 1264
   },
   "edges": [
     {
