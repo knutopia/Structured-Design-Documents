@@ -1,0 +1,112 @@
+flowchart LR
+  subgraph n_P_410[" "]
+    n_P_410__anchor["Departure Desk<br/>/departures<br/>[auth]"]
+    subgraph n_VS_410a[" "]
+      n_VS_410a__anchor["ViewState: Staging<br/>data: LoadRecord"]
+      n_C_460("Crew Note")
+    end
+    subgraph n_VS_410b[" "]
+      n_VS_410b__anchor["ViewState: Released<br/>data: LoadRecord"]
+      n_C_460("Crew Note")
+    end
+    subgraph n_C_410__group[" "]
+      n_C_410__anchor["Component: Load Workbench"]
+      subgraph n_secondary_state_group_C_410[" "]
+        n_secondary_state_group_C_410__anchor["State detail: Load Workbench<br/>scope_id=C-410"]
+        n_ST_410a(["Assembling"])
+        n_ST_410b(["Ready to release"])
+        n_ST_410c(["Checking load"])
+        n_ST_410d(["Release recorded"])
+        n_ST_410e(["Handoff complete"])
+        n_ST_415a(["Checklist open"])
+        n_ST_415b(["Checklist reviewed"])
+        n_ST_415c(["Checklist filed"])
+      end
+    end
+    n_VS_410c("Archived<br/>data: LoadRecord")
+    n_VS_410d("Receipt delivered<br/>data: LoadRecord")
+    n_VS_410e("Departure closed<br/>data: LoadRecord")
+    n_VS_415a("Crew message<br/>data: LoadRecord")
+    n_VS_415b("Crew review<br/>data: LoadRecord")
+    n_VS_415c("Crew confirmation<br/>data: LoadRecord")
+  end
+  subgraph n_C_420__group[" "]
+    n_C_420__anchor["Component: Cargo Sheet"]
+    n_E_420(["Cargo changed"])
+    subgraph n_secondary_state_group_C_420[" "]
+      n_secondary_state_group_C_420__anchor["State detail: Cargo Sheet<br/>scope_id=C-420"]
+      n_ST_420a(["Untouched"])
+      n_ST_420b(["Adjusted"])
+    end
+  end
+  subgraph n_C_430__group[" "]
+    n_C_430__anchor["Component: Seal Check"]
+    n_E_430(["Seal accepted"])
+    n_SA_430[["Check seal"]]
+    subgraph n_secondary_state_group_C_430[" "]
+      n_secondary_state_group_C_430__anchor["State detail: Seal Check<br/>scope_id=C-430"]
+      n_ST_430a(["Unchecked"])
+      n_ST_430b(["Verified"])
+      n_ST_430c(["Result applied"])
+      n_ST_430d(["Result acknowledged"])
+      n_ST_430e(["Check filed"])
+    end
+  end
+  n_C_431("Seal Code Input")
+  subgraph n_C_440__group[" "]
+    n_C_440__anchor["Component: Release Lever"]
+    n_E_440(["Release load"])
+    n_SA_440[["Record departure"]]
+  end
+  n_C_450("Trail Lens")
+  n_C_470("Arrival Review")
+  subgraph n_shared_supporting_contracts[" "]
+    n_shared_supporting_contracts__anchor["Shared Supporting Contracts"]
+    n_E_470(["Archive confirmed"])
+    n_E_480(["Crew review opened"])
+    n_E_490(["Crew note acknowledged"])
+    n_E_500(["Release recorded"])
+    n_E_510(["Handoff completed"])
+    n_E_520(["Receipt delivered"])
+    n_E_530(["Departure closed"])
+    n_E_540(["Result applied"])
+    n_E_550(["Result acknowledged"])
+    n_E_560(["Check filed"])
+    n_SA_410[["Store draft"]]
+    n_D_410["LoadRecord"]
+    n_E_450(["Checklist reviewed"])
+    n_E_460(["Checklist filed"])
+  end
+  n_C_420__anchor -->|binds field contents| n_D_410
+  n_C_420__anchor -->|depends on| n_SA_410
+  n_C_420__anchor -->|emits| n_E_420
+  n_C_430__anchor -->|binds field seal_code| n_D_410
+  n_C_430__anchor -->|depends on| n_SA_430
+  n_C_430__anchor -->|emits| n_E_430
+  n_C_440__anchor -->|depends on| n_SA_440
+  n_C_440__anchor -->|emits| n_E_440
+  n_C_450 -->|binds field status| n_D_410
+  n_C_450 -->|depends on| n_SA_410
+  n_ST_410a -->|[Cargo changed]| n_ST_410c
+  n_ST_410b -->|[Release recorded]| n_ST_410d
+  n_ST_410c -->|[Seal accepted] {seal_valid}| n_ST_410b
+  n_ST_410d -->|[Handoff completed]| n_ST_410e
+  n_ST_415a -->|[Checklist reviewed]| n_ST_415b
+  n_ST_415b -->|[Checklist filed]| n_ST_415c
+  n_ST_420a -->|[Cargo changed]| n_ST_420b
+  n_ST_430a -->|[Seal accepted] {seal_valid}| n_ST_430b
+  n_ST_430b -->|[Result applied]| n_ST_430c
+  n_ST_430c -->|[Result acknowledged]| n_ST_430d
+  n_ST_430d -->|[Check filed]| n_ST_430e
+  n_VS_410a__anchor -->|[Release load] {seal_valid} / SA-440| n_VS_410b__anchor
+  n_VS_410b__anchor -->|[Archive confirmed]| n_VS_410c
+  n_VS_410c -->|[Receipt delivered]| n_VS_410d
+  n_VS_410d -->|[Departure closed]| n_VS_410e
+  n_VS_415a -->|[Crew review opened]| n_VS_415b
+  n_VS_415b -->|[Crew note acknowledged]| n_VS_415c
+  classDef dashedNode stroke-dasharray: 6 4;
+  class n_ST_410a,n_ST_410b,n_ST_410c,n_ST_410d,n_ST_410e,n_ST_415a,n_ST_415b,n_ST_415c,n_VS_410c,n_VS_410d,n_VS_410e,n_VS_415a,n_VS_415b,n_VS_415c,n_ST_420a,n_ST_420b,n_ST_430a,n_ST_430b,n_ST_430c,n_ST_430d,n_ST_430e dashedNode;
+  classDef containerTitle fill:transparent,stroke:transparent,color:#111;
+  class n_P_410__anchor,n_VS_410a__anchor,n_VS_410b__anchor,n_C_410__anchor,n_secondary_state_group_C_410__anchor,n_C_420__anchor,n_secondary_state_group_C_420__anchor,n_C_430__anchor,n_secondary_state_group_C_430__anchor,n_C_440__anchor,n_shared_supporting_contracts__anchor containerTitle;
+  linkStyle 2,5,7,10,11,12,13,14,15,16,17,18,19,20 stroke-dasharray: 6 4;
+  linkStyle 0,3,8 stroke-dasharray: 2 4;

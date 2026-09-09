@@ -40,7 +40,8 @@ z
 - Added emphasized node to ui_contracts
 - Components without hierarchy
 - Added gen-x script for canonical examples
-- Cleaned up ui contracts doc text
+- Cleaned up ui_contracts doc text
+- Moved ui_contracts guide to doc site
 
 ## Mon 9-7
 

@@ -1,4 +1,4 @@
-# Understanding the hierarchical UI Contracts renderer
+# UI Contracts Guide
 
 This guide describes the implemented **staged `ui_contracts` SVG/PNG renderer**, as accepted on 8 September 2026. It explains how to read a diagram and where its composition is implemented. It covers the current B5 implementation, including the later transition and sibling-enclosure corrections, rather than the earlier design studies.
 
@@ -21,9 +21,8 @@ Sections appear vertically: Component hierarchy roots first, then Components wit
 
 Each section takes the width its contents require. A long transition sequence can therefore make one section much wider than the hierarchy overview. The sheet has no outer frame; the visible frames belong to individual scopes and hierarchy enclosures. Large diagrams are intended for zooming and scrolling.
 
-![Current compact Departure Desk sheet, with hierarchy overview and local scopes](implementation_evidence/isolated_components/departure_desk/compact.none.svg)
-
-[Open the compact SVG at full size](implementation_evidence/isolated_components/departure_desk/compact.none.svg). With ViewStates present, this compact sheet omits secondary State sequences and supporting contracts, but retains the hierarchy and local parent/child neighborhoods.
+![example with decorators](examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg)
+[Open the compact SVG at full size](examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg). With ViewStates present, this compact sheet omits secondary State sequences and supporting contracts, but retains the hierarchy and local parent/child neighborhoods.
 
 ## Component hierarchy overview
 
@@ -88,9 +87,9 @@ Absent parts are omitted. The event reference is resolved to its node name when 
 
 Forks and merges use distinct routed segments. Cycles reserve a return channel above the forward sequence, and self-loops also route above their node. These are layout treatments of authored transitions, not extra relationships.
 
-![Accepted cycle treatment, with its return transition above the sequence](implementation_evidence/stage6_resumed/cycle.compact.none.svg)
+![Accepted cycle treatment, with its return transition above the sequence](examples/ui_contracts/stage6_resumed/cycle.compact.none.svg)
 
-[Cycle SVG](implementation_evidence/stage6_resumed/cycle.compact.none.svg) · [Self-loop SVG](implementation_evidence/stage6_resumed/self_loop.compact.none.svg) · [Branch SVG](implementation_evidence/stage6_resumed/branch.compact.none.svg) · [Merge SVG](implementation_evidence/stage6_resumed/merge.compact.none.svg)
+[Cycle SVG](examples/ui_contracts/stage6_resumed/cycle.compact.none.svg) · [Self-loop SVG](examples/ui_contracts/stage6_resumed/self_loop.compact.none.svg) · [Branch SVG](examples/ui_contracts/stage6_resumed/branch.compact.none.svg) · [Merge SVG](examples/ui_contracts/stage6_resumed/merge.compact.none.svg)
 
 ## Outgoing contracts and referenced targets
 
@@ -110,9 +109,9 @@ The final `Referenced targets` section lists visible Event, DataEntity, and Syst
 
 Supporting nodes with outgoing contracts can receive their own `Contract scope · <name>` section. Unowned nodes and cross-scope transitions also receive explicit standalone context when needed, so they are not silently lost merely because they do not fit a normal Place or Component scope.
 
-![Current detailed Departure Desk sheet including State sequences, outgoing contracts and referenced targets](implementation_evidence/isolated_components/departure_desk/detailed.none.svg)
+![Current detailed Departure Desk sheet including State sequences, outgoing contracts and referenced targets](examples/ui_contracts/isolated_components/departure_desk/detailed.none.svg)
 
-[Open the detailed SVG at full size](implementation_evidence/isolated_components/departure_desk/detailed.none.svg). Compare Seal Check's local parents with its two overview occurrences, then follow its own bindings and emissions to their local target references.
+[Open the detailed SVG at full size](examples/ui_contracts/isolated_components/departure_desk/detailed.none.svg). Compare Seal Check's local parents with its two overview occurrences, then follow its own bindings and emissions to their local target references.
 
 ## Detail and decorators
 
@@ -133,14 +132,14 @@ Supporting nodes with outgoing contracts can receive their own `Contract scope �
 
 The fallback test is **projection-wide**. A Component with States but no local ViewStates does not receive its own compact fallback if a ViewState exists elsewhere in the projection. Compact is therefore a selected-content view, not evidence that omitted contracts are absent from the source. An empty Place is assessed against the content visible for the selected detail.
 
-[Existing compact State-fallback SVG](../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/compact_detail/ui_state_fallback.ui_contracts.svg) illustrates the fallback without primary ViewStates.
+[Existing compact State-fallback SVG](examples/ui_contracts/ui_state_fallback.ui_contracts.svg) illustrates the fallback without primary ViewStates.
 
 Decorator choices are `none`, `type`, `id`, and `type,id`. Container titles and H locators remain visible in every case. ID decorators display the original semantic ID, never the internal visual-occurrence ID. When decorators are omitted, the independent user preference and bundle fallback resolve the setting.
 
 | Detail | No decorators | Type | ID | Type and ID |
 | --- | --- | --- | --- | --- |
-| Compact | [SVG](implementation_evidence/stage7/departure_desk/compact.none.svg) | [SVG](implementation_evidence/stage7/departure_desk/compact.type.svg) | [SVG](implementation_evidence/stage7/departure_desk/compact.id.svg) | [SVG](implementation_evidence/stage7/departure_desk/compact.type-id.svg) |
-| Detailed | [SVG](implementation_evidence/stage7/departure_desk/detailed.none.svg) | [SVG](implementation_evidence/stage7/departure_desk/detailed.type.svg) | [SVG](implementation_evidence/stage7/departure_desk/detailed.id.svg) | [SVG](implementation_evidence/stage7/departure_desk/detailed.type-id.svg) |
+| Compact | [SVG](examples/ui_contracts/stage7/departure_desk/compact.none.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/compact.type.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/compact.id.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/compact.type-id.svg) |
+| Detailed | [SVG](examples/ui_contracts/stage7/departure_desk/detailed.none.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/detailed.type.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/detailed.id.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/detailed.type-id.svg) |
 
 ## Visual sizing and container treatment
 

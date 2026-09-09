@@ -54,6 +54,10 @@ node_decorator_modes:
     show_node_id: true
 
 examples:
+  - path: examples/departure_desk.sdd
+    compiled_snapshot: snapshots/departure_desk.compiled.json
+    projection_snapshots:
+      - snapshots/departure_desk.ui_contracts.projection.json
   - path: examples/outcome_to_ia_trace.sdd
     compiled_snapshot: snapshots/outcome_to_ia_trace.compiled.json
     projection_snapshots:

@@ -49,6 +49,17 @@ for a compact list of content available to each diagram type.
   Component hierarchy, UI composition and state changes, with local Place and Component scopes.
 
   Examples: 
+  :::: details departure_desk_example <Badge type="info" text="Detail: Compact" vertical="top" /><Badge type="info" text="Decorators: Type, ID" vertical="top" />
+
+  :::tabs
+  == UI Contracts Diagram
+  ![Departure Desk example](./examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg)
+  == Source
+  showRepoLink /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/
+  showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+  :::
+  ::::
+
   :::: details place_viewstate_transition_example <Badge type="info" text="Detail: Detailed" vertical="top" />
   
   :::tabs
@@ -72,8 +83,8 @@ for a compact list of content available to each diagram type.
   ::::
   The overview shows Component containment with nested enclosures. Each Component also has a local scope containing all immediate parents and children.  
 
-  Place and Component scopes show horizontal state sequences, composition references, and outgoing contracts from one source reference. A final register lists supporting targets, including Events used only in transition labels. Container titles and hierarchy locators stay visible with every decorator setting.
-  See [diagram detail levels](ui_contracts_diagram_detail_levels.md) for UI Contracts.
+  Place and Component scopes show horizontal state sequences, composition references, and outgoing contracts from one source reference.  
+  See [UI Contracts Guide](ui_contracts_guide.md) for a closer look.
   
 ## Scenario Flow
 
