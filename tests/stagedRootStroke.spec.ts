@@ -14,6 +14,7 @@ import { renderPositionedSceneToSvg } from "../src/renderer/staged/svgBackend.js
 import * as themes from "../src/renderer/staged/theme.js";
 import { renderUiContractsStagedSvg } from "../src/renderer/staged/uiContracts.js";
 import { buildPositionedSvgFixture } from "./stagedSvgFixtures.js";
+import { flattenUiContractsItems } from "./uiContractsB5Acceptance.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -21,7 +22,7 @@ function chromeRects(svg: string, itemId: string): Record<string, number>[] {
   const group = [...svg.matchAll(/<g\b[^>]*data-item-id="([^"]+)"[^>]*>([\s\S]*?)<\/g>/g)]
     .find((match) => match[1] === itemId)?.[2] ?? "";
   return [...group.matchAll(/<rect\b[^>]*\/>/g)].map(([rect]) =>
-    Object.fromEntries([...rect.matchAll(/\b(x|y|width|height|rx|ry)="([^"]+)"/g)]
+    Object.fromEntries([...rect.matchAll(/\s(x|y|width|height|rx|ry)="([^"]+)"/g)]
       .map((match) => [match[1]!, Number(match[2])]))
   );
 }
@@ -155,7 +156,25 @@ describe("staged root inside strokes", () => {
     const result = render
       ? await render(projected.projection!, compiled.graph!, view, settings)
       : await renderJourneyMapStagedSvg(projected.projection!, compiled.graph!, bundle, view, settings);
-    expectInsideRootStroke(result.svg, result.positionedScene, themes.getRendererTheme(result.positionedScene.themeId).paint.strokeWidth);
+    if (viewId === "ui_contracts") {
+      // B5 has an unpainted sheet. Its visible boundaries are native enclosure
+      // outlines, whose strokes must fit both their own frame and the viewport.
+      const root = result.positionedScene.root;
+      expect(chromeRects(result.svg, root.id)).toEqual([]);
+      const enclosures = flattenUiContractsItems(root).filter(item => item.kind === "container" && item.viewMetadata?.uiContracts?.kind === "enclosure");
+      expect(enclosures.length).toBeGreaterThan(0);
+      for (const item of enclosures) {
+        const outline = chromeRects(result.svg, item.id).at(-1)!;
+        expect(outline.x - 0.75).toBeCloseTo(item.x, 3);
+        expect(outline.y - 0.75).toBeCloseTo(item.y, 3);
+        expect(outline.x + outline.width + 0.75).toBeCloseTo(item.x + item.width, 3);
+        expect(outline.y + outline.height + 0.75).toBeCloseTo(item.y + item.height, 3);
+        expect(item.x).toBeGreaterThanOrEqual(root.x);
+        expect(item.y).toBeGreaterThanOrEqual(root.y);
+        expect(item.x + item.width).toBeLessThanOrEqual(root.x + root.width);
+        expect(item.y + item.height).toBeLessThanOrEqual(root.y + root.height);
+      }
+    } else expectInsideRootStroke(result.svg, result.positionedScene, themes.getRendererTheme(result.positionedScene.themeId).paint.strokeWidth);
     expect(result.diagnostics.filter((diagnostic) => diagnostic.phase === "backend")).toEqual([]);
   });
 });

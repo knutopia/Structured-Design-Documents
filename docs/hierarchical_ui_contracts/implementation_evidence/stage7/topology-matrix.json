@@ -1,0 +1,756 @@
+[
+  {
+    "case": "actual_support_sources.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "actual_support_sources.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "actual_support_sources.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "actual_support_sources.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "actual_support_sources.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "actual_support_sources.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "actual_support_sources.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "actual_support_sources.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "branch.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "branch.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "branch.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "branch.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "branch.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "branch.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "branch.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "branch.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "composition_fanout.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "composition_fanout.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "composition_fanout.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "composition_fanout.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "composition_fanout.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "composition_fanout.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "composition_fanout.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "composition_fanout.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "cycle.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "cycle.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "cycle.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "cycle.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "cycle.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "cycle.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "cycle.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "cycle.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "diamond.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "diamond.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "diamond.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "diamond.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "diamond.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "diamond.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "diamond.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "diamond.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "disconnected.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "disconnected.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "disconnected.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "disconnected.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "disconnected.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "disconnected.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "disconnected.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "disconnected.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty_place.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty_place.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty_place.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty_place.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty_place.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty_place.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty_place.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "empty_place.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_content.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_content.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_content.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_content.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_content.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_content.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_content.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_content.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_ids.compact.id",
+    "issues": [
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width."
+    ],
+    "coverage": [],
+    "acceptedLongIdLimitation": true
+  },
+  {
+    "case": "long_ids.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_ids.compact.type-id",
+    "issues": [
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "semantic decorator bounds: occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-123456789012345678901234567890%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567890%22%2C%22focal%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567890%22%2C%22child%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567891%22%2C%22parent%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567891%22%2C%22focal%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id"
+    ],
+    "coverage": [],
+    "acceptedLongIdLimitation": true
+  },
+  {
+    "case": "long_ids.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_ids.detailed.id",
+    "issues": [
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width."
+    ],
+    "coverage": [],
+    "acceptedLongIdLimitation": true
+  },
+  {
+    "case": "long_ids.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "long_ids.detailed.type-id",
+    "issues": [
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "semantic decorator bounds: occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-123456789012345678901234567890%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567890%22%2C%22focal%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567890%22%2C%22child%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567891%22%2C%22parent%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567891%22%2C%22focal%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id"
+    ],
+    "coverage": [],
+    "acceptedLongIdLimitation": true
+  },
+  {
+    "case": "long_ids.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "merge.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "merge.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "merge.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "merge.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "merge.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "merge.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "merge.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "merge.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "nested_reuse.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "nested_reuse.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "nested_reuse.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "nested_reuse.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "nested_reuse.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "nested_reuse.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "nested_reuse.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "nested_reuse.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "parallel_bindings.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "parallel_bindings.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "parallel_bindings.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "parallel_bindings.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "parallel_bindings.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "parallel_bindings.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "parallel_bindings.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "parallel_bindings.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "self_loop.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "self_loop.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "self_loop.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "self_loop.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "self_loop.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "self_loop.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "self_loop.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "self_loop.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "three_parents_children.compact.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "three_parents_children.compact.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "three_parents_children.compact.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "three_parents_children.compact.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "three_parents_children.detailed.id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "three_parents_children.detailed.none",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "three_parents_children.detailed.type-id",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  },
+  {
+    "case": "three_parents_children.detailed.type",
+    "issues": [],
+    "coverage": [],
+    "acceptedLongIdLimitation": false
+  }
+]

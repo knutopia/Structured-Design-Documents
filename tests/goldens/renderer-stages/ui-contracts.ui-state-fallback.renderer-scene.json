@@ -5,87 +5,157 @@
   "root": {
     "kind": "container",
     "id": "root",
-    "role": "diagram_root",
-    "primitive": "root",
-    "classes": [
-      "diagram",
-      "ui_contracts"
-    ],
+    "role": "ui_contracts_group",
+    "primitive": "stack",
+    "classes": [],
     "layout": {
       "strategy": "stack",
       "direction": "vertical",
       "gap": 28,
-      "crossAlignment": "stretch"
+      "crossAlignment": "start"
     },
     "chrome": {
       "padding": {
-        "top": 24,
-        "right": 24,
-        "bottom": 24,
-        "left": 24
+        "top": 16,
+        "right": 16,
+        "bottom": 16,
+        "left": 16
       },
-      "gutter": 28,
       "headerBandHeight": 0
     },
     "children": [
       {
         "kind": "container",
-        "id": "P-060",
-        "role": "place",
+        "id": "components-without-containment",
+        "role": "ui_contracts_group",
         "primitive": "cluster",
-        "classes": [
-          "place",
-          "scope"
-        ],
+        "classes": [],
         "layout": {
-          "strategy": "grid",
-          "columns": 2,
+          "strategy": "stack",
+          "direction": "vertical",
           "gap": 16,
-          "crossAlignment": "stretch"
+          "crossAlignment": "start"
         },
         "chrome": {
           "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
           },
-          "gutter": 16
+          "headerBandHeight": 0
         },
-        "headerContent": [
+        "children": [
           {
-            "id": "P-060__header__line_0",
-            "kind": "text",
-            "text": "Case Review",
-            "textStyleRole": "title",
-            "priority": "primary"
-          },
-          {
-            "id": "P-060__header__line_1",
-            "kind": "text",
-            "text": "/cases/review",
-            "textStyleRole": "subtitle",
-            "priority": "secondary"
-          },
-          {
-            "id": "P-060__header__line_2",
-            "kind": "badge_text",
-            "text": "auth",
-            "textStyleRole": "badge",
-            "priority": "secondary"
+            "kind": "node",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-060%22%5D",
+            "role": "component",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "Review Panel",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Component",
+              "nodeId": "C-060",
+              "attributes": []
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
           }
         ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north"
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
+          }
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Components without hierarchy"
+          }
+        }
+      },
+      {
+        "kind": "container",
+        "id": "scope:P-060",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "headerBandHeight": 0
+        },
         "children": [
           {
             "kind": "container",
-            "id": "secondary_state_group:P-060",
-            "role": "state_graph",
-            "primitive": "cluster",
-            "classes": [
-              "synthetic",
-              "transition_graph",
-              "state_graph"
-            ],
+            "id": "scope:P-060:composition:P-060",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
             "layout": {
               "strategy": "layered",
               "direction": "horizontal",
@@ -94,33 +164,206 @@
             },
             "chrome": {
               "padding": {
-                "top": 12,
-                "right": 12,
-                "bottom": 12,
-                "left": 12
+                "top": 10,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
               },
-              "gutter": 16
+              "headerBandHeight": 0
             },
-            "headerContent": [
-              {
-                "id": "secondary_state_group:P-060__header__line_0",
-                "kind": "text",
-                "text": "State graph: Case Review",
-                "textStyleRole": "title",
-                "priority": "primary"
-              },
-              {
-                "id": "secondary_state_group:P-060__header__line_1",
-                "kind": "metadata",
-                "text": "scope_id=P-060",
-                "textStyleRole": "metadata",
-                "priority": "secondary"
-              }
-            ],
             "children": [
               {
                 "kind": "node",
-                "id": "ST-060a",
+                "id": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "emphasized": true,
+                  "title": "Case Review",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Place",
+                  "nodeId": "P-060",
+                  "attributes": [
+                    {
+                      "groupId": "route_or_key",
+                      "label": "Route",
+                      "value": "/cases/review"
+                    },
+                    {
+                      "groupId": "access",
+                      "label": "Access",
+                      "value": "auth"
+                    }
+                  ]
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "offset": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              },
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-060%22%2C%22composition_target%22%2C%22scope%3AP-060%3Acomposition%3AP-060%22%2C%22relationship%3A%255B%2522P-060%2522%252C%2522COMPOSED_OF%2522%252C%2522C-060%2522%255D%3A0%22%2C%22C-060%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Review Panel",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Component",
+                  "nodeId": "C-060",
+                  "attributes": []
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "offset": 24
+                  }
+                ]
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "node",
+            "id": "scope:P-060:description",
+            "role": "ui_contracts_description",
+            "primitive": "label",
+            "classes": [],
+            "content": [
+              {
+                "id": "scope:P-060:description:text",
+                "kind": "text",
+                "text": "Case review place without viewstate-specific rendering",
+                "textStyleRole": "label"
+              }
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "ports": []
+          },
+          {
+            "kind": "container",
+            "id": "scope:P-060:sequence:secondary",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "layered",
+              "direction": "horizontal",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 26,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-060%22%2C%22sequence%22%2C%22scope%3AP-060%3Asequence%3Asecondary%22%2C%22ST-060a%22%5D",
                 "role": "state",
                 "primitive": "card",
                 "classes": [
@@ -149,20 +392,30 @@
                 },
                 "ports": [
                   {
-                    "id": "ST-060a__transition_in",
-                    "role": "transition_in",
-                    "side": "west"
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
                   },
                   {
-                    "id": "ST-060a__transition_out",
-                    "role": "transition_out",
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
                     "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
                   }
                 ]
               },
               {
                 "kind": "node",
-                "id": "ST-060b",
+                "id": "occurrence:%5B%22scope%3AP-060%22%2C%22sequence%22%2C%22scope%3AP-060%3Asequence%3Asecondary%22%2C%22ST-060b%22%5D",
                 "role": "state",
                 "primitive": "card",
                 "classes": [
@@ -191,82 +444,465 @@
                 },
                 "ports": [
                   {
-                    "id": "ST-060b__transition_in",
-                    "role": "transition_in",
-                    "side": "west"
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
                   },
                   {
-                    "id": "ST-060b__transition_out",
-                    "role": "transition_out",
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
                     "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
                   }
                 ]
               }
             ],
-            "ports": []
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north"
           },
           {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
+          }
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Place scope · Case Review"
+          }
+        }
+      },
+      {
+        "kind": "container",
+        "id": "scope:C-060",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
             "kind": "container",
-            "id": "C-060",
-            "role": "component",
-            "primitive": "cluster",
-            "classes": [
-              "component",
-              "scope"
-            ],
+            "id": "scope:C-060:neighborhood",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
             "layout": {
               "strategy": "stack",
               "direction": "vertical",
-              "gap": 16,
-              "crossAlignment": "stretch"
+              "gap": 12,
+              "crossAlignment": "center"
             },
             "chrome": {
               "padding": {
-                "top": 12,
-                "right": 12,
-                "bottom": 12,
-                "left": 12
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
               },
-              "gutter": 16
+              "headerBandHeight": 0
             },
-            "headerContent": [
+            "children": [
               {
-                "id": "C-060__header__line_0",
-                "kind": "text",
-                "text": "Component: Review Panel",
-                "textStyleRole": "title",
-                "priority": "primary"
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "emphasized": true,
+                  "title": "Review Panel",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Component",
+                  "nodeId": "C-060",
+                  "attributes": [
+                    {
+                      "groupId": "description",
+                      "label": "description",
+                      "value": "Panel for reviewing and submitting a case"
+                    },
+                    {
+                      "groupId": "inputs",
+                      "label": "inputs",
+                      "value": "CaseRecord"
+                    },
+                    {
+                      "groupId": "outputs",
+                      "label": "outputs",
+                      "value": "ReviewSubmitted"
+                    }
+                  ]
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
               }
             ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "container",
+            "id": "scope:C-060:sequence:secondary",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "layered",
+              "direction": "horizontal",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 26,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-060%22%2C%22sequence%22%2C%22scope%3AC-060%3Asequence%3Asecondary%22%2C%22ST-061a%22%5D",
+                "role": "state",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Panel Idle",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "State",
+                  "nodeId": "ST-061a",
+                  "attributes": []
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              },
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-060%22%2C%22sequence%22%2C%22scope%3AC-060%3Asequence%3Asecondary%22%2C%22ST-061b%22%5D",
+                "role": "state",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Panel Dirty",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "State",
+                  "nodeId": "ST-061b",
+                  "attributes": []
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "container",
+            "id": "scope:C-060:contract:C-060",
+            "role": "fanout_proof",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
             "children": [
               {
                 "kind": "container",
-                "id": "C-060__content",
-                "role": "contract_gutter",
+                "id": "scope:C-060:contract:C-060:target-row:0",
+                "role": "fanout_proof",
                 "primitive": "stack",
-                "classes": [
-                  "contract_gutter"
-                ],
+                "classes": [],
                 "layout": {
                   "strategy": "stack",
-                  "direction": "vertical",
-                  "gap": 16,
-                  "crossAlignment": "stretch"
+                  "direction": "horizontal",
+                  "gap": 131.748,
+                  "crossAlignment": "start"
                 },
                 "chrome": {
                   "padding": {
-                    "top": 0,
+                    "top": 10,
                     "right": 0,
                     "bottom": 0,
-                    "left": 128
+                    "left": 0
                   },
-                  "gutter": 16,
                   "headerBandHeight": 0
                 },
                 "children": [
                   {
                     "kind": "node",
-                    "id": "E-060",
+                    "id": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_source%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22C-060%22%5D",
+                    "role": "component",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "standard"
+                      ]
+                    },
+                    "overflowPolicy": {
+                      "kind": "grow_height"
+                    },
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Review Panel",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "Component",
+                      "nodeId": "C-060",
+                      "attributes": []
+                    },
+                    "ports": [
+                      {
+                        "id": "contract-out:0",
+                        "role": "contract_out",
+                        "side": "east",
+                        "offset": 24
+                      },
+                      {
+                        "id": "contract-out:1",
+                        "role": "contract_out",
+                        "side": "south",
+                        "offset": 200
+                      },
+                      {
+                        "id": "contract-out:2",
+                        "role": "contract_out",
+                        "side": "south",
+                        "offset": 184
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "node",
+                    "id": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_target%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22relationship%3A%255B%2522C-060%2522%252C%2522EMITS%2522%252C%2522E-060%2522%255D%3A0%22%2C%22E-060%22%5D",
                     "role": "event",
                     "primitive": "card",
                     "classes": [
@@ -295,52 +931,78 @@
                     },
                     "ports": [
                       {
-                        "id": "E-060__contract_in",
+                        "id": "contract-in",
                         "role": "contract_in",
-                        "side": "west"
+                        "side": "west",
+                        "offset": 24
                       }
                     ]
+                  }
+                ],
+                "ports": []
+              },
+              {
+                "kind": "container",
+                "id": "scope:C-060:contract:C-060:target-row:1",
+                "role": "fanout_proof",
+                "primitive": "stack",
+                "classes": [],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "horizontal",
+                  "gap": 155.748,
+                  "crossAlignment": "center"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 10,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 200
                   },
+                  "headerBandHeight": 0
+                },
+                "children": [
                   {
-                    "kind": "node",
-                    "id": "SA-060",
-                    "role": "systemaction",
-                    "primitive": "card",
-                    "classes": [
-                      "semantic_node"
-                    ],
-                    "widthPolicy": {
-                      "preferred": "standard",
-                      "allowed": [
-                        "standard"
-                      ]
+                    "kind": "container",
+                    "id": "scope:C-060:contract:C-060:anchor:1",
+                    "role": "fanout_proof",
+                    "primitive": "stack",
+                    "classes": [],
+                    "layout": {
+                      "strategy": "stack",
+                      "direction": "vertical",
+                      "gap": 0,
+                      "crossAlignment": "start"
                     },
-                    "overflowPolicy": {
-                      "kind": "grow_height"
-                    },
-                    "content": [],
-                    "sharedNode": {
-                      "title": "Save Review",
-                      "decoratorMode": {
-                        "id": "none",
-                        "showNodeType": false,
-                        "showNodeId": false
+                    "chrome": {
+                      "padding": {
+                        "top": 0,
+                        "right": 0,
+                        "bottom": 0,
+                        "left": 0
                       },
-                      "nodeType": "SystemAction",
-                      "nodeId": "SA-060",
-                      "attributes": []
+                      "headerBandHeight": 0
                     },
+                    "children": [],
                     "ports": [
                       {
-                        "id": "SA-060__contract_in",
-                        "role": "contract_in",
-                        "side": "west"
+                        "id": "in",
+                        "role": "in",
+                        "side": "north",
+                        "offset": 0
+                      },
+                      {
+                        "id": "out",
+                        "role": "out",
+                        "side": "east",
+                        "offset": 0
                       }
                     ]
                   },
                   {
                     "kind": "node",
-                    "id": "D-060",
+                    "id": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_target%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22relationship%3A%255B%2522C-060%2522%252C%2522BINDS_TO%2522%252C%2522D-060%2522%255D%3A0%22%2C%22D-060%22%5D",
                     "role": "dataentity",
                     "primitive": "card",
                     "classes": [
@@ -369,191 +1031,405 @@
                     },
                     "ports": [
                       {
-                        "id": "D-060__contract_in",
+                        "id": "contract-in",
                         "role": "contract_in",
-                        "side": "west"
+                        "side": "west",
+                        "offset": 24
                       }
                     ]
+                  }
+                ],
+                "ports": []
+              },
+              {
+                "kind": "container",
+                "id": "scope:C-060:contract:C-060:target-row:2",
+                "role": "fanout_proof",
+                "primitive": "stack",
+                "classes": [],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "horizontal",
+                  "gap": 171.748,
+                  "crossAlignment": "center"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 10,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 184
                   },
+                  "headerBandHeight": 0
+                },
+                "children": [
                   {
                     "kind": "container",
-                    "id": "secondary_state_group:C-060",
-                    "role": "state_graph",
-                    "primitive": "cluster",
-                    "classes": [
-                      "synthetic",
-                      "transition_graph",
-                      "state_graph"
-                    ],
+                    "id": "scope:C-060:contract:C-060:anchor:2",
+                    "role": "fanout_proof",
+                    "primitive": "stack",
+                    "classes": [],
                     "layout": {
-                      "strategy": "layered",
-                      "direction": "horizontal",
-                      "gap": 24,
+                      "strategy": "stack",
+                      "direction": "vertical",
+                      "gap": 0,
                       "crossAlignment": "start"
                     },
                     "chrome": {
                       "padding": {
-                        "top": 12,
-                        "right": 12,
-                        "bottom": 12,
-                        "left": 12
+                        "top": 0,
+                        "right": 0,
+                        "bottom": 0,
+                        "left": 0
                       },
-                      "gutter": 16
+                      "headerBandHeight": 0
                     },
-                    "headerContent": [
+                    "children": [],
+                    "ports": [
                       {
-                        "id": "secondary_state_group:C-060__header__line_0",
-                        "kind": "text",
-                        "text": "State graph: Review Panel",
-                        "textStyleRole": "title",
-                        "priority": "primary"
+                        "id": "in",
+                        "role": "in",
+                        "side": "north",
+                        "offset": 0
                       },
                       {
-                        "id": "secondary_state_group:C-060__header__line_1",
-                        "kind": "metadata",
-                        "text": "scope_id=C-060",
-                        "textStyleRole": "metadata",
-                        "priority": "secondary"
+                        "id": "out",
+                        "role": "out",
+                        "side": "east",
+                        "offset": 0
                       }
+                    ]
+                  },
+                  {
+                    "kind": "node",
+                    "id": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_target%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22relationship%3A%255B%2522C-060%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-060%2522%255D%3A0%22%2C%22SA-060%22%5D",
+                    "role": "systemaction",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node"
                     ],
-                    "children": [
-                      {
-                        "kind": "node",
-                        "id": "ST-061a",
-                        "role": "state",
-                        "primitive": "card",
-                        "classes": [
-                          "semantic_node"
-                        ],
-                        "widthPolicy": {
-                          "preferred": "standard",
-                          "allowed": [
-                            "standard"
-                          ]
-                        },
-                        "overflowPolicy": {
-                          "kind": "grow_height"
-                        },
-                        "content": [],
-                        "sharedNode": {
-                          "title": "Panel Idle",
-                          "decoratorMode": {
-                            "id": "none",
-                            "showNodeType": false,
-                            "showNodeId": false
-                          },
-                          "nodeType": "State",
-                          "nodeId": "ST-061a",
-                          "attributes": []
-                        },
-                        "ports": [
-                          {
-                            "id": "ST-061a__transition_in",
-                            "role": "transition_in",
-                            "side": "west"
-                          },
-                          {
-                            "id": "ST-061a__transition_out",
-                            "role": "transition_out",
-                            "side": "east"
-                          }
-                        ]
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "standard"
+                      ]
+                    },
+                    "overflowPolicy": {
+                      "kind": "grow_height"
+                    },
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Save Review",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
                       },
+                      "nodeType": "SystemAction",
+                      "nodeId": "SA-060",
+                      "attributes": []
+                    },
+                    "ports": [
                       {
-                        "kind": "node",
-                        "id": "ST-061b",
-                        "role": "state",
-                        "primitive": "card",
-                        "classes": [
-                          "semantic_node"
-                        ],
-                        "widthPolicy": {
-                          "preferred": "standard",
-                          "allowed": [
-                            "standard"
-                          ]
-                        },
-                        "overflowPolicy": {
-                          "kind": "grow_height"
-                        },
-                        "content": [],
-                        "sharedNode": {
-                          "title": "Panel Dirty",
-                          "decoratorMode": {
-                            "id": "none",
-                            "showNodeType": false,
-                            "showNodeId": false
-                          },
-                          "nodeType": "State",
-                          "nodeId": "ST-061b",
-                          "attributes": []
-                        },
-                        "ports": [
-                          {
-                            "id": "ST-061b__transition_in",
-                            "role": "transition_in",
-                            "side": "west"
-                          },
-                          {
-                            "id": "ST-061b__transition_out",
-                            "role": "transition_out",
-                            "side": "east"
-                          }
-                        ]
+                        "id": "contract-in",
+                        "role": "contract_in",
+                        "side": "west",
+                        "offset": 24
                       }
-                    ],
-                    "ports": []
+                    ]
                   }
                 ],
                 "ports": []
               }
             ],
+            "ports": []
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north"
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
+          }
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Component scope · Review Panel"
+          }
+        }
+      },
+      {
+        "kind": "container",
+        "id": "target-register",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-060%22%5D",
+            "role": "event",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "Submit Review",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Event",
+              "nodeId": "E-060",
+              "attributes": []
+            },
             "ports": [
               {
-                "id": "C-060__contract_out",
-                "role": "contract_out",
-                "side": "west",
-                "offsetPolicy": "content_start"
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-060%22%5D",
+            "role": "systemaction",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "Save Review",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "SystemAction",
+              "nodeId": "SA-060",
+              "attributes": []
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-060%22%5D",
+            "role": "dataentity",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "CaseRecord",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "DataEntity",
+              "nodeId": "D-060",
+              "attributes": []
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
               }
             ]
           }
         ],
         "ports": [
           {
-            "id": "P-060__contract_out",
-            "role": "contract_out",
-            "side": "west",
-            "offsetPolicy": "content_start"
+            "id": "north",
+            "role": "north",
+            "side": "north"
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
           }
-        ]
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Referenced targets"
+          }
+        }
       }
     ],
-    "ports": []
+    "ports": [
+      {
+        "id": "north",
+        "role": "north",
+        "side": "north"
+      },
+      {
+        "id": "south",
+        "role": "south",
+        "side": "south"
+      },
+      {
+        "id": "east",
+        "role": "east",
+        "side": "east"
+      },
+      {
+        "id": "west",
+        "role": "west",
+        "side": "west"
+      }
+    ],
+    "viewMetadata": {
+      "uiContracts": {
+        "kind": "sheet"
+      }
+    }
   },
   "edges": [
     {
-      "id": "binds_to:C-060->D-060",
-      "role": "binds_to",
-      "classes": [
-        "edge-dotted",
-        "constraint_edge"
-      ],
+      "id": "scope:P-060:composition:P-060:relationship:%5B%22P-060%22%2C%22COMPOSED_OF%22%2C%22C-060%22%5D:0",
+      "role": "composition",
+      "classes": [],
       "from": {
-        "itemId": "C-060"
+        "itemId": "occurrence:%5B%22scope%3AP-060%22%2C%22focal%22%2C%22P-060%22%5D",
+        "portId": "east"
       },
       "to": {
-        "itemId": "D-060"
+        "itemId": "occurrence:%5B%22scope%3AP-060%22%2C%22composition_target%22%2C%22scope%3AP-060%3Acomposition%3AP-060%22%2C%22relationship%3A%255B%2522P-060%2522%252C%2522COMPOSED_OF%2522%252C%2522C-060%2522%255D%3A0%22%2C%22C-060%22%5D",
+        "portId": "west"
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
+        "preferAxis": "horizontal"
       },
       "label": {
-        "text": "binds field status",
+        "text": "composed of",
         "textStyleRole": "edge_label"
       },
       "markers": {
@@ -561,80 +1437,20 @@
       }
     },
     {
-      "id": "depends_on:C-060->SA-060",
-      "role": "depends_on",
-      "classes": [
-        "constraint_edge"
-      ],
+      "id": "scope:P-060:sequence:secondary:relationship:%5B%22ST-060a%22%2C%22TRANSITIONS_TO%22%2C%22ST-060b%22%5D:0",
+      "role": "transition",
+      "classes": [],
       "from": {
-        "itemId": "C-060"
+        "itemId": "occurrence:%5B%22scope%3AP-060%22%2C%22sequence%22%2C%22scope%3AP-060%3Asequence%3Asecondary%22%2C%22ST-060a%22%5D",
+        "portId": "east"
       },
       "to": {
-        "itemId": "SA-060"
+        "itemId": "occurrence:%5B%22scope%3AP-060%22%2C%22sequence%22%2C%22scope%3AP-060%3Asequence%3Asecondary%22%2C%22ST-060b%22%5D",
+        "portId": "west"
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
-      },
-      "label": {
-        "text": "depends on",
-        "textStyleRole": "edge_label"
-      },
-      "markers": {
-        "end": "arrow"
-      }
-    },
-    {
-      "id": "emits:C-060->E-060",
-      "role": "emits",
-      "classes": [
-        "edge-dashed",
-        "constraint_edge"
-      ],
-      "from": {
-        "itemId": "C-060"
-      },
-      "to": {
-        "itemId": "E-060"
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
-      },
-      "label": {
-        "text": "emits",
-        "textStyleRole": "edge_label"
-      },
-      "markers": {
-        "end": "arrow"
-      }
-    },
-    {
-      "id": "transitions_to:ST-060a->ST-060b",
-      "role": "transitions_to",
-      "classes": [
-        "free_edge"
-      ],
-      "from": {
-        "itemId": "ST-060a"
-      },
-      "to": {
-        "itemId": "ST-060b"
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "avoidNodeBoxes": true,
-        "sourcePortRole": "transition_out",
-        "targetPortRole": "transition_in"
+        "preferAxis": "horizontal"
       },
       "label": {
         "text": "[Submit Review] / SA-060",
@@ -645,26 +1461,137 @@
       }
     },
     {
-      "id": "transitions_to:ST-061a->ST-061b",
-      "role": "transitions_to",
-      "classes": [
-        "free_edge"
-      ],
+      "id": "scope:C-060:sequence:secondary:relationship:%5B%22ST-061a%22%2C%22TRANSITIONS_TO%22%2C%22ST-061b%22%5D:0",
+      "role": "transition",
+      "classes": [],
       "from": {
-        "itemId": "ST-061a"
+        "itemId": "occurrence:%5B%22scope%3AC-060%22%2C%22sequence%22%2C%22scope%3AC-060%3Asequence%3Asecondary%22%2C%22ST-061a%22%5D",
+        "portId": "east"
       },
       "to": {
-        "itemId": "ST-061b"
+        "itemId": "occurrence:%5B%22scope%3AC-060%22%2C%22sequence%22%2C%22scope%3AC-060%3Asequence%3Asecondary%22%2C%22ST-061b%22%5D",
+        "portId": "west"
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "avoidNodeBoxes": true,
-        "sourcePortRole": "transition_out",
-        "targetPortRole": "transition_in"
+        "preferAxis": "horizontal"
       },
       "label": {
         "text": "[Submit Review] {draft_ready}",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:C-060:contract:C-060:relationship:%5B%22C-060%22%2C%22BINDS_TO%22%2C%22D-060%22%5D:0:lead",
+      "role": "contract",
+      "classes": [
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_source%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22C-060%22%5D",
+        "portId": "contract-out:1"
+      },
+      "to": {
+        "itemId": "scope:C-060:contract:C-060:anchor:1",
+        "portId": "in"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "vertical"
+      },
+      "markers": {}
+    },
+    {
+      "id": "scope:C-060:contract:C-060:relationship:%5B%22C-060%22%2C%22DEPENDS_ON%22%2C%22SA-060%22%5D:0:lead",
+      "role": "contract",
+      "classes": [],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_source%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22C-060%22%5D",
+        "portId": "contract-out:2"
+      },
+      "to": {
+        "itemId": "scope:C-060:contract:C-060:anchor:2",
+        "portId": "in"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "vertical"
+      },
+      "markers": {}
+    },
+    {
+      "id": "scope:C-060:contract:C-060:relationship:%5B%22C-060%22%2C%22EMITS%22%2C%22E-060%22%5D:0",
+      "role": "contract",
+      "classes": [
+        "edge-dashed"
+      ],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_source%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22C-060%22%5D",
+        "portId": "contract-out:0"
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_target%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22relationship%3A%255B%2522C-060%2522%252C%2522EMITS%2522%252C%2522E-060%2522%255D%3A0%22%2C%22E-060%22%5D",
+        "portId": "contract-in"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "text": "emits",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:C-060:contract:C-060:relationship:%5B%22C-060%22%2C%22BINDS_TO%22%2C%22D-060%22%5D:0",
+      "role": "contract",
+      "classes": [
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "scope:C-060:contract:C-060:anchor:1",
+        "portId": "out"
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_target%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22relationship%3A%255B%2522C-060%2522%252C%2522BINDS_TO%2522%252C%2522D-060%2522%255D%3A0%22%2C%22D-060%22%5D",
+        "portId": "contract-in"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "text": "binds field status",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:C-060:contract:C-060:relationship:%5B%22C-060%22%2C%22DEPENDS_ON%22%2C%22SA-060%22%5D:0",
+      "role": "contract",
+      "classes": [],
+      "from": {
+        "itemId": "scope:C-060:contract:C-060:anchor:2",
+        "portId": "out"
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AC-060%22%2C%22contract_target%22%2C%22scope%3AC-060%3Acontract%3AC-060%22%2C%22relationship%3A%255B%2522C-060%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-060%2522%255D%3A0%22%2C%22SA-060%22%5D",
+        "portId": "contract-in"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "text": "depends on",
         "textStyleRole": "edge_label"
       },
       "markers": {

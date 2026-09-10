@@ -336,6 +336,9 @@ export function measureSharedNode(options: MeasureSharedNodeOptions): SharedNode
 
   const layout: MeasuredSharedNodeLayout = {
     density,
+    ...(node.sharedNode.emphasized ? { emphasized: true } : {}),
+    ...(nodeTheme.container.padding.bottom !== nodeTheme.container.padding.left
+      ? { bottomInset: strokeInset + nodeTheme.container.padding.bottom } : {}),
     ...(decorator ? { decorator } : {}),
     body: {
       x: containerContentX,
@@ -361,7 +364,7 @@ export function measureSharedNode(options: MeasureSharedNodeOptions): SharedNode
 }
 
 export function reflowMeasuredSharedNode(layout: MeasuredSharedNodeLayout, height: number): void {
-  const strokeInset = layout.body.x;
+  const strokeInset = layout.bottomInset ?? layout.body.x;
   layout.body.height = roundMetric(height - strokeInset - layout.body.y);
   if (layout.density === "plain") {
     layout.body.title.y = roundMetric(
@@ -380,6 +383,8 @@ export function cloneMeasuredSharedNodeLayout(
 
   return {
     density: layout.density,
+    ...(layout.emphasized ? { emphasized: true } : {}),
+    ...(layout.bottomInset !== undefined ? { bottomInset: layout.bottomInset } : {}),
     ...(layout.decorator
       ? {
         decorator: {

@@ -1,0 +1,876 @@
+[
+  {
+    "fixture": "actual_support_sources.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "actual_support_sources.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "actual_support_sources.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "actual_support_sources.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "actual_support_sources.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "actual_support_sources.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "actual_support_sources.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "actual_support_sources.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "branch.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "branch.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "branch.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "branch.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "branch.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "branch.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "branch.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "branch.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "composition_fanout.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "composition_fanout.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "composition_fanout.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "composition_fanout.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "composition_fanout.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "composition_fanout.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "composition_fanout.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "composition_fanout.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "cycle.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "cycle.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "cycle.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "cycle.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "cycle.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "cycle.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "cycle.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "cycle.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "diamond.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "diamond.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "diamond.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "diamond.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "diamond.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "diamond.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "diamond.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "diamond.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "disconnected.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "disconnected.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "disconnected.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "disconnected.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "disconnected.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "disconnected.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "disconnected.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "disconnected.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty_place.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty_place.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty_place.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty_place.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty_place.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty_place.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty_place.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "empty_place.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_content.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_content.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_content.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_content.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_content.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_content.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_content.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_content.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_ids.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width."
+    ],
+    "coverage": []
+  },
+  {
+    "fixture": "long_ids.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_ids.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "semantic decorator bounds: occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-123456789012345678901234567890%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567890%22%2C%22focal%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567890%22%2C%22child%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567891%22%2C%22parent%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567891%22%2C%22focal%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id"
+    ],
+    "coverage": []
+  },
+  {
+    "fixture": "long_ids.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_ids.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width."
+    ],
+    "coverage": []
+  },
+  {
+    "fixture": "long_ids.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "long_ids.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
+      "semantic decorator bounds: occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-123456789012345678901234567890%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567890%22%2C%22focal%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567890%22%2C%22child%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567891%22%2C%22parent%22%2C%22C-123456789012345678901234567890%22%5D__decorator_id",
+      "semantic decorator bounds: occurrence:%5B%22scope%3AC-123456789012345678901234567891%22%2C%22focal%22%2C%22C-123456789012345678901234567891%22%5D__decorator_id"
+    ],
+    "coverage": []
+  },
+  {
+    "fixture": "long_ids.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "merge.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "merge.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "merge.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "merge.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "merge.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "merge.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "merge.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "merge.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "nested_reuse.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "nested_reuse.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "nested_reuse.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "nested_reuse.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "nested_reuse.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "nested_reuse.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "nested_reuse.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "nested_reuse.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "parallel_bindings.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "parallel_bindings.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "parallel_bindings.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "parallel_bindings.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "parallel_bindings.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "parallel_bindings.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "parallel_bindings.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "parallel_bindings.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "self_loop.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "self_loop.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "self_loop.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "self_loop.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "self_loop.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "self_loop.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "self_loop.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "self_loop.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "three_parents_children.compact.id",
+    "detail": "compact",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "three_parents_children.compact.none",
+    "detail": "compact",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "three_parents_children.compact.type-id",
+    "detail": "compact",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "three_parents_children.compact.type",
+    "detail": "compact",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "three_parents_children.detailed.id",
+    "detail": "detailed",
+    "decorators": "id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "three_parents_children.detailed.none",
+    "detail": "detailed",
+    "decorators": "none",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "three_parents_children.detailed.type-id",
+    "detail": "detailed",
+    "decorators": "type,id",
+    "issues": [],
+    "coverage": []
+  },
+  {
+    "fixture": "three_parents_children.detailed.type",
+    "detail": "detailed",
+    "decorators": "type",
+    "issues": [],
+    "coverage": []
+  }
+]

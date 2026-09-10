@@ -43,6 +43,15 @@ Legacy DOT, Mermaid, and Graphviz-backed preview paths may still exist. New
 renderer authoring should not be designed around replacing those paths unless a
 specific migration task asks for that.
 
+The B5 `ui_contracts` port is an example of a presentation model between
+projection and scene construction. Its bundle-owned policy selects content and
+relationships; semantic identities remain separate from repeated visual
+occurrences. Its view-owned measurement preparation supplies ports and channel
+reservations to the existing shared pipeline. Native container-header and arrow
+paint use narrow UI-contract metadata dispatches. This port explicitly freezes
+shared node, placement and routing implementations; it does not establish a
+general container-header framework. See the [implementation evidence](../hierarchical_ui_contracts/b5_implementation_evidence.md).
+
 ## Responsibility Boundaries
 
 Put new behavior in the layer that owns it.

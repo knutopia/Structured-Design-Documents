@@ -1,0 +1,306 @@
+[
+  {
+    "name": "compact.none",
+    "format": "svg",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "compact.none",
+    "format": "png",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "compact.type",
+    "format": "svg",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "compact.type",
+    "format": "png",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "compact.id",
+    "format": "svg",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "compact.id",
+    "format": "png",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "compact.type-id",
+    "format": "svg",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "compact.type-id",
+    "format": "png",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed.none",
+    "format": "svg",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed.none",
+    "format": "png",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed.type",
+    "format": "svg",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed.type",
+    "format": "png",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed.id",
+    "format": "svg",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed.id",
+    "format": "png",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed.type-id",
+    "format": "svg",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed.type-id",
+    "format": "png",
+    "backend": "staged_ui_contracts_preview",
+    "diagnostics": [
+      {
+        "stage": "validate",
+        "code": "validate.contains_single_parent_recommended",
+        "severity": "warn",
+        "message": "Node 'C-430' has 2 incoming 'CONTAINS' edges; maximum is 1",
+        "file": "docs/hierarchical_ui_contracts/departure_desk.sdd",
+        "ruleId": "contains_single_parent_recommended",
+        "profileId": "simple",
+        "relatedIds": [
+          "C-430"
+        ]
+      }
+    ]
+  }
+]

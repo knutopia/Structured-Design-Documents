@@ -1,7 +1,7 @@
 This directory contains the vendored preview font assets used by CLI preview rendering.
 
-- `PublicSans-Regular.woff` and `PublicSans-SemiBold.woff` are the official Public Sans `v2.001` webfonts used for Graphviz-backed and staged embedded SVG output.
-- `PublicSans-Regular.otf` and `PublicSans-SemiBold.otf` are the official Public Sans `v2.001` desktop fonts used for staged text measurement and PNG rasterization via `resvg-js`.
+- `PublicSans-Regular.woff`, `PublicSans-SemiBold.woff`, and `PublicSans-Bold.woff` are the official Public Sans `v2.001` webfonts used for Graphviz-backed and staged embedded SVG output.
+- `PublicSans-Regular.otf`, `PublicSans-SemiBold.otf`, and `PublicSans-Bold.otf` are the official Public Sans `v2.001` desktop fonts used for staged text measurement and PNG rasterization via `resvg-js`.
 - `PublicSans-OFL.txt` contains the required SIL Open Font License text and attribution for redistribution.
 
 When refreshing the preview font:

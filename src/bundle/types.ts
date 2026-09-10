@@ -467,6 +467,7 @@ export interface RendererJourneyMapLayoutConfig {
 }
 
 export interface RendererDefaultsConfig {
+  ui_contracts_presentation?: UiContractsPresentationConfig;
   preview?: PreviewDefaultsConfig;
   semantic_columns?: RendererSemanticColumnsConfig;
   node_chrome?: Record<string, RendererNodeChromeConfig>;
@@ -476,6 +477,45 @@ export interface RendererDefaultsConfig {
   scenario_flow_layout?: RendererScenarioFlowLayoutConfig;
   cell_sizing?: RendererCellSizingConfig;
   [key: string]: unknown;
+}
+
+export type UiContractsPresentationRole = "component" | "place" | "primary" | "secondary" | "support";
+export type UiContractsRelationshipKind = "containment" | "composition" | "ownership" | "transition" | "contract";
+
+export interface UiContractsAttributeConfig {
+  property: string;
+  label: string;
+  visible_when: string;
+}
+
+export interface UiContractsRelationshipConfig {
+  kind: UiContractsRelationshipKind;
+  edge_type: string;
+  from: string[];
+  to: string[];
+  style: "solid" | "dashed" | "dotted";
+  secondary_style?: "solid" | "dashed" | "dotted";
+  label?: string;
+  field_property?: string;
+  field_label?: string;
+}
+
+export interface UiContractsPresentationConfig {
+  roles: Record<UiContractsPresentationRole, string[]>;
+  relationships: UiContractsRelationshipConfig[];
+  content: Record<UiContractsPresentationRole, UiContractsAttributeConfig[]>;
+  ownership: { primary_property: string; secondary_property: string };
+  visibility: { hierarchy: string; secondary: string; support: string; omit_empty_places: string };
+  hierarchy: { order: "source_depth_first"; reuse: "first_expansion"; locator_prefix: string; isolated_components: "grouped" | "individual_roots" };
+  place_description: { property: string; visible_when: string };
+  labels: {
+    isolated_components: string; hierarchy_root: string; hierarchy_expansion: string; hierarchy_reference: string;
+    component_scope: string; place_scope: string; standalone_scope: string; target_register: string;
+  };
+  transition_label: {
+    separator: string;
+    parts: Array<{ field: "event" | "guard" | "effect"; template: string; resolve_node_name: boolean }>;
+  };
 }
 
 export interface RelationshipContract {

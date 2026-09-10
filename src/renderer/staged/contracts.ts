@@ -211,6 +211,7 @@ export type JourneyMapItemMetadata =
     };
 
 export interface ViewMetadata {
+  uiContracts?: { kind: "enclosure" | "sheet"; title?: string; tone?: "inset" | "hierarchy" };
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
   outcomeOpportunity?: OutcomeOpportunityItemMetadata;
@@ -223,6 +224,7 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
   }
 
   return {
+    ...(viewMetadata.uiContracts ? { uiContracts: { ...viewMetadata.uiContracts } } : {}),
     ...(viewMetadata.serviceBlueprint
       ? {
         serviceBlueprint: {
@@ -389,6 +391,7 @@ export interface SharedNodeAttribute {
 
 /** Semantic input for the renderer-owned shared node composition. */
 export interface SharedNodeContent {
+  emphasized?: boolean;
   title: string;
   decoratorMode: NodeDecoratorMode;
   nodeType?: string;
@@ -531,6 +534,9 @@ export interface MeasuredSharedNodeRegion {
 }
 
 export interface MeasuredSharedNodeLayout {
+  emphasized?: boolean;
+  /** Bottom enclosure reserved during natural measurement for height reflow. */
+  bottomInset?: number;
   density: "plain" | "dense";
   decorator?: MeasuredSharedNodeRegion & {
     items: MeasuredContentBlock[];

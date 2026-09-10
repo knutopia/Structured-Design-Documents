@@ -1,4 +1,5 @@
 import { cloneEdgeViewMetadata, cloneViewMetadata } from "./contracts.js";
+import { measureUiContractsHeader } from "./uiContractsContainer.js";
 import type {
   ChromeSpec,
   ContentBlock,
@@ -38,7 +39,7 @@ import { resolveGridCells } from "./gridLayout.js";
 import { measureSharedNode, reflowMeasuredSharedNode } from "./sharedNode.js";
 import { reservedStackSlotHeight } from "./stackSlots.js";
 import { createTextMeasurementService, type TextMeasurementService } from "./textMeasurement.js";
-import { resolveRendererTheme, WIDTH_BAND_ORDER, type RendererTheme, type TextStyleToken } from "./theme.js";
+import { resolveRendererTheme, resolveSharedNodeTheme, WIDTH_BAND_ORDER, type RendererTheme, type TextStyleToken } from "./theme.js";
 
 const ELLIPSIS = "...";
 
@@ -390,6 +391,9 @@ function measureContainerHeaderContent(
   container: SceneContainer,
   chrome: ChromeSpec
 ): ContainerHeaderLayoutResult {
+  if (container.viewMetadata?.uiContracts?.kind === "enclosure") {
+    return measureUiContractsHeader(container, context.theme, context.measureText);
+  }
   const headerContent = container.headerContent ?? [];
   if (headerContent.length === 0) {
     return {
@@ -786,11 +790,12 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
   const primitiveTheme = getNodePrimitiveTheme(context.theme, item.primitive);
 
   if (item.sharedNode) {
+    const nodeContext = { ...context, theme: resolveSharedNodeTheme(context.theme, item.sharedNode.emphasized) };
     const sharedNode = measureSharedNode({
       node: item as SceneNode & { sharedNode: NonNullable<SceneNode["sharedNode"]> },
-      theme: context.theme,
+      theme: nodeContext.theme,
       diagnostics: context.diagnostics,
-      getTextStyle: (role) => getTextStyle(context, item.id, role),
+      getTextStyle: (role) => getTextStyle(nodeContext, item.id, role),
       wrapText: (text, maxWidth, style) => wrapTextBlock(text, maxWidth, style, context.measureText)
     });
 
@@ -799,7 +804,8 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
       id: item.id,
       role: item.role,
       primitive: item.primitive,
-      classes: [...item.classes, "shared-node", `shared-node-${sharedNode.layout.density}`],
+      classes: [...item.classes, "shared-node", `shared-node-${sharedNode.layout.density}`,
+        ...(item.sharedNode.emphasized ? ["shared-node--emphasized"] : [])],
       viewMetadata: cloneViewMetadata(item.viewMetadata),
       widthPolicy: cloneWidthPolicy(item.widthPolicy),
       widthBand: "standard",

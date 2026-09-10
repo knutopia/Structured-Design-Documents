@@ -1,0 +1,90 @@
+
+ RUN  v2.1.9 /home/knut/projects/sdd
+
+ ❯ tests/uiContractsTopology.spec.ts (122 tests | 4 failed) 14893ms
+   ✓ B5 topology acceptance > branch / compact / none 452ms
+   × B5 topology acceptance > long_ids / compact / id 126ms
+     → expected [ …(3) ] to deeply equal []
+   × B5 topology acceptance > long_ids / compact / type,id 109ms
+     → expected [ …(6) ] to deeply equal []
+   × B5 topology acceptance > long_ids / detailed / id 121ms
+     → expected [ …(3) ] to deeply equal []
+   × B5 topology acceptance > long_ids / detailed / type,id 117ms
+     → expected [ …(6) ] to deeply equal []
+   ✓ B5 topology acceptance > keeps local composition and contracts fixed when sequences grow horizontally 336ms
+ ✓ tests/uiContractsPresentationModel.spec.ts (8 tests) 2315ms
+   ✓ bundle-driven UI contracts presentation > preserves the complete fixture's identity and relationship sets 579ms
+   ✓ bundle-driven UI contracts presentation > honors bundle-only label, attribute, endpoint-selector, and visibility mutations 419ms
+ ✓ tests/uiContractsB5Scopes.spec.ts (2 tests) 2852ms
+   ✓ production scene builders reproduce B5 scopes > preserves all twelve B5 geometries except the newly approved 18px child-arrow approach 1809ms
+ ✓ tests/uiContractsComplete.spec.ts (8 tests) 9693ms
+   ✓ complete native B5 sheet > compact / none 1008ms
+   ✓ complete native B5 sheet > compact / type 790ms
+   ✓ complete native B5 sheet > compact / id 881ms
+   ✓ complete native B5 sheet > compact / type,id 749ms
+   ✓ complete native B5 sheet > detailed / none 1396ms
+   ✓ complete native B5 sheet > detailed / type 1391ms
+   ✓ complete native B5 sheet > detailed / id 1401ms
+   ✓ complete native B5 sheet > detailed / type,id 1436ms
+ ✓ tests/uiContractsContainer.spec.ts (2 tests) 605ms
+   ✓ native B5 container headers > adds native titles to all twelve B5 inputs without moving nodes, connectors, or labels 497ms
+ ✓ tests/uiContractsB5Replay.spec.ts (14 tests) 531ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > long_ids / compact / id
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > long_ids / detailed / id
+AssertionError: expected [ …(3) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++ ]
+
+ ❯ tests/uiContractsTopology.spec.ts:71:20
+     69|     const rendered = await renderPositionedSceneToSvg(result.positione…
+     70|     await writeFile(`/tmp/sdd-b5-topology/${stem}.svg`, rendered.svg);
+     71|     expect(issues).toEqual([]);
+       |                    ^
+     72|     expect(coverage).toEqual([]);
+     73|     expect(rendered.svg).not.toMatch(/marker-(?:start|end)=/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > long_ids / compact / type,id
+ FAIL  tests/uiContractsTopology.spec.ts > B5 topology acceptance > long_ids / detailed / type,id
+AssertionError: expected [ …(6) ] to deeply equal []
+
+- Expected
++ Received
+
+- Array []
++ Array [
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++   "renderer.measure.shared_node_decorator_overflow: Shared-node decorator content exceeds the available header width.",
++ ]
+
+ ❯ tests/uiContractsTopology.spec.ts:71:20
+     69|     const rendered = await renderPositionedSceneToSvg(result.positione…
+     70|     await writeFile(`/tmp/sdd-b5-topology/${stem}.svg`, rendered.svg);
+     71|     expect(issues).toEqual([]);
+       |                    ^
+     72|     expect(coverage).toEqual([]);
+     73|     expect(rendered.svg).not.toMatch(/marker-(?:start|end)=/);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ Test Files  1 failed | 5 passed (6)
+      Tests  4 failed | 152 passed (156)
+   Start at  18:31:27
+   Duration  39.51s (transform 2.04s, setup 0ms, collect 5.61s, tests 30.89s, environment 3ms, prepare 1.01s)
+

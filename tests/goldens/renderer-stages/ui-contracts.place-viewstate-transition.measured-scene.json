@@ -5,113 +5,354 @@
   "root": {
     "kind": "container",
     "id": "root",
-    "role": "diagram_root",
-    "primitive": "root",
-    "classes": [
-      "diagram",
-      "ui_contracts"
-    ],
+    "role": "ui_contracts_group",
+    "primitive": "stack",
+    "classes": [],
+    "viewMetadata": {
+      "uiContracts": {
+        "kind": "sheet"
+      }
+    },
     "layout": {
       "strategy": "stack",
       "direction": "vertical",
       "gap": 28,
-      "crossAlignment": "stretch"
+      "crossAlignment": "start"
     },
     "chrome": {
       "padding": {
-        "top": 24,
-        "right": 24,
-        "bottom": 24,
-        "left": 24
+        "top": 16,
+        "right": 16,
+        "bottom": 16,
+        "left": 16
       },
-      "gutter": 28,
+      "gutter": 12,
       "headerBandHeight": 0
     },
     "headerContent": [],
     "children": [
       {
         "kind": "container",
-        "id": "P-010",
-        "role": "place",
+        "id": "components-without-containment",
+        "role": "ui_contracts_group",
         "primitive": "cluster",
-        "classes": [
-          "place",
-          "scope"
-        ],
+        "classes": [],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Components without hierarchy"
+          }
+        },
         "layout": {
-          "strategy": "grid",
-          "columns": 2,
+          "strategy": "stack",
+          "direction": "vertical",
           "gap": 16,
-          "crossAlignment": "stretch"
+          "crossAlignment": "start"
         },
         "chrome": {
           "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
           },
-          "gutter": 16,
-          "headerBandHeight": 86
+          "gutter": 12,
+          "headerBandHeight": 19
         },
         "headerContent": [
           {
-            "id": "P-010__header__line_0",
+            "id": "components-without-containment:title",
             "kind": "text",
-            "textStyleRole": "title",
+            "textStyleRole": "shared_node_decorator",
             "lines": [
-              "Billing"
+              "Components without hierarchy"
             ],
-            "x": 12,
-            "y": 10,
-            "width": 48.456,
-            "height": 20,
-            "lineHeight": 20,
-            "region": "primary",
-            "priority": "primary"
+            "x": 14,
+            "y": 3,
+            "width": 160.975,
+            "height": 12,
+            "lineHeight": 12,
+            "region": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-010%22%5D",
+            "role": "component",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "shared-node",
+              "shared-node-plain"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-010%22%5D__title",
+                "kind": "text",
+                "textStyleRole": "shared_node_title",
+                "lines": [
+                  "Billing Form"
+                ],
+                "x": 15.5,
+                "y": 14.5,
+                "width": 87.736,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
+              }
+            ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-010%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Billing Form"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 87.736,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
           },
           {
-            "id": "P-010__header__line_1",
-            "kind": "text",
-            "textStyleRole": "subtitle",
-            "lines": [
-              "/billing"
+            "kind": "node",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-011%22%5D",
+            "role": "component",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "shared-node",
+              "shared-node-plain"
             ],
-            "x": 12,
-            "y": 34,
-            "width": 42.127,
-            "height": 16,
-            "lineHeight": 16,
-            "region": "primary",
-            "priority": "secondary"
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-011%22%5D__title",
+                "kind": "text",
+                "textStyleRole": "shared_node_title",
+                "lines": [
+                  "Submit Button"
+                ],
+                "x": 15.5,
+                "y": 14.5,
+                "width": 105.432,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
+              }
+            ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-011%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Submit Button"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 105.432,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north",
+            "x": 0,
+            "y": 0
           },
           {
-            "id": "P-010__header__line_2",
-            "kind": "badge_text",
-            "textStyleRole": "badge",
+            "id": "south",
+            "role": "south",
+            "side": "south",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west",
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "width": 256,
+        "height": 163
+      },
+      {
+        "kind": "container",
+        "id": "scope:P-010",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Place scope · Billing"
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 12,
+          "headerBandHeight": 19
+        },
+        "headerContent": [
+          {
+            "id": "scope:P-010:title",
+            "kind": "text",
+            "textStyleRole": "shared_node_decorator",
             "lines": [
-              "auth"
+              "Place scope · Billing"
             ],
-            "x": 12,
-            "y": 54,
-            "width": 41.65,
-            "height": 22,
-            "lineHeight": 14,
-            "region": "primary",
-            "priority": "secondary"
+            "x": 14,
+            "y": 3,
+            "width": 93.985,
+            "height": 12,
+            "lineHeight": 12,
+            "region": "primary"
           }
         ],
         "children": [
           {
             "kind": "container",
-            "id": "view_state_graph:P-010",
-            "role": "view_state_graph",
-            "primitive": "cluster",
-            "classes": [
-              "synthetic",
-              "transition_graph",
-              "view_state_graph"
-            ],
+            "id": "scope:P-010:composition:P-010",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
             "layout": {
               "strategy": "layered",
               "direction": "horizontal",
@@ -120,285 +361,575 @@
             },
             "chrome": {
               "padding": {
-                "top": 12,
-                "right": 12,
-                "bottom": 12,
-                "left": 12
+                "top": 10,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
               },
-              "gutter": 16,
-              "headerBandHeight": 40
+              "gutter": 12,
+              "headerBandHeight": 0
             },
-            "headerContent": [
-              {
-                "id": "view_state_graph:P-010__header__line_0",
-                "kind": "text",
-                "textStyleRole": "title",
-                "lines": [
-                  "ViewState Graph"
-                ],
-                "x": 12,
-                "y": 10,
-                "width": 127.552,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
-              }
-            ],
+            "headerContent": [],
             "children": [
               {
-                "kind": "container",
-                "id": "VS-010a",
-                "role": "view_state",
-                "primitive": "cluster",
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D",
+                "role": "place",
+                "primitive": "card",
                 "classes": [
-                  "view_state",
-                  "scope",
-                  "chrome-dashed"
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-dense",
+                  "shared-node--emphasized"
                 ],
-                "layout": {
-                  "strategy": "stack",
-                  "direction": "vertical",
-                  "gap": 16,
-                  "crossAlignment": "stretch"
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
                 },
-                "chrome": {
-                  "padding": {
-                    "top": 12,
-                    "right": 12,
-                    "bottom": 12,
-                    "left": 12
-                  },
-                  "gutter": 16,
-                  "headerBandHeight": 60
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
                 },
-                "headerContent": [
+                "content": [
                   {
-                    "id": "VS-010a__header__line_0",
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__title",
                     "kind": "text",
-                    "textStyleRole": "title",
+                    "textStyleRole": "shared_node_emphasized_title",
                     "lines": [
-                      "Billing Editing"
+                      "Billing"
                     ],
-                    "x": 12,
-                    "y": 10,
-                    "width": 106.072,
-                    "height": 20,
-                    "lineHeight": 20,
-                    "region": "primary",
-                    "priority": "primary"
+                    "x": 16,
+                    "y": 8,
+                    "width": 47.424,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
                   },
                   {
-                    "id": "VS-010a__header__line_1",
-                    "kind": "metadata",
-                    "textStyleRole": "metadata",
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_0_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
                     "lines": [
-                      "data: PaymentMethod"
+                      "Route"
                     ],
-                    "x": 12,
-                    "y": 34,
-                    "width": 121.83,
-                    "height": 16,
-                    "lineHeight": 16,
-                    "region": "primary",
-                    "priority": "secondary"
+                    "x": 16,
+                    "y": 31,
+                    "width": 27.465,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "/billing"
+                    ],
+                    "x": 16,
+                    "y": 45,
+                    "width": 38.886,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_1_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Access"
+                    ],
+                    "x": 16,
+                    "y": 63,
+                    "width": 33.5,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_1_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "auth"
+                    ],
+                    "x": 16,
+                    "y": 77,
+                    "width": 25.188,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_2_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Entry Points"
+                    ],
+                    "x": 16,
+                    "y": 95,
+                    "width": 56.275,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_2_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "link:/billing,notification:payment_f",
+                      "ailed"
+                    ],
+                    "x": 16,
+                    "y": 109,
+                    "width": 189.846,
+                    "height": 28,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_3_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Primary Navigation"
+                    ],
+                    "x": 16,
+                    "y": 141,
+                    "width": 88.325,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_3_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "true"
+                    ],
+                    "x": 16,
+                    "y": 155,
+                    "width": 23.124,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
                   }
                 ],
-                "children": [
-                  {
-                    "kind": "container",
-                    "id": "C-011",
-                    "role": "component",
-                    "primitive": "cluster",
-                    "classes": [
-                      "component",
-                      "scope"
-                    ],
-                    "layout": {
-                      "strategy": "stack",
-                      "direction": "vertical",
-                      "gap": 16,
-                      "crossAlignment": "stretch"
+                "sharedNode": {
+                  "density": "dense",
+                  "emphasized": true,
+                  "body": {
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
+                    "height": 173,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_emphasized_title",
+                      "lines": [
+                        "Billing"
+                      ],
+                      "x": 16,
+                      "y": 8,
+                      "width": 47.424,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
                     },
-                    "chrome": {
-                      "padding": {
-                        "top": 12,
-                        "right": 12,
-                        "bottom": 12,
-                        "left": 12
-                      },
-                      "gutter": 16,
-                      "headerBandHeight": 40
-                    },
-                    "headerContent": [
+                    "attributeGroups": [
                       {
-                        "id": "C-011__header__line_0",
-                        "kind": "text",
-                        "textStyleRole": "title",
-                        "lines": [
-                          "Component: Submit Button"
-                        ],
-                        "x": 12,
-                        "y": 10,
-                        "width": 204.256,
-                        "height": 20,
-                        "lineHeight": 20,
-                        "region": "primary",
-                        "priority": "primary"
-                      }
-                    ],
-                    "children": [
-                      {
-                        "kind": "container",
-                        "id": "C-011__content",
-                        "role": "contract_gutter",
-                        "primitive": "stack",
-                        "classes": [
-                          "contract_gutter"
-                        ],
-                        "layout": {
-                          "strategy": "stack",
-                          "direction": "vertical",
-                          "gap": 16,
-                          "crossAlignment": "stretch"
+                        "id": "route_or_key",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Route"
+                          ],
+                          "x": 16,
+                          "y": 31,
+                          "width": 27.465,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
                         },
-                        "chrome": {
-                          "padding": {
-                            "top": 0,
-                            "right": 0,
-                            "bottom": 0,
-                            "left": 128
-                          },
-                          "gutter": 16,
-                          "headerBandHeight": 0
-                        },
-                        "headerContent": [],
-                        "children": [
+                        "values": [
                           {
-                            "kind": "node",
-                            "id": "E-010",
-                            "role": "event",
-                            "primitive": "card",
-                            "classes": [
-                              "semantic_node",
-                              "shared-node",
-                              "shared-node-plain"
+                            "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "/billing"
                             ],
-                            "widthPolicy": {
-                              "preferred": "standard",
-                              "allowed": [
-                                "standard"
-                              ]
-                            },
-                            "widthBand": "standard",
-                            "overflowPolicy": {
-                              "kind": "grow_height"
-                            },
-                            "content": [
-                              {
-                                "id": "E-010__title",
-                                "kind": "text",
-                                "textStyleRole": "shared_node_title",
-                                "lines": [
-                                  "Submit"
-                                ],
-                                "x": 15.5,
-                                "y": 14.5,
-                                "width": 53.144,
-                                "height": 19,
-                                "lineHeight": 19,
-                                "region": "primary"
-                              }
-                            ],
-                            "sharedNode": {
-                              "density": "plain",
-                              "body": {
-                                "x": 1.5,
-                                "y": 1.5,
-                                "width": 221,
-                                "height": 45,
-                                "title": {
-                                  "id": "E-010__title",
-                                  "kind": "text",
-                                  "textStyleRole": "shared_node_title",
-                                  "lines": [
-                                    "Submit"
-                                  ],
-                                  "x": 15.5,
-                                  "y": 14.5,
-                                  "width": 53.144,
-                                  "height": 19,
-                                  "lineHeight": 19,
-                                  "region": "primary"
-                                },
-                                "attributeGroups": []
-                              }
-                            },
-                            "ports": [
-                              {
-                                "id": "E-010__contract_in",
-                                "role": "contract_in",
-                                "side": "west",
-                                "x": 0,
-                                "y": 24
-                              }
-                            ],
-                            "overflow": {
-                              "status": "fits"
-                            },
-                            "width": 224,
-                            "height": 48
+                            "x": 16,
+                            "y": 45,
+                            "width": 38.886,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
                           }
                         ],
-                        "ports": [],
-                        "width": 352,
-                        "height": 48
-                      }
-                    ],
-                    "ports": [
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
+                        "height": 28
+                      },
                       {
-                        "id": "C-011__contract_out",
-                        "role": "contract_out",
-                        "side": "west",
-                        "offsetPolicy": "content_start",
-                        "x": 0,
-                        "y": 0
+                        "id": "access",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_1_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Access"
+                          ],
+                          "x": 16,
+                          "y": 63,
+                          "width": 33.5,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "auth"
+                            ],
+                            "x": 16,
+                            "y": 77,
+                            "width": 25.188,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
+                        "height": 28
+                      },
+                      {
+                        "id": "entry_points",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_2_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Entry Points"
+                          ],
+                          "x": 16,
+                          "y": 95,
+                          "width": 56.275,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_2_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "link:/billing,notification:payment_f",
+                              "ailed"
+                            ],
+                            "x": 16,
+                            "y": 109,
+                            "width": 189.846,
+                            "height": 28,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 95,
+                        "width": 192,
+                        "height": 42
+                      },
+                      {
+                        "id": "primary_nav",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_3_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Primary Navigation"
+                          ],
+                          "x": 16,
+                          "y": 141,
+                          "width": 88.325,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D__attribute_3_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "true"
+                            ],
+                            "x": 16,
+                            "y": 155,
+                            "width": 23.124,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 141,
+                        "width": 192,
+                        "height": 28
                       }
-                    ],
-                    "width": 376,
-                    "height": 112
+                    ]
                   }
-                ],
+                },
                 "ports": [
                   {
-                    "id": "VS-010a__transition_in",
-                    "role": "transition_in",
-                    "side": "west",
-                    "x": 0,
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
                     "y": 0
                   },
                   {
-                    "id": "VS-010a__transition_out",
-                    "role": "transition_out",
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 177
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
                     "side": "east",
-                    "x": 0,
-                    "y": 0
+                    "offset": 24,
+                    "x": 224,
+                    "y": 24
                   },
                   {
-                    "id": "VS-010a__contract_out",
-                    "role": "contract_out",
+                    "id": "west",
+                    "role": "west",
                     "side": "west",
-                    "offsetPolicy": "content_start",
                     "x": 0,
-                    "y": 0
+                    "y": 88.5
                   }
                 ],
-                "width": 400,
-                "height": 196
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 177
               },
               {
                 "kind": "node",
-                "id": "VS-010b",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AP-010%22%2C%22relationship%3A%255B%2522P-010%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-plain"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AP-010%22%2C%22relationship%3A%255B%2522P-010%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Billing Form"
+                    ],
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 87.736,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AP-010%22%2C%22relationship%3A%255B%2522P-010%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Billing Form"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 87.736,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "offset": 24,
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 48
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "width": 472,
+            "height": 187
+          },
+          {
+            "kind": "node",
+            "id": "scope:P-010:description",
+            "role": "ui_contracts_description",
+            "primitive": "label",
+            "classes": [],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "scope:P-010:description:text",
+                "kind": "text",
+                "textStyleRole": "label",
+                "lines": [
+                  "Billing place"
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 74.88,
+                "height": 16,
+                "lineHeight": 16,
+                "region": "primary"
+              }
+            ],
+            "ports": [],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 16
+          },
+          {
+            "kind": "container",
+            "id": "scope:P-010:sequence:primary",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "layered",
+              "direction": "horizontal",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 31,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 12,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D",
                 "role": "viewstate",
                 "primitive": "card",
                 "classes": [
@@ -418,7 +949,169 @@
                 },
                 "content": [
                   {
-                    "id": "VS-010b__title",
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Billing Editing"
+                    ],
+                    "x": 15.5,
+                    "y": 7.5,
+                    "width": 101.592,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D__attribute_0_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_label",
+                    "lines": [
+                      "Data Required"
+                    ],
+                    "x": 15.5,
+                    "y": 30.5,
+                    "width": 66.155,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_attribute_value",
+                    "lines": [
+                      "PaymentMethod"
+                    ],
+                    "x": 15.5,
+                    "y": 44.5,
+                    "width": 91.488,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "dense",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 63,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Billing Editing"
+                      ],
+                      "x": 15.5,
+                      "y": 7.5,
+                      "width": 101.592,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "data_required",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_label",
+                          "lines": [
+                            "Data Required"
+                          ],
+                          "x": 15.5,
+                          "y": 30.5,
+                          "width": 66.155,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_attribute_value",
+                            "lines": [
+                              "PaymentMethod"
+                            ],
+                            "x": 15.5,
+                            "y": 44.5,
+                            "width": 91.488,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 15.5,
+                        "y": 30.5,
+                        "width": 193,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 66
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 33
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 33
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 66
+              },
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D",
+                "role": "viewstate",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-dense"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D__title",
                     "kind": "text",
                     "textStyleRole": "shared_node_title",
                     "lines": [
@@ -432,21 +1125,21 @@
                     "region": "primary"
                   },
                   {
-                    "id": "VS-010b__attribute_0_label",
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D__attribute_0_label",
                     "kind": "text",
                     "textStyleRole": "shared_node_attribute_label",
                     "lines": [
-                      "Data"
+                      "Data Required"
                     ],
                     "x": 15.5,
                     "y": 30.5,
-                    "width": 21.635,
+                    "width": 66.155,
                     "height": 12,
                     "lineHeight": 12,
                     "region": "primary"
                   },
                   {
-                    "id": "VS-010b__attribute_0_value_0",
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D__attribute_0_value_0",
                     "kind": "text",
                     "textStyleRole": "shared_node_attribute_value",
                     "lines": [
@@ -468,7 +1161,7 @@
                     "width": 221,
                     "height": 63,
                     "title": {
-                      "id": "VS-010b__title",
+                      "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D__title",
                       "kind": "text",
                       "textStyleRole": "shared_node_title",
                       "lines": [
@@ -485,22 +1178,22 @@
                       {
                         "id": "data_required",
                         "label": {
-                          "id": "VS-010b__attribute_0_label",
+                          "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D__attribute_0_label",
                           "kind": "text",
                           "textStyleRole": "shared_node_attribute_label",
                           "lines": [
-                            "Data"
+                            "Data Required"
                           ],
                           "x": 15.5,
                           "y": 30.5,
-                          "width": 21.635,
+                          "width": 66.155,
                           "height": 12,
                           "lineHeight": 12,
                           "region": "primary"
                         },
                         "values": [
                           {
-                            "id": "VS-010b__attribute_0_value_0",
+                            "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D__attribute_0_value_0",
                             "kind": "text",
                             "textStyleRole": "shared_node_attribute_value",
                             "lines": [
@@ -524,17 +1217,31 @@
                 },
                 "ports": [
                   {
-                    "id": "VS-010b__transition_in",
-                    "role": "transition_in",
-                    "side": "west",
-                    "x": 0,
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 66
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
                     "y": 33
                   },
                   {
-                    "id": "VS-010b__transition_out",
-                    "role": "transition_out",
-                    "side": "east",
-                    "x": 224,
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
                     "y": 33
                   }
                 ],
@@ -545,83 +1252,1371 @@
                 "height": 66
               }
             ],
-            "ports": [],
-            "width": 672,
-            "height": 260
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "width": 472,
+            "height": 97
           },
           {
             "kind": "container",
-            "id": "C-010",
-            "role": "component",
-            "primitive": "cluster",
-            "classes": [
-              "component",
-              "scope"
-            ],
+            "id": "scope:P-010:composition:VS-010a",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
             "layout": {
-              "strategy": "stack",
-              "direction": "vertical",
-              "gap": 16,
-              "crossAlignment": "stretch"
+              "strategy": "layered",
+              "direction": "horizontal",
+              "gap": 24,
+              "crossAlignment": "start"
             },
             "chrome": {
               "padding": {
-                "top": 12,
-                "right": 12,
-                "bottom": 12,
-                "left": 12
+                "top": 10,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
               },
-              "gutter": 16,
-              "headerBandHeight": 40
+              "gutter": 12,
+              "headerBandHeight": 0
             },
-            "headerContent": [
+            "headerContent": [],
+            "children": [
               {
-                "id": "C-010__header__line_0",
-                "kind": "text",
-                "textStyleRole": "title",
-                "lines": [
-                  "Component: Billing Form"
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_source%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22VS-010a%22%5D",
+                "role": "viewstate",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-plain"
                 ],
-                "x": 12,
-                "y": 10,
-                "width": 186.24,
-                "height": 20,
-                "lineHeight": 20,
-                "region": "primary",
-                "priority": "primary"
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_source%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22VS-010a%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Billing Editing"
+                    ],
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 101.592,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_source%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22VS-010a%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Billing Editing"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 101.592,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "offset": 24,
+                    "x": 224,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 48
+              },
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22relationship%3A%255B%2522VS-010a%2522%252C%2522COMPOSED_OF%2522%252C%2522C-011%2522%255D%3A0%22%2C%22C-011%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-plain"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22relationship%3A%255B%2522VS-010a%2522%252C%2522COMPOSED_OF%2522%252C%2522C-011%2522%255D%3A0%22%2C%22C-011%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Submit Button"
+                    ],
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 105.432,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22relationship%3A%255B%2522VS-010a%2522%252C%2522COMPOSED_OF%2522%252C%2522C-011%2522%255D%3A0%22%2C%22C-011%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Submit Button"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 105.432,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "offset": 24,
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 48
               }
             ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "width": 472,
+            "height": 58
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west",
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "width": 504,
+        "height": 457
+      },
+      {
+        "kind": "container",
+        "id": "scope:P-011",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Place scope · Confirmation"
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 12,
+          "headerBandHeight": 19
+        },
+        "headerContent": [
+          {
+            "id": "scope:P-011:title",
+            "kind": "text",
+            "textStyleRole": "shared_node_decorator",
+            "lines": [
+              "Place scope · Confirmation"
+            ],
+            "x": 14,
+            "y": 3,
+            "width": 125.115,
+            "height": 12,
+            "lineHeight": 12,
+            "region": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "shared-node",
+              "shared-node-dense",
+              "shared-node--emphasized"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__title",
+                "kind": "text",
+                "textStyleRole": "shared_node_emphasized_title",
+                "lines": [
+                  "Confirmation"
+                ],
+                "x": 16,
+                "y": 8,
+                "width": 96.664,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
+              },
+              {
+                "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_0_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_emphasized_attributeLabel",
+                "lines": [
+                  "Route"
+                ],
+                "x": 16,
+                "y": 31,
+                "width": 27.465,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_0_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_emphasized_attributeValue",
+                "lines": [
+                  "/confirmation"
+                ],
+                "x": 16,
+                "y": 45,
+                "width": 74.718,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
+              },
+              {
+                "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_1_label",
+                "kind": "text",
+                "textStyleRole": "shared_node_emphasized_attributeLabel",
+                "lines": [
+                  "Access"
+                ],
+                "x": 16,
+                "y": 63,
+                "width": 33.5,
+                "height": 12,
+                "lineHeight": 12,
+                "region": "primary"
+              },
+              {
+                "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_1_value_0",
+                "kind": "text",
+                "textStyleRole": "shared_node_emphasized_attributeValue",
+                "lines": [
+                  "role:billing_agent"
+                ],
+                "x": 16,
+                "y": 77,
+                "width": 97.152,
+                "height": 14,
+                "lineHeight": 14,
+                "region": "primary"
+              }
+            ],
+            "sharedNode": {
+              "density": "dense",
+              "emphasized": true,
+              "body": {
+                "x": 2,
+                "y": 2,
+                "width": 220,
+                "height": 95,
+                "title": {
+                  "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_emphasized_title",
+                  "lines": [
+                    "Confirmation"
+                  ],
+                  "x": 16,
+                  "y": 8,
+                  "width": 96.664,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": [
+                  {
+                    "id": "route_or_key",
+                    "label": {
+                      "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_0_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_emphasized_attributeLabel",
+                      "lines": [
+                        "Route"
+                      ],
+                      "x": 16,
+                      "y": 31,
+                      "width": 27.465,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_0_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_emphasized_attributeValue",
+                        "lines": [
+                          "/confirmation"
+                        ],
+                        "x": 16,
+                        "y": 45,
+                        "width": 74.718,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 16,
+                    "y": 31,
+                    "width": 192,
+                    "height": 28
+                  },
+                  {
+                    "id": "access",
+                    "label": {
+                      "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_1_label",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_emphasized_attributeLabel",
+                      "lines": [
+                        "Access"
+                      ],
+                      "x": 16,
+                      "y": 63,
+                      "width": 33.5,
+                      "height": 12,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    "values": [
+                      {
+                        "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D__attribute_1_value_0",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_emphasized_attributeValue",
+                        "lines": [
+                          "role:billing_agent"
+                        ],
+                        "x": 16,
+                        "y": 77,
+                        "width": 97.152,
+                        "height": 14,
+                        "lineHeight": 14,
+                        "region": "primary"
+                      }
+                    ],
+                    "x": 16,
+                    "y": 63,
+                    "width": 192,
+                    "height": 28
+                  }
+                ]
+              }
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 112,
+                "y": 99
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 224,
+                "y": 49.5
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 49.5
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 99
+          },
+          {
+            "kind": "node",
+            "id": "scope:P-011:description",
+            "role": "ui_contracts_description",
+            "primitive": "label",
+            "classes": [],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "scope:P-011:description:text",
+                "kind": "text",
+                "textStyleRole": "label",
+                "lines": [
+                  "Confirmation place"
+                ],
+                "x": 0,
+                "y": 0,
+                "width": 114.647,
+                "height": 16,
+                "lineHeight": 16,
+                "region": "primary"
+              }
+            ],
+            "ports": [],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 16
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west",
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "width": 256,
+        "height": 182
+      },
+      {
+        "kind": "container",
+        "id": "scope:C-010",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Component scope · Billing Form"
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 12,
+          "headerBandHeight": 19
+        },
+        "headerContent": [
+          {
+            "id": "scope:C-010:title",
+            "kind": "text",
+            "textStyleRole": "shared_node_decorator",
+            "lines": [
+              "Component scope · Billing Form"
+            ],
+            "x": 14,
+            "y": 3,
+            "width": 149.04,
+            "height": 12,
+            "lineHeight": 12,
+            "region": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "scope:C-010:neighborhood",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 12,
+              "crossAlignment": "center"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 12,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-dense",
+                  "shared-node--emphasized"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_title",
+                    "lines": [
+                      "Billing Form"
+                    ],
+                    "x": 16,
+                    "y": 8,
+                    "width": 89.048,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_0_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Description"
+                    ],
+                    "x": 16,
+                    "y": 31,
+                    "width": 52.96,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "Form collecting billing details"
+                    ],
+                    "x": 16,
+                    "y": 45,
+                    "width": 164.652,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_1_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Inputs"
+                    ],
+                    "x": 16,
+                    "y": 63,
+                    "width": 29.28,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_1_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "BillingFields"
+                    ],
+                    "x": 16,
+                    "y": 77,
+                    "width": 69.03,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_2_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Outputs"
+                    ],
+                    "x": 16,
+                    "y": 95,
+                    "width": 37.715,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_2_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "SubmitRequested"
+                    ],
+                    "x": 16,
+                    "y": 109,
+                    "width": 100.242,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "dense",
+                  "emphasized": true,
+                  "body": {
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
+                    "height": 127,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_emphasized_title",
+                      "lines": [
+                        "Billing Form"
+                      ],
+                      "x": 16,
+                      "y": 8,
+                      "width": 89.048,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "description",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Description"
+                          ],
+                          "x": 16,
+                          "y": 31,
+                          "width": 52.96,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "Form collecting billing details"
+                            ],
+                            "x": 16,
+                            "y": 45,
+                            "width": 164.652,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
+                        "height": 28
+                      },
+                      {
+                        "id": "inputs",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_1_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Inputs"
+                          ],
+                          "x": 16,
+                          "y": 63,
+                          "width": 29.28,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "BillingFields"
+                            ],
+                            "x": 16,
+                            "y": 77,
+                            "width": 69.03,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
+                        "height": 28
+                      },
+                      {
+                        "id": "outputs",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_2_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Outputs"
+                          ],
+                          "x": 16,
+                          "y": 95,
+                          "width": 37.715,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D__attribute_2_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "SubmitRequested"
+                            ],
+                            "x": 16,
+                            "y": 109,
+                            "width": 100.242,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 95,
+                        "width": 192,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 131
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 65.5
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 65.5
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 131
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "width": 224,
+            "height": 131
+          },
+          {
+            "kind": "container",
+            "id": "scope:C-010:sequence:secondary",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "layered",
+              "direction": "horizontal",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 40,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 12,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010a%22%5D",
+                "role": "state",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-plain"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010a%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Form Ready"
+                    ],
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 87.128,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010a%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form Ready"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 87.128,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 48
+              },
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010b%22%5D",
+                "role": "state",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-plain"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010b%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Submitting"
+                    ],
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 81.256,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010b%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Submitting"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 81.256,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 48
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "width": 472,
+            "height": 88
+          },
+          {
+            "kind": "container",
+            "id": "scope:C-010:contract:C-010",
+            "role": "fanout_proof",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 12,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
             "children": [
               {
                 "kind": "container",
-                "id": "C-010__content",
-                "role": "contract_gutter",
+                "id": "scope:C-010:contract:C-010:target-row:0",
+                "role": "fanout_proof",
                 "primitive": "stack",
-                "classes": [
-                  "contract_gutter"
-                ],
+                "classes": [],
                 "layout": {
                   "strategy": "stack",
-                  "direction": "vertical",
-                  "gap": 16,
-                  "crossAlignment": "stretch"
+                  "direction": "horizontal",
+                  "gap": 131.748,
+                  "crossAlignment": "start"
                 },
                 "chrome": {
                   "padding": {
-                    "top": 0,
+                    "top": 10,
                     "right": 0,
                     "bottom": 0,
-                    "left": 128
+                    "left": 0
                   },
-                  "gutter": 16,
+                  "gutter": 12,
                   "headerBandHeight": 0
                 },
                 "headerContent": [],
                 "children": [
                   {
                     "kind": "node",
-                    "id": "SA-010",
-                    "role": "systemaction",
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D",
+                    "role": "component",
                     "primitive": "card",
                     "classes": [
                       "semantic_node",
@@ -640,15 +2635,15 @@
                     },
                     "content": [
                       {
-                        "id": "SA-010__title",
+                        "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D__title",
                         "kind": "text",
                         "textStyleRole": "shared_node_title",
                         "lines": [
-                          "Save Subscription"
+                          "Billing Form"
                         ],
                         "x": 15.5,
                         "y": 14.5,
-                        "width": 131.2,
+                        "width": 87.736,
                         "height": 19,
                         "lineHeight": 19,
                         "region": "primary"
@@ -662,15 +2657,15 @@
                         "width": 221,
                         "height": 45,
                         "title": {
-                          "id": "SA-010__title",
+                          "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D__title",
                           "kind": "text",
                           "textStyleRole": "shared_node_title",
                           "lines": [
-                            "Save Subscription"
+                            "Billing Form"
                           ],
                           "x": 15.5,
                           "y": 14.5,
-                          "width": 131.2,
+                          "width": 87.736,
                           "height": 19,
                           "lineHeight": 19,
                           "region": "primary"
@@ -680,11 +2675,20 @@
                     },
                     "ports": [
                       {
-                        "id": "SA-010__contract_in",
-                        "role": "contract_in",
-                        "side": "west",
-                        "x": 0,
+                        "id": "contract-out:0",
+                        "role": "contract_out",
+                        "side": "east",
+                        "offset": 24,
+                        "x": 224,
                         "y": 24
+                      },
+                      {
+                        "id": "contract-out:1",
+                        "role": "contract_out",
+                        "side": "south",
+                        "offset": 200,
+                        "x": 200,
+                        "y": 48
                       }
                     ],
                     "overflow": {
@@ -695,7 +2699,7 @@
                   },
                   {
                     "kind": "node",
-                    "id": "D-010",
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522BINDS_TO%2522%252C%2522D-010%2522%255D%3A0%22%2C%22D-010%22%5D",
                     "role": "dataentity",
                     "primitive": "card",
                     "classes": [
@@ -715,7 +2719,7 @@
                     },
                     "content": [
                       {
-                        "id": "D-010__title",
+                        "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522BINDS_TO%2522%252C%2522D-010%2522%255D%3A0%22%2C%22D-010%22%5D__title",
                         "kind": "text",
                         "textStyleRole": "shared_node_title",
                         "lines": [
@@ -737,7 +2741,7 @@
                         "width": 221,
                         "height": 45,
                         "title": {
-                          "id": "D-010__title",
+                          "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522BINDS_TO%2522%252C%2522D-010%2522%255D%3A0%22%2C%22D-010%22%5D__title",
                           "kind": "text",
                           "textStyleRole": "shared_node_title",
                           "lines": [
@@ -755,10 +2759,726 @@
                     },
                     "ports": [
                       {
-                        "id": "D-010__contract_in",
+                        "id": "contract-in",
                         "role": "contract_in",
                         "side": "west",
+                        "offset": 24,
                         "x": 0,
+                        "y": 24
+                      }
+                    ],
+                    "overflow": {
+                      "status": "fits"
+                    },
+                    "width": 224,
+                    "height": 48
+                  }
+                ],
+                "ports": [],
+                "width": 579.748,
+                "height": 58
+              },
+              {
+                "kind": "container",
+                "id": "scope:C-010:contract:C-010:target-row:1",
+                "role": "fanout_proof",
+                "primitive": "stack",
+                "classes": [],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "horizontal",
+                  "gap": 155.748,
+                  "crossAlignment": "center"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 10,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 200
+                  },
+                  "gutter": 12,
+                  "headerBandHeight": 0
+                },
+                "headerContent": [],
+                "children": [
+                  {
+                    "kind": "container",
+                    "id": "scope:C-010:contract:C-010:anchor:1",
+                    "role": "fanout_proof",
+                    "primitive": "stack",
+                    "classes": [],
+                    "layout": {
+                      "strategy": "stack",
+                      "direction": "vertical",
+                      "gap": 0,
+                      "crossAlignment": "start"
+                    },
+                    "chrome": {
+                      "padding": {
+                        "top": 0,
+                        "right": 0,
+                        "bottom": 0,
+                        "left": 0
+                      },
+                      "gutter": 12,
+                      "headerBandHeight": 0
+                    },
+                    "headerContent": [],
+                    "children": [],
+                    "ports": [
+                      {
+                        "id": "in",
+                        "role": "in",
+                        "side": "north",
+                        "offset": 0,
+                        "x": 0,
+                        "y": 0
+                      },
+                      {
+                        "id": "out",
+                        "role": "out",
+                        "side": "east",
+                        "offset": 0,
+                        "x": 0,
+                        "y": 0
+                      }
+                    ],
+                    "width": 0,
+                    "height": 0
+                  },
+                  {
+                    "kind": "node",
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-010%2522%255D%3A0%22%2C%22SA-010%22%5D",
+                    "role": "systemaction",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node",
+                      "shared-node",
+                      "shared-node-plain"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "standard"
+                      ]
+                    },
+                    "widthBand": "standard",
+                    "overflowPolicy": {
+                      "kind": "grow_height"
+                    },
+                    "content": [
+                      {
+                        "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-010%2522%255D%3A0%22%2C%22SA-010%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Save Subscription"
+                        ],
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 131.2,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      }
+                    ],
+                    "sharedNode": {
+                      "density": "plain",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 45,
+                        "title": {
+                          "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-010%2522%255D%3A0%22%2C%22SA-010%22%5D__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "Save Subscription"
+                          ],
+                          "x": 15.5,
+                          "y": 14.5,
+                          "width": 131.2,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": []
+                      }
+                    },
+                    "ports": [
+                      {
+                        "id": "contract-in",
+                        "role": "contract_in",
+                        "side": "west",
+                        "offset": 24,
+                        "x": 0,
+                        "y": 24
+                      }
+                    ],
+                    "overflow": {
+                      "status": "fits"
+                    },
+                    "width": 224,
+                    "height": 48
+                  }
+                ],
+                "ports": [],
+                "width": 579.748,
+                "height": 58
+              }
+            ],
+            "ports": [],
+            "width": 579.748,
+            "height": 140
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west",
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "width": 611.748,
+        "height": 442
+      },
+      {
+        "kind": "container",
+        "id": "scope:C-011",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Component scope · Submit Button"
+          }
+        },
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 12,
+          "headerBandHeight": 19
+        },
+        "headerContent": [
+          {
+            "id": "scope:C-011:title",
+            "kind": "text",
+            "textStyleRole": "shared_node_decorator",
+            "lines": [
+              "Component scope · Submit Button"
+            ],
+            "x": 14,
+            "y": 3,
+            "width": 160.3,
+            "height": 12,
+            "lineHeight": 12,
+            "region": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "scope:C-011:neighborhood",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 12,
+              "crossAlignment": "center"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 12,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "shared-node",
+                  "shared-node-dense",
+                  "shared-node--emphasized"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_title",
+                    "lines": [
+                      "Submit Button"
+                    ],
+                    "x": 16,
+                    "y": 8,
+                    "width": 107.088,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_0_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Description"
+                    ],
+                    "x": 16,
+                    "y": 31,
+                    "width": 52.96,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_0_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "Primary submit action"
+                    ],
+                    "x": 16,
+                    "y": 45,
+                    "width": 121.962,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_1_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Inputs"
+                    ],
+                    "x": 16,
+                    "y": 63,
+                    "width": 29.28,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_1_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "Click"
+                    ],
+                    "x": 16,
+                    "y": 77,
+                    "width": 27.99,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_2_label",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeLabel",
+                    "lines": [
+                      "Outputs"
+                    ],
+                    "x": 16,
+                    "y": 95,
+                    "width": 37.715,
+                    "height": 12,
+                    "lineHeight": 12,
+                    "region": "primary"
+                  },
+                  {
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_2_value_0",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_emphasized_attributeValue",
+                    "lines": [
+                      "SubmitClicked"
+                    ],
+                    "x": 16,
+                    "y": 109,
+                    "width": 81.924,
+                    "height": 14,
+                    "lineHeight": 14,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "dense",
+                  "emphasized": true,
+                  "body": {
+                    "x": 2,
+                    "y": 2,
+                    "width": 220,
+                    "height": 127,
+                    "title": {
+                      "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_emphasized_title",
+                      "lines": [
+                        "Submit Button"
+                      ],
+                      "x": 16,
+                      "y": 8,
+                      "width": 107.088,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": [
+                      {
+                        "id": "description",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_0_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Description"
+                          ],
+                          "x": 16,
+                          "y": 31,
+                          "width": 52.96,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_0_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "Primary submit action"
+                            ],
+                            "x": 16,
+                            "y": 45,
+                            "width": 121.962,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 31,
+                        "width": 192,
+                        "height": 28
+                      },
+                      {
+                        "id": "inputs",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_1_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Inputs"
+                          ],
+                          "x": 16,
+                          "y": 63,
+                          "width": 29.28,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_1_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "Click"
+                            ],
+                            "x": 16,
+                            "y": 77,
+                            "width": 27.99,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 63,
+                        "width": 192,
+                        "height": 28
+                      },
+                      {
+                        "id": "outputs",
+                        "label": {
+                          "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_2_label",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_emphasized_attributeLabel",
+                          "lines": [
+                            "Outputs"
+                          ],
+                          "x": 16,
+                          "y": 95,
+                          "width": 37.715,
+                          "height": 12,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        "values": [
+                          {
+                            "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D__attribute_2_value_0",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_emphasized_attributeValue",
+                            "lines": [
+                              "SubmitClicked"
+                            ],
+                            "x": 16,
+                            "y": 109,
+                            "width": 81.924,
+                            "height": 14,
+                            "lineHeight": 14,
+                            "region": "primary"
+                          }
+                        ],
+                        "x": 16,
+                        "y": 95,
+                        "width": 192,
+                        "height": 28
+                      }
+                    ]
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north",
+                    "x": 112,
+                    "y": 0
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south",
+                    "x": 112,
+                    "y": 131
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 65.5
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 65.5
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "width": 224,
+                "height": 131
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 0,
+                "y": 0
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "width": 224,
+            "height": 131
+          },
+          {
+            "kind": "container",
+            "id": "scope:C-011:contract:C-011",
+            "role": "fanout_proof",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 12,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "container",
+                "id": "scope:C-011:contract:C-011:target-row:0",
+                "role": "fanout_proof",
+                "primitive": "stack",
+                "classes": [],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "horizontal",
+                  "gap": 66.87,
+                  "crossAlignment": "start"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 10,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 0
+                  },
+                  "gutter": 12,
+                  "headerBandHeight": 0
+                },
+                "headerContent": [],
+                "children": [
+                  {
+                    "kind": "node",
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_source%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22C-011%22%5D",
+                    "role": "component",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node",
+                      "shared-node",
+                      "shared-node-plain"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "standard"
+                      ]
+                    },
+                    "widthBand": "standard",
+                    "overflowPolicy": {
+                      "kind": "grow_height"
+                    },
+                    "content": [
+                      {
+                        "id": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_source%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22C-011%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Submit Button"
+                        ],
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 105.432,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      }
+                    ],
+                    "sharedNode": {
+                      "density": "plain",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 45,
+                        "title": {
+                          "id": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_source%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22C-011%22%5D__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "Submit Button"
+                          ],
+                          "x": 15.5,
+                          "y": 14.5,
+                          "width": 105.432,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": []
+                      }
+                    },
+                    "ports": [
+                      {
+                        "id": "contract-out:0",
+                        "role": "contract_out",
+                        "side": "east",
+                        "offset": 24,
+                        "x": 224,
                         "y": 24
                       }
                     ],
@@ -769,383 +3489,706 @@
                     "height": 48
                   },
                   {
-                    "kind": "container",
-                    "id": "secondary_state_group:C-010",
-                    "role": "state_graph",
-                    "primitive": "cluster",
+                    "kind": "node",
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_target%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22relationship%3A%255B%2522C-011%2522%252C%2522EMITS%2522%252C%2522E-010%2522%255D%3A0%22%2C%22E-010%22%5D",
+                    "role": "event",
+                    "primitive": "card",
                     "classes": [
-                      "synthetic",
-                      "transition_graph",
-                      "state_graph",
-                      "chrome-dashed"
+                      "semantic_node",
+                      "shared-node",
+                      "shared-node-plain"
                     ],
-                    "layout": {
-                      "strategy": "layered",
-                      "direction": "horizontal",
-                      "gap": 24,
-                      "crossAlignment": "start"
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "standard"
+                      ]
                     },
-                    "chrome": {
-                      "padding": {
-                        "top": 12,
-                        "right": 12,
-                        "bottom": 12,
-                        "left": 12
-                      },
-                      "gutter": 16,
-                      "headerBandHeight": 60
+                    "widthBand": "standard",
+                    "overflowPolicy": {
+                      "kind": "grow_height"
                     },
-                    "headerContent": [
+                    "content": [
                       {
-                        "id": "secondary_state_group:C-010__header__line_0",
+                        "id": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_target%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22relationship%3A%255B%2522C-011%2522%252C%2522EMITS%2522%252C%2522E-010%2522%255D%3A0%22%2C%22E-010%22%5D__title",
                         "kind": "text",
-                        "textStyleRole": "title",
+                        "textStyleRole": "shared_node_title",
                         "lines": [
-                          "State detail: Billing Form"
+                          "Submit"
                         ],
-                        "x": 12,
-                        "y": 10,
-                        "width": 186.648,
-                        "height": 20,
-                        "lineHeight": 20,
-                        "region": "primary",
-                        "priority": "primary"
-                      },
-                      {
-                        "id": "secondary_state_group:C-010__header__line_1",
-                        "kind": "metadata",
-                        "textStyleRole": "metadata",
-                        "lines": [
-                          "scope_id=C-010"
-                        ],
-                        "x": 12,
-                        "y": 34,
-                        "width": 88.638,
-                        "height": 16,
-                        "lineHeight": 16,
-                        "region": "primary",
-                        "priority": "secondary"
+                        "x": 15.5,
+                        "y": 14.5,
+                        "width": 53.144,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
                       }
                     ],
-                    "children": [
+                    "sharedNode": {
+                      "density": "plain",
+                      "body": {
+                        "x": 1.5,
+                        "y": 1.5,
+                        "width": 221,
+                        "height": 45,
+                        "title": {
+                          "id": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_target%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22relationship%3A%255B%2522C-011%2522%252C%2522EMITS%2522%252C%2522E-010%2522%255D%3A0%22%2C%22E-010%22%5D__title",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_title",
+                          "lines": [
+                            "Submit"
+                          ],
+                          "x": 15.5,
+                          "y": 14.5,
+                          "width": 53.144,
+                          "height": 19,
+                          "lineHeight": 19,
+                          "region": "primary"
+                        },
+                        "attributeGroups": []
+                      }
+                    },
+                    "ports": [
                       {
-                        "kind": "node",
-                        "id": "ST-010a",
-                        "role": "state",
-                        "primitive": "card",
-                        "classes": [
-                          "semantic_node",
-                          "shared-node",
-                          "shared-node-plain"
-                        ],
-                        "widthPolicy": {
-                          "preferred": "standard",
-                          "allowed": [
-                            "standard"
-                          ]
-                        },
-                        "widthBand": "standard",
-                        "overflowPolicy": {
-                          "kind": "grow_height"
-                        },
-                        "content": [
-                          {
-                            "id": "ST-010a__title",
-                            "kind": "text",
-                            "textStyleRole": "shared_node_title",
-                            "lines": [
-                              "Form Ready"
-                            ],
-                            "x": 15.5,
-                            "y": 14.5,
-                            "width": 87.128,
-                            "height": 19,
-                            "lineHeight": 19,
-                            "region": "primary"
-                          }
-                        ],
-                        "sharedNode": {
-                          "density": "plain",
-                          "body": {
-                            "x": 1.5,
-                            "y": 1.5,
-                            "width": 221,
-                            "height": 45,
-                            "title": {
-                              "id": "ST-010a__title",
-                              "kind": "text",
-                              "textStyleRole": "shared_node_title",
-                              "lines": [
-                                "Form Ready"
-                              ],
-                              "x": 15.5,
-                              "y": 14.5,
-                              "width": 87.128,
-                              "height": 19,
-                              "lineHeight": 19,
-                              "region": "primary"
-                            },
-                            "attributeGroups": []
-                          }
-                        },
-                        "ports": [
-                          {
-                            "id": "ST-010a__transition_in",
-                            "role": "transition_in",
-                            "side": "west",
-                            "x": 0,
-                            "y": 24
-                          },
-                          {
-                            "id": "ST-010a__transition_out",
-                            "role": "transition_out",
-                            "side": "east",
-                            "x": 224,
-                            "y": 24
-                          }
-                        ],
-                        "overflow": {
-                          "status": "fits"
-                        },
-                        "width": 224,
-                        "height": 48
-                      },
-                      {
-                        "kind": "node",
-                        "id": "ST-010b",
-                        "role": "state",
-                        "primitive": "card",
-                        "classes": [
-                          "semantic_node",
-                          "shared-node",
-                          "shared-node-plain"
-                        ],
-                        "widthPolicy": {
-                          "preferred": "standard",
-                          "allowed": [
-                            "standard"
-                          ]
-                        },
-                        "widthBand": "standard",
-                        "overflowPolicy": {
-                          "kind": "grow_height"
-                        },
-                        "content": [
-                          {
-                            "id": "ST-010b__title",
-                            "kind": "text",
-                            "textStyleRole": "shared_node_title",
-                            "lines": [
-                              "Submitting"
-                            ],
-                            "x": 15.5,
-                            "y": 14.5,
-                            "width": 81.256,
-                            "height": 19,
-                            "lineHeight": 19,
-                            "region": "primary"
-                          }
-                        ],
-                        "sharedNode": {
-                          "density": "plain",
-                          "body": {
-                            "x": 1.5,
-                            "y": 1.5,
-                            "width": 221,
-                            "height": 45,
-                            "title": {
-                              "id": "ST-010b__title",
-                              "kind": "text",
-                              "textStyleRole": "shared_node_title",
-                              "lines": [
-                                "Submitting"
-                              ],
-                              "x": 15.5,
-                              "y": 14.5,
-                              "width": 81.256,
-                              "height": 19,
-                              "lineHeight": 19,
-                              "region": "primary"
-                            },
-                            "attributeGroups": []
-                          }
-                        },
-                        "ports": [
-                          {
-                            "id": "ST-010b__transition_in",
-                            "role": "transition_in",
-                            "side": "west",
-                            "x": 0,
-                            "y": 24
-                          },
-                          {
-                            "id": "ST-010b__transition_out",
-                            "role": "transition_out",
-                            "side": "east",
-                            "x": 224,
-                            "y": 24
-                          }
-                        ],
-                        "overflow": {
-                          "status": "fits"
-                        },
-                        "width": 224,
-                        "height": 48
+                        "id": "contract-in",
+                        "role": "contract_in",
+                        "side": "west",
+                        "offset": 24,
+                        "x": 0,
+                        "y": 24
                       }
                     ],
-                    "ports": [],
-                    "width": 496,
-                    "height": 132
+                    "overflow": {
+                      "status": "fits"
+                    },
+                    "width": 224,
+                    "height": 48
                   }
                 ],
                 "ports": [],
-                "width": 624,
-                "height": 260
+                "width": 514.87,
+                "height": 58
               }
             ],
-            "ports": [
-              {
-                "id": "C-010__contract_out",
-                "role": "contract_out",
-                "side": "west",
-                "offsetPolicy": "content_start",
-                "x": 0,
-                "y": 0
-              }
-            ],
-            "width": 648,
-            "height": 324
+            "ports": [],
+            "width": 514.87,
+            "height": 58
           }
         ],
         "ports": [
           {
-            "id": "P-010__contract_out",
-            "role": "contract_out",
+            "id": "north",
+            "role": "north",
+            "side": "north",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "west",
+            "role": "west",
             "side": "west",
-            "offsetPolicy": "content_start",
             "x": 0,
             "y": 0
           }
         ],
-        "width": 1360,
-        "height": 434
+        "width": 546.87,
+        "height": 256
       },
       {
         "kind": "container",
-        "id": "P-011",
-        "role": "place",
+        "id": "target-register",
+        "role": "ui_contracts_group",
         "primitive": "cluster",
-        "classes": [
-          "place",
-          "scope"
-        ],
+        "classes": [],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Referenced targets"
+          }
+        },
         "layout": {
           "strategy": "stack",
           "direction": "vertical",
           "gap": 16,
-          "crossAlignment": "stretch"
+          "crossAlignment": "start"
         },
         "chrome": {
           "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
           },
-          "gutter": 16,
-          "headerBandHeight": 86
+          "gutter": 12,
+          "headerBandHeight": 19
         },
         "headerContent": [
           {
-            "id": "P-011__header__line_0",
+            "id": "target-register:title",
             "kind": "text",
-            "textStyleRole": "title",
+            "textStyleRole": "shared_node_decorator",
             "lines": [
-              "Confirmation"
+              "Referenced targets"
             ],
-            "x": 12,
-            "y": 10,
-            "width": 98.264,
-            "height": 20,
-            "lineHeight": 20,
-            "region": "primary",
-            "priority": "primary"
-          },
-          {
-            "id": "P-011__header__line_1",
-            "kind": "text",
-            "textStyleRole": "subtitle",
-            "lines": [
-              "/confirmation"
-            ],
-            "x": 12,
-            "y": 34,
-            "width": 80.944,
-            "height": 16,
-            "lineHeight": 16,
-            "region": "primary",
-            "priority": "secondary"
-          },
-          {
-            "id": "P-011__header__line_2",
-            "kind": "badge_text",
-            "textStyleRole": "badge",
-            "lines": [
-              "role:billing_agent"
-            ],
-            "x": 12,
-            "y": 54,
-            "width": 115.396,
-            "height": 22,
-            "lineHeight": 14,
-            "region": "primary",
-            "priority": "secondary"
+            "x": 14,
+            "y": 3,
+            "width": 91.31,
+            "height": 12,
+            "lineHeight": 12,
+            "region": "primary"
           }
         ],
-        "children": [],
+        "children": [
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-010%22%5D",
+            "role": "event",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "shared-node",
+              "shared-node-plain"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-010%22%5D__title",
+                "kind": "text",
+                "textStyleRole": "shared_node_title",
+                "lines": [
+                  "Submit"
+                ],
+                "x": 15.5,
+                "y": 14.5,
+                "width": 53.144,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
+              }
+            ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-010%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Submit"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 53.144,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
+          },
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-010%22%5D",
+            "role": "systemaction",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "shared-node",
+              "shared-node-plain"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-010%22%5D__title",
+                "kind": "text",
+                "textStyleRole": "shared_node_title",
+                "lines": [
+                  "Save Subscription"
+                ],
+                "x": 15.5,
+                "y": 14.5,
+                "width": 131.2,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
+              }
+            ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-010%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Save Subscription"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 131.2,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
+          },
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-010%22%5D",
+            "role": "dataentity",
+            "primitive": "card",
+            "classes": [
+              "semantic_node",
+              "shared-node",
+              "shared-node-plain"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "widthBand": "standard",
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [
+              {
+                "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-010%22%5D__title",
+                "kind": "text",
+                "textStyleRole": "shared_node_title",
+                "lines": [
+                  "Subscription"
+                ],
+                "x": 15.5,
+                "y": 14.5,
+                "width": 92.48,
+                "height": 19,
+                "lineHeight": 19,
+                "region": "primary"
+              }
+            ],
+            "sharedNode": {
+              "density": "plain",
+              "body": {
+                "x": 1.5,
+                "y": 1.5,
+                "width": 221,
+                "height": 45,
+                "title": {
+                  "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-010%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Subscription"
+                  ],
+                  "x": 15.5,
+                  "y": 14.5,
+                  "width": 92.48,
+                  "height": 19,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                "attributeGroups": []
+              }
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north",
+                "x": 112,
+                "y": 0
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east",
+                "x": 224,
+                "y": 24
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west",
+                "x": 0,
+                "y": 24
+              }
+            ],
+            "overflow": {
+              "status": "fits"
+            },
+            "width": 224,
+            "height": 48
+          }
+        ],
         "ports": [
           {
-            "id": "P-011__contract_out",
-            "role": "contract_out",
+            "id": "north",
+            "role": "north",
+            "side": "north",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east",
+            "x": 0,
+            "y": 0
+          },
+          {
+            "id": "west",
+            "role": "west",
             "side": "west",
-            "offsetPolicy": "content_start",
             "x": 0,
             "y": 0
           }
         ],
-        "width": 139.396,
-        "height": 110
+        "width": 256,
+        "height": 227
       }
     ],
-    "ports": [],
-    "width": 1408,
-    "height": 620
+    "ports": [
+      {
+        "id": "north",
+        "role": "north",
+        "side": "north",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "id": "south",
+        "role": "south",
+        "side": "south",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "id": "east",
+        "role": "east",
+        "side": "east",
+        "x": 0,
+        "y": 0
+      },
+      {
+        "id": "west",
+        "role": "west",
+        "side": "west",
+        "x": 0,
+        "y": 0
+      }
+    ],
+    "width": 643.748,
+    "height": 1899
   },
   "edges": [
     {
-      "id": "binds_to:C-010->D-010",
-      "role": "binds_to",
-      "classes": [
-        "edge-dotted",
-        "constraint_edge"
-      ],
+      "id": "scope:P-010:composition:P-010:relationship:%5B%22P-010%22%2C%22COMPOSED_OF%22%2C%22C-010%22%5D:0",
+      "role": "composition",
+      "classes": [],
       "from": {
-        "itemId": "C-010",
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D",
+        "portId": "east",
         "x": 0,
         "y": 0
       },
       "to": {
-        "itemId": "D-010",
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AP-010%22%2C%22relationship%3A%255B%2522P-010%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D",
+        "portId": "west",
         "x": 0,
         "y": 0
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "lines": [
+          "composed of"
+        ],
+        "width": 83.622,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:P-010:sequence:primary:relationship:%5B%22VS-010a%22%2C%22TRANSITIONS_TO%22%2C%22VS-010b%22%5D:0",
+      "role": "transition",
+      "classes": [],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D",
+        "portId": "east",
+        "x": 0,
+        "y": 0
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D",
+        "portId": "west",
+        "x": 0,
+        "y": 0
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "lines": [
+          "[Submit] {payment_valid} /",
+          "SA-010"
+        ],
+        "width": 158.424,
+        "height": 36,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:P-010:composition:VS-010a:relationship:%5B%22VS-010a%22%2C%22COMPOSED_OF%22%2C%22C-011%22%5D:0",
+      "role": "composition",
+      "classes": [],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_source%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22VS-010a%22%5D",
+        "portId": "east",
+        "x": 0,
+        "y": 0
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22relationship%3A%255B%2522VS-010a%2522%252C%2522COMPOSED_OF%2522%252C%2522C-011%2522%255D%3A0%22%2C%22C-011%22%5D",
+        "portId": "west",
+        "x": 0,
+        "y": 0
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "lines": [
+          "composed of"
+        ],
+        "width": 83.622,
+        "height": 22,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:C-010:sequence:secondary:relationship:%5B%22ST-010a%22%2C%22TRANSITIONS_TO%22%2C%22ST-010b%22%5D:0",
+      "role": "transition",
+      "classes": [
+        "edge-dashed"
+      ],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010a%22%5D",
+        "portId": "east",
+        "x": 0,
+        "y": 0
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010b%22%5D",
+        "portId": "west",
+        "x": 0,
+        "y": 0
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "lines": [
+          "[Submit] {payment_valid} /",
+          "SA-010"
+        ],
+        "width": 158.424,
+        "height": 36,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:C-010:contract:C-010:relationship:%5B%22C-010%22%2C%22DEPENDS_ON%22%2C%22SA-010%22%5D:0:lead",
+      "role": "contract",
+      "classes": [],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D",
+        "portId": "contract-out:1",
+        "x": 0,
+        "y": 0
+      },
+      "to": {
+        "itemId": "scope:C-010:contract:C-010:anchor:1",
+        "portId": "in",
+        "x": 0,
+        "y": 0
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "vertical"
+      },
+      "markers": {}
+    },
+    {
+      "id": "scope:C-010:contract:C-010:relationship:%5B%22C-010%22%2C%22BINDS_TO%22%2C%22D-010%22%5D:0",
+      "role": "contract",
+      "classes": [
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D",
+        "portId": "contract-out:0",
+        "x": 0,
+        "y": 0
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522BINDS_TO%2522%252C%2522D-010%2522%255D%3A0%22%2C%22D-010%22%5D",
+        "portId": "contract-in",
+        "x": 0,
+        "y": 0
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
       },
       "label": {
         "lines": [
@@ -1161,28 +4204,24 @@
       }
     },
     {
-      "id": "depends_on:C-010->SA-010",
-      "role": "depends_on",
-      "classes": [
-        "constraint_edge"
-      ],
+      "id": "scope:C-010:contract:C-010:relationship:%5B%22C-010%22%2C%22DEPENDS_ON%22%2C%22SA-010%22%5D:0",
+      "role": "contract",
+      "classes": [],
       "from": {
-        "itemId": "C-010",
+        "itemId": "scope:C-010:contract:C-010:anchor:1",
+        "portId": "out",
         "x": 0,
         "y": 0
       },
       "to": {
-        "itemId": "SA-010",
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-010%2522%255D%3A0%22%2C%22SA-010%22%5D",
+        "portId": "contract-in",
         "x": 0,
         "y": 0
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
+        "preferAxis": "horizontal"
       },
       "label": {
         "lines": [
@@ -1198,29 +4237,26 @@
       }
     },
     {
-      "id": "emits:C-011->E-010",
-      "role": "emits",
+      "id": "scope:C-011:contract:C-011:relationship:%5B%22C-011%22%2C%22EMITS%22%2C%22E-010%22%5D:0",
+      "role": "contract",
       "classes": [
-        "edge-dashed",
-        "constraint_edge"
+        "edge-dashed"
       ],
       "from": {
-        "itemId": "C-011",
+        "itemId": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_source%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22C-011%22%5D",
+        "portId": "contract-out:0",
         "x": 0,
         "y": 0
       },
       "to": {
-        "itemId": "E-010",
+        "itemId": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_target%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22relationship%3A%255B%2522C-011%2522%252C%2522EMITS%2522%252C%2522E-010%2522%255D%3A0%22%2C%22E-010%22%5D",
+        "portId": "contract-in",
         "x": 0,
         "y": 0
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
+        "preferAxis": "horizontal"
       },
       "label": {
         "lines": [
@@ -1228,81 +4264,6 @@
         ],
         "width": 42.87,
         "height": 22,
-        "lineHeight": 14,
-        "textStyleRole": "edge_label"
-      },
-      "markers": {
-        "end": "arrow"
-      }
-    },
-    {
-      "id": "transitions_to:ST-010a->ST-010b",
-      "role": "transitions_to",
-      "classes": [
-        "edge-dashed",
-        "free_edge"
-      ],
-      "from": {
-        "itemId": "ST-010a",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "ST-010b",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "avoidNodeBoxes": true,
-        "sourcePortRole": "transition_out",
-        "targetPortRole": "transition_in"
-      },
-      "label": {
-        "lines": [
-          "[Submit] {payment_valid} /",
-          "SA-010"
-        ],
-        "width": 158.424,
-        "height": 36,
-        "lineHeight": 14,
-        "textStyleRole": "edge_label"
-      },
-      "markers": {
-        "end": "arrow"
-      }
-    },
-    {
-      "id": "transitions_to:VS-010a->VS-010b",
-      "role": "transitions_to",
-      "classes": [
-        "free_edge"
-      ],
-      "from": {
-        "itemId": "VS-010a",
-        "x": 0,
-        "y": 0
-      },
-      "to": {
-        "itemId": "VS-010b",
-        "x": 0,
-        "y": 0
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "avoidNodeBoxes": true,
-        "sourcePortRole": "transition_out",
-        "targetPortRole": "transition_in"
-      },
-      "label": {
-        "lines": [
-          "[Submit] {payment_valid} /",
-          "SA-010"
-        ],
-        "width": 158.424,
-        "height": 36,
         "lineHeight": 14,
         "textStyleRole": "edge_label"
       },

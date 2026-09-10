@@ -559,7 +559,7 @@ Recommended bias by view:
 - `ia_place_map`: use hierarchical containers, explicit ports, and manual hub/follower grouping; let owned child scopes and follower scopes grow parent geometry bottom-up, then route only local structure connectors with deterministic direct-vertical and shared-trunk patterns
 - `scenario_flow`: use the active scenario-flow design's custom staged lane-and-band layout with explicit branch tracks and decision-node port policy; do not use Elk or any other external layout engine for staged placement or routing
 - `outcome_opportunity_map`: use the active custom staged outcome-opportunity design with fixed semantic columns, outcome bands, explicit ports, and custom gutter/occupancy routing; do not use ELK or another external layout engine for staged placement or routing
-- `ui_contracts`: use manual scoped containers, reserved gutter space plus dedicated label lanes for container-origin contract edges, and renderer-owned layered placement for transition graphs
+- `ui_contracts`: use the bundle-driven occurrence model, B5 enclosure overview/local scopes, measured native headers and single-source contracts; supply scene ports and reservations to unchanged shared placement/routing
 
 The point is not to assign one universal engine to every view. The point is to let each view reuse the same renderer contracts while choosing the right layout strategies.
 

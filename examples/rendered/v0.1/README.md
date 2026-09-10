@@ -13,6 +13,7 @@ Source manifest: `bundle/v0.1/manifest.yaml`
 Curated view/example pairs:
 
 - `journey_map_diagram_type/branching_journey_example`
+- `ui_contracts_diagram_type/departure_desk_example`
 - `scenario_flow_diagram_type/flow_journey_topology_challenge_example`
 - `outcome_opportunity_map_diagram_type/metric_event_instrumentation_example`
 - `outcome_opportunity_map_diagram_type/multiple_outcomes_example`
@@ -46,9 +47,9 @@ All corpus inputs are validated with the bundle-derived `simple` profile before 
 
 `ui_contracts` visual review checklist:
 
-- top-level Place containers remain vertically balanced even when content density varies sharply
-- synthetic `ViewState Graph` and fallback `State graph` regions read horizontally inside their owning scope
-- contract edges that emerge from containers stay readable without collapsing sibling grid or stack placement
+- Component hierarchy and local parent/child scopes appear in both detail settings
+- ViewState and fallback State sequences read horizontally inside intrinsic-width local scopes
+- single-source contract references, hierarchy locators and native container title bars remain readable
 - default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed
 
 `service_blueprint` visual review checklist:

@@ -140,7 +140,9 @@ Added viewStates within Shift Detail:
 ### Simple Follow-Up Edit
 
 The same style also works for smaller follow-ups:
-
+```text
+Using $sdd skill, rename "Open Shifts" to "Available Shifts" and update the IA diagram.
+```
 
 #### Output
 

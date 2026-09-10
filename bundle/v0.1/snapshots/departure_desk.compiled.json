@@ -1,0 +1,1039 @@
+{
+  "schema": "sdd-text",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "C-410",
+      "type": "Component",
+      "name": "Load Workbench",
+      "props": {
+        "description": "Coordinate cargo editing, seal verification, release, and status review.",
+        "inputs": "LoadRecord",
+        "outputs": "LoadReady",
+        "owner": "OperationsDesign",
+        "responsibility": "Expose readiness for release while each child retains its own contracts."
+      }
+    },
+    {
+      "id": "C-420",
+      "type": "Component",
+      "name": "Cargo Sheet",
+      "props": {
+        "description": "Edit the item list while keeping the seal check within its local context.",
+        "inputs": "LoadContents",
+        "outputs": "CargoChanged",
+        "owner": "OperationsDesign",
+        "responsibility": "Capture cargo changes and store the current draft."
+      }
+    },
+    {
+      "id": "C-430",
+      "type": "Component",
+      "name": "Seal Check",
+      "props": {
+        "description": "Verify the entered seal code against the current load record.",
+        "inputs": "SealCode",
+        "outputs": "SealAccepted",
+        "owner": "OperationsDesign",
+        "responsibility": "Confirm the seal independently of cargo editing and emit its result."
+      }
+    },
+    {
+      "id": "C-431",
+      "type": "Component",
+      "name": "Seal Code Input",
+      "props": {
+        "description": "Accept the seal code printed on the loaded container.",
+        "inputs": "SealCode",
+        "outputs": "SealCodeEdited",
+        "owner": "OperationsDesign",
+        "responsibility": "Capture a seal code without deciding whether the load may depart."
+      }
+    },
+    {
+      "id": "C-440",
+      "type": "Component",
+      "name": "Release Lever",
+      "props": {
+        "description": "Offer the deliberate action that releases the prepared load.",
+        "inputs": "ReleasePermission",
+        "outputs": "ReleaseRequested",
+        "owner": "OperationsDesign",
+        "responsibility": "Emit the release request and invoke departure recording."
+      }
+    },
+    {
+      "id": "C-450",
+      "type": "Component",
+      "name": "Trail Lens",
+      "props": {
+        "description": "Show the load status alongside the stored draft context.",
+        "inputs": "LoadStatus",
+        "outputs": "StatusViewed",
+        "owner": "OperationsDesign",
+        "responsibility": "Present departure status using the draft service shared with Cargo Sheet."
+      }
+    },
+    {
+      "id": "C-460",
+      "type": "Component",
+      "name": "Crew Note",
+      "props": {
+        "description": "Present the crew handoff message in both Staging and Released.",
+        "inputs": "CrewMessage",
+        "outputs": "NoteAcknowledged",
+        "owner": "OperationsDesign",
+        "responsibility": "Keep the same message component recognizable across the two ViewState contexts."
+      }
+    },
+    {
+      "id": "C-470",
+      "type": "Component",
+      "name": "Arrival Review",
+      "props": {
+        "description": "Review the arrival handoff using the same seal-verification subtree.",
+        "inputs": "ArrivalReceipt",
+        "outputs": "ArrivalReviewed",
+        "owner": "OperationsDesign",
+        "responsibility": "Expose the existing seal check in a second component context without duplicating its identity."
+      }
+    },
+    {
+      "id": "D-410",
+      "type": "DataEntity",
+      "name": "LoadRecord",
+      "props": {
+        "description": "The load data shared by cargo editing, seal verification, and status review.",
+        "fields": "load_id,contents,seal_code,status",
+        "owner": "OperationsData",
+        "system_of_record": "DepartureStore"
+      }
+    },
+    {
+      "id": "E-420",
+      "type": "Event",
+      "name": "Cargo changed",
+      "props": {
+        "description": "The operator changed the item list through Cargo Sheet.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,contents}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "E-430",
+      "type": "Event",
+      "name": "Seal accepted",
+      "props": {
+        "description": "Seal Check accepted the current code for this load.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,seal_code}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-440",
+      "type": "Event",
+      "name": "Release load",
+      "props": {
+        "description": "The operator requested departure through Release Lever.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "E-450",
+      "type": "Event",
+      "name": "Checklist reviewed",
+      "props": {
+        "description": "The operator has completed a review of the departure checklist.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,checklist_id,reviewer_id}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "E-460",
+      "type": "Event",
+      "name": "Checklist filed",
+      "props": {
+        "description": "The checklist workflow confirms that the reviewed checklist has been filed.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,checklist_id,filing_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-470",
+      "type": "Event",
+      "name": "Archive confirmed",
+      "props": {
+        "description": "The departure workflow confirms that the released load record has been archived.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,archive_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-480",
+      "type": "Event",
+      "name": "Crew review opened",
+      "props": {
+        "description": "The operator opened the crew handoff review.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,crew_message_id}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "E-490",
+      "type": "Event",
+      "name": "Crew note acknowledged",
+      "props": {
+        "description": "The operator acknowledged the reviewed crew handoff note.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,crew_message_id,acknowledged_by}",
+        "source_kind": "user"
+      }
+    },
+    {
+      "id": "E-500",
+      "type": "Event",
+      "name": "Release recorded",
+      "props": {
+        "description": "The departure system confirms that the accepted load release was recorded.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,departure_record_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-510",
+      "type": "Event",
+      "name": "Handoff completed",
+      "props": {
+        "description": "The receiving workflow confirms completion of the released load handoff.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,handoff_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-520",
+      "type": "Event",
+      "name": "Receipt delivered",
+      "props": {
+        "description": "The departure system confirms delivery of the archived departure receipt.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,receipt_id,delivery_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-530",
+      "type": "Event",
+      "name": "Departure closed",
+      "props": {
+        "description": "The departure system confirms closure of the record after receipt delivery.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,closure_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-540",
+      "type": "Event",
+      "name": "Result applied",
+      "props": {
+        "description": "The seal workflow confirms that the verified result has been applied to the current load.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,seal_code,result_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-550",
+      "type": "Event",
+      "name": "Result acknowledged",
+      "props": {
+        "description": "The receiving workflow confirms acknowledgement of the applied seal result.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,result_id,acknowledgement_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "E-560",
+      "type": "Event",
+      "name": "Check filed",
+      "props": {
+        "description": "The seal workflow confirms that the acknowledged result has been filed.",
+        "owner": "OperationsDesign",
+        "payload_schema": "{load_id,result_id,filing_id}",
+        "source_kind": "system"
+      }
+    },
+    {
+      "id": "P-410",
+      "type": "Place",
+      "name": "Departure Desk",
+      "props": {
+        "access": "auth",
+        "description": "Prepare a loaded container for departure and record its release.",
+        "entry_points": "link:/departures",
+        "owner": "OperationsDesign",
+        "primary_nav": "true",
+        "route_or_key": "/departures",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "SA-410",
+      "type": "SystemAction",
+      "name": "Store draft",
+      "props": {
+        "action": "storeLoadDraft",
+        "description": "Persist the prepared load draft used by Cargo Sheet and Trail Lens.",
+        "failure_modes": "timeout,revision_conflict",
+        "owner": "DepartureEngineering",
+        "system_name": "DepartureAPI"
+      }
+    },
+    {
+      "id": "SA-430",
+      "type": "SystemAction",
+      "name": "Check seal",
+      "props": {
+        "action": "verifyLoadSeal",
+        "description": "Check that the supplied seal code belongs to the current load.",
+        "failure_modes": "timeout,seal_mismatch",
+        "owner": "DepartureEngineering",
+        "system_name": "DepartureAPI"
+      }
+    },
+    {
+      "id": "SA-440",
+      "type": "SystemAction",
+      "name": "Record departure",
+      "props": {
+        "action": "recordLoadDeparture",
+        "description": "Record that the prepared load has been released.",
+        "failure_modes": "timeout,already_released",
+        "owner": "DepartureEngineering",
+        "system_name": "DepartureAPI"
+      }
+    },
+    {
+      "id": "ST-410a",
+      "type": "State",
+      "name": "Assembling",
+      "props": {
+        "description": "The load is being prepared and is not yet ready for release.",
+        "invariants": "Release readiness has not been confirmed.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-410"
+      }
+    },
+    {
+      "id": "ST-410b",
+      "type": "State",
+      "name": "Ready to release",
+      "props": {
+        "description": "Seal acceptance has made the workbench ready for release.",
+        "invariants": "The current load has an accepted seal.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-410"
+      }
+    },
+    {
+      "id": "ST-410c",
+      "type": "State",
+      "name": "Checking load",
+      "props": {
+        "description": "The edited load awaits its seal verification result.",
+        "invariants": "Cargo changes have been received; seal acceptance is pending.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-410"
+      }
+    },
+    {
+      "id": "ST-410d",
+      "type": "State",
+      "name": "Release recorded",
+      "props": {
+        "description": "The departure workflow has recorded release of the accepted load.",
+        "invariants": "The load release has a persisted departure record.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-410"
+      }
+    },
+    {
+      "id": "ST-410e",
+      "type": "State",
+      "name": "Handoff complete",
+      "props": {
+        "description": "The arrival handoff has been completed after release recording.",
+        "invariants": "The recorded release has a completed handoff.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-410"
+      }
+    },
+    {
+      "id": "ST-415a",
+      "type": "State",
+      "name": "Checklist open",
+      "props": {
+        "description": "The departure checklist remains available for its independent review.",
+        "invariants": "The checklist has not yet been reviewed.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-410"
+      }
+    },
+    {
+      "id": "ST-415b",
+      "type": "State",
+      "name": "Checklist reviewed",
+      "props": {
+        "description": "The departure checklist has been reviewed but is not yet filed.",
+        "invariants": "The checklist review is complete and filing is pending.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-410"
+      }
+    },
+    {
+      "id": "ST-415c",
+      "type": "State",
+      "name": "Checklist filed",
+      "props": {
+        "description": "The reviewed departure checklist has been filed independently of load readiness.",
+        "invariants": "The reviewed checklist is filed.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-410"
+      }
+    },
+    {
+      "id": "ST-420a",
+      "type": "State",
+      "name": "Untouched",
+      "props": {
+        "description": "The cargo list still matches its loaded draft.",
+        "invariants": "No cargo edits have been made in this editing session.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-420"
+      }
+    },
+    {
+      "id": "ST-420b",
+      "type": "State",
+      "name": "Adjusted",
+      "props": {
+        "description": "The operator has changed the cargo list.",
+        "invariants": "The current cargo list includes a local edit.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-420"
+      }
+    },
+    {
+      "id": "ST-430a",
+      "type": "State",
+      "name": "Unchecked",
+      "props": {
+        "description": "The current seal code awaits verification.",
+        "invariants": "The entered seal has not been accepted.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-430"
+      }
+    },
+    {
+      "id": "ST-430b",
+      "type": "State",
+      "name": "Verified",
+      "props": {
+        "description": "The current seal code has passed the seal check.",
+        "invariants": "The accepted code matches the current load record.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-430"
+      }
+    },
+    {
+      "id": "ST-430c",
+      "type": "State",
+      "name": "Result applied",
+      "props": {
+        "description": "The verified seal result has been applied to the current load.",
+        "invariants": "The current load carries the accepted seal result.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-430"
+      }
+    },
+    {
+      "id": "ST-430d",
+      "type": "State",
+      "name": "Result acknowledged",
+      "props": {
+        "description": "The receiving workflow has acknowledged the applied seal result.",
+        "invariants": "The applied seal result has been acknowledged.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-430"
+      }
+    },
+    {
+      "id": "ST-430e",
+      "type": "State",
+      "name": "Check filed",
+      "props": {
+        "description": "The completed seal check has been filed for later review.",
+        "invariants": "The acknowledged seal check has a filed result record.",
+        "owner": "OperationsDesign",
+        "scope_id": "C-430"
+      }
+    },
+    {
+      "id": "VS-410a",
+      "type": "ViewState",
+      "name": "Staging",
+      "props": {
+        "data_required": "LoadRecord",
+        "description": "Prepare the load and review the crew message before release.",
+        "owner": "OperationsDesign",
+        "place_id": "P-410"
+      }
+    },
+    {
+      "id": "VS-410b",
+      "type": "ViewState",
+      "name": "Released",
+      "props": {
+        "data_required": "LoadRecord",
+        "description": "Confirm release while keeping the same crew message component available.",
+        "owner": "OperationsDesign",
+        "place_id": "P-410"
+      }
+    },
+    {
+      "id": "VS-410c",
+      "type": "ViewState",
+      "name": "Archived",
+      "props": {
+        "data_required": "LoadRecord",
+        "description": "Review the archived departure record after release.",
+        "owner": "OperationsDesign",
+        "place_id": "P-410"
+      }
+    },
+    {
+      "id": "VS-410d",
+      "type": "ViewState",
+      "name": "Receipt delivered",
+      "props": {
+        "data_required": "LoadRecord",
+        "description": "Confirm that the archived departure receipt has been delivered.",
+        "owner": "OperationsDesign",
+        "place_id": "P-410"
+      }
+    },
+    {
+      "id": "VS-410e",
+      "type": "ViewState",
+      "name": "Departure closed",
+      "props": {
+        "data_required": "LoadRecord",
+        "description": "Show the completed departure record after receipt delivery and closure.",
+        "owner": "OperationsDesign",
+        "place_id": "P-410"
+      }
+    },
+    {
+      "id": "VS-415a",
+      "type": "ViewState",
+      "name": "Crew message",
+      "props": {
+        "data_required": "LoadRecord",
+        "description": "Read the crew message in a separate handoff review path.",
+        "owner": "OperationsDesign",
+        "place_id": "P-410"
+      }
+    },
+    {
+      "id": "VS-415b",
+      "type": "ViewState",
+      "name": "Crew review",
+      "props": {
+        "data_required": "LoadRecord",
+        "description": "Review the crew handoff information before acknowledgement.",
+        "owner": "OperationsDesign",
+        "place_id": "P-410"
+      }
+    },
+    {
+      "id": "VS-415c",
+      "type": "ViewState",
+      "name": "Crew confirmation",
+      "props": {
+        "data_required": "LoadRecord",
+        "description": "Confirm that the crew handoff note has been acknowledged.",
+        "owner": "OperationsDesign",
+        "place_id": "P-410"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "C-410",
+      "type": "CONTAINS",
+      "to": "C-420",
+      "to_name": "Cargo Sheet",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-410",
+      "type": "CONTAINS",
+      "to": "C-440",
+      "to_name": "Release Lever",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-410",
+      "type": "CONTAINS",
+      "to": "C-450",
+      "to_name": "Trail Lens",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-410",
+      "type": "CONTAINS",
+      "to": "C-470",
+      "to_name": "Arrival Review",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-420",
+      "type": "BINDS_TO",
+      "to": "D-410",
+      "to_name": "LoadRecord",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "field": "contents"
+      }
+    },
+    {
+      "from": "C-420",
+      "type": "CONTAINS",
+      "to": "C-430",
+      "to_name": "Seal Check",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-420",
+      "type": "DEPENDS_ON",
+      "to": "SA-410",
+      "to_name": "Store draft",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-420",
+      "type": "EMITS",
+      "to": "E-420",
+      "to_name": "Cargo changed",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-430",
+      "type": "BINDS_TO",
+      "to": "D-410",
+      "to_name": "LoadRecord",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "field": "seal_code"
+      }
+    },
+    {
+      "from": "C-430",
+      "type": "CONTAINS",
+      "to": "C-431",
+      "to_name": "Seal Code Input",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-430",
+      "type": "DEPENDS_ON",
+      "to": "SA-430",
+      "to_name": "Check seal",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-430",
+      "type": "EMITS",
+      "to": "E-430",
+      "to_name": "Seal accepted",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-440",
+      "type": "DEPENDS_ON",
+      "to": "SA-440",
+      "to_name": "Record departure",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-440",
+      "type": "EMITS",
+      "to": "E-440",
+      "to_name": "Release load",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-450",
+      "type": "BINDS_TO",
+      "to": "D-410",
+      "to_name": "LoadRecord",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "field": "status"
+      }
+    },
+    {
+      "from": "C-450",
+      "type": "DEPENDS_ON",
+      "to": "SA-410",
+      "to_name": "Store draft",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "C-470",
+      "type": "CONTAINS",
+      "to": "C-430",
+      "to_name": "Seal Check",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "COMPOSED_OF",
+      "to": "C-410",
+      "to_name": "Load Workbench",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410a",
+      "to_name": "Staging",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410b",
+      "to_name": "Released",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410c",
+      "to_name": "Archived",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410d",
+      "to_name": "Receipt delivered",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410e",
+      "to_name": "Departure closed",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-415a",
+      "to_name": "Crew message",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-415b",
+      "to_name": "Crew review",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-415c",
+      "to_name": "Crew confirmation",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-410a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-410c",
+      "to_name": "Checking load",
+      "event": "E-420",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-410b",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-410d",
+      "to_name": "Release recorded",
+      "event": "E-500",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-410c",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-410b",
+      "to_name": "Ready to release",
+      "event": "E-430",
+      "guard": "seal_valid",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-410d",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-410e",
+      "to_name": "Handoff complete",
+      "event": "E-510",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-415a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-415b",
+      "to_name": "Checklist reviewed",
+      "event": "E-450",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-415b",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-415c",
+      "to_name": "Checklist filed",
+      "event": "E-460",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-420a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-420b",
+      "to_name": "Adjusted",
+      "event": "E-420",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-430a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-430b",
+      "to_name": "Verified",
+      "event": "E-430",
+      "guard": "seal_valid",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-430b",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-430c",
+      "to_name": "Result applied",
+      "event": "E-540",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-430c",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-430d",
+      "to_name": "Result acknowledged",
+      "event": "E-550",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "ST-430d",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-430e",
+      "to_name": "Check filed",
+      "event": "E-560",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-410a",
+      "type": "COMPOSED_OF",
+      "to": "C-460",
+      "to_name": "Crew Note",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-410a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-410b",
+      "to_name": "Released",
+      "event": "E-440",
+      "guard": "seal_valid",
+      "effect": "SA-440",
+      "props": {}
+    },
+    {
+      "from": "VS-410b",
+      "type": "COMPOSED_OF",
+      "to": "C-460",
+      "to_name": "Crew Note",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-410b",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-410c",
+      "to_name": "Archived",
+      "event": "E-470",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-410c",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-410d",
+      "to_name": "Receipt delivered",
+      "event": "E-520",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-410d",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-410e",
+      "to_name": "Departure closed",
+      "event": "E-530",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-415a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-415b",
+      "to_name": "Crew review",
+      "event": "E-480",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "VS-415b",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-415c",
+      "to_name": "Crew confirmation",
+      "event": "E-490",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

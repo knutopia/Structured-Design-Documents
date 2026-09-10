@@ -1,0 +1,130 @@
+[
+  {
+    "source": "/home/knut/projects/sdd/bundle/v0.1/examples/place_viewstate_transition.sdd",
+    "detailId": "compact",
+    "decorators": "none",
+    "format": "svg",
+    "output": "/home/knut/projects/sdd/examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/compact_detail/place_viewstate_transition.ui_contracts.svg",
+    "diagnostics": []
+  },
+  {
+    "source": "/home/knut/projects/sdd/bundle/v0.1/examples/place_viewstate_transition.sdd",
+    "detailId": "compact",
+    "decorators": "none",
+    "format": "png",
+    "output": "/home/knut/projects/sdd/examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/compact_detail/place_viewstate_transition.ui_contracts.png",
+    "diagnostics": []
+  },
+  {
+    "source": "/home/knut/projects/sdd/bundle/v0.1/examples/place_viewstate_transition.sdd",
+    "detailId": "detailed",
+    "decorators": "none",
+    "format": "svg",
+    "output": "/home/knut/projects/sdd/examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.svg",
+    "diagnostics": []
+  },
+  {
+    "source": "/home/knut/projects/sdd/bundle/v0.1/examples/place_viewstate_transition.sdd",
+    "detailId": "detailed",
+    "decorators": "none",
+    "format": "png",
+    "output": "/home/knut/projects/sdd/examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.png",
+    "diagnostics": []
+  },
+  {
+    "source": "/home/knut/projects/sdd/bundle/v0.1/examples/ui_state_fallback.sdd",
+    "detailId": "compact",
+    "decorators": "none",
+    "format": "svg",
+    "output": "/home/knut/projects/sdd/examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/compact_detail/ui_state_fallback.ui_contracts.svg",
+    "diagnostics": []
+  },
+  {
+    "source": "/home/knut/projects/sdd/bundle/v0.1/examples/ui_state_fallback.sdd",
+    "detailId": "compact",
+    "decorators": "none",
+    "format": "png",
+    "output": "/home/knut/projects/sdd/examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/compact_detail/ui_state_fallback.ui_contracts.png",
+    "diagnostics": []
+  },
+  {
+    "source": "/home/knut/projects/sdd/bundle/v0.1/examples/ui_state_fallback.sdd",
+    "detailId": "detailed",
+    "decorators": "none",
+    "format": "svg",
+    "output": "/home/knut/projects/sdd/examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts.svg",
+    "diagnostics": []
+  },
+  {
+    "source": "/home/knut/projects/sdd/bundle/v0.1/examples/ui_state_fallback.sdd",
+    "detailId": "detailed",
+    "decorators": "none",
+    "format": "png",
+    "output": "/home/knut/projects/sdd/examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts.png",
+    "diagnostics": []
+  },
+  {
+    "source": "docs/doc_site/small_app_example/small_app.sdd",
+    "detailId": "compact",
+    "decorators": "none",
+    "format": "svg",
+    "output": "docs/doc_site/small_app_example/small_app.ui_contracts.compact.svg",
+    "diagnostics": []
+  },
+  {
+    "source": "docs/doc_site/small_app_example/small_app.sdd",
+    "detailId": "compact",
+    "decorators": "none",
+    "format": "png",
+    "output": "docs/doc_site/small_app_example/small_app.ui_contracts.compact.png",
+    "diagnostics": []
+  },
+  {
+    "source": "docs/doc_site/small_app_example/small_app.sdd",
+    "detailId": "detailed",
+    "decorators": "none",
+    "format": "svg",
+    "output": "docs/doc_site/small_app_example/small_app.ui_contracts.detailed.svg",
+    "diagnostics": []
+  },
+  {
+    "source": "docs/doc_site/small_app_example/small_app.sdd",
+    "detailId": "detailed",
+    "decorators": "none",
+    "format": "png",
+    "output": "docs/doc_site/small_app_example/small_app.ui_contracts.detailed.png",
+    "diagnostics": []
+  },
+  {
+    "source": "docs/doc_site/sdd-skill/examples/shop_sched_exploration_3.sdd",
+    "detailId": "compact",
+    "decorators": "none",
+    "format": "svg",
+    "output": "docs/doc_site/sdd-skill/examples/shop_sched_exploration_3.ui_contracts.compact.svg",
+    "diagnostics": []
+  },
+  {
+    "source": "docs/doc_site/sdd-skill/examples/shop_sched_exploration_3.sdd",
+    "detailId": "compact",
+    "decorators": "none",
+    "format": "png",
+    "output": "docs/doc_site/sdd-skill/examples/shop_sched_exploration_3.ui_contracts.compact.png",
+    "diagnostics": []
+  },
+  {
+    "source": "docs/doc_site/sdd-skill/examples/shop_sched_exploration_3.sdd",
+    "detailId": "detailed",
+    "decorators": "none",
+    "format": "svg",
+    "output": "docs/doc_site/sdd-skill/examples/shop_sched_exploration_3.ui_contracts.detailed.svg",
+    "diagnostics": []
+  },
+  {
+    "source": "docs/doc_site/sdd-skill/examples/shop_sched_exploration_3.sdd",
+    "detailId": "detailed",
+    "decorators": "none",
+    "format": "png",
+    "output": "docs/doc_site/sdd-skill/examples/shop_sched_exploration_3.ui_contracts.detailed.png",
+    "diagnostics": []
+  }
+]

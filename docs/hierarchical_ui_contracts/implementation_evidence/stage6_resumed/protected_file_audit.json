@@ -1,0 +1,20 @@
+{
+  "protectedSourceHashes": {
+    "checked": 49,
+    "changed": []
+  },
+  "referenceHashes": {
+    "checked": 49,
+    "changed": []
+  },
+  "goldenHashes": {
+    "checked": 156,
+    "changed": []
+  },
+  "fixtureSha256": "fec1fc5b356be868944b67eb2d6134bd6d70f0ca2f290fc515662f061f45fbff",
+  "allowedIntegration": [
+    "contracts.ts: enclosure tone and sheet metadata",
+    "microLayout.ts: existing UI header measurement dispatch",
+    "svgBackend.ts: existing UI container paint dispatch plus view-only explicit arrow paint requested in stage_6_visual_issues_solutions.md"
+  ]
+}

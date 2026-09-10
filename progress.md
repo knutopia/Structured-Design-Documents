@@ -3,7 +3,6 @@
 ## Open Issues
 
 -doc examples updates to new routing, nodes
--containment display for ui_contracts
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -30,6 +29,33 @@ z
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
 - Caught 2 missing artifact updates
+
+## Wed 9-9
+
+- Cleaned ui_contracts guide doc page
+
+## Tue 9-8
+
+- Hierarchical ui_contracts implemented, reviewing details
+- Restored broken skill doc page
+- Created ui contracts renderer guide
+- Reduced redundancy in diagram
+- Emphasized shared node
+- Added emphasized node to ui_contracts
+- Components without hierarchy
+- Added gen-x script for canonical examples
+- Cleaned up ui_contracts doc text
+- Moved ui_contracts guide to doc site
+
+## Mon 9-7
+
+- Implementing hierarchical ui_contracts
+- Manually debugging routing
+
+## Sun 9-6
+
+- Designing hierarchical ui_contracts concepts with Astra
+- Updated some example diagrams to show --decorators
 
 ## Sat 9-5
 

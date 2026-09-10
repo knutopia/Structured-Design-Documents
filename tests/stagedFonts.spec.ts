@@ -24,6 +24,16 @@ describe("staged renderer font faces", () => {
     expect(font.version).toBe(expectedVersion);
   });
 
+  it.each([
+    ["PublicSans-Bold.woff", "Version 2.001; ttfautohint (v1.8.3)"],
+    ["PublicSans-Bold.otf", "Version 2.001"]
+  ])("vendors an official static weight-700 %s face", (fileName, expectedVersion) => {
+    const font = fontkit.openSync(path.join(fontsRoot, fileName));
+    expect(font.postscriptName).toBe("PublicSans-Bold");
+    expect(font["OS/2"].usWeightClass).toBe(700);
+    expect(font.version).toBe(expectedVersion);
+  });
+
   it("measures weight-600 text with Semibold metrics", () => {
     const theme = getRendererTheme("default");
     const measureText = createTextMeasurementService(theme.fontFaces);

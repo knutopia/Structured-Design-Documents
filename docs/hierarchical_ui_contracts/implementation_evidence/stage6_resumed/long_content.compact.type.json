@@ -1,0 +1,5363 @@
+{
+  "detail": "compact",
+  "decorators": "type",
+  "model": {
+    "overview": [
+      {
+        "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+        "node": {
+          "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "semanticId": "C-100",
+          "scopeId": "overview",
+          "role": "hierarchy",
+          "path": [],
+          "title": "Form with a long descriptive name that wraps",
+          "nodeType": "Component",
+          "attributes": []
+        },
+        "children": [],
+        "title": "Component hierarchy · Form with a long descriptive name that wraps"
+      }
+    ],
+    "scopes": [
+      {
+        "id": "scope:P-100",
+        "kind": "place",
+        "title": "Place scope · A long place title that must expand its container title bar without widening any semantic node",
+        "focal": {
+          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D",
+          "semanticId": "P-100",
+          "scopeId": "scope:P-100",
+          "role": "focal",
+          "path": [],
+          "title": "A long place title that must expand its container title bar without widening any semantic node",
+          "nodeType": "Place",
+          "attributes": [
+            {
+              "groupId": "primary_nav",
+              "label": "Primary navigation",
+              "value": "true"
+            }
+          ]
+        },
+        "parents": [],
+        "children": [],
+        "containment": [],
+        "sequences": [
+          {
+            "id": "scope:P-100:sequence:primary",
+            "nodes": [
+              {
+                "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+                "semanticId": "VS-100",
+                "scopeId": "scope:P-100",
+                "role": "sequence",
+                "path": [
+                  "scope:P-100:sequence:primary"
+                ],
+                "title": "A deliberately long view state name that wraps across several native lines",
+                "nodeType": "ViewState",
+                "attributes": []
+              },
+              {
+                "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+                "semanticId": "VS-101",
+                "scopeId": "scope:P-100",
+                "role": "sequence",
+                "path": [
+                  "scope:P-100:sequence:primary"
+                ],
+                "title": "Ready",
+                "nodeType": "ViewState",
+                "attributes": []
+              }
+            ],
+            "edges": [
+              {
+                "id": "scope:P-100:sequence:primary:relationship:%5B%22VS-100%22%2C%22TRANSITIONS_TO%22%2C%22VS-101%22%5D:0",
+                "relationshipId": "relationship:%5B%22VS-100%22%2C%22TRANSITIONS_TO%22%2C%22VS-101%22%5D:0",
+                "from": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+                "to": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+                "kind": "transition",
+                "label": "[A long event name used in complete transition annotations] {all_records_confirmed_and_review_completed} / SA-100",
+                "style": "solid"
+              }
+            ]
+          }
+        ],
+        "compositions": [
+          {
+            "id": "scope:P-100:composition:VS-100",
+            "source": {
+              "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+              "semanticId": "VS-100",
+              "scopeId": "scope:P-100",
+              "role": "composition_source",
+              "path": [
+                "scope:P-100:composition:VS-100"
+              ],
+              "title": "A deliberately long view state name that wraps across several native lines",
+              "nodeType": "ViewState",
+              "attributes": []
+            },
+            "targets": [
+              {
+                "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                "semanticId": "C-100",
+                "scopeId": "scope:P-100",
+                "role": "composition_target",
+                "path": [
+                  "scope:P-100:composition:VS-100",
+                  "relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0"
+                ],
+                "title": "Form with a long descriptive name that wraps",
+                "nodeType": "Component",
+                "attributes": []
+              }
+            ],
+            "edges": [
+              {
+                "id": "scope:P-100:composition:VS-100:relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+                "relationshipId": "relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+                "from": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+                "to": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                "kind": "composition",
+                "label": "composed of",
+                "style": "solid"
+              }
+            ]
+          },
+          {
+            "id": "scope:P-100:composition:VS-101",
+            "source": {
+              "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+              "semanticId": "VS-101",
+              "scopeId": "scope:P-100",
+              "role": "composition_source",
+              "path": [
+                "scope:P-100:composition:VS-101"
+              ],
+              "title": "Ready",
+              "nodeType": "ViewState",
+              "attributes": []
+            },
+            "targets": [
+              {
+                "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                "semanticId": "C-100",
+                "scopeId": "scope:P-100",
+                "role": "composition_target",
+                "path": [
+                  "scope:P-100:composition:VS-101",
+                  "relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0"
+                ],
+                "title": "Form with a long descriptive name that wraps",
+                "nodeType": "Component",
+                "attributes": []
+              }
+            ],
+            "edges": [
+              {
+                "id": "scope:P-100:composition:VS-101:relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+                "relationshipId": "relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+                "from": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+                "to": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                "kind": "composition",
+                "label": "composed of",
+                "style": "solid"
+              }
+            ]
+          }
+        ],
+        "contracts": []
+      },
+      {
+        "id": "scope:C-100",
+        "kind": "component",
+        "title": "Component scope · Form with a long descriptive name that wraps",
+        "focal": {
+          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+          "semanticId": "C-100",
+          "scopeId": "scope:C-100",
+          "role": "focal",
+          "path": [],
+          "title": "Form with a long descriptive name that wraps",
+          "nodeType": "Component",
+          "attributes": []
+        },
+        "parents": [],
+        "children": [],
+        "containment": [],
+        "sequences": [],
+        "compositions": [],
+        "contracts": []
+      }
+    ],
+    "register": {
+      "id": "target-register",
+      "title": "Referenced targets",
+      "nodes": []
+    },
+    "occurrences": [
+      {
+        "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+        "semanticId": "C-100",
+        "scopeId": "overview",
+        "role": "hierarchy",
+        "path": [],
+        "title": "Form with a long descriptive name that wraps",
+        "nodeType": "Component",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D",
+        "semanticId": "P-100",
+        "scopeId": "scope:P-100",
+        "role": "focal",
+        "path": [],
+        "title": "A long place title that must expand its container title bar without widening any semantic node",
+        "nodeType": "Place",
+        "attributes": [
+          {
+            "groupId": "primary_nav",
+            "label": "Primary navigation",
+            "value": "true"
+          }
+        ]
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+        "semanticId": "VS-100",
+        "scopeId": "scope:P-100",
+        "role": "sequence",
+        "path": [
+          "scope:P-100:sequence:primary"
+        ],
+        "title": "A deliberately long view state name that wraps across several native lines",
+        "nodeType": "ViewState",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+        "semanticId": "VS-101",
+        "scopeId": "scope:P-100",
+        "role": "sequence",
+        "path": [
+          "scope:P-100:sequence:primary"
+        ],
+        "title": "Ready",
+        "nodeType": "ViewState",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+        "semanticId": "VS-100",
+        "scopeId": "scope:P-100",
+        "role": "composition_source",
+        "path": [
+          "scope:P-100:composition:VS-100"
+        ],
+        "title": "A deliberately long view state name that wraps across several native lines",
+        "nodeType": "ViewState",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+        "semanticId": "C-100",
+        "scopeId": "scope:P-100",
+        "role": "composition_target",
+        "path": [
+          "scope:P-100:composition:VS-100",
+          "relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0"
+        ],
+        "title": "Form with a long descriptive name that wraps",
+        "nodeType": "Component",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+        "semanticId": "VS-101",
+        "scopeId": "scope:P-100",
+        "role": "composition_source",
+        "path": [
+          "scope:P-100:composition:VS-101"
+        ],
+        "title": "Ready",
+        "nodeType": "ViewState",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+        "semanticId": "C-100",
+        "scopeId": "scope:P-100",
+        "role": "composition_target",
+        "path": [
+          "scope:P-100:composition:VS-101",
+          "relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0"
+        ],
+        "title": "Form with a long descriptive name that wraps",
+        "nodeType": "Component",
+        "attributes": []
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+        "semanticId": "C-100",
+        "scopeId": "scope:C-100",
+        "role": "focal",
+        "path": [],
+        "title": "Form with a long descriptive name that wraps",
+        "nodeType": "Component",
+        "attributes": []
+      }
+    ],
+    "relationships": [
+      {
+        "id": "relationship:%5B%22P-100%22%2C%22CONTAINS%22%2C%22VS-100%22%5D:0",
+        "from": "P-100",
+        "to": "VS-100",
+        "type": "CONTAINS",
+        "kind": "ownership",
+        "style": "solid",
+        "sourceOrder": 0
+      },
+      {
+        "id": "relationship:%5B%22P-100%22%2C%22CONTAINS%22%2C%22VS-101%22%5D:0",
+        "from": "P-100",
+        "to": "VS-101",
+        "type": "CONTAINS",
+        "kind": "ownership",
+        "style": "solid",
+        "sourceOrder": 1
+      },
+      {
+        "id": "relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+        "from": "VS-100",
+        "to": "C-100",
+        "type": "COMPOSED_OF",
+        "kind": "composition",
+        "label": "composed of",
+        "style": "solid",
+        "sourceOrder": 2
+      },
+      {
+        "id": "relationship:%5B%22VS-100%22%2C%22TRANSITIONS_TO%22%2C%22VS-101%22%5D:0",
+        "from": "VS-100",
+        "to": "VS-101",
+        "type": "TRANSITIONS_TO",
+        "kind": "transition",
+        "label": "[A long event name used in complete transition annotations] {all_records_confirmed_and_review_completed} / SA-100",
+        "style": "solid",
+        "sourceOrder": 3
+      },
+      {
+        "id": "relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+        "from": "VS-101",
+        "to": "C-100",
+        "type": "COMPOSED_OF",
+        "kind": "composition",
+        "label": "composed of",
+        "style": "solid",
+        "sourceOrder": 4
+      }
+    ],
+    "structuralRelationshipIds": [
+      "relationship:%5B%22P-100%22%2C%22CONTAINS%22%2C%22VS-100%22%5D:0",
+      "relationship:%5B%22P-100%22%2C%22CONTAINS%22%2C%22VS-101%22%5D:0"
+    ],
+    "visibleSemanticNodeIds": [
+      "P-100",
+      "VS-100",
+      "VS-101",
+      "C-100"
+    ],
+    "omittedPlaceIds": [],
+    "omissions": [
+      {
+        "id": "D-100",
+        "reason": "detail_policy"
+      },
+      {
+        "id": "E-100",
+        "reason": "detail_policy"
+      },
+      {
+        "id": "SA-100",
+        "reason": "detail_policy"
+      },
+      {
+        "id": "relationship:%5B%22C-100%22%2C%22BINDS_TO%22%2C%22D-100%22%5D:0",
+        "reason": "detail_policy"
+      },
+      {
+        "id": "relationship:%5B%22C-100%22%2C%22EMITS%22%2C%22E-100%22%5D:0",
+        "reason": "detail_policy"
+      }
+    ],
+    "notes": [],
+    "diagnostics": []
+  },
+  "issues": [],
+  "coverage": [],
+  "occurrences": [
+    [
+      "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+      "C-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D",
+      "P-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+      "VS-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+      "VS-101"
+    ],
+    [
+      "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+      "VS-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+      "C-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+      "VS-101"
+    ],
+    [
+      "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+      "C-100"
+    ],
+    [
+      "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+      "C-100"
+    ]
+  ],
+  "relationships": [
+    [
+      "relationship:%5B%22VS-100%22%2C%22TRANSITIONS_TO%22%2C%22VS-101%22%5D:0",
+      [
+        "scope:P-100:sequence:primary:relationship:%5B%22VS-100%22%2C%22TRANSITIONS_TO%22%2C%22VS-101%22%5D:0"
+      ]
+    ],
+    [
+      "relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+      [
+        "scope:P-100:composition:VS-100:relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0"
+      ]
+    ],
+    [
+      "relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+      [
+        "scope:P-100:composition:VS-101:relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0"
+      ]
+    ]
+  ],
+  "rendererScene": {
+    "viewId": "ui_contracts",
+    "detailId": "compact",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "headerBandHeight": 0
+      },
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [],
+              "sharedNode": {
+                "title": "Form with a long descriptive name that wraps",
+                "decoratorMode": {
+                  "id": "type",
+                  "showNodeType": true,
+                  "showNodeId": false
+                },
+                "nodeType": "Component",
+                "nodeId": "C-100",
+                "attributes": []
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north"
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south"
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east"
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west"
+            }
+          ],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Form with a long descriptive name that wraps",
+              "tone": "hierarchy"
+            }
+          }
+        },
+        {
+          "kind": "container",
+          "id": "scope:P-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D",
+              "role": "place",
+              "primitive": "card",
+              "classes": [
+                "semantic_node"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [],
+              "sharedNode": {
+                "title": "A long place title that must expand its container title bar without widening any semantic node",
+                "decoratorMode": {
+                  "id": "type",
+                  "showNodeType": true,
+                  "showNodeId": false
+                },
+                "nodeType": "Place",
+                "nodeId": "P-100",
+                "attributes": [
+                  {
+                    "groupId": "primary_nav",
+                    "label": "Primary navigation",
+                    "value": "true"
+                  }
+                ]
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:sequence:primary",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 79.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "A deliberately long view state name that wraps across several native lines",
+                    "decoratorMode": {
+                      "id": "type",
+                      "showNodeType": true,
+                      "showNodeId": false
+                    },
+                    "nodeType": "ViewState",
+                    "nodeId": "VS-100",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Ready",
+                    "decoratorMode": {
+                      "id": "type",
+                      "showNodeType": true,
+                      "showNodeId": false
+                    },
+                    "nodeType": "ViewState",
+                    "nodeId": "VS-101",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:composition:VS-100",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "A deliberately long view state name that wraps across several native lines",
+                    "decoratorMode": {
+                      "id": "type",
+                      "showNodeType": true,
+                      "showNodeId": false
+                    },
+                    "nodeType": "ViewState",
+                    "nodeId": "VS-100",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Form with a long descriptive name that wraps",
+                    "decoratorMode": {
+                      "id": "type",
+                      "showNodeType": true,
+                      "showNodeId": false
+                    },
+                    "nodeType": "Component",
+                    "nodeId": "C-100",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 45.5
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:composition:VS-101",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Ready",
+                    "decoratorMode": {
+                      "id": "type",
+                      "showNodeType": true,
+                      "showNodeId": false
+                    },
+                    "nodeType": "ViewState",
+                    "nodeId": "VS-101",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Form with a long descriptive name that wraps",
+                    "decoratorMode": {
+                      "id": "type",
+                      "showNodeType": true,
+                      "showNodeId": false
+                    },
+                    "nodeType": "Component",
+                    "nodeId": "C-100",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north"
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south"
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east"
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west"
+            }
+          ],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Place scope · A long place title that must expand its container title bar without widening any semantic node"
+            }
+          }
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Form with a long descriptive name that wraps",
+                    "decoratorMode": {
+                      "id": "type",
+                      "showNodeType": true,
+                      "showNodeId": false
+                    },
+                    "nodeType": "Component",
+                    "nodeId": "C-100",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north"
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south"
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east"
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west"
+                    }
+                  ]
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north"
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south"
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east"
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west"
+                }
+              ]
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north"
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south"
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east"
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west"
+            }
+          ],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Form with a long descriptive name that wraps"
+            }
+          }
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north"
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south"
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east"
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west"
+        }
+      ],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      }
+    },
+    "edges": [
+      {
+        "id": "scope:P-100:sequence:primary:relationship:%5B%22VS-100%22%2C%22TRANSITIONS_TO%22%2C%22VS-101%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+          "portId": "east"
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+          "portId": "west"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "[A long event name used in complete transition annotations] {all_records_confirmed_and_review_completed} / SA-100",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "scope:P-100:composition:VS-100:relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+          "portId": "east"
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+          "portId": "west"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "composed of",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "scope:P-100:composition:VS-101:relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+          "portId": "east"
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+          "portId": "west"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "composed of",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "measuredScene": {
+    "viewId": "ui_contracts",
+    "detailId": "compact",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      },
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Form with a long descriptive name that wraps",
+              "tone": "hierarchy"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component hierarchy · Form with a long descriptive name that wraps"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 321.15,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node",
+                "shared-node",
+                "shared-node-dense"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "widthBand": "standard",
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "Component"
+                  ],
+                  "x": 15.5,
+                  "y": 1.5,
+                  "width": 54.58,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Form with a long",
+                    "descriptive name that",
+                    "wraps"
+                  ],
+                  "x": 15.5,
+                  "y": 26.5,
+                  "width": 156.768,
+                  "height": 57,
+                  "lineHeight": 19,
+                  "region": "primary"
+                }
+              ],
+              "sharedNode": {
+                "density": "dense",
+                "decorator": {
+                  "x": 1.5,
+                  "y": 1.5,
+                  "width": 221,
+                  "height": 19,
+                  "items": [
+                    {
+                      "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    }
+                  ]
+                },
+                "body": {
+                  "x": 1.5,
+                  "y": 20.5,
+                  "width": 221,
+                  "height": 69,
+                  "title": {
+                    "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Form with a long",
+                      "descriptive name that",
+                      "wraps"
+                    ],
+                    "x": 15.5,
+                    "y": 26.5,
+                    "width": 156.768,
+                    "height": 57,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  "attributeGroups": []
+                }
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 91
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 45.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 45.5
+                }
+              ],
+              "overflow": {
+                "status": "fits"
+              },
+              "width": 224,
+              "height": 91
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "width": 351.15,
+          "height": 142
+        },
+        {
+          "kind": "container",
+          "id": "scope:P-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Place scope · A long place title that must expand its container title bar without widening any semantic node"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:P-100:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Place scope · A long place title that must expand its container title bar without widening any semantic node"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 502.055,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D",
+              "role": "place",
+              "primitive": "card",
+              "classes": [
+                "semantic_node",
+                "shared-node",
+                "shared-node-dense"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "widthBand": "standard",
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [
+                {
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__decorator_type",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "Place"
+                  ],
+                  "x": 15.5,
+                  "y": 1.5,
+                  "width": 26.32,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "A long place title that",
+                    "must expand its container",
+                    "title bar without widening",
+                    "any semantic node"
+                  ],
+                  "x": 15.5,
+                  "y": 26.5,
+                  "width": 186.864,
+                  "height": 76,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__attribute_0_label",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_attribute_label",
+                  "lines": [
+                    "Primary Navigation"
+                  ],
+                  "x": 15.5,
+                  "y": 106.5,
+                  "width": 88.325,
+                  "height": 12,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__attribute_0_value_0",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_attribute_value",
+                  "lines": [
+                    "true"
+                  ],
+                  "x": 15.5,
+                  "y": 120.5,
+                  "width": 23.124,
+                  "height": 14,
+                  "lineHeight": 14,
+                  "region": "primary"
+                }
+              ],
+              "sharedNode": {
+                "density": "dense",
+                "decorator": {
+                  "x": 1.5,
+                  "y": 1.5,
+                  "width": 221,
+                  "height": 19,
+                  "items": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Place"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.32,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    }
+                  ]
+                },
+                "body": {
+                  "x": 1.5,
+                  "y": 20.5,
+                  "width": 221,
+                  "height": 120,
+                  "title": {
+                    "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "A long place title that",
+                      "must expand its container",
+                      "title bar without widening",
+                      "any semantic node"
+                    ],
+                    "x": 15.5,
+                    "y": 26.5,
+                    "width": 186.864,
+                    "height": 76,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  "attributeGroups": [
+                    {
+                      "id": "primary_nav",
+                      "label": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__attribute_0_label",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_label",
+                        "lines": [
+                          "Primary Navigation"
+                        ],
+                        "x": 15.5,
+                        "y": 106.5,
+                        "width": 88.325,
+                        "height": 12,
+                        "lineHeight": 12,
+                        "region": "primary"
+                      },
+                      "values": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__attribute_0_value_0",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_value",
+                          "lines": [
+                            "true"
+                          ],
+                          "x": 15.5,
+                          "y": 120.5,
+                          "width": 23.124,
+                          "height": 14,
+                          "lineHeight": 14,
+                          "region": "primary"
+                        }
+                      ],
+                      "x": 15.5,
+                      "y": 106.5,
+                      "width": 193,
+                      "height": 28
+                    }
+                  ]
+                }
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 142
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 71
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 71
+                }
+              ],
+              "overflow": {
+                "status": "fits"
+              },
+              "width": 224,
+              "height": 142
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:sequence:primary",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 79.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "A deliberately long view",
+                        "state name that wraps",
+                        "across several native lines"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 188.616,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "A deliberately long view",
+                          "state name that wraps",
+                          "across several native lines"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 188.616,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 91
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Ready"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 45.928,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Ready"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 45.928,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 472,
+              "height": 170.5
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:composition:VS-100",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "A deliberately long view",
+                        "state name that wraps",
+                        "across several native lines"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 188.616,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "A deliberately long view",
+                          "state name that wraps",
+                          "across several native lines"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 188.616,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 45.5,
+                      "x": 224,
+                      "y": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 45.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 91
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form with a long",
+                        "descriptive name that",
+                        "wraps"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 156.768,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Form with a long",
+                          "descriptive name that",
+                          "wraps"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 156.768,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 45.5,
+                      "x": 0,
+                      "y": 45.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 91
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 472,
+              "height": 91
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:composition:VS-101",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Ready"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 45.928,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Ready"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 45.928,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form with a long",
+                        "descriptive name that",
+                        "wraps"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 156.768,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Form with a long",
+                          "descriptive name that",
+                          "wraps"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 156.768,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 91
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 472,
+              "height": 98.5
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "width": 532.055,
+          "height": 601
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Form with a long descriptive name that wraps"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:C-100:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component scope · Form with a long descriptive name that wraps"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 305.015,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form with a long",
+                        "descriptive name that",
+                        "wraps"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 156.768,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Form with a long",
+                          "descriptive name that",
+                          "wraps"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 156.768,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 45.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 91
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 0,
+                  "y": 0
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 0
+                }
+              ],
+              "width": 224,
+              "height": 91
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 0,
+              "y": 0
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 0
+            }
+          ],
+          "width": 335.015,
+          "height": 142
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "width": 564.055,
+      "height": 973
+    },
+    "edges": [
+      {
+        "id": "scope:P-100:sequence:primary:relationship:%5B%22VS-100%22%2C%22TRANSITIONS_TO%22%2C%22VS-101%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+          "portId": "east",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+          "portId": "west",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "[A long event name used in",
+            "complete transition annotations]",
+            "{all_records_confirmed_and_rev",
+            "iew_completed}",
+            "/ SA-100"
+          ],
+          "width": 191.85,
+          "height": 78,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "scope:P-100:composition:VS-100:relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+          "portId": "east",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+          "portId": "west",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "composed of"
+          ],
+          "width": 83.622,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "scope:P-100:composition:VS-101:relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+          "portId": "east",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+          "portId": "west",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "composed of"
+          ],
+          "width": 83.622,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "positionedScene": {
+    "viewId": "ui_contracts",
+    "detailId": "compact",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "ui_contracts_group",
+      "primitive": "stack",
+      "classes": [],
+      "viewMetadata": {
+        "uiContracts": {
+          "kind": "sheet"
+        }
+      },
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 28,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component hierarchy · Form with a long descriptive name that wraps",
+              "tone": "hierarchy"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component hierarchy · Form with a long descriptive name that wraps"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 321.15,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D",
+              "role": "component",
+              "primitive": "card",
+              "classes": [
+                "semantic_node",
+                "shared-node",
+                "shared-node-dense"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "widthBand": "standard",
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "Component"
+                  ],
+                  "x": 15.5,
+                  "y": 1.5,
+                  "width": 54.58,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "Form with a long",
+                    "descriptive name that",
+                    "wraps"
+                  ],
+                  "x": 15.5,
+                  "y": 26.5,
+                  "width": 156.768,
+                  "height": 57,
+                  "lineHeight": 19,
+                  "region": "primary"
+                }
+              ],
+              "sharedNode": {
+                "density": "dense",
+                "decorator": {
+                  "x": 1.5,
+                  "y": 1.5,
+                  "width": 221,
+                  "height": 19,
+                  "items": [
+                    {
+                      "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    }
+                  ]
+                },
+                "body": {
+                  "x": 1.5,
+                  "y": 20.5,
+                  "width": 221,
+                  "height": 69,
+                  "title": {
+                    "id": "occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-100%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Form with a long",
+                      "descriptive name that",
+                      "wraps"
+                    ],
+                    "x": 15.5,
+                    "y": 26.5,
+                    "width": 156.768,
+                    "height": 57,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  "attributeGroups": []
+                }
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 91
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 45.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 45.5
+                }
+              ],
+              "overflow": {
+                "status": "fits"
+              },
+              "x": 32,
+              "y": 51,
+              "width": 224,
+              "height": 91
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 175.575,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 175.575,
+              "y": 142
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 351.15,
+              "y": 71
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 71
+            }
+          ],
+          "x": 16,
+          "y": 16,
+          "width": 351.15,
+          "height": 142
+        },
+        {
+          "kind": "container",
+          "id": "scope:P-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Place scope · A long place title that must expand its container title bar without widening any semantic node"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:P-100:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Place scope · A long place title that must expand its container title bar without widening any semantic node"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 502.055,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "node",
+              "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D",
+              "role": "place",
+              "primitive": "card",
+              "classes": [
+                "semantic_node",
+                "shared-node",
+                "shared-node-dense"
+              ],
+              "widthPolicy": {
+                "preferred": "standard",
+                "allowed": [
+                  "standard"
+                ]
+              },
+              "widthBand": "standard",
+              "overflowPolicy": {
+                "kind": "grow_height"
+              },
+              "content": [
+                {
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__decorator_type",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_decorator",
+                  "lines": [
+                    "Place"
+                  ],
+                  "x": 15.5,
+                  "y": 1.5,
+                  "width": 26.32,
+                  "height": 19,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__title",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_title",
+                  "lines": [
+                    "A long place title that",
+                    "must expand its container",
+                    "title bar without widening",
+                    "any semantic node"
+                  ],
+                  "x": 15.5,
+                  "y": 26.5,
+                  "width": 186.864,
+                  "height": 76,
+                  "lineHeight": 19,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__attribute_0_label",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_attribute_label",
+                  "lines": [
+                    "Primary Navigation"
+                  ],
+                  "x": 15.5,
+                  "y": 106.5,
+                  "width": 88.325,
+                  "height": 12,
+                  "lineHeight": 12,
+                  "region": "primary"
+                },
+                {
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__attribute_0_value_0",
+                  "kind": "text",
+                  "textStyleRole": "shared_node_attribute_value",
+                  "lines": [
+                    "true"
+                  ],
+                  "x": 15.5,
+                  "y": 120.5,
+                  "width": 23.124,
+                  "height": 14,
+                  "lineHeight": 14,
+                  "region": "primary"
+                }
+              ],
+              "sharedNode": {
+                "density": "dense",
+                "decorator": {
+                  "x": 1.5,
+                  "y": 1.5,
+                  "width": 221,
+                  "height": 19,
+                  "items": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Place"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.32,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    }
+                  ]
+                },
+                "body": {
+                  "x": 1.5,
+                  "y": 20.5,
+                  "width": 221,
+                  "height": 120,
+                  "title": {
+                    "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "A long place title that",
+                      "must expand its container",
+                      "title bar without widening",
+                      "any semantic node"
+                    ],
+                    "x": 15.5,
+                    "y": 26.5,
+                    "width": 186.864,
+                    "height": 76,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  },
+                  "attributeGroups": [
+                    {
+                      "id": "primary_nav",
+                      "label": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__attribute_0_label",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_attribute_label",
+                        "lines": [
+                          "Primary Navigation"
+                        ],
+                        "x": 15.5,
+                        "y": 106.5,
+                        "width": 88.325,
+                        "height": 12,
+                        "lineHeight": 12,
+                        "region": "primary"
+                      },
+                      "values": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22focal%22%2C%22P-100%22%5D__attribute_0_value_0",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_attribute_value",
+                          "lines": [
+                            "true"
+                          ],
+                          "x": 15.5,
+                          "y": 120.5,
+                          "width": 23.124,
+                          "height": 14,
+                          "lineHeight": 14,
+                          "region": "primary"
+                        }
+                      ],
+                      "x": 15.5,
+                      "y": 106.5,
+                      "width": 193,
+                      "height": 28
+                    }
+                  ]
+                }
+              },
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 142
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 71
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 71
+                }
+              ],
+              "overflow": {
+                "status": "fits"
+              },
+              "x": 32,
+              "y": 221,
+              "width": 224,
+              "height": 142
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:sequence:primary",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 79.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "A deliberately long view",
+                        "state name that wraps",
+                        "across several native lines"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 188.616,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "A deliberately long view",
+                          "state name that wraps",
+                          "across several native lines"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 188.616,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 458.5,
+                  "width": 224,
+                  "height": 91
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Ready"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 45.928,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Ready"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 45.928,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 471.85,
+                  "y": 458.5,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 331.925,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 331.925,
+                  "y": 170.5
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 663.85,
+                  "y": 85.25
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 85.25
+                }
+              ],
+              "x": 32,
+              "y": 379,
+              "width": 663.85,
+              "height": 170.5
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:composition:VS-100",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "A deliberately long view",
+                        "state name that wraps",
+                        "across several native lines"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 188.616,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "A deliberately long view",
+                          "state name that wraps",
+                          "across several native lines"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 188.616,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 45.5,
+                      "x": 224,
+                      "y": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 45.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 565.5,
+                  "width": 224,
+                  "height": 91
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form with a long",
+                        "descriptive name that",
+                        "wraps"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 156.768,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Form with a long",
+                          "descriptive name that",
+                          "wraps"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 156.768,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 45.5,
+                      "x": 0,
+                      "y": 45.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 363.622,
+                  "y": 565.5,
+                  "width": 224,
+                  "height": 91
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 277.811,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 277.811,
+                  "y": 91
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 555.622,
+                  "y": 45.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 45.5
+                }
+              ],
+              "x": 32,
+              "y": 565.5,
+              "width": 555.622,
+              "height": 91
+            },
+            {
+              "kind": "container",
+              "id": "scope:P-100:composition:VS-101",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "layered",
+                "direction": "horizontal",
+                "gap": 24,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+                  "role": "viewstate",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "ViewState"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 48.61,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Ready"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 45.928,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "ViewState"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 48.61,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Ready"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 45.928,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 53
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 680,
+                  "width": 224,
+                  "height": 53
+                },
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form with a long",
+                        "descriptive name that",
+                        "wraps"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 156.768,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Form with a long",
+                          "descriptive name that",
+                          "wraps"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 156.768,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 363.622,
+                  "y": 680,
+                  "width": 224,
+                  "height": 91
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 277.811,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 277.811,
+                  "y": 98.5
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 555.622,
+                  "y": 49.25
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 49.25
+                }
+              ],
+              "x": 32,
+              "y": 672.5,
+              "width": 555.622,
+              "height": 98.5
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 347.925,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 347.925,
+              "y": 601
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 695.85,
+              "y": 300.5
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 300.5
+            }
+          ],
+          "x": 16,
+          "y": 186,
+          "width": 695.85,
+          "height": 601
+        },
+        {
+          "kind": "container",
+          "id": "scope:C-100",
+          "role": "ui_contracts_group",
+          "primitive": "cluster",
+          "classes": [],
+          "viewMetadata": {
+            "uiContracts": {
+              "kind": "enclosure",
+              "title": "Component scope · Form with a long descriptive name that wraps"
+            }
+          },
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 16,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 16,
+              "right": 16,
+              "bottom": 16,
+              "left": 16
+            },
+            "gutter": 12,
+            "headerBandHeight": 19
+          },
+          "headerContent": [
+            {
+              "id": "scope:C-100:title",
+              "kind": "text",
+              "textStyleRole": "shared_node_decorator",
+              "lines": [
+                "Component scope · Form with a long descriptive name that wraps"
+              ],
+              "x": 14,
+              "y": 3,
+              "width": 305.015,
+              "height": 12,
+              "lineHeight": 12,
+              "region": "primary"
+            }
+          ],
+          "children": [
+            {
+              "kind": "container",
+              "id": "scope:C-100:neighborhood",
+              "role": "ui_contracts_group",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "vertical",
+                "gap": 12,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 0,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Form with a long",
+                        "descriptive name that",
+                        "wraps"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 156.768,
+                      "height": 57,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 69,
+                      "title": {
+                        "id": "occurrence:%5B%22scope%3AC-100%22%2C%22focal%22%2C%22C-100%22%5D__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Form with a long",
+                          "descriptive name that",
+                          "wraps"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 156.768,
+                        "height": 57,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "north",
+                      "role": "north",
+                      "side": "north",
+                      "x": 112,
+                      "y": 0
+                    },
+                    {
+                      "id": "south",
+                      "role": "south",
+                      "side": "south",
+                      "x": 112,
+                      "y": 91
+                    },
+                    {
+                      "id": "east",
+                      "role": "east",
+                      "side": "east",
+                      "x": 224,
+                      "y": 45.5
+                    },
+                    {
+                      "id": "west",
+                      "role": "west",
+                      "side": "west",
+                      "x": 0,
+                      "y": 45.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 32,
+                  "y": 850,
+                  "width": 224,
+                  "height": 91
+                }
+              ],
+              "ports": [
+                {
+                  "id": "north",
+                  "role": "north",
+                  "side": "north",
+                  "x": 112,
+                  "y": 0
+                },
+                {
+                  "id": "south",
+                  "role": "south",
+                  "side": "south",
+                  "x": 112,
+                  "y": 91
+                },
+                {
+                  "id": "east",
+                  "role": "east",
+                  "side": "east",
+                  "x": 224,
+                  "y": 45.5
+                },
+                {
+                  "id": "west",
+                  "role": "west",
+                  "side": "west",
+                  "x": 0,
+                  "y": 45.5
+                }
+              ],
+              "x": 32,
+              "y": 850,
+              "width": 224,
+              "height": 91
+            }
+          ],
+          "ports": [
+            {
+              "id": "north",
+              "role": "north",
+              "side": "north",
+              "x": 167.508,
+              "y": 0
+            },
+            {
+              "id": "south",
+              "role": "south",
+              "side": "south",
+              "x": 167.508,
+              "y": 142
+            },
+            {
+              "id": "east",
+              "role": "east",
+              "side": "east",
+              "x": 335.015,
+              "y": 71
+            },
+            {
+              "id": "west",
+              "role": "west",
+              "side": "west",
+              "x": 0,
+              "y": 71
+            }
+          ],
+          "x": 16,
+          "y": 815,
+          "width": 335.015,
+          "height": 142
+        }
+      ],
+      "ports": [
+        {
+          "id": "north",
+          "role": "north",
+          "side": "north",
+          "x": 363.925,
+          "y": 0
+        },
+        {
+          "id": "south",
+          "role": "south",
+          "side": "south",
+          "x": 363.925,
+          "y": 973
+        },
+        {
+          "id": "east",
+          "role": "east",
+          "side": "east",
+          "x": 727.85,
+          "y": 486.5
+        },
+        {
+          "id": "west",
+          "role": "west",
+          "side": "west",
+          "x": 0,
+          "y": 486.5
+        }
+      ],
+      "x": 0,
+      "y": 0,
+      "width": 727.85,
+      "height": 973
+    },
+    "edges": [
+      {
+        "id": "scope:P-100:sequence:primary:relationship:%5B%22VS-100%22%2C%22TRANSITIONS_TO%22%2C%22VS-101%22%5D:0",
+        "role": "transition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-100%22%5D",
+          "portId": "east",
+          "x": 256,
+          "y": 485
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22sequence%22%2C%22scope%3AP-100%3Asequence%3Aprimary%22%2C%22VS-101%22%5D",
+          "portId": "west",
+          "x": 471.85,
+          "y": 485
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 256,
+              "y": 485
+            },
+            {
+              "x": 471.85,
+              "y": 485
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "[A long event name used in",
+            "complete transition annotations]",
+            "{all_records_confirmed_and_rev",
+            "iew_completed}",
+            "/ SA-100"
+          ],
+          "width": 191.85,
+          "height": 78,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 268,
+          "y": 395
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "scope:P-100:composition:VS-100:relationship:%5B%22VS-100%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22VS-100%22%5D",
+          "portId": "east",
+          "x": 256,
+          "y": 611
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-100%22%2C%22relationship%3A%255B%2522VS-100%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+          "portId": "west",
+          "x": 363.622,
+          "y": 611
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 256,
+              "y": 611
+            },
+            {
+              "x": 363.622,
+              "y": 611
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "composed of"
+          ],
+          "width": 83.622,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 268,
+          "y": 577
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "scope:P-100:composition:VS-101:relationship:%5B%22VS-101%22%2C%22COMPOSED_OF%22%2C%22C-100%22%5D:0",
+        "role": "composition",
+        "classes": [],
+        "from": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_source%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22VS-101%22%5D",
+          "portId": "east",
+          "x": 256,
+          "y": 706.5
+        },
+        "to": {
+          "itemId": "occurrence:%5B%22scope%3AP-100%22%2C%22composition_target%22%2C%22scope%3AP-100%3Acomposition%3AVS-101%22%2C%22relationship%3A%255B%2522VS-101%2522%252C%2522COMPOSED_OF%2522%252C%2522C-100%2522%255D%3A0%22%2C%22C-100%22%5D",
+          "portId": "west",
+          "x": 363.622,
+          "y": 706.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 256,
+              "y": 706.5
+            },
+            {
+              "x": 363.622,
+              "y": 706.5
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "composed of"
+          ],
+          "width": 83.622,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 268,
+          "y": 672.5
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      }
+    ],
+    "decorations": [],
+    "diagnostics": [],
+    "paintOrder": [
+      "chrome",
+      "nodes",
+      "labels",
+      "edges",
+      "edge_labels"
+    ]
+  }
+}

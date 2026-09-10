@@ -1,0 +1,30 @@
+{
+  "protectedSourceHashes": {
+    "checked": 49,
+    "changed": []
+  },
+  "referenceHashes": {
+    "checked": 49,
+    "changed": []
+  },
+  "goldenHashes": {
+    "checked": 156,
+    "changed": [
+      "tests/goldens/renderer-stages/ui-contracts.dense-sparse.positioned-scene.json",
+      "tests/goldens/renderer-stages/ui-contracts.dense-sparse.svg",
+      "tests/goldens/renderer-stages/ui-contracts.place-viewstate-transition.measured-scene.json",
+      "tests/goldens/renderer-stages/ui-contracts.place-viewstate-transition.positioned-scene.json",
+      "tests/goldens/renderer-stages/ui-contracts.place-viewstate-transition.renderer-scene.json",
+      "tests/goldens/renderer-stages/ui-contracts.place-viewstate-transition.svg",
+      "tests/goldens/renderer-stages/ui-contracts.ui-state-fallback.measured-scene.json",
+      "tests/goldens/renderer-stages/ui-contracts.ui-state-fallback.positioned-scene.json",
+      "tests/goldens/renderer-stages/ui-contracts.ui-state-fallback.renderer-scene.json",
+      "tests/goldens/renderer-stages/ui-contracts.ui-state-fallback.svg"
+    ]
+  },
+  "legacyAndOtherArtifacts": {
+    "checked": 416,
+    "changed": []
+  },
+  "fixtureSha256": "fec1fc5b356be868944b67eb2d6134bd6d70f0ca2f290fc515662f061f45fbff"
+}

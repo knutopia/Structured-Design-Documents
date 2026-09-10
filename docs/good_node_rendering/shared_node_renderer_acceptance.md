@@ -39,3 +39,67 @@ Repeated attributes with the same `groupId` form one group. Group order follows 
 - `svgBackend.ts` emits stable structural classes and `--sdd-shared-node-*` CSS values, including all four canonical line heights.
 
 The SVG classes are the editable CSS targeting surface. Geometry-affecting customization must be resolved into a registered renderer theme before measurement; the emitted CSS values then describe that same effective theme.
+
+## Emphasized Nodes
+
+Callers opt in per node with `emphasized: true` on `SharedNodeRequest` (or
+`SharedNodeContent` when constructing scenes directly). Omitted and `false`
+retain regular rendering. Emphasis does not select semantic nodes automatically.
+
+Default emphasis changes only the title to Public Sans Bold (`700`) and the
+inside outline to `2px`. The default width remains `224px`; the text interior
+is `192px` wide after the outline and body padding. Bold metrics and the reduced
+interior participate in wrapping and automatic height. A one-line plain node
+remains `224 × 48`; a one-line decorated node becomes `224 × 54`.
+
+The visual exemplar is [Emphasized Node](<node_visual_reference/emphasized_node_visuals/Emphasized Node@2x.png>).
+
+```ts
+const result = await renderSharedNodesStagedSvg([
+  { ...nodeRequest, emphasized: true }
+], { detailId: "detailed" });
+```
+
+Global customization uses the existing registered renderer theme. The optional
+`sharedNodeEmphasis` section is a recursively partial delta over `sharedNode`;
+its `textStyles` section accepts partial tokens for `title`, `decorator`,
+`attributeLabel`, and `attributeValue`.
+
+```ts
+const theme = structuredClone(getRendererTheme("default"));
+theme.id = "my-node-theme";
+theme.sharedNode.fill = "#fffaf0"; // Inherited by regular and emphasized nodes.
+theme.sharedNodeEmphasis = {
+  strokeWidth: 3,
+  body: { padding: { left: 18 } }, // Other padding inherits regular values.
+  textStyles: {
+    title: { fontWeight: 600, letterSpacing: 0 } // Replaces default Bold.
+  }
+};
+registerRendererTheme(theme);
+const result = await renderSharedNodesStagedSvg([
+  { ...nodeRequest, emphasized: true }
+], { detailId: "detailed", themeId: theme.id });
+```
+
+Resolution order is regular styling, default emphasis, then custom emphasis.
+Text deltas inherit the configured regular text-style roles (or an explicitly
+overridden role). Missing fields, including `undefined`, inherit; numeric zero
+is an explicit replacement. Register any custom font weights with matching
+measurement, SVG, and PNG faces, as for regular styling.
+
+Both chrome and labels expose `shared-node--emphasized`. The complete resolved
+style is described by `--sdd-shared-node-emphasized-*` CSS properties, parallel
+to the regular properties. Existing structural classes remain available for
+CSS targeting. As with regular nodes, the emitted properties document resolved
+geometry; changing them in an exported SVG does not remeasure it. Register
+geometry or typography changes in the theme before rendering. Paint rules can
+be edited directly, for example:
+
+```css
+.shared-node--emphasized .shared-node__outline { stroke: #8b4513; }
+```
+
+The emphasis state survives shared-height allocation and positioning. Existing
+dashed outlines remain dashed. PNG uses the same SVG and vendored Bold font;
+ordinary SVGs do not embed an unused Bold face.

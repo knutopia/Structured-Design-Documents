@@ -12,13 +12,15 @@ import type {
   SceneContainerPrimitive,
   SceneNodePrimitive
 } from "./contracts.js";
+import { paintUiContractsContainer } from "./uiContractsContainer.js";
+import { paintUiContractsArrowheads } from "./uiContractsArrowheads.js";
 import {
   createBackendDiagnostic,
   sortRendererDiagnostics,
   type RendererDiagnostic
 } from "./diagnostics.js";
 import { getContainerPrimitiveTheme, getNodePrimitiveTheme, resolveTextRoleForBlock } from "./primitives.js";
-import { resolveRendererTheme, type RendererTheme, type TextStyleToken } from "./theme.js";
+import { resolveSharedNodeTheme, resolveRendererTheme, type RendererTheme, type TextStyleToken } from "./theme.js";
 import { buildEmbeddedFontFaceStyleElements, renderSvgToPng } from "../svgArtifacts.js";
 import {
   calculateAlphabeticBaselineOffset,
@@ -237,6 +239,9 @@ function renderContainerChrome(
   theme: RendererTheme,
   isSceneRoot: boolean
 ): string | undefined {
+  if (container.viewMetadata?.uiContracts?.kind === "enclosure") {
+    return paintUiContractsContainer(container, theme);
+  }
   const classList = buildItemClassList("container", container.primitive, container.role, container.classes, "chrome");
   const lines = [
     `<g id="scene-container-${sanitizeToken(container.id)}" class="${classList}" data-item-id="${escapeXml(container.id)}" data-role="${escapeXml(container.role)}">`
@@ -307,7 +312,7 @@ function renderBadgeChrome(node: PositionedNode, block: MeasuredContentBlock): s
 }
 
 function renderSharedNodeChrome(node: PositionedNode, theme: RendererTheme, classList: string): string {
-  const nodeTheme = theme.sharedNode;
+  const nodeTheme = resolveSharedNodeTheme(theme, node.sharedNode?.emphasized).sharedNode;
   const borderInset = nodeTheme.strokeWidth / 2;
   const strokeInset = nodeTheme.strokeWidth;
   const lines = [
@@ -421,6 +426,7 @@ function renderNodeLabels(
 
   const classList = buildItemClassList("node", node.primitive, node.role, node.classes, "labels");
   if (node.sharedNode) {
+    theme = resolveSharedNodeTheme(theme, node.sharedNode.emphasized);
     const renderSharedBlock = (block: MeasuredContentBlock, roleClass: string): string[] => {
       const style = getTextStyleForBackend(theme, block.textStyleRole, node.id, diagnostics);
       const markup = renderSharedTextBlock(
@@ -667,7 +673,7 @@ function resolveMarkerAttributes(edge: PositionedEdge): string {
   return attributes.length > 0 ? ` ${attributes.join(" ")}` : "";
 }
 
-function renderEdge(edge: PositionedEdge, diagnostics: RendererDiagnostic[]): string | undefined {
+function renderEdge(edge: PositionedEdge, diagnostics: RendererDiagnostic[], theme: RendererTheme, portableUiArrows = false): string | undefined {
   const path = buildRoutePath(edge, diagnostics);
   if (!path) {
     return undefined;
@@ -683,7 +689,8 @@ function renderEdge(edge: PositionedEdge, diagnostics: RendererDiagnostic[]): st
 
   return [
     `<g id="scene-edge-${sanitizeToken(edge.id)}" class="${classList}" data-edge-id="${escapeXml(edge.id)}" data-role="${escapeXml(edge.role)}">`,
-    `  <path class="scene-edge__path" d="${path}"${resolveMarkerAttributes(edge)}/>`,
+    `  <path class="scene-edge__path" d="${path}"${portableUiArrows ? "" : resolveMarkerAttributes(edge)}/>`,
+    ...(portableUiArrows ? paintUiContractsArrowheads(edge, theme).map(markup => `  ${markup}`) : []),
     "</g>"
   ].join("\n");
 }
@@ -776,13 +783,34 @@ function renderTextDecoration(
   ].join("\n");
 }
 
-function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[] {
-  const { paint } = theme;
+function hasEmphasizedNodes(scene: PositionedScene): boolean {
+  const visit = (item: PositionedItem): boolean => item.kind === "node"
+    ? item.sharedNode?.emphasized === true
+    : item.children.some(visit);
+  return visit(scene.root);
+}
+
+function buildSharedNodeStyleLines(theme: RendererTheme, emphasized = false): string[] {
   const shared = theme.sharedNode;
   const decoratorText = theme.textStyles[shared.decorator.textStyleRole];
   const titleText = theme.textStyles[shared.titleTextStyleRole];
   const attributeLabelText = theme.textStyles[shared.attribute.labelTextStyleRole];
   const attributeValueText = theme.textStyles[shared.attribute.valueTextStyleRole];
+  const scope = emphasized ? ".shared-node--emphasized" : ".staged-svg";
+  const prefix = emphasized ? ".shared-node--emphasized " : "";
+  const variablePrefix = emphasized ? "shared-node-emphasized" : "shared-node";
+  const lines = [
+    `${scope} { --sdd-${variablePrefix}-font-family: '${theme.fontFamily}'; --sdd-${variablePrefix}-width: ${formatNumber(shared.width)}px; --sdd-${variablePrefix}-min-height: ${formatNumber(shared.minHeight)}px; --sdd-${variablePrefix}-container-padding-top: ${formatNumber(shared.container.padding.top)}px; --sdd-${variablePrefix}-container-padding-right: ${formatNumber(shared.container.padding.right)}px; --sdd-${variablePrefix}-container-padding-bottom: ${formatNumber(shared.container.padding.bottom)}px; --sdd-${variablePrefix}-container-padding-left: ${formatNumber(shared.container.padding.left)}px; --sdd-${variablePrefix}-container-gap: ${formatNumber(shared.container.gap)}px; --sdd-${variablePrefix}-radius: ${formatNumber(shared.cornerRadius)}px; --sdd-${variablePrefix}-stroke-width: ${formatNumber(shared.strokeWidth)}px; --sdd-${variablePrefix}-stroke-placement: ${shared.strokePlacement}; --sdd-${variablePrefix}-fill: ${shared.fill}; --sdd-${variablePrefix}-stroke: ${shared.stroke}; --sdd-${variablePrefix}-text: ${shared.text}; --sdd-${variablePrefix}-decorator-height: ${formatNumber(shared.decorator.height)}px; --sdd-${variablePrefix}-decorator-gap: ${formatNumber(shared.decorator.gap)}px; --sdd-${variablePrefix}-decorator-padding-top: ${formatNumber(shared.decorator.padding.top)}px; --sdd-${variablePrefix}-decorator-padding-right: ${formatNumber(shared.decorator.padding.right)}px; --sdd-${variablePrefix}-decorator-padding-bottom: ${formatNumber(shared.decorator.padding.bottom)}px; --sdd-${variablePrefix}-decorator-padding-left: ${formatNumber(shared.decorator.padding.left)}px; --sdd-${variablePrefix}-decorator-fill: ${shared.decorator.fill}; --sdd-${variablePrefix}-body-padding-top: ${formatNumber(shared.body.padding.top)}px; --sdd-${variablePrefix}-body-padding-right: ${formatNumber(shared.body.padding.right)}px; --sdd-${variablePrefix}-body-padding-bottom: ${formatNumber(shared.body.padding.bottom)}px; --sdd-${variablePrefix}-body-padding-left: ${formatNumber(shared.body.padding.left)}px; --sdd-${variablePrefix}-body-gap: ${formatNumber(shared.body.gap)}px; --sdd-${variablePrefix}-attribute-padding-top: ${formatNumber(shared.attribute.padding.top)}px; --sdd-${variablePrefix}-attribute-padding-right: ${formatNumber(shared.attribute.padding.right)}px; --sdd-${variablePrefix}-attribute-padding-bottom: ${formatNumber(shared.attribute.padding.bottom)}px; --sdd-${variablePrefix}-attribute-padding-left: ${formatNumber(shared.attribute.padding.left)}px; --sdd-${variablePrefix}-attribute-gap: ${formatNumber(shared.attribute.gap)}px; --sdd-${variablePrefix}-decorator-font-size: ${formatNumber(decoratorText.fontSize)}px; --sdd-${variablePrefix}-decorator-font-weight: ${decoratorText.fontWeight}; --sdd-${variablePrefix}-decorator-line-height: ${formatNumber(decoratorText.lineHeight)}px; --sdd-${variablePrefix}-decorator-letter-spacing: ${formatNumber(decoratorText.letterSpacing ?? 0)}px; --sdd-${variablePrefix}-title-font-size: ${formatNumber(titleText.fontSize)}px; --sdd-${variablePrefix}-title-font-weight: ${titleText.fontWeight}; --sdd-${variablePrefix}-title-line-height: ${formatNumber(titleText.lineHeight)}px; --sdd-${variablePrefix}-title-letter-spacing: ${formatNumber(titleText.letterSpacing ?? 0)}px; --sdd-${variablePrefix}-attribute-label-font-size: ${formatNumber(attributeLabelText.fontSize)}px; --sdd-${variablePrefix}-attribute-label-font-weight: ${attributeLabelText.fontWeight}; --sdd-${variablePrefix}-attribute-label-line-height: ${formatNumber(attributeLabelText.lineHeight)}px; --sdd-${variablePrefix}-attribute-label-letter-spacing: ${formatNumber(attributeLabelText.letterSpacing ?? 0)}px; --sdd-${variablePrefix}-attribute-value-font-size: ${formatNumber(attributeValueText.fontSize)}px; --sdd-${variablePrefix}-attribute-value-font-weight: ${attributeValueText.fontWeight}; --sdd-${variablePrefix}-attribute-value-line-height: ${formatNumber(attributeValueText.lineHeight)}px; --sdd-${variablePrefix}-attribute-value-letter-spacing: ${formatNumber(attributeValueText.letterSpacing ?? 0)}px; }`,
+    `${prefix}.shared-node__chrome { fill: ${shared.fill}; stroke: none; }`,
+    `${prefix}.shared-node__decorator-header { fill: ${shared.decorator.fill}; }`,
+    `${prefix}.shared-node__outline { fill: none; stroke: ${shared.stroke}; stroke-width: ${formatNumber(shared.strokeWidth)}; }`,
+    `${emphasized ? scope : ".shared-node"} .scene-text { fill: ${shared.text}; }`
+  ];
+  return lines;
+}
+
+function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[] {
+  const { paint } = theme;
   const hasBoldEdges = scene.edges.some((edge) => edge.classes.some((className) => sanitizeToken(className) === "edge-bold"));
   const hasLineDecorations = scene.decorations.some((decoration) => decoration.kind === "line");
   const isServiceBlueprint = scene.viewId === "service_blueprint";
@@ -849,20 +877,18 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
   }
 
   if (hasSharedNodes) {
-    lines.push(
-      `.staged-svg { --sdd-shared-node-font-family: '${theme.fontFamily}'; --sdd-shared-node-width: ${formatNumber(shared.width)}px; --sdd-shared-node-min-height: ${formatNumber(shared.minHeight)}px; --sdd-shared-node-container-padding-top: ${formatNumber(shared.container.padding.top)}px; --sdd-shared-node-container-padding-right: ${formatNumber(shared.container.padding.right)}px; --sdd-shared-node-container-padding-bottom: ${formatNumber(shared.container.padding.bottom)}px; --sdd-shared-node-container-padding-left: ${formatNumber(shared.container.padding.left)}px; --sdd-shared-node-container-gap: ${formatNumber(shared.container.gap)}px; --sdd-shared-node-radius: ${formatNumber(shared.cornerRadius)}px; --sdd-shared-node-stroke-width: ${formatNumber(shared.strokeWidth)}px; --sdd-shared-node-stroke-placement: ${shared.strokePlacement}; --sdd-shared-node-fill: ${shared.fill}; --sdd-shared-node-stroke: ${shared.stroke}; --sdd-shared-node-text: ${shared.text}; --sdd-shared-node-decorator-height: ${formatNumber(shared.decorator.height)}px; --sdd-shared-node-decorator-gap: ${formatNumber(shared.decorator.gap)}px; --sdd-shared-node-decorator-padding-top: ${formatNumber(shared.decorator.padding.top)}px; --sdd-shared-node-decorator-padding-right: ${formatNumber(shared.decorator.padding.right)}px; --sdd-shared-node-decorator-padding-bottom: ${formatNumber(shared.decorator.padding.bottom)}px; --sdd-shared-node-decorator-padding-left: ${formatNumber(shared.decorator.padding.left)}px; --sdd-shared-node-decorator-fill: ${shared.decorator.fill}; --sdd-shared-node-body-padding-top: ${formatNumber(shared.body.padding.top)}px; --sdd-shared-node-body-padding-right: ${formatNumber(shared.body.padding.right)}px; --sdd-shared-node-body-padding-bottom: ${formatNumber(shared.body.padding.bottom)}px; --sdd-shared-node-body-padding-left: ${formatNumber(shared.body.padding.left)}px; --sdd-shared-node-body-gap: ${formatNumber(shared.body.gap)}px; --sdd-shared-node-attribute-padding-top: ${formatNumber(shared.attribute.padding.top)}px; --sdd-shared-node-attribute-padding-right: ${formatNumber(shared.attribute.padding.right)}px; --sdd-shared-node-attribute-padding-bottom: ${formatNumber(shared.attribute.padding.bottom)}px; --sdd-shared-node-attribute-padding-left: ${formatNumber(shared.attribute.padding.left)}px; --sdd-shared-node-attribute-gap: ${formatNumber(shared.attribute.gap)}px; --sdd-shared-node-decorator-font-size: ${formatNumber(decoratorText.fontSize)}px; --sdd-shared-node-decorator-font-weight: ${decoratorText.fontWeight}; --sdd-shared-node-decorator-line-height: ${formatNumber(decoratorText.lineHeight)}px; --sdd-shared-node-decorator-letter-spacing: ${formatNumber(decoratorText.letterSpacing ?? 0)}px; --sdd-shared-node-title-font-size: ${formatNumber(titleText.fontSize)}px; --sdd-shared-node-title-font-weight: ${titleText.fontWeight}; --sdd-shared-node-title-line-height: ${formatNumber(titleText.lineHeight)}px; --sdd-shared-node-title-letter-spacing: ${formatNumber(titleText.letterSpacing ?? 0)}px; --sdd-shared-node-attribute-label-font-size: ${formatNumber(attributeLabelText.fontSize)}px; --sdd-shared-node-attribute-label-font-weight: ${attributeLabelText.fontWeight}; --sdd-shared-node-attribute-label-line-height: ${formatNumber(attributeLabelText.lineHeight)}px; --sdd-shared-node-attribute-label-letter-spacing: ${formatNumber(attributeLabelText.letterSpacing ?? 0)}px; --sdd-shared-node-attribute-value-font-size: ${formatNumber(attributeValueText.fontSize)}px; --sdd-shared-node-attribute-value-font-weight: ${attributeValueText.fontWeight}; --sdd-shared-node-attribute-value-line-height: ${formatNumber(attributeValueText.lineHeight)}px; --sdd-shared-node-attribute-value-letter-spacing: ${formatNumber(attributeValueText.letterSpacing ?? 0)}px; }`,
-      `.shared-node__chrome { fill: ${shared.fill}; stroke: none; }`,
-      `.shared-node__decorator-header { fill: ${shared.decorator.fill}; }`,
-      `.shared-node__outline { fill: none; stroke: ${shared.stroke}; stroke-width: ${formatNumber(shared.strokeWidth)}; }`,
-      `.shared-node .scene-text { fill: ${shared.text}; }`
-    );
+    lines.push(...buildSharedNodeStyleLines(theme));
+    if (hasEmphasizedNodes(scene)) {
+      lines.push(...buildSharedNodeStyleLines(resolveSharedNodeTheme(theme, true), true));
+    }
     if (scene.viewId === "shared_node") {
       lines.push(`.view-shared_node .standalone_node_harness .scene-container__chrome { fill: #ffffff; stroke: transparent; }`);
     }
   }
 
-  for (const role of Object.keys(theme.textStyles).filter((role) => hasSharedNodes || !role.startsWith("shared_node_")).sort()) {
-    const style = theme.textStyles[role];
+  const textStyles = (hasEmphasizedNodes(scene) ? resolveSharedNodeTheme(theme, true) : theme).textStyles;
+  for (const role of Object.keys(textStyles).filter((role) => hasSharedNodes || !role.startsWith("shared_node_")).sort()) {
+    const style = textStyles[role];
     lines.push(
       role.startsWith("shared_node_")
         ? `.text-role-${sanitizeToken(role)} { font-family: '${style.fontFamily}'; font-size: ${formatNumber(style.fontSize)}px; font-weight: ${style.fontWeight}; line-height: ${formatNumber(style.lineHeight)}px; letter-spacing: ${formatNumber(style.letterSpacing ?? 0)}px; }`
@@ -874,8 +900,10 @@ function buildStyleLines(scene: PositionedScene, theme: RendererTheme): string[]
 }
 
 async function buildDefs(scene: PositionedScene, theme: RendererTheme): Promise<string[]> {
+  const textStyles = (hasEmphasizedNodes(scene) ? resolveSharedNodeTheme(theme, true) : theme).textStyles;
+  const usedWeights = new Set(Object.values(textStyles).map((style) => style.fontWeight));
   const fontFaceStyles = await buildEmbeddedFontFaceStyleElements(
-    theme.fontFaces.map((face) => ({
+    theme.fontFaces.filter((face) => usedWeights.has(face.fontWeight)).map((face) => ({
       fontFamily: theme.fontFamily,
       fontAssetPath: face.svgFontAssetPath,
       fontStyle: face.fontStyle,
@@ -907,7 +935,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
   collectPaintElements(scene.root, groups, diagnostics, theme, measurement, true);
 
   for (const edge of scene.edges) {
-    const rendered = renderEdge(edge, diagnostics);
+    const rendered = renderEdge(edge, diagnostics, theme, scene.root.viewMetadata?.uiContracts?.kind === "sheet");
     if (rendered) {
       groups.edges.push(rendered);
     }

@@ -1,0 +1,24 @@
+SDD-TEXT 0.1
+Component C-100 "Parent 0"
+  CONTAINS C-110 "Focal"
+END
+Component C-101 "Parent 1"
+  CONTAINS C-110 "Focal"
+END
+Component C-102 "Parent 2"
+  CONTAINS C-110 "Focal"
+END
+Component C-110 "Focal"
+  CONTAINS C-120 "Child 0"
+  CONTAINS C-121 "Child 1"
+  CONTAINS C-122 "Child 2"
+END
+Component C-120 "Child 0"
+
+END
+Component C-121 "Child 1"
+
+END
+Component C-122 "Child 2"
+
+END

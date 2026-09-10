@@ -1,0 +1,6329 @@
+{
+  "testCase": "eight-targets",
+  "decorators": "type,id",
+  "geometry": [],
+  "occurrences": [
+    [
+      "source",
+      "C-900"
+    ],
+    [
+      "target:0",
+      "E-900"
+    ],
+    [
+      "target:1",
+      "E-901"
+    ],
+    [
+      "target:2",
+      "E-902"
+    ],
+    [
+      "target:3",
+      "E-903"
+    ],
+    [
+      "target:4",
+      "E-904"
+    ],
+    [
+      "target:5",
+      "E-905"
+    ],
+    [
+      "target:6",
+      "E-906"
+    ],
+    [
+      "target:7",
+      "E-907"
+    ]
+  ],
+  "relationships": [
+    [
+      "contract:0",
+      [
+        "contract:0"
+      ]
+    ],
+    [
+      "contract:1",
+      [
+        "contract:1:lead",
+        "contract:1"
+      ]
+    ],
+    [
+      "contract:2",
+      [
+        "contract:2:lead",
+        "contract:2"
+      ]
+    ],
+    [
+      "contract:3",
+      [
+        "contract:3:lead",
+        "contract:3"
+      ]
+    ],
+    [
+      "contract:4",
+      [
+        "contract:4:lead",
+        "contract:4"
+      ]
+    ],
+    [
+      "contract:5",
+      [
+        "contract:5:lead",
+        "contract:5"
+      ]
+    ],
+    [
+      "contract:6",
+      [
+        "contract:6:lead",
+        "contract:6"
+      ]
+    ],
+    [
+      "contract:7",
+      [
+        "contract:7:lead",
+        "contract:7"
+      ]
+    ]
+  ],
+  "rendererScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "fanout_proof",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 0,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "headerBandHeight": 0
+      },
+      "children": [
+        {
+          "kind": "container",
+          "id": "contract-group",
+          "role": "fanout_proof",
+          "primitive": "stack",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 24,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "headerBandHeight": 0
+          },
+          "children": [
+            {
+              "kind": "container",
+              "id": "target-row:0",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 66.87,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "source",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Contract source",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Component",
+                    "nodeId": "C-900",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-out:0",
+                      "role": "contract_out",
+                      "side": "east",
+                      "offset": 26.5
+                    },
+                    {
+                      "id": "contract-out:1",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 200
+                    },
+                    {
+                      "id": "contract-out:2",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 184
+                    },
+                    {
+                      "id": "contract-out:3",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 168
+                    },
+                    {
+                      "id": "contract-out:4",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 152
+                    },
+                    {
+                      "id": "contract-out:5",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 136
+                    },
+                    {
+                      "id": "contract-out:6",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 120
+                    },
+                    {
+                      "id": "contract-out:7",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 104
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:0",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Event 0",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Event",
+                    "nodeId": "E-900",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            },
+            {
+              "kind": "container",
+              "id": "target-row:1",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 90.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 200
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:1",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:1",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Event 1",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Event",
+                    "nodeId": "E-901",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            },
+            {
+              "kind": "container",
+              "id": "target-row:2",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 106.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 184
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:2",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:2",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Event 2",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Event",
+                    "nodeId": "E-902",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            },
+            {
+              "kind": "container",
+              "id": "target-row:3",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 122.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 168
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:3",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:3",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Event 3",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Event",
+                    "nodeId": "E-903",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            },
+            {
+              "kind": "container",
+              "id": "target-row:4",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 138.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 152
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:4",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:4",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Event 4",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Event",
+                    "nodeId": "E-904",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            },
+            {
+              "kind": "container",
+              "id": "target-row:5",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 154.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 136
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:5",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:5",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Event 5",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Event",
+                    "nodeId": "E-905",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            },
+            {
+              "kind": "container",
+              "id": "target-row:6",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 170.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 120
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:6",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:6",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Event 6",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Event",
+                    "nodeId": "E-906",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            },
+            {
+              "kind": "container",
+              "id": "target-row:7",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 186.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 104
+                },
+                "headerBandHeight": 0
+              },
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:7",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "headerBandHeight": 0
+                  },
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0
+                    }
+                  ]
+                },
+                {
+                  "kind": "node",
+                  "id": "target:7",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [],
+                  "sharedNode": {
+                    "title": "Event 7",
+                    "decoratorMode": {
+                      "id": "type,id",
+                      "showNodeType": true,
+                      "showNodeId": true
+                    },
+                    "nodeType": "Event",
+                    "nodeId": "E-907",
+                    "attributes": []
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5
+                    }
+                  ]
+                }
+              ],
+              "ports": []
+            }
+          ],
+          "ports": []
+        }
+      ],
+      "ports": []
+    },
+    "edges": [
+      {
+        "id": "contract:1:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:1"
+        },
+        "to": {
+          "itemId": "anchor:1",
+          "portId": "in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:2:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:2"
+        },
+        "to": {
+          "itemId": "anchor:2",
+          "portId": "in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:3:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:3"
+        },
+        "to": {
+          "itemId": "anchor:3",
+          "portId": "in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:4:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:4"
+        },
+        "to": {
+          "itemId": "anchor:4",
+          "portId": "in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:5:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:5"
+        },
+        "to": {
+          "itemId": "anchor:5",
+          "portId": "in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:6:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:6"
+        },
+        "to": {
+          "itemId": "anchor:6",
+          "portId": "in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:7:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:7"
+        },
+        "to": {
+          "itemId": "anchor:7",
+          "portId": "in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:0",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:0"
+        },
+        "to": {
+          "itemId": "target:0",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "emits",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:1",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:1",
+          "portId": "out"
+        },
+        "to": {
+          "itemId": "target:1",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "emits",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:2",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:2",
+          "portId": "out"
+        },
+        "to": {
+          "itemId": "target:2",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "emits",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:3",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:3",
+          "portId": "out"
+        },
+        "to": {
+          "itemId": "target:3",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "emits",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:4",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:4",
+          "portId": "out"
+        },
+        "to": {
+          "itemId": "target:4",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "emits",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:5",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:5",
+          "portId": "out"
+        },
+        "to": {
+          "itemId": "target:5",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "emits",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:6",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:6",
+          "portId": "out"
+        },
+        "to": {
+          "itemId": "target:6",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "emits",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:7",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:7",
+          "portId": "out"
+        },
+        "to": {
+          "itemId": "target:7",
+          "portId": "contract-in"
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "text": "emits",
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "measuredScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "fanout_proof",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 0,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "contract-group",
+          "role": "fanout_proof",
+          "primitive": "stack",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 24,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "gutter": 12,
+            "headerBandHeight": 0
+          },
+          "headerContent": [],
+          "children": [
+            {
+              "kind": "container",
+              "id": "target-row:0",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 66.87,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "source",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "source__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "source__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "C-900"
+                      ],
+                      "x": 74.08,
+                      "y": 1.5,
+                      "width": 29.835,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "source__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Contract source"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 116.312,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "source__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "source__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "C-900"
+                          ],
+                          "x": 74.08,
+                          "y": 1.5,
+                          "width": 29.835,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "source__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Contract source"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 116.312,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-out:0",
+                      "role": "contract_out",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "contract-out:1",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 200,
+                      "x": 200,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:2",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 184,
+                      "x": 184,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:3",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 168,
+                      "x": 168,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:4",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 152,
+                      "x": 152,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:5",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 136,
+                      "x": 136,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:6",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 120,
+                      "x": 120,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:7",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 104,
+                      "x": 104,
+                      "y": 53
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                },
+                {
+                  "kind": "node",
+                  "id": "target:0",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:0__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:0__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-900"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 28.875,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:0__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 0"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.376,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:0__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:0__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-900"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 28.875,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:0__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 0"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.376,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:1",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 90.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 200
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:1",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:1",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:1__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:1__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-901"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 26.81,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:1__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 1"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 51,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:1__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:1__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-901"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 26.81,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:1__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 1"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 51,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:2",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 106.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 184
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:2",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:2",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:2__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:2__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-902"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 28.8,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:2__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 2"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.184,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:2__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:2__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-902"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 28.8,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:2__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 2"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.184,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:3",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 122.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 168
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:3",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:3",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:3__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:3__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-903"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 29.07,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:3__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 3"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.688,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:3__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:3__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-903"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 29.07,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:3__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 3"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.688,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:4",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 138.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 152
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:4",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:4",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:4__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:4__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-904"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 29.035,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:4__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 4"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.6,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:4__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:4__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-904"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 29.035,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:4__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 4"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.6,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:5",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 154.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 136
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:5",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:5",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:5__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:5__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-905"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 29.215,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:5__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 5"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.848,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:5__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:5__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-905"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 29.215,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:5__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 5"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.848,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:6",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 170.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 120
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:6",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:6",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:6__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:6__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-906"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 29.01,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:6__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 6"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.592,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:6__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:6__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-906"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 29.01,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:6__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 6"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.592,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:7",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 186.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 104
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:7",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:7",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:7__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:7__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-907"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 28.595,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:7__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 7"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.136,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:7__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:7__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-907"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 28.595,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:7__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 7"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.136,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "width": 514.87,
+              "height": 60.5
+            }
+          ],
+          "ports": [],
+          "width": 514.87,
+          "height": 652
+        }
+      ],
+      "ports": [],
+      "width": 546.87,
+      "height": 684
+    },
+    "edges": [
+      {
+        "id": "contract:1:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:1",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "anchor:1",
+          "portId": "in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:2:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:2",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "anchor:2",
+          "portId": "in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:3:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:3",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "anchor:3",
+          "portId": "in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:4:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:4",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "anchor:4",
+          "portId": "in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:5:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:5",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "anchor:5",
+          "portId": "in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:6:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:6",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "anchor:6",
+          "portId": "in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:7:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:7",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "anchor:7",
+          "portId": "in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "vertical"
+        },
+        "markers": {}
+      },
+      {
+        "id": "contract:0",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:0",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:0",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:1",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:1",
+          "portId": "out",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:1",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:2",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:2",
+          "portId": "out",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:2",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:3",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:3",
+          "portId": "out",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:3",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:4",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:4",
+          "portId": "out",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:4",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:5",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:5",
+          "portId": "out",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:5",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:6",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:6",
+          "portId": "out",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:6",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      },
+      {
+        "id": "contract:7",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:7",
+          "portId": "out",
+          "x": 0,
+          "y": 0
+        },
+        "to": {
+          "itemId": "target:7",
+          "portId": "contract-in",
+          "x": 0,
+          "y": 0
+        },
+        "routing": {
+          "style": "orthogonal",
+          "preferAxis": "horizontal"
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label"
+        },
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ],
+    "diagnostics": []
+  },
+  "positionedScene": {
+    "viewId": "ui_contracts",
+    "detailId": "detailed",
+    "themeId": "default",
+    "root": {
+      "kind": "container",
+      "id": "root",
+      "role": "fanout_proof",
+      "primitive": "stack",
+      "classes": [],
+      "layout": {
+        "strategy": "stack",
+        "direction": "vertical",
+        "gap": 0,
+        "crossAlignment": "start"
+      },
+      "chrome": {
+        "padding": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "gutter": 12,
+        "headerBandHeight": 0
+      },
+      "headerContent": [],
+      "children": [
+        {
+          "kind": "container",
+          "id": "contract-group",
+          "role": "fanout_proof",
+          "primitive": "stack",
+          "classes": [],
+          "layout": {
+            "strategy": "stack",
+            "direction": "vertical",
+            "gap": 24,
+            "crossAlignment": "start"
+          },
+          "chrome": {
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            },
+            "gutter": 12,
+            "headerBandHeight": 0
+          },
+          "headerContent": [],
+          "children": [
+            {
+              "kind": "container",
+              "id": "target-row:0",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 66.87,
+                "crossAlignment": "start"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 0
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "node",
+                  "id": "source",
+                  "role": "component",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "source__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Component"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 54.58,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "source__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "C-900"
+                      ],
+                      "x": 74.08,
+                      "y": 1.5,
+                      "width": 29.835,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "source__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Contract source"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 116.312,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "source__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Component"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 54.58,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "source__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "C-900"
+                          ],
+                          "x": 74.08,
+                          "y": 1.5,
+                          "width": 29.835,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "source__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Contract source"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 116.312,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-out:0",
+                      "role": "contract_out",
+                      "side": "east",
+                      "offset": 26.5,
+                      "x": 224,
+                      "y": 26.5
+                    },
+                    {
+                      "id": "contract-out:1",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 200,
+                      "x": 200,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:2",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 184,
+                      "x": 184,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:3",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 168,
+                      "x": 168,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:4",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 152,
+                      "x": 152,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:5",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 136,
+                      "x": 136,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:6",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 120,
+                      "x": 120,
+                      "y": 53
+                    },
+                    {
+                      "id": "contract-out:7",
+                      "role": "contract_out",
+                      "side": "south",
+                      "offset": 104,
+                      "x": 104,
+                      "y": 53
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 16,
+                  "y": 23.5,
+                  "width": 224,
+                  "height": 53
+                },
+                {
+                  "kind": "node",
+                  "id": "target:0",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:0__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:0__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-900"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 28.875,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:0__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 0"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.376,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:0__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:0__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-900"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 28.875,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:0__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 0"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.376,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 306.87,
+                  "y": 23.5,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 16,
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:1",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 90.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 200
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:1",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "x": 216,
+                  "y": 134.5,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:1",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:1__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:1__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-901"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 26.81,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:1__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 1"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 51,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:1__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:1__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-901"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 26.81,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:1__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 1"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 51,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 306.87,
+                  "y": 108,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 100.5,
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:2",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 106.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 184
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:2",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "x": 200,
+                  "y": 219,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:2",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:2__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:2__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-902"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 28.8,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:2__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 2"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.184,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:2__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:2__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-902"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 28.8,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:2__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 2"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.184,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 306.87,
+                  "y": 192.5,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 185,
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:3",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 122.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 168
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:3",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "x": 184,
+                  "y": 303.5,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:3",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:3__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:3__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-903"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 29.07,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:3__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 3"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.688,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:3__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:3__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-903"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 29.07,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:3__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 3"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.688,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 306.87,
+                  "y": 277,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 269.5,
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:4",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 138.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 152
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:4",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "x": 168,
+                  "y": 388,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:4",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:4__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:4__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-904"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 29.035,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:4__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 4"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.6,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:4__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:4__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-904"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 29.035,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:4__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 4"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.6,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 306.87,
+                  "y": 361.5,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 354,
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:5",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 154.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 136
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:5",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "x": 152,
+                  "y": 472.5,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:5",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:5__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:5__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-905"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 29.215,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:5__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 5"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.848,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:5__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:5__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-905"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 29.215,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:5__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 5"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.848,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 306.87,
+                  "y": 446,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 438.5,
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:6",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 170.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 120
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:6",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "x": 136,
+                  "y": 557,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:6",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:6__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:6__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-906"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 29.01,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:6__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 6"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.592,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:6__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:6__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-906"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 29.01,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:6__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 6"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.592,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 306.87,
+                  "y": 530.5,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 523,
+              "width": 514.87,
+              "height": 60.5
+            },
+            {
+              "kind": "container",
+              "id": "target-row:7",
+              "role": "fanout_proof",
+              "primitive": "stack",
+              "classes": [],
+              "layout": {
+                "strategy": "stack",
+                "direction": "horizontal",
+                "gap": 186.87,
+                "crossAlignment": "center"
+              },
+              "chrome": {
+                "padding": {
+                  "top": 7.5,
+                  "right": 0,
+                  "bottom": 0,
+                  "left": 104
+                },
+                "gutter": 12,
+                "headerBandHeight": 0
+              },
+              "headerContent": [],
+              "children": [
+                {
+                  "kind": "container",
+                  "id": "anchor:7",
+                  "role": "fanout_proof",
+                  "primitive": "stack",
+                  "classes": [],
+                  "layout": {
+                    "strategy": "stack",
+                    "direction": "vertical",
+                    "gap": 0,
+                    "crossAlignment": "start"
+                  },
+                  "chrome": {
+                    "padding": {
+                      "top": 0,
+                      "right": 0,
+                      "bottom": 0,
+                      "left": 0
+                    },
+                    "gutter": 12,
+                    "headerBandHeight": 0
+                  },
+                  "headerContent": [],
+                  "children": [],
+                  "ports": [
+                    {
+                      "id": "in",
+                      "role": "in",
+                      "side": "north",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    },
+                    {
+                      "id": "out",
+                      "role": "out",
+                      "side": "east",
+                      "offset": 0,
+                      "x": 0,
+                      "y": 0
+                    }
+                  ],
+                  "x": 120,
+                  "y": 641.5,
+                  "width": 0,
+                  "height": 0
+                },
+                {
+                  "kind": "node",
+                  "id": "target:7",
+                  "role": "event",
+                  "primitive": "card",
+                  "classes": [
+                    "semantic_node",
+                    "shared-node",
+                    "shared-node-dense"
+                  ],
+                  "widthPolicy": {
+                    "preferred": "standard",
+                    "allowed": [
+                      "standard"
+                    ]
+                  },
+                  "widthBand": "standard",
+                  "overflowPolicy": {
+                    "kind": "grow_height"
+                  },
+                  "content": [
+                    {
+                      "id": "target:7__decorator_type",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "Event"
+                      ],
+                      "x": 15.5,
+                      "y": 1.5,
+                      "width": 26.555,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:7__decorator_id",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_decorator",
+                      "lines": [
+                        "E-907"
+                      ],
+                      "x": 46.055,
+                      "y": 1.5,
+                      "width": 28.595,
+                      "height": 19,
+                      "lineHeight": 12,
+                      "region": "primary"
+                    },
+                    {
+                      "id": "target:7__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Event 7"
+                      ],
+                      "x": 15.5,
+                      "y": 26.5,
+                      "width": 54.136,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    }
+                  ],
+                  "sharedNode": {
+                    "density": "dense",
+                    "decorator": {
+                      "x": 1.5,
+                      "y": 1.5,
+                      "width": 221,
+                      "height": 19,
+                      "items": [
+                        {
+                          "id": "target:7__decorator_type",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "Event"
+                          ],
+                          "x": 15.5,
+                          "y": 1.5,
+                          "width": 26.555,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        },
+                        {
+                          "id": "target:7__decorator_id",
+                          "kind": "text",
+                          "textStyleRole": "shared_node_decorator",
+                          "lines": [
+                            "E-907"
+                          ],
+                          "x": 46.055,
+                          "y": 1.5,
+                          "width": 28.595,
+                          "height": 19,
+                          "lineHeight": 12,
+                          "region": "primary"
+                        }
+                      ]
+                    },
+                    "body": {
+                      "x": 1.5,
+                      "y": 20.5,
+                      "width": 221,
+                      "height": 31,
+                      "title": {
+                        "id": "target:7__title",
+                        "kind": "text",
+                        "textStyleRole": "shared_node_title",
+                        "lines": [
+                          "Event 7"
+                        ],
+                        "x": 15.5,
+                        "y": 26.5,
+                        "width": 54.136,
+                        "height": 19,
+                        "lineHeight": 19,
+                        "region": "primary"
+                      },
+                      "attributeGroups": []
+                    }
+                  },
+                  "ports": [
+                    {
+                      "id": "contract-in",
+                      "role": "contract_in",
+                      "side": "west",
+                      "offset": 26.5,
+                      "x": 0,
+                      "y": 26.5
+                    }
+                  ],
+                  "overflow": {
+                    "status": "fits"
+                  },
+                  "x": 306.87,
+                  "y": 615,
+                  "width": 224,
+                  "height": 53
+                }
+              ],
+              "ports": [],
+              "x": 16,
+              "y": 607.5,
+              "width": 514.87,
+              "height": 60.5
+            }
+          ],
+          "ports": [],
+          "x": 16,
+          "y": 16,
+          "width": 514.87,
+          "height": 652
+        }
+      ],
+      "ports": [],
+      "x": 0,
+      "y": 0,
+      "width": 546.87,
+      "height": 684
+    },
+    "edges": [
+      {
+        "id": "contract:1:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:1",
+          "x": 216,
+          "y": 76.5
+        },
+        "to": {
+          "itemId": "anchor:1",
+          "portId": "in",
+          "x": 216,
+          "y": 134.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 216,
+              "y": 76.5
+            },
+            {
+              "x": 216,
+              "y": 134.5
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:2:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:2",
+          "x": 200,
+          "y": 76.5
+        },
+        "to": {
+          "itemId": "anchor:2",
+          "portId": "in",
+          "x": 200,
+          "y": 219
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 200,
+              "y": 76.5
+            },
+            {
+              "x": 200,
+              "y": 219
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:3:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:3",
+          "x": 184,
+          "y": 76.5
+        },
+        "to": {
+          "itemId": "anchor:3",
+          "portId": "in",
+          "x": 184,
+          "y": 303.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 184,
+              "y": 76.5
+            },
+            {
+              "x": 184,
+              "y": 303.5
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:4:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:4",
+          "x": 168,
+          "y": 76.5
+        },
+        "to": {
+          "itemId": "anchor:4",
+          "portId": "in",
+          "x": 168,
+          "y": 388
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 168,
+              "y": 76.5
+            },
+            {
+              "x": 168,
+              "y": 388
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:5:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:5",
+          "x": 152,
+          "y": 76.5
+        },
+        "to": {
+          "itemId": "anchor:5",
+          "portId": "in",
+          "x": 152,
+          "y": 472.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 152,
+              "y": 76.5
+            },
+            {
+              "x": 152,
+              "y": 472.5
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:6:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:6",
+          "x": 136,
+          "y": 76.5
+        },
+        "to": {
+          "itemId": "anchor:6",
+          "portId": "in",
+          "x": 136,
+          "y": 557
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 136,
+              "y": 76.5
+            },
+            {
+              "x": 136,
+              "y": 557
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:7:lead",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:7",
+          "x": 120,
+          "y": 76.5
+        },
+        "to": {
+          "itemId": "anchor:7",
+          "portId": "in",
+          "x": 120,
+          "y": 641.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 120,
+              "y": 76.5
+            },
+            {
+              "x": 120,
+              "y": 641.5
+            }
+          ]
+        },
+        "markers": {},
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:0",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "source",
+          "portId": "contract-out:0",
+          "x": 240,
+          "y": 50
+        },
+        "to": {
+          "itemId": "target:0",
+          "portId": "contract-in",
+          "x": 306.87,
+          "y": 50
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 240,
+              "y": 50
+            },
+            {
+              "x": 306.87,
+              "y": 50
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 252,
+          "y": 16
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:1",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:1",
+          "portId": "out",
+          "x": 216,
+          "y": 134.5
+        },
+        "to": {
+          "itemId": "target:1",
+          "portId": "contract-in",
+          "x": 306.87,
+          "y": 134.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 216,
+              "y": 134.5
+            },
+            {
+              "x": 306.87,
+              "y": 134.5
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 240,
+          "y": 100.5
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:2",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:2",
+          "portId": "out",
+          "x": 200,
+          "y": 219
+        },
+        "to": {
+          "itemId": "target:2",
+          "portId": "contract-in",
+          "x": 306.87,
+          "y": 219
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 200,
+              "y": 219
+            },
+            {
+              "x": 306.87,
+              "y": 219
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 232,
+          "y": 185
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:3",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:3",
+          "portId": "out",
+          "x": 184,
+          "y": 303.5
+        },
+        "to": {
+          "itemId": "target:3",
+          "portId": "contract-in",
+          "x": 306.87,
+          "y": 303.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 184,
+              "y": 303.5
+            },
+            {
+              "x": 306.87,
+              "y": 303.5
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 224,
+          "y": 269.5
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:4",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:4",
+          "portId": "out",
+          "x": 168,
+          "y": 388
+        },
+        "to": {
+          "itemId": "target:4",
+          "portId": "contract-in",
+          "x": 306.87,
+          "y": 388
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 168,
+              "y": 388
+            },
+            {
+              "x": 306.87,
+              "y": 388
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 216,
+          "y": 354
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:5",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:5",
+          "portId": "out",
+          "x": 152,
+          "y": 472.5
+        },
+        "to": {
+          "itemId": "target:5",
+          "portId": "contract-in",
+          "x": 306.87,
+          "y": 472.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 152,
+              "y": 472.5
+            },
+            {
+              "x": 306.87,
+              "y": 472.5
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 208,
+          "y": 438.5
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:6",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:6",
+          "portId": "out",
+          "x": 136,
+          "y": 557
+        },
+        "to": {
+          "itemId": "target:6",
+          "portId": "contract-in",
+          "x": 306.87,
+          "y": 557
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 136,
+              "y": 557
+            },
+            {
+              "x": 306.87,
+              "y": 557
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 200,
+          "y": 523
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      },
+      {
+        "id": "contract:7",
+        "role": "emits",
+        "classes": [
+          "edge-dashed"
+        ],
+        "from": {
+          "itemId": "anchor:7",
+          "portId": "out",
+          "x": 120,
+          "y": 641.5
+        },
+        "to": {
+          "itemId": "target:7",
+          "portId": "contract-in",
+          "x": 306.87,
+          "y": 641.5
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 120,
+              "y": 641.5
+            },
+            {
+              "x": 306.87,
+              "y": 641.5
+            }
+          ]
+        },
+        "label": {
+          "lines": [
+            "emits"
+          ],
+          "width": 42.87,
+          "height": 22,
+          "lineHeight": 14,
+          "textStyleRole": "edge_label",
+          "x": 192,
+          "y": 607.5
+        },
+        "markers": {
+          "end": "arrow"
+        },
+        "paintGroup": "edges"
+      }
+    ],
+    "decorations": [],
+    "diagnostics": [],
+    "paintOrder": [
+      "chrome",
+      "nodes",
+      "labels",
+      "edges",
+      "edge_labels"
+    ]
+  }
+}

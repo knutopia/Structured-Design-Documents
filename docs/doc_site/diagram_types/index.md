@@ -34,10 +34,10 @@ for a compact list of content available to each diagram type.
   :::
   ::::
 
-  :::: details billSage app <Badge type="info" text="Detail: Compact" vertical="top" />
+  :::: details billSage app <Badge type="info" text="Detail: Compact" vertical="top" /><Badge type="info" text="Decorators: Type, ID" vertical="top" />
   :::tabs
   == Information Architecture Diagram
-  ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.compact.svg)
+  ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.compact.decorators-type-id.svg)
   == Source
   showRepoLink /real_world_exploration/billSage_example
   showSource ../../../real_world_exploration/billSage_example/billSage_simple_structure.sdd {3, 8, 13, 15-18, 26, 27, 37, 39, 40, 44, 47, 49, 50, 59, 64, 76, 78, 79, 86, 88, 89, 95, 98, 99, 106, 108, 109}
@@ -46,11 +46,20 @@ for a compact list of content available to each diagram type.
 
 ## UI Contracts
 
-  UI composition and state changes, per Place (and optionally per component).
-
-  In this view, Places and View States act as containers for UI structure; View State or component State transitions show behavior inside those scopes, with events, data bindings, and system dependencies shown as supporting contracts.
+  Component hierarchy, UI composition and state changes, with local Place and Component scopes.
 
   Examples: 
+  :::: details departure_desk_example <Badge type="info" text="Detail: Compact" vertical="top" /><Badge type="info" text="Decorators: Type, ID" vertical="top" />
+
+  :::tabs
+  == UI Contracts Diagram
+  ![Departure Desk example](./examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg)
+  == Source
+  showRepoLink /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/
+  showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+  :::
+  ::::
+
   :::: details place_viewstate_transition_example <Badge type="info" text="Detail: Detailed" vertical="top" />
   
   :::tabs
@@ -72,7 +81,11 @@ for a compact list of content available to each diagram type.
   showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/ui_state_fallback.sdd {3, 9, 12, 16-20, 23, 26, 31, 34, 38, 41, 46, 49, 53-58, 60-66, 68-73}
   :::
   ::::
+  The overview shows Component containment with nested enclosures. Each Component also has a local scope containing all immediate parents and children.  
 
+  Place and Component scopes show horizontal state sequences, composition references, and outgoing contracts from one source reference.  
+  See [UI Contracts Guide](ui_contracts_guide.md) for a closer look.
+  
 ## Scenario Flow
 
   Step-by-step UI-level activities (but *without* collapsing the world into screens). 

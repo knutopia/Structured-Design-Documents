@@ -1,0 +1,545 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.1",
+  "view_id": "ui_contracts",
+  "source_example": "departure_desk",
+  "nodes": [
+    {
+      "id": "C-410",
+      "type": "Component",
+      "name": "Load Workbench"
+    },
+    {
+      "id": "C-420",
+      "type": "Component",
+      "name": "Cargo Sheet"
+    },
+    {
+      "id": "C-430",
+      "type": "Component",
+      "name": "Seal Check"
+    },
+    {
+      "id": "C-431",
+      "type": "Component",
+      "name": "Seal Code Input"
+    },
+    {
+      "id": "C-440",
+      "type": "Component",
+      "name": "Release Lever"
+    },
+    {
+      "id": "C-450",
+      "type": "Component",
+      "name": "Trail Lens"
+    },
+    {
+      "id": "C-460",
+      "type": "Component",
+      "name": "Crew Note"
+    },
+    {
+      "id": "C-470",
+      "type": "Component",
+      "name": "Arrival Review"
+    },
+    {
+      "id": "D-410",
+      "type": "DataEntity",
+      "name": "LoadRecord"
+    },
+    {
+      "id": "E-420",
+      "type": "Event",
+      "name": "Cargo changed"
+    },
+    {
+      "id": "E-430",
+      "type": "Event",
+      "name": "Seal accepted"
+    },
+    {
+      "id": "E-440",
+      "type": "Event",
+      "name": "Release load"
+    },
+    {
+      "id": "E-450",
+      "type": "Event",
+      "name": "Checklist reviewed"
+    },
+    {
+      "id": "E-460",
+      "type": "Event",
+      "name": "Checklist filed"
+    },
+    {
+      "id": "E-470",
+      "type": "Event",
+      "name": "Archive confirmed"
+    },
+    {
+      "id": "E-480",
+      "type": "Event",
+      "name": "Crew review opened"
+    },
+    {
+      "id": "E-490",
+      "type": "Event",
+      "name": "Crew note acknowledged"
+    },
+    {
+      "id": "E-500",
+      "type": "Event",
+      "name": "Release recorded"
+    },
+    {
+      "id": "E-510",
+      "type": "Event",
+      "name": "Handoff completed"
+    },
+    {
+      "id": "E-520",
+      "type": "Event",
+      "name": "Receipt delivered"
+    },
+    {
+      "id": "E-530",
+      "type": "Event",
+      "name": "Departure closed"
+    },
+    {
+      "id": "E-540",
+      "type": "Event",
+      "name": "Result applied"
+    },
+    {
+      "id": "E-550",
+      "type": "Event",
+      "name": "Result acknowledged"
+    },
+    {
+      "id": "E-560",
+      "type": "Event",
+      "name": "Check filed"
+    },
+    {
+      "id": "P-410",
+      "type": "Place",
+      "name": "Departure Desk"
+    },
+    {
+      "id": "SA-410",
+      "type": "SystemAction",
+      "name": "Store draft"
+    },
+    {
+      "id": "SA-430",
+      "type": "SystemAction",
+      "name": "Check seal"
+    },
+    {
+      "id": "SA-440",
+      "type": "SystemAction",
+      "name": "Record departure"
+    },
+    {
+      "id": "ST-410a",
+      "type": "State",
+      "name": "Assembling"
+    },
+    {
+      "id": "ST-410b",
+      "type": "State",
+      "name": "Ready to release"
+    },
+    {
+      "id": "ST-410c",
+      "type": "State",
+      "name": "Checking load"
+    },
+    {
+      "id": "ST-410d",
+      "type": "State",
+      "name": "Release recorded"
+    },
+    {
+      "id": "ST-410e",
+      "type": "State",
+      "name": "Handoff complete"
+    },
+    {
+      "id": "ST-415a",
+      "type": "State",
+      "name": "Checklist open"
+    },
+    {
+      "id": "ST-415b",
+      "type": "State",
+      "name": "Checklist reviewed"
+    },
+    {
+      "id": "ST-415c",
+      "type": "State",
+      "name": "Checklist filed"
+    },
+    {
+      "id": "ST-420a",
+      "type": "State",
+      "name": "Untouched"
+    },
+    {
+      "id": "ST-420b",
+      "type": "State",
+      "name": "Adjusted"
+    },
+    {
+      "id": "ST-430a",
+      "type": "State",
+      "name": "Unchecked"
+    },
+    {
+      "id": "ST-430b",
+      "type": "State",
+      "name": "Verified"
+    },
+    {
+      "id": "ST-430c",
+      "type": "State",
+      "name": "Result applied"
+    },
+    {
+      "id": "ST-430d",
+      "type": "State",
+      "name": "Result acknowledged"
+    },
+    {
+      "id": "ST-430e",
+      "type": "State",
+      "name": "Check filed"
+    },
+    {
+      "id": "VS-410a",
+      "type": "ViewState",
+      "name": "Staging"
+    },
+    {
+      "id": "VS-410b",
+      "type": "ViewState",
+      "name": "Released"
+    },
+    {
+      "id": "VS-410c",
+      "type": "ViewState",
+      "name": "Archived"
+    },
+    {
+      "id": "VS-410d",
+      "type": "ViewState",
+      "name": "Receipt delivered"
+    },
+    {
+      "id": "VS-410e",
+      "type": "ViewState",
+      "name": "Departure closed"
+    },
+    {
+      "id": "VS-415a",
+      "type": "ViewState",
+      "name": "Crew message"
+    },
+    {
+      "id": "VS-415b",
+      "type": "ViewState",
+      "name": "Crew review"
+    },
+    {
+      "id": "VS-415c",
+      "type": "ViewState",
+      "name": "Crew confirmation"
+    }
+  ],
+  "edges": [
+    {
+      "from": "C-410",
+      "type": "CONTAINS",
+      "to": "C-420"
+    },
+    {
+      "from": "C-410",
+      "type": "CONTAINS",
+      "to": "C-440"
+    },
+    {
+      "from": "C-410",
+      "type": "CONTAINS",
+      "to": "C-450"
+    },
+    {
+      "from": "C-410",
+      "type": "CONTAINS",
+      "to": "C-470"
+    },
+    {
+      "from": "C-420",
+      "type": "BINDS_TO",
+      "to": "D-410"
+    },
+    {
+      "from": "C-420",
+      "type": "CONTAINS",
+      "to": "C-430"
+    },
+    {
+      "from": "C-420",
+      "type": "DEPENDS_ON",
+      "to": "SA-410"
+    },
+    {
+      "from": "C-420",
+      "type": "EMITS",
+      "to": "E-420"
+    },
+    {
+      "from": "C-430",
+      "type": "BINDS_TO",
+      "to": "D-410"
+    },
+    {
+      "from": "C-430",
+      "type": "CONTAINS",
+      "to": "C-431"
+    },
+    {
+      "from": "C-430",
+      "type": "DEPENDS_ON",
+      "to": "SA-430"
+    },
+    {
+      "from": "C-430",
+      "type": "EMITS",
+      "to": "E-430"
+    },
+    {
+      "from": "C-440",
+      "type": "DEPENDS_ON",
+      "to": "SA-440"
+    },
+    {
+      "from": "C-440",
+      "type": "EMITS",
+      "to": "E-440"
+    },
+    {
+      "from": "C-450",
+      "type": "BINDS_TO",
+      "to": "D-410"
+    },
+    {
+      "from": "C-450",
+      "type": "DEPENDS_ON",
+      "to": "SA-410"
+    },
+    {
+      "from": "C-470",
+      "type": "CONTAINS",
+      "to": "C-430"
+    },
+    {
+      "from": "P-410",
+      "type": "COMPOSED_OF",
+      "to": "C-410"
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410a"
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410b"
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410c"
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410d"
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-410e"
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-415a"
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-415b"
+    },
+    {
+      "from": "P-410",
+      "type": "CONTAINS",
+      "to": "VS-415c"
+    },
+    {
+      "from": "ST-410a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-410c"
+    },
+    {
+      "from": "ST-410b",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-410d"
+    },
+    {
+      "from": "ST-410c",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-410b"
+    },
+    {
+      "from": "ST-410d",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-410e"
+    },
+    {
+      "from": "ST-415a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-415b"
+    },
+    {
+      "from": "ST-415b",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-415c"
+    },
+    {
+      "from": "ST-420a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-420b"
+    },
+    {
+      "from": "ST-430a",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-430b"
+    },
+    {
+      "from": "ST-430b",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-430c"
+    },
+    {
+      "from": "ST-430c",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-430d"
+    },
+    {
+      "from": "ST-430d",
+      "type": "TRANSITIONS_TO",
+      "to": "ST-430e"
+    },
+    {
+      "from": "VS-410a",
+      "type": "COMPOSED_OF",
+      "to": "C-460"
+    },
+    {
+      "from": "VS-410a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-410b"
+    },
+    {
+      "from": "VS-410b",
+      "type": "COMPOSED_OF",
+      "to": "C-460"
+    },
+    {
+      "from": "VS-410b",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-410c"
+    },
+    {
+      "from": "VS-410c",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-410d"
+    },
+    {
+      "from": "VS-410d",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-410e"
+    },
+    {
+      "from": "VS-415a",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-415b"
+    },
+    {
+      "from": "VS-415b",
+      "type": "TRANSITIONS_TO",
+      "to": "VS-415c"
+    }
+  ],
+  "derived": {
+    "node_annotations": [],
+    "edge_annotations": [],
+    "node_groups": [
+      {
+        "id": "secondary_state_group:C-410",
+        "role": "secondary_state_group",
+        "label": "C-410",
+        "node_ids": [
+          "ST-410a",
+          "ST-410b",
+          "ST-410c",
+          "ST-410d",
+          "ST-410e",
+          "ST-415a",
+          "ST-415b",
+          "ST-415c"
+        ],
+        "scope_id": "C-410"
+      },
+      {
+        "id": "secondary_state_group:C-420",
+        "role": "secondary_state_group",
+        "label": "C-420",
+        "node_ids": [
+          "ST-420a",
+          "ST-420b"
+        ],
+        "scope_id": "C-420"
+      },
+      {
+        "id": "secondary_state_group:C-430",
+        "role": "secondary_state_group",
+        "label": "C-430",
+        "node_ids": [
+          "ST-430a",
+          "ST-430b",
+          "ST-430c",
+          "ST-430d",
+          "ST-430e"
+        ],
+        "scope_id": "C-430"
+      }
+    ],
+    "view_metadata": {
+      "transition_graph_priority": {
+        "primary_node_type": "ViewState",
+        "secondary_node_type": "State",
+        "secondary_render_mode": "inset",
+        "fallback_to_secondary_when_primary_absent": true
+      }
+    }
+  },
+  "omissions": [],
+  "notes": []
+}

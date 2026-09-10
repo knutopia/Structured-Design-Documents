@@ -1,0 +1,21 @@
+{
+  "revision": "e3fe09c600d6c8681380a297d9c426cd99e53045",
+  "fixtureSha256": "fec1fc5b356be868944b67eb2d6134bd6d70f0ca2f290fc515662f061f45fbff",
+  "protectedSourceHashes": {
+    "checked": 49,
+    "changed": []
+  },
+  "referenceHashes": {
+    "checked": 49,
+    "changed": []
+  },
+  "goldenHashes": {
+    "checked": 156,
+    "changed": []
+  },
+  "allowedHeaderIntegration": [
+    "src/renderer/staged/contracts.ts: metadata and cloning",
+    "src/renderer/staged/microLayout.ts: header measurement dispatch",
+    "src/renderer/staged/svgBackend.ts: container chrome dispatch"
+  ]
+}

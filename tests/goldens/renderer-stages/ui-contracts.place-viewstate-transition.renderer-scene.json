@@ -5,87 +5,209 @@
   "root": {
     "kind": "container",
     "id": "root",
-    "role": "diagram_root",
-    "primitive": "root",
-    "classes": [
-      "diagram",
-      "ui_contracts"
-    ],
+    "role": "ui_contracts_group",
+    "primitive": "stack",
+    "classes": [],
     "layout": {
       "strategy": "stack",
       "direction": "vertical",
       "gap": 28,
-      "crossAlignment": "stretch"
+      "crossAlignment": "start"
     },
     "chrome": {
       "padding": {
-        "top": 24,
-        "right": 24,
-        "bottom": 24,
-        "left": 24
+        "top": 16,
+        "right": 16,
+        "bottom": 16,
+        "left": 16
       },
-      "gutter": 28,
       "headerBandHeight": 0
     },
     "children": [
       {
         "kind": "container",
-        "id": "P-010",
-        "role": "place",
+        "id": "components-without-containment",
+        "role": "ui_contracts_group",
         "primitive": "cluster",
-        "classes": [
-          "place",
-          "scope"
-        ],
+        "classes": [],
         "layout": {
-          "strategy": "grid",
-          "columns": 2,
+          "strategy": "stack",
+          "direction": "vertical",
           "gap": 16,
-          "crossAlignment": "stretch"
+          "crossAlignment": "start"
         },
         "chrome": {
           "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
           },
-          "gutter": 16
+          "headerBandHeight": 0
         },
-        "headerContent": [
+        "children": [
           {
-            "id": "P-010__header__line_0",
-            "kind": "text",
-            "text": "Billing",
-            "textStyleRole": "title",
-            "priority": "primary"
+            "kind": "node",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-010%22%5D",
+            "role": "component",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "Billing Form",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Component",
+              "nodeId": "C-010",
+              "attributes": []
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
           },
           {
-            "id": "P-010__header__line_1",
-            "kind": "text",
-            "text": "/billing",
-            "textStyleRole": "subtitle",
-            "priority": "secondary"
-          },
-          {
-            "id": "P-010__header__line_2",
-            "kind": "badge_text",
-            "text": "auth",
-            "textStyleRole": "badge",
-            "priority": "secondary"
+            "kind": "node",
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-011%22%5D",
+            "role": "component",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "Submit Button",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Component",
+              "nodeId": "C-011",
+              "attributes": []
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
           }
         ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north"
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
+          }
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Components without hierarchy"
+          }
+        }
+      },
+      {
+        "kind": "container",
+        "id": "scope:P-010",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "headerBandHeight": 0
+        },
         "children": [
           {
             "kind": "container",
-            "id": "view_state_graph:P-010",
-            "role": "view_state_graph",
-            "primitive": "cluster",
-            "classes": [
-              "synthetic",
-              "transition_graph",
-              "view_state_graph"
-            ],
+            "id": "scope:P-010:composition:P-010",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
             "layout": {
               "strategy": "layered",
               "direction": "horizontal",
@@ -94,197 +216,274 @@
             },
             "chrome": {
               "padding": {
-                "top": 12,
-                "right": 12,
-                "bottom": 12,
-                "left": 12
+                "top": 10,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
               },
-              "gutter": 16
+              "headerBandHeight": 0
             },
-            "headerContent": [
-              {
-                "id": "view_state_graph:P-010__header__line_0",
-                "kind": "text",
-                "text": "ViewState Graph",
-                "textStyleRole": "title",
-                "priority": "primary"
-              }
-            ],
             "children": [
               {
-                "kind": "container",
-                "id": "VS-010a",
-                "role": "view_state",
-                "primitive": "cluster",
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D",
+                "role": "place",
+                "primitive": "card",
                 "classes": [
-                  "view_state",
-                  "scope",
-                  "chrome-dashed"
+                  "semantic_node"
                 ],
-                "layout": {
-                  "strategy": "stack",
-                  "direction": "vertical",
-                  "gap": 16,
-                  "crossAlignment": "stretch"
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
                 },
-                "chrome": {
-                  "padding": {
-                    "top": 12,
-                    "right": 12,
-                    "bottom": 12,
-                    "left": 12
-                  },
-                  "gutter": 16
+                "overflowPolicy": {
+                  "kind": "grow_height"
                 },
-                "headerContent": [
-                  {
-                    "id": "VS-010a__header__line_0",
-                    "kind": "text",
-                    "text": "Billing Editing",
-                    "textStyleRole": "title",
-                    "priority": "primary"
+                "content": [],
+                "sharedNode": {
+                  "emphasized": true,
+                  "title": "Billing",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
                   },
-                  {
-                    "id": "VS-010a__header__line_1",
-                    "kind": "metadata",
-                    "text": "data: PaymentMethod",
-                    "textStyleRole": "metadata",
-                    "priority": "secondary"
-                  }
-                ],
-                "children": [
-                  {
-                    "kind": "container",
-                    "id": "C-011",
-                    "role": "component",
-                    "primitive": "cluster",
-                    "classes": [
-                      "component",
-                      "scope"
-                    ],
-                    "layout": {
-                      "strategy": "stack",
-                      "direction": "vertical",
-                      "gap": 16,
-                      "crossAlignment": "stretch"
+                  "nodeType": "Place",
+                  "nodeId": "P-010",
+                  "attributes": [
+                    {
+                      "groupId": "route_or_key",
+                      "label": "Route",
+                      "value": "/billing"
                     },
-                    "chrome": {
-                      "padding": {
-                        "top": 12,
-                        "right": 12,
-                        "bottom": 12,
-                        "left": 12
-                      },
-                      "gutter": 16
+                    {
+                      "groupId": "access",
+                      "label": "Access",
+                      "value": "auth"
                     },
-                    "headerContent": [
-                      {
-                        "id": "C-011__header__line_0",
-                        "kind": "text",
-                        "text": "Component: Submit Button",
-                        "textStyleRole": "title",
-                        "priority": "primary"
-                      }
-                    ],
-                    "children": [
-                      {
-                        "kind": "container",
-                        "id": "C-011__content",
-                        "role": "contract_gutter",
-                        "primitive": "stack",
-                        "classes": [
-                          "contract_gutter"
-                        ],
-                        "layout": {
-                          "strategy": "stack",
-                          "direction": "vertical",
-                          "gap": 16,
-                          "crossAlignment": "stretch"
-                        },
-                        "chrome": {
-                          "padding": {
-                            "top": 0,
-                            "right": 0,
-                            "bottom": 0,
-                            "left": 128
-                          },
-                          "gutter": 16,
-                          "headerBandHeight": 0
-                        },
-                        "children": [
-                          {
-                            "kind": "node",
-                            "id": "E-010",
-                            "role": "event",
-                            "primitive": "card",
-                            "classes": [
-                              "semantic_node"
-                            ],
-                            "widthPolicy": {
-                              "preferred": "standard",
-                              "allowed": [
-                                "standard"
-                              ]
-                            },
-                            "overflowPolicy": {
-                              "kind": "grow_height"
-                            },
-                            "content": [],
-                            "sharedNode": {
-                              "title": "Submit",
-                              "decoratorMode": {
-                                "id": "none",
-                                "showNodeType": false,
-                                "showNodeId": false
-                              },
-                              "nodeType": "Event",
-                              "nodeId": "E-010",
-                              "attributes": []
-                            },
-                            "ports": [
-                              {
-                                "id": "E-010__contract_in",
-                                "role": "contract_in",
-                                "side": "west"
-                              }
-                            ]
-                          }
-                        ],
-                        "ports": []
-                      }
-                    ],
-                    "ports": [
-                      {
-                        "id": "C-011__contract_out",
-                        "role": "contract_out",
-                        "side": "west",
-                        "offsetPolicy": "content_start"
-                      }
-                    ]
-                  }
-                ],
+                    {
+                      "groupId": "entry_points",
+                      "label": "Entry points",
+                      "value": "link:/billing,notification:payment_failed"
+                    },
+                    {
+                      "groupId": "primary_nav",
+                      "label": "Primary navigation",
+                      "value": "true"
+                    }
+                  ]
+                },
                 "ports": [
                   {
-                    "id": "VS-010a__transition_in",
-                    "role": "transition_in",
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "offset": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
                     "side": "west"
-                  },
-                  {
-                    "id": "VS-010a__transition_out",
-                    "role": "transition_out",
-                    "side": "east"
-                  },
-                  {
-                    "id": "VS-010a__contract_out",
-                    "role": "contract_out",
-                    "side": "west",
-                    "offsetPolicy": "content_start"
                   }
                 ]
               },
               {
                 "kind": "node",
-                "id": "VS-010b",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AP-010%22%2C%22relationship%3A%255B%2522P-010%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Billing Form",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Component",
+                  "nodeId": "C-010",
+                  "attributes": []
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "offset": 24
+                  }
+                ]
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "node",
+            "id": "scope:P-010:description",
+            "role": "ui_contracts_description",
+            "primitive": "label",
+            "classes": [],
+            "content": [
+              {
+                "id": "scope:P-010:description:text",
+                "kind": "text",
+                "text": "Billing place",
+                "textStyleRole": "label"
+              }
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "ports": []
+          },
+          {
+            "kind": "container",
+            "id": "scope:P-010:sequence:primary",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "layered",
+              "direction": "horizontal",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 31,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D",
+                "role": "viewstate",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Billing Editing",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "ViewState",
+                  "nodeId": "VS-010a",
+                  "attributes": [
+                    {
+                      "groupId": "data_required",
+                      "label": "Data required",
+                      "value": "PaymentMethod"
+                    }
+                  ]
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              },
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D",
                 "role": "viewstate",
                 "primitive": "card",
                 "classes": [
@@ -312,90 +511,716 @@
                   "attributes": [
                     {
                       "groupId": "data_required",
-                      "label": "data",
+                      "label": "Data required",
                       "value": "Receipt"
                     }
                   ]
                 },
                 "ports": [
                   {
-                    "id": "VS-010b__transition_in",
-                    "role": "transition_in",
-                    "side": "west"
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
                   },
                   {
-                    "id": "VS-010b__transition_out",
-                    "role": "transition_out",
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
                     "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
                   }
                 ]
               }
             ],
-            "ports": []
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
           },
           {
             "kind": "container",
-            "id": "C-010",
-            "role": "component",
-            "primitive": "cluster",
-            "classes": [
-              "component",
-              "scope"
-            ],
+            "id": "scope:P-010:composition:VS-010a",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
             "layout": {
-              "strategy": "stack",
-              "direction": "vertical",
-              "gap": 16,
-              "crossAlignment": "stretch"
+              "strategy": "layered",
+              "direction": "horizontal",
+              "gap": 24,
+              "crossAlignment": "start"
             },
             "chrome": {
               "padding": {
-                "top": 12,
-                "right": 12,
-                "bottom": 12,
-                "left": 12
+                "top": 10,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
               },
-              "gutter": 16
+              "headerBandHeight": 0
             },
-            "headerContent": [
+            "children": [
               {
-                "id": "C-010__header__line_0",
-                "kind": "text",
-                "text": "Component: Billing Form",
-                "textStyleRole": "title",
-                "priority": "primary"
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_source%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22VS-010a%22%5D",
+                "role": "viewstate",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Billing Editing",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "ViewState",
+                  "nodeId": "VS-010a",
+                  "attributes": []
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "offset": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              },
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22relationship%3A%255B%2522VS-010a%2522%252C%2522COMPOSED_OF%2522%252C%2522C-011%2522%255D%3A0%22%2C%22C-011%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Submit Button",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Component",
+                  "nodeId": "C-011",
+                  "attributes": []
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "offset": 24
+                  }
+                ]
               }
             ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north"
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
+          }
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Place scope · Billing"
+          }
+        }
+      },
+      {
+        "kind": "container",
+        "id": "scope:P-011",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22scope%3AP-011%22%2C%22focal%22%2C%22P-011%22%5D",
+            "role": "place",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "emphasized": true,
+              "title": "Confirmation",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Place",
+              "nodeId": "P-011",
+              "attributes": [
+                {
+                  "groupId": "route_or_key",
+                  "label": "Route",
+                  "value": "/confirmation"
+                },
+                {
+                  "groupId": "access",
+                  "label": "Access",
+                  "value": "role:billing_agent"
+                }
+              ]
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "node",
+            "id": "scope:P-011:description",
+            "role": "ui_contracts_description",
+            "primitive": "label",
+            "classes": [],
+            "content": [
+              {
+                "id": "scope:P-011:description:text",
+                "kind": "text",
+                "text": "Confirmation place",
+                "textStyleRole": "label"
+              }
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "ports": []
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north"
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
+          }
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Place scope · Confirmation"
+          }
+        }
+      },
+      {
+        "kind": "container",
+        "id": "scope:C-010",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "container",
+            "id": "scope:C-010:neighborhood",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 12,
+              "crossAlignment": "center"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "emphasized": true,
+                  "title": "Billing Form",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Component",
+                  "nodeId": "C-010",
+                  "attributes": [
+                    {
+                      "groupId": "description",
+                      "label": "description",
+                      "value": "Form collecting billing details"
+                    },
+                    {
+                      "groupId": "inputs",
+                      "label": "inputs",
+                      "value": "BillingFields"
+                    },
+                    {
+                      "groupId": "outputs",
+                      "label": "outputs",
+                      "value": "SubmitRequested"
+                    }
+                  ]
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "container",
+            "id": "scope:C-010:sequence:secondary",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "layered",
+              "direction": "horizontal",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 40,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010a%22%5D",
+                "role": "state",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Form Ready",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "State",
+                  "nodeId": "ST-010a",
+                  "attributes": []
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              },
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010b%22%5D",
+                "role": "state",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "title": "Submitting",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "State",
+                  "nodeId": "ST-010b",
+                  "attributes": []
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              }
+            ],
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "container",
+            "id": "scope:C-010:contract:C-010",
+            "role": "fanout_proof",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
             "children": [
               {
                 "kind": "container",
-                "id": "C-010__content",
-                "role": "contract_gutter",
+                "id": "scope:C-010:contract:C-010:target-row:0",
+                "role": "fanout_proof",
                 "primitive": "stack",
-                "classes": [
-                  "contract_gutter"
-                ],
+                "classes": [],
                 "layout": {
                   "strategy": "stack",
-                  "direction": "vertical",
-                  "gap": 16,
-                  "crossAlignment": "stretch"
+                  "direction": "horizontal",
+                  "gap": 131.748,
+                  "crossAlignment": "start"
                 },
                 "chrome": {
                   "padding": {
-                    "top": 0,
+                    "top": 10,
                     "right": 0,
                     "bottom": 0,
-                    "left": 128
+                    "left": 0
                   },
-                  "gutter": 16,
                   "headerBandHeight": 0
                 },
                 "children": [
                   {
                     "kind": "node",
-                    "id": "SA-010",
-                    "role": "systemaction",
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D",
+                    "role": "component",
                     "primitive": "card",
                     "classes": [
                       "semantic_node"
@@ -411,27 +1236,34 @@
                     },
                     "content": [],
                     "sharedNode": {
-                      "title": "Save Subscription",
+                      "title": "Billing Form",
                       "decoratorMode": {
                         "id": "none",
                         "showNodeType": false,
                         "showNodeId": false
                       },
-                      "nodeType": "SystemAction",
-                      "nodeId": "SA-010",
+                      "nodeType": "Component",
+                      "nodeId": "C-010",
                       "attributes": []
                     },
                     "ports": [
                       {
-                        "id": "SA-010__contract_in",
-                        "role": "contract_in",
-                        "side": "west"
+                        "id": "contract-out:0",
+                        "role": "contract_out",
+                        "side": "east",
+                        "offset": 24
+                      },
+                      {
+                        "id": "contract-out:1",
+                        "role": "contract_out",
+                        "side": "south",
+                        "offset": 200
                       }
                     ]
                   },
                   {
                     "kind": "node",
-                    "id": "D-010",
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522BINDS_TO%2522%252C%2522D-010%2522%255D%3A0%22%2C%22D-010%22%5D",
                     "role": "dataentity",
                     "primitive": "card",
                     "classes": [
@@ -460,246 +1292,813 @@
                     },
                     "ports": [
                       {
-                        "id": "D-010__contract_in",
+                        "id": "contract-in",
                         "role": "contract_in",
-                        "side": "west"
+                        "side": "west",
+                        "offset": 24
                       }
                     ]
+                  }
+                ],
+                "ports": []
+              },
+              {
+                "kind": "container",
+                "id": "scope:C-010:contract:C-010:target-row:1",
+                "role": "fanout_proof",
+                "primitive": "stack",
+                "classes": [],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "horizontal",
+                  "gap": 155.748,
+                  "crossAlignment": "center"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 10,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 200
                   },
+                  "headerBandHeight": 0
+                },
+                "children": [
                   {
                     "kind": "container",
-                    "id": "secondary_state_group:C-010",
-                    "role": "state_graph",
-                    "primitive": "cluster",
-                    "classes": [
-                      "synthetic",
-                      "transition_graph",
-                      "state_graph",
-                      "chrome-dashed"
-                    ],
+                    "id": "scope:C-010:contract:C-010:anchor:1",
+                    "role": "fanout_proof",
+                    "primitive": "stack",
+                    "classes": [],
                     "layout": {
-                      "strategy": "layered",
-                      "direction": "horizontal",
-                      "gap": 24,
+                      "strategy": "stack",
+                      "direction": "vertical",
+                      "gap": 0,
                       "crossAlignment": "start"
                     },
                     "chrome": {
                       "padding": {
-                        "top": 12,
-                        "right": 12,
-                        "bottom": 12,
-                        "left": 12
+                        "top": 0,
+                        "right": 0,
+                        "bottom": 0,
+                        "left": 0
                       },
-                      "gutter": 16
+                      "headerBandHeight": 0
                     },
-                    "headerContent": [
+                    "children": [],
+                    "ports": [
                       {
-                        "id": "secondary_state_group:C-010__header__line_0",
-                        "kind": "text",
-                        "text": "State detail: Billing Form",
-                        "textStyleRole": "title",
-                        "priority": "primary"
+                        "id": "in",
+                        "role": "in",
+                        "side": "north",
+                        "offset": 0
                       },
                       {
-                        "id": "secondary_state_group:C-010__header__line_1",
-                        "kind": "metadata",
-                        "text": "scope_id=C-010",
-                        "textStyleRole": "metadata",
-                        "priority": "secondary"
+                        "id": "out",
+                        "role": "out",
+                        "side": "east",
+                        "offset": 0
                       }
+                    ]
+                  },
+                  {
+                    "kind": "node",
+                    "id": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-010%2522%255D%3A0%22%2C%22SA-010%22%5D",
+                    "role": "systemaction",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node"
                     ],
-                    "children": [
-                      {
-                        "kind": "node",
-                        "id": "ST-010a",
-                        "role": "state",
-                        "primitive": "card",
-                        "classes": [
-                          "semantic_node"
-                        ],
-                        "widthPolicy": {
-                          "preferred": "standard",
-                          "allowed": [
-                            "standard"
-                          ]
-                        },
-                        "overflowPolicy": {
-                          "kind": "grow_height"
-                        },
-                        "content": [],
-                        "sharedNode": {
-                          "title": "Form Ready",
-                          "decoratorMode": {
-                            "id": "none",
-                            "showNodeType": false,
-                            "showNodeId": false
-                          },
-                          "nodeType": "State",
-                          "nodeId": "ST-010a",
-                          "attributes": []
-                        },
-                        "ports": [
-                          {
-                            "id": "ST-010a__transition_in",
-                            "role": "transition_in",
-                            "side": "west"
-                          },
-                          {
-                            "id": "ST-010a__transition_out",
-                            "role": "transition_out",
-                            "side": "east"
-                          }
-                        ]
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "standard"
+                      ]
+                    },
+                    "overflowPolicy": {
+                      "kind": "grow_height"
+                    },
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Save Subscription",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
                       },
+                      "nodeType": "SystemAction",
+                      "nodeId": "SA-010",
+                      "attributes": []
+                    },
+                    "ports": [
                       {
-                        "kind": "node",
-                        "id": "ST-010b",
-                        "role": "state",
-                        "primitive": "card",
-                        "classes": [
-                          "semantic_node"
-                        ],
-                        "widthPolicy": {
-                          "preferred": "standard",
-                          "allowed": [
-                            "standard"
-                          ]
-                        },
-                        "overflowPolicy": {
-                          "kind": "grow_height"
-                        },
-                        "content": [],
-                        "sharedNode": {
-                          "title": "Submitting",
-                          "decoratorMode": {
-                            "id": "none",
-                            "showNodeType": false,
-                            "showNodeId": false
-                          },
-                          "nodeType": "State",
-                          "nodeId": "ST-010b",
-                          "attributes": []
-                        },
-                        "ports": [
-                          {
-                            "id": "ST-010b__transition_in",
-                            "role": "transition_in",
-                            "side": "west"
-                          },
-                          {
-                            "id": "ST-010b__transition_out",
-                            "role": "transition_out",
-                            "side": "east"
-                          }
-                        ]
+                        "id": "contract-in",
+                        "role": "contract_in",
+                        "side": "west",
+                        "offset": 24
                       }
-                    ],
-                    "ports": []
+                    ]
                   }
                 ],
                 "ports": []
               }
             ],
+            "ports": []
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north"
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
+          }
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Component scope · Billing Form"
+          }
+        }
+      },
+      {
+        "kind": "container",
+        "id": "scope:C-011",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "container",
+            "id": "scope:C-011:neighborhood",
+            "role": "ui_contracts_group",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 12,
+              "crossAlignment": "center"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
+            "children": [
+              {
+                "kind": "node",
+                "id": "occurrence:%5B%22scope%3AC-011%22%2C%22focal%22%2C%22C-011%22%5D",
+                "role": "component",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [],
+                "sharedNode": {
+                  "emphasized": true,
+                  "title": "Submit Button",
+                  "decoratorMode": {
+                    "id": "none",
+                    "showNodeType": false,
+                    "showNodeId": false
+                  },
+                  "nodeType": "Component",
+                  "nodeId": "C-011",
+                  "attributes": [
+                    {
+                      "groupId": "description",
+                      "label": "description",
+                      "value": "Primary submit action"
+                    },
+                    {
+                      "groupId": "inputs",
+                      "label": "inputs",
+                      "value": "Click"
+                    },
+                    {
+                      "groupId": "outputs",
+                      "label": "outputs",
+                      "value": "SubmitClicked"
+                    }
+                  ]
+                },
+                "ports": [
+                  {
+                    "id": "north",
+                    "role": "north",
+                    "side": "north"
+                  },
+                  {
+                    "id": "south",
+                    "role": "south",
+                    "side": "south"
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east"
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west"
+                  }
+                ]
+              }
+            ],
             "ports": [
               {
-                "id": "C-010__contract_out",
-                "role": "contract_out",
-                "side": "west",
-                "offsetPolicy": "content_start"
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "container",
+            "id": "scope:C-011:contract:C-011",
+            "role": "fanout_proof",
+            "primitive": "stack",
+            "classes": [],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 24,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "headerBandHeight": 0
+            },
+            "children": [
+              {
+                "kind": "container",
+                "id": "scope:C-011:contract:C-011:target-row:0",
+                "role": "fanout_proof",
+                "primitive": "stack",
+                "classes": [],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "horizontal",
+                  "gap": 66.87,
+                  "crossAlignment": "start"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 10,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 0
+                  },
+                  "headerBandHeight": 0
+                },
+                "children": [
+                  {
+                    "kind": "node",
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_source%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22C-011%22%5D",
+                    "role": "component",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "standard"
+                      ]
+                    },
+                    "overflowPolicy": {
+                      "kind": "grow_height"
+                    },
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Submit Button",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "Component",
+                      "nodeId": "C-011",
+                      "attributes": []
+                    },
+                    "ports": [
+                      {
+                        "id": "contract-out:0",
+                        "role": "contract_out",
+                        "side": "east",
+                        "offset": 24
+                      }
+                    ]
+                  },
+                  {
+                    "kind": "node",
+                    "id": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_target%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22relationship%3A%255B%2522C-011%2522%252C%2522EMITS%2522%252C%2522E-010%2522%255D%3A0%22%2C%22E-010%22%5D",
+                    "role": "event",
+                    "primitive": "card",
+                    "classes": [
+                      "semantic_node"
+                    ],
+                    "widthPolicy": {
+                      "preferred": "standard",
+                      "allowed": [
+                        "standard"
+                      ]
+                    },
+                    "overflowPolicy": {
+                      "kind": "grow_height"
+                    },
+                    "content": [],
+                    "sharedNode": {
+                      "title": "Submit",
+                      "decoratorMode": {
+                        "id": "none",
+                        "showNodeType": false,
+                        "showNodeId": false
+                      },
+                      "nodeType": "Event",
+                      "nodeId": "E-010",
+                      "attributes": []
+                    },
+                    "ports": [
+                      {
+                        "id": "contract-in",
+                        "role": "contract_in",
+                        "side": "west",
+                        "offset": 24
+                      }
+                    ]
+                  }
+                ],
+                "ports": []
+              }
+            ],
+            "ports": []
+          }
+        ],
+        "ports": [
+          {
+            "id": "north",
+            "role": "north",
+            "side": "north"
+          },
+          {
+            "id": "south",
+            "role": "south",
+            "side": "south"
+          },
+          {
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
+          }
+        ],
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Component scope · Submit Button"
+          }
+        }
+      },
+      {
+        "kind": "container",
+        "id": "target-register",
+        "role": "ui_contracts_group",
+        "primitive": "cluster",
+        "classes": [],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 16,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "headerBandHeight": 0
+        },
+        "children": [
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-010%22%5D",
+            "role": "event",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "Submit",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "Event",
+              "nodeId": "E-010",
+              "attributes": []
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-010%22%5D",
+            "role": "systemaction",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "Save Subscription",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "SystemAction",
+              "nodeId": "SA-010",
+              "attributes": []
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
+              }
+            ]
+          },
+          {
+            "kind": "node",
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-010%22%5D",
+            "role": "dataentity",
+            "primitive": "card",
+            "classes": [
+              "semantic_node"
+            ],
+            "widthPolicy": {
+              "preferred": "standard",
+              "allowed": [
+                "standard"
+              ]
+            },
+            "overflowPolicy": {
+              "kind": "grow_height"
+            },
+            "content": [],
+            "sharedNode": {
+              "title": "Subscription",
+              "decoratorMode": {
+                "id": "none",
+                "showNodeType": false,
+                "showNodeId": false
+              },
+              "nodeType": "DataEntity",
+              "nodeId": "D-010",
+              "attributes": []
+            },
+            "ports": [
+              {
+                "id": "north",
+                "role": "north",
+                "side": "north"
+              },
+              {
+                "id": "south",
+                "role": "south",
+                "side": "south"
+              },
+              {
+                "id": "east",
+                "role": "east",
+                "side": "east"
+              },
+              {
+                "id": "west",
+                "role": "west",
+                "side": "west"
               }
             ]
           }
         ],
         "ports": [
           {
-            "id": "P-010__contract_out",
-            "role": "contract_out",
-            "side": "west",
-            "offsetPolicy": "content_start"
-          }
-        ]
-      },
-      {
-        "kind": "container",
-        "id": "P-011",
-        "role": "place",
-        "primitive": "cluster",
-        "classes": [
-          "place",
-          "scope"
-        ],
-        "layout": {
-          "strategy": "stack",
-          "direction": "vertical",
-          "gap": 16,
-          "crossAlignment": "stretch"
-        },
-        "chrome": {
-          "padding": {
-            "top": 12,
-            "right": 12,
-            "bottom": 12,
-            "left": 12
-          },
-          "gutter": 16
-        },
-        "headerContent": [
-          {
-            "id": "P-011__header__line_0",
-            "kind": "text",
-            "text": "Confirmation",
-            "textStyleRole": "title",
-            "priority": "primary"
+            "id": "north",
+            "role": "north",
+            "side": "north"
           },
           {
-            "id": "P-011__header__line_1",
-            "kind": "text",
-            "text": "/confirmation",
-            "textStyleRole": "subtitle",
-            "priority": "secondary"
+            "id": "south",
+            "role": "south",
+            "side": "south"
           },
           {
-            "id": "P-011__header__line_2",
-            "kind": "badge_text",
-            "text": "role:billing_agent",
-            "textStyleRole": "badge",
-            "priority": "secondary"
+            "id": "east",
+            "role": "east",
+            "side": "east"
+          },
+          {
+            "id": "west",
+            "role": "west",
+            "side": "west"
           }
         ],
-        "children": [],
-        "ports": [
-          {
-            "id": "P-011__contract_out",
-            "role": "contract_out",
-            "side": "west",
-            "offsetPolicy": "content_start"
+        "viewMetadata": {
+          "uiContracts": {
+            "kind": "enclosure",
+            "title": "Referenced targets"
           }
-        ]
+        }
       }
     ],
-    "ports": []
+    "ports": [
+      {
+        "id": "north",
+        "role": "north",
+        "side": "north"
+      },
+      {
+        "id": "south",
+        "role": "south",
+        "side": "south"
+      },
+      {
+        "id": "east",
+        "role": "east",
+        "side": "east"
+      },
+      {
+        "id": "west",
+        "role": "west",
+        "side": "west"
+      }
+    ],
+    "viewMetadata": {
+      "uiContracts": {
+        "kind": "sheet"
+      }
+    }
   },
   "edges": [
     {
-      "id": "binds_to:C-010->D-010",
-      "role": "binds_to",
-      "classes": [
-        "edge-dotted",
-        "constraint_edge"
-      ],
+      "id": "scope:P-010:composition:P-010:relationship:%5B%22P-010%22%2C%22COMPOSED_OF%22%2C%22C-010%22%5D:0",
+      "role": "composition",
+      "classes": [],
       "from": {
-        "itemId": "C-010"
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D",
+        "portId": "east"
       },
       "to": {
-        "itemId": "D-010"
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AP-010%22%2C%22relationship%3A%255B%2522P-010%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D",
+        "portId": "west"
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "text": "composed of",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:P-010:sequence:primary:relationship:%5B%22VS-010a%22%2C%22TRANSITIONS_TO%22%2C%22VS-010b%22%5D:0",
+      "role": "transition",
+      "classes": [],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D",
+        "portId": "east"
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D",
+        "portId": "west"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "text": "[Submit] {payment_valid} / SA-010",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:P-010:composition:VS-010a:relationship:%5B%22VS-010a%22%2C%22COMPOSED_OF%22%2C%22C-011%22%5D:0",
+      "role": "composition",
+      "classes": [],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_source%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22VS-010a%22%5D",
+        "portId": "east"
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22relationship%3A%255B%2522VS-010a%2522%252C%2522COMPOSED_OF%2522%252C%2522C-011%2522%255D%3A0%22%2C%22C-011%22%5D",
+        "portId": "west"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "text": "composed of",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:C-010:sequence:secondary:relationship:%5B%22ST-010a%22%2C%22TRANSITIONS_TO%22%2C%22ST-010b%22%5D:0",
+      "role": "transition",
+      "classes": [
+        "edge-dashed"
+      ],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010a%22%5D",
+        "portId": "east"
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010b%22%5D",
+        "portId": "west"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "label": {
+        "text": "[Submit] {payment_valid} / SA-010",
+        "textStyleRole": "edge_label"
+      },
+      "markers": {
+        "end": "arrow"
+      }
+    },
+    {
+      "id": "scope:C-010:contract:C-010:relationship:%5B%22C-010%22%2C%22DEPENDS_ON%22%2C%22SA-010%22%5D:0:lead",
+      "role": "contract",
+      "classes": [],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D",
+        "portId": "contract-out:1"
+      },
+      "to": {
+        "itemId": "scope:C-010:contract:C-010:anchor:1",
+        "portId": "in"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "vertical"
+      },
+      "markers": {}
+    },
+    {
+      "id": "scope:C-010:contract:C-010:relationship:%5B%22C-010%22%2C%22BINDS_TO%22%2C%22D-010%22%5D:0",
+      "role": "contract",
+      "classes": [
+        "edge-dotted"
+      ],
+      "from": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D",
+        "portId": "contract-out:0"
+      },
+      "to": {
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522BINDS_TO%2522%252C%2522D-010%2522%255D%3A0%22%2C%22D-010%22%5D",
+        "portId": "contract-in"
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
       },
       "label": {
         "text": "binds field status",
@@ -710,24 +2109,20 @@
       }
     },
     {
-      "id": "depends_on:C-010->SA-010",
-      "role": "depends_on",
-      "classes": [
-        "constraint_edge"
-      ],
+      "id": "scope:C-010:contract:C-010:relationship:%5B%22C-010%22%2C%22DEPENDS_ON%22%2C%22SA-010%22%5D:0",
+      "role": "contract",
+      "classes": [],
       "from": {
-        "itemId": "C-010"
+        "itemId": "scope:C-010:contract:C-010:anchor:1",
+        "portId": "out"
       },
       "to": {
-        "itemId": "SA-010"
+        "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-010%2522%255D%3A0%22%2C%22SA-010%22%5D",
+        "portId": "contract-in"
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
+        "preferAxis": "horizontal"
       },
       "label": {
         "text": "depends on",
@@ -738,83 +2133,25 @@
       }
     },
     {
-      "id": "emits:C-011->E-010",
-      "role": "emits",
+      "id": "scope:C-011:contract:C-011:relationship:%5B%22C-011%22%2C%22EMITS%22%2C%22E-010%22%5D:0",
+      "role": "contract",
       "classes": [
-        "edge-dashed",
-        "constraint_edge"
+        "edge-dashed"
       ],
       "from": {
-        "itemId": "C-011"
+        "itemId": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_source%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22C-011%22%5D",
+        "portId": "contract-out:0"
       },
       "to": {
-        "itemId": "E-010"
+        "itemId": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_target%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22relationship%3A%255B%2522C-011%2522%252C%2522EMITS%2522%252C%2522E-010%2522%255D%3A0%22%2C%22E-010%22%5D",
+        "portId": "contract-in"
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "bendPlacement": "target_bias",
-        "labelPlacement": "source_contract_lane",
-        "sourcePortRole": "contract_out",
-        "targetPortRole": "contract_in"
+        "preferAxis": "horizontal"
       },
       "label": {
         "text": "emits",
-        "textStyleRole": "edge_label"
-      },
-      "markers": {
-        "end": "arrow"
-      }
-    },
-    {
-      "id": "transitions_to:ST-010a->ST-010b",
-      "role": "transitions_to",
-      "classes": [
-        "edge-dashed",
-        "free_edge"
-      ],
-      "from": {
-        "itemId": "ST-010a"
-      },
-      "to": {
-        "itemId": "ST-010b"
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "avoidNodeBoxes": true,
-        "sourcePortRole": "transition_out",
-        "targetPortRole": "transition_in"
-      },
-      "label": {
-        "text": "[Submit] {payment_valid} / SA-010",
-        "textStyleRole": "edge_label"
-      },
-      "markers": {
-        "end": "arrow"
-      }
-    },
-    {
-      "id": "transitions_to:VS-010a->VS-010b",
-      "role": "transitions_to",
-      "classes": [
-        "free_edge"
-      ],
-      "from": {
-        "itemId": "VS-010a"
-      },
-      "to": {
-        "itemId": "VS-010b"
-      },
-      "routing": {
-        "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "avoidNodeBoxes": true,
-        "sourcePortRole": "transition_out",
-        "targetPortRole": "transition_in"
-      },
-      "label": {
-        "text": "[Submit] {payment_valid} / SA-010",
         "textStyleRole": "edge_label"
       },
       "markers": {

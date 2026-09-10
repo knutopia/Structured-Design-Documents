@@ -164,9 +164,7 @@ describe("staged visual acceptance", () => {
       expect(rendered.positionedScene.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);
       expectNoForbiddenDiagnostics(rendered.positionedScene.diagnostics, FORBIDDEN_DIAGNOSTICS);
 
-      const supportEdges = rendered.positionedScene.edges.filter((edge) =>
-        edge.role === "emits" || edge.role === "depends_on" || edge.role === "binds_to"
-      );
+      const supportEdges = rendered.positionedScene.edges.filter((edge) => edge.role === "contract");
       expect(supportEdges.length).toBeGreaterThan(0);
 
       const headers = collectHeaderBoxes(rendered.positionedScene.root);

@@ -1,0 +1,27 @@
+{
+  "status": "accepted",
+  "tests": {
+    "files": 117,
+    "passed": 1216,
+    "failed": 0,
+    "command": "TMPDIR=/tmp pnpm test --maxWorkers=1 --minWorkers=1"
+  },
+  "docsBuild": "passed",
+  "topologyCombinations": 120,
+  "acceptedLongIdCombinations": 4,
+  "departureDesk": {
+    "detailed": {
+      "identities": 51,
+      "relationships": 45
+    },
+    "compact": {
+      "identities": 17,
+      "relationships": 24
+    }
+  },
+  "retainedLimitations": [
+    "User-accepted shared-node long-ID overflow; (long ID) replacement deferred",
+    "B5 native right-edge excess",
+    "Figma import not exercised; native SVG arrow paths verified"
+  ]
+}
