@@ -2,7 +2,6 @@
 
 ## Open Issues
 
--doc examples updates to new routing, nodes
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -34,7 +33,9 @@ z
 
 - Cleaned ui_contracts guide doc page
 - Merged hierarchical-ui-contracts branch
-- Cleaned new main- asset lings in guide page
+- Cleaned new main- asset links in guide page
+- Guide details clean-up
+
 ## Tue 9-8
 
 - Hierarchical ui_contracts implemented, reviewing details
