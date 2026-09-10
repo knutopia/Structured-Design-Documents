@@ -8,12 +8,21 @@ The diagram combines a Component hierarchy overview with local Place and Compone
 
 The following invariants anchor this guide:
 
-- **The bundle governs presentation policy.** Roles, relationship selectors, captions, attribute selection, and detail switches live in [`core/views.yaml`](../../bundle/v0.1/core/views.yaml), under the `ui_contracts` view's `renderer_defaults.ui_contracts_presentation` and `detail_display`.
-- **Visual repetition preserves identity.** The [presentation model](../../src/renderer/uiContractsPresentationModel.ts) distinguishes semantic nodes from their visual occurrences and retains authored relationship multiplicity and provenance.
-- **Projection remains the semantic boundary.** View-owned scene construction supplies groups, ports, and reservations to the shared staged pipeline; it does not replace shared placement or routing. See the [renderer architecture](../toolchain/architecture.md) and [acceptance report](b5_implementation_acceptance.md).
+- **The bundle governs presentation policy.** Roles, relationship selectors, captions, attribute selection, and detail switches live in 
+showRepoLink views.yaml /bundle/v0.1/core/views.yaml {pos: inline}
+, under the `ui_contracts` view's `renderer_defaults.ui_contracts_presentation` and `detail_display`.
+- **Visual repetition preserves identity.** The
+showRepoLink presentation model /src/renderer/uiContractsPresentationModel.ts {pos: inline}
+ distinguishes semantic nodes from their visual occurrences and retains authored relationship multiplicity and provenance.
+- **Projection remains the semantic boundary.** View-owned scene construction supplies groups, ports, and reservations to the shared staged pipeline; it does not replace shared placement or routing. See the
+showRepoLink renderer architecture /docs/toolchain/architecture.md {pos: inline}  
 - **Detail and decorators are independent.** Both details preserve Component hierarchy and primary ViewState transitions. Compact's State fallback is decided across the projection, not separately in each scope.
 
-The complete-sheet illustrations below include redundant Component scope suppression and grouping of Components without hierarchy. Other illustrations and the decorator reference matrix retain historical output and may show scopes or singleton hierarchy enclosures that current rendering omits. The Stage 7 images are public-preview artifacts from the unchanged [Departure Desk source](departure_desk.sdd); focused Stage 6 resumed images show accepted topology corrections. The `b2_*` through `b5_*` exploration files remain historical visual references and should not be mistaken for current public output.
+The complete-sheet illustrations below include redundant Component scope suppression and grouping of Components without hierarchy. 
+
+The departure_desk.sdd source which was used for diagram development is now a 
+showRepoLink canonical example /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example {pos: inline}
+.
 
 ## The complete sheet
 
@@ -21,8 +30,24 @@ Sections appear vertically: Component hierarchy roots first, then Components wit
 
 Each section takes the width its contents require. A long transition sequence can therefore make one section much wider than the hierarchy overview. The sheet has no outer frame; the visible frames belong to individual scopes and hierarchy enclosures. Large diagrams are intended for zooming and scrolling.
 
+:::: details departure_desk.sdd UI Contracts Diagram<Badge type="info" text="Detail: Compact" vertical="top" /> {open}
+
+With ViewStates present, this `--details compact` sheet omits secondary State sequences and supporting contracts, but retains the hierarchy and local parent/child neighborhoods.
+
+:::tabs
+== Diagram
 ![example with decorators](examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg)
-[Open the compact SVG at full size](examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg). With ViewStates present, this compact sheet omits secondary State sequences and supporting contracts, but retains the hierarchy and local parent/child neighborhoods.
+[Open the compact SVG at full size](examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg).
+
+== Source
+# showSource /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+
+== CLI Command
+```bash
+TMPDIR=/tmp pnpm sdd show examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd --view ui_contracts --detail compact --decorators type,id --out /tmp/departure_desk.compact.svg
+```
+:::
+::::
 
 ## Component hierarchy overview
 
@@ -87,9 +112,44 @@ Absent parts are omitted. The event reference is resolved to its node name when 
 
 Forks and merges use distinct routed segments. Cycles reserve a return channel above the forward sequence, and self-loops also route above their node. These are layout treatments of authored transitions, not extra relationships.
 
-![Accepted cycle treatment, with its return transition above the sequence](examples/ui_contracts/stage6_resumed/cycle.compact.none.svg)
 
-[Cycle SVG](examples/ui_contracts/stage6_resumed/cycle.compact.none.svg) · [Self-loop SVG](examples/ui_contracts/stage6_resumed/self_loop.compact.none.svg) · [Branch SVG](examples/ui_contracts/stage6_resumed/branch.compact.none.svg) · [Merge SVG](examples/ui_contracts/stage6_resumed/merge.compact.none.svg)
+::::tabs
+=== Cycle Example
+:::tabs key:ab
+== Diagram
+![Accepted cycle treatment, with its return transition above the sequence](examples/ui_contracts/stage6_resumed/cycle.compact.decorators-type-id.svg)
+
+== Source
+showSource examples/ui_contracts/stage6_resumed/cycle.sdd
+:::
+
+=== Self-Loop Example
+:::tabs key:ab
+== Diagram
+![Self-loop SVG](examples/ui_contracts/stage6_resumed/self_loop.compact.decorators-type-id.svg)
+
+== Source
+showSource examples/ui_contracts/stage6_resumed/self_loop.sdd
+:::
+
+=== Branching Example
+:::tabs key:ab
+== Diagram
+![Branch SVG](examples/ui_contracts/stage6_resumed/branch.compact.decorators-type-id.svg)
+
+== Source
+showSource examples/ui_contracts/stage6_resumed/branch.sdd
+:::
+
+=== Merge Example 
+:::tabs key:ab
+== Diagram
+![Merge SVG](examples/ui_contracts/stage6_resumed/merge.compact.decorators-type-id.svg)
+
+== Source
+showSource examples/ui_contracts/stage6_resumed/merge.sdd
+:::
+::::
 
 ## Outgoing contracts and referenced targets
 
@@ -109,13 +169,32 @@ The final `Referenced targets` section lists visible Event, DataEntity, and Syst
 
 Supporting nodes with outgoing contracts can receive their own `Contract scope · <name>` section. Unowned nodes and cross-scope transitions also receive explicit standalone context when needed, so they are not silently lost merely because they do not fit a normal Place or Component scope.
 
-![Current detailed Departure Desk sheet including State sequences, outgoing contracts and referenced targets](examples/ui_contracts/isolated_components/departure_desk/detailed.none.svg)
+:::: details departure_desk.sdd UI Contracts Diagram<Badge type="info" text="Detail: Detailed" vertical="top" />
 
-[Open the detailed SVG at full size](examples/ui_contracts/isolated_components/departure_desk/detailed.none.svg). Compare Seal Check's local parents with its two overview occurrences, then follow its own bindings and emissions to their local target references.
+Departure Desk sheet with `--details detailed`, including State sequences, outgoing contracts and referenced targets
+
+:::tabs
+== Diagram
+
+*Compare the local parents of `Seal Check` with its two overview occurrences, then follow its own bindings and emissions to their local target references.*
+
+![detailed example including State sequences, outgoing contracts and referenced targets](examples/ui_contracts/isolated_components/departure_desk/detailed.decorators-type-id.svg)
+
+[Open the detailed SVG at full size](examples/ui_contracts/isolated_components/departure_desk/detailed.decorators-type-id.svg).
+
+== Source
+# showSource /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+
+== CLI Command
+```bash
+TMPDIR=/tmp pnpm sdd show examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd --view ui_contracts --detail detailed --decorators type,id --out /tmp/departure_desk.detailed.svg
+```
+:::
+::::
 
 ## Detail and decorators
 
-`--detail` selects content. `--decorators` selects the type/ID header on semantic cards. Detailed content does not automatically enable those headers.
+As with the other diagram types, `--detail` selects content. `--decorators` selects the type/ID header shown on nodes. Detailed content does not automatically enable those headers.
 
 | Content | `compact` | `detailed` |
 | --- | --- | --- |
@@ -127,25 +206,54 @@ Supporting nodes with outgoing contracts can receive their own `Contract scope �
 | Place route/key, access, entry points, description | Omitted | Shown when authored |
 | ViewState data required | Omitted | Shown when authored in sequence cards |
 | State sequences and supporting contracts when any ViewState is present | Omitted | Shown |
-| State sequences and supporting contracts when States exist and no ViewState is present | Shown through fallback | Shown |
+| State sequences and supporting contracts when States exist and no ViewState is present | Shown through fallback (see below)| Shown |
 | Empty Place scopes | Omitted, with an omission note | Retained |
 
 The fallback test is **projection-wide**. A Component with States but no local ViewStates does not receive its own compact fallback if a ViewState exists elsewhere in the projection. Compact is therefore a selected-content view, not evidence that omitted contracts are absent from the source. An empty Place is assessed against the content visible for the selected detail.
 
-[Existing compact State-fallback SVG](examples/ui_contracts/ui_state_fallback.ui_contracts.svg) illustrates the fallback without primary ViewStates.
+:::: details Fallback Example
+:::tabs key:ab
+== Diagram
+Fallback without primary ViewStates:
+![Existing compact State-fallback SVG](examples/ui_contracts/ui_state_fallback.ui_contracts.decorators-type-id.svg) 
+
+== Source
+showSource examples/ui_contracts/ui_state_fallback.sdd
+:::
+::::
 
 Decorator choices are `none`, `type`, `id`, and `type,id`. Container titles and H locators remain visible in every case. ID decorators display the original semantic ID, never the internal visual-occurrence ID. When decorators are omitted, the independent user preference and bundle fallback resolve the setting.
 
-| Detail | No decorators | Type | ID | Type and ID |
-| --- | --- | --- | --- | --- |
-| Compact | [SVG](examples/ui_contracts/stage7/departure_desk/compact.none.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/compact.type.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/compact.id.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/compact.type-id.svg) |
-| Detailed | [SVG](examples/ui_contracts/stage7/departure_desk/detailed.none.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/detailed.type.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/detailed.id.svg) | [SVG](examples/ui_contracts/stage7/departure_desk/detailed.type-id.svg) |
+:::: details Detail Level & Decorators
+:::tabs
+== Compact & Type, ID
+`--detail compact --decorators type, id`
+![Compact / Type, ID](examples/ui_contracts/stage7/departure_desk/departure_desk.ui_contracts.compact.decorators-type-id.svg)
+
+== Compact & No Decorators
+`--detail compact`
+![Compact / No Decorators](examples/ui_contracts/stage7/departure_desk/departure_desk.ui_contracts.compact.svg)
+
+== Detailed & Type, ID
+`--detail detailed --decorators type, id`
+![Detailed / Type, ID](examples/ui_contracts/stage7/departure_desk/departure_desk.ui_contracts.detailed.decorators-type-id.svg)
+
+== Detailed & No Decorators
+`--detail detailed`
+![Detailed, No Decorators](examples/ui_contracts/stage7/departure_desk/departure_desk.ui_contracts.detailed.svg)
+:::
+::::
+
+## CSS Styling
+
+Diagrams are themed with CSS. For example, node appearance  (across diagram types) is defined in 
+showRepoLink theme.ts /src/renderer/staged/theme.ts {pos: inline}
+ and appearance of containers in UI Contracts diagrams is in  
+showRepoLink uiContractsContainer.ts /src/renderer/staged/uiContractsContainer.ts {pos: inline}
 
 ## Visual sizing and container treatment
 
-Semantic cards use shared-node measurement, Public Sans typography, standard 224px width, and content-driven height. Context and target references stay lean; selected richer attributes belong to focal or sequence occurrences. Repetition therefore need not repeat every attribute.
-
-Scope titles have a measured, single-line 19px title band. Long titles expand their enclosure instead of stretching semantic cards. The band has a flat lower edge and follows the enclosure's rounded top interior; the 1.5px outline is painted after the fill so it stays intact. Enclosure corner radius is 14px.
+Semantic cards use shared-node measurement, a standard width, and content-driven height. Context and target references stay lean; selected richer attributes belong to focal or sequence occurrences. Repetition therefore need not repeat every attribute.
 
 Local groups use their intrinsic measured widths. Shared measurement can retain excess space on the right of some sequence groups; the implementation does not crop or shrink those positioned frames afterward. Longer sequences grow the diagram horizontally rather than shrinking its cards and text.
 
@@ -167,35 +275,20 @@ The compiled graph supplies authored ordering, properties, and transition annota
 
 | Responsibility | Source |
 | --- | --- |
-| Machine-owned roles, labels, relationship styles, content and visibility | [`bundle/v0.1/core/views.yaml`](../../bundle/v0.1/core/views.yaml) |
-| Bundle presentation validation and resolution, reached through `loadBundle(...)` | [`src/bundle/uiContractsPresentation.ts`](../../src/bundle/uiContractsPresentation.ts) |
-| Identity/occurrence separation, reuse, ownership, fallback, local groups, omissions and provenance | [`src/renderer/uiContractsPresentationModel.ts`](../../src/renderer/uiContractsPresentationModel.ts) |
-| Public scene builder and SVG/PNG entrypoints | [`src/renderer/staged/uiContracts.ts`](../../src/renderer/staged/uiContracts.ts) |
-| Sheet assembly, enclosures, neighborhoods, composition, ports and coverage checks | [`uiContractsPresentationScene.ts`](../../src/renderer/staged/uiContractsPresentationScene.ts) |
-| Single-source outgoing groups | [`uiContractsFanout.ts`](../../src/renderer/staged/uiContractsFanout.ts) |
-| Transition-region inputs and return-channel reservations | [`uiContractsTransitions.ts`](../../src/renderer/staged/uiContractsTransitions.ts) |
-| Native title measurement and enclosure painting | [`uiContractsContainer.ts`](../../src/renderer/staged/uiContractsContainer.ts) |
-| Ordinary SVG arrow paths for import compatibility | [`uiContractsArrowheads.ts`](../../src/renderer/staged/uiContractsArrowheads.ts) |
-| Shared staged execution and artifact output | [`pipeline.ts`](../../src/renderer/staged/pipeline.ts), [`svgBackend.ts`](../../src/renderer/staged/svgBackend.ts) |
-| Backend-aware preparation and public preview integration | [`prepareProjectionForRender.ts`](../../src/renderer/prepareProjectionForRender.ts), [`previewWorkflow.ts`](../../src/renderer/previewWorkflow.ts) |
+| Machine-owned roles, labels, relationship styles, content and visibility | {{showRepoLink bundle/v0.1/core/views.yaml /bundle/v0.1/core/views.yaml}} |
+| Bundle presentation validation and resolution, reached through `loadBundle(...)` | {{showRepoLink src/bundle/uiContractsPresentation.ts /src/bundle/uiContractsPresentation.ts}} |
+| Identity/occurrence separation, reuse, ownership, fallback, local groups, omissions and provenance | {{showRepoLink src/renderer/uiContractsPresentationModel.ts /src/renderer/uiContractsPresentationModel.ts}} |
+| Public scene builder and SVG/PNG entrypoints | {{showRepoLink src/renderer/staged/uiContracts.ts /src/renderer/staged/uiContracts.ts}} |
+| Sheet assembly, enclosures, neighborhoods, composition, ports and coverage checks | {{showRepoLink uiContractsPresentationScene.ts /src/renderer/staged/uiContractsPresentationScene.ts}} |
+| Single-source outgoing groups | {{showRepoLink uiContractsFanout.ts /src/renderer/staged/uiContractsFanout.ts}} |
+| Transition-region inputs and return-channel reservations | {{showRepoLink uiContractsTransitions.ts /src/renderer/staged/uiContractsTransitions.ts}} |
+| Native title measurement and enclosure painting | {{showRepoLink uiContractsContainer.ts /src/renderer/staged/uiContractsContainer.ts}} |
+| Ordinary SVG arrow paths for import compatibility | {{showRepoLink uiContractsArrowheads.ts /src/renderer/staged/uiContractsArrowheads.ts}} |
+| Shared staged execution and artifact output | {{showRepoLink pipeline.ts /src/renderer/staged/pipeline.ts}}, {{showRepoLink svgBackend.ts /src/renderer/staged/svgBackend.ts}} |
+| Backend-aware preparation and public preview integration | {{showRepoLink prepareProjectionForRender.ts /src/renderer/prepareProjectionForRender.ts}}, {{showRepoLink previewWorkflow.ts /src/renderer/previewWorkflow.ts}} |
 
 Scene occurrence IDs identify a card's role and context separately from its semantic ID. Routed connector segments retain mappings to authored relationship IDs. Ownership is accounted for structurally; the final builder checks other visible relationships for scene representation and checks visible identities for occurrences. Containment cycles produce an explicit renderer error instead of recursive expansion.
 
 Policy changes belong in the bundle and must affect runtime through the loaded policy. Do not add hidden lists of node types, relationship names, or detail rules to the scene builder. Preserve the staged boundary: shared placement, routing, repair, and validation were unchanged by this implementation. The view provides their inputs rather than final coordinates or routes.
 
-Relevant tests include [presentation-model policy and identity tests](../../tests/uiContractsPresentationModel.spec.ts), [scope tests](../../tests/uiContractsB5Scopes.spec.ts), [complete-sheet tests](../../tests/uiContractsComplete.spec.ts), [topology tests](../../tests/uiContractsTopology.spec.ts), [container tests](../../tests/uiContractsContainer.spec.ts), and [public staged renderer tests](../../tests/stagedUiContracts.spec.ts). Acceptance must precede snapshot refresh; a snapshot is evidence of output, not the presentation contract.
-
-## Producing a diagram and known limits
-
-Run from the repository root:
-
-```bash
-TMPDIR=/tmp pnpm sdd show docs/hierarchical_ui_contracts/departure_desk.sdd --view ui_contracts --detail detailed --decorators type,id --out /tmp/departure.svg
-TMPDIR=/tmp pnpm sdd show docs/hierarchical_ui_contracts/departure_desk.sdd --view ui_contracts --detail compact --decorators none --format png --out /tmp/departure.png
-```
-
-Validation profiles govern validation; render detail governs displayed content. The hierarchical design applies to the staged SVG/PNG path. Legacy DOT, Mermaid, and Graphviz preview paths retain their previous model and appearance.
-
-The accepted implementation retains long-ID overflow in shared-node decorators. A proposed `(long ID)` substitution is not implemented. Native overflow diagnostics remain available. SVG arrowheads are ordinary filled paths, but live Figma import was not verified during acceptance. The documented right-edge excess width also remains.
-
-The [final acceptance report](b5_implementation_acceptance.md) records the implementation's 1,216 passing tests, documentation build, option matrix, artifact refresh, and unchanged shared-source audit. Those are recorded implementation results, not new test runs performed for this guide.
+Relevant tests include {{showRepoLink presentation-model policy and identity tests /tests/uiContractsPresentationModel.spec.ts}}, {{showRepoLink scope tests /tests/uiContractsB5Scopes.spec.ts}}, {{showRepoLink complete-sheet tests /tests/uiContractsComplete.spec.ts}}, {{showRepoLink topology tests /tests/uiContractsTopology.spec.ts}}, {{showRepoLink container tests /tests/uiContractsContainer.spec.ts}}, and {{showRepoLink public staged renderer tests /tests/stagedUiContracts.spec.ts}}. Acceptance must precede snapshot refresh; a snapshot is evidence of output, not the presentation contract.

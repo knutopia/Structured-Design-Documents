@@ -30,6 +30,10 @@ z
 
 - Caught 2 missing artifact updates
 
+## Wed 9-9
+
+- Cleaned ui_contracts guide doc page
+
 ## Tue 9-8
 
 - Hierarchical ui_contracts implemented, reviewing details

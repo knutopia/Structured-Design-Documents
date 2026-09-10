@@ -24,11 +24,30 @@ directives with source page and line context.
 
 ## `showRepoLink`
 
-`showRepoLink.ts` creates a link to a directory in this repository on GitHub:
+`showRepoLink.ts` creates a link to a file or directory in this repository on GitHub:
 
 ```md
 showRepoLink examples/rendered/v0.1
 ```
+
+The default label is `Repo folder`. Add a display name (which may contain spaces)
+before the path to use a custom label after the GitHub icon:
+
+```md
+showRepoLink views.yaml /bundle/v0.1/core/views.yaml
+showRepoLink views.yaml /bundle/v0.1/core/views.yaml {pos: up}
+```
+
+For example:
+
+```md
+showRepoLink presentation model src/renderer/uiContractsPresentationModel.ts {pos: inline}
+```
+
+The final whitespace-separated word before `{pos: ...}` (or the end of the
+line) is the repository path; preceding words form the display name.
+Display names are rendered as literal text, preserving their capitalization.
+Both forms use the same repository URL and link behavior.
 
 By default the link is a standalone right-aligned block. `{pos: up}` attaches
 it to the preceding prose block, which is useful immediately above a
@@ -40,9 +59,40 @@ showRepoLink examples/rendered/v0.1 {pos: up}
 showSource ../../../examples/example.sdd
 ```
 
+Use `{pos: inline}` to flow the link within the surrounding paragraph without
+right alignment. Keep the directive on its own source line, without blank
+lines separating it from the surrounding text:
+
+```md
+before
+showRepoLink fileDisplayName /bundle/v0.1/core/views.yaml {pos: inline}
+after
+```
+
+This renders as `before (GitHub icon) fileDisplayName after`. Inline positioning
+also works with the default label. Blank lines still separate paragraphs.
+
 Repository paths may start with `/`. Fenced authoring examples are left
 untouched, and invalid directives or options fail with source page and line
 context.
+
+
+### Links inside table cells and prose
+
+Use `{{showRepoLink DISPLAY_NAME /repo/path}}` on the same line as surrounding
+Markdown. The display name is optional (defaults to `Repo folder`) and is literal
+text rendered with code formatting (equivalent to Markdown backticks), not parsed
+as Markdown. This form always renders inline and takes no position option.
+Existing standalone directives and their position options are unchanged.
+
+```md
+| Responsibility | Source |
+| --- | --- |
+| Presentation policy | {{showRepoLink bundle/v0.1/core/views.yaml /bundle/v0.1/core/views.yaml}} |
+```
+
+Multiple links can share a cell. Inline directives in code spans or fenced code
+blocks remain literal examples.
 
 ## `dropdownSwitch`
 
