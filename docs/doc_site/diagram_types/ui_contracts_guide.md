@@ -40,7 +40,7 @@ With ViewStates present, this `--details compact` sheet omits secondary State se
 [Open the compact SVG at full size](examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg).
 
 == Source
-# showSource /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+showSource /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
 
 == CLI Command
 ```bash
@@ -183,7 +183,7 @@ Departure Desk sheet with `--details detailed`, including State sequences, outgo
 [Open the detailed SVG at full size](examples/ui_contracts/isolated_components/departure_desk/detailed.decorators-type-id.svg).
 
 == Source
-# showSource /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+showSource /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
 
 == CLI Command
 ```bash

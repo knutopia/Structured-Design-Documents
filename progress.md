@@ -33,7 +33,8 @@ z
 ## Wed 9-9
 
 - Cleaned ui_contracts guide doc page
-
+- Merged hierarchical-ui-contracts branch
+- Cleaned new main- asset lings in guide page
 ## Tue 9-8
 
 - Hierarchical ui_contracts implemented, reviewing details
