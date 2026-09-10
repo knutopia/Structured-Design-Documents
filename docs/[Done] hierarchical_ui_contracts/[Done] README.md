@@ -1,4 +1,4 @@
-# Component containment: B — enclosure overview and local context
+# [Done] Component containment: B — enclosure overview and local context
 
 ## B5 implementation and acceptance
 

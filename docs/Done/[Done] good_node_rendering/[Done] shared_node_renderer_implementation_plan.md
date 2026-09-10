@@ -1,4 +1,4 @@
-# Shared Node Renderer Implementation Plan
+# [Done] Shared Node Renderer Implementation Plan
 
 ## Implementation Status
 

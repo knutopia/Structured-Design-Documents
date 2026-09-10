@@ -1,4 +1,4 @@
-# Staged UI contracts: B5 implementation acceptance
+# [Done] Staged UI contracts: B5 implementation acceptance
 
 The B5 port is complete through the public staged SVG/PNG preview paths, with
 the user's accepted long-ID limitation. All 1,216 repository tests pass and the

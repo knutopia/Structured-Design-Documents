@@ -1,4 +1,4 @@
-# B4: spacing demonstrated through the unchanged shared pipeline
+# [Done] B4: spacing demonstrated through the unchanged shared pipeline
 
 > B5 supersedes the visible junction markers and container-header painting in
 > these SVGs. Its explicit decorator variants also clarify that B4's detailed

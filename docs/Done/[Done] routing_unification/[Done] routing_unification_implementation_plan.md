@@ -1,4 +1,4 @@
-# Routing Unification Implementation Plan
+# [Done] Routing Unification Implementation Plan
 
 **Status:** Complete and verified on 2026-09-04. The proof wave and all six renderer
 adoptions, including Journey Map physical-track assignment, are complete. Accepted

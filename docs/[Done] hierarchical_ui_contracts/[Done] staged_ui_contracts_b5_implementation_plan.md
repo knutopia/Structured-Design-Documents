@@ -1,4 +1,4 @@
-# Staged `ui_contracts`: B5 implementation plan
+# [Done] Staged `ui_contracts`: B5 implementation plan
 
 **Destination:** `/home/knut/projects/sdd/docs/hierarchical_ui_contracts/staged_ui_contracts_b5_implementation_plan.md`
 

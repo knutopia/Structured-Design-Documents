@@ -1,4 +1,4 @@
-# Shared Node Renderer Acceptance Reference
+# [Done] Shared Node Renderer Acceptance Reference
 
 This file records the design values and proof cases used to implement the shared staged node renderer. The structural contract comes from `solving_for_good_node_rendering.md`; the values below come from the Figma **Components** section. The Figma **Node Reference Visuals** section remains the visual exemplar.
 

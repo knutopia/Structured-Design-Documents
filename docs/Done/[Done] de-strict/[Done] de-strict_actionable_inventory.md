@@ -1,4 +1,4 @@
-# Actionable Inventory for Replacing Strict Profile Default
+# [Done] Actionable Inventory for Replacing Strict Profile Default
 
 The CLI (except `sdd add`) uses profile `strict` as the default. That will be replaced with a global-setting default profile. 
 

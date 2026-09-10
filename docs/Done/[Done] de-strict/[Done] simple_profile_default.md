@@ -1,4 +1,4 @@
-# Changing the SDD CLI Default Profile from `strict` to `simple`
+# [Done] Changing the SDD CLI Default Profile from `strict` to `simple`
 
 Date: 2026-08-16
 

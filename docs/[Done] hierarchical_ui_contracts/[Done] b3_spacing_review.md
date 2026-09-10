@@ -1,4 +1,4 @@
-# B3: headerless compact nodes and measured spacing
+# [Done] B3: headerless compact nodes and measured spacing
 
 > Withdrawn as a spacing/implementation proof. The user rejected changes to
 > shared routing, and B3 did not run its manually positioned routes through the

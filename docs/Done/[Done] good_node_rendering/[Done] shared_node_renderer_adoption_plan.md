@@ -1,4 +1,4 @@
-# Shared Node Renderer Adoption Plan
+# [Done] Shared Node Renderer Adoption Plan
 
 ## Status and Scope
 

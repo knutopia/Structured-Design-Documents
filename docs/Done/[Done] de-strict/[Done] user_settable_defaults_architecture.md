@@ -1,4 +1,4 @@
-# Architecture for User-Settable Validation and Rendering Defaults
+# [Done] Architecture for User-Settable Validation and Rendering Defaults
 
 Date: 2026-08-16
 

@@ -1,4 +1,4 @@
-# B5: connector and header refinement
+# [Done] B5: connector and header refinement
 
 This pass addresses the user's annotated screenshot without changing shared
 layout, routing, measurement, or backend source code. B4 remains the spacing

@@ -1,4 +1,4 @@
-# B: enclosure overview and local context
+# [Done] B: enclosure overview and local context
 
 Historical B1 PNG review, based on the 41-node / 38-edge source revision below.
 The H1 treatment and portrait-only proofs are superseded by the

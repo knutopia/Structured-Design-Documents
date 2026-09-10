@@ -1,4 +1,4 @@
-# Solving for Good Node Rendering
+# [Done] Solving for Good Node Rendering
 
 The goal is to unify and improve node rendering across our renderers.
 

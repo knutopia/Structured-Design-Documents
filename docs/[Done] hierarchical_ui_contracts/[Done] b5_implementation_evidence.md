@@ -1,4 +1,4 @@
-# B5 implementation evidence
+# [Done] B5 implementation evidence
 
 Current status: complete through Stage 7, with the user's accepted long-ID
 limitation. All 1,216 tests pass and the documentation site builds. See the

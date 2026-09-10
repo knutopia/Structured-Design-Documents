@@ -36,6 +36,7 @@ z
 - Cleaned new main- asset links in guide page
 - Guide details clean-up
 - README recents entry
+- Docs Done clean-up
 
 ## Tue 9-8
 

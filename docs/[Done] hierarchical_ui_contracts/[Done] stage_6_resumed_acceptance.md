@@ -1,4 +1,4 @@
-# Stage 6 resumed: visual corrections and accepted limitation
+# [Done] Stage 6 resumed: visual corrections and accepted limitation
 
 Status: accepted for Stage 7. The five original transition failures and the
 additional visual issues have been corrected. The user explicitly accepted

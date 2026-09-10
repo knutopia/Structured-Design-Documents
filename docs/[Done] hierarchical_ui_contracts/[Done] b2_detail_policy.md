@@ -1,4 +1,5 @@
-# B2: titled containers, horizontal proofs, and render detail
+# [Done] 
+B2: titled containers, horizontal proofs, and render detail
 
 These are **proposed design proofs**, not output claiming that the current CLI
 implements Component containment. No renderer, projection, bundle, or preference
