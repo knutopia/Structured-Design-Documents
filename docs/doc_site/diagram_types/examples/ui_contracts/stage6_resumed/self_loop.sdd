@@ -1,4 +1,8 @@
 SDD-TEXT 0.1
+
+# UI Contracts
+# self-loop example
+
 Component C-100 "Controller"
 
 END

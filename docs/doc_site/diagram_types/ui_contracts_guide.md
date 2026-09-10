@@ -30,7 +30,7 @@ Sections appear vertically: Component hierarchy roots first, then Components wit
 
 Each section takes the width its contents require. A long transition sequence can therefore make one section much wider than the hierarchy overview. The sheet has no outer frame; the visible frames belong to individual scopes and hierarchy enclosures. Large diagrams are intended for zooming and scrolling.
 
-:::: details departure_desk.sdd UI Contracts Diagram<Badge type="info" text="Detail: Compact" vertical="top" /> {open}
+:::: details departure_desk.sdd UI Contracts Diagram<Badge type="info" text="Detail: Compact" vertical="top" /><Badge type="info" text="Decorators: Type, ID" vertical="top" /> {open}
 
 With ViewStates present, this `--details compact` sheet omits secondary State sequences and supporting contracts, but retains the hierarchy and local parent/child neighborhoods.
 
@@ -40,7 +40,7 @@ With ViewStates present, this `--details compact` sheet omits secondary State se
 [Open the compact SVG at full size](examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg).
 
 == Source
-showSource /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
 
 == CLI Command
 ```bash
@@ -169,7 +169,7 @@ The final `Referenced targets` section lists visible Event, DataEntity, and Syst
 
 Supporting nodes with outgoing contracts can receive their own `Contract scope · <name>` section. Unowned nodes and cross-scope transitions also receive explicit standalone context when needed, so they are not silently lost merely because they do not fit a normal Place or Component scope.
 
-:::: details departure_desk.sdd UI Contracts Diagram<Badge type="info" text="Detail: Detailed" vertical="top" />
+:::: details departure_desk.sdd UI Contracts Diagram<Badge type="info" text="Detail: Detailed" vertical="top" /><Badge type="info" text="Decorators: Type, ID" vertical="top" />
 
 Departure Desk sheet with `--details detailed`, including State sequences, outgoing contracts and referenced targets
 
@@ -183,7 +183,7 @@ Departure Desk sheet with `--details detailed`, including State sequences, outgo
 [Open the detailed SVG at full size](examples/ui_contracts/isolated_components/departure_desk/detailed.decorators-type-id.svg).
 
 == Source
-showSource /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
 
 == CLI Command
 ```bash
@@ -211,7 +211,7 @@ As with the other diagram types, `--detail` selects content. `--decorators` sele
 
 The fallback test is **projection-wide**. A Component with States but no local ViewStates does not receive its own compact fallback if a ViewState exists elsewhere in the projection. Compact is therefore a selected-content view, not evidence that omitted contracts are absent from the source. An empty Place is assessed against the content visible for the selected detail.
 
-:::: details Fallback Example
+:::: details Fallback Example <Badge type="info" text="Decorators: Type, ID" vertical="top" />
 :::tabs key:ab
 == Diagram
 Fallback without primary ViewStates:

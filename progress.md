@@ -35,6 +35,7 @@ z
 - Merged hierarchical-ui-contracts branch
 - Cleaned new main- asset links in guide page
 - Guide details clean-up
+- README recents entry
 
 ## Tue 9-8
 
