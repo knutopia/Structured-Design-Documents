@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1166.77" height="744" viewBox="0 0 1166.77 744" class="staged-svg view-outcome_opportunity_map profile-simple theme-default theme-revision-public-sans-v0-2" data-view-id="outcome_opportunity_map" data-profile-id="simple" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="356" viewBox="0 0 320 356" class="staged-svg view-ia_place_map detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="ia_place_map" data-detail-id="detailed" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -36,10 +36,20 @@
     .scene-marker { fill: #1d4ed8; }
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
+    .scene-container__chrome--canvas { fill: #f7f8fb; }
+    .staged-svg { --sdd-shared-node-font-family: 'Public Sans'; --sdd-shared-node-width: 224px; --sdd-shared-node-min-height: 48px; --sdd-shared-node-container-padding-top: 0px; --sdd-shared-node-container-padding-right: 0px; --sdd-shared-node-container-padding-bottom: 0px; --sdd-shared-node-container-padding-left: 0px; --sdd-shared-node-container-gap: 0px; --sdd-shared-node-radius: 14px; --sdd-shared-node-stroke-width: 1.5px; --sdd-shared-node-stroke-placement: inside; --sdd-shared-node-fill: #ffffff; --sdd-shared-node-stroke: #387575; --sdd-shared-node-text: #0f172a; --sdd-shared-node-decorator-height: 19px; --sdd-shared-node-decorator-gap: 4px; --sdd-shared-node-decorator-padding-top: 0px; --sdd-shared-node-decorator-padding-right: 14px; --sdd-shared-node-decorator-padding-bottom: 0px; --sdd-shared-node-decorator-padding-left: 14px; --sdd-shared-node-decorator-fill: #dbe4f0; --sdd-shared-node-body-padding-top: 6px; --sdd-shared-node-body-padding-right: 14px; --sdd-shared-node-body-padding-bottom: 6px; --sdd-shared-node-body-padding-left: 14px; --sdd-shared-node-body-gap: 4px; --sdd-shared-node-attribute-padding-top: 0px; --sdd-shared-node-attribute-padding-right: 0px; --sdd-shared-node-attribute-padding-bottom: 0px; --sdd-shared-node-attribute-padding-left: 0px; --sdd-shared-node-attribute-gap: 2px; --sdd-shared-node-decorator-font-size: 10px; --sdd-shared-node-decorator-font-weight: 600; --sdd-shared-node-decorator-line-height: 12px; --sdd-shared-node-decorator-letter-spacing: 0px; --sdd-shared-node-title-font-size: 16px; --sdd-shared-node-title-font-weight: 600; --sdd-shared-node-title-line-height: 19px; --sdd-shared-node-title-letter-spacing: -0.32px; --sdd-shared-node-attribute-label-font-size: 10px; --sdd-shared-node-attribute-label-font-weight: 400; --sdd-shared-node-attribute-label-line-height: 12px; --sdd-shared-node-attribute-label-letter-spacing: 0px; --sdd-shared-node-attribute-value-font-size: 12px; --sdd-shared-node-attribute-value-font-weight: 400; --sdd-shared-node-attribute-value-line-height: 14px; --sdd-shared-node-attribute-value-letter-spacing: 0px; }
+    .shared-node__chrome { fill: #ffffff; stroke: none; }
+    .shared-node__decorator-header { fill: #dbe4f0; }
+    .shared-node__outline { fill: none; stroke: #387575; stroke-width: 1.5; }
+    .shared-node .scene-text { fill: #0f172a; }
     .text-role-badge { font-family: 'Public Sans'; font-size: 12px; font-weight: 600; }
     .text-role-edge_label { font-family: 'Public Sans'; font-size: 12px; font-weight: 400; }
     .text-role-label { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-metadata { font-family: 'Public Sans'; font-size: 12px; font-weight: 400; }
+    .text-role-shared_node_attribute_label { font-family: 'Public Sans'; font-size: 10px; font-weight: 400; line-height: 12px; letter-spacing: 0px; }
+    .text-role-shared_node_attribute_value { font-family: 'Public Sans'; font-size: 12px; font-weight: 400; line-height: 14px; letter-spacing: 0px; }
+    .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; line-height: 12px; letter-spacing: 0px; }
+    .text-role-shared_node_title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; line-height: 19px; letter-spacing: -0.32px; }
     .text-role-subtitle { font-family: 'Public Sans'; font-size: 13px; font-weight: 400; }
     .text-role-title { font-family: 'Public Sans'; font-size: 16px; font-weight: 600; }
     ]]></style>
@@ -51,164 +61,113 @@
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram outcome_opportunity_map outcome_opportunity_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome" x="0" y="0" width="1166.77" height="744" rx="18" ry="18"/>
+    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
+      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="318.5" height="354.5" rx="17.25" ry="17.25"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-i-010" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-010" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="66" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-p-010" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-010" data-role="place" data-node-density="dense">
+      <rect class="shared-node__chrome" x="24.75" y="24.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 25.5 44.5 L 25.5 38 Q 25.5 25.5 38 25.5 L 234 25.5 Q 246.5 25.5 246.5 38 L 246.5 44.5 Z"/>
+      <rect class="shared-node__outline" x="24.75" y="24.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-op-010" class="scene-node primitive-card role-opportunity paint-nodes semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-010" data-role="opportunity">
-      <rect class="scene-node__chrome" x="507.336" y="66" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-p-012" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-1 shared-node shared-node-dense" data-item-id="P-012" data-role="place" data-node-density="dense">
+      <rect class="shared-node__chrome" x="72.75" y="109.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 73.5 129.5 L 73.5 123 Q 73.5 110.5 86 110.5 L 282 110.5 Q 294.5 110.5 294.5 123 L 294.5 129.5 Z"/>
+      <rect class="shared-node__outline" x="72.75" y="109.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-o-010" class="scene-node primitive-card role-outcome paint-nodes semantic_node outcome_opportunity_node type-outcome visual-role-outcome_anchor shape-ellipse column-outcome placement-role-anchor_outcome band-band-outcome-1" data-item-id="O-010" data-role="outcome">
-      <rect class="scene-node__chrome" x="856.77" y="66" width="224" height="64" rx="14" ry="14"/>
+    <g id="scene-node-p-014" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-1 shared-node shared-node-dense" data-item-id="P-014" data-role="place" data-node-density="dense">
+      <rect class="shared-node__chrome" x="72.75" y="194.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 73.5 214.5 L 73.5 208 Q 73.5 195.5 86 195.5 L 282 195.5 Q 294.5 195.5 294.5 208 L 294.5 214.5 Z"/>
+      <rect class="shared-node__outline" x="72.75" y="194.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-i-011" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-011" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="178" width="224" height="48" rx="14" ry="14"/>
-    </g>
-    <g id="scene-node-op-020" class="scene-node primitive-card role-opportunity paint-nodes semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-020" data-role="opportunity">
-      <rect class="scene-node__chrome" x="507.336" y="178" width="224" height="48" rx="14" ry="14"/>
-    </g>
-    <g id="scene-node-i-012" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-012" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="274" width="224" height="48" rx="14" ry="14"/>
-    </g>
-    <g id="scene-node-i-020" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-020" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="370" width="224" height="48" rx="14" ry="14"/>
-    </g>
-    <g id="scene-node-i-021" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-021" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="466" width="224" height="48" rx="14" ry="14"/>
-    </g>
-    <g id="scene-node-i-022" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-022" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="562" width="224" height="48" rx="14" ry="14"/>
-    </g>
-    <g id="scene-node-i-030" class="scene-node primitive-card role-initiative paint-nodes semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-030" data-role="initiative">
-      <rect class="scene-node__chrome" x="38" y="658" width="224" height="48" rx="14" ry="14"/>
+    <g id="scene-node-p-016" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-1 shared-node shared-node-dense" data-item-id="P-016" data-role="place" data-node-density="dense">
+      <rect class="shared-node__chrome" x="72.75" y="279.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 73.5 299.5 L 73.5 293 Q 73.5 280.5 86 280.5 L 282 280.5 Q 294.5 280.5 294.5 293 L 294.5 299.5 Z"/>
+      <rect class="shared-node__outline" x="72.75" y="279.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-010" data-role="initiative">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="91">
-          <tspan x="50" dy="0">Basic Layout Structure</tspan>
-        </text>
+    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-010" data-role="place">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="39.5" y="38.625">
+            <tspan x="39.5" y="38.625">Place</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="69.82" y="38.625">
+            <tspan x="69.82" y="38.625">P-010</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="39.5" y="65.8">
+              <tspan x="39.5" y="65.8">SDD Viewer/Editor</tspan>
+            </text>
+        </g>
+      </g>
     </g>
-    <g class="scene-node primitive-card role-opportunity paint-labels semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-010" data-role="opportunity">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="519.336" y="91">
-          <tspan x="519.336" dy="0">Low-Friction SDD authoring</tspan>
-        </text>
+    <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-1 shared-node shared-node-dense shared-node__labels" data-item-id="P-012" data-role="place">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="87.5" y="123.625">
+            <tspan x="87.5" y="123.625">Place</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="117.82" y="123.625">
+            <tspan x="117.82" y="123.625">P-012</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="87.5" y="150.8">
+              <tspan x="87.5" y="150.8">Source Pane</tspan>
+            </text>
+        </g>
+      </g>
     </g>
-    <g class="scene-node primitive-card role-outcome paint-labels semantic_node outcome_opportunity_node type-outcome visual-role-outcome_anchor shape-ellipse column-outcome placement-role-anchor_outcome band-band-outcome-1" data-item-id="O-010" data-role="outcome">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="868.77" y="94">
-          <tspan x="868.77" dy="0">Access to Structural</tspan>
-          <tspan x="868.77" dy="20">Design Artifacts</tspan>
-        </text>
+    <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-1 shared-node shared-node-dense shared-node__labels" data-item-id="P-014" data-role="place">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="87.5" y="208.625">
+            <tspan x="87.5" y="208.625">Place</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="117.82" y="208.625">
+            <tspan x="117.82" y="208.625">P-014</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="87.5" y="235.8">
+              <tspan x="87.5" y="235.8">Diagram Pane</tspan>
+            </text>
+        </g>
+      </g>
     </g>
-    <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-011" data-role="initiative">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="203">
-          <tspan x="50" dy="0">Simple Authoring</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-opportunity paint-labels semantic_node outcome_opportunity_node type-opportunity visual-role-opportunity_card shape-hexagon column-opportunity placement-role-supporting_opportunity band-band-outcome-1" data-item-id="OP-020" data-role="opportunity">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="519.336" y="203">
-          <tspan x="519.336" dy="0">Low-Friction SDD consumption</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-012" data-role="initiative">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="299">
-          <tspan x="50" dy="0">SDD Editing</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-020" data-role="initiative">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="395">
-          <tspan x="50" dy="0">Diagram Navigation</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-021" data-role="initiative">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="491">
-          <tspan x="50" dy="0">Diagram Comparison</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-022" data-role="initiative">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="587">
-          <tspan x="50" dy="0">Annotation and Linking</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-initiative paint-labels semantic_node outcome_opportunity_node type-initiative visual-role-work_action_card shape-box column-initiative placement-role-addressing_initiative band-band-outcome-1" data-item-id="I-030" data-role="initiative">
-      <text class="scene-text text-role-label block-kind-text block-region-primary" x="50" y="683">
-          <tspan x="50" dy="0">Infrastructure</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-column-initiative__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-initiative" data-decoration-id="outcome-opportunity-column-initiative__title">
-      <text class="scene-text text-role-label block-kind-text" x="50" y="39">
-          <tspan x="50" dy="0">Initiative</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-column-opportunity__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-opportunity" data-decoration-id="outcome-opportunity-column-opportunity__title">
-      <text class="scene-text text-role-label block-kind-text" x="519.336" y="39">
-          <tspan x="519.336" dy="0">Opportunity</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-column-outcome__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-outcome" data-decoration-id="outcome-opportunity-column-outcome__title">
-      <text class="scene-text text-role-label block-kind-text" x="868.77" y="39">
-          <tspan x="868.77" dy="0">Outcome</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-column-metric__title" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_column_title column-metric" data-decoration-id="outcome-opportunity-column-metric__title">
-      <text class="scene-text text-role-label block-kind-text" x="1140.77" y="39">
-          <tspan x="1140.77" dy="0">Metric</tspan>
-        </text>
-    </g>
-    <g id="scene-decoration-outcome-opportunity-aggregate-initiative-to-opportunity-addresses" class="scene-decoration scene-decoration-text paint-labels outcome_opportunity_aggregate_label gap-initiative-opportunity edge-type-addresses edge-channel-initiative_addressing role-addresses" data-decoration-id="outcome-opportunity-aggregate-initiative-to-opportunity-addresses">
-      <text class="scene-text text-role-label block-kind-text" x="286" y="39">
-          <tspan x="286" dy="0">addresses</tspan>
-        </text>
+    <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-1 shared-node shared-node-dense shared-node__labels" data-item-id="P-016" data-role="place">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="87.5" y="293.625">
+            <tspan x="87.5" y="293.625">Place</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="117.82" y="293.625">
+            <tspan x="117.82" y="293.625">P-016</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="87.5" y="320.8">
+              <tspan x="87.5" y="320.8">Inspector Pane</tspan>
+            </text>
+        </g>
+      </g>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-op-010__supports__o-010" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-010__supports__O-010" data-role="supports">
-      <path class="scene-edge__path" d="M 731.336 90 L 856.77 90" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-p-010__contains__p-012" class="scene-edge role-contains_place route-orthogonal paint-edges ia_local_structure contains_edge structural_only shared_trunk" data-edge-id="P-010__contains__P-012" data-role="contains_place">
+      <path class="scene-edge__path" d="M 48 77 L 48 135.5 L 72 135.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-op-020__supports__o-010" class="scene-edge role-supports route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-020__supports__O-010" data-role="supports">
-      <path class="scene-edge__path" d="M 731.336 202 L 794.053 202 L 794.053 114 L 856.77 114" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-p-010__contains__p-014" class="scene-edge role-contains_place route-orthogonal paint-edges ia_local_structure contains_edge structural_only shared_trunk" data-edge-id="P-010__contains__P-014" data-role="contains_place">
+      <path class="scene-edge__path" d="M 48 77 L 48 220.5 L 72 220.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-i-010__addresses__op-010" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-010__addresses__OP-010" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 90 L 475.336 90 L 475.336 66 L 507.336 66" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-i-011__addresses__op-010" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-011__addresses__OP-010" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 202 L 459.336 202 L 459.336 82 L 507.336 82" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-i-012__addresses__op-010" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-012__addresses__OP-010" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 298 L 443.336 298 L 443.336 98 L 507.336 98" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-i-020__addresses__op-020" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-020__addresses__OP-020" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 394 L 427.336 394 L 427.336 178 L 507.336 178" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-i-021__addresses__op-020" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-021__addresses__OP-020" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 490 L 411.336 490 L 411.336 194 L 507.336 194" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-i-022__addresses__op-020" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-022__addresses__OP-020" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 586 L 395.336 586 L 395.336 210 L 507.336 210" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-i-030__addresses__op-010" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-030__addresses__OP-010" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 682 L 443.336 682 L 443.336 138 L 459.336 138 L 459.336 114 L 507.336 114" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-i-030__addresses__op-020" class="scene-edge role-addresses route-orthogonal paint-edges outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-addresses edge-channel-initiative_addressing route-pattern-same_band_addressing" data-edge-id="I-030__addresses__OP-020" data-role="addresses">
-      <path class="scene-edge__path" d="M 262 698 L 459.336 698 L 459.336 226 L 507.336 226" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-p-010__contains__p-016" class="scene-edge role-contains_place route-orthogonal paint-edges ia_local_structure contains_edge structural_only shared_trunk" data-edge-id="P-010__contains__P-016" data-role="contains_place">
+      <path class="scene-edge__path" d="M 48 77 L 48 305.5 L 72 305.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
-    <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-010__supports__O-010" data-role="supports">
-      <rect class="scene-edge-label__box" x="755.336" y="56" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="761.336" y="67" dominant-baseline="middle">
-          <tspan x="761.336" dy="0">supports</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-supports outcome_opportunity_edge outcome_opportunity_semantic_edge edge-type-supports edge-channel-opportunity_support route-pattern-same_band_support" data-edge-id="OP-020__supports__O-010" data-role="supports">
-      <rect class="scene-edge-label__box" x="755.336" y="168" width="61.434" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="761.336" y="179" dominant-baseline="middle">
-          <tspan x="761.336" dy="0">supports</tspan>
-        </text>
-    </g>
   </g>
 </svg>

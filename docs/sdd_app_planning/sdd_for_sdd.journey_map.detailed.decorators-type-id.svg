@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="784" height="3625.5" viewBox="0 0 784 3625.5" class="staged-svg view-ui_contracts detail-compact theme-default theme-revision-public-sans-v0-2" data-view-id="ui_contracts" data-detail-id="compact" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="2117.816" height="488" viewBox="0 0 2117.816 488" class="staged-svg view-journey_map detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="journey_map" data-detail-id="detailed" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -36,6 +36,7 @@
     .scene-marker { fill: #1d4ed8; }
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
+    .scene-container__chrome--canvas { fill: #f7f8fb; }
     .staged-svg { --sdd-shared-node-font-family: 'Public Sans'; --sdd-shared-node-width: 224px; --sdd-shared-node-min-height: 48px; --sdd-shared-node-container-padding-top: 0px; --sdd-shared-node-container-padding-right: 0px; --sdd-shared-node-container-padding-bottom: 0px; --sdd-shared-node-container-padding-left: 0px; --sdd-shared-node-container-gap: 0px; --sdd-shared-node-radius: 14px; --sdd-shared-node-stroke-width: 1.5px; --sdd-shared-node-stroke-placement: inside; --sdd-shared-node-fill: #ffffff; --sdd-shared-node-stroke: #387575; --sdd-shared-node-text: #0f172a; --sdd-shared-node-decorator-height: 19px; --sdd-shared-node-decorator-gap: 4px; --sdd-shared-node-decorator-padding-top: 0px; --sdd-shared-node-decorator-padding-right: 14px; --sdd-shared-node-decorator-padding-bottom: 0px; --sdd-shared-node-decorator-padding-left: 14px; --sdd-shared-node-decorator-fill: #dbe4f0; --sdd-shared-node-body-padding-top: 6px; --sdd-shared-node-body-padding-right: 14px; --sdd-shared-node-body-padding-bottom: 6px; --sdd-shared-node-body-padding-left: 14px; --sdd-shared-node-body-gap: 4px; --sdd-shared-node-attribute-padding-top: 0px; --sdd-shared-node-attribute-padding-right: 0px; --sdd-shared-node-attribute-padding-bottom: 0px; --sdd-shared-node-attribute-padding-left: 0px; --sdd-shared-node-attribute-gap: 2px; --sdd-shared-node-decorator-font-size: 10px; --sdd-shared-node-decorator-font-weight: 600; --sdd-shared-node-decorator-line-height: 12px; --sdd-shared-node-decorator-letter-spacing: 0px; --sdd-shared-node-title-font-size: 16px; --sdd-shared-node-title-font-weight: 600; --sdd-shared-node-title-line-height: 19px; --sdd-shared-node-title-letter-spacing: -0.32px; --sdd-shared-node-attribute-label-font-size: 10px; --sdd-shared-node-attribute-label-font-weight: 400; --sdd-shared-node-attribute-label-line-height: 12px; --sdd-shared-node-attribute-label-letter-spacing: 0px; --sdd-shared-node-attribute-value-font-size: 12px; --sdd-shared-node-attribute-value-font-weight: 400; --sdd-shared-node-attribute-value-line-height: 14px; --sdd-shared-node-attribute-value-letter-spacing: 0px; }
     .shared-node__chrome { fill: #ffffff; stroke: none; }
     .shared-node__decorator-header { fill: #dbe4f0; }
@@ -60,1233 +61,304 @@
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-010\25 22\25 5D"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="16" width="256" height="104" rx="14" fill="#f1f5f9" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 35 L 17.5 30 Q 17.5 17.5 30 17.5 L 258 17.5 Q 270.5 17.5 270.5 30 L 270.5 35 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="16.75" width="254.5" height="102.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram journey_map journey_map" data-item-id="root" data-role="diagram_root">
+      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="2116.316" height="486.5" rx="17.25" ry="17.25"/>
     </g>
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%5D">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-020\25 22\25 5D"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="148" width="288" height="343" rx="14" fill="#f1f5f9" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 167 L 17.5 162 Q 17.5 149.5 30 149.5 L 290 149.5 Q 302.5 149.5 302.5 162 L 302.5 167 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="148.75" width="286.5" height="341.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%5D:siblings">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-020\25 22\25 5D\3a siblings"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="32" y="252" width="256" height="223" rx="14" fill="#ffffff" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="32.75" y="252.75" width="254.5" height="221.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-050%22%5D">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-050\25 22\25 5D"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="519" width="261.63" height="104" rx="14" fill="#f1f5f9" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 538 L 17.5 533 Q 17.5 520.5 30 520.5 L 263.63 520.5 Q 276.13 520.5 276.13 533 L 276.13 538 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="519.75" width="260.13" height="102.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-060\25 22\25 5D"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="651" width="260.66" height="104" rx="14" fill="#f1f5f9" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 670 L 17.5 665 Q 17.5 652.5 30 652.5 L 262.66 652.5 Q 275.16 652.5 275.16 665 L 275.16 670 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="651.75" width="259.16" height="102.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%5D">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-070\25 22\25 5D"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="783" width="288" height="274" rx="14" fill="#f1f5f9" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 802 L 17.5 797 Q 17.5 784.5 30 784.5 L 290 784.5 Q 302.5 784.5 302.5 797 L 302.5 802 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="783.75" width="286.5" height="272.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%5D:siblings">
-      <style>g[data-item-id="enclosure\3a occurrence\3a \25 5B\25 22overview\25 22\25 2C\25 22hierarchy\25 22\25 2C\25 22C-070\25 22\25 5D\3a siblings"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="32" y="887" width="256" height="154" rx="14" fill="#ffffff" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="32.75" y="887.75" width="254.5" height="152.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:P-012">
-      <style>g[data-item-id="scope\3a P-012"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1085" width="587.622" height="111.5" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1104 L 17.5 1099 Q 17.5 1086.5 30 1086.5 L 589.622 1086.5 Q 602.122 1086.5 602.122 1099 L 602.122 1104 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1085.75" width="586.122" height="110" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:P-014">
-      <style>g[data-item-id="scope\3a P-014"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1224.5" width="587.622" height="196" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1243.5 L 17.5 1238.5 Q 17.5 1226 30 1226 L 589.622 1226 Q 602.122 1226 602.122 1238.5 L 602.122 1243.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1225.25" width="586.122" height="194.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:P-016">
-      <style>g[data-item-id="scope\3a P-016"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1448.5" width="587.622" height="196" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1467.5 L 17.5 1462.5 Q 17.5 1450 30 1450 L 589.622 1450 Q 602.122 1450 602.122 1462.5 L 602.122 1467.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1449.25" width="586.122" height="194.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-010">
-      <style>g[data-item-id="scope\3a C-010"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1672.5" width="256" height="104" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1691.5 L 17.5 1686.5 Q 17.5 1674 30 1674 L 258 1674 Q 270.5 1674 270.5 1686.5 L 270.5 1691.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1673.25" width="254.5" height="102.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-020">
-      <style>g[data-item-id="scope\3a C-020"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1804.5" width="752" height="209" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1823.5 L 17.5 1818.5 Q 17.5 1806 30 1806 L 754 1806 Q 766.5 1806 766.5 1818.5 L 766.5 1823.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1805.25" width="750.5" height="207.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-022">
-      <style>g[data-item-id="scope\3a C-022"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="2041.5" width="256" height="191" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 2060.5 L 17.5 2055.5 Q 17.5 2043 30 2043 L 258 2043 Q 270.5 2043 270.5 2055.5 L 270.5 2060.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="2042.25" width="254.5" height="189.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-024">
-      <style>g[data-item-id="scope\3a C-024"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="2260.5" width="256" height="191" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 2279.5 L 17.5 2274.5 Q 17.5 2262 30 2262 L 258 2262 Q 270.5 2262 270.5 2274.5 L 270.5 2279.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="2261.25" width="254.5" height="189.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-026">
-      <style>g[data-item-id="scope\3a C-026"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="2479.5" width="256" height="191" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 2498.5 L 17.5 2493.5 Q 17.5 2481 30 2481 L 258 2481 Q 270.5 2481 270.5 2493.5 L 270.5 2498.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="2480.25" width="254.5" height="189.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-050">
-      <style>g[data-item-id="scope\3a C-050"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="2698.5" width="256" height="104" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 2717.5 L 17.5 2712.5 Q 17.5 2700 30 2700 L 258 2700 Q 270.5 2700 270.5 2712.5 L 270.5 2717.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="2699.25" width="254.5" height="102.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-060">
-      <style>g[data-item-id="scope\3a C-060"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="2830.5" width="256" height="104" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 2849.5 L 17.5 2844.5 Q 17.5 2832 30 2832 L 258 2832 Q 270.5 2832 270.5 2844.5 L 270.5 2849.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="2831.25" width="254.5" height="102.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-070">
-      <style>g[data-item-id="scope\3a C-070"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="2962.5" width="504" height="209" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 2981.5 L 17.5 2976.5 Q 17.5 2964 30 2964 L 506 2964 Q 518.5 2964 518.5 2976.5 L 518.5 2981.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="2963.25" width="502.5" height="207.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-071">
-      <style>g[data-item-id="scope\3a C-071"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="3199.5" width="256" height="191" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 3218.5 L 17.5 3213.5 Q 17.5 3201 30 3201 L 258 3201 Q 270.5 3201 270.5 3213.5 L 270.5 3218.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="3200.25" width="254.5" height="189.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
-    </g>
-    <g class="ui-contracts-container" data-item-id="scope:C-072">
-      <style>g[data-item-id="scope\3a C-072"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
-      <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="3418.5" width="256" height="191" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 3437.5 L 17.5 3432.5 Q 17.5 3420 30 3420 L 258 3420 Q 270.5 3420 270.5 3432.5 L 270.5 3437.5 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="3419.25" width="254.5" height="189.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+    <g id="scene-container-g-001" class="scene-container primitive-cluster role-journey_stage paint-chrome journey_map journey_stage" data-item-id="G-001" data-role="journey_stage">
+      <rect class="scene-container__chrome" x="32" y="32" width="205.816" height="80" rx="16" ry="16"/>
+      <rect class="scene-container__header-band" x="32" y="32" width="205.816" height="40" rx="16" ry="16"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-010-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="51.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 71.5 L 33.5 65 Q 33.5 52.5 46 52.5 L 242 52.5 Q 254.5 52.5 254.5 65 L 254.5 71.5 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="51.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-010" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-010" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="278.566" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 279.316 112.5 L 279.316 106 Q 279.316 93.5 291.816 93.5 L 487.816 93.5 Q 500.316 93.5 500.316 106 L 500.316 112.5 Z"/>
+      <rect class="shared-node__outline" x="278.566" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-020-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="183.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 203.5 L 33.5 197 Q 33.5 184.5 46 184.5 L 242 184.5 Q 254.5 184.5 254.5 197 L 254.5 203.5 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="183.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-020" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-020" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="542.566" y="92.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 543.316 112.5 L 543.316 106 Q 543.316 93.5 555.816 93.5 L 751.816 93.5 Q 764.316 93.5 764.316 106 L 764.316 112.5 Z"/>
+      <rect class="shared-node__outline" x="542.566" y="92.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-020-22-2c-22c-022-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%2C%22C-022%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="48.75" y="268.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 49.5 288.5 L 49.5 282 Q 49.5 269.5 62 269.5 L 258 269.5 Q 270.5 269.5 270.5 282 L 270.5 288.5 Z"/>
-      <rect class="shared-node__outline" x="48.75" y="268.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-040" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-040" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="542.566" y="217.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 543.316 237.5 L 543.316 231 Q 543.316 218.5 555.816 218.5 L 751.816 218.5 Q 764.316 218.5 764.316 231 L 764.316 237.5 Z"/>
+      <rect class="shared-node__outline" x="542.566" y="217.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-020-22-2c-22c-024-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%2C%22C-024%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="48.75" y="337.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 49.5 357.5 L 49.5 351 Q 49.5 338.5 62 338.5 L 258 338.5 Q 270.5 338.5 270.5 351 L 270.5 357.5 Z"/>
-      <rect class="shared-node__outline" x="48.75" y="337.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-041" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-041" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="806.566" y="217.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 807.316 237.5 L 807.316 231 Q 807.316 218.5 819.816 218.5 L 1015.816 218.5 Q 1028.316 218.5 1028.316 231 L 1028.316 237.5 Z"/>
+      <rect class="shared-node__outline" x="806.566" y="217.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-020-22-2c-22c-026-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%2C%22C-026%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="48.75" y="406.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 49.5 426.5 L 49.5 420 Q 49.5 407.5 62 407.5 L 258 407.5 Q 270.5 407.5 270.5 420 L 270.5 426.5 Z"/>
-      <rect class="shared-node__outline" x="48.75" y="406.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-042" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-042" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="806.566" y="310.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 807.316 330.5 L 807.316 324 Q 807.316 311.5 819.816 311.5 L 1015.816 311.5 Q 1028.316 311.5 1028.316 324 L 1028.316 330.5 Z"/>
+      <rect class="shared-node__outline" x="806.566" y="310.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-050-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-050%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="554.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 574.5 L 33.5 568 Q 33.5 555.5 46 555.5 L 242 555.5 Q 254.5 555.5 254.5 568 L 254.5 574.5 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="554.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-043" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-043" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="806.566" y="403.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 807.316 423.5 L 807.316 417 Q 807.316 404.5 819.816 404.5 L 1015.816 404.5 Q 1028.316 404.5 1028.316 417 L 1028.316 423.5 Z"/>
+      <rect class="shared-node__outline" x="806.566" y="403.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-060-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="686.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 706.5 L 33.5 700 Q 33.5 687.5 46 687.5 L 242 687.5 Q 254.5 687.5 254.5 700 L 254.5 706.5 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="686.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-021" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-021" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="806.566" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 807.316 112.5 L 807.316 106 Q 807.316 93.5 819.816 93.5 L 1015.816 93.5 Q 1028.316 93.5 1028.316 106 L 1028.316 112.5 Z"/>
+      <rect class="shared-node__outline" x="806.566" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-070-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="818.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 838.5 L 33.5 832 Q 33.5 819.5 46 819.5 L 242 819.5 Q 254.5 819.5 254.5 832 L 254.5 838.5 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="818.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-022" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-022" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="1070.566" y="92.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 1071.316 112.5 L 1071.316 106 Q 1071.316 93.5 1083.816 93.5 L 1279.816 93.5 Q 1292.316 93.5 1292.316 106 L 1292.316 112.5 Z"/>
+      <rect class="shared-node__outline" x="1070.566" y="92.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-070-22-2c-22c-071-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%2C%22C-071%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="48.75" y="903.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 49.5 923.5 L 49.5 917 Q 49.5 904.5 62 904.5 L 258 904.5 Q 270.5 904.5 270.5 917 L 270.5 923.5 Z"/>
-      <rect class="shared-node__outline" x="48.75" y="903.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-030" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-030" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="1334.566" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 1335.316 112.5 L 1335.316 106 Q 1335.316 93.5 1347.816 93.5 L 1543.816 93.5 Q 1556.316 93.5 1556.316 106 L 1556.316 112.5 Z"/>
+      <rect class="shared-node__outline" x="1334.566" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22overview-22-2c-22hierarchy-22-2c-22c-070-22-2c-22c-072-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%2C%22C-072%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="48.75" y="972.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 49.5 992.5 L 49.5 986 Q 49.5 973.5 62 973.5 L 258 973.5 Q 270.5 973.5 270.5 986 L 270.5 992.5 Z"/>
-      <rect class="shared-node__outline" x="48.75" y="972.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-031" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-031" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="1598.566" y="92.75" width="222.5" height="83.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 1599.316 112.5 L 1599.316 106 Q 1599.316 93.5 1611.816 93.5 L 1807.816 93.5 Q 1820.316 93.5 1820.316 106 L 1820.316 112.5 Z"/>
+      <rect class="shared-node__outline" x="1598.566" y="92.75" width="222.5" height="83.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-occurrence-5b-22scope-3ap-012-22-2c-22focal-22-2c-22p-012-22-5d" class="scene-node primitive-card role-place paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-012%22%2C%22focal%22%2C%22P-012%22%5D" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="1128.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 1148 L 33.5 1141.5 Q 33.5 1129 46 1129 L 242 1129 Q 254.5 1129 254.5 1141.5 L 254.5 1148 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="1128.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ap-012-22-2c-22composition_target-22-2c-22scope-3ap-012-3acomposition-3ap-012-22-2c-22relationship-3a-255b-2522p-012-2522-252c-2522composed_of-2522-252c-2522c-010-2522-255d-3a0-22-2c-22c-010-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-012%22%2C%22composition_target%22%2C%22scope%3AP-012%3Acomposition%3AP-012%22%2C%22relationship%3A%255B%2522P-012%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="364.372" y="1128.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 365.122 1148 L 365.122 1141.5 Q 365.122 1129 377.622 1129 L 573.622 1129 Q 586.122 1129 586.122 1141.5 L 586.122 1148 Z"/>
-      <rect class="shared-node__outline" x="364.372" y="1128.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ap-014-22-2c-22focal-22-2c-22p-014-22-5d" class="scene-node primitive-card role-place paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-014%22%2C%22focal%22%2C%22P-014%22%5D" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="1267.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 1287.5 L 33.5 1281 Q 33.5 1268.5 46 1268.5 L 242 1268.5 Q 254.5 1268.5 254.5 1281 L 254.5 1287.5 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="1267.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ap-014-22-2c-22composition_target-22-2c-22scope-3ap-014-3acomposition-3ap-014-22-2c-22relationship-3a-255b-2522p-014-2522-252c-2522composed_of-2522-252c-2522c-020-2522-255d-3a0-22-2c-22c-020-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-014%22%2C%22composition_target%22%2C%22scope%3AP-014%3Acomposition%3AP-014%22%2C%22relationship%3A%255B%2522P-014%2522%252C%2522COMPOSED_OF%2522%252C%2522C-020%2522%255D%3A0%22%2C%22C-020%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="364.372" y="1267.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 365.122 1287.5 L 365.122 1281 Q 365.122 1268.5 377.622 1268.5 L 573.622 1268.5 Q 586.122 1268.5 586.122 1281 L 586.122 1287.5 Z"/>
-      <rect class="shared-node__outline" x="364.372" y="1267.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ap-014-22-2c-22composition_target-22-2c-22scope-3ap-014-3acomposition-3ap-014-22-2c-22relationship-3a-255b-2522p-014-2522-252c-2522composed_of-2522-252c-2522c-070-2522-255d-3a0-22-2c-22c-070-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-014%22%2C%22composition_target%22%2C%22scope%3AP-014%3Acomposition%3AP-014%22%2C%22relationship%3A%255B%2522P-014%2522%252C%2522COMPOSED_OF%2522%252C%2522C-070%2522%255D%3A0%22%2C%22C-070%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="364.372" y="1352.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 365.122 1372 L 365.122 1365.5 Q 365.122 1353 377.622 1353 L 573.622 1353 Q 586.122 1353 586.122 1365.5 L 586.122 1372 Z"/>
-      <rect class="shared-node__outline" x="364.372" y="1352.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ap-016-22-2c-22focal-22-2c-22p-016-22-5d" class="scene-node primitive-card role-place paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-016%22%2C%22focal%22%2C%22P-016%22%5D" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="1491.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 1511.5 L 33.5 1505 Q 33.5 1492.5 46 1492.5 L 242 1492.5 Q 254.5 1492.5 254.5 1505 L 254.5 1511.5 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="1491.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ap-016-22-2c-22composition_target-22-2c-22scope-3ap-016-3acomposition-3ap-016-22-2c-22relationship-3a-255b-2522p-016-2522-252c-2522composed_of-2522-252c-2522c-050-2522-255d-3a0-22-2c-22c-050-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-016%22%2C%22composition_target%22%2C%22scope%3AP-016%3Acomposition%3AP-016%22%2C%22relationship%3A%255B%2522P-016%2522%252C%2522COMPOSED_OF%2522%252C%2522C-050%2522%255D%3A0%22%2C%22C-050%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="364.372" y="1491.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 365.122 1511.5 L 365.122 1505 Q 365.122 1492.5 377.622 1492.5 L 573.622 1492.5 Q 586.122 1492.5 586.122 1505 L 586.122 1511.5 Z"/>
-      <rect class="shared-node__outline" x="364.372" y="1491.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ap-016-22-2c-22composition_target-22-2c-22scope-3ap-016-3acomposition-3ap-016-22-2c-22relationship-3a-255b-2522p-016-2522-252c-2522composed_of-2522-252c-2522c-060-2522-255d-3a0-22-2c-22c-060-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AP-016%22%2C%22composition_target%22%2C%22scope%3AP-016%3Acomposition%3AP-016%22%2C%22relationship%3A%255B%2522P-016%2522%252C%2522COMPOSED_OF%2522%252C%2522C-060%2522%255D%3A0%22%2C%22C-060%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="364.372" y="1576.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 365.122 1596 L 365.122 1589.5 Q 365.122 1577 377.622 1577 L 573.622 1577 Q 586.122 1577 586.122 1589.5 L 586.122 1596 Z"/>
-      <rect class="shared-node__outline" x="364.372" y="1576.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-010-22-2c-22focal-22-2c-22c-010-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="1708.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 1728 L 33.5 1721.5 Q 33.5 1709 46 1709 L 242 1709 Q 254.5 1709 254.5 1721.5 L 254.5 1728 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="1708.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-020-22-2c-22focal-22-2c-22c-020-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-020%22%2C%22focal%22%2C%22C-020%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="280.75" y="1840.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 281.5 1860 L 281.5 1853.5 Q 281.5 1841 294 1841 L 490 1841 Q 502.5 1841 502.5 1853.5 L 502.5 1860 Z"/>
-      <rect class="shared-node__outline" x="280.75" y="1840.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-020-22-2c-22child-22-2c-22c-022-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-020%22%2C%22child%22%2C%22C-022%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="1945.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 1965 L 33.5 1958.5 Q 33.5 1946 46 1946 L 242 1946 Q 254.5 1946 254.5 1958.5 L 254.5 1965 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="1945.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-020-22-2c-22child-22-2c-22c-024-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-020%22%2C%22child%22%2C%22C-024%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="280.75" y="1945.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 281.5 1965 L 281.5 1958.5 Q 281.5 1946 294 1946 L 490 1946 Q 502.5 1946 502.5 1958.5 L 502.5 1965 Z"/>
-      <rect class="shared-node__outline" x="280.75" y="1945.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-020-22-2c-22child-22-2c-22c-026-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-020%22%2C%22child%22%2C%22C-026%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="528.75" y="1945.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 529.5 1965 L 529.5 1958.5 Q 529.5 1946 542 1946 L 738 1946 Q 750.5 1946 750.5 1958.5 L 750.5 1965 Z"/>
-      <rect class="shared-node__outline" x="528.75" y="1945.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-022-22-2c-22parent-22-2c-22c-020-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-022%22%2C%22parent%22%2C%22C-020%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="2077.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 2097 L 33.5 2090.5 Q 33.5 2078 46 2078 L 242 2078 Q 254.5 2078 254.5 2090.5 L 254.5 2097 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="2077.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-022-22-2c-22focal-22-2c-22c-022-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-022%22%2C%22focal%22%2C%22C-022%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="2164.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 2184 L 33.5 2177.5 Q 33.5 2165 46 2165 L 242 2165 Q 254.5 2165 254.5 2177.5 L 254.5 2184 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="2164.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-024-22-2c-22parent-22-2c-22c-020-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-024%22%2C%22parent%22%2C%22C-020%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="2296.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 2316 L 33.5 2309.5 Q 33.5 2297 46 2297 L 242 2297 Q 254.5 2297 254.5 2309.5 L 254.5 2316 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="2296.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-024-22-2c-22focal-22-2c-22c-024-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-024%22%2C%22focal%22%2C%22C-024%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="2383.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 2403 L 33.5 2396.5 Q 33.5 2384 46 2384 L 242 2384 Q 254.5 2384 254.5 2396.5 L 254.5 2403 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="2383.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-026-22-2c-22parent-22-2c-22c-020-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-026%22%2C%22parent%22%2C%22C-020%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="2515.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 2535 L 33.5 2528.5 Q 33.5 2516 46 2516 L 242 2516 Q 254.5 2516 254.5 2528.5 L 254.5 2535 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="2515.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-026-22-2c-22focal-22-2c-22c-026-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-026%22%2C%22focal%22%2C%22C-026%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="2602.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 2622 L 33.5 2615.5 Q 33.5 2603 46 2603 L 242 2603 Q 254.5 2603 254.5 2615.5 L 254.5 2622 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="2602.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-050-22-2c-22focal-22-2c-22c-050-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-050%22%2C%22focal%22%2C%22C-050%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="2734.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 2754 L 33.5 2747.5 Q 33.5 2735 46 2735 L 242 2735 Q 254.5 2735 254.5 2747.5 L 254.5 2754 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="2734.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-060-22-2c-22focal-22-2c-22c-060-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="2866.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 2886 L 33.5 2879.5 Q 33.5 2867 46 2867 L 242 2867 Q 254.5 2867 254.5 2879.5 L 254.5 2886 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="2866.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-070-22-2c-22focal-22-2c-22c-070-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-070%22%2C%22focal%22%2C%22C-070%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="156.75" y="2998.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 157.5 3018 L 157.5 3011.5 Q 157.5 2999 170 2999 L 366 2999 Q 378.5 2999 378.5 3011.5 L 378.5 3018 Z"/>
-      <rect class="shared-node__outline" x="156.75" y="2998.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-070-22-2c-22child-22-2c-22c-071-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-070%22%2C%22child%22%2C%22C-071%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="3103.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 3123 L 33.5 3116.5 Q 33.5 3104 46 3104 L 242 3104 Q 254.5 3104 254.5 3116.5 L 254.5 3123 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="3103.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-070-22-2c-22child-22-2c-22c-072-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-070%22%2C%22child%22%2C%22C-072%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="280.75" y="3103.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 281.5 3123 L 281.5 3116.5 Q 281.5 3104 294 3104 L 490 3104 Q 502.5 3104 502.5 3116.5 L 502.5 3123 Z"/>
-      <rect class="shared-node__outline" x="280.75" y="3103.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-071-22-2c-22parent-22-2c-22c-070-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-071%22%2C%22parent%22%2C%22C-070%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="3235.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 3255 L 33.5 3248.5 Q 33.5 3236 46 3236 L 242 3236 Q 254.5 3236 254.5 3248.5 L 254.5 3255 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="3235.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-071-22-2c-22focal-22-2c-22c-071-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-071%22%2C%22focal%22%2C%22C-071%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="3322.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 3342 L 33.5 3335.5 Q 33.5 3323 46 3323 L 242 3323 Q 254.5 3323 254.5 3335.5 L 254.5 3342 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="3322.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-072-22-2c-22parent-22-2c-22c-070-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-072%22%2C%22parent%22%2C%22C-070%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="3454.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 3474 L 33.5 3467.5 Q 33.5 3455 46 3455 L 242 3455 Q 254.5 3455 254.5 3467.5 L 254.5 3474 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="3454.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-occurrence-5b-22scope-3ac-072-22-2c-22focal-22-2c-22c-072-22-5d" class="scene-node primitive-card role-component paint-nodes semantic_node shared-node shared-node-dense" data-item-id="occurrence:%5B%22scope%3AC-072%22%2C%22focal%22%2C%22C-072%22%5D" data-role="component" data-node-density="dense">
-      <rect class="shared-node__chrome" x="32.75" y="3541.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 33.5 3561 L 33.5 3554.5 Q 33.5 3542 46 3542 L 242 3542 Q 254.5 3542 254.5 3554.5 L 254.5 3561 Z"/>
-      <rect class="shared-node__outline" x="32.75" y="3541.25" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-032" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense" data-item-id="J-032" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="1862.566" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 1863.316 112.5 L 1863.316 106 Q 1863.316 93.5 1875.816 93.5 L 2071.816 93.5 Q 2084.316 93.5 2084.316 106 L 2084.316 112.5 Z"/>
+      <rect class="shared-node__outline" x="1862.566" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="29">
-          <tspan x="30" dy="0">Component hierarchy · Source Editor</tspan>
+    <g class="scene-container primitive-cluster role-journey_stage paint-labels journey_map journey_stage" data-item-id="G-001" data-role="journey_stage">
+      <text class="scene-text text-role-title block-kind-text block-region-primary" x="52" y="58">
+          <tspan x="52" dy="0">Maintain Product Map</tspan>
         </text>
     </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-010%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-010" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="65.625">
-            <tspan x="47.5" y="65.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="293.316" y="106.625">
+            <tspan x="293.316" y="106.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="65.625">
-            <tspan x="106.08" y="65.625">C-010</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="319.591" y="106.625">
+            <tspan x="319.591" y="106.625">J-010</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="92.8">
-              <tspan x="47.5" y="92.8">Source Editor</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="293.316" y="133.8">
+              <tspan x="293.316" y="133.8">Select a Node</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%5D" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="161">
-          <tspan x="30" dy="0">Component hierarchy · Graphical Editor</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-020" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="197.625">
-            <tspan x="47.5" y="197.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="557.316" y="106.625">
+            <tspan x="557.316" y="106.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="197.625">
-            <tspan x="106.08" y="197.625">C-020</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="583.591" y="106.625">
+            <tspan x="583.591" y="106.625">J-020</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="224.8">
-              <tspan x="47.5" y="224.8">Graphical Editor</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="557.316" y="133.8">
+              <tspan x="557.316" y="133.8">Review Diagrams</tspan>
+              <tspan x="557.316" y="152.8">Containing Current Node</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%2C%22C-022%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-040" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="63.5" y="282.625">
-            <tspan x="63.5" y="282.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="557.316" y="231.625">
+            <tspan x="557.316" y="231.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="122.08" y="282.625">
-            <tspan x="122.08" y="282.625">C-022</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="583.591" y="231.625">
+            <tspan x="583.591" y="231.625">J-040</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="63.5" y="309.8">
-              <tspan x="63.5" y="309.8">Node Action Menu</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="557.316" y="258.8">
+              <tspan x="557.316" y="258.8">Add Relationship</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%2C%22C-024%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-041" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="63.5" y="351.625">
-            <tspan x="63.5" y="351.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="821.316" y="231.625">
+            <tspan x="821.316" y="231.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="122.08" y="351.625">
-            <tspan x="122.08" y="351.625">C-024</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="847.591" y="231.625">
+            <tspan x="847.591" y="231.625">J-041</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="63.5" y="378.8">
-              <tspan x="63.5" y="378.8">Edge Action Menu</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="821.316" y="258.8">
+              <tspan x="821.316" y="258.8">Add relationship, by node</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-020%22%2C%22C-026%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-042" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="63.5" y="420.625">
-            <tspan x="63.5" y="420.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="821.316" y="324.625">
+            <tspan x="821.316" y="324.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="122.08" y="420.625">
-            <tspan x="122.08" y="420.625">C-026</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="847.591" y="324.625">
+            <tspan x="847.591" y="324.625">J-042</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="63.5" y="447.8">
-              <tspan x="63.5" y="447.8">Selection Actions</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="821.316" y="351.8">
+              <tspan x="821.316" y="351.8">Add outgoing relationship</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-050%22%5D" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="532">
-          <tspan x="30" dy="0">Component hierarchy · Node Properties Inspector</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-050%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-043" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="568.625">
-            <tspan x="47.5" y="568.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="821.316" y="417.625">
+            <tspan x="821.316" y="417.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="568.625">
-            <tspan x="106.08" y="568.625">C-050</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="847.591" y="417.625">
+            <tspan x="847.591" y="417.625">J-043</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="595.8">
-              <tspan x="47.5" y="595.8">Node Properties Inspector</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="821.316" y="444.8">
+              <tspan x="821.316" y="444.8">Add incoming relationship</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="664">
-          <tspan x="30" dy="0">Component hierarchy · Edge Properties Inspector</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-060%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-021" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="700.625">
-            <tspan x="47.5" y="700.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="821.316" y="106.625">
+            <tspan x="821.316" y="106.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="700.625">
-            <tspan x="106.08" y="700.625">C-060</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="847.591" y="106.625">
+            <tspan x="847.591" y="106.625">J-021</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="727.8">
-              <tspan x="47.5" y="727.8">Edge Properties Inspector</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="821.316" y="133.8">
+              <tspan x="821.316" y="133.8">Select Diagram</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="enclosure:occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%5D" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="796">
-          <tspan x="30" dy="0">Component hierarchy · View Selector</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-022" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="832.625">
-            <tspan x="47.5" y="832.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1085.316" y="106.625">
+            <tspan x="1085.316" y="106.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="832.625">
-            <tspan x="106.08" y="832.625">C-070</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1111.591" y="106.625">
+            <tspan x="1111.591" y="106.625">J-022</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="859.8">
-              <tspan x="47.5" y="859.8">View Selector</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1085.316" y="133.8">
+              <tspan x="1085.316" y="133.8">View Node in New</tspan>
+              <tspan x="1085.316" y="152.8">Diagram Context</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%2C%22C-071%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-030" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="63.5" y="917.625">
-            <tspan x="63.5" y="917.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1349.316" y="106.625">
+            <tspan x="1349.316" y="106.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="122.08" y="917.625">
-            <tspan x="122.08" y="917.625">C-071</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1375.591" y="106.625">
+            <tspan x="1375.591" y="106.625">J-030</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="63.5" y="944.8">
-              <tspan x="63.5" y="944.8">Diagram Type Selector</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1349.316" y="133.8">
+              <tspan x="1349.316" y="133.8">Select Diagram Content</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22overview%22%2C%22hierarchy%22%2C%22C-070%22%2C%22C-072%22%5D" data-role="component">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-031" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="63.5" y="986.625">
-            <tspan x="63.5" y="986.625">Component</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1613.316" y="106.625">
+            <tspan x="1613.316" y="106.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="122.08" y="986.625">
-            <tspan x="122.08" y="986.625">C-072</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1639.591" y="106.625">
+            <tspan x="1639.591" y="106.625">J-031</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="63.5" y="1013.8">
-              <tspan x="63.5" y="1013.8">View Mode Selector</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1613.316" y="133.8">
+              <tspan x="1613.316" y="133.8">Adjust View</tspan>
+            </text>
+        </g>
+        <g class="shared-node__attribute-group" data-attribute-group="opportunity_ref">
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="1613.316" y="151.125">
+              <tspan x="1613.316" y="151.125">Opportunity Ref</tspan>
+            </text>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="1613.316" y="166.85">
+              <tspan x="1613.316" y="166.85">Low-Friction SDD consumption</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:P-012" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1098">
-          <tspan x="30" dy="0">Place scope · Source Pane</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-012%22%2C%22focal%22%2C%22P-012%22%5D" data-role="place">
+    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-dense shared-node__labels" data-item-id="J-032" data-role="step">
       <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="1142.125">
-            <tspan x="47.5" y="1142.125">Place</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1877.316" y="106.625">
+            <tspan x="1877.316" y="106.625">Step</tspan>
           </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="77.82" y="1142.125">
-            <tspan x="77.82" y="1142.125">P-012</tspan>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1903.591" y="106.625">
+            <tspan x="1903.591" y="106.625">J-032</tspan>
           </text>
       </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1169.3">
-              <tspan x="47.5" y="1169.3">Source Pane</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-012%22%2C%22composition_target%22%2C%22scope%3AP-012%3Acomposition%3AP-012%22%2C%22relationship%3A%255B%2522P-012%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="379.122" y="1142.125">
-            <tspan x="379.122" y="1142.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="437.702" y="1142.125">
-            <tspan x="437.702" y="1142.125">C-010</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="1169.3">
-              <tspan x="379.122" y="1169.3">Source Editor</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:P-014" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1237.5">
-          <tspan x="30" dy="0">Place scope · Diagram Pane</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-014%22%2C%22focal%22%2C%22P-014%22%5D" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="1281.625">
-            <tspan x="47.5" y="1281.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="77.82" y="1281.625">
-            <tspan x="77.82" y="1281.625">P-014</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1308.8">
-              <tspan x="47.5" y="1308.8">Diagram Pane</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-014%22%2C%22composition_target%22%2C%22scope%3AP-014%3Acomposition%3AP-014%22%2C%22relationship%3A%255B%2522P-014%2522%252C%2522COMPOSED_OF%2522%252C%2522C-020%2522%255D%3A0%22%2C%22C-020%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="379.122" y="1281.625">
-            <tspan x="379.122" y="1281.625">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="437.702" y="1281.625">
-            <tspan x="437.702" y="1281.625">C-020</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="1308.8">
-              <tspan x="379.122" y="1308.8">Graphical Editor</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-014%22%2C%22composition_target%22%2C%22scope%3AP-014%3Acomposition%3AP-014%22%2C%22relationship%3A%255B%2522P-014%2522%252C%2522COMPOSED_OF%2522%252C%2522C-070%2522%255D%3A0%22%2C%22C-070%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="379.122" y="1366.125">
-            <tspan x="379.122" y="1366.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="437.702" y="1366.125">
-            <tspan x="437.702" y="1366.125">C-070</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="1393.3">
-              <tspan x="379.122" y="1393.3">View Selector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:P-016" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1461.5">
-          <tspan x="30" dy="0">Place scope · Inspector Pane</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-016%22%2C%22focal%22%2C%22P-016%22%5D" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="1505.625">
-            <tspan x="47.5" y="1505.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="77.82" y="1505.625">
-            <tspan x="77.82" y="1505.625">P-016</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1532.8">
-              <tspan x="47.5" y="1532.8">Inspector Pane</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-016%22%2C%22composition_target%22%2C%22scope%3AP-016%3Acomposition%3AP-016%22%2C%22relationship%3A%255B%2522P-016%2522%252C%2522COMPOSED_OF%2522%252C%2522C-050%2522%255D%3A0%22%2C%22C-050%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="379.122" y="1505.625">
-            <tspan x="379.122" y="1505.625">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="437.702" y="1505.625">
-            <tspan x="437.702" y="1505.625">C-050</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="1532.8">
-              <tspan x="379.122" y="1532.8">Node Properties Inspector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AP-016%22%2C%22composition_target%22%2C%22scope%3AP-016%3Acomposition%3AP-016%22%2C%22relationship%3A%255B%2522P-016%2522%252C%2522COMPOSED_OF%2522%252C%2522C-060%2522%255D%3A0%22%2C%22C-060%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="379.122" y="1590.125">
-            <tspan x="379.122" y="1590.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="437.702" y="1590.125">
-            <tspan x="437.702" y="1590.125">C-060</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="379.122" y="1617.3">
-              <tspan x="379.122" y="1617.3">Edge Properties Inspector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-010" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1685.5">
-          <tspan x="30" dy="0">Component scope · Source Editor</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-010%22%2C%22focal%22%2C%22C-010%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="1722.125">
-            <tspan x="47.5" y="1722.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="1722.125">
-            <tspan x="106.08" y="1722.125">C-010</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1749.3">
-              <tspan x="47.5" y="1749.3">Source Editor</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-020" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="1817.5">
-          <tspan x="30" dy="0">Component scope · Graphical Editor</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-020%22%2C%22focal%22%2C%22C-020%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="295.5" y="1854.125">
-            <tspan x="295.5" y="1854.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="354.08" y="1854.125">
-            <tspan x="354.08" y="1854.125">C-020</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="295.5" y="1881.3">
-              <tspan x="295.5" y="1881.3">Graphical Editor</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-020%22%2C%22child%22%2C%22C-022%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="1959.125">
-            <tspan x="47.5" y="1959.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="1959.125">
-            <tspan x="106.08" y="1959.125">C-022</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="1986.3">
-              <tspan x="47.5" y="1986.3">Node Action Menu</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-020%22%2C%22child%22%2C%22C-024%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="295.5" y="1959.125">
-            <tspan x="295.5" y="1959.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="354.08" y="1959.125">
-            <tspan x="354.08" y="1959.125">C-024</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="295.5" y="1986.3">
-              <tspan x="295.5" y="1986.3">Edge Action Menu</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-020%22%2C%22child%22%2C%22C-026%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="543.5" y="1959.125">
-            <tspan x="543.5" y="1959.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="602.08" y="1959.125">
-            <tspan x="602.08" y="1959.125">C-026</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="543.5" y="1986.3">
-              <tspan x="543.5" y="1986.3">Selection Actions</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-022" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="2054.5">
-          <tspan x="30" dy="0">Component scope · Node Action Menu</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-022%22%2C%22parent%22%2C%22C-020%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="2091.125">
-            <tspan x="47.5" y="2091.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="2091.125">
-            <tspan x="106.08" y="2091.125">C-020</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="2118.3">
-              <tspan x="47.5" y="2118.3">Graphical Editor</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-022%22%2C%22focal%22%2C%22C-022%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="2178.125">
-            <tspan x="47.5" y="2178.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="2178.125">
-            <tspan x="106.08" y="2178.125">C-022</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="2205.3">
-              <tspan x="47.5" y="2205.3">Node Action Menu</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-024" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="2273.5">
-          <tspan x="30" dy="0">Component scope · Edge Action Menu</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-024%22%2C%22parent%22%2C%22C-020%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="2310.125">
-            <tspan x="47.5" y="2310.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="2310.125">
-            <tspan x="106.08" y="2310.125">C-020</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="2337.3">
-              <tspan x="47.5" y="2337.3">Graphical Editor</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-024%22%2C%22focal%22%2C%22C-024%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="2397.125">
-            <tspan x="47.5" y="2397.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="2397.125">
-            <tspan x="106.08" y="2397.125">C-024</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="2424.3">
-              <tspan x="47.5" y="2424.3">Edge Action Menu</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-026" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="2492.5">
-          <tspan x="30" dy="0">Component scope · Selection Actions</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-026%22%2C%22parent%22%2C%22C-020%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="2529.125">
-            <tspan x="47.5" y="2529.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="2529.125">
-            <tspan x="106.08" y="2529.125">C-020</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="2556.3">
-              <tspan x="47.5" y="2556.3">Graphical Editor</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-026%22%2C%22focal%22%2C%22C-026%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="2616.125">
-            <tspan x="47.5" y="2616.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="2616.125">
-            <tspan x="106.08" y="2616.125">C-026</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="2643.3">
-              <tspan x="47.5" y="2643.3">Selection Actions</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-050" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="2711.5">
-          <tspan x="30" dy="0">Component scope · Node Properties Inspector</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-050%22%2C%22focal%22%2C%22C-050%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="2748.125">
-            <tspan x="47.5" y="2748.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="2748.125">
-            <tspan x="106.08" y="2748.125">C-050</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="2775.3">
-              <tspan x="47.5" y="2775.3">Node Properties Inspector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-060" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="2843.5">
-          <tspan x="30" dy="0">Component scope · Edge Properties Inspector</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-060%22%2C%22focal%22%2C%22C-060%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="2880.125">
-            <tspan x="47.5" y="2880.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="2880.125">
-            <tspan x="106.08" y="2880.125">C-060</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="2907.3">
-              <tspan x="47.5" y="2907.3">Edge Properties Inspector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-070" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="2975.5">
-          <tspan x="30" dy="0">Component scope · View Selector</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-070%22%2C%22focal%22%2C%22C-070%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="171.5" y="3012.125">
-            <tspan x="171.5" y="3012.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="230.08" y="3012.125">
-            <tspan x="230.08" y="3012.125">C-070</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="171.5" y="3039.3">
-              <tspan x="171.5" y="3039.3">View Selector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-070%22%2C%22child%22%2C%22C-071%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="3117.125">
-            <tspan x="47.5" y="3117.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="3117.125">
-            <tspan x="106.08" y="3117.125">C-071</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="3144.3">
-              <tspan x="47.5" y="3144.3">Diagram Type Selector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-070%22%2C%22child%22%2C%22C-072%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="295.5" y="3117.125">
-            <tspan x="295.5" y="3117.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="354.08" y="3117.125">
-            <tspan x="354.08" y="3117.125">C-072</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="295.5" y="3144.3">
-              <tspan x="295.5" y="3144.3">View Mode Selector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-071" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="3212.5">
-          <tspan x="30" dy="0">Component scope · Diagram Type Selector</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-071%22%2C%22parent%22%2C%22C-070%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="3249.125">
-            <tspan x="47.5" y="3249.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="3249.125">
-            <tspan x="106.08" y="3249.125">C-070</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="3276.3">
-              <tspan x="47.5" y="3276.3">View Selector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-071%22%2C%22focal%22%2C%22C-071%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="3336.125">
-            <tspan x="47.5" y="3336.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="3336.125">
-            <tspan x="106.08" y="3336.125">C-071</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="3363.3">
-              <tspan x="47.5" y="3363.3">Diagram Type Selector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-ui_contracts_group paint-labels" data-item-id="scope:C-072" data-role="ui_contracts_group">
-      <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary" x="30" y="3431.5">
-          <tspan x="30" dy="0">Component scope · View Mode Selector</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-072%22%2C%22parent%22%2C%22C-070%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="3468.125">
-            <tspan x="47.5" y="3468.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="3468.125">
-            <tspan x="106.08" y="3468.125">C-070</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="3495.3">
-              <tspan x="47.5" y="3495.3">View Selector</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-component paint-labels semantic_node shared-node shared-node-dense shared-node__labels" data-item-id="occurrence:%5B%22scope%3AC-072%22%2C%22focal%22%2C%22C-072%22%5D" data-role="component">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="47.5" y="3555.125">
-            <tspan x="47.5" y="3555.125">Component</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="106.08" y="3555.125">
-            <tspan x="106.08" y="3555.125">C-072</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="3582.3">
-              <tspan x="47.5" y="3582.3">View Mode Selector</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1877.316" y="133.8">
+              <tspan x="1877.316" y="133.8">Name the New View</tspan>
             </text>
         </g>
       </g>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-scope-p-012-composition-p-012-relationship-5b-22p-012-22-2c-22composed_of-22-2c-22c-010-22-5d-0" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-012:composition:P-012:relationship:%5B%22P-012%22%2C%22COMPOSED_OF%22%2C%22C-010%22%5D:0" data-role="composition">
-      <path class="scene-edge__path" d="M 256 1154 L 363.622 1154"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 1154 L 354.622 1159 L 354.622 1149 Z" fill="#1d4ed8" stroke="none"/>
+    <g id="scene-edge-j-020__precedes__j-021__46eee8d43c6d776b1dcc753aa338faec816b97554b7003e617b75fe86a975a36__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-020__PRECEDES__J-021__46eee8d43c6d776b1dcc753aa338faec816b97554b7003e617b75fe86a975a36__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 765.816 118.5 L 805.816 118.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-scope-p-014-composition-p-014-relationship-5b-22p-014-22-2c-22composed_of-22-2c-22c-070-22-5d-0-lead" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-014:composition:P-014:relationship:%5B%22P-014%22%2C%22COMPOSED_OF%22%2C%22C-070%22%5D:0:lead" data-role="composition">
-      <path class="scene-edge__path" d="M 232 1320 L 232 1378"/>
+    <g id="scene-edge-j-021__precedes__j-022__84df0e61ab61b8543263f49908472ace2a2b519578cadca8570812d4f3301422__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-021__PRECEDES__J-022__84df0e61ab61b8543263f49908472ace2a2b519578cadca8570812d4f3301422__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 1029.816 118.5 L 1069.816 118.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-scope-p-014-composition-p-014-relationship-5b-22p-014-22-2c-22composed_of-22-2c-22c-020-22-5d-0" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-014:composition:P-014:relationship:%5B%22P-014%22%2C%22COMPOSED_OF%22%2C%22C-020%22%5D:0" data-role="composition">
-      <path class="scene-edge__path" d="M 256 1293.5 L 363.622 1293.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 1293.5 L 354.622 1298.5 L 354.622 1288.5 Z" fill="#1d4ed8" stroke="none"/>
+    <g id="scene-edge-j-030__precedes__j-031__0e3ab4d720f49fe2fe8b7d13b91ee34595e6149e7a4523176d7009e8cf2431ee__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-030__PRECEDES__J-031__0e3ab4d720f49fe2fe8b7d13b91ee34595e6149e7a4523176d7009e8cf2431ee__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 1557.816 118.5 L 1597.816 118.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-scope-p-014-composition-p-014-relationship-5b-22p-014-22-2c-22composed_of-22-2c-22c-070-22-5d-0" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-014:composition:P-014:relationship:%5B%22P-014%22%2C%22COMPOSED_OF%22%2C%22C-070%22%5D:0" data-role="composition">
-      <path class="scene-edge__path" d="M 232 1378 L 363.622 1378"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 1378 L 354.622 1383 L 354.622 1373 Z" fill="#1d4ed8" stroke="none"/>
+    <g id="scene-edge-j-031__precedes__j-032__2d8e4e0cd8d71be9365379c44f4c09b68131146db06e0443809107850317dd3b__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-031__PRECEDES__J-032__2d8e4e0cd8d71be9365379c44f4c09b68131146db06e0443809107850317dd3b__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 1821.816 118.5 L 1861.816 118.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-scope-p-016-composition-p-016-relationship-5b-22p-016-22-2c-22composed_of-22-2c-22c-060-22-5d-0-lead" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-016:composition:P-016:relationship:%5B%22P-016%22%2C%22COMPOSED_OF%22%2C%22C-060%22%5D:0:lead" data-role="composition">
-      <path class="scene-edge__path" d="M 232 1544 L 232 1602"/>
+    <g id="scene-edge-j-010__precedes__j-020__bd5b4702ee4578ba61d9321a99e2c57ecd9eb8c9def1cf16df06db2a612f7b43__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-010__PRECEDES__J-020__bd5b4702ee4578ba61d9321a99e2c57ecd9eb8c9def1cf16df06db2a612f7b43__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 501.816 118.5 L 541.816 118.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-scope-p-016-composition-p-016-relationship-5b-22p-016-22-2c-22composed_of-22-2c-22c-050-22-5d-0" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-016:composition:P-016:relationship:%5B%22P-016%22%2C%22COMPOSED_OF%22%2C%22C-050%22%5D:0" data-role="composition">
-      <path class="scene-edge__path" d="M 256 1517.5 L 363.622 1517.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 1517.5 L 354.622 1522.5 L 354.622 1512.5 Z" fill="#1d4ed8" stroke="none"/>
+    <g id="scene-edge-j-010__precedes__j-040__0969a1b8b474097395cda04a683c6f5bd486b6ca60a8ef92085bd6742118cafd__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-010__PRECEDES__J-040__0969a1b8b474097395cda04a683c6f5bd486b6ca60a8ef92085bd6742118cafd__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 389.816 145 L 389.816 243.5 L 541.816 243.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-scope-p-016-composition-p-016-relationship-5b-22p-016-22-2c-22composed_of-22-2c-22c-060-22-5d-0" class="scene-edge role-composition route-orthogonal paint-edges" data-edge-id="scope:P-016:composition:P-016:relationship:%5B%22P-016%22%2C%22COMPOSED_OF%22%2C%22C-060%22%5D:0" data-role="composition">
-      <path class="scene-edge__path" d="M 232 1602 L 363.622 1602"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 364.622 1602 L 354.622 1607 L 354.622 1597 Z" fill="#1d4ed8" stroke="none"/>
+    <g id="scene-edge-j-040__precedes__j-041__1044dad5678dc742c6791e2a250651f3723e36db5662773c4e221866c4ef6491__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-040__PRECEDES__J-041__1044dad5678dc742c6791e2a250651f3723e36db5662773c4e221866c4ef6491__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 765.816 243.5 L 805.816 243.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-scope-c-020-children-leg-0" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-020:children:leg:0" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 144 1926.5 L 144 1944.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 144 1945.5 L 139 1935.5 L 149 1935.5 Z" fill="#1d4ed8" stroke="none"/>
+    <g id="scene-edge-j-040__precedes__j-042__ec5169d09142273bad793dffd5096600b67407a113c32447ba424feb417c6e10__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-040__PRECEDES__J-042__ec5169d09142273bad793dffd5096600b67407a113c32447ba424feb417c6e10__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 661.816 270 L 661.816 336.5 L 805.816 336.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-scope-c-020-children-leg-1" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-020:children:leg:1" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 392 1926.5 L 392 1944.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 392 1945.5 L 387 1935.5 L 397 1935.5 Z" fill="#1d4ed8" stroke="none"/>
-    </g>
-    <g id="scene-edge-scope-c-020-children-leg-2" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-020:children:leg:2" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 640 1926.5 L 640 1944.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 640 1945.5 L 635 1935.5 L 645 1935.5 Z" fill="#1d4ed8" stroke="none"/>
-    </g>
-    <g id="scene-edge-scope-c-020-children-bar-1" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-020:children:bar:1" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 144 1926.5 L 392 1926.5"/>
-    </g>
-    <g id="scene-edge-scope-c-020-children-bar-2" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-020:children:bar:2" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 392 1926.5 L 640 1926.5"/>
-    </g>
-    <g id="scene-edge-scope-c-020-children-stem" class="scene-edge role-containment route-orthogonal paint-edges" data-edge-id="scope:C-020:children:stem" data-role="containment">
-      <path class="scene-edge__path" d="M 392 1892.5 L 392 1926.5"/>
-    </g>
-    <g id="scene-edge-scope-c-022-relationship-5b-22c-020-22-2c-22contains-22-2c-22c-022-22-5d-0" class="scene-edge role-containment route-orthogonal paint-edges" data-edge-id="scope:C-022:relationship:%5B%22C-020%22%2C%22CONTAINS%22%2C%22C-022%22%5D:0" data-role="containment">
-      <path class="scene-edge__path" d="M 144 2129.5 L 144 2163.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 144 2164.5 L 139 2154.5 L 149 2154.5 Z" fill="#1d4ed8" stroke="none"/>
-    </g>
-    <g id="scene-edge-scope-c-024-relationship-5b-22c-020-22-2c-22contains-22-2c-22c-024-22-5d-0" class="scene-edge role-containment route-orthogonal paint-edges" data-edge-id="scope:C-024:relationship:%5B%22C-020%22%2C%22CONTAINS%22%2C%22C-024%22%5D:0" data-role="containment">
-      <path class="scene-edge__path" d="M 144 2348.5 L 144 2382.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 144 2383.5 L 139 2373.5 L 149 2373.5 Z" fill="#1d4ed8" stroke="none"/>
-    </g>
-    <g id="scene-edge-scope-c-026-relationship-5b-22c-020-22-2c-22contains-22-2c-22c-026-22-5d-0" class="scene-edge role-containment route-orthogonal paint-edges" data-edge-id="scope:C-026:relationship:%5B%22C-020%22%2C%22CONTAINS%22%2C%22C-026%22%5D:0" data-role="containment">
-      <path class="scene-edge__path" d="M 144 2567.5 L 144 2601.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 144 2602.5 L 139 2592.5 L 149 2592.5 Z" fill="#1d4ed8" stroke="none"/>
-    </g>
-    <g id="scene-edge-scope-c-070-children-leg-0" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-070:children:leg:0" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 144 3084.5 L 144 3102.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 144 3103.5 L 139 3093.5 L 149 3093.5 Z" fill="#1d4ed8" stroke="none"/>
-    </g>
-    <g id="scene-edge-scope-c-070-children-leg-1" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-070:children:leg:1" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 392 3084.5 L 392 3102.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 392 3103.5 L 387 3093.5 L 397 3093.5 Z" fill="#1d4ed8" stroke="none"/>
-    </g>
-    <g id="scene-edge-scope-c-070-children-bar-1" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-070:children:bar:1" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 144 3084.5 L 268 3084.5"/>
-    </g>
-    <g id="scene-edge-scope-c-070-children-bar-2" class="scene-edge role-relationship_branch route-orthogonal paint-edges" data-edge-id="scope:C-070:children:bar:2" data-role="relationship_branch">
-      <path class="scene-edge__path" d="M 268 3084.5 L 392 3084.5"/>
-    </g>
-    <g id="scene-edge-scope-c-070-children-stem" class="scene-edge role-containment route-orthogonal paint-edges" data-edge-id="scope:C-070:children:stem" data-role="containment">
-      <path class="scene-edge__path" d="M 268 3050.5 L 268 3084.5"/>
-    </g>
-    <g id="scene-edge-scope-c-071-relationship-5b-22c-070-22-2c-22contains-22-2c-22c-071-22-5d-0" class="scene-edge role-containment route-orthogonal paint-edges" data-edge-id="scope:C-071:relationship:%5B%22C-070%22%2C%22CONTAINS%22%2C%22C-071%22%5D:0" data-role="containment">
-      <path class="scene-edge__path" d="M 144 3287.5 L 144 3321.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 144 3322.5 L 139 3312.5 L 149 3312.5 Z" fill="#1d4ed8" stroke="none"/>
-    </g>
-    <g id="scene-edge-scope-c-072-relationship-5b-22c-070-22-2c-22contains-22-2c-22c-072-22-5d-0" class="scene-edge role-containment route-orthogonal paint-edges" data-edge-id="scope:C-072:relationship:%5B%22C-070%22%2C%22CONTAINS%22%2C%22C-072%22%5D:0" data-role="containment">
-      <path class="scene-edge__path" d="M 144 3506.5 L 144 3540.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 144 3541.5 L 139 3531.5 L 149 3531.5 Z" fill="#1d4ed8" stroke="none"/>
+    <g id="scene-edge-j-040__precedes__j-043__516ff555b414b6cd05c89a504ded928336c61a450faa1c1efaeb3f75d697869f__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-040__PRECEDES__J-043__516ff555b414b6cd05c89a504ded928336c61a450faa1c1efaeb3f75d697869f__0" data-role="precedes">
+      <path class="scene-edge__path" d="M 645.816 270 L 645.816 429.5 L 805.816 429.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
-    <g class="scene-edge-label role-composition" data-edge-id="scope:P-012:composition:P-012:relationship:%5B%22P-012%22%2C%22COMPOSED_OF%22%2C%22C-010%22%5D:0" data-role="composition">
-      <rect class="scene-edge-label__box" x="268" y="1120" width="83.622" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="1131" dominant-baseline="middle">
-          <tspan x="274" dy="0">composed of</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-composition" data-edge-id="scope:P-014:composition:P-014:relationship:%5B%22P-014%22%2C%22COMPOSED_OF%22%2C%22C-020%22%5D:0" data-role="composition">
-      <rect class="scene-edge-label__box" x="268" y="1259.5" width="83.622" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="1270.5" dominant-baseline="middle">
-          <tspan x="274" dy="0">composed of</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-composition" data-edge-id="scope:P-014:composition:P-014:relationship:%5B%22P-014%22%2C%22COMPOSED_OF%22%2C%22C-070%22%5D:0" data-role="composition">
-      <rect class="scene-edge-label__box" x="256" y="1344" width="83.622" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="262" y="1355" dominant-baseline="middle">
-          <tspan x="262" dy="0">composed of</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-composition" data-edge-id="scope:P-016:composition:P-016:relationship:%5B%22P-016%22%2C%22COMPOSED_OF%22%2C%22C-050%22%5D:0" data-role="composition">
-      <rect class="scene-edge-label__box" x="268" y="1483.5" width="83.622" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="1494.5" dominant-baseline="middle">
-          <tspan x="274" dy="0">composed of</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-composition" data-edge-id="scope:P-016:composition:P-016:relationship:%5B%22P-016%22%2C%22COMPOSED_OF%22%2C%22C-060%22%5D:0" data-role="composition">
-      <rect class="scene-edge-label__box" x="256" y="1568" width="83.622" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="262" y="1579" dominant-baseline="middle">
-          <tspan x="262" dy="0">composed of</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-containment" data-edge-id="scope:C-020:children:stem" data-role="containment">
-      <rect class="scene-edge-label__box" x="404" y="1898.5" width="60.942" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="410" y="1909.5" dominant-baseline="middle">
-          <tspan x="410" dy="0">Contains</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-containment" data-edge-id="scope:C-022:relationship:%5B%22C-020%22%2C%22CONTAINS%22%2C%22C-022%22%5D:0" data-role="containment">
-      <rect class="scene-edge-label__box" x="156" y="2135.5" width="60.942" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="162" y="2146.5" dominant-baseline="middle">
-          <tspan x="162" dy="0">Contains</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-containment" data-edge-id="scope:C-024:relationship:%5B%22C-020%22%2C%22CONTAINS%22%2C%22C-024%22%5D:0" data-role="containment">
-      <rect class="scene-edge-label__box" x="156" y="2354.5" width="60.942" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="162" y="2365.5" dominant-baseline="middle">
-          <tspan x="162" dy="0">Contains</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-containment" data-edge-id="scope:C-026:relationship:%5B%22C-020%22%2C%22CONTAINS%22%2C%22C-026%22%5D:0" data-role="containment">
-      <rect class="scene-edge-label__box" x="156" y="2573.5" width="60.942" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="162" y="2584.5" dominant-baseline="middle">
-          <tspan x="162" dy="0">Contains</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-containment" data-edge-id="scope:C-070:children:stem" data-role="containment">
-      <rect class="scene-edge-label__box" x="280" y="3056.5" width="60.942" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="286" y="3067.5" dominant-baseline="middle">
-          <tspan x="286" dy="0">Contains</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-containment" data-edge-id="scope:C-071:relationship:%5B%22C-070%22%2C%22CONTAINS%22%2C%22C-071%22%5D:0" data-role="containment">
-      <rect class="scene-edge-label__box" x="156" y="3293.5" width="60.942" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="162" y="3304.5" dominant-baseline="middle">
-          <tspan x="162" dy="0">Contains</tspan>
-        </text>
-    </g>
-    <g class="scene-edge-label role-containment" data-edge-id="scope:C-072:relationship:%5B%22C-070%22%2C%22CONTAINS%22%2C%22C-072%22%5D:0" data-role="containment">
-      <rect class="scene-edge-label__box" x="156" y="3512.5" width="60.942" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="162" y="3523.5" dominant-baseline="middle">
-          <tspan x="162" dy="0">Contains</tspan>
-        </text>
-    </g>
   </g>
 </svg>
