@@ -781,9 +781,11 @@ async function runShowAllCommand(
   }
 
   const renderedEntries: Array<{
+    candidate: ShowAllCandidate;
     outputPath: string;
     result: SourcePreviewRenderResult;
   }> = [];
+  const failedRenderers: ShowAllCandidate[] = [];
   for (const entry of outputEntries) {
     try {
       const result = await deps.renderPreparedCompiledGraphPreview(
@@ -792,11 +794,11 @@ async function runShowAllCommand(
         bundle,
         entry.prepared
       );
-      renderedEntries.push({ outputPath: entry.outputPath, result });
+      renderedEntries.push({ candidate: entry.candidate, outputPath: entry.outputPath, result });
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       deps.stderr(appendLine(appendInstallHint(message, entry.candidate.previewCapability.backendId)));
-      return 1;
+      failedRenderers.push(entry.candidate);
     }
   }
 
@@ -807,20 +809,36 @@ async function runShowAllCommand(
     ...renderDiagnostics
   ];
   writeDiagnostics(deps, allDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
-  if (hasErrors(renderDiagnostics) || renderedEntries.some(({ result }) => !result.artifact)) {
-    return 1;
-  }
-
-  for (const { outputPath, result } of renderedEntries) {
+  const generatedFiles: Array<{ outputPath: string; postfix: string }> = [];
+  for (const { candidate, outputPath, result } of renderedEntries) {
+    if (hasErrors(result.diagnostics) || !result.artifact) {
+      failedRenderers.push(candidate);
+      continue;
+    }
     writeNotes(deps, result.notes);
-    await writePreviewOutput(deps, outputPath, result.artifact!);
-    announceFileWrite(deps, outputPath);
+    await writePreviewOutput(deps, outputPath, result.artifact);
+    const warnings = result.diagnostics.filter((diagnostic) => diagnostic.severity === "warn").length;
+    const info = result.diagnostics.filter((diagnostic) => diagnostic.severity === "info").length;
+    const notices = [
+      ...(warnings > 0 ? [`${warnings} warning(s)`] : []),
+      ...(info > 0 ? [`${info} info`] : [])
+    ];
+    generatedFiles.push({ outputPath, postfix: notices.length > 0 ? ` (${notices.join(", ")})` : "" });
   }
   const skippedSuffix = skipped.length > 0
     ? ` Skipped ${skipped.length} without visible content: ${formatList(skipped.map(({ candidate }) => candidate.view.id))}.`
     : "";
-  deps.stderr(appendLine(`Generated ${renderedEntries.length} diagram(s).${skippedSuffix}`));
-  return 0;
+  deps.stderr(appendLine(`Generated ${generatedFiles.length} diagram(s). Failed ${failedRenderers.length} renderer(s).${skippedSuffix}`));
+  if (generatedFiles.length > 0) {
+    deps.stderr(appendLine(`Path: ${path.dirname(path.resolve(generatedFiles[0].outputPath))}`));
+  }
+  for (const { outputPath, postfix } of generatedFiles) {
+    deps.stderr(appendLine(`${path.basename(outputPath)}${postfix}`));
+  }
+  for (const candidate of candidates.filter((candidate) => failedRenderers.includes(candidate))) {
+    deps.stderr(appendLine(`Failed renderer: ${candidate.view.id} (${candidate.previewCapability.backendId})`));
+  }
+  return failedRenderers.length > 0 ? 1 : 0;
 }
 
 async function runShowCommand(

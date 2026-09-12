@@ -858,11 +858,22 @@ describe("CLI wrappers", () => {
     expect(stderr.join("")).toContain("--dot-out cannot be used with '--view all'");
   });
 
-  it("show --view all writes no partial batch when an applicable renderer fails", async () => {
+  it.each(["diagnostics", "throw", "missing artifact", "diagnostics with artifact"])("show --view all preserves successes and summarizes a renderer failure (%s)", async (failureMode) => {
     const batch = createBatchPreviewMocks({
       ia_place_map: ["P-001"],
-      journey_map: ["J-001"]
+      journey_map: ["J-001"],
+      ui_contracts: ["UI-001"]
     }, "journey_map");
+    const render = batch.render.getMockImplementation()!;
+    batch.render.mockImplementation(async (...args) => {
+      const result = await render(...args);
+      if (args[3].view.id === "journey_map") {
+        if (failureMode === "throw") throw new Error("Renderer crashed");
+        if (failureMode === "missing artifact") result.diagnostics = [];
+        if (failureMode === "diagnostics with artifact") result.artifact = { format: "svg", text: "<svg/>" };
+      }
+      return result;
+    });
     const { deps, stderr, writeTextFileMock } = createDeps({
       prepareCompiledGraphPreview: batch.prepare,
       renderPreparedCompiledGraphPreview: batch.render
@@ -874,9 +885,75 @@ describe("CLI wrappers", () => {
     ], deps);
 
     expect(result.exitCode).toBe(1);
+    expect(batch.render).toHaveBeenCalledTimes(3);
+    expect(writeTextFileMock.mock.calls.map((call) => call[0])).toEqual([
+      "/tmp/diagram.ia_place_map.svg",
+      "/tmp/diagram.ui_contracts.svg"
+    ]);
+    const summary = stderr.join("").slice(stderr.join("").indexOf("Generated 2 diagram(s)."));
+    expect(summary.trim().split("\n")).toEqual([
+      expect.stringContaining("Failed 1 renderer(s)."),
+      "Path: /tmp",
+      "diagram.ia_place_map.svg",
+      "diagram.ui_contracts.svg",
+      "Failed renderer: journey_map (staged_journey_map_preview)"
+    ]);
+  });
+
+  it.each([
+    { severities: ["warn"], postfix: " (1 warning(s))" },
+    { severities: ["info"], postfix: " (1 info)" },
+    { severities: ["warn", "warn", "info"], postfix: " (2 warning(s), 1 info)" }
+  ])("show --view all annotates successful files with $postfix", async ({ severities, postfix }) => {
+    const batch = createBatchPreviewMocks({ ia_place_map: ["P-001"], journey_map: ["J-001"] });
+    const render = batch.render.getMockImplementation()!;
+    batch.render.mockImplementation(async (...args) => {
+      const result = await render(...args);
+      if (args[3].view.id === "ia_place_map") {
+        result.diagnostics = severities.map((severity) => ({
+          stage: "render", code: "render.notice", severity, message: "Renderer notice", file: args[0]
+        }));
+      }
+      return result;
+    });
+    const { deps, stderr, writeTextFileMock } = createDeps({
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--out", "/tmp/diagram.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(0);
+    expect(writeTextFileMock).toHaveBeenCalledTimes(2);
+    expect(stderr.join("").trim().split("\n").slice(-3)).toEqual([
+      "Path: /tmp",
+      `diagram.ia_place_map.svg${postfix}`,
+      "diagram.journey_map.svg"
+    ]);
+    expect(countOccurrences(stderr.join(""), "Path: ")).toBe(1);
+  });
+
+  it("show --view all lists every failed renderer when none succeeds", async () => {
+    const batch = createBatchPreviewMocks({ ia_place_map: ["P-001"], journey_map: ["J-001"] }, "journey_map");
+    batch.render.mockRejectedValueOnce(new Error("Renderer crashed"));
+    const { deps, stderr, writeTextFileMock } = createDeps({
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd", "--view", "all"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
     expect(batch.render).toHaveBeenCalledTimes(2);
     expect(writeTextFileMock).not.toHaveBeenCalled();
-    expect(stderr.join("")).toContain("render.synthetic_failure");
+    expect(stderr.join("")).toContain("Generated 0 diagram(s). Failed 2 renderer(s).");
+    expect(stderr.join("").trim().split("\n").slice(-2)).toEqual([
+      "Failed renderer: ia_place_map (staged_ia_place_map_preview)",
+      "Failed renderer: journey_map (staged_journey_map_preview)"
+    ]);
   });
 
   it("show appends an explicit backend override to the default output path", async () => {

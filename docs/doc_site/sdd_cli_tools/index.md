@@ -108,9 +108,11 @@ pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./ou
 
 When `--profile`, `--detail`, or `--decorators` is omitted, `sdd show` resolves that setting from your user default and then the bundle fallback. The shipped v0.1 fallbacks are `simple`, `compact`, and `none`; an explicit option overrides the saved preference for one invocation. Profile controls validation, detail controls rendering content, and decorators add orientation information independently.
 
-With `--view all`, `sdd show` generates only views that retain visible semantic content after the selected detail policy. Finding no applicable views is successful and writes no files. An explicit backend must support every available view, and `--dot-out` cannot be combined with `--view all`.
+With `--view all`, `sdd show` generates only views that retain visible semantic content after the selected detail policy. Finding no applicable views is successful and writes no files. If a renderer fails, the remaining applicable renderers still run and successful outputs are saved. The command exits with code 1 if any renderer fails. An explicit backend must support every available view, and `--dot-out` cannot be combined with `--view all`.
 
 If you omit `--out`, `sdd show` writes output beside the input file using `<source>.<view>.<detail>[.decorators-<mode>][.<backend>].<format>`. The decorator segment is omitted for `none`. With `--view all --out ./diagram.svg`, the output template becomes files such as `diagram.ia_place_map.svg` and `diagram.journey_map.svg`.
+
+The final `--view all` summary shows the output directory once as `Path: <directory>`, followed by each generated filename on its own line. Files with renderer warning or info diagnostics include a postfix such as `(2 warning(s), 1 info)`. Failed renderers are each listed on a separate line.
 
 ### Detail Choice
 

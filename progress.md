@@ -27,7 +27,9 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-- Caught 2 missing artifact updates
+## Sat 9-12
+
+- increased --view all tolerance
 
 ## Wed 9-9
 
@@ -63,6 +65,7 @@ z
 
 ## Sat 9-5
 
+- Caught 2 missing artifact updates
 - Updated, reviewed canonical examples
 - Updated README recent items
 
