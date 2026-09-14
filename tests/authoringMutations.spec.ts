@@ -685,6 +685,124 @@ describe("authoring mutations", () => {
     });
   });
 
+  it("quotes multi-word edge event/effect annotations so the written document re-parses", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const documentPath = "docs/edge-annotations.sdd";
+      await writeTempDocument(
+        tempRepoRoot,
+        documentPath,
+        [
+          "SDD-TEXT 0.1",
+          "ViewState VS-010 \"Method Choice\"",
+          "  description=\"Choose a method\"",
+          "END",
+          "",
+          "ViewState VS-020 \"By Node\"",
+          "END",
+          ""
+        ].join("\n")
+      );
+
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const inspected = expectInspectedDocument(await inspectDocument(workspace, bundle, documentPath));
+      const parentHandle = inspected.resource.nodes.find((node) => node.node_id === "VS-010")!.handle;
+
+      const inserted = await applyChangeSet(workspace, bundle, {
+        path: documentPath,
+        base_revision: inspected.resource.revision,
+        mode: "commit",
+        operations: [
+          {
+            kind: "insert_edge_line",
+            parent_handle: parentHandle,
+            rel_type: "TRANSITIONS_TO",
+            to: "VS-020",
+            to_name: "By Node",
+            event: "Select Add Relationship",
+            guard: "single select",
+            effect: "open the dialog"
+          }
+        ]
+      });
+
+      expect(inserted.status).toBe("applied");
+      expect(await readTempDocument(tempRepoRoot, documentPath)).toBe(
+        [
+          "SDD-TEXT 0.1",
+          "ViewState VS-010 \"Method Choice\"",
+          "  description=\"Choose a method\"",
+          "  TRANSITIONS_TO VS-020 \"By Node\" [\"Select Add Relationship\"] {single select} / \"open the dialog\"",
+          "END",
+          "",
+          "ViewState VS-020 \"By Node\"",
+          "END",
+          ""
+        ].join("\n")
+      );
+
+      // The written document must re-parse cleanly and round-trip the decoded values.
+      const reparsed = expectInspectedDocument(await inspectDocument(workspace, bundle, documentPath));
+      const edge = reparsed.resource.body_items.find((item) => item.kind === "edge_line");
+      expect(edge?.edge?.event).toBe("Select Add Relationship");
+      expect(edge?.edge?.guard).toBe("single select");
+      expect(edge?.edge?.effect).toBe("open the dialog");
+    });
+  });
+
+  it("emits bare edge event/effect annotations unchanged when they match bundle atom patterns", async () => {
+    await withTempRepo(async (tempRepoRoot) => {
+      const documentPath = "docs/edge-annotations-bare.sdd";
+      await writeTempDocument(
+        tempRepoRoot,
+        documentPath,
+        [
+          "SDD-TEXT 0.1",
+          "ViewState VS-010 \"Method Choice\"",
+          "END",
+          "",
+          "ViewState VS-020 \"By Node\"",
+          "END",
+          ""
+        ].join("\n")
+      );
+
+      const workspace = createAuthoringWorkspace(tempRepoRoot);
+      const inspected = expectInspectedDocument(await inspectDocument(workspace, bundle, documentPath));
+      const parentHandle = inspected.resource.nodes.find((node) => node.node_id === "VS-010")!.handle;
+
+      const inserted = await applyChangeSet(workspace, bundle, {
+        path: documentPath,
+        base_revision: inspected.resource.revision,
+        mode: "commit",
+        operations: [
+          {
+            kind: "insert_edge_line",
+            parent_handle: parentHandle,
+            rel_type: "TRANSITIONS_TO",
+            to: "VS-020",
+            to_name: "By Node",
+            event: "E-010",
+            effect: "emitMetric"
+          }
+        ]
+      });
+
+      expect(inserted.status).toBe("applied");
+      expect(await readTempDocument(tempRepoRoot, documentPath)).toBe(
+        [
+          "SDD-TEXT 0.1",
+          "ViewState VS-010 \"Method Choice\"",
+          "  TRANSITIONS_TO VS-020 \"By Node\" [E-010] / emitMetric",
+          "END",
+          "",
+          "ViewState VS-020 \"By Node\"",
+          "END",
+          ""
+        ].join("\n")
+      );
+    });
+  });
+
   it("uses the bundle edge policy for placement-free insertion and preserves explicit overrides", async () => {
     await withTempRepo(async (tempRepoRoot) => {
       const source = [

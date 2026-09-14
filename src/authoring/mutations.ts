@@ -34,6 +34,7 @@ import type {
   StructuralRelationshipType,
   ValueKind
 } from "./contracts.js";
+import { isBareSyntaxAtomValue } from "./authoringFormat.js";
 import { evaluateDocumentText, type EvaluatedDocumentText, type EvaluationOptions } from "./evaluation.js";
 import {
   inspectDocumentText,
@@ -320,6 +321,14 @@ function emitEdgePropertyValue(syntax: AuthoringSyntax, bundle: Bundle, rawValue
   return syntax.bareValuePattern.test(rawValue) ? rawValue : quoteString(bundle, rawValue);
 }
 
+function emitEdgeAtomValue(
+  bundle: Bundle,
+  atomName: "event_atom" | "effect_atom",
+  rawValue: string
+): string {
+  return isBareSyntaxAtomValue(bundle, atomName, rawValue) ? rawValue : quoteString(bundle, rawValue);
+}
+
 function emitNodeHeaderLine(bundle: Bundle, syntax: AuthoringSyntax, node: NodeModel): string {
   const indent = node.rawHeaderLine ? extractLeadingWhitespace(node.rawHeaderLine) : indentForDepth(node.depth);
   const prefix = node.headerKind === syntax.nestedHeaderKind ? "+ " : "";
@@ -350,7 +359,7 @@ function emitEdgeLine(bundle: Bundle, syntax: AuthoringSyntax, nodeDepth: number
         break;
       case "event":
         if (edge.event !== null) {
-          fragments.push(`[${edge.event}]`);
+          fragments.push(`[${emitEdgeAtomValue(bundle, "event_atom", edge.event)}]`);
         }
         break;
       case "guard":
@@ -360,7 +369,7 @@ function emitEdgeLine(bundle: Bundle, syntax: AuthoringSyntax, nodeDepth: number
         break;
       case "effect":
         if (edge.effect !== null) {
-          fragments.push(`/ ${edge.effect}`);
+          fragments.push(`/ ${emitEdgeAtomValue(bundle, "effect_atom", edge.effect)}`);
         }
         break;
       case "props":

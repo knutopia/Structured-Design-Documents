@@ -129,6 +129,30 @@ export function isSyntaxAtom(bundle: Bundle, atomName: "event_atom" | "effect_at
   return matchesAtom(bundle, atomName, value);
 }
 
+/**
+ * Reports whether a decoded atom value can be emitted as bare SDD source text and
+ * round-trip back to the same value. Only the bundle's pattern-based alternatives
+ * (for example `lexical.id_pattern` / `lexical.identifier_pattern`) qualify; the
+ * `quoted_string` alternative is deliberately excluded because emitting a value that
+ * merely looks like a quoted string would be re-decoded (quotes stripped) on re-parse.
+ * Values that are not bare-eligible must be emitted through `quoteString`.
+ */
+export function isBareSyntaxAtomValue(
+  bundle: Bundle,
+  atomName: "event_atom" | "effect_atom",
+  value: string
+): boolean {
+  const atom = bundle.syntax.atoms[atomName];
+  if (!atom || !("one_of" in atom)) {
+    return false;
+  }
+
+  return atom.one_of.some(
+    (alternative) =>
+      alternative.pattern_ref !== undefined && matchesPatternRef(bundle, alternative.pattern_ref, value)
+  );
+}
+
 function jsonExample(json: string, renders: string): { json: string; renders: string } {
   return { json, renders };
 }

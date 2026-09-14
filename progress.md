@@ -29,11 +29,12 @@ z
 
 ## Mon 9-14
 
-- shared renderer hardened
+- Shared routing hardened
+- Parse error in sdd-add fixed
 
 ## Sat 9-12
 
-- increased --view all tolerance
+- Increased --view all tolerance
 
 ## Wed 9-9
 
