@@ -5923,6 +5923,7 @@ export function resolveJourneyMapTrackOccupancy(
   const segments = [...segmentByIdentity.values()];
   const aggregated = aggregateRoutingObservations(segments, observations, 0.001);
   const solved = solveRoutingClaims(aggregated.claims, {
+    priorViolations: aggregated.violations,
     policy: {
       minSeparation: JOURNEY_MAP_TRACK_SEPARATION,
       epsilon: 0.001,

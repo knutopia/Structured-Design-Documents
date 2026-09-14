@@ -6,7 +6,6 @@ import {
   buildRoutingSegments,
   createRoutingSegmentId,
   reconstructRouteFromAssignments,
-  runRoutingLifecycle,
   selectRouteCandidate,
   segmentIntersectsBoxInterior,
   solveRoutingClaims,
@@ -348,41 +347,4 @@ describe("shared routing lifecycle", () => {
     expect(selected.candidate?.id).toBe("above");
   });
 
-  it("tries the next candidate when final validation rejects a topology", () => {
-    const buildCandidate = (id: string): RoutingCandidate<{ valid: boolean }> & {
-      observations: RoutingObservation[];
-      resources: RoutingResource[];
-      reconstruct: () => string;
-    } => {
-      const candidateRoute = route([{ x: 0, y: 0 }, { x: 40, y: 0 }]);
-      return {
-        id,
-        connectorId: "edge",
-        route: candidateRoute,
-        segments: buildRoutingSegments("edge", candidateRoute, { candidateId: id }),
-        metadata: { valid: id === "valid" },
-        observations: [],
-        resources: [],
-        reconstruct: () => id
-      };
-    };
-    const rejected: RoutingViolation = {
-      kind: "node_intersection",
-      message: "rejected candidate",
-      connectorIds: ["edge"],
-      segmentIds: [createRoutingSegmentId("edge", "invalid", "run-0")]
-    };
-    const result = runRoutingLifecycle(
-      {},
-      {
-        buildCandidates: () => [buildCandidate("invalid"), buildCandidate("valid")],
-        validate: (_output, candidate) => candidate.metadata.valid ? [] : [rejected]
-      },
-      DEFAULT_ROUTING_POLICY
-    );
-    expect(result.status).toBe("resolved");
-    if (result.status === "resolved") {
-      expect(result.output).toBe("valid");
-    }
-  });
 });

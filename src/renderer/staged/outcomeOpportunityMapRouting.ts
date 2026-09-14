@@ -1,3 +1,4 @@
+import { markerRoutingClearance } from "./markerGeometry.js";
 import type {
   MeasuredEdge,
   MeasuredPort,
@@ -24,8 +25,11 @@ import {
 import { createRoutingDiagnostic, sortRendererDiagnostics, type RendererDiagnostic } from "./diagnostics.js";
 import { collapseRoutePoints } from "./routing.js";
 import {
-  resolveAndReconstructRouteOccupancy,
-  validatePositionedSceneRouting
+  runRoutingLifecycle,
+  validateFinalRouteSet,
+  type FinalRoutingContext,
+  type FinalRoutingTrace,
+  type RoutingViolation
 } from "./routingCore/index.js";
 import type {
   OutcomeOpportunityEdgeChannel,
@@ -279,6 +283,7 @@ export interface OutcomeOpportunityRoutingStages {
   step3PositionedScene: PositionedScene;
   finalPositionedScene: PositionedScene;
   diagnostics: RendererDiagnostic[];
+  finalResolutionTrace: FinalRoutingTrace;
 }
 
 const ENDPOINT_SPACING = 16;
@@ -4197,21 +4202,15 @@ function routePlansForSceneWithEndpointOffsets(
   });
 }
 
-function buildFinalRoute(
+function resolveFinalPlanEndpoints(
   plan: OutcomeOpportunityConnectorTemplatePlan,
   index: OutcomeOpportunityPositionedIndex,
-  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>,
-  displacementBySegmentKey: ReadonlyMap<string, number>,
-  bundleEndpointCoordinateByEndpointKey: ReadonlyMap<string, number>,
-  bundleSegmentCoordinateBySegmentKey: ReadonlyMap<string, number>
-): OutcomeOpportunityConnectorRouteState {
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>
+): { sourcePoint: Point; targetPoint: Point; sourceOffset: number; targetOffset: number } | undefined {
   const source = index.nodeById.get(plan.from);
   const target = index.nodeById.get(plan.to);
   if (!source || !target) {
-    return {
-      route: plan.step3Route,
-      occupiedGutters: []
-    };
+    return undefined;
   }
 
   const sourceOffset = getEndpointOffset(endpointOffsetsByNodeId, plan.from, plan.sourceSide, plan.id);
@@ -4242,6 +4241,20 @@ function buildFinalRoute(
       targetPoint = aligned.targetPoint;
     }
   }
+  return { sourcePoint, targetPoint, sourceOffset, targetOffset };
+}
+
+function buildFinalRoute(
+  plan: OutcomeOpportunityConnectorTemplatePlan,
+  index: OutcomeOpportunityPositionedIndex,
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>,
+  displacementBySegmentKey: ReadonlyMap<string, number>,
+  bundleEndpointCoordinateByEndpointKey: ReadonlyMap<string, number>,
+  bundleSegmentCoordinateBySegmentKey: ReadonlyMap<string, number>
+): OutcomeOpportunityConnectorRouteState {
+  const endpoints = resolveFinalPlanEndpoints(plan, index, endpointOffsetsByNodeId);
+  if (!endpoints) return { route: plan.step3Route, occupiedGutters: [] };
+  const { sourcePoint, targetPoint, sourceOffset, targetOffset } = endpoints;
   const sourceBundleCoordinate = bundleEndpointCoordinateByEndpointKey.get(
     buildEndpointCoordinateKey(plan.id, "source")
   );
@@ -4886,6 +4899,68 @@ function mergeGlobalGutterStates(
   return buildGlobalGutterState(columnExpansions, rowExpansions);
 }
 
+/** Final validation can request only capacity owned by the existing row/column
+ * gutters. A violation without a measured deficit has no legal expansion request. */
+function resolveFinalValidationGutterDemand(
+  context: FinalRoutingContext,
+  violations: readonly RoutingViolation[],
+  plans: readonly OutcomeOpportunityConnectorTemplatePlan[],
+  scene: PositionedScene,
+  index: OutcomeOpportunityPositionedIndex,
+  globalGutterState: OutcomeOpportunityGlobalGutterState
+): OutcomeOpportunityGlobalGutterState {
+  const implicated = new Set(violations.flatMap(violation => violation.connectorIds));
+  const routeById = new Map(context.connectors.map(connector => [connector.id, connector.route]));
+  const occupancy = extractGutterOccupancyByConnector(plans, routeById, scene, index, globalGutterState).occupancy;
+  const displacements = resolveOccupancyDisplacements(plans, occupancy, new Set());
+  const implicatedOccupancy = occupancy.filter(entry => implicated.has(entry.connectorId));
+  const columnExpansions = resolveRequiredColumnExpansions(implicatedOccupancy, index, displacements);
+  const rowExpansions = resolveRequiredRowExpansions(implicatedOccupancy, index, displacements);
+  const epsilon = context.policy?.epsilon ?? 0.5;
+
+  for (const connector of context.connectors) {
+    if (!implicated.has(connector.id)) continue;
+    const source = index.nodeById.get(connector.source.nodeId);
+    const target = index.nodeById.get(connector.target.nodeId);
+    if (!source || !target) continue;
+    const sourceLeg = Math.max(epsilon * 2, connector.source.minLeg);
+    const targetLeg = Math.max(epsilon * 2, connector.target.minLeg);
+    // Opposing attachments share one available gap. A straight route can satisfy
+    // both legs with its full length; different transverse coordinates need room
+    // for each terminal before/after the shared turn.
+    if (connector.source.side === "east" && connector.target.side === "west"
+      && source.placement.columnOrder < target.placement.columnOrder) {
+      const straight = Math.abs(connector.source.point.y - connector.target.point.y) <= epsilon;
+      const required = straight ? Math.max(sourceLeg, targetLeg) : sourceLeg + targetLeg;
+      const available = connector.target.point.x - connector.source.point.x;
+      accumulateExpansion(columnExpansions, source.placement.columnOrder,
+        roundUpToEndpointSpacing(Math.max(0, required - available)));
+    } else if (connector.source.side === "west" && connector.target.side === "east"
+      && target.placement.columnOrder < source.placement.columnOrder) {
+      const straight = Math.abs(connector.source.point.y - connector.target.point.y) <= epsilon;
+      const required = straight ? Math.max(sourceLeg, targetLeg) : sourceLeg + targetLeg;
+      const available = connector.source.point.x - connector.target.point.x;
+      accumulateExpansion(columnExpansions, target.placement.columnOrder,
+        roundUpToEndpointSpacing(Math.max(0, required - available)));
+    } else if (connector.source.side === "south" && connector.target.side === "north"
+      && source.placement.rowOrder < target.placement.rowOrder) {
+      const straight = Math.abs(connector.source.point.x - connector.target.point.x) <= epsilon;
+      const required = straight ? Math.max(sourceLeg, targetLeg) : sourceLeg + targetLeg;
+      const available = connector.target.point.y - connector.source.point.y;
+      accumulateExpansion(rowExpansions, source.placement.rowOrder,
+        roundUpToEndpointSpacing(Math.max(0, required - available)));
+    } else if (connector.source.side === "north" && connector.target.side === "south"
+      && target.placement.rowOrder < source.placement.rowOrder) {
+      const straight = Math.abs(connector.source.point.x - connector.target.point.x) <= epsilon;
+      const required = straight ? Math.max(sourceLeg, targetLeg) : sourceLeg + targetLeg;
+      const available = connector.source.point.y - connector.target.point.y;
+      accumulateExpansion(rowExpansions, target.placement.rowOrder,
+        roundUpToEndpointSpacing(Math.max(0, required - available)));
+    }
+  }
+  return buildGlobalGutterState(columnExpansions, rowExpansions);
+}
+
 export function buildOutcomeOpportunityMapRoutingStages(
   measuredScene: MeasuredScene,
   preRoutingPositionedScene: PositionedScene,
@@ -4917,6 +4992,7 @@ export function buildOutcomeOpportunityMapRoutingStages(
   let globalGutterState = buildGlobalGutterState();
   let workingScene = preRoutingPositionedScene;
   let workingIndex = baseIndex;
+  let globalExpansionPasses = 0;
 
   for (let attempt = 0; attempt < MAX_GLOBAL_GUTTER_ATTEMPTS; attempt += 1) {
     workingIndex = buildIndex(workingScene, middleLayer);
@@ -4960,72 +5036,105 @@ export function buildOutcomeOpportunityMapRoutingStages(
         )
       )
     );
+    // This owner shifts later cells. A request after the last occupied row/column
+    // cannot create capacity and must not consume the shared expansion budget.
+    for (const order of Object.keys(required.columnExpansions)) {
+      if (getNextValue(workingIndex.columnLeftByOrder, Number(order)) === undefined) delete required.columnExpansions[Number(order)];
+    }
+    for (const order of Object.keys(required.rowExpansions)) {
+      if (getNextValue(workingIndex.rowTopByOrder, Number(order)) === undefined) delete required.rowExpansions[Number(order)];
+    }
     if (!hasNonZeroExpansion(required)) {
       break;
     }
+    globalExpansionPasses += 1;
     globalGutterState = mergeGlobalGutterStates(globalGutterState, required);
     workingScene = applyGlobalGutterExpansions(preRoutingPositionedScene, globalGutterState);
   }
 
-  workingIndex = buildIndex(workingScene, middleLayer);
-  const finalBucketsByNodeId = buildNodeEdgeBuckets(step3Plans, workingIndex);
-  const finalDiagnostics: RendererDiagnostic[] = [...diagnostics];
-  const {
-    endpointOffsetsByNodeId: finalEndpointOffsetsByNodeId,
-    preparedRoutes: preparedRoutesFinal
-  } = buildPreparedRoutesWithObstacleCompaction(
-    step3Plans,
-    workingScene,
-    workingIndex,
-    globalGutterState,
-    finalBucketsByNodeId,
-    finalDiagnostics
-  );
-  const initialFinalDisplacementBySegmentKey = resolveOccupancyDisplacements(
-    preparedRoutesFinal.connectorPlansWithOccupancy,
-    preparedRoutesFinal.occupancyResult.occupancy,
-    preparedRoutesFinal.lockedSegmentKeys
-  );
-  const provisionalFinalRouteStates = buildRouteStatesForPlans(
-    preparedRoutesFinal.connectorPlansWithOccupancy,
-    workingIndex,
-    finalEndpointOffsetsByNodeId,
-    initialFinalDisplacementBySegmentKey,
-    preparedRoutesFinal.bundleEndpointCoordinateByEndpointKey,
-    preparedRoutesFinal.preparedSegmentCoordinateBySegmentKey
-  );
-  const finalOccupancyResolution = resolveAndReconstructRouteOccupancy(
-    preparedRoutesFinal.connectorPlansWithOccupancy.map((plan) => ({
-      connectorId: plan.id,
-      route: provisionalFinalRouteStates.get(plan.id)?.route ?? plan.step3Route,
-      priority: plan.priority
-    })),
-    {
-      buildSegmentKey: buildSegmentDisplacementKey,
-      policy: {
-        minSeparation: ENDPOINT_SPACING,
-        epsilon: 0.5,
-        maxExpansionPasses: MAX_GLOBAL_GUTTER_ATTEMPTS
-      }
+  const preparationExpansionPasses = globalExpansionPasses;
+  const remainingExpansionPasses = MAX_GLOBAL_GUTTER_ATTEMPTS - preparationExpansionPasses;
+  const prepareFinalRoutes = (scene: PositionedScene) => {
+    const index = buildIndex(scene, middleLayer);
+    const finalBucketsByNodeId = buildNodeEdgeBuckets(step3Plans, index);
+    const preparationDiagnostics: RendererDiagnostic[] = [...diagnostics];
+    const {
+      endpointOffsetsByNodeId: finalEndpointOffsetsByNodeId,
+      preparedRoutes: preparedRoutesFinal
+    } = buildPreparedRoutesWithObstacleCompaction(
+      step3Plans,
+      scene,
+      index,
+      globalGutterState,
+      finalBucketsByNodeId,
+      preparationDiagnostics
+    );
+    const initialFinalDisplacementBySegmentKey = resolveOccupancyDisplacements(
+      preparedRoutesFinal.connectorPlansWithOccupancy,
+      preparedRoutesFinal.occupancyResult.occupancy,
+      preparedRoutesFinal.lockedSegmentKeys
+    );
+    const provisionalFinalRouteStates = buildRouteStatesForPlans(
+      preparedRoutesFinal.connectorPlansWithOccupancy,
+      index,
+      finalEndpointOffsetsByNodeId,
+      initialFinalDisplacementBySegmentKey,
+      preparedRoutesFinal.bundleEndpointCoordinateByEndpointKey,
+      preparedRoutesFinal.preparedSegmentCoordinateBySegmentKey
+    );
+    // Preparation locks are heuristic coordinate ownership for compaction, not immutable
+    // endpoint/resource constraints. The final owner keeps actual ports and geometry bounds.
+    const paint = resolveRendererTheme(scene.themeId).theme.paint;
+    const finalContext: FinalRoutingContext = {
+      connectors: preparedRoutesFinal.connectorPlansWithOccupancy.map(plan => {
+        const endpoints = resolveFinalPlanEndpoints(plan, index, finalEndpointOffsetsByNodeId);
+        if (!endpoints) throw new Error(`Missing independently resolved routing endpoint for ${plan.id}.`);
+        const route = provisionalFinalRouteStates.get(plan.id)?.route ?? plan.step3Route;
+        // The finite canvas is the root-owned free-space resource; solid nodes and
+        // independent endpoint sides supply its remaining hard constraints.
+        return { id: plan.id, route, priority: plan.priority,
+          source: { point: endpoints.sourcePoint, side: plan.sourceSide, nodeId: plan.from, minLeg: markerRoutingClearance(plan.markers?.start, paint.arrowSize, paint.edgeStrokeWidth) },
+          target: { point: endpoints.targetPoint, side: plan.targetSide, nodeId: plan.to, minLeg: markerRoutingClearance(plan.markers?.end, paint.arrowSize, paint.edgeStrokeWidth) }
+        };
+      }),
+      boxes: index.nodeBoxes.map(box => ({ ...box, id: box.itemId })),
+      bounds: { minX: scene.root.x, minY: scene.root.y, maxX: scene.root.x + scene.root.width, maxY: scene.root.y + scene.root.height },
+      policy: { minSeparation: ENDPOINT_SPACING, epsilon: 0.5, crossingTreatment: "penalize", maxExpansionPasses: remainingExpansionPasses }
+    };
+    return { finalContext, index, finalBucketsByNodeId, preparedRoutesFinal, provisionalFinalRouteStates, preparationDiagnostics };
+  };
+  let finalPreparation = prepareFinalRoutes(workingScene);
+  const finalResolution = runRoutingLifecycle(finalPreparation.finalContext, {
+    expand: (context, violations, absolutePass) => {
+      if (preparationExpansionPasses + absolutePass > MAX_GLOBAL_GUTTER_ATTEMPTS) return undefined;
+      const required = resolveFinalValidationGutterDemand(context, violations,
+        finalPreparation.preparedRoutesFinal.connectorPlansWithOccupancy,
+        workingScene, finalPreparation.index, globalGutterState);
+      if (!hasNonZeroExpansion(required)) return undefined;
+      // Requests are current capacity deficits; accumulate their absolute totals and
+      // always apply those totals to the original layout, never to an expanded copy.
+      globalGutterState = mergeGlobalGutterStates(globalGutterState, required);
+      workingScene = applyGlobalGutterExpansions(preRoutingPositionedScene, globalGutterState);
+      finalPreparation = prepareFinalRoutes(workingScene);
+      return finalPreparation.finalContext;
     }
-  );
-  if (finalOccupancyResolution.status !== "resolved") {
-    finalDiagnostics.push(createRoutingDiagnostic(
-      "renderer.routing.outcome_opportunity_constraint_unsatisfiable",
-      "Outcome-opportunity routing could not find a globally separated final track assignment within the bounded solve lifecycle.",
-      "outcome_opportunity_map",
-      "error"
+  });
+  const { finalBucketsByNodeId, preparedRoutesFinal, provisionalFinalRouteStates } = finalPreparation;
+  workingIndex = finalPreparation.index;
+  const finalDiagnostics = finalPreparation.preparationDiagnostics;
+  const acceptedFinalContext = finalResolution.status === "resolved" ? finalResolution.context : undefined;
+  if (finalResolution.status === "failed") {
+    for (const violation of finalResolution.violations) finalDiagnostics.push(createRoutingDiagnostic(
+      `renderer.routing.outcome_opportunity_${violation.kind}`,
+      `Final routing failed (${finalResolution.reason}): ${violation.message}`,
+      violation.connectorIds[0] ?? "outcome_opportunity_map", "error",
+      JSON.stringify({ connectorIds: violation.connectorIds, violation, trace: finalResolution.trace })
     ));
   }
-  const finalRouteStates = new Map(
-    [...provisionalFinalRouteStates.entries()].map(([connectorId, state]) => [
-      connectorId,
-      {
-        ...state,
-        route: finalOccupancyResolution.routeByConnectorId.get(connectorId) ?? state.route
-      }
-    ] as const)
-  );
+  // On failure these plans are diagnostic-only. The public preview rejects their errors.
+  const finalRouteStates = new Map([...provisionalFinalRouteStates].map(([connectorId, state]) => [connectorId, {
+    ...state, route: finalResolution.status === "resolved" ? finalResolution.routeByConnectorId.get(connectorId)! : state.route
+  }] as const));
   const finalOccupancyResult = extractGutterOccupancyByConnector(
     preparedRoutesFinal.connectorPlansWithOccupancy,
     new Map([...finalRouteStates.entries()].map(([connectorId, state]) => [connectorId, state.route] as const)),
@@ -5055,33 +5164,22 @@ export function buildOutcomeOpportunityMapRoutingStages(
       aggregateLabels: aggregateLabels.decorations
     }
   );
-  const sharedViolationKinds = new Set([
-    "non_orthogonal_segment",
-    "endpoint_mismatch",
-    "endpoint_intrusion",
-    "node_intersection",
-    "collinear_overlap",
-    "track_separation"
-  ]);
-  const sharedViolations = validatePositionedSceneRouting(finalPositionedScene, {
-    policy: { minTerminalLeg: 0, crossingTreatment: "allow" }
-  }).filter((violation) => sharedViolationKinds.has(violation.kind));
-  if (sharedViolations.length > 0) {
-    const sharedDiagnostics = sharedViolations.map((violation) => createRoutingDiagnostic(
-      `renderer.routing.outcome_opportunity_${violation.kind}`,
-      violation.message,
-      violation.connectorIds[0] ?? "outcome_opportunity_map",
-      "error"
-    ));
-    finalDiagnostics.push(...sharedDiagnostics);
-    finalPositionedScene = {
-      ...finalPositionedScene,
-      diagnostics: sortRendererDiagnostics([...finalPositionedScene.diagnostics, ...sharedDiagnostics])
-    };
+  // Labels/decorations do not own route coordinates. Revalidate the actual emitted routes
+  // against the same independently resolved endpoints if future finalization changes them.
+  const emittedEdgeById = new Map(finalPositionedScene.edges.map(edge => [edge.id, edge]));
+  const emittedRouteById = new Map(finalPlans.map(plan => [plan.id, emittedEdgeById.get(plan.edgeId)!.route]));
+  const emittedViolations = finalResolution.status === "resolved" ? validateFinalRouteSet({ ...acceptedFinalContext!,
+    connectors: acceptedFinalContext!.connectors.map(c => ({ ...c, route: emittedRouteById.get(c.id) ?? c.route }))
+  }) : [];
+  if (emittedViolations.length) {
+    const errors = emittedViolations.map(v => createRoutingDiagnostic(`renderer.routing.outcome_opportunity_${v.kind}`, v.message, v.connectorIds[0] ?? "outcome_opportunity_map", "error"));
+    finalDiagnostics.push(...errors);
+    finalPositionedScene = { ...finalPositionedScene, diagnostics: sortRendererDiagnostics([...finalPositionedScene.diagnostics, ...errors]) };
   }
 
   return {
     connectorPlans: finalPlans,
+    finalResolutionTrace: finalResolution.trace,
     nodeEdgeBuckets: [...finalBucketsByNodeId.values()].sort((left, right) => left.nodeId.localeCompare(right.nodeId)),
     nodeGutters: buildNodeGutters(workingIndex),
     globalGutterState,

@@ -1,3 +1,4 @@
+import { arrowMarkerReferenceX } from "./markerGeometry.js";
 import type {
   MeasuredContentBlock,
   PaintGroup,
@@ -640,7 +641,7 @@ function buildRoutePath(
 }
 
 function buildArrowMarkerDef(direction: keyof typeof EDGE_MARKER_IDS, arrowSize: number): string {
-  const refX = direction === "end" ? formatNumber(arrowSize - 1) : "1";
+  const refX = formatNumber(arrowMarkerReferenceX(direction, arrowSize));
   const path = direction === "end"
     ? `M 0 0 L ${formatNumber(arrowSize)} ${formatNumber(arrowSize / 2)} L 0 ${formatNumber(arrowSize)} z`
     : `M ${formatNumber(arrowSize)} 0 L 0 ${formatNumber(arrowSize / 2)} L ${formatNumber(arrowSize)} ${formatNumber(arrowSize)} z`;

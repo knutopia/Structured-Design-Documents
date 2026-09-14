@@ -1,6 +1,8 @@
 # [Done] Routing Unification Implementation Plan
 
-**Status:** Complete and verified on 2026-09-04. The proof wave and all six renderer
+**Dated correction — 2026-09-14:** The September 4 completion claim below overstated production final-resolution adoption. The later source/geometry audit found that Outcome, Service and Scenario consumed assignment-only reconstruction; no production caller used the exported repair lifecycle, fixed terminal conflicts could be missed, and Service/Scenario suppressed final edge interactions. Passing the earlier proofs did not establish complete route-set acceptance. The [routing hardening plan](../../routing_hardening/routing_hardening_implementation_plan.md) addresses that discrepancy; its [execution ledger](../../routing_hardening/implementation_status.md) records actual production integration, verification and remaining issues. The historical record below is retained rather than rewritten as evidence of guarantees it did not prove.
+
+**Historical status recorded on 2026-09-04:** Complete and verified on 2026-09-04. The proof wave and all six renderer
 adoptions, including Journey Map physical-track assignment, are complete. Accepted
 visual proofs, focused tests, the TypeScript build, and the full repository suite all
 pass; the final full-suite run completed with 109 test files and 1,040 tests passing.
@@ -12,7 +14,7 @@ geometry, stable physical-segment identity, observation aggregation, determinist
 track assignment, reconstruction, candidate selection, typed validation, expansion
 requests, and a bounded solve-validate-repair lifecycle.
 
-The current adoption state is:
+The adoption state reported on September 4 was:
 
 | View | Implemented state |
 | --- | --- |

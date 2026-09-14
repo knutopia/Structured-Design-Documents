@@ -1,0 +1,507 @@
+{
+  "connectors": [
+    {
+      "id": "OP-010__supports__O-010",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 763.336,
+            "y": 102
+          },
+          {
+            "x": 904.77,
+            "y": 102
+          }
+        ]
+      },
+      "priority": 0,
+      "source": {
+        "point": {
+          "x": 763.336,
+          "y": 102
+        },
+        "side": "east",
+        "nodeId": "OP-010",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 904.77,
+          "y": 102
+        },
+        "side": "west",
+        "nodeId": "O-010",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "OP-020__supports__O-010",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 763.336,
+            "y": 222
+          },
+          {
+            "x": 834.053,
+            "y": 222
+          },
+          {
+            "x": 834.053,
+            "y": 118
+          },
+          {
+            "x": 904.77,
+            "y": 118
+          }
+        ]
+      },
+      "priority": 1,
+      "source": {
+        "point": {
+          "x": 763.336,
+          "y": 222
+        },
+        "side": "east",
+        "nodeId": "OP-020",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 904.77,
+          "y": 118
+        },
+        "side": "west",
+        "nodeId": "O-010",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "I-010__addresses__OP-010",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 92.5
+          },
+          {
+            "x": 523.336,
+            "y": 92.5
+          },
+          {
+            "x": 523.336,
+            "y": 78
+          },
+          {
+            "x": 539.336,
+            "y": 78
+          }
+        ]
+      },
+      "priority": 2,
+      "source": {
+        "point": {
+          "x": 262,
+          "y": 92.5
+        },
+        "side": "east",
+        "nodeId": "I-010",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 539.336,
+          "y": 78
+        },
+        "side": "west",
+        "nodeId": "OP-010",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "I-011__addresses__OP-010",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 212.5
+          },
+          {
+            "x": 507.336,
+            "y": 212.5
+          },
+          {
+            "x": 507.336,
+            "y": 94
+          },
+          {
+            "x": 539.336,
+            "y": 94
+          }
+        ]
+      },
+      "priority": 3,
+      "source": {
+        "point": {
+          "x": 262,
+          "y": 212.5
+        },
+        "side": "east",
+        "nodeId": "I-011",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 539.336,
+          "y": 94
+        },
+        "side": "west",
+        "nodeId": "OP-010",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "I-012__addresses__OP-010",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 356.5
+          },
+          {
+            "x": 491.336,
+            "y": 356.5
+          },
+          {
+            "x": 491.336,
+            "y": 110
+          },
+          {
+            "x": 539.336,
+            "y": 110
+          }
+        ]
+      },
+      "priority": 4,
+      "source": {
+        "point": {
+          "x": 262,
+          "y": 356.5
+        },
+        "side": "east",
+        "nodeId": "I-012",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 539.336,
+          "y": 110
+        },
+        "side": "west",
+        "nodeId": "OP-010",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "I-020__addresses__OP-020",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 505.5
+          },
+          {
+            "x": 459.336,
+            "y": 505.5
+          },
+          {
+            "x": 459.336,
+            "y": 198
+          },
+          {
+            "x": 539.336,
+            "y": 198
+          }
+        ]
+      },
+      "priority": 5,
+      "source": {
+        "point": {
+          "x": 262,
+          "y": 505.5
+        },
+        "side": "east",
+        "nodeId": "I-020",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 539.336,
+          "y": 198
+        },
+        "side": "west",
+        "nodeId": "OP-020",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "I-021__addresses__OP-020",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 646.5
+          },
+          {
+            "x": 443.336,
+            "y": 646.5
+          },
+          {
+            "x": 443.336,
+            "y": 214
+          },
+          {
+            "x": 539.336,
+            "y": 214
+          }
+        ]
+      },
+      "priority": 6,
+      "source": {
+        "point": {
+          "x": 262,
+          "y": 646.5
+        },
+        "side": "east",
+        "nodeId": "I-021",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 539.336,
+          "y": 214
+        },
+        "side": "west",
+        "nodeId": "OP-020",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "I-022__addresses__OP-020",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 787.5
+          },
+          {
+            "x": 427.336,
+            "y": 787.5
+          },
+          {
+            "x": 427.336,
+            "y": 230
+          },
+          {
+            "x": 539.336,
+            "y": 230
+          }
+        ]
+      },
+      "priority": 7,
+      "source": {
+        "point": {
+          "x": 262,
+          "y": 787.5
+        },
+        "side": "east",
+        "nodeId": "I-022",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 539.336,
+          "y": 230
+        },
+        "side": "west",
+        "nodeId": "OP-020",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "I-030__addresses__OP-010",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 912.5
+          },
+          {
+            "x": 475.336,
+            "y": 912.5
+          },
+          {
+            "x": 475.336,
+            "y": 126
+          },
+          {
+            "x": 539.336,
+            "y": 126
+          }
+        ]
+      },
+      "priority": 8,
+      "source": {
+        "point": {
+          "x": 262,
+          "y": 912.5
+        },
+        "side": "east",
+        "nodeId": "I-030",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 539.336,
+          "y": 126
+        },
+        "side": "west",
+        "nodeId": "OP-010",
+        "minLeg": 12
+      }
+    },
+    {
+      "id": "I-030__addresses__OP-020",
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 262,
+            "y": 928.5
+          },
+          {
+            "x": 411.336,
+            "y": 928.5
+          },
+          {
+            "x": 411.336,
+            "y": 246
+          },
+          {
+            "x": 539.336,
+            "y": 246
+          }
+        ]
+      },
+      "priority": 9,
+      "source": {
+        "point": {
+          "x": 262,
+          "y": 928.5
+        },
+        "side": "east",
+        "nodeId": "I-030",
+        "minLeg": 12
+      },
+      "target": {
+        "point": {
+          "x": 539.336,
+          "y": 246
+        },
+        "side": "west",
+        "nodeId": "OP-020",
+        "minLeg": 12
+      }
+    }
+  ],
+  "boxes": [
+    {
+      "id": "I-010",
+      "x": 38,
+      "y": 66,
+      "width": 224,
+      "height": 53
+    },
+    {
+      "id": "OP-010",
+      "x": 539.336,
+      "y": 66,
+      "width": 224,
+      "height": 72
+    },
+    {
+      "id": "O-010",
+      "x": 904.77,
+      "y": 66,
+      "width": 224,
+      "height": 72
+    },
+    {
+      "id": "I-011",
+      "x": 38,
+      "y": 186,
+      "width": 224,
+      "height": 53
+    },
+    {
+      "id": "OP-020",
+      "x": 539.336,
+      "y": 186,
+      "width": 224,
+      "height": 72
+    },
+    {
+      "id": "I-012",
+      "x": 38,
+      "y": 306,
+      "width": 224,
+      "height": 101
+    },
+    {
+      "id": "I-020",
+      "x": 38,
+      "y": 455,
+      "width": 224,
+      "height": 101
+    },
+    {
+      "id": "I-021",
+      "x": 38,
+      "y": 604,
+      "width": 224,
+      "height": 85
+    },
+    {
+      "id": "I-022",
+      "x": 38,
+      "y": 737,
+      "width": 224,
+      "height": 101
+    },
+    {
+      "id": "I-030",
+      "x": 38,
+      "y": 886,
+      "width": 224,
+      "height": 53
+    }
+  ],
+  "bounds": {
+    "minX": 0,
+    "minY": 0,
+    "maxX": 1214.77,
+    "maxY": 977
+  },
+  "policy": {
+    "crossingTreatment": "allow"
+  }
+}

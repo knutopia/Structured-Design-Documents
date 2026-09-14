@@ -3,6 +3,9 @@ import { aggregateRoutingObservations } from "./claims.js";
 import {
   createRoutingSegmentId,
   type RoutingAxis,
+  type RoutingCoordinateRange,
+  type RoutingEndpointRole,
+  type RoutingResource,
   type RoutingObservation,
   type RoutingPolicy,
   type RoutingSegment,
@@ -12,7 +15,6 @@ import {
   buildRoutingSegments,
   getSegmentAxis,
   roundRoutingMetric,
-  spansOverlap
 } from "./geometry.js";
 import { solveRoutingClaims } from "./solver.js";
 import { reconstructRouteFromAssignments } from "./reconstruction.js";
@@ -30,6 +32,11 @@ export interface PhysicalSegmentOccupancy {
   resourceId?: string;
   obstacleId?: string;
   sharedTrackGroupId?: string;
+  allowedRange?: RoutingCoordinateRange;
+  forbiddenRanges?: RoutingCoordinateRange[];
+  lockedCoordinate?: number;
+  lockReason?: "endpoint" | "resource" | "topology";
+  endpointRole?: RoutingEndpointRole;
 }
 
 export interface PhysicalSegmentOccupancyResolution {
@@ -49,6 +56,7 @@ export interface RouteOccupancyInput {
   priority: number;
   lockedSegmentKeys?: ReadonlySet<string>;
   sharedTrackGroupBySegmentIndex?: ReadonlyMap<number, string>;
+  observationsBySegmentKey?: ReadonlyMap<string, readonly Omit<RoutingObservation, "segmentId">[]>;
 }
 
 export interface ResolveRouteOccupancyOptions {
@@ -56,6 +64,7 @@ export interface ResolveRouteOccupancyOptions {
   policy?: Partial<RoutingPolicy>;
   fixEndpointSegments?: boolean;
   includeEndpointSegments?: boolean;
+  resources?: readonly RoutingResource[];
 }
 
 interface AggregatedPhysicalSegment {
@@ -129,7 +138,8 @@ function aggregatePhysicalSegments(
 
 export function resolvePhysicalSegmentOccupancy(
   entries: readonly PhysicalSegmentOccupancy[],
-  policy: Partial<RoutingPolicy> = {}
+  policy: Partial<RoutingPolicy> = {},
+  resources: readonly RoutingResource[] = []
 ): PhysicalSegmentOccupancyResolution {
   const physicalSegments = aggregatePhysicalSegments(entries);
   const segmentKeyById = new Map<string, string>();
@@ -153,7 +163,7 @@ export function resolvePhysicalSegmentOccupancy(
       spanEnd: physical.spanEnd,
       start: points.start,
       end: points.end,
-      endpointRole: "internal",
+      endpointRole: physical.entries.find(entry => entry.endpointRole)?.endpointRole ?? "internal",
       movable: physical.movable,
       priority: physical.priority,
       sharedTrackGroupId: physical.sharedTrackGroupId
@@ -167,6 +177,10 @@ export function resolvePhysicalSegmentOccupancy(
     const segment = segmentByKey.get(physical.segmentKey)!;
     const base: RoutingObservation[] = physical.entries.map((entry) => ({
       segmentId: segment.id,
+      allowedRange: entry.allowedRange,
+      forbiddenRanges: entry.forbiddenRanges,
+      lockedCoordinate: entry.lockedCoordinate,
+      lockReason: entry.lockReason,
       resourceId: entry.resourceId,
       obstacleId: entry.obstacleId,
       movable: entry.movable,
@@ -185,11 +199,12 @@ export function resolvePhysicalSegmentOccupancy(
   const aggregated = aggregateRoutingObservations(segments, observations, policy.epsilon);
   const result = solveRoutingClaims(aggregated.claims, {
     policy,
+    resources,
     priorViolations: aggregated.violations
   });
   const coordinateBySegmentKey = new Map<string, number>();
   const displacementBySegmentKey = new Map<string, number>();
-  for (const [segmentId, assignment] of result.assignments) {
+  for (const [segmentId, assignment] of result.status === "resolved" ? result.assignments : []) {
     const segmentKey = segmentKeyById.get(segmentId);
     if (!segmentKey) {
       continue;
@@ -233,6 +248,31 @@ export function buildLogicalRunIds(route: PositionedRoute): string[] {
   return ids;
 }
 
+export type RoutingSpanEndpointDependency =
+  | { kind: "endpoint"; role: "source" | "target"; coordinate: number }
+  | { kind: "run"; logicalRunId: string };
+
+/** The transverse lock of a terminal run does not freeze its longitudinal span. */
+export function buildRoutingRunDependencies(route: PositionedRoute): Array<{
+  logicalRunId: string;
+  start: RoutingSpanEndpointDependency;
+  end: RoutingSpanEndpointDependency;
+}> {
+  const ids = buildLogicalRunIds(route);
+  return ids.map((logicalRunId, index) => {
+    const horizontal = getSegmentAxis(route.points[index]!, route.points[index + 1]!) === "horizontal";
+    return {
+      logicalRunId,
+      start: index === 0
+        ? { kind: "endpoint", role: "source", coordinate: horizontal ? route.points[0]!.x : route.points[0]!.y }
+        : { kind: "run", logicalRunId: ids[index - 1]! },
+      end: index === ids.length - 1
+        ? { kind: "endpoint", role: "target", coordinate: horizontal ? route.points.at(-1)!.x : route.points.at(-1)!.y }
+        : { kind: "run", logicalRunId: ids[index + 1]! }
+    };
+  });
+}
+
 export function resolveRouteSegmentOccupancy(
   routes: readonly RouteOccupancyInput[],
   options: ResolveRouteOccupancyOptions
@@ -254,7 +294,7 @@ export function resolveRouteSegmentOccupancy(
       const segmentKey = options.buildSegmentKey(input.connectorId, segment.routeSegmentIndex);
       const endpointFixed = (options.fixEndpointSegments ?? true)
         && (segment.endpointRole === "source" || segment.endpointRole === "target");
-      entries.push({
+      const entry: PhysicalSegmentOccupancy = {
         connectorId: input.connectorId,
         segmentKey,
         logicalRunId: segment.logicalRunId,
@@ -264,23 +304,17 @@ export function resolveRouteSegmentOccupancy(
         spanEnd: segment.spanEnd,
         movable: !endpointFixed && !input.lockedSegmentKeys?.has(segmentKey),
         priority: input.priority,
-        sharedTrackGroupId: segment.sharedTrackGroupId
-      });
+        sharedTrackGroupId: segment.sharedTrackGroupId,
+        endpointRole: segment.endpointRole,
+        lockReason: endpointFixed ? "endpoint" : input.lockedSegmentKeys?.has(segmentKey) ? "topology" : undefined
+      };
+      const observations = input.observationsBySegmentKey?.get(segmentKey) ?? [];
+      entries.push(entry, ...observations.map(observation => ({ ...entry, ...observation, movable: entry.movable && observation.movable !== false })));
     }
   }
-  const epsilon = options.policy?.epsilon ?? 0.5;
-  const movableEntries = entries.filter((entry) => entry.movable);
-  const relevantEntries = entries.filter((entry) => entry.movable || movableEntries.some((movable) =>
-    movable.axis === entry.axis
-    && spansOverlap(
-      movable.spanStart,
-      movable.spanEnd,
-      entry.spanStart,
-      entry.spanEnd,
-      epsilon
-    )
-  ));
-  return resolvePhysicalSegmentOccupancy(relevantEntries, options.policy);
+  // Fixed terminal spans still compete, even when no same-axis run can shift.
+  // A contradiction here is a frozen-span result; the final lifecycle may move bends.
+  return resolvePhysicalSegmentOccupancy(entries, options.policy, options.resources);
 }
 
 export function resolveAndReconstructRouteOccupancy(

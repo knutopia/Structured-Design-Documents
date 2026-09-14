@@ -55,6 +55,7 @@ export interface RoutingObservation {
   allowedRange?: RoutingCoordinateRange;
   forbiddenRanges?: RoutingCoordinateRange[];
   lockedCoordinate?: number;
+  lockReason?: "endpoint" | "resource" | "topology";
   movable?: boolean;
   priority?: number;
   sharedTrackGroupId?: string;

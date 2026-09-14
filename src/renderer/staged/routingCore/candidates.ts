@@ -119,3 +119,75 @@ export function buildExteriorOrthogonalCandidates(
     route("outer-right", [{ x: maxX, y: sourceStub.y }, { x: maxX, y: targetStub.y }])
   ];
 }
+
+// Type-only dependency: lifecycle owns acceptance; this module only proposes geometry.
+import type { FinalRoutingContext, FinalRoutingConnector } from "./lifecycle.js";
+import { DEFAULT_ROUTING_POLICY } from "./contracts.js";
+import { buildRoutingSegments } from "./geometry.js";
+import { buildLogicalRunIds, buildRoutingRunDependencies } from "./occupancy.js";
+
+/** Event-derived single-run changes compose into coupled turn arrangements in the coordinator. */
+export function* buildTerminalTurnAlternatives(
+  context: FinalRoutingContext,
+  violations: readonly RoutingViolation[]
+): Generator<readonly FinalRoutingConnector[]> {
+  const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
+  const ordered = [...context.connectors].sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id));
+  for (const c of ordered) {
+    const relevant = violations.filter(v => v.connectorIds.includes(c.id));
+    if (!relevant.length) continue;
+    const logicalRunIds = buildLogicalRunIds(c.route);
+    const segments = buildRoutingSegments(c.id, c.route, { logicalRunIds });
+    const dependencies = buildRoutingRunDependencies(c.route);
+    const implicated = new Set<string>();
+    for (const v of relevant) {
+      const index = v.routeSegmentIndexes?.[v.connectorIds.indexOf(c.id)];
+      if (index === undefined) segments.forEach(s => implicated.add(s.logicalRunId));
+      else {
+        const dependency = dependencies[index];
+        if (!dependency) continue;
+        implicated.add(dependency.logicalRunId);
+        for (const end of [dependency.start, dependency.end]) if (end.kind === "run") implicated.add(end.logicalRunId);
+      }
+    }
+    for (const segment of segments) {
+      const index = segment.routeSegmentIndex;
+      if (index === 0 || index === c.route.points.length - 2 || !implicated.has(segment.logicalRunId)) continue;
+      const constraint = c.runConstraints?.get(segment.logicalRunId);
+      if (constraint?.lockedCoordinate !== undefined) continue;
+      const horizontal = segment.axis === "horizontal";
+      const transverse = (p: Point): number => horizontal ? p.y : p.x;
+      const events = new Set<number>();
+      const min = Math.max(horizontal ? context.bounds.minY : context.bounds.minX, constraint?.allowedRange?.min ?? -Infinity);
+      const max = Math.min(horizontal ? context.bounds.maxY : context.bounds.maxX, constraint?.allowedRange?.max ?? Infinity);
+      const add = (n: number): void => { const value = roundRoutingMetric(n); if (value >= min && value <= max) events.add(value); };
+      add(min); add(max);
+      for (const other of ordered) for (const p of other.route.points) {
+        const value = transverse(p);
+        add(value); add(value - policy.minSeparation); add(value + policy.minSeparation);
+      }
+      for (const box of [...context.boxes, ...(context.blockers ?? [])]) {
+        const low = horizontal ? box.y : box.x, high = low + (horizontal ? box.height : box.width);
+        for (const value of [low, high]) { add(value); add(value - policy.minSeparation); add(value + policy.minSeparation); }
+      }
+      for (const endpoint of [c.source, c.target]) {
+        add(transverse(endpoint.point) - Math.max(endpoint.minLeg, policy.minTerminalLeg));
+        add(transverse(endpoint.point) + Math.max(endpoint.minLeg, policy.minTerminalLeg));
+      }
+      for (const coordinate of [...events].sort((a, b) => Math.abs(a - segment.coordinate) - Math.abs(b - segment.coordinate) || a - b)) {
+        if (Math.abs(coordinate - segment.coordinate) <= policy.epsilon) continue;
+        const points = c.route.points.map(p => ({ ...p }));
+        if (horizontal) points[index]!.y = points[index + 1]!.y = coordinate;
+        else points[index]!.x = points[index + 1]!.x = coordinate;
+        const normalized = collapseRoutePoints(points, policy.epsilon);
+        // Topology-specific ownership cannot survive collapse without an explicit remapping.
+        if (normalized.length !== points.length && (c.runConstraints?.size || c.sharedTrackGroupBySegmentIndex?.size)) continue;
+        // Crossing marks refer to one geometry revision; an adapter must regenerate them
+        // before a changed arrangement can satisfy require_mark.
+        yield context.connectors.map(other => other.id === c.id
+          ? { ...c, markedCrossings: undefined, route: { ...c.route, points: normalized } }
+          : { ...other, markedCrossings: undefined });
+      }
+    }
+  }
+}

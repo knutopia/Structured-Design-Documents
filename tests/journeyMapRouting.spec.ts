@@ -932,13 +932,17 @@ describe("journey map Gate 7 typed occupancy extraction", () => {
     expect(state("J-790->J-791").finalRoute.points).toContainEqual({ x: 276, y: 215 });
     expect(fixture.routingStages.expansionAttempts).toEqual([{
       attempt: 1,
-      requests: [{ kind: "stage_bypass_gutter", stageId: "G-700", amount: 32 }]
+      // Corrected close-domain competition exposes the root track's retained-margin deficit.
+      requests: [
+        { kind: "root_outer_gutter", ownerContainerId: "root", amount: 32 },
+        { kind: "stage_bypass_gutter", stageId: "G-700", amount: 32 }
+      ]
     }]);
     const nominalStage = findContainer(fixture.preRoutingPositionedScene, "G-700");
     const finalStage = findContainer(fixture.routingStages.finalPositionedScene, "G-700");
     expect(finalStage.height - nominalStage.height).toBe(2 * JOURNEY_MAP_TRACK_SEPARATION);
     expect(fixture.routingStages.finalPositionedScene.root.height
-      - fixture.preRoutingPositionedScene.root.height).toBe(2 * JOURNEY_MAP_TRACK_SEPARATION);
+      - fixture.preRoutingPositionedScene.root.height).toBe(4 * JOURNEY_MAP_TRACK_SEPARATION);
     for (const nodeId of ["J-701", "J-702", "J-711", "J-712", "J-713", "J-714"]) {
       expect(findNode(fixture.routingStages.finalPositionedScene, nodeId)).toMatchObject({
         x: findNode(fixture.preRoutingPositionedScene, nodeId).x,
