@@ -31,6 +31,7 @@ z
 
 - Shared routing hardened
 - Parse error in sdd-add fixed
+- App planning progress
 
 ## Sat 9-12
 
