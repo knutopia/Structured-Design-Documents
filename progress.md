@@ -27,6 +27,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 9-14
+
+- shared renderer hardened
+
 ## Sat 9-12
 
 - increased --view all tolerance

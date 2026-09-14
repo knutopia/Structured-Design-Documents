@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="2096" height="261" viewBox="0 0 2096 261" class="staged-svg view-journey_map detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="journey_map" data-detail-id="detailed" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="356" viewBox="0 0 320 356" class="staged-svg view-ia_place_map detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="ia_place_map" data-detail-id="detailed" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -61,155 +61,111 @@
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram journey_map journey_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="2094.5" height="259.5" rx="17.25" ry="17.25"/>
-    </g>
-    <g id="scene-container-g-700" class="scene-container primitive-cluster role-journey_stage paint-chrome journey_map journey_stage" data-item-id="G-700" data-role="journey_stage">
-      <rect class="scene-container__chrome" x="296" y="32" width="1504" height="165" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="296" y="32" width="1504" height="40" rx="16" ry="16"/>
+    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
+      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="318.5" height="354.5" rx="17.25" ry="17.25"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-j-790" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-plain" data-item-id="J-790" data-role="step" data-node-density="plain">
-      <rect class="shared-node__chrome" x="32.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="32.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-p-010" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-010" data-role="place" data-node-density="dense">
+      <rect class="shared-node__chrome" x="24.75" y="24.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 25.5 44.5 L 25.5 38 Q 25.5 25.5 38 25.5 L 234 25.5 Q 246.5 25.5 246.5 38 L 246.5 44.5 Z"/>
+      <rect class="shared-node__outline" x="24.75" y="24.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-j-701" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain" data-item-id="J-701" data-role="step" data-node-density="plain">
-      <rect class="shared-node__chrome" x="316.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="316.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-p-012" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-1 shared-node shared-node-dense" data-item-id="P-012" data-role="place" data-node-density="dense">
+      <rect class="shared-node__chrome" x="72.75" y="109.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 73.5 129.5 L 73.5 123 Q 73.5 110.5 86 110.5 L 282 110.5 Q 294.5 110.5 294.5 123 L 294.5 129.5 Z"/>
+      <rect class="shared-node__outline" x="72.75" y="109.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-j-702" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain" data-item-id="J-702" data-role="step" data-node-density="plain">
-      <rect class="shared-node__chrome" x="564.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="564.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-p-014" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-1 shared-node shared-node-dense" data-item-id="P-014" data-role="place" data-node-density="dense">
+      <rect class="shared-node__chrome" x="72.75" y="194.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 73.5 214.5 L 73.5 208 Q 73.5 195.5 86 195.5 L 282 195.5 Q 294.5 195.5 294.5 208 L 294.5 214.5 Z"/>
+      <rect class="shared-node__outline" x="72.75" y="194.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-j-711" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain" data-item-id="J-711" data-role="step" data-node-density="plain">
-      <rect class="shared-node__chrome" x="812.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="812.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-j-712" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_contained shared-node shared-node-dense" data-item-id="J-712" data-role="step" data-node-density="dense">
-      <rect class="shared-node__chrome" x="1060.75" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="1060.75" y="92.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-j-713" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain" data-item-id="J-713" data-role="step" data-node-density="plain">
-      <rect class="shared-node__chrome" x="1308.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="1308.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-j-714" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain" data-item-id="J-714" data-role="step" data-node-density="plain">
-      <rect class="shared-node__chrome" x="1556.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="1556.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-    </g>
-    <g id="scene-node-j-791" class="scene-node primitive-card role-step paint-nodes semantic_node journey_map journey_step journey_step_root shared-node shared-node-plain" data-item-id="J-791" data-role="step" data-node-density="plain">
-      <rect class="shared-node__chrome" x="1840.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="1840.75" y="92.75" width="222.5" height="46.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-p-016" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-1 shared-node shared-node-dense" data-item-id="P-016" data-role="place" data-node-density="dense">
+      <rect class="shared-node__chrome" x="72.75" y="279.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 73.5 299.5 L 73.5 293 Q 73.5 280.5 86 280.5 L 282 280.5 Q 294.5 280.5 294.5 293 L 294.5 299.5 Z"/>
+      <rect class="shared-node__outline" x="72.75" y="279.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-plain shared-node__labels" data-item-id="J-790" data-role="step">
+    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-010" data-role="place">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="39.5" y="38.625">
+            <tspan x="39.5" y="38.625">Place</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="69.82" y="38.625">
+            <tspan x="69.82" y="38.625">P-010</tspan>
+          </text>
+      </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="47.5" y="121.8">
-              <tspan x="47.5" y="121.8">Root entry</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="39.5" y="65.8">
+              <tspan x="39.5" y="65.8">SDD Viewer/Editor</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-container primitive-cluster role-journey_stage paint-labels journey_map journey_stage" data-item-id="G-700" data-role="journey_stage">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="316" y="58">
-          <tspan x="316" dy="0">Loops and returns</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain shared-node__labels" data-item-id="J-701" data-role="step">
+    <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-1 shared-node shared-node-dense shared-node__labels" data-item-id="P-012" data-role="place">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="87.5" y="123.625">
+            <tspan x="87.5" y="123.625">Place</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="117.82" y="123.625">
+            <tspan x="117.82" y="123.625">P-012</tspan>
+          </text>
+      </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="331.5" y="121.8">
-              <tspan x="331.5" y="121.8">Begin intentional retry</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="87.5" y="150.8">
+              <tspan x="87.5" y="150.8">Source Pane</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain shared-node__labels" data-item-id="J-702" data-role="step">
+    <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-1 shared-node shared-node-dense shared-node__labels" data-item-id="P-014" data-role="place">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="87.5" y="208.625">
+            <tspan x="87.5" y="208.625">Place</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="117.82" y="208.625">
+            <tspan x="117.82" y="208.625">P-014</tspan>
+          </text>
+      </g>
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="579.5" y="121.8">
-              <tspan x="579.5" y="121.8">Complete intentional retry</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="87.5" y="235.8">
+              <tspan x="87.5" y="235.8">Diagram Pane</tspan>
             </text>
         </g>
       </g>
     </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain shared-node__labels" data-item-id="J-711" data-role="step">
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="827.5" y="121.8">
-              <tspan x="827.5" y="121.8">Begin unannotated retry</tspan>
-            </text>
-        </g>
+    <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-1 shared-node shared-node-dense shared-node__labels" data-item-id="P-016" data-role="place">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="87.5" y="293.625">
+            <tspan x="87.5" y="293.625">Place</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="117.82" y="293.625">
+            <tspan x="117.82" y="293.625">P-016</tspan>
+          </text>
       </g>
-    </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_contained shared-node shared-node-dense shared-node__labels" data-item-id="J-712" data-role="step">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1075.5" y="114.8">
-              <tspan x="1075.5" y="114.8">Complete unannotated</tspan>
-              <tspan x="1075.5" y="133.8">retry</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain shared-node__labels" data-item-id="J-713" data-role="step">
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1323.5" y="121.8">
-              <tspan x="1323.5" y="121.8">Repeat current action</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_contained shared-node shared-node-plain shared-node__labels" data-item-id="J-714" data-role="step">
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1571.5" y="121.8">
-              <tspan x="1571.5" y="121.8">Return to prior action</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-step paint-labels semantic_node journey_map journey_step journey_step_root shared-node shared-node-plain shared-node__labels" data-item-id="J-791" data-role="step">
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="1855.5" y="121.8">
-              <tspan x="1855.5" y="121.8">Root exit</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="87.5" y="320.8">
+              <tspan x="87.5" y="320.8">Inspector Pane</tspan>
             </text>
         </g>
       </g>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-j-790__precedes__j-701__661a1f868e72e80d2f47aedd3157ec09171f344f4a9aa62486fc7da5457bd384__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-790__PRECEDES__J-701__661a1f868e72e80d2f47aedd3157ec09171f344f4a9aa62486fc7da5457bd384__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 256 116 L 316 116" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-p-010__contains__p-012" class="scene-edge role-contains_place route-orthogonal paint-edges ia_local_structure contains_edge structural_only shared_trunk" data-edge-id="P-010__contains__P-012" data-role="contains_place">
+      <path class="scene-edge__path" d="M 48 77 L 48 135.5 L 72 135.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-j-790__precedes__j-791__71d18a11d3f80b2283cb17a0d68e86a327e54fca708def24c118a265fc3cd6be__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-790__PRECEDES__J-791__71d18a11d3f80b2283cb17a0d68e86a327e54fca708def24c118a265fc3cd6be__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 256 136 L 276 136 L 276 215 L 1952 215 L 1952 140" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-p-010__contains__p-014" class="scene-edge role-contains_place route-orthogonal paint-edges ia_local_structure contains_edge structural_only shared_trunk" data-edge-id="P-010__contains__P-014" data-role="contains_place">
+      <path class="scene-edge__path" d="M 48 77 L 48 220.5 L 72 220.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-j-714__precedes__j-791__37d24514299e09f03f8d2a42e59503f5de765431b1348d451dfadcb4d8555722__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-714__PRECEDES__J-791__37d24514299e09f03f8d2a42e59503f5de765431b1348d451dfadcb4d8555722__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1780 116 L 1840 116" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-j-701__precedes__j-702__62dd9eaed887ffe62145782afe1dc6bc99c19e1b2bf7a5d307b531d232493540__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-701__PRECEDES__J-702__62dd9eaed887ffe62145782afe1dc6bc99c19e1b2bf7a5d307b531d232493540__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 444 140 L 444 158 L 676 158 L 676 140" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-j-702__precedes__j-701__c9a6391812ee931f5875c47b25b2d20c79e3d847c68b0dfe4f1b2b60b6d8a5fe__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-702__PRECEDES__J-701__c9a6391812ee931f5875c47b25b2d20c79e3d847c68b0dfe4f1b2b60b6d8a5fe__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 692 140 L 692 174 L 428 174 L 428 140" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-j-711__precedes__j-712__9a1802733c65b60fc3855bbf277a593f8778b7ddae303150862ec114578c2c57__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-711__PRECEDES__J-712__9a1802733c65b60fc3855bbf277a593f8778b7ddae303150862ec114578c2c57__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 940 140 L 940 163 L 1172 163 L 1172 145" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-j-712__precedes__j-711__540ae902a78d2f04ab591261eca74d355c37e4a437c084c2e44d877b71f8c822__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-712__PRECEDES__J-711__540ae902a78d2f04ab591261eca74d355c37e4a437c084c2e44d877b71f8c822__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1188 145 L 1188 179 L 924 179 L 924 140" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-j-713__precedes__j-713__2a6ea6d3272f5ed9c1f8af6a31503aaeeeb10df8f9ebdce3f3a3b1cf36b09432__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-713__PRECEDES__J-713__2a6ea6d3272f5ed9c1f8af6a31503aaeeeb10df8f9ebdce3f3a3b1cf36b09432__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1532 116 L 1544 116 L 1544 80 L 1290 80 L 1290 116 L 1308 116" marker-end="url(#scene-marker-arrow-end)"/>
-    </g>
-    <g id="scene-edge-j-714__precedes__j-713__48be4303b0633d1150403027b444b86f13dc6ac7e956b46aa2bdaa0956251025__0" class="scene-edge role-precedes route-orthogonal paint-edges journey_map journey_precedes" data-edge-id="J-714__PRECEDES__J-713__48be4303b0633d1150403027b444b86f13dc6ac7e956b46aa2bdaa0956251025__0" data-role="precedes">
-      <path class="scene-edge__path" d="M 1668 140 L 1668 158 L 1420 158 L 1420 140" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-p-010__contains__p-016" class="scene-edge role-contains_place route-orthogonal paint-edges ia_local_structure contains_edge structural_only shared_trunk" data-edge-id="P-010__contains__P-016" data-role="contains_place">
+      <path class="scene-edge__path" d="M 48 77 L 48 305.5 L 72 305.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

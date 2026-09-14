@@ -1113,8 +1113,16 @@ describe("journey map Gate 7 reciprocal topology visual proof", () => {
     }
     expect(rendered.routingStages.expansionAttempts).toEqual([{
       attempt: 1,
-      requests: [{ kind: "stage_bypass_gutter", stageId: "G-700", amount: 32 }]
+      // Corrected close-domain competition exposes the root track's retained-margin deficit.
+      requests: [
+        { kind: "root_outer_gutter", ownerContainerId: "root", amount: 32 },
+        { kind: "stage_bypass_gutter", stageId: "G-700", amount: 32 }
+      ]
     }]);
+    const rootBypass = edge("J-790", "J-791");
+    const lowestTrack = Math.max(...rootBypass.route.points.map(point => point.y));
+    expect(scene.root.y + scene.root.height - lowestTrack)
+      .toBeGreaterThanOrEqual(MIN_ARROW_MARKER_LEG + JOURNEY_MAP_TRACK_SEPARATION / 2);
     expect(rendered.finalSvg).toBe(rerendered.finalSvg);
     expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
     expect(rendered.diagnostics.some(isBlockingJourneyDiagnostic)).toBe(false);

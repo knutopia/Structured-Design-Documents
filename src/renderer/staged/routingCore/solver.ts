@@ -45,7 +45,7 @@ function assignmentCostContribution(
   ];
 }
 
-function claimsCompete(left: RoutingTrackClaim, right: RoutingTrackClaim, epsilon: number): boolean {
+function claimsCompete(left: RoutingTrackClaim, right: RoutingTrackClaim, epsilon: number, minSeparation: number): boolean {
   if (left.segment.axis !== right.segment.axis) {
     return false;
   }
@@ -63,7 +63,7 @@ function claimsCompete(left: RoutingTrackClaim, right: RoutingTrackClaim, epsilo
     return false;
   }
   return Math.max(left.allowedRange.min, right.allowedRange.min)
-    <= Math.min(left.allowedRange.max, right.allowedRange.max) + epsilon;
+    <= Math.min(left.allowedRange.max, right.allowedRange.max) + minSeparation + epsilon;
 }
 
 function compareClaims(left: RoutingTrackClaim, right: RoutingTrackClaim): number {
@@ -76,7 +76,7 @@ function compareClaims(left: RoutingTrackClaim, right: RoutingTrackClaim): numbe
 
 function buildClaimComponents(
   claims: readonly RoutingTrackClaim[],
-  epsilon: number
+  policy: RoutingPolicy
 ): RoutingTrackClaim[][] {
   const ordered = [...claims].sort(compareClaims);
   const visited = new Set<RoutingSegmentId>();
@@ -93,7 +93,7 @@ function buildClaimComponents(
       const current = queue.shift()!;
       component.push(current);
       for (const candidate of ordered) {
-        if (visited.has(candidate.segment.id) || !claimsCompete(current, candidate, epsilon)) {
+        if (visited.has(candidate.segment.id) || !claimsCompete(current, candidate, policy.epsilon, policy.minSeparation)) {
           continue;
         }
         visited.add(candidate.segment.id);
@@ -148,8 +148,9 @@ function enumerateCoordinates(
 ): number[] {
   if (claim.lockedCoordinate !== undefined || !claim.movable) {
     const coordinate = roundRoutingMetric(claim.lockedCoordinate ?? claim.segment.coordinate);
-    return coordinate >= claim.allowedRange.min - policy.epsilon
-      && coordinate <= claim.allowedRange.max + policy.epsilon
+    const range = resolveFiniteRange(claim, claims, resources, policy.minSeparation);
+    return coordinate >= range.min - policy.epsilon
+      && coordinate <= range.max + policy.epsilon
       && !isForbidden(claim, coordinate, policy.epsilon)
       ? [coordinate]
       : [];
@@ -202,7 +203,7 @@ function assignmentCompatible(
 ): boolean {
   for (const [otherId, otherCoordinate] of assigned) {
     const other = claimById.get(otherId);
-    if (!other || !claimsCompete(claim, other, policy.epsilon)) {
+    if (!other || !claimsCompete(claim, other, policy.epsilon, policy.minSeparation)) {
       continue;
     }
     if (Math.abs(coordinate - otherCoordinate) < policy.minSeparation - policy.epsilon) {
@@ -257,7 +258,7 @@ function searchAssignments(
   const claimById = new Map(ordered.map((claim) => [claim.segment.id, claim] as const));
   const conflictDegreeById = new Map(ordered.map((claim) => [
     claim.segment.id,
-    ordered.filter((candidate) => claimsCompete(claim, candidate, policy.epsilon)).length
+    ordered.filter((candidate) => claimsCompete(claim, candidate, policy.epsilon, policy.minSeparation)).length
   ] as const));
   const state: SearchState = { visited: 0, exhausted: false };
   const assigned = new Map<RoutingSegmentId, number>();
@@ -414,7 +415,7 @@ function toRoutingAssignments(
   claims: readonly RoutingTrackClaim[],
   coordinates: ReadonlyMap<RoutingSegmentId, number>
 ): Map<RoutingSegmentId, RoutingAssignment> {
-  return new Map(claims.map((claim) => {
+  return new Map([...claims].sort(compareClaims).map((claim) => {
     const coordinate = roundRoutingMetric(coordinates.get(claim.segment.id) ?? claim.segment.coordinate);
     return [claim.segment.id, {
       segmentId: claim.segment.id,
@@ -479,7 +480,7 @@ export function solveRoutingClaims(
   }
 
   const resolvedCoordinates = new Map<RoutingSegmentId, number>();
-  for (const component of buildClaimComponents(claims, policy.epsilon)) {
+  for (const component of buildClaimComponents(claims, policy)) {
     const unchanged = zeroDisplacementAssignment(component, candidatesById, policy);
     if (unchanged) {
       for (const [segmentId, coordinate] of unchanged) {
@@ -505,7 +506,7 @@ export function solveRoutingClaims(
       kind: "assignment_exhausted",
       message: search.exhausted
         ? `Routing assignment search exhausted its ${options.maxSearchStates ?? 100_000}-state bound.`
-        : "No separation-preserving routing-track assignment exists within the available resources.",
+        : "No separation-preserving assignment was found in the enumerated coordinate candidates.",
       connectorIds: [...new Set(component.map((claim) => claim.segment.connectorId))].sort(),
       segmentIds: component.map((claim) => claim.segment.id)
     };
@@ -513,14 +514,14 @@ export function solveRoutingClaims(
     if (expansionRequests.length > 0) {
       return {
         status: "needs_expansion",
-        assignments: toRoutingAssignments(claims, resolvedCoordinates),
+        assignments: new Map(),
         expansionRequests,
         violations: [violation]
       };
     }
     return {
       status: "needs_alternate_candidate",
-      assignments: toRoutingAssignments(claims, resolvedCoordinates),
+      assignments: new Map(),
       violations: [violation]
     };
   }

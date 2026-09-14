@@ -385,7 +385,7 @@
       <path class="scene-edge__path" d="M 1040 76 L 1076 76 L 1076 134.5 L 1376 134.5 L 1376 76 L 1408 76" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-040__precedes__j-043" class="scene-edge role-precedes route-orthogonal paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-precedes edge-channel-flow" data-edge-id="J-040__precedes__J-043" data-role="precedes">
-      <path class="scene-edge__path" d="M 1040 76 L 1104 76 L 1104 102.5 L 1648 102.5 L 1648 76 L 1680 76" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1040 92 L 1104 92 L 1104 102.5 L 1648 102.5 L 1648 76 L 1680 76" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-021__precedes__j-022" class="scene-edge role-precedes route-straight paint-edges service_blueprint_edge service_blueprint_semantic_edge edge-type-precedes edge-channel-flow" data-edge-id="J-021__precedes__J-022" data-role="precedes">
       <path class="scene-edge__path" d="M 2176 76 L 2224 76" marker-end="url(#scene-marker-arrow-end)"/>

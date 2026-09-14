@@ -25,10 +25,12 @@ import {
 import { createRoutingDiagnostic, sortRendererDiagnostics, type RendererDiagnostic } from "./diagnostics.js";
 import { collapseRoutePoints } from "./routing.js";
 import {
-  resolveAndReconstructRouteOccupancy,
-  validatePositionedSceneRouting
+  runRoutingLifecycle,
+  validateFinalRouteSet,
+  type FinalRoutingContext,
+  type FinalRoutingTrace
 } from "./routingCore/index.js";
-import { decorateScenarioFlowPositionedScene } from "./scenarioFlowDecorations.js";
+import { buildScenarioFlowLaneDecorations, decorateScenarioFlowPositionedScene } from "./scenarioFlowDecorations.js";
 import type {
   ScenarioFlowEdgeChannel,
   ScenarioFlowMiddleEdge,
@@ -202,6 +204,7 @@ export interface ScenarioFlowConnectorPlan {
 }
 
 export interface ScenarioFlowRoutingStages {
+  finalResolutionTrace: FinalRoutingTrace;
   connectorPlans: ScenarioFlowConnectorPlan[];
   nodeEdgeBuckets: ScenarioFlowNodeEdgeBuckets[];
   nodeGutters: ScenarioFlowNodeGutter[];
@@ -220,6 +223,10 @@ interface PreparedScenarioFlowRoutes {
   requiredColumnExpansions: Record<number, number>;
   requiredLaneExpansions: Record<number, number>;
 }
+
+import { markerRoutingClearance } from "./markerGeometry.js";
+import { resolveRendererTheme } from "./theme.js";
+import { createTextMeasurementService } from "./textMeasurement.js";
 
 const CHANNEL_PRIORITY: Record<ScenarioFlowEdgeChannel, number> = {
   step_flow: 0,
@@ -951,6 +958,46 @@ function resolveAdjacentHorizontalSharedY(
   return sharedY;
 }
 
+function resolveFinalPlanEndpoints(
+  plan: ScenarioFlowConnectorPlan,
+  index: ScenarioFlowPositionedIndex,
+  endpointOffsetsByNodeId: ReadonlyMap<string, Map<PortSide, Map<string, number>>>
+): { sourcePoint: Point; targetPoint: Point; direct: boolean } {
+  const source = index.nodeById.get(plan.from)!, target = index.nodeById.get(plan.to)!;
+  const sourcePoint = getSidePointWithOffset(
+    source.node,
+    plan.sourceSide,
+    getEndpointOffset(endpointOffsetsByNodeId, plan.from, plan.sourceSide, plan.id)
+  );
+  const targetPoint = getSidePointWithOffset(
+    target.node,
+    plan.targetSide,
+    getEndpointOffset(endpointOffsetsByNodeId, plan.to, plan.targetSide, plan.id)
+  );
+  const adjacentHorizontalY = resolveAdjacentHorizontalSharedY(
+    plan,
+    source,
+    target,
+    sourcePoint,
+    targetPoint,
+    endpointOffsetsByNodeId,
+    index
+  );
+  if (adjacentHorizontalY !== undefined) {
+    return { sourcePoint: { ...sourcePoint, y: adjacentHorizontalY }, targetPoint: { ...targetPoint, y: adjacentHorizontalY }, direct: true };
+  }
+
+  if (plan.pattern === "realization_vertical") {
+    const trackOffset = source.cell ? source.cell.rowOrder * FIXED_SEPARATION_DISTANCE * 2 : 0;
+    const trackX = resolveVerticalTrackX(source.node, target.node, roundMetric(sourcePoint.x + trackOffset));
+    if (trackX !== undefined) {
+      return { sourcePoint: { ...sourcePoint, x: trackX }, targetPoint: { ...targetPoint, x: trackX }, direct: true };
+    }
+  }
+
+  return { sourcePoint, targetPoint, direct: false };
+}
+
 function buildTemplateRoute(
   plan: ScenarioFlowConnectorPlan,
   index: ScenarioFlowPositionedIndex,
@@ -963,46 +1010,11 @@ function buildTemplateRoute(
     return buildEmptyRoute();
   }
 
-  const sourcePoint = getSidePointWithOffset(
-    source.node,
-    plan.sourceSide,
-    getEndpointOffset(endpointOffsetsByNodeId, plan.from, plan.sourceSide, plan.id)
-  );
-  const targetPoint = getSidePointWithOffset(
-    target.node,
-    plan.targetSide,
-    getEndpointOffset(endpointOffsetsByNodeId, plan.to, plan.targetSide, plan.id)
-  );
+  const { sourcePoint, targetPoint, direct } = resolveFinalPlanEndpoints(plan, index, endpointOffsetsByNodeId);
+  if (direct) return buildRoute([sourcePoint, targetPoint], "orthogonal");
   const sourceStub = moveOutward(sourcePoint, plan.sourceSide, FIXED_SEPARATION_DISTANCE);
   const targetStub = moveOutward(targetPoint, plan.targetSide, FIXED_SEPARATION_DISTANCE);
   const points: Point[] = [sourcePoint, sourceStub];
-
-  const adjacentHorizontalY = resolveAdjacentHorizontalSharedY(
-    plan,
-    source,
-    target,
-    sourcePoint,
-    targetPoint,
-    endpointOffsetsByNodeId,
-    index
-  );
-  if (adjacentHorizontalY !== undefined) {
-    return buildRoute([
-      { x: sourcePoint.x, y: adjacentHorizontalY },
-      { x: targetPoint.x, y: adjacentHorizontalY }
-    ], "orthogonal");
-  }
-
-  if (plan.pattern === "realization_vertical") {
-    const trackOffset = source.cell ? source.cell.rowOrder * FIXED_SEPARATION_DISTANCE * 2 : 0;
-    const trackX = resolveVerticalTrackX(source.node, target.node, roundMetric(sourcePoint.x + trackOffset));
-    if (trackX !== undefined) {
-      return buildRoute([
-        { x: trackX, y: sourcePoint.y },
-        { x: trackX, y: targetPoint.y }
-      ], "orthogonal");
-    }
-  }
 
   if (plan.pattern === "realization_corridor" || plan.pattern === "parking_fallback") {
     const connectorIndex = Math.max(0, plan.outgoingOrder);
@@ -3694,6 +3706,7 @@ export function buildScenarioFlowRoutingStages(
   let workingIndex = baseIndex;
   let workingGlobalGutterState = buildGlobalGutterState();
   let finalPrepared = step3Prepared;
+  let preparationExpansionPasses = 0;
 
   for (let attempt = 0; attempt < MAX_FINAL_ROUTING_ATTEMPTS; attempt += 1) {
     const bucketsByNodeId = buildNodeEdgeBuckets(connectorPlans, workingIndex);
@@ -3758,75 +3771,102 @@ export function buildScenarioFlowRoutingStages(
       accumulateExpansions(workingGlobalGutterState.columnExpansions, columnExpansions),
       accumulateExpansions(workingGlobalGutterState.laneExpansions, laneExpansions)
     );
-    workingScene = applyGlobalGutterExpansions(workingScene, middleLayer, columnExpansions, laneExpansions);
+    preparationExpansionPasses++;
+    workingScene = applyGlobalGutterExpansions(positionedScene, middleLayer,
+      workingGlobalGutterState.columnExpansions, workingGlobalGutterState.laneExpansions);
     workingIndex = buildIndex(workingScene, middleLayer);
 
-    if (attempt === MAX_FINAL_ROUTING_ATTEMPTS - 1) {
-      const finalBucketsByNodeId = buildNodeEdgeBuckets(connectorPlans, workingIndex);
-      const finalEndpointOffsetsByNodeId = buildEndpointOffsets(workingIndex, finalBucketsByNodeId);
-      const nominal = buildStep3Routes(
-        connectorPlans,
-        workingScene,
-        workingIndex,
-        finalEndpointOffsetsByNodeId,
-        finalBucketsByNodeId,
-        workingGlobalGutterState
-      );
-      const finalSegmentCoordinates = resolveOccupancyCoordinates(nominal.connectorPlans, nominal.occupancy);
-      finalPrepared = buildPreparedRoutes(
-        connectorPlans,
-        workingScene,
-        workingIndex,
-        finalEndpointOffsetsByNodeId,
-        finalBucketsByNodeId,
-        workingGlobalGutterState
-      );
-    }
   }
 
-  workingIndex = buildIndex(workingScene, middleLayer);
-  const settledBucketsByNodeId = buildNodeEdgeBuckets(connectorPlans, workingIndex);
-  const settledEndpointOffsetsByNodeId = buildEndpointOffsets(workingIndex, settledBucketsByNodeId);
-  finalPrepared = buildPreparedRoutes(
-    connectorPlans,
-    workingScene,
-    workingIndex,
-    settledEndpointOffsetsByNodeId,
-    settledBucketsByNodeId,
-    workingGlobalGutterState
-  );
+  const prepareFinalContext = (): FinalRoutingContext => {
+    workingIndex = buildIndex(workingScene, middleLayer);
+    const settledBucketsByNodeId = buildNodeEdgeBuckets(connectorPlans, workingIndex);
+    const settledEndpointOffsetsByNodeId = buildEndpointOffsets(workingIndex, settledBucketsByNodeId);
+    finalPrepared = buildPreparedRoutes(
+      connectorPlans,
+      workingScene,
+      workingIndex,
+      settledEndpointOffsetsByNodeId,
+      settledBucketsByNodeId,
+      workingGlobalGutterState
+    );
 
-  const finalDiagnostics: RendererDiagnostic[] = [...diagnostics];
-  const sharedOccupancy = resolveAndReconstructRouteOccupancy(
-    finalPrepared.connectorPlans.map((plan, priority) => ({
-      connectorId: plan.id,
-      route: plan.finalRoute,
-      priority
-    })),
-    {
-      buildSegmentKey: (connectorId, routeSegmentIndex) => `${connectorId}|${routeSegmentIndex}`,
-      policy: {
-        minSeparation: FIXED_SEPARATION_DISTANCE,
-        epsilon: 0.5,
-        maxExpansionPasses: MAX_FINAL_ROUTING_ATTEMPTS
-      }
-    }
-  );
-  if (sharedOccupancy.status !== "resolved") {
-    finalDiagnostics.push(createRoutingDiagnostic(
-      "renderer.routing.scenario_flow_constraint_unsatisfiable",
-      "Scenario-flow routing could not find a globally separated final track assignment within the bounded solve lifecycle.",
-      "scenario_flow",
-      "error"
-    ));
-  }
-  finalPrepared = {
-    ...finalPrepared,
-    connectorPlans: finalPrepared.connectorPlans.map((plan) => ({
-      ...plan,
-      finalRoute: sharedOccupancy.routeByConnectorId.get(plan.id) ?? plan.finalRoute
-    }))
+    // The established Scenario canvas owner includes prepared route extents. Resolve
+    // that free-space resource before acceptance, not only during SVG finalization.
+    updateRootSize(workingScene.root, collectPositionedEdgeExtents(
+      buildPositionedEdges(finalPrepared.connectorPlans, plan => plan.finalRoute)));
+    const theme = resolveRendererTheme(workingScene.themeId).theme;
+    const textMeasurement = createTextMeasurementService(theme.fontFaces);
+    const finalContext: FinalRoutingContext = {
+      connectors: finalPrepared.connectorPlans.map((plan, priority) => {
+        const endpoints = resolveFinalPlanEndpoints(plan, workingIndex, settledEndpointOffsetsByNodeId);
+        return { id: plan.id, route: plan.finalRoute, priority,
+          source: { point: endpoints.sourcePoint, side: plan.sourceSide, nodeId: plan.from,
+            minLeg: markerRoutingClearance(plan.markers?.start, theme.paint.arrowSize, theme.paint.edgeStrokeWidth) },
+          target: { point: endpoints.targetPoint, side: plan.targetSide, nodeId: plan.to,
+            minLeg: markerRoutingClearance(plan.markers?.end, theme.paint.arrowSize, theme.paint.edgeStrokeWidth) }
+        };
+      }),
+      boxes: workingIndex.nodeBoxes.map(box => ({ ...box, id: box.itemId })),
+      blockers: buildScenarioFlowLaneDecorations(workingScene, middleLayer).flatMap(decoration => {
+        if (decoration.kind !== "text") return [];
+        const style = theme.textStyles[decoration.textStyleRole] ?? theme.textStyles.label!;
+        return [{ id: decoration.id, x: decoration.x, y: decoration.y,
+          width: textMeasurement.measureText(decoration.text, style), height: style.lineHeight }];
+      }),
+      bounds: { minX: workingScene.root.x, minY: workingScene.root.y,
+        maxX: workingScene.root.x + workingScene.root.width, maxY: workingScene.root.y + workingScene.root.height },
+      policy: { minSeparation: FIXED_SEPARATION_DISTANCE, epsilon: 0.5, crossingTreatment: "penalize", maxExpansionPasses: MAX_FINAL_ROUTING_ATTEMPTS - preparationExpansionPasses }
+    };
+    return finalContext;
   };
+  const finalDiagnostics: RendererDiagnostic[] = [...diagnostics];
+  const finalResolution = runRoutingLifecycle(prepareFinalContext(), {
+    expand: (context, violations, pass) => {
+      if (preparationExpansionPasses + pass > MAX_FINAL_ROUTING_ATTEMPTS) return undefined;
+      const implicated = new Set(violations.flatMap(violation => violation.connectorIds));
+      const columns: Record<number, number> = {};
+      const lanes: Record<number, number> = {};
+      // Only measured capacity deficits are requests to the existing cell-shift owner.
+      for (const connector of context.connectors) {
+        if (!implicated.has(connector.id)) continue;
+        const source = workingIndex.nodeById.get(connector.source.nodeId)!, target = workingIndex.nodeById.get(connector.target.nodeId)!;
+        if (!source.cell || !target.cell) continue;
+        for (const [axis, positive, negative, record] of [["x", "east", "west", columns], ["y", "south", "north", lanes]] as const) {
+          const sourceOrder = axis === "x" ? source.cell.columnOrder : source.cell.rowOrder;
+          const targetOrder = axis === "x" ? target.cell.columnOrder : target.cell.rowOrder;
+          const forward = connector.source.side === positive && connector.target.side === negative && sourceOrder < targetOrder;
+          const backward = connector.source.side === negative && connector.target.side === positive && targetOrder < sourceOrder;
+          if (!forward && !backward) continue;
+          const transverse = axis === "x" ? "y" : "x";
+          const sourceLeg = Math.max(1, connector.source.minLeg), targetLeg = Math.max(1, connector.target.minLeg);
+          const required = Math.abs(connector.source.point[transverse] - connector.target.point[transverse]) <= EPSILON
+            ? Math.max(sourceLeg, targetLeg) : sourceLeg + targetLeg;
+          const deficit = required - Math.abs(connector.source.point[axis] - connector.target.point[axis]);
+          const order = Math.min(sourceOrder, targetOrder);
+          record[order] = Math.max(record[order] ?? 0, roundUpToSeparationDistance(deficit));
+        }
+      }
+      if (!hasNonZeroExpansion(columns) && !hasNonZeroExpansion(lanes)) return undefined;
+      workingGlobalGutterState = buildGlobalGutterState(
+        accumulateExpansions(workingGlobalGutterState.columnExpansions, columns),
+        accumulateExpansions(workingGlobalGutterState.laneExpansions, lanes));
+      workingScene = applyGlobalGutterExpansions(positionedScene, middleLayer,
+        workingGlobalGutterState.columnExpansions, workingGlobalGutterState.laneExpansions);
+      return prepareFinalContext();
+    }
+  });
+  if (finalResolution.status === "failed") {
+    for (const violation of finalResolution.violations) finalDiagnostics.push(createRoutingDiagnostic(
+      `renderer.routing.scenario_flow_${violation.kind}`,
+      `Final routing failed (${finalResolution.reason}): ${violation.message}`,
+      violation.connectorIds[0] ?? "scenario_flow", "error", JSON.stringify({ violation, trace: finalResolution.trace })
+    ));
+  } else {
+    finalPrepared = { ...finalPrepared, connectorPlans: finalPrepared.connectorPlans.map(plan => ({ ...plan,
+      finalRoute: finalResolution.routeByConnectorId.get(plan.id)!
+    })) };
+  }
   emitFinalIntersectionDiagnostics(finalPrepared.connectorPlans, workingIndex.nodeBoxes, finalDiagnostics);
   const labelsByPlanId = placeLabels(finalPrepared.connectorPlans, workingScene, middleLayer, finalDiagnostics);
   let finalPositionedScene = withEdgesAndDiagnostics(
@@ -3835,16 +3875,10 @@ export function buildScenarioFlowRoutingStages(
     finalDiagnostics,
     middleLayer
   );
-  const sharedViolationKinds = new Set([
-    "non_orthogonal_segment",
-    "endpoint_mismatch",
-    "endpoint_intrusion",
-    "node_intersection"
-  ]);
-  const sharedViolations = validatePositionedSceneRouting(finalPositionedScene, {
-    includeEdgeInteractions: false,
-    policy: { minTerminalLeg: 0, crossingTreatment: "allow" }
-  }).filter((violation) => sharedViolationKinds.has(violation.kind));
+  const emittedById = new Map(finalPositionedScene.edges.map(edge => [edge.id, edge.route]));
+  const sharedViolations = finalResolution.status === "resolved" ? validateFinalRouteSet({ ...finalResolution.context,
+    connectors: finalResolution.context.connectors.map(connector => ({ ...connector, route: emittedById.get(connector.id)! }))
+  }) : [];
   if (sharedViolations.length > 0) {
     const sharedDiagnostics = sharedViolations.map((violation) => createRoutingDiagnostic(
       `renderer.routing.scenario_flow_${violation.kind}`,
@@ -3861,6 +3895,7 @@ export function buildScenarioFlowRoutingStages(
   const finalBucketsByNodeId = buildNodeEdgeBuckets(finalPrepared.connectorPlans, workingIndex);
 
   return {
+    finalResolutionTrace: finalResolution.trace,
     connectorPlans: finalPrepared.connectorPlans,
     nodeEdgeBuckets: [...finalBucketsByNodeId.values()].sort((left, right) => left.nodeId.localeCompare(right.nodeId)),
     nodeGutters: buildNodeGutters(workingIndex),
