@@ -8,7 +8,7 @@ import { renderPositionedSceneToSvg } from "../src/renderer/staged/svgBackend.js
 import { assessUiContractsCoverage, assessUiContractsGeometry } from "./uiContractsB5Acceptance.js";
 import { buildFanoutProof } from "./uiContractsFanoutProof.js";
 
-const fixture = "docs/hierarchical_ui_contracts/departure_desk.sdd";
+const fixture = "docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd";
 const cases = ["C-430", "C-420", "C-450", "long-binding", "eight-targets"];
 
 describe("single-source contract fan-out feasibility", () => {

@@ -307,7 +307,7 @@ describe("shared node renderer", () => {
 
   it("carries the CLI decorator selection through the staged preview request", async () => {
     const bundle = await loadBundle(path.join(repoRoot, "bundle/v0.1/manifest.yaml"));
-    const sourcePath = path.join(repoRoot, "docs/good_node_rendering/unified_node.sdd");
+    const sourcePath = path.join(repoRoot, "docs/Done/[Done] good_node_rendering/unified_node.sdd");
     const result = await renderSourcePreview({
       path: sourcePath,
       text: await readFile(sourcePath, "utf8")

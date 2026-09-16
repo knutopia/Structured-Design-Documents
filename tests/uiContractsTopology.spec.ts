@@ -88,7 +88,7 @@ describe("B5 topology acceptance", () => {
   });
 
   it("keeps local composition and contracts fixed when sequences grow horizontally", async () => {
-    const text = await readFile("docs/hierarchical_ui_contracts/departure_desk.sdd", "utf8");
+    const text = await readFile("docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd", "utf8");
     const local = [];
     for (const short of [true, false]) {
       const model = presentation(text);

@@ -40,7 +40,7 @@ describe("native B5 container headers", () => {
   });
 
   it("adds native titles to all twelve B5 inputs without moving nodes, connectors, or labels", async () => {
-    const evidence = JSON.parse(await readFile("docs/hierarchical_ui_contracts/b5_pipeline_evidence.json", "utf8"));
+    const evidence = JSON.parse(await readFile("docs/Done/[Done] hierarchical_ui_contracts/b5_pipeline_evidence.json", "utf8"));
     for (const proof of evidence.proofs) {
       const scene: RendererScene = structuredClone(proof.rendererScene);
       const mark = (item: SceneItem): void => {
