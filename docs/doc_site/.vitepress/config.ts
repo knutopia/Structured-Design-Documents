@@ -13,6 +13,7 @@ import {
 import { showRepoLinkMarkdownPlugin } from './markdown/showRepoLink'
 import { dropdownSwitchMarkdownPlugin } from './markdown/dropdownSwitch'
 import { sideBySideMarkdownPlugin } from './markdown/sideBySide'
+import { containerTitleMarkdownPlugin } from './markdown/containerTitle'
 
 const showSourceOptions = {
   lineNumbers: true
@@ -114,6 +115,8 @@ export default defineConfig({
       md.use(dropdownSwitchMarkdownPlugin);
       // Render exactly two level-three Markdown sections as responsive columns.
       md.use(sideBySideMarkdownPlugin);
+      // Restyle VitePress container titles, as in `::: info {h4} Title`.
+      md.use(containerTitleMarkdownPlugin);
 
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {

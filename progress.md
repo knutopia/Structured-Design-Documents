@@ -30,7 +30,7 @@ z
 ## Wed 9-16
 
 - Absans title font
-
+- Absans info box title
 
 ## Tue 9-15
 

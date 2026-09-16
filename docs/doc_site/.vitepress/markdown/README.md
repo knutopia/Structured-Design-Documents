@@ -184,3 +184,56 @@ When nesting another colon-delimited container, use more markers for the outer
 `sideBySide` container than for the inner container. Fenced Markdown examples
 are left untouched. A documentation build fails with the source page and line
 number when the container contract is invalid.
+
+## `containerTitle`
+
+`containerTitle.ts` restyles the title of a VitePress container (`info`, `tip`,
+`warning`, `danger`, `details`) without changing its markup. An option group
+immediately after the container keyword selects the treatment:
+
+```md
+::: info {h4} Impact on Product Decisions
+Body text.
+:::
+```
+
+`{h4}` gives the title an h4-like appearance: the site title font (Absans) at
+18px/24px, flush with the top of the block. The title remains a
+`<p class="custom-block-title">` (or a `<summary>` for `details`), so it keeps
+the custom block's zero top margin instead of inheriting
+`.vp-doc h4 { margin: 24px 0 0 }`.
+
+Do not author a literal `<h4>` in a container title. VitePress renders the
+title inside a `<p>`, and `<p><h4>…</h4></p>` is invalid HTML: the browser
+closes the paragraph early, leaving an empty title paragraph and a real heading
+whose 24px top margin pushes the text down a line.
+
+The option group must be the first token after the keyword, so
+`::: info Impact {h4} on Product` is ordinary title text. Options are
+case-sensitive and may be comma- or space-separated inside one group. An
+untitled container may still take the option, as in `::: tip {h4}`, which
+restyles the default `TIP` label. Titles keep inline Markdown, such as
+`::: warning {h4} **Bold** and \`code\``.
+
+### Where the behavior lives
+
+- The plugin only rewrites `token.info` and joins a
+  `custom-block-title-<option>` class onto the container element. VitePress's
+  own container renderer then builds the title, so no VitePress rendering
+  internals are duplicated here.
+- The visual result lives in `../theme/title-font.css` (font family, weight,
+  letter-spacing, kerning) and `../theme/style.css` (size metrics). Supporting a
+  new option means adding it to `supportedTitleOptions` plus the matching CSS.
+- The plugin runs as a core rule after `block`, so fenced authoring examples are
+  left untouched.
+
+A documentation build fails with the source page and line number when an option
+group is empty or names an unsupported option.
+
+### Maintenance checklist
+
+- Keep plugin installation in `../config.ts`.
+- Keep the supported option list aligned with the CSS selectors in
+  `../theme/title-font.css` and `../theme/style.css`.
+- Run the focused `docsContainerTitle` tests and `pnpm run docs:build` after
+  changes.

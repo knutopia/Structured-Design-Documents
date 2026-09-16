@@ -51,6 +51,24 @@
   overflow-wrap: anywhere;
 }
 
+/*
+ * Container titles opted into an h4-like appearance by the `containerTitle`
+ * Markdown extension, as in `::: info {h4} Title`.
+ *
+ * The title stays a <p class="custom-block-title"> (or a <summary> for
+ * `details`), so it keeps the custom block's zero top margin instead of
+ * inheriting `.vp-doc h4 { margin: 24px 0 0 }`. Only the size metrics are
+ * borrowed from `.vp-doc h4`; family, weight, and letter-spacing come from
+ * title-font.css so the title matches a real h4 on this site (Absans at its
+ * natural weight, neutral letter-spacing per title-font.css §3.2).
+ */
+.vp-doc .custom-block.custom-block-title-h4 > .custom-block-title,
+.vp-doc .custom-block.details.custom-block-title-h4 > summary {
+  margin-top: 0;
+  font-size: 18px;
+  line-height: 24px;
+}
+
 .kinda-important .vp-doc h1 {
   margin-bottom: 1rem;
 }

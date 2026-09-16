@@ -77,7 +77,11 @@
 
 .vp-doc h3,
 .vp-doc h4,
-.VPFeature h2 {
+.VPFeature h2,
+/* Container titles opted into an h4-like appearance via `::: info {h4} Title`.
+   See the matching metrics in style.css. */
+.vp-doc .custom-block.custom-block-title-h4 > .custom-block-title,
+.vp-doc .custom-block.details.custom-block-title-h4 > summary {
   font-family: var(--sdd-title-font);
   font-weight: var(--sdd-title-weight);
   letter-spacing: var(--sdd-title-letter-spacing);
