@@ -53,10 +53,19 @@
 .dark {
   
   --sdd-c-testC-1: hsl(200, 98%, 59%);
+  --sdd-c-testC-2: hsl(201, 94%, 25%);
+  --sdd-c-testC-3: hsl(213, 66%, 29%);
+  --sdd-c-testC-soft: hsla(200, 98%, 20%, 0.715);
+
+  /*
+
+  --sdd-c-testC-1: hsl(35, 98%, 59%);
+
+  --sdd-c-testC-1: hsl(200, 98%, 59%);
   --sdd-c-testC-2: hsl(200, 29%, 37%);
   --sdd-c-testC-3: hwb(186 19% 43%);
   --sdd-c-testC-soft: hsla(124, 100%, 70%, 0.16);  
-
+  */
   --sdd-c-testB-1: hsl(13, 98%, 59%);
   --sdd-c-testB-2: hsl(117, 38%, 34%);
   --sdd-c-testB-3: hsl(127, 34%, 48%);

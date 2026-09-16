@@ -31,6 +31,7 @@ z
 
 - Absans title font
 - Absans info box title
+- Brand color noodling
 
 ## Tue 9-15
 
