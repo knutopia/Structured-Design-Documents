@@ -12,7 +12,7 @@ import { assessUiContractsCoverage, assessUiContractsGeometry, flattenUiContract
 let bundle: Awaited<ReturnType<typeof loadBundle>>, graph: NonNullable<ReturnType<typeof compileSource>["graph"]>;
 beforeAll(async () => {
   bundle = await loadBundle("bundle/v0.1/manifest.yaml");
-  graph = compileSource({ path: "/tmp/departure.sdd", text: await readFile("docs/hierarchical_ui_contracts/departure_desk.sdd", "utf8") }, bundle).graph!;
+  graph = compileSource({ path: "/tmp/departure.sdd", text: await readFile("docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd", "utf8") }, bundle).graph!;
 });
 
 describe("complete native B5 sheet", () => {

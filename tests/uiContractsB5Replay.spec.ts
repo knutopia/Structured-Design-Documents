@@ -5,7 +5,7 @@ import type { PositionedScene, RendererScene } from "../src/renderer/staged/cont
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import { assessUiContractsGeometry } from "./uiContractsB5Acceptance.js";
 
-const directory = "docs/hierarchical_ui_contracts/";
+const directory = "docs/Done/[Done] hierarchical_ui_contracts/";
 const evidence = JSON.parse(readFileSync(`${directory}b5_pipeline_evidence.json`, "utf8")) as {
   proofs: Array<{ file: string; rendererScene: RendererScene; positionedScene: PositionedScene }>;
 };

@@ -12,8 +12,8 @@ import type { PositionedScene, SceneContainer } from "../src/renderer/staged/con
 let bundle: Awaited<ReturnType<typeof loadBundle>>, graph: NonNullable<ReturnType<typeof compileSource>["graph"]>, evidence: any;
 beforeAll(async () => {
   bundle = await loadBundle("bundle/v0.1/manifest.yaml");
-  graph = compileSource({ path: "/tmp/departure.sdd", text: await readFile("docs/hierarchical_ui_contracts/departure_desk.sdd", "utf8") }, bundle).graph!;
-  evidence = JSON.parse(await readFile("docs/hierarchical_ui_contracts/b5_pipeline_evidence.json", "utf8"));
+  graph = compileSource({ path: "/tmp/departure.sdd", text: await readFile("docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd", "utf8") }, bundle).graph!;
+  evidence = JSON.parse(await readFile("docs/Done/[Done] hierarchical_ui_contracts/b5_pipeline_evidence.json", "utf8"));
 });
 function build(proof: any, historicalRegularNodes = false) {
   const view = bundle.views.views.find(view => view.id === "ui_contracts")!;

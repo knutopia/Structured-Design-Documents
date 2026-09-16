@@ -32,6 +32,7 @@ z
 - Absans title font
 - Absans info box title
 - Brand color noodling
+- Some routing tests fixed
 
 ## Tue 9-15
 

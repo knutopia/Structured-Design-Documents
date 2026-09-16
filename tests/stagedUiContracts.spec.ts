@@ -113,7 +113,7 @@ describe("public staged UI contracts B5 renderer", () => {
   });
 
   for (const detailId of ["compact", "detailed"]) for (const nodeDecoratorModeId of ["none", "type", "id", "type,id"]) it(`public preview ${detailId} / ${nodeDecoratorModeId}`, async () => {
-    const input = { path: "docs/hierarchical_ui_contracts/departure_desk.sdd", text: await readFile("docs/hierarchical_ui_contracts/departure_desk.sdd", "utf8") };
+    const input = { path: "docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd", text: await readFile("docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd", "utf8") };
     const result = await renderSourcePreview(input, bundle, { viewId: "ui_contracts", format: "svg", profileId: "simple", detailId, nodeDecoratorModeId });
     // The unchanged fixture deliberately reuses C-430 under two parents; the
     // existing validator reports that recommendation independently of rendering.

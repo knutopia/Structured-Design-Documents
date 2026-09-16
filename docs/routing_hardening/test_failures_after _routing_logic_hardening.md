@@ -1,5 +1,7 @@
 # Test Failures After Routing Logic Hardening
 
+**Failures with Root Causes A and C have been fixed. Root Cause B remains.**
+
 **quen3.8-max**:
 
 Ran terminal command:  cd /home/knut/projects/sdd && TMPDIR=/tmp pnpm test 2>&1 | tee /tmp/sdd_full_test_output.txt | tail -5

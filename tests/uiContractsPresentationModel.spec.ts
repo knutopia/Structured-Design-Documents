@@ -10,7 +10,7 @@ let bundle: Bundle, source: string, view: ViewSpec;
 beforeAll(async () => {
   bundle = await loadBundle("bundle/v0.1/manifest.yaml");
   view = bundle.views.views.find(view => view.id === "ui_contracts")!;
-  source = await readFile("docs/hierarchical_ui_contracts/departure_desk.sdd", "utf8");
+  source = await readFile("docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd", "utf8");
 });
 function model(text = source, detail = "detailed", spec = view) {
   const compiled = compileSource({ path: "/tmp/presentation.sdd", text }, bundle);
