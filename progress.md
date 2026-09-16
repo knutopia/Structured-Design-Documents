@@ -27,6 +27,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## TUe 9-15
+
+- Removed duplication from practical applications page
+
 ## Mon 9-14
 
 - Shared routing hardened

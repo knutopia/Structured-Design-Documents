@@ -24,9 +24,13 @@ The status quo map keeps tabs on continuous delivery, and supports making well-i
 
 ## Comparing and Consolidating Product Variants
 
-A special case of the UX inventory addresses the situation where a SaaS product exists in several parallel, similar-but-different versions. This is often the case when the specific needs of different large customers are being served.
+A special case of the UX inventory addresses the situation where a SaaS product exists in several parallel, similar-but-different variants. This is often the case when the specific needs of different large customers are being served, where slightly different requirements translate into diverging parallel products. 
 
-In that situation, opportunities for re-using structures between product versions are not always clear. By inventorying structural variations, and identifying best-in-class solutions, different product versions can be structured to be aligned where possible, making variations a deliverate, clear choice. This can save a lot of development resources over time.
+Coordinating development- and support activities across such parallel products is challenging. Opportunities for re-using structures between product vaiants are not always clear. Design drift happens, resulting in unnecessary variations.
+
+Documententing the structure of the product variants, inventorying structural differences, and identifying best-in-class solutions creates a foundation for alignment. With this foudation, variants can be addressed where it makes sense. It becomes a deliberate choice to align or to diverge product variants. This can save a lot of development resources over time. 
+
+When it's time to stand up another product variant (for a new enterprise customer, for example), tapping into the documented best-in-class solutions accellerates planning and development, focusing effort on creating new value.
 
 ## Placing New Designs in Product Context
 
@@ -47,10 +51,6 @@ Sometimes, different stakeholders actually have different views on what the prod
 With SDD, we can capture high-level product drivers (such as opportunities, journeys). This can be done "from scratch", for example as part of a workshop to align different stakeholders points of view. It can also be done based on existing documentation. 
 
 The advantage of SDD is that this high-level information can be connected to the actual product: which flows / areas / places actually realize which opportunity? Which ones are covered well? Which ones are being left out? How do new features map to the high-level drivers? This connection between product reality and high-level drivers provides clarity for making product decisions.
-
-## Coordinating Development Across Product Variants
-
-Sometimes, a product is offered in several similar-but-different variations, for example to serve different enterprise customers with separate needs. Coordinating development- and support activities across such parallel tracks is challenging. By documenting the information architecture variations as SDD across product variations, coordinating updates becomes easier, avoiding blind spots. Beyond information architecture, tracking screen composition and state handling variations with Ui contracts information in SDD can help with coordinating front end changes. When it's time to stand up another product variations (for a new enterprise customer, for example), the clear picture available in SDD can accelerate planning and show opportunities for reusing existing solutions, focusing development.
 
 ## Aligning New Designs with Existing UI Components
 
