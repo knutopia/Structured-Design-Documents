@@ -8,6 +8,9 @@ import DropdownSwitch from './components/DropdownSwitch.vue'
 import SideBySide from './components/SideBySide.vue'
 import Layout from "./Layout.vue";
 import { enhanceAppWithTabs } from 'vitepress-plugin-tabs/client'
+// Title/display font (Absans). Imported before style.css/custom.css so the
+// @font-face is registered first and cascade order stays predictable.
+import './title-font.css'
 import './style.css'
 import './custom.css'
 
