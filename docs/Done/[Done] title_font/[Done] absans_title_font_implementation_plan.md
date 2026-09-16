@@ -1,4 +1,4 @@
-# Absans Title Font — Implementation Plan
+# [Done] Absans Title Font — Implementation Plan
 
 **Goal:** Adopt the **Absans** typeface as the *title/display* font for the documentation
 site (`docs/doc_site`), covering the home hero and the large/inline headings across pages,
