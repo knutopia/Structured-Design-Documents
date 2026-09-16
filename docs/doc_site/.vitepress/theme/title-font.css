@@ -1,0 +1,101 @@
+/* .vitepress/theme/title-font.css
+ *
+ * Title / display font for the documentation site: Absans.
+ * Body text intentionally stays on the VitePress default (Inter) via
+ * --vp-font-family-base; this file only restyles title/display selectors.
+ *
+ * Font source (official): https://github.com/collletttivo/absans
+ *   - fonts/Absans-Regular.woff2 (single weight: 400, style: normal)
+ *   - License: SIL Open Font License 1.1, Copyright (c) 2023 Collletttivo.
+ *     The license text ships alongside the font at ./fonts/Absans-OFL-1.1.txt
+ *     to satisfy OFL 1.1 condition 2 (copyright notice + license travel with
+ *     each copy of the Font Software).
+ *
+ * Plan: docs/title_font/absans_title_font_implementation_plan.md
+ */
+
+/* ---------------------------------------------------------------------------
+ * @font-face
+ *
+ * Absans ships a single 400 face. VitePress headings ask for weight 600 and the
+ * home hero asks for 700. Declaring a weight RANGE (400 700) tells the browser
+ * that this one face legitimately covers that whole range, so it maps any
+ * requested weight in [400,700] to the real 400 face instead of synthesizing
+ * (faux) bold. DECISION (plan §3.1): use actual weight 400 only; never faux bold.
+ * ------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Absans';
+  src: url('./fonts/Absans-Regular.woff2') format('woff2');
+  font-weight: 400 700; /* range -> single real face, no synthetic bold */
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------------------------------------------------------------------------
+ * Title design tokens
+ * ------------------------------------------------------------------------- */
+:root {
+  /* Absans + generic fallback (registry fallback is sans-serif). */
+  --sdd-title-font: 'Absans', sans-serif;
+
+  /* DECISION (plan §3.1): Absans's natural design weight. The @font-face range
+     above is the safety net if any selector still computes 600/700. */
+  --sdd-title-weight: 400;
+
+  /* DECISION (plan §3.2): start neutral. VitePress's -0.02em/-0.01em and the
+     font explorer's -0.035em are tuned for Inter and do not transfer to Absans.
+     Tune only after visual review at real heading sizes. */
+  --sdd-title-letter-spacing: normal;
+
+  --sdd-title-kerning: normal;
+}
+
+/* ---------------------------------------------------------------------------
+ * Shared title treatment
+ *
+ * font-optical-sizing: none — DECISION (plan §3.3). The VitePress default sets
+ * `:root { font-optical-sizing: auto; }`, which targets Inter's variable `opsz`
+ * axis. Absans is not a variable font, so optical sizing is meaningless here;
+ * we disable it explicitly on title selectors for cleanliness. (Previous/Inter
+ * setting documented here per the decision.)
+ * ------------------------------------------------------------------------- */
+.VPHero .name,
+.VPHero .text,
+.vp-doc h1,
+.vp-doc h2 {
+  font-family: var(--sdd-title-font);
+  font-weight: var(--sdd-title-weight);
+  letter-spacing: var(--sdd-title-letter-spacing);
+  font-kerning: var(--sdd-title-kerning);
+  font-optical-sizing: none; /* Inter default was `auto`; Absans is not variable */
+}
+
+/* ---------------------------------------------------------------------------
+ * Tier 3 (optional) — DECISION (plan §3.4): decide during visual tuning.
+ * Uncomment to extend the title font to deeper headings and home feature cards.
+ * ------------------------------------------------------------------------- */
+
+.vp-doc h3,
+.vp-doc h4,
+.VPFeature h2 {
+  font-family: var(--sdd-title-font);
+  font-weight: var(--sdd-title-weight);
+  letter-spacing: var(--sdd-title-letter-spacing);
+  font-kerning: var(--sdd-title-kerning);
+  font-optical-sizing: none;
+}
+
+
+/* ---------------------------------------------------------------------------
+ * Hero tagline — DECISION (plan §3.5): keep on the body font (Inter) for
+ * contrast against the Absans hero title. Uncomment to switch it to Absans.
+ * ------------------------------------------------------------------------- */
+/*
+.VPHero .tagline {
+  font-family: var(--sdd-title-font);
+  font-weight: var(--sdd-title-weight);
+  letter-spacing: var(--sdd-title-letter-spacing);
+  font-kerning: var(--sdd-title-kerning);
+  font-optical-sizing: none;
+}
+*/

@@ -18,7 +18,7 @@ With this explicit structure, a product team can keep exploration and execution 
 
 :::: sideBySide
 
-::: info Impact on Product Decisions
+::: info <h4>Impact on Product Decisions</h4>
 
 Traditional product management tools capture product structure and decisions in oceans of data. Showing SDD diagrams in this context can provide clarity, driving alignment and good product decisions. Today, showing an SDD in an external tool means rendering a diagram to a file and then attaching the file in the external tool. 
 :::
