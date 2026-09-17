@@ -1,3 +1,5 @@
+import path from "node:path";
+
 /**
  * Resolves the working directory the user launched the CLI from.
  *
@@ -18,4 +20,16 @@ export function resolveLauncherCwd(env: NodeJS.ProcessEnv = process.env): string
     return initCwd;
   }
   return process.cwd();
+}
+
+/**
+ * Resolves a (possibly relative) path against the launcher's working directory
+ * rather than `process.cwd()`. Absolute paths are returned normalized.
+ *
+ * Use this for any user-supplied input or output path so that relative paths
+ * behave consistently whether the CLI is run directly or through a
+ * package-manager script.
+ */
+export function resolveLauncherPath(targetPath: string, env: NodeJS.ProcessEnv = process.env): string {
+  return path.resolve(resolveLauncherCwd(env), targetPath);
 }

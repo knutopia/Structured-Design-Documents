@@ -55,7 +55,7 @@ import {
 import type { Diagnostic } from "../diagnostics/types.js";
 import { createHelperCapabilities, createHelperHelpStub, shouldReturnHelperHelp } from "./helperDiscovery.js";
 import { writeAllSync } from "./writeAllSync.js";
-import { resolveLauncherCwd } from "./launcherCwd.js";
+import { resolveLauncherCwd, resolveLauncherPath } from "./launcherCwd.js";
 
 export interface HelperCliDeps {
   cwd: () => string;
@@ -131,7 +131,7 @@ function createDefaultDeps(): HelperCliDeps {
     renderPreview,
     getGitStatus,
     gitCommit,
-    readTextFile: async (filePath: string) => readFile(path.resolve(filePath), "utf8"),
+    readTextFile: async (filePath: string) => readFile(resolveLauncherPath(filePath), "utf8"),
     readStdin: async () => {
       const chunks: Buffer[] = [];
       for await (const chunk of process.stdin) {

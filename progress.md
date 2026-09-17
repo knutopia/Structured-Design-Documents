@@ -36,6 +36,7 @@ z
 - Added --force option to sdd show to output renders with errors 
 - Changed SDD CLI behavior to recognize current-folder files
 - Attempted ui_contracts routing fix again
+- CLI behavior to output files in current folder
 
 ## Wed 9-16
 
