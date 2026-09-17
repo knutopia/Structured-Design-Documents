@@ -32,6 +32,7 @@ z
 - Abandoned ui_contracts routing fix
 - Commit chaos
 - Thinned tagline font
+- Added --force option to sdd show to output renders with errors 
 
 ## Wed 9-16
 

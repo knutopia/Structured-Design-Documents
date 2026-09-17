@@ -200,6 +200,7 @@ export interface CliDeps extends GuidedAdditionCliDeps {
     detailId: string;
     nodeDecoratorModeId?: string;
     backendId?: PreviewRendererBackendId;
+    force?: boolean;
   }) => Promise<SourcePreviewRenderResult>;
   prepareCompiledGraphPreview: (
     sourcePath: string,
@@ -671,6 +672,7 @@ async function runShowAllCommand(
     format: PreviewFormat;
     backendId?: PreviewRendererBackendId;
     out?: string;
+    force?: boolean;
     diagnostics: string;
   }
 ): Promise<number> {
@@ -728,7 +730,8 @@ async function runShowAllCommand(
       profileId: options.profileId,
       detailId: options.detailId,
       nodeDecoratorModeId: options.nodeDecoratorModeId,
-      backendId: candidate.previewCapability.backendId
+      backendId: candidate.previewCapability.backendId,
+      force: options.force
     })
   }));
   const preparationDiagnostics = preparedCandidates.flatMap(({ prepared }) => prepared.diagnostics);
@@ -811,7 +814,7 @@ async function runShowAllCommand(
   writeDiagnostics(deps, allDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
   const generatedFiles: Array<{ outputPath: string; postfix: string }> = [];
   for (const { candidate, outputPath, result } of renderedEntries) {
-    if (hasErrors(result.diagnostics) || !result.artifact) {
+    if (!result.artifact || (hasErrors(result.diagnostics) && !options.force)) {
       failedRenderers.push(candidate);
       continue;
     }
@@ -838,7 +841,7 @@ async function runShowAllCommand(
   for (const candidate of candidates.filter((candidate) => failedRenderers.includes(candidate))) {
     deps.stderr(appendLine(`Failed renderer: ${candidate.view.id} (${candidate.previewCapability.backendId})`));
   }
-  return failedRenderers.length > 0 ? 1 : 0;
+  return failedRenderers.length > 0 || hasErrors(allDiagnostics) ? 1 : 0;
 }
 
 async function runShowCommand(
@@ -854,6 +857,7 @@ async function runShowCommand(
     out?: string;
     dotOut?: string;
     backend?: string;
+    force?: boolean;
     diagnostics: string;
   }
 ): Promise<number> {
@@ -892,6 +896,7 @@ async function runShowCommand(
         format: requestedPreviewFormat,
         backendId: requestedBackendId,
         out: options.out,
+        force: options.force,
         diagnostics: options.diagnostics
       });
     }
@@ -935,10 +940,11 @@ async function runShowCommand(
         format: requestedPreviewFormat,
         profileId,
         detailId,
-        nodeDecoratorModeId
+        nodeDecoratorModeId,
+        force: options.force
       });
       writeDiagnostics(deps, renderResult.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
-      if (!renderResult.artifact || hasErrors(renderResult.diagnostics)) {
+      if (!renderResult.artifact || (hasErrors(renderResult.diagnostics) && !options.force)) {
         return hasErrors(renderResult.diagnostics) ? 1 : 0;
       }
 
@@ -955,7 +961,7 @@ async function runShowCommand(
       }
       await writePreviewOutput(deps, previewPath, renderResult.artifact);
       announceFileWrite(deps, previewPath);
-      return 0;
+      return hasErrors(renderResult.diagnostics) ? 1 : 0;
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       deps.stderr(appendLine(appendInstallHint(message, previewCapability.backendId)));
@@ -1306,6 +1312,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--backend <backend>", "preview backend id override")
     .option("--out <file>", "write preview output; with --view all, insert each view id before the extension; omission defaults to <input>.<view>.<detail>[.decorators-<mode>][.<backend>].<format> beside the input")
     .option("--dot-out <file>", "internal/debug: also keep the intermediate DOT source for one selected view; incompatible with --view all")
+    .option("--force", "write preview output even when error-severity diagnostics are present")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",

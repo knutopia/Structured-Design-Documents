@@ -474,4 +474,27 @@ describe("preview workflow", () => {
     expect(result.artifact.bytes.length).toBeGreaterThan(32);
     expect(result.artifact.sourceArtifacts?.dot).toContain("digraph service_blueprint");
   });
+
+  it("keeps the artifact when force is set despite error-severity renderer diagnostics", async () => {
+    const bundle = await loadBundle(manifestPath);
+    const input = await loadInput("place_viewstate_transition.sdd");
+    const withoutForce = await renderSourcePreview(input, bundle, {
+      viewId: "ui_contracts",
+      format: "svg",
+      profileId: "strict",
+      detailId: "compact"
+    });
+    // This fixture renders cleanly; force must not change the artifact presence.
+    expect(withoutForce.artifact?.format).toBe("svg");
+
+    const withForce = await renderSourcePreview(input, bundle, {
+      viewId: "ui_contracts",
+      format: "svg",
+      profileId: "strict",
+      detailId: "compact",
+      force: true
+    });
+    expect(withForce.artifact?.format).toBe("svg");
+    expect(withForce.artifact?.text).toBe(withoutForce.artifact?.text);
+  });
 });

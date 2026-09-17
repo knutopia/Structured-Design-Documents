@@ -1004,6 +1004,109 @@ describe("CLI wrappers", () => {
     expect(stderr.join("")).toContain("Wrote /tmp/custom.svg");
   });
 
+  it("show --force writes output despite error-severity diagnostics and still exits 1", async () => {
+    const { deps, stderr, writeTextFileMock } = createDeps({
+      renderSourcePreview: vi.fn(async (_input, _bundle, options) => ({
+        profileId: options.profileId,
+        detailId: options.detailId,
+        view: bundle.views.views.find((candidate) => candidate.id === options.viewId)!,
+        capability: {
+          textArtifacts: [],
+          previewArtifacts: [],
+          defaultPreviewFormat: "svg" as const
+        },
+        previewCapability: {
+          format: options.format,
+          backendId: "staged_ui_contracts_preview",
+          backendClass: "staged" as const
+        },
+        artifact: { format: "svg" as const, text: "<svg>forced</svg>" },
+        notes: [],
+        diagnostics: [{
+          stage: "render",
+          code: "renderer.routing.ui_contracts_collinear_overlap",
+          severity: "error",
+          message: "Connectors overlap",
+          file: "/repo/example.sdd"
+        }]
+      }))
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "ui_contracts", "--out", "/tmp/forced.svg", "--force"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(writeTextFileMock).toHaveBeenCalledWith("/tmp/forced.svg", "<svg>forced</svg>");
+    expect(stderr.join("")).toContain("Wrote /tmp/forced.svg");
+    expect(stderr.join("")).toContain("ui_contracts_collinear_overlap");
+  });
+
+  it("show without --force still drops output when error-severity diagnostics are present", async () => {
+    const { deps, writeTextFileMock } = createDeps({
+      renderSourcePreview: vi.fn(async (_input, _bundle, options) => ({
+        profileId: options.profileId,
+        detailId: options.detailId,
+        view: bundle.views.views.find((candidate) => candidate.id === options.viewId)!,
+        capability: {
+          textArtifacts: [],
+          previewArtifacts: [],
+          defaultPreviewFormat: "svg" as const
+        },
+        previewCapability: {
+          format: options.format,
+          backendId: "staged_ui_contracts_preview",
+          backendClass: "staged" as const
+        },
+        artifact: { format: "svg" as const, text: "<svg>forced</svg>" },
+        notes: [],
+        diagnostics: [{
+          stage: "render",
+          code: "renderer.routing.ui_contracts_collinear_overlap",
+          severity: "error",
+          message: "Connectors overlap",
+          file: "/repo/example.sdd"
+        }]
+      }))
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "ui_contracts", "--out", "/tmp/forced.svg"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(writeTextFileMock).not.toHaveBeenCalled();
+  });
+
+  it("show --view all --force writes applicable views despite error diagnostics", async () => {
+    const batch = createBatchPreviewMocks({ ia_place_map: ["P-001"], journey_map: ["J-001"] }, "journey_map");
+    const render = batch.render.getMockImplementation()!;
+    batch.render.mockImplementation(async (...args) => {
+      const result = await render(...args);
+      if (args[3].view.id === "journey_map") {
+        result.artifact = { format: "svg" as const, text: "<svg>forced-journey</svg>" };
+      }
+      return result;
+    });
+    const { deps, writeTextFileMock } = createDeps({
+      prepareCompiledGraphPreview: batch.prepare,
+      renderPreparedCompiledGraphPreview: batch.render
+    });
+
+    const result = await runCli([
+      "node", "sdd", "show", "bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+      "--view", "all", "--out", "/tmp/diagram.svg", "--force"
+    ], deps);
+
+    expect(result.exitCode).toBe(1);
+    expect(writeTextFileMock.mock.calls.map((call) => call[0])).toEqual([
+      "/tmp/diagram.ia_place_map.svg",
+      "/tmp/diagram.journey_map.svg"
+    ]);
+  });
+
   it("show allows ia_place_map to opt back into the legacy preview backend", async () => {
     const { deps, stderr, renderSourcePreviewMock } = createDeps();
     const result = await runCli([

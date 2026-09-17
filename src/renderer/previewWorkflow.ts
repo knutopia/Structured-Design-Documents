@@ -36,6 +36,7 @@ export interface SourcePreviewRenderOptions {
   detailId?: string;
   nodeDecoratorModeId?: string;
   backendId?: PreviewRendererBackendId;
+  force?: boolean;
 }
 
 export interface SourcePreviewRenderResult {
@@ -56,6 +57,7 @@ export interface CompiledPreviewRenderOptions {
   detailId: string;
   nodeDecoratorModeId?: string;
   backendId?: PreviewRendererBackendId;
+  force?: boolean;
 }
 
 export interface PreparedCompiledGraphPreview {
@@ -67,6 +69,7 @@ export interface PreparedCompiledGraphPreview {
   nodeDecoratorModeId?: string;
   prepared?: PreparedProjectionForRender;
   diagnostics: Diagnostic[];
+  force?: boolean;
 }
 
 function mapRendererDiagnostic(sourcePath: string, diagnostic: RendererDiagnostic): Diagnostic {
@@ -169,7 +172,8 @@ export function prepareCompiledGraphPreview(
     previewCapability,
     nodeDecoratorModeId: options.nodeDecoratorModeId,
     prepared,
-    diagnostics: sortDiagnostics(diagnostics)
+    diagnostics: sortDiagnostics(diagnostics),
+    force: options.force
   };
 }
 
@@ -187,7 +191,8 @@ export async function renderPreparedCompiledGraphPreview(
     capability,
     previewCapability,
     prepared,
-    nodeDecoratorModeId
+    nodeDecoratorModeId,
+    force
   } = preparedResult;
   const notes = [...(prepared?.notes ?? [])];
 
@@ -259,7 +264,7 @@ export async function renderPreparedCompiledGraphPreview(
     view,
     capability,
     previewCapability,
-    artifact: hasErrors(diagnostics) ? undefined : artifact,
+    artifact: hasErrors(diagnostics) && !force ? undefined : artifact,
     notes,
     diagnostics: sortDiagnostics(diagnostics)
   };
@@ -341,11 +346,12 @@ export async function renderSourcePreview(
     profileId,
     detailId,
     nodeDecoratorModeId: options.nodeDecoratorModeId,
-    backendId: options.backendId
+    backendId: options.backendId,
+    force: options.force
   });
   return {
     ...rendered,
-    artifact: hasErrors([...diagnostics, ...rendered.diagnostics]) ? undefined : rendered.artifact,
+    artifact: hasErrors([...diagnostics, ...rendered.diagnostics]) && !options.force ? undefined : rendered.artifact,
     diagnostics: sortDiagnostics([...diagnostics, ...rendered.diagnostics])
   };
 }
