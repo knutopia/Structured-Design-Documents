@@ -27,6 +27,12 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 9-17
+
+- Abandoned ui_contracts routing fix
+- Commit chaos
+- Thinned tagline font
+
 ## Wed 9-16
 
 - Absans title font

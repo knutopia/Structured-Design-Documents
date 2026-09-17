@@ -94,6 +94,7 @@
  * Hero tagline — DECISION (plan §3.5): keep on the body font (Inter) for
  * contrast against the Absans hero title. Uncomment to switch it to Absans.
  * ------------------------------------------------------------------------- */
+
 /*
 .VPHero .tagline {
   font-family: var(--sdd-title-font);
@@ -103,3 +104,8 @@
   font-optical-sizing: none;
 }
 */
+
+/* Make Inter more palatable by going thin: */
+.VPHero .tagline {
+  font-weight: 300;
+}
