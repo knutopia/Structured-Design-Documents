@@ -14,6 +14,11 @@ const block = (type: string, id: string, name: string, body = "") => `${type} ${
 const sdd = (...blocks: string[]) => "SDD-TEXT 0.1\n" + blocks.join("");
 const stateGraph = (links: Array<[number, number]>) => sdd(block("Component", "C-100", "Controller"),
   ...[...new Set(links.flat())].map(index => block("State", `ST-${100 + index}`, `State ${index}`, `  scope_id=C-100\n` + links.filter(([from]) => from === index).map(([, to]) => `  TRANSITIONS_TO ST-${100 + to} "State ${to}" {ready_${index}_${to}}`).join("\n"))));
+// Top-level ViewState transitions (no scope_id) land in the standalone:transitions
+// scope, which is the exact shape that produced the collinear_overlap defect.
+const viewStateGraph = (links: Array<[number, number]>) => sdd(
+  ...[...new Set(links.flat())].map(index => block("ViewState", `VS-${100 + index}`, `View State ${index}`,
+    links.filter(([from]) => from === index).map(([, to]) => `  TRANSITIONS_TO VS-${100 + to} "View State ${to}"`).join("\n"))));
 function presentation(text: string, detail = "detailed", metadata = true) {
   const compiled = compileSource({ path: "/tmp/topology.sdd", text }, bundle);
   expect(compiled.diagnostics).toEqual([]);
@@ -29,6 +34,8 @@ const topologyCases: Record<string, string> = {
   cycle: stateGraph([[0, 1], [1, 2], [2, 0]]),
   self_loop: stateGraph([[0, 0]]),
   disconnected: stateGraph([[0, 1], [2, 3]]),
+  general_fanout: viewStateGraph([[0, 1], [0, 2], [0, 3]]),
+  multi_fanout_chain: viewStateGraph([[0, 1], [0, 2], [1, 3], [1, 4]]),
   three_parents_children: sdd(...[0, 1, 2].map(i => block("Component", `C-${100+i}`, `Parent ${i}`, '  CONTAINS C-110 "Focal"')),
     block("Component", "C-110", "Focal", [0,1,2].map(i => `  CONTAINS C-${120+i} "Child ${i}"`).join("\n")),
     ...[0,1,2].map(i => block("Component", `C-${120+i}`, `Child ${i}`))),

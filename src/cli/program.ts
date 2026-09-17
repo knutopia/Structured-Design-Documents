@@ -69,6 +69,7 @@ import {
   runGuidedAdditionCommand,
   type GuidedAdditionCliDeps
 } from "./guidedAddition.js";
+import { resolveLauncherCwd } from "./launcherCwd.js";
 import {
   resolveCliRenderSettings,
   resolveCliShowSettings,
@@ -235,7 +236,7 @@ function appendLine(content: string): string {
 }
 
 async function defaultReadSourceInput(filePath: string): Promise<SourceInput> {
-  const resolvedPath = path.resolve(filePath);
+  const resolvedPath = path.resolve(resolveLauncherCwd(), filePath);
   return {
     path: resolvedPath,
     text: await readFile(resolvedPath, "utf8")
@@ -243,16 +244,16 @@ async function defaultReadSourceInput(filePath: string): Promise<SourceInput> {
 }
 
 async function defaultWriteTextFile(outputPath: string, content: string): Promise<void> {
-  await writeFile(path.resolve(outputPath), content, "utf8");
+  await writeFile(path.resolve(resolveLauncherCwd(), outputPath), content, "utf8");
 }
 
 async function defaultWriteBinaryFile(outputPath: string, content: Uint8Array): Promise<void> {
-  await writeFile(path.resolve(outputPath), content);
+  await writeFile(path.resolve(resolveLauncherCwd(), outputPath), content);
 }
 
 function createDefaultDeps(): CliDeps {
   return {
-    cwd: () => process.cwd(),
+    cwd: () => resolveLauncherCwd(),
     loadBundle,
     readSourceInput: defaultReadSourceInput,
     findAuthoringRepoRoot,
