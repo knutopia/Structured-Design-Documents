@@ -19,6 +19,22 @@ import {
 import { solveRoutingClaims } from "./solver.js";
 import { reconstructRouteFromAssignments } from "./reconstruction.js";
 
+/**
+ * Search-state budget for the shared occupancy solver.
+ *
+ * Every staged renderer that routes through `runRoutingLifecycle` funnels into
+ * `resolvePhysicalSegmentOccupancy`, so this is the single place that bounds their track
+ * assignment search. Without an explicit budget these renderers inherited the solver's
+ * large default and a single dense claim component could search for minutes, which
+ * surfaced as `sdd show --view all` hanging on `scenario_flow`.
+ *
+ * The value matches the precedent already established by the journey map shared solver
+ * (`JOURNEY_MAP_SHARED_SOLVER_SEARCH_STATES`). The budget is a wall-clock guard rather than
+ * a quality target: the solver seeds a greedy incumbent and keeps the best assignment found
+ * when the budget runs out, so a bounded search still resolves.
+ */
+export const OCCUPANCY_SOLVER_SEARCH_STATES = 250;
+
 export interface PhysicalSegmentOccupancy {
   connectorId: string;
   segmentKey: string;
@@ -200,7 +216,9 @@ export function resolvePhysicalSegmentOccupancy(
   const result = solveRoutingClaims(aggregated.claims, {
     policy,
     resources,
-    priorViolations: aggregated.violations
+    priorViolations: aggregated.violations,
+    maxSearchStates: OCCUPANCY_SOLVER_SEARCH_STATES,
+    searchOrder: "most_constrained"
   });
   const coordinateBySegmentKey = new Map<string, number>();
   const displacementBySegmentKey = new Map<string, number>();

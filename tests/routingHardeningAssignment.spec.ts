@@ -86,5 +86,33 @@ describe("routing hardening: supplied assignment contract", () => {
     expect(result.assignments.size).toBe(0);
     expect(result.violations[0]?.message).toContain("0-state bound");
   });
+  it("resolves a dense movable claim set through the occupancy path without running away", () => {
+    // Regression guard for the `sdd show --view all` hang. Every staged renderer that routes
+    // through `runRoutingLifecycle` funnels into this occupancy path, which used to inherit the
+    // solver's 100_000-state default. A dense set of competing movable runs made one claim
+    // component enumerate thousands of track candidates and search for minutes. The path must
+    // now stay bounded and still resolve to a separated assignment.
+    const entries = Array.from({ length: 28 }, (_, index) => ({
+      connectorId: `dense-${String(index).padStart(2, "0")}`,
+      segmentKey: `dense-${String(index).padStart(2, "0")}:0`,
+      logicalRunId: "horizontal-internal-0",
+      axis: "horizontal" as const,
+      nominalCoordinate: index % 4,
+      spanStart: 0,
+      spanEnd: 100,
+      movable: true,
+      priority: index,
+      allowedRange: { min: -256, max: 256 }
+    }));
+    const started = Date.now();
+    const result = resolvePhysicalSegmentOccupancy(entries);
+    expect(Date.now() - started).toBeLessThan(5_000);
+    expect(result.status).toBe("resolved");
+    expect(result.coordinateBySegmentKey.size).toBe(entries.length);
+    const coordinates = [...result.coordinateBySegmentKey.values()].sort((left, right) => left - right);
+    for (let index = 1; index < coordinates.length; index += 1) {
+      expect(coordinates[index]! - coordinates[index - 1]!).toBeGreaterThanOrEqual(15.5);
+    }
+  });
 
 });
