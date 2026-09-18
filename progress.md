@@ -2,7 +2,6 @@
 
 ## Open Issues
 
--Remove $PWD syntax from docs
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -28,6 +27,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Fri 9-18
+
+- Routing triage assessment
+
 ## Thu 9-17
 
 - Abandoned ui_contracts routing fix
@@ -40,6 +43,7 @@ z
 - Linter fixes in a random test file
 - Label placement for ui_contracts failed
 - SDD app details added
+- Addressed shared candidate explosion
 
 ## Wed 9-16
 
