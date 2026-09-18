@@ -799,6 +799,7 @@ async function runShowAllCommand(
         entry.prepared
       );
       renderedEntries.push({ candidate: entry.candidate, outputPath: entry.outputPath, result });
+      deps.stderr(appendLine(`Rendered view '${entry.candidate.view.id}'`));
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       deps.stderr(appendLine(appendInstallHint(message, entry.candidate.previewCapability.backendId)));
@@ -832,6 +833,7 @@ async function runShowAllCommand(
   const skippedSuffix = skipped.length > 0
     ? ` Skipped ${skipped.length} without visible content: ${formatList(skipped.map(({ candidate }) => candidate.view.id))}.`
     : "";
+  deps.stderr(appendLine(``));
   deps.stderr(appendLine(`Generated ${generatedFiles.length} diagram(s). Failed ${failedRenderers.length} renderer(s).${skippedSuffix}`));
   if (generatedFiles.length > 0) {
     deps.stderr(appendLine(`Path: ${path.dirname(resolveLauncherPath(generatedFiles[0].outputPath))}`));
