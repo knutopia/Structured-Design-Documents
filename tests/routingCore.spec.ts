@@ -302,7 +302,9 @@ describe("shared routing track solver", () => {
     // Regression guard for the `sdd show --view all` hang: a single connected component of
     // many overlapping movable runs used to enumerate thousands of track candidates per
     // claim, so each branch-and-bound state cost milliseconds and one component consumed the
-    // entire search budget. The component must now resolve quickly and deterministically.
+    // entire search budget. This component exhausts whatever budget it is given rather than
+    // pruning early, so it resolves deterministically only because the default budget is
+    // bounded. The budget itself is asserted in "keeps the solver search budget bounded".
     const segments = Array.from({ length: 28 }, (_, index) =>
       oneSegment(`dense-${String(index).padStart(2, "0")}`, index % 4, { priority: index })
     );
@@ -312,9 +314,7 @@ describe("shared routing track solver", () => {
     }));
 
     const solve = (ordered: readonly RoutingSegment[]): string => {
-      const started = Date.now();
       const result = solveRoutingClaims(claimsFor(ordered, observations));
-      expect(Date.now() - started).toBeLessThan(5_000);
       expect(result.status).toBe("resolved");
       if (result.status !== "resolved") {
         return "";
@@ -355,9 +355,13 @@ describe("shared routing track solver", () => {
     }
   });
 
-  it("exposes a bounded solver search default", () => {
+  it("keeps the solver search budget bounded", () => {
+    // Deterministic guard for the `sdd show --view all` hang. The dense component above
+    // exhausts whatever budget it is given rather than pruning early, so the budget is what
+    // keeps the search finite. Asserting the constant catches a raised or removed budget
+    // without depending on wall-clock timing, which would flake under CI load.
     expect(DEFAULT_SOLVER_SEARCH_STATES).toBeGreaterThan(0);
-    expect(DEFAULT_SOLVER_SEARCH_STATES).toBeLessThan(100_000);
+    expect(DEFAULT_SOLVER_SEARCH_STATES).toBeLessThanOrEqual(2_000);
   });
 
   it("reconstructs adjacent bends from segment assignments", () => {

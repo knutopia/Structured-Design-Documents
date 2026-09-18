@@ -5,6 +5,9 @@ Three items, in the order they should be worked.
 Companion document: `routing_fragility_assessment.md` (the broader assessment this
 triage came out of).
 
+**Status: Items 1 and 2 IMPLEMENTED (2026-09-18). Item 3 deferred to a later session.**
+See "Implementation record" at the end of this document.
+
 ---
 
 ## Item 1 — Timeout-based testing (must resolve; options explained)
@@ -206,3 +209,73 @@ This fix also unhangs `tests/routingHardeningScenario.spec.ts`, which previously
 produced zero results in 30 minutes. That file now completes and reports the
 pre-existing `scenario_flow` routing defect on `sdd_for_sdd.sdd` that the hang had been
 masking. That geometry defect is separate and unaddressed — it is what Item 3 targets.
+
+---
+
+## Implementation record (2026-09-18)
+
+### Item 1 — done (Option A)
+
+Wall-clock assertions removed from both tests; replaced with deterministic constant
+assertions.
+
+- `tests/routingCore.spec.ts`: `Date.now()` check dropped from the dense-component test.
+  The former `exposes a bounded solver search default` test became
+  `keeps the solver search budget bounded`, asserting
+  `DEFAULT_SOLVER_SEARCH_STATES <= 2_000` (was `< 100_000`).
+- `tests/routingHardeningAssignment.spec.ts`: `Date.now()` check dropped; new test
+  `keeps the occupancy solver search budget bounded` asserts
+  `OCCUPANCY_SOLVER_SEARCH_STATES <= 250`.
+
+Correctness assertions retained in both dense-component tests (`status === "resolved"`,
+pairwise separation, determinism under input reversal). Option B (exposing `visited`)
+was rejected as an unnecessary public-contract change.
+
+### Item 2 — done
+
+**Fixture frozen:** `tests/fixtures/render/sdd_for_sdd_frozen.sdd`, a byte-identical copy
+of the live document taken 2026-09-18
+(sha256 `c43579920b85102b129067b88a022ec27397b829a1b59999acf2763590c242d8`).
+
+**Five test files repointed** to the fixture:
+
+| File | Change |
+| --- | --- |
+| `tests/routingHardeningScenario.spec.ts` | `exact` → fixture path |
+| `tests/routingHardeningOutcome.spec.ts` | `exact` → fixture path |
+| `tests/routingHardeningService.spec.ts` | `exact` → fixture path |
+| `tests/stagedSpacingRegression.spec.ts` | `readFile(repoRoot + fixture)` |
+| `tests/stagedServiceBlueprint.spec.ts` | `loadDocumentationInput` replaced by `loadFixtureInput` (anchors to `tests/fixtures/render`) |
+
+The `loadDocumentationInput` helper was removed rather than left unused. This also
+eliminates the bare-relative-path defect noted above: all five now anchor to `repoRoot`.
+
+**Plan amended:** `routing_hardening_implementation_plan.md` §8.1 "Exact production
+input" now names the frozen fixture, with an amendment note recording the authority
+resolution and the fixture hash. §8.2 verification commands repointed to the fixture.
+§3.1 left as a historical record of the original defect report.
+
+**Informational live-document check: NOT added**, per maintainer decision — the live
+document will change and its containing folder will disappear, so nothing may reference
+it. Verified: zero references to `docs/sdd_app_planning/sdd_for_sdd.sdd` remain in
+`tests/`.
+
+### Verification
+
+- `pnpm run build`: passes.
+- All 33 hardening-gate test names now reference the frozen fixture; zero live-document
+  references.
+- `routingHardeningService.spec.ts`: **19/19 pass** (was 1 failing on the clean tree).
+- `routingHardeningOutcome.spec.ts`: 1 failing (`detailed / type,id`) — same test failed
+  on the clean baseline.
+- `routingHardeningScenario.spec.ts`: 8 failing on the frozen fixture — the
+  `scenario_flow` geometry defect. On the clean tree this file **hung** and produced zero
+  results, so these were masked, not absent.
+- `stagedSpacingRegression.spec.ts`: 2 failing with `Test timed out in 5000ms` —
+  identical reason on the clean baseline.
+
+### Remaining red is the Item 3 target
+
+The 8 `routingHardeningScenario` failures and the 2 `stagedSpacingRegression` timeouts
+are the `scenario_flow` routing/geometry defect on this document, now hermetically
+reproducible from the frozen fixture. They are not caused by Items 1 or 2.

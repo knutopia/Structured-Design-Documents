@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   aggregateRoutingObservations, buildRoutingSegments, buildRoutingRunDependencies, solveRoutingClaims,
   resolveRouteSegmentOccupancy, resolvePhysicalSegmentOccupancy,
+  OCCUPANCY_SOLVER_SEARCH_STATES,
   type RoutingObservation, type RoutingSegment
 } from "../src/renderer/staged/routingCore/index.js";
 
@@ -90,8 +91,10 @@ describe("routing hardening: supplied assignment contract", () => {
     // Regression guard for the `sdd show --view all` hang. Every staged renderer that routes
     // through `runRoutingLifecycle` funnels into this occupancy path, which used to inherit the
     // solver's 100_000-state default. A dense set of competing movable runs made one claim
-    // component enumerate thousands of track candidates and search for minutes. The path must
-    // now stay bounded and still resolve to a separated assignment.
+    // component enumerate thousands of track candidates and search for minutes. This component
+    // exhausts whatever budget it is given rather than pruning early, so it resolves only
+    // because the occupancy budget is bounded. The budget itself is asserted in "keeps the
+    // occupancy solver search budget bounded".
     const entries = Array.from({ length: 28 }, (_, index) => ({
       connectorId: `dense-${String(index).padStart(2, "0")}`,
       segmentKey: `dense-${String(index).padStart(2, "0")}:0`,
@@ -104,15 +107,23 @@ describe("routing hardening: supplied assignment contract", () => {
       priority: index,
       allowedRange: { min: -256, max: 256 }
     }));
-    const started = Date.now();
     const result = resolvePhysicalSegmentOccupancy(entries);
-    expect(Date.now() - started).toBeLessThan(5_000);
     expect(result.status).toBe("resolved");
     expect(result.coordinateBySegmentKey.size).toBe(entries.length);
     const coordinates = [...result.coordinateBySegmentKey.values()].sort((left, right) => left - right);
     for (let index = 1; index < coordinates.length; index += 1) {
       expect(coordinates[index]! - coordinates[index - 1]!).toBeGreaterThanOrEqual(15.5);
     }
+  });
+  it("keeps the occupancy solver search budget bounded", () => {
+    // Deterministic guard for the `sdd show --view all` hang. Every staged renderer that routes
+    // through `runRoutingLifecycle` funnels into `resolvePhysicalSegmentOccupancy`, which
+    // previously inherited the solver's 100_000-state default. The dense component above
+    // exhausts whatever budget it is given rather than pruning early, so the budget is what
+    // keeps the search finite. Asserting the constant catches a raised or removed budget
+    // without depending on wall-clock timing, which would flake under CI load.
+    expect(OCCUPANCY_SOLVER_SEARCH_STATES).toBeGreaterThan(0);
+    expect(OCCUPANCY_SOLVER_SEARCH_STATES).toBeLessThanOrEqual(250);
   });
 
 });

@@ -18,7 +18,8 @@ let journeySource: string;
 beforeAll(async () => {
   [bundle, scenarioSource, blueprintSource, journeySource] = await Promise.all([
     loadBundle(path.join(repoRoot, "bundle/v0.1/manifest.yaml")),
-    readFile(path.join(repoRoot, "docs/sdd_app_planning/sdd_for_sdd.sdd"), "utf8"),
+    // Frozen copy of the production SDD-app document; the live one is work-in-progress.
+    readFile(path.join(repoRoot, "tests/fixtures/render/sdd_for_sdd_frozen.sdd"), "utf8"),
     readFile(path.join(repoRoot, "bundle/v0.1/examples/service_blueprint_slice.sdd"), "utf8"),
     readFile(path.join(repoRoot, "bundle/v0.1/examples/three_branch_journey.sdd"), "utf8")
   ]);
