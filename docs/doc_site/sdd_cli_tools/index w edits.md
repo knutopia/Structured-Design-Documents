@@ -246,7 +246,7 @@ pnpm sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.js
 
 - Use `pnpm sdd --help` for SDD help. 
 - Use `pnpm sdd help <command>` for command-specific details.
-- Since the sdd command looks for files in the project root directory, file paths have to be specified, as seen in the examples above. When using the SDD command from within another directory, use `$PWD` to point the command at the current directory without typing the path: `pnpm sdd show $PWD/input.sdd --view service_blueprint --out $PWD/output.svg`
+- The sdd command looks for files in the current directory.
 - When there are temp-directory permission problems in a WSL setup, rerun commands with `TMPDIR=/tmp`.
 
 ## Contract And Behavior Sources

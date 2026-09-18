@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-Remove $PWD syntax from docs
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -33,6 +34,12 @@ z
 - Commit chaos
 - Thinned tagline font
 - Added --force option to sdd show to output renders with errors 
+- Changed SDD CLI behavior to recognize current-folder files
+- Attempted ui_contracts routing fix again
+- CLI behavior to output files in current folder
+- Linter fixes in a random test file
+- Label placement for ui_contracts failed
+- SDD app details added
 
 ## Wed 9-16
 

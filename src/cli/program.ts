@@ -69,6 +69,7 @@ import {
   runGuidedAdditionCommand,
   type GuidedAdditionCliDeps
 } from "./guidedAddition.js";
+import { resolveLauncherCwd, resolveLauncherPath } from "./launcherCwd.js";
 import {
   resolveCliRenderSettings,
   resolveCliShowSettings,
@@ -235,7 +236,7 @@ function appendLine(content: string): string {
 }
 
 async function defaultReadSourceInput(filePath: string): Promise<SourceInput> {
-  const resolvedPath = path.resolve(filePath);
+  const resolvedPath = resolveLauncherPath(filePath);
   return {
     path: resolvedPath,
     text: await readFile(resolvedPath, "utf8")
@@ -243,16 +244,16 @@ async function defaultReadSourceInput(filePath: string): Promise<SourceInput> {
 }
 
 async function defaultWriteTextFile(outputPath: string, content: string): Promise<void> {
-  await writeFile(path.resolve(outputPath), content, "utf8");
+  await writeFile(resolveLauncherPath(outputPath), content, "utf8");
 }
 
 async function defaultWriteBinaryFile(outputPath: string, content: Uint8Array): Promise<void> {
-  await writeFile(path.resolve(outputPath), content);
+  await writeFile(resolveLauncherPath(outputPath), content);
 }
 
 function createDefaultDeps(): CliDeps {
   return {
-    cwd: () => process.cwd(),
+    cwd: () => resolveLauncherCwd(),
     loadBundle,
     readSourceInput: defaultReadSourceInput,
     findAuthoringRepoRoot,
@@ -327,13 +328,13 @@ async function writeTextOutput(
     return;
   }
 
-  const resolvedPath = path.resolve(outputPath);
+  const resolvedPath = resolveLauncherPath(outputPath);
   await deps.writeTextFile(resolvedPath, content);
   deps.stderr(appendLine(`Wrote ${resolvedPath}`));
 }
 
 function announceFileWrite(io: Pick<CliDeps, "stderr">, outputPath: string): void {
-  io.stderr(appendLine(`Wrote ${path.resolve(outputPath)}`));
+  io.stderr(appendLine(`Wrote ${resolveLauncherPath(outputPath)}`));
 }
 
 function appendInstallHint(message: string, backendId: PreviewRendererBackendId): string {
@@ -570,11 +571,11 @@ async function writePreviewOutput(
   artifact: PreviewArtifactResult
 ): Promise<void> {
   if (artifact.format === "svg") {
-    await deps.writeTextFile(path.resolve(outputPath), artifact.text);
+    await deps.writeTextFile(resolveLauncherPath(outputPath), artifact.text);
     return;
   }
 
-  await deps.writeBinaryFile(path.resolve(outputPath), artifact.bytes);
+  await deps.writeBinaryFile(resolveLauncherPath(outputPath), artifact.bytes);
 }
 
 async function runDotCommand(
@@ -768,7 +769,7 @@ async function runShowAllCommand(
     candidate,
     prepared,
     outputPath: options.out
-      ? buildExplicitBatchPreviewOutputPath(options.out, candidate.view.id)
+      ? buildExplicitBatchPreviewOutputPath(resolveLauncherPath(options.out), candidate.view.id)
       : buildShowPreviewOutputPath(input.path, {
         viewId: candidate.view.id,
         detailId: options.detailId,
@@ -777,7 +778,7 @@ async function runShowAllCommand(
         backendId: options.backendId ? candidate.previewCapability.backendId : undefined
       })
   }));
-  const outputPaths = outputEntries.map(({ outputPath }) => path.resolve(outputPath));
+  const outputPaths = outputEntries.map(({ outputPath }) => resolveLauncherPath(outputPath));
   if (new Set(outputPaths).size !== outputPaths.length) {
     deps.stderr(appendLine("Batch preview output paths collide after view modifiers are applied."));
     return 2;
@@ -833,7 +834,7 @@ async function runShowAllCommand(
     : "";
   deps.stderr(appendLine(`Generated ${generatedFiles.length} diagram(s). Failed ${failedRenderers.length} renderer(s).${skippedSuffix}`));
   if (generatedFiles.length > 0) {
-    deps.stderr(appendLine(`Path: ${path.dirname(path.resolve(generatedFiles[0].outputPath))}`));
+    deps.stderr(appendLine(`Path: ${path.dirname(resolveLauncherPath(generatedFiles[0].outputPath))}`));
   }
   for (const { outputPath, postfix } of generatedFiles) {
     deps.stderr(appendLine(`${path.basename(outputPath)}${postfix}`));
@@ -955,7 +956,7 @@ async function runShowCommand(
           deps.stderr(appendLine(`Preview backend '${previewCapability.backendId}' does not expose a DOT intermediate for '--dot-out'.`));
           return 2;
         }
-        const resolvedDotPath = path.resolve(options.dotOut);
+        const resolvedDotPath = resolveLauncherPath(options.dotOut);
         await deps.writeTextFile(resolvedDotPath, dotSource);
         announceFileWrite(deps, resolvedDotPath);
       }

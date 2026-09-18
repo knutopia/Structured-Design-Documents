@@ -1,6 +1,6 @@
 import type { UiContractsHierarchy, UiContractsLocalGroup, UiContractsOccurrence, UiContractsPresentationModel, UiContractsScope, UiContractsSequence, UiContractsVisualEdge } from "../uiContractsPresentationModel.js";
-import type { NodeDecoratorMode, RendererScene, SceneContainer, SceneEdge, SceneItem, SceneNode } from "./contracts.js";
-import { buildCardinalPorts, buildSharedNode } from "./sceneBuilders.js";
+import type { NodeDecoratorMode, PortSpec, RendererScene, SceneContainer, SceneEdge, SceneItem, SceneNode } from "./contracts.js";
+import { buildCardinalPorts, buildPortSpec, buildSharedNode } from "./sceneBuilders.js";
 import { createEdgeLabelMeasurementService } from "./microLayout.js";
 import { measureScene } from "./pipeline.js";
 import { DEFAULT_ROUTING_POLICY } from "./routingCore/contracts.js";
@@ -124,12 +124,70 @@ export class UiContractsSceneBuilder {
     return buildUiContractsTransitionRegion(this, sequence) ?? this.layeredSequence(sequence);
   }
   layeredSequence(sequence: UiContractsSequence): SceneContainer {
-    const nodes = sequence.nodes.map(node => this.node(node)), edges = sequence.edges.map(edge => this.edge(edge));
+    const nodes = sequence.nodes.map(node => this.node(node));
     const sizes = new Map(this.measure(nodes).map(node => [node.id, node]));
     const alignedOffset = Math.min(...[...sizes.values()].map(node => node.height)) / 2;
-    if (new Set([...sizes.values()].map(node => node.height)).size > 1) {
-      for (const node of nodes) for (const port of node.ports) if (port.side === "east" || port.side === "west") port.offset = alignedOffset;
+    const separation = DEFAULT_ROUTING_POLICY.minSeparation;
+    const heightsDiffer = new Set([...sizes.values()].map(node => node.height)).size > 1;
+
+    // Bucket edges by source (outgoing/east) and target (incoming/west).
+    const nodeIndex = new Map(sequence.nodes.map((node, index) => [node.id, index]));
+    const outgoingByNode = new Map<string, UiContractsVisualEdge[]>();
+    const incomingByNode = new Map<string, UiContractsVisualEdge[]>();
+    for (const edge of sequence.edges) {
+      const outgoing = outgoingByNode.get(edge.from) ?? [];
+      outgoing.push(edge);
+      outgoingByNode.set(edge.from, outgoing);
+      const incoming = incomingByNode.get(edge.to) ?? [];
+      incoming.push(edge);
+      incomingByNode.set(edge.to, incoming);
     }
+
+    // Order outgoing edges by target source order (proxy for target Y within a rank),
+    // so the lowest target receives the lowest start point and crossings are avoided.
+    const orderByTarget = (edges: UiContractsVisualEdge[]): UiContractsVisualEdge[] =>
+      [...edges].sort((a, b) => (nodeIndex.get(a.to) ?? 0) - (nodeIndex.get(b.to) ?? 0));
+
+    // Assign distinct ports per node side, centered on the aligned offset. The default
+    // "east"/"west" ports are always retained (return-edge routing and single-connector
+    // forward edges rely on them); multi-connector forward edges get additional ports.
+    const portByEdge = new Map<string, { fromPort: string; toPort: string }>();
+    for (const node of nodes) {
+      const outgoing = orderByTarget(outgoingByNode.get(node.id) ?? []);
+      const incoming = incomingByNode.get(node.id) ?? [];
+      const northSouth = node.ports.filter(port => port.side === "north" || port.side === "south");
+      const defaultOffset = heightsDiffer ? { offset: alignedOffset } : {};
+      const eastPorts: PortSpec[] = [
+        buildPortSpec("east", "east", "east", defaultOffset),
+        ...(outgoing.length > 1
+          ? outgoing.map((_, index) => buildPortSpec(`${node.id}:east:${index}`, "east", "east", {
+            offset: alignedOffset + (index - (outgoing.length - 1) / 2) * separation
+          }))
+          : [])
+      ];
+      const westPorts: PortSpec[] = [
+        buildPortSpec("west", "west", "west", defaultOffset),
+        ...(incoming.length > 1
+          ? incoming.map((_, index) => buildPortSpec(`${node.id}:west:${index}`, "west", "west", {
+            offset: alignedOffset + (index - (incoming.length - 1) / 2) * separation
+          }))
+          : [])
+      ];
+      node.ports = [...northSouth, ...eastPorts, ...westPorts];
+      outgoing.forEach((edge, index) => {
+        const existing = portByEdge.get(edge.id) ?? { fromPort: "east", toPort: "west" };
+        portByEdge.set(edge.id, { ...existing, fromPort: outgoing.length > 1 ? `${node.id}:east:${index}` : "east" });
+      });
+      incoming.forEach((edge, index) => {
+        const existing = portByEdge.get(edge.id) ?? { fromPort: "east", toPort: "west" };
+        portByEdge.set(edge.id, { ...existing, toPort: incoming.length > 1 ? `${node.id}:west:${index}` : "west" });
+      });
+    }
+
+    const edges = sequence.edges.map(edge => {
+      const ports = portByEdge.get(edge.id) ?? { fromPort: "east", toPort: "west" };
+      return this.edge(edge, ports.fromPort, ports.toPort);
+    });
     const outsets = edges.map(edge => edge.label ? this.labelMeasure(edge.label, edge.id).height + DEFAULT_ROUTING_POLICY.minTerminalLeg
       - alignedOffset : 0);
     const group = uiContractsStack(sequence.id, nodes, "horizontal", UI_CONTRACTS_SPACING.layerGap);

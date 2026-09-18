@@ -11,6 +11,7 @@ import {
   repairPositionedSceneRoutesAroundNodes,
   validatePositionedSceneRouting
 } from "./routingCore/index.js";
+import { routeUiContractsScene } from "./uiContractsRouting.js";
 
 export interface StagedRendererPipelineResult {
   rendererScene: RendererScene;
@@ -38,6 +39,12 @@ export async function runStagedRendererPipeline(scene: RendererScene): Promise<S
       const originalRouteByEdgeId = new Map(
         positionedScene.edges.map((edge) => [edge.id, edge.route] as const)
       );
+      // First separate collinear segments via the shared lifecycle, then route
+      // around intermediate nodes via the candidate-based repair. The lifecycle
+      // alone does not avoid node boxes; the repair alone greedily picks the
+      // first candidate (routing connectors the wrong way around). Together they
+      // cover both concerns.
+      positionedScene = routeUiContractsScene(positionedScene);
       positionedScene = repairPositionedSceneRoutesAroundNodes(positionedScene);
       positionedScene = {
         ...positionedScene,

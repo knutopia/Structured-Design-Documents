@@ -1,0 +1,381 @@
+SDD-TEXT 0.1
+
+# SDD for SDD
+# Structural Design Document for the Structural Design Documents application
+# covering editing, viewing, comparing SDDs
+# and working with SDDs in the context of the product structure and product variants
+# by linking external content and tracking comments in some form (tbd)
+
+Outcome O-010 "Access to Structural Design Artifacts"
+  owner=Product
+  description="Having structural design artifacts readily available to reference in prototyping and implementation"
+END
+
+Outcome O-020 "Well-aligned Product Structure"
+  owner=Product
+  description="Rich, consistent, well-rationalized product structure to drive ease of use, engineering efficency, and product value"
+END
+
+Opportunity OP-010 "Low-Friction SDD authoring"
+  owner=Design
+  description="Guided, graphical SDD authoring"
+  SUPPORTS O-010 "Access to Structural Design Artifacts"
+END
+
+Opportunity OP-020 "Low-Friction SDD consumption"
+  owner=Design
+  description="Exploring, comparing, annotating SDD diagrams and their relationships"
+  SUPPORTS O-010 "Access to Structural Design Artifacts"
+END
+
+Initiative I-010 "Basic Layout Structure"
+  owner=Product
+  description="Source- , diagram-, inspector pane"
+  ADDRESSES OP-010 "Low-Friction SDD authoring"
+  IMPLEMENTED_BY P-010 "SDD Viewer/Editor"
+END
+
+Initiative I-011 "Simple Authoring"
+  owner=Product
+  description="Dynamic, responsive, guided add-node, add-edge"
+  ADDRESSES OP-010 "Low-Friction SDD authoring"
+  IMPLEMENTED_BY C-010 "Source Editor"
+  IMPLEMENTED_BY C-020 "Graphical Editor"
+  IMPLEMENTED_BY VS-010 "Add Relationship Method Choice"
+END
+
+Initiative I-012 "SDD Editing"
+  owner=Product
+  description="Node properties, source order"
+  ADDRESSES OP-010 "Low-Friction SDD authoring"
+  IMPLEMENTED_BY C-010 "Source Editor"
+  IMPLEMENTED_BY C-020 "Graphical Editor"
+  IMPLEMENTED_BY VS-010 "Add Relationship Method Choice"
+  IMPLEMENTED_BY P-010 "SDD Viewer/Editor"
+END
+
+Initiative I-020 "Diagram Navigation"
+  owner=Product
+  description="Pan & zoom, node-pivot, view management"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY C-022 "Node Action Menu"
+  IMPLEMENTED_BY C-070 "View Selector"
+  IMPLEMENTED_BY P-010 "SDD Viewer/Editor"
+END
+
+Initiative I-021 "Diagram Comparison"
+  owner=Product
+  description="Overlay, side-by-side, diff"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY C-072 "View Mode Selector"
+END
+
+Initiative I-022 "Annotation and Linking"
+  owner=Product
+  description="Add annotations and links, SDD diagrams, states, roll-ups"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY C-022 "Node Action Menu"
+  IMPLEMENTED_BY P-016 "Inspector Pane"
+  IMPLEMENTED_BY P-050 "Comments"
+  IMPLEMENTED_BY P-060 "External Links"
+END
+
+Initiative I-030 "Infrastructure"
+  owner=Product
+  description="Database-File mapping, concurrent editing, rendering, MCP readyness"
+  ADDRESSES OP-010 "Low-Friction SDD authoring"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  # IMPLEMENTED_BY P-0 ""
+END
+
+Opportunity OP-030 "Reusable, Repeatable Structural Elements for Authoring"
+  owner=Design
+  description="Capture and reuse dynamic, repeatable structures for SDD authoring"
+  SUPPORTS O-020 "Well-aligned Product Structure"
+END
+
+Initiative I-040 "Templates and Patterns"
+  owner=Product
+  description="Templates and patterns for common structures"
+  ADDRESSES OP-010 "Low-Friction SDD authoring"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  ADDRESSES OP-030 "Reusable, Repeatable Structural Elements for Authoring"
+  IMPLEMENTED_BY P-010 "SDD Viewer/Editor" 
+  IMPLEMENTED_BY P-030 "Template Browser"
+  IMPLEMENTED_BY P-040 "Prompt Browser"
+END
+
+# Journey Placeholders: (we are missing multiple-journey markup)
+
+Stage G-010 "Maintain Product Map"
+  description="Maintain a map of the existing product"
+  # Placeholder for a Journey title
+END
+
+Stage G-020 "Consolidating Product Variants"
+  description="Comparing and Consolidating Product Variants"
+  # Placeholder for a Journey title
+END
+
+Stage G-030 "Contextualizing New Designs"
+  description="Placing New Designs in Product Context"
+  # Placeholder for a Journey title
+END
+
+Stage G-040 "Connecting Strategy to Structure"
+  description="Connecting Product Strategy to Product Structure"
+  # Placeholder for a Journey title
+END
+
+Stage G-050 "Providing Design Guidance"
+  description="# Aligning New Designs with Existing UI Components"
+  # Placeholder for a Journey title
+END
+
+Stage G-060 "Providing Front-End Implementation Guidance"
+  description="Guiding Front-End Implementation with Structural References"
+  # Placeholder for a Journey title
+END
+
+Stage G-070 "Providing Prototype Guidance"
+  description="Guiding Vibe-Coded Prototypes with Existing UX Structure"
+  # Placeholder for a Journey title
+END
+
+Stage G-080 "Product Issue Triage"
+  description="Locating and Triaging Issues in Product Context"
+  # Placeholder for a Journey title
+END
+
+# Scenario Flows: (we are missing multiple-flow markup)
+
+Step J-010 "Select a Node"
+  description="Select a Node in Source viewer or in Diagram viewer"
+  PRECEDES J-020 "Review Diagrams Containing Current Node"
+  PRECEDES J-040 "Add Relationship"
+END
+
+Step J-020 "Review Diagrams Containing Current Node"
+  description="See the set of diagrams in which the current node appears"
+  PRECEDES J-021 "Select Diagram"
+  REALIZED_BY VS-050 "Browse Diagrams Containing Current Node"
+END
+
+Step J-040 "Add Relationship"
+  description="Add a relationship to an existing node"
+  PRECEDES J-041 "Add relationship, by node"
+  PRECEDES J-042 "Add outgoing relationship"
+  PRECEDES J-043 "Add incoming relationship"
+  REALIZED_BY VS-010 "Add Relationship Method Choice"
+END
+
+Step J-041 "Add relationship, by node"
+  description="Add relationship, by choosing another node first (incoming or outgoing)"
+  REALIZED_BY VS-020 "Add Relationship by Node"
+END
+
+Step J-042 "Add outgoing relationship"
+  description="Add outgoing relationship, by choosing the relationship type or a node first"
+  REALIZED_BY VS-030 "Add Outgoing Relationship"
+END
+
+Step J-043 "Add incoming relationship"
+  description="Add incoming relationship, by choosing the relationship type or a node first"
+  REALIZED_BY VS-040 "Add Incoming Relationship"
+END
+
+Step J-021 "Select Diagram"
+  description="Choose a diagram in which the node is used"
+  PRECEDES J-022 "View Node in New Diagram Context"
+END
+
+Step J-022 "View Node in New Diagram Context"
+  description="View the chosen diagram using the current node"
+  REALIZED_BY VS-006 "Diagram Browsing, Single Node Selected"
+END
+
+Step J-030 "Select Diagram Content"
+  description="Select a node or multiple nodes in a diagram"
+  PRECEDES J-031 "Adjust View"
+  # PRECEDES J-032 "Name the New View" ...this crashes scenario_flow renderer
+END
+
+Step J-031 "Adjust View"
+  description="Make the view just right"
+  opportunity_refs="OP-020"
+  PRECEDES J-032 "Name the New View"
+END
+
+Step J-032 "Name the New View"
+  description="Enter a name for the new view"
+END
+
+# Areas, Places (IA)
+
+Area A-010 "Core"
+  description="Editor / Viewer providing core SDD authoring and consumption capabilities"
+  CONTAINS P-010 "SDD Viewer/Editor"
+  CONTAINS P-012 "Source Pane"
+  CONTAINS P-014 "Diagram Pane"
+  CONTAINS P-016 "Inspector Pane"
+
+  + Place P-010 "SDD Viewer/Editor"
+      description="Work with SDD content in source and diagram form"
+      CONTAINS P-012 "Source Pane"
+      CONTAINS P-014 "Diagram Pane"
+      CONTAINS P-016 "Inspector Pane"
+    END
+
+  + Place P-012 "Source Pane"
+      description="Source code view"
+      COMPOSED_OF C-010 "Source Editor"
+    END
+
+  + Place P-014 "Diagram Pane"
+      description="Graphical diagram view"
+      COMPOSED_OF C-020 "Graphical Editor"
+      COMPOSED_OF C-070 "View Selector"
+      CONTAINS VS-004 "Diagram Browsing, No Selection"
+      CONTAINS VS-006 "Diagram Browsing, Single Node Selected"
+
+      + ViewState VS-004 "Diagram Browsing, No Selection"
+        description="Diagram browsing while nothing is selected"
+        TRANSITIONS_TO VS-006 "Diagram Browsing, Single Node Selected" ["Select Node"]
+      END
+
+      + ViewState VS-006 "Diagram Browsing, Single Node Selected"
+        description="Browsing a diagram while a single node is selected, enabling single select actions"
+        TRANSITIONS_TO VS-010 "Add Relationship Method Choice" ["Select: Add Relationship"]
+        TRANSITIONS_TO VS-004 "Diagram Browsing, No Selection" ["Cancel Selection"]
+        TRANSITIONS_TO VS-050 "Browse Diagrams Containing Current Node" ["Select: Diagrams Containing This Node"]
+      END
+  END
+
+  + Place P-016 "Inspector Pane"
+      description="Context-driven properties view"
+      COMPOSED_OF C-050 "Node Properties Inspector"
+      COMPOSED_OF C-060 "Edge Properties Inspector"
+    END
+
+END
+
+Area A-020 "Browser"
+  description="Accessing projects, templates, re-usable content"
+  CONTAINS P-020 "Project Browser"
+  CONTAINS P-030 "Template Browser"
+  CONTAINS P-040 "Prompt Browser"  
+
+  + Place P-020 "Project Browser"
+      description="Browse and select projects"
+      # COMPOSED_OF
+    END
+
+  + Place P-030 "Template Browser"
+      description="Browse and select templates"
+      # COMPOSED_OF
+    END
+
+  + Place P-040 "Prompt Browser"
+      description="Browse and select ready-to use prompts"
+      # COMPOSED_OF
+    END
+
+END
+
+Area A-030 "Updates"
+  description="Tracking comments, changes, external links"
+  CONTAINS P-050 "Comments"
+  CONTAINS P-060 "External Links"
+  CONTAINS P-070 "Updates"
+
+  + Place P-050 "Comments"
+      description="Comment threads and change tracking"
+      # COMPOSED_OF
+    END
+
+  + Place P-060 "External Links"
+      description="Browse and track external links"
+      # COMPOSED_OF
+    END
+
+  + Place P-070 "Updates"
+      description="Browse and track SDD activity and changes"
+      # COMPOSED_OF
+    END
+
+END
+
+# ViewStates, Components (UI Contracts)
+
+ViewState VS-050 "Browse Diagrams Containing Current Node"
+  description="Browse diagrams in which the currently selected node appears"
+  TRANSITIONS_TO VS-060 "Diagram Selection Confirmation" ["Select Diagram"]
+END
+
+ViewState VS-060 "Diagram Selection Confirmation"
+  description="Confirms the selected diagram containing the current node"
+END
+
+ViewState VS-010 "Add Relationship Method Choice"
+  description="Choose by which method to add a relationship to a node"
+  TRANSITIONS_TO VS-020 "Add Relationship by Node"
+  TRANSITIONS_TO VS-030 "Add Outgoing Relationship"
+  TRANSITIONS_TO VS-040 "Add Incoming Relationship"
+END
+
+ViewState VS-020 "Add Relationship by Node"
+  description="(Multiple sub-states:) choose target node, choose relationship type"
+END
+
+ViewState VS-030 "Add Outgoing Relationship"
+  description="(Multiple sub-states:) choose relationship type, choose or created destination node"
+END
+
+ViewState VS-040 "Add Incoming Relationship"
+  description="(Multiple sub-states:) choose relationship type, choose or create originating node"
+END
+
+Component C-010 "Source Editor"
+  description="SDD source code editor"
+END
+
+Component C-020 "Graphical Editor"
+  description="Interactive graphical diagram editor"
+  CONTAINS C-022 "Node Action Menu"
+  CONTAINS C-024 "Edge Action Menu"
+  CONTAINS C-026 "Selection Actions"
+END
+
+Component C-022 "Node Action Menu"
+  description="Actions for a selected node"
+END
+
+Component C-024 "Edge Action Menu"
+  description="Actions for a selected edge"
+END
+
+Component C-026 "Selection Actions"
+  description="Contextual actions for selected nodes and edges"
+END
+
+Component C-050 "Node Properties Inspector"
+  description="Properties for a selected node"
+END
+
+Component C-060 "Edge Properties Inspector"
+  description="Properties for a selected edge"
+END
+
+Component C-070 "View Selector"
+  description="Manages different views of the SDD"
+  CONTAINS C-071 "Diagram Type Selector"
+  CONTAINS C-072 "View Mode Selector"
+END
+
+Component C-071 "Diagram Type Selector"
+  description="Select from the diagrams available for the current SDD file"
+END
+
+Component C-072 "View Mode Selector"
+  description="Overlay, side-by-side, diff"
+END
