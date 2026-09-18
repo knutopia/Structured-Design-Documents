@@ -316,7 +316,7 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
       compileSource: vi.fn(() => ({
         diagnostics: [],
         graph: {
-          schema: "sdd-text",
+          schema: "sdd-text" as const,
           version: "0.1",
           nodes: [],
           edges: []
@@ -354,7 +354,7 @@ function createBatchPreviewMocks(
   prepare: ReturnType<typeof vi.fn>;
   render: ReturnType<typeof vi.fn>;
 } {
-  const prepare = vi.fn((_sourcePath, _graph, loadedBundle, options) => {
+  const prepare = vi.fn((_sourcePath, _graph, loadedBundle: Bundle, options) => {
     const view = loadedBundle.views.views.find((candidate) => candidate.id === options.viewId)!;
     const visibleSemanticNodeIds = visibleByView[options.viewId] ?? [];
     return {
@@ -601,9 +601,9 @@ describe("CLI wrappers", () => {
     const { deps, stderr } = createDeps({
       validateGraph: vi.fn((_graph, _bundle, profileId) => ({
         diagnostics: [{
-          stage: "validate",
+          stage: "validate" as const,
           code: "validate.unknown_profile",
-          severity: "error",
+          severity: "error" as const,
           message: `Unknown profile '${profileId}'`,
           file: "/repo/example.sdd"
         }],
@@ -1017,15 +1017,15 @@ describe("CLI wrappers", () => {
         },
         previewCapability: {
           format: options.format,
-          backendId: "staged_ui_contracts_preview",
+          backendId: "staged_ui_contracts_preview" as const,
           backendClass: "staged" as const
         },
         artifact: { format: "svg" as const, text: "<svg>forced</svg>" },
         notes: [],
         diagnostics: [{
-          stage: "render",
+          stage: "render" as const,
           code: "renderer.routing.ui_contracts_collinear_overlap",
-          severity: "error",
+          severity: "error" as const,
           message: "Connectors overlap",
           file: "/repo/example.sdd"
         }]
@@ -1056,15 +1056,15 @@ describe("CLI wrappers", () => {
         },
         previewCapability: {
           format: options.format,
-          backendId: "staged_ui_contracts_preview",
+          backendId: "staged_ui_contracts_preview" as const,
           backendClass: "staged" as const
         },
         artifact: { format: "svg" as const, text: "<svg>forced</svg>" },
         notes: [],
         diagnostics: [{
-          stage: "render",
+          stage: "render" as const,
           code: "renderer.routing.ui_contracts_collinear_overlap",
-          severity: "error",
+          severity: "error" as const,
           message: "Connectors overlap",
           file: "/repo/example.sdd"
         }]
@@ -1624,6 +1624,8 @@ describe("CLI wrappers", () => {
   it("show stops before Graphviz when validation fails", async () => {
     const { deps, stderr } = createDeps({
       renderSourcePreview: vi.fn(async () => ({
+        profileId: "simple",
+        detailId: "compact",
         view: bundle.views.views.find((candidate) => candidate.id === "ia_place_map")!,
         capability: {
           textArtifacts: [],
@@ -1635,18 +1637,19 @@ describe("CLI wrappers", () => {
           backendId: "staged_ia_place_map_preview" as const,
           backendClass: "staged" as const
         },
+        notes: [],
         diagnostics: [
           {
-            stage: "validate",
+            stage: "validate" as const,
             code: "validate.failed",
-            severity: "error",
+            severity: "error" as const,
             message: "validation failed",
             file: "/repo/example.sdd"
           },
           {
-            stage: "validate",
+            stage: "validate" as const,
             code: "validate.failed",
-            severity: "error",
+            severity: "error" as const,
             message: "validation failed",
             file: "/repo/example.sdd"
           }
@@ -1678,9 +1681,9 @@ describe("CLI wrappers", () => {
       validateGraph: vi.fn(() => ({
         diagnostics: [
           {
-            stage: "validate",
+            stage: "validate" as const,
             code: "validate.warning",
-            severity: "warn",
+            severity: "warn" as const,
             message: "warning text",
             file: "/repo/example.sdd"
           }
@@ -1736,9 +1739,9 @@ describe("CLI wrappers", () => {
     const { deps, stdout } = createDeps({
       validateGraph: vi.fn(() => ({
         diagnostics: [{
-          stage: "validate",
+          stage: "validate" as const,
           code: "validate.failed",
-          severity: "error",
+          severity: "error" as const,
           message: "validation failed",
           file: "/repo/example.sdd"
         }],
@@ -1799,13 +1802,14 @@ describe("CLI wrappers", () => {
         viewId: options.viewId,
         format: options.format,
         profileId: options.profileId,
+        detailId: options.detailId,
         text: "flowchart TD",
         notes: [],
         diagnostics: [
           {
-            stage: "validate",
+            stage: "validate" as const,
             code: "validate.warning",
-            severity: "warn",
+            severity: "warn" as const,
             message: "warning text",
             file: "/repo/example.sdd"
           }
@@ -1837,6 +1841,8 @@ describe("CLI wrappers", () => {
   it("show supports json diagnostics output", async () => {
     const { deps, stderr } = createDeps({
       renderSourcePreview: vi.fn(async (_input, _bundle, options) => ({
+        profileId: options.profileId,
+        detailId: options.detailId,
         view: bundle.views.views.find((candidate) => candidate.id === options.viewId)!,
         capability: {
           textArtifacts: [],
@@ -1855,9 +1861,9 @@ describe("CLI wrappers", () => {
         notes: [],
         diagnostics: [
           {
-            stage: "validate",
+            stage: "validate" as const,
             code: "validate.warning",
-            severity: "warn",
+            severity: "warn" as const,
             message: "warning text",
             file: "/repo/example.sdd"
           }
@@ -1888,13 +1894,14 @@ describe("CLI wrappers", () => {
         viewId: options.viewId,
         format: options.format,
         profileId: options.profileId,
+        detailId: options.detailId,
         text: "digraph G {}",
         notes: [],
         diagnostics: [
           {
-            stage: "validate",
+            stage: "validate" as const,
             code: "validate.warning",
-            severity: "warn",
+            severity: "warn" as const,
             message: "warning text",
             file: "/repo/example.sdd"
           }
@@ -1923,13 +1930,14 @@ describe("CLI wrappers", () => {
         viewId: options.viewId,
         format: options.format,
         profileId: options.profileId,
+        detailId: options.detailId,
         text: "flowchart TD",
         notes: [],
         diagnostics: [
           {
-            stage: "validate",
+            stage: "validate" as const,
             code: "validate.warning",
-            severity: "warn",
+            severity: "warn" as const,
             message: "warning text",
             file: "/repo/example.sdd"
           }

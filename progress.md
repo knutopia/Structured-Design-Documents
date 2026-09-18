@@ -37,6 +37,9 @@ z
 - Changed SDD CLI behavior to recognize current-folder files
 - Attempted ui_contracts routing fix again
 - CLI behavior to output files in current folder
+- Linter fixes in a random test file
+- Label placement for ui_contracts failed
+- SDD app details added
 
 ## Wed 9-16
 

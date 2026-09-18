@@ -107,42 +107,42 @@ END
 
 # Journey Placeholders: (we are missing multiple-journey markup)
 
-Stage G-001 "Maintain Product Map"
+Stage G-010 "Maintain Product Map"
   description="Maintain a map of the existing product"
   # Placeholder for a Journey title
 END
 
-Stage G-001 "Consolidating Product Variants"
+Stage G-020 "Consolidating Product Variants"
   description="Comparing and Consolidating Product Variants"
   # Placeholder for a Journey title
 END
 
-Stage G-001 "Contextualizing New Designs"
+Stage G-030 "Contextualizing New Designs"
   description="Placing New Designs in Product Context"
   # Placeholder for a Journey title
 END
 
-Stage G-001 "Connecting Strategy to Structure"
+Stage G-040 "Connecting Strategy to Structure"
   description="Connecting Product Strategy to Product Structure"
   # Placeholder for a Journey title
 END
 
-Stage G-001 "Providing Design Guidance"
+Stage G-050 "Providing Design Guidance"
   description="# Aligning New Designs with Existing UI Components"
   # Placeholder for a Journey title
 END
 
-Stage G-001 "Providing Front-End Implementation Guidance"
+Stage G-060 "Providing Front-End Implementation Guidance"
   description="Guiding Front-End Implementation with Structural References"
   # Placeholder for a Journey title
 END
 
-Stage G-001 "Providing Prototype Guidance"
+Stage G-070 "Providing Prototype Guidance"
   description="Guiding Vibe-Coded Prototypes with Existing UX Structure"
   # Placeholder for a Journey title
 END
 
-Stage G-001 "Product Issue Triage"
+Stage G-080 "Product Issue Triage"
   description="Locating and Triaging Issues in Product Context"
   # Placeholder for a Journey title
 END
@@ -219,66 +219,66 @@ Area A-010 "Core"
   CONTAINS P-014 "Diagram Pane"
   CONTAINS P-016 "Inspector Pane"
 
-  Place P-010 "SDD Viewer/Editor"
-    description="Work with SDD content in source and diagram form"
-    CONTAINS P-012 "Source Pane"
-    CONTAINS P-014 "Diagram Pane"
-    CONTAINS P-016 "Inspector Pane"
-  END
-
-  Place P-012 "Source Pane"
-    description="Source code view"
-    COMPOSED_OF C-010 "Source Editor"
-  END
-
-  Place P-014 "Diagram Pane"
-    description="Graphical diagram view"
-    COMPOSED_OF C-020 "Graphical Editor"
-    COMPOSED_OF C-070 "View Selector"
-    CONTAINS VS-004 "Diagram Browsing, No Selection"
-    CONTAINS VS-006 "Diagram Browsing, Single Node Selected"
-
-    + ViewState VS-004 "Diagram Browsing, No Selection"
-      description="Diagram browsing while nothing is selected"
-      TRANSITIONS_TO VS-006 "Diagram Browsing, Single Node Selected" ["Select Node"]
+  + Place P-010 "SDD Viewer/Editor"
+      description="Work with SDD content in source and diagram form"
+      CONTAINS P-012 "Source Pane"
+      CONTAINS P-014 "Diagram Pane"
+      CONTAINS P-016 "Inspector Pane"
     END
 
-    + ViewState VS-006 "Diagram Browsing, Single Node Selected"
-      description="Browsing a diagram while a single node is selected, enabling single select actions"
-      TRANSITIONS_TO VS-010 "Add Relationship Method Choice" ["Select: Add Relationship"]
-      TRANSITIONS_TO VS-004 "Diagram Browsing, No Selection" ["Cancel Selection"]
-      TRANSITIONS_TO VS-050 "Browse Diagrams Containing Current Node" ["Select: Diagrams Containing This Node"]
+  + Place P-012 "Source Pane"
+      description="Source code view"
+      COMPOSED_OF C-010 "Source Editor"
     END
+
+  + Place P-014 "Diagram Pane"
+      description="Graphical diagram view"
+      COMPOSED_OF C-020 "Graphical Editor"
+      COMPOSED_OF C-070 "View Selector"
+      CONTAINS VS-004 "Diagram Browsing, No Selection"
+      CONTAINS VS-006 "Diagram Browsing, Single Node Selected"
+
+      + ViewState VS-004 "Diagram Browsing, No Selection"
+        description="Diagram browsing while nothing is selected"
+        TRANSITIONS_TO VS-006 "Diagram Browsing, Single Node Selected" ["Select Node"]
+      END
+
+      + ViewState VS-006 "Diagram Browsing, Single Node Selected"
+        description="Browsing a diagram while a single node is selected, enabling single select actions"
+        TRANSITIONS_TO VS-010 "Add Relationship Method Choice" ["Select: Add Relationship"]
+        TRANSITIONS_TO VS-004 "Diagram Browsing, No Selection" ["Cancel Selection"]
+        TRANSITIONS_TO VS-050 "Browse Diagrams Containing Current Node" ["Select: Diagrams Containing This Node"]
+      END
   END
 
-  Place P-016 "Inspector Pane"
-    description="Context-driven properties view"
-    COMPOSED_OF C-050 "Node Properties Inspector"
-    COMPOSED_OF C-060 "Edge Properties Inspector"
-  END
-  
+  + Place P-016 "Inspector Pane"
+      description="Context-driven properties view"
+      COMPOSED_OF C-050 "Node Properties Inspector"
+      COMPOSED_OF C-060 "Edge Properties Inspector"
+    END
+
 END
 
 Area A-020 "Browser"
   description="Accessing projects, templates, re-usable content"
-    CONTAINS P-020 "Project Browser"
-    CONTAINS P-030 "Template Browser"
-    CONTAINS P-040 "Prompt Browser"  
+  CONTAINS P-020 "Project Browser"
+  CONTAINS P-030 "Template Browser"
+  CONTAINS P-040 "Prompt Browser"  
 
-  Place P-020 "Project Browser"
-    description="Browse and select projects"
-    # COMPOSED_OF
-  END
+  + Place P-020 "Project Browser"
+      description="Browse and select projects"
+      # COMPOSED_OF
+    END
 
-  Place P-030 "Template Browser"
-    description="Browse and select templates"
-    # COMPOSED_OF
-  END
+  + Place P-030 "Template Browser"
+      description="Browse and select templates"
+      # COMPOSED_OF
+    END
 
-  Place P-040 "Prompt Browser"
-    description="Browse and select ready-to use prompts"
-    # COMPOSED_OF
-  END
+  + Place P-040 "Prompt Browser"
+      description="Browse and select ready-to use prompts"
+      # COMPOSED_OF
+    END
 
 END
 
@@ -288,20 +288,20 @@ Area A-030 "Updates"
   CONTAINS P-060 "External Links"
   CONTAINS P-070 "Updates"
 
-  Place P-050 "Comments"
-    description="Comment threads and change tracking"
-    # COMPOSED_OF
-  END
+  + Place P-050 "Comments"
+      description="Comment threads and change tracking"
+      # COMPOSED_OF
+    END
 
-  Place P-060 "External Links"
-    description="Browse and track external links"
-    # COMPOSED_OF
-  END
+  + Place P-060 "External Links"
+      description="Browse and track external links"
+      # COMPOSED_OF
+    END
 
-  Place P-070 "Updates"
-    description="Browse and track SDD activity and changes"
-    # COMPOSED_OF
-  END
+  + Place P-070 "Updates"
+      description="Browse and track SDD activity and changes"
+      # COMPOSED_OF
+    END
 
 END
 
