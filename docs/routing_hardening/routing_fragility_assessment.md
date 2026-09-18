@@ -78,6 +78,9 @@ implements that contract. The expectation is what is misaligned, not the code.
 
 ## The concrete lead: expansion starvation
 
+**Status: VERIFIED — CONFIRMED (2026-09-18).** Measured evidence and the full decision
+table are recorded in `routing_triage_2026-09-18.md`, "Item 3 verification record".
+
 Every observed failure carried `expansionPasses: 0` — the lifecycle **never attempted
 to expand**, despite having 8 passes available. Expansion is the one mechanism that
 could help a dense document, because it grows the canvas to make room.
@@ -97,24 +100,64 @@ If the **preparation** phase consumed all 8 passes, final routing receives a bud
 be structurally dead — which matches `expansionPasses: 0` exactly.
 
 **Hypothesis:** budget starvation. Two phases share one ceiling, and the first can
-exhaust it. This is specific, falsifiable, and would explain why dense documents cannot
-recover.
+exhaust it.
 
-**Status: NOT VERIFIED.** Confirming it requires instrumenting
-`preparationExpansionPasses`. It is a lead, not a finding.
+### Measured confirmation
+
+A read-only probe (`tests/routingExpansionStarvationProbe.spec.ts`) recovered
+`preparationExpansionPasses` without any production change, since it is exactly
+`MAX_FINAL_ROUTING_ATTEMPTS - initial.policy.maxExpansionPasses`. On the frozen
+production fixture (`detailed` / `type,id`):
+
+- `preparationPasses: 8` — preparation consumed the entire shared ceiling
+- `finalBudget: 0` — final routing received zero
+- `expandInvocations: 0` — the expand callback was **never invoked**
+- `reason: expansion_exhausted`, `expansionPasses: 0`
+
+The hypothesis is confirmed. Three alternative causes of `expansionPasses: 0` were
+separated and **excluded by evidence**: a deficit-model gap and a no-op expansion both
+require the callback to have been invoked (it was not), and repair/candidate exhaustion
+requires a budget to have been hit (`repairRevisions` was 1 of 128, `candidates` 2306 of
+4096).
+
+### One correction to the mechanism
+
+Expansion does not die at line 3826 as originally described. With `maxExpansionPasses: 0`,
+the shared lifecycle gate in `routingCore/lifecycle.ts` — the guard
+`trace.expansionPasses >= policy.maxExpansionPasses` immediately preceding the
+`options.expand(...)` call — evaluates `0 >= 0` → true and breaks **before** the adapter's
+callback is ever invoked. Control never reaches line 3826. Both paths produce
+`expansionPasses: 0`, but a fix aimed only at line 3826 would not restore expansion.
+
+### Constraint on the fix
+
+The shared ceiling is mandated by `contract_review.md` L71, `design_decisions.md` L13, and
+implementation plan §5.5/L379, and is encoded executably in three tests. The chosen
+resolution is to **partition** the single ceiling — bound preparation to a sub-budget so
+final routing retains a floor, total still at or below 8 — rather than to introduce a
+second independent ceiling, which the contract forbids.
+
+Note also `design_decisions.md` L25: the ceilings "do not assert completeness for
+arbitrary diagrams." Starvation followed by honest failure is inside the documented
+contract; the defect is that it is **silent**. Making it visible is required by the
+degrade-visibly contract below regardless of whether the partition fix lands.
 
 ---
 
 ## Suggested sequence
 
-1. **Verify the expansion-starvation hypothesis.** Cheap, and if true it is a genuine
-   fix that helps dense documents broadly.
-2. **Reclassify `sdd_for_sdd.sdd`.** It is a stress test, not a conformance gate. Keep
-   it visible; stop letting it block. This also resolves the authority conflict
-   described in `routing_triage_2026-09-18.md`.
-3. **Decide the contract explicitly.** "Best-effort routing with honest diagnostics" is
-   a legitimate, shippable contract that most tools adopt. Chasing "no violations ever"
+1. **Verify the expansion-starvation hypothesis.** DONE — confirmed. See above.
+2. **Reclassify `sdd_for_sdd.sdd`.** DONE — see `routing_triage_2026-09-18.md` Item 2.
+   The live document is no longer referenced by any test; a frozen fixture carries the
+   coverage instead.
+3. **Decide the contract explicitly.** "Best-effort routing with honest diagnostics" is a
+   legitimate, shippable contract that most tools adopt. Chasing "no violations ever"
    is what will grind the project down, because it is not achievable.
+
+Note that step 3 is now partly answered by the verification itself: the starvation case
+already fails loudly with `expansion_exhausted` and a full trace, but emits nothing that
+distinguishes "preparation consumed the budget" from any other failure. Closing that gap
+is the concrete form of "degrade visibly" here.
 
 ---
 

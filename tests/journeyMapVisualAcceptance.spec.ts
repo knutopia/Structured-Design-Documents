@@ -701,7 +701,7 @@ describe("journey map Gate 6 visual acceptance", () => {
         code: "renderer.routing.journey_map_preferred_terminal_leg_unmet"
       })
     ]);
-  }, 10_000);
+  });
 });
 
 describe("journey map Gate 6 self-loop visual acceptance", () => {
@@ -1184,5 +1184,5 @@ describe("journey map dense shared-solver proof", () => {
     expect(rendered.diagnostics).toEqual(rendered.routingStages.diagnostics);
     expect(rendered.finalSvg).toBe(rerendered.finalSvg);
     expect(rendered.finalSvg).not.toBe(rendered.provisionalSvg);
-  }, 10_000);
+  });
 });

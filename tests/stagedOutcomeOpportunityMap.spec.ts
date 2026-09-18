@@ -591,10 +591,7 @@ describe("staged outcome_opportunity_map", () => {
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.positioned-scene.json`, stripViewMetadata(rendered.positionedScene));
       await expectRendererStageTextSnapshot(`${testCase.goldenPrefix}.svg`, rendered.svg);
     }
-    // This canonical proof case renders many multi-stage routing snapshots and
-    // takes ~12s even in isolation; the larger budget prevents flaky timeouts
-    // under full-suite parallel CPU contention.
-  }, 45000);
+  });
 
   it("matches selected synthetic renderer-stage snapshots for routing risk cases", async () => {
     const cases = [
@@ -720,5 +717,5 @@ END
       await expectRendererStageSnapshot(`${testCase.goldenPrefix}.positioned-scene.json`, stripViewMetadata(rendered.positionedScene));
       await expectRendererStageTextSnapshot(`${testCase.goldenPrefix}.svg`, rendered.svg);
     }
-  }, 15000);
+  });
 });

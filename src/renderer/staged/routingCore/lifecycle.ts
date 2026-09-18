@@ -1,5 +1,5 @@
 import type { Point, PositionedRoute, PortSide } from "../contracts.js";
-import { DEFAULT_ROUTING_POLICY, type RoutingBox, type RoutingCoordinateRange, type RoutingValidationPolicy, type RoutingViolation } from "./contracts.js";
+import { DEFAULT_ROUTING_POLICY, type RoutingBox, type RoutingCoordinateRange, type RoutingSegment, type RoutingValidationPolicy, type RoutingViolation } from "./contracts.js";
 import { buildRoutingSegments, segmentLength, perpendicularSegmentsCross } from "./geometry.js";
 import { validateRouting } from "./validation.js";
 import { buildLogicalRunIds, resolveAndReconstructRouteOccupancy } from "./occupancy.js";
@@ -172,11 +172,26 @@ function score(context: FinalRoutingContext, baseline: FinalRoutingContext, viol
     });
     bends += c.route.points.length - 2;
   }
+  // Segments depend only on the connector's route, but the pairwise crossing loop below
+  // would otherwise rebuild them for both connectors of every pair: O(n^2) rebuilds per
+  // score() call, measured as the dominant render cost on dense scenes. Memoize per
+  // connector object so each route is segmented at most once per call. Connector objects
+  // are immutable within one context, and buildRoutingSegments is pure, so this changes
+  // call count only, never values.
+  const segmentsByConnector = new Map<FinalRoutingConnector, readonly RoutingSegment[]>();
+  const segmentsFor = (connector: FinalRoutingConnector): readonly RoutingSegment[] => {
+    let segments = segmentsByConnector.get(connector);
+    if (!segments) {
+      segments = buildRoutingSegments(connector.id, connector.route);
+      segmentsByConnector.set(connector, segments);
+    }
+    return segments;
+  };
   for (let i = 0; i < context.connectors.length; i++) for (let j = i + 1; j < context.connectors.length; j++) {
     const a = context.connectors[i]!, b = context.connectors[j]!;
     const treatment = context.policy?.crossingTreatmentForPair?.(a.id, b.id) ?? context.policy?.crossingTreatment ?? DEFAULT_ROUTING_POLICY.crossingTreatment;
     if (treatment !== "penalize") continue;
-    for (const x of buildRoutingSegments(a.id, a.route)) for (const y of buildRoutingSegments(b.id, b.route)) if (perpendicularSegmentsCross(x, y)) crossings++;
+    for (const x of segmentsFor(a)) for (const y of segmentsFor(b)) if (perpendicularSegmentsCross(x, y)) crossings++;
   }
   return [violations.length, unrelated, displacement, crossings, bends, length];
 }

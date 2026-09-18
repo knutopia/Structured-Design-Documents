@@ -84,7 +84,7 @@ describe("production scene builders reproduce B5 scopes", () => {
       expect(actual, proof.file).toEqual(geometry(proof.positionedScene));
       expect(historical.positionedScene.root.width, proof.file).toBe(proof.width);
     }
-  }, 30_000);
+  });
 
   it("continues to reject 33px labeled stems and 11px branch legs", async () => {
     const proof = evidence.proofs.find((proof: any) => proof.file === "b5_component.compact");

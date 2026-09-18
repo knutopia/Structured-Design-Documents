@@ -2,6 +2,10 @@
 
 ## Open Issues
 
+-Test failure: B5 immutable baseline (pipeline.ts hash)
+-Test failure: Outcome gate detailed / type,id
+-Test failure: Spacing regression (2 Scenario Flow trims)
+
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -30,6 +34,10 @@ z
 ## Fri 9-18
 
 - Routing triage assessment
+- Expanded test timeouts
+- Removed 16 individual test timeouts
+- Memoization for buildRoutingSegments, saving a millon calls
+- Confirmed expansion starvation hypothesis for scenario_flow
 
 ## Thu 9-17
 

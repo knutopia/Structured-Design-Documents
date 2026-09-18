@@ -505,5 +505,5 @@ describe("journey map degraded diagnostic goldens", () => {
       "journey-map.degraded.capacity.diagnostics.json",
       diagnostics
     );
-  }, 20_000);
+  });
 });
