@@ -31,6 +31,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 9-19
+
+- Diagnosed failing FigJam imports
+
 ## Fri 9-18
 
 - Routing triage assessment
