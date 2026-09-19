@@ -121,10 +121,167 @@ export function buildExteriorOrthogonalCandidates(
 }
 
 // Type-only dependency: lifecycle owns acceptance; this module only proposes geometry.
-import type { FinalRoutingContext, FinalRoutingConnector } from "./lifecycle.js";
-import { DEFAULT_ROUTING_POLICY } from "./contracts.js";
-import { buildRoutingSegments } from "./geometry.js";
+import type { FinalRoutingContext, FinalRoutingConnector, FinalRoutingEndpoint } from "./lifecycle.js";
+import { DEFAULT_ROUTING_POLICY, type RoutingPolicy } from "./contracts.js";
+import { buildRoutingSegments, departsOutwardFromPort } from "./geometry.js";
 import { buildLogicalRunIds, buildRoutingRunDependencies } from "./occupancy.js";
+
+/**
+ * Minimum outward stub for a constructed corridor route, in px.
+ *
+ * A zero-length stub would collapse away and could leave the first segment departing
+ * sideways rather than outward, which acceptance rejects as `endpoint_intrusion`. The
+ * floor guarantees the stub survives `collapseRoutePoints` as a real outward leg.
+ */
+const CORRIDOR_MIN_STUB = 8;
+
+/**
+ * Hard cap on corridor candidates per connector.
+ *
+ * Coordinate events scale with scene density (every box edge and every other route
+ * point, each with a ±minSeparation variant), so an uncapped enumeration would make
+ * recovery cost unbounded and order-dependent. The cap keeps recovery deterministic
+ * and bounded; ordering is minimal-change-first so the cap drops the least plausible
+ * candidates.
+ */
+const MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR = 256;
+
+function corridorStub(endpoint: FinalRoutingEndpoint): Point {
+  const distance = Math.max(endpoint.minLeg, CORRIDOR_MIN_STUB);
+  switch (endpoint.side) {
+    case "east": return { x: roundRoutingMetric(endpoint.point.x + distance), y: endpoint.point.y };
+    case "west": return { x: roundRoutingMetric(endpoint.point.x - distance), y: endpoint.point.y };
+    case "north": return { x: endpoint.point.x, y: roundRoutingMetric(endpoint.point.y - distance) };
+    case "south": return { x: endpoint.point.x, y: roundRoutingMetric(endpoint.point.y + distance) };
+  }
+}
+
+/**
+ * Port-to-port corridor candidates for one connector, minimal-change first.
+ *
+ * Why this exists. `buildTerminalTurnAlternatives` rewrites ONE existing segment
+ * coordinate per yield, so it can only ever preserve the emitted topology. When the
+ * emitted route is already wrong — for example an eight-point detour that cuts through
+ * a box, where the correct route is a four-point path staying inside the channel both
+ * ports already face — no single-coordinate edit can reach the correct shape, because
+ * reaching it requires several points to collapse away at once. Every one-move
+ * neighbour then still intersects a box, and the coordinator refuses to queue states
+ * carrying such violations, so the repair frontier dies immediately. Measured on the
+ * frozen SDD-app fixture: 2312 one-move alternatives, zero queueable, in all eight
+ * failing `scenario_flow` gates.
+ *
+ * This generator supplies the missing capability by constructing routes from the two
+ * DECLARED ports rather than perturbing the emitted route. Both stubs step outward
+ * along the declared side, so port outwardness and `minLeg` hold by construction for
+ * any middle geometry.
+ *
+ * Deterministic: coordinate events are collected into sets, then sorted by distance
+ * from the coordinate the emitted route already used for its first internal run on the
+ * relevant axis, with a numeric tiebreak. The same context always yields the same
+ * sequence.
+ */
+export function* buildPortCorridorCandidates(
+  connector: FinalRoutingConnector,
+  context: FinalRoutingContext
+): Generator<Point[]> {
+  // A `straight` route's geometry IS its contract: the adapter asked for a direct line
+  // between two ports. Rebuilding it as a multi-bend corridor is not repair, it is
+  // substitution of a different rendering intent, and it would silently accept a diagonal
+  // route that acceptance is required to reject. Only `orthogonal` routes grant the router
+  // latitude over their shape, so only those are eligible.
+  if (connector.route.style !== "orthogonal") {
+    return;
+  }
+  // A fresh topology re-derives logical run IDs from the route, so any run constraint or
+  // shared track group keyed to the previous topology would become stale. Acceptance
+  // reports that as `endpoint_mismatch`, which terminates the lifecycle outright, so such
+  // connectors are not eligible for corridor recovery. This mirrors the ownership guard
+  // `buildTerminalTurnAlternatives` applies before accepting a collapsed point count.
+  if (connector.runConstraints?.size || connector.sharedTrackGroupBySegmentIndex?.size) {
+    return;
+  }
+
+  const policy: RoutingPolicy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
+  const separation = policy.minSeparation;
+  const epsilon = policy.epsilon;
+  const sourceStub = corridorStub(connector.source);
+  const targetStub = corridorStub(connector.target);
+  const boxes = [...context.boxes, ...(context.blockers ?? [])];
+
+  // Candidate middle-run coordinates, drawn from the same event sources the turn
+  // generator uses: box edges, other routes' points, and this route's own points. The
+  // last of these matters most — the natural channel is frequently a coordinate the
+  // emitted route already touches.
+  const xs = new Set<number>();
+  const ys = new Set<number>();
+  const addX = (n: number): void => {
+    for (const value of [n, n - separation, n + separation]) {
+      const rounded = roundRoutingMetric(value);
+      if (rounded >= context.bounds.minX && rounded <= context.bounds.maxX) xs.add(rounded);
+    }
+  };
+  const addY = (n: number): void => {
+    for (const value of [n, n - separation, n + separation]) {
+      const rounded = roundRoutingMetric(value);
+      if (rounded >= context.bounds.minY && rounded <= context.bounds.maxY) ys.add(rounded);
+    }
+  };
+  for (const box of boxes) {
+    addX(box.x); addX(box.x + box.width);
+    addY(box.y); addY(box.y + box.height);
+  }
+  for (const other of context.connectors) {
+    for (const point of other.route.points) { addX(point.x); addY(point.y); }
+  }
+  for (const point of connector.route.points) { addX(point.x); addY(point.y); }
+  addX(sourceStub.x); addX(targetStub.x);
+  addY(sourceStub.y); addY(targetStub.y);
+
+  const segments = buildRoutingSegments(connector.id, connector.route, {
+    logicalRunIds: buildLogicalRunIds(connector.route)
+  });
+  const preferredX = segments.find(s => s.axis === "vertical" && s.endpointRole === "internal")?.coordinate ?? sourceStub.x;
+  const preferredY = segments.find(s => s.axis === "horizontal" && s.endpointRole === "internal")?.coordinate ?? sourceStub.y;
+  const byPreference = (preferred: number) => (a: number, b: number): number =>
+    Math.abs(a - preferred) - Math.abs(b - preferred) || a - b;
+  // Split the budget across both axes so a dense scene cannot spend it all on one.
+  const perAxis = Math.max(1, Math.floor((MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR - 3) / 2));
+  const orderedXs = [...xs].sort(byPreference(preferredX)).slice(0, perAxis);
+  const orderedYs = [...ys].sort(byPreference(preferredY)).slice(0, perAxis);
+
+  const wrap = (middle: readonly Point[]): Point[] => collapseRoutePoints(
+    [connector.source.point, sourceStub, ...middle, targetStub, connector.target.point],
+    epsilon
+  );
+  // A candidate whose terminals do not depart outward can never be accepted, so it is
+  // dropped here rather than yielded for the coordinator to reject.
+  const departsOutward = (points: readonly Point[]): boolean => points.length >= 2
+    && departsOutwardFromPort(connector.source.side, points[0]!, points[1]!, epsilon)
+    && departsOutwardFromPort(connector.target.side, points.at(-1)!, points.at(-2)!, epsilon);
+
+  const seen = new Set<string>();
+  const queue: Point[][] = [];
+  const push = (points: Point[]): void => {
+    if (!departsOutward(points)) return;
+    const key = JSON.stringify(points);
+    if (seen.has(key)) return;
+    seen.add(key);
+    queue.push(points);
+  };
+
+  // Straight stub-to-stub, then the two one-corner L shapes, then two-corner Z shapes
+  // with a free middle run. Ordered by increasing bend count so the simplest viable
+  // corridor is proposed first.
+  push(wrap([]));
+  push(wrap([{ x: targetStub.x, y: sourceStub.y }]));
+  push(wrap([{ x: sourceStub.x, y: targetStub.y }]));
+  for (const c of orderedXs) push(wrap([{ x: c, y: sourceStub.y }, { x: c, y: targetStub.y }]));
+  for (const c of orderedYs) push(wrap([{ x: sourceStub.x, y: c }, { x: targetStub.x, y: c }]));
+
+  for (const points of queue.slice(0, MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR)) {
+    yield points;
+  }
+}
 
 /** Event-derived single-run changes compose into coupled turn arrangements in the coordinator. */
 export function* buildTerminalTurnAlternatives(

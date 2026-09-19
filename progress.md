@@ -38,6 +38,8 @@ z
 - Removed 16 individual test timeouts
 - Memoization for buildRoutingSegments, saving a millon calls
 - Confirmed expansion starvation hypothesis for scenario_flow
+- Found starvation hypothesis without effect
+- Slight scenario_flow routing fix by seeding the repair search with port-derived corridor routes
 
 ## Thu 9-17
 

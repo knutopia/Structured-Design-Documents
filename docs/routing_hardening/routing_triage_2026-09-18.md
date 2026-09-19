@@ -6,8 +6,9 @@ Companion document: `routing_fragility_assessment.md` (the broader assessment th
 triage came out of).
 
 **Status: Items 1 and 2 IMPLEMENTED (2026-09-18). Item 3 VERIFIED — CONFIRMED
-(2026-09-18); fix not yet implemented.**
-See "Implementation record" and "Item 3 verification record" at the end of this document.
+(2026-09-18). Follow-up measurement found the proposed ceiling-partition fix ineffective;
+STOP CONDITION reached, two distinct defects identified.**
+See "Implementation record", "Item 3 verification record", and "Step 1 follow-up" below.
 
 ---
 
@@ -376,20 +377,31 @@ Causes (b), (c) and (d) are **excluded by evidence**, not merely unobserved:
   `candidates` 2306 of 4096 — both far from their caps. The repair search had ample
   budget remaining when the expansion gate terminated it.
 
-### Secondary observation (new lead, not yet investigated)
+### Secondary observation — CLOSED as by-design, not a defect
 
 `repairRevisions: 1` with `repeatedStates: 7` and 2306 candidates generated. The inner
-repair loop performed a single revision and then drained. The likely mechanism is the
+repair loop performed a single revision and then drained. The mechanism is the
 queue-admission filter in `routingCore/lifecycle.ts`: a candidate state is only queued if
 all its violations are `track_separation`, `collinear_overlap`, or
 `perpendicular_crossing`. This document's violation set includes `endpoint_intrusion`,
 which is not queueable, so states carrying it are dropped and the queue empties after one
 revision.
 
-This is a separate question from Item 3 and is recorded only as a lead. Even with
-expansion restored, it may bound how much the repair search can achieve on this document.
-It is **not verified** — the filter is a plausible mechanism inferred from the trace
-counts, not a measured one.
+On review this is **deliberate**, not a defect. The filter carries the comment
+*"Irreversible endpoint/resource violations cannot be fixed by unrelated later turn
+changes."* Turn alternatives genuinely cannot repair an `endpoint_intrusion`, because the
+endpoint is declared by the adapter's port geometry and is not movable by a turn change.
+Draining the queue is the design working correctly rather than wasting search on
+candidates that cannot help.
+
+The consequence is worth recording, though: this document's violation profile
+(`endpoint_intrusion`, `node_intersection`) is **repair-resistant by design**, which makes
+expansion the only mechanism that could improve it — and expansion is exactly what
+starvation disabled. That strengthens the case that starvation mattered, while Finding 4
+above shows that relieving starvation alone still does not help, because the expand
+callback cannot derive a deficit either.
+
+No work item arises from this observation.
 
 ### Authority constraint on any fix
 
@@ -428,21 +440,151 @@ consumed the budget" from any other failure. Making that degradation visible is 
 by the "route well when possible, degrade visibly when not" contract in
 `routing_fragility_assessment.md`, independent of whether the partition fix lands.
 
-### Agreed follow-ups (not yet implemented)
+### Step 1 follow-up: preparation convergence (2026-09-18)
+
+The verification above established that preparation consumed all 8 passes. It left open
+whether preparation **converged** at 8 or was **cut off** at 8 — the two have very
+different implications for any fix. This was measured with temporary env-gated
+instrumentation in the preparation loop (`SDD_SCENARIO_PREP_PROBE`,
+`SDD_SCENARIO_PREP_CEILING`), since reverted; `git diff` confirms zero remnants.
+
+The instrumentation was verified inert when the env var is unset: the probe reproduced the
+original measurement byte-identically (`preparationPasses 8`, `finalBudget 0`,
+`expandInvocations 0`, `candidates 2306`, `repairRevisions 1`, `repeatedStates 7`).
+
+**Finding 1 — preparation was cut off, not converged.** At the production ceiling of 8 it
+exits `ceiling_exhausted`, never reaching the convergence `break`.
+
+**Finding 2 — preparation never converges.** Raised to a ceiling of 24, it still exits
+`ceiling_exhausted` after 24 passes. Demand reaches a steady state at attempt 2 and stays
+there while the gutter grows without bound:
+
+| Attempt | columnTotal | laneTotal | gutterColumns | gutterLanes |
+| --- | --- | --- | --- | --- |
+| 0 | 80 | 48 | 0 | 0 |
+| 1 | 48 | 48 | 80 | 48 |
+| 2 | 16 | 48 | 128 | 96 |
+| 3 | 16 | 48 | 144 | 144 |
+| 7 | 16 | 48 | 208 | 336 |
+| 12 | 16 | 32 | 288 | 576 |
+| 14 | 0 | 32 | 320 | 656 |
+| 23 | 0 | 32 | 320 | 944 |
+
+Growing the canvas does **not** reduce the demand. This is a non-convergent loop, not a
+slow-converging one.
+
+**Finding 3 — the steady-state demand is a single source.** At attempt 14 the entire
+residual demand is `preparedLanes: 32` (from `nominalPrepared.requiredLaneExpansions`);
+every other source is 0. A constant 32px lane demand that gutter growth cannot satisfy.
+
+**Finding 4 — the ceiling partition does NOT fix the geometry.** Bounding preparation
+below 8 *is* the partition proposed in Decision 2, so it was measured directly:
+
+| Prep ceiling | Final budget | expandInvocations | returnedContext | expansionPasses | reason |
+| --- | --- | --- | --- | --- | --- |
+| 8 (production) | 0 | 0 | – | 0 | `expansion_exhausted` |
+| 7 | 1 | 1 | **false** | 0 | `repeated_state` |
+| 6 | 2 | 1 | **false** | 0 | `repeated_state` |
+| 4 | 4 | 1 | **false** | 0 | `repeated_state` |
+
+The partition does restore the callback — `expandInvocations` goes from 0 to 1, so
+starvation is genuinely relieved. But the callback returns `undefined`
+(`returnedContext: false`) despite being handed 21 violations, so no expansion pass is
+credited and the result still fails.
+
+**This converts cause (a) into cause (b).** Starvation was real, but it was masking a
+second, independent defect: the adapter's expand callback cannot derive a measured deficit
+for this document's violations. Its deficit model only considers source/target side plus
+cell-order relationships, while the actual violations are `collinear_overlap`,
+`endpoint_intrusion`, `track_separation`, and `node_intersection`.
+
+### Stop condition reached
+
+Per `AGENTS.md`: *"stop and surface the problem instead of coding through it when the
+current strategy is producing structurally wrong output and further tuning is speculative."*
+
+The partition fix (Decision 2) is **not** the remedy. It would relieve starvation, change
+the failure reason from `expansion_exhausted` to `repeated_state`, and leave the diagram
+exactly as broken — while touching contract-adjacent code and three tests that encode the
+shared ceiling. Implementing it now would be speculative tuning against a defect whose
+real cause lies elsewhere.
+
+Two defects are now distinguished, and they need separate treatment:
+
+1. **Non-convergent preparation** — a constant 32px lane demand that gutter growth cannot
+   satisfy. Preparation burns its entire budget chasing an unsatisfiable requirement.
+2. **Deficit-model gap in the expand callback** — even with budget available, the callback
+   finds no measured deficit for these violation kinds and returns `undefined`.
+
+Defect 1 is the reason preparation consumes the budget; defect 2 is the reason relieving
+that consumption does not help. Both must be addressed for expansion to actually improve
+this document.
+
+### Follow-ups (revised)
+
+Still valid and unaffected:
 
 1. Export `MAX_FINAL_ROUTING_ATTEMPTS` from `scenarioFlowRouting.ts` and repoint the
    hardcoded `8` in `tests/routingHardeningScenario.spec.ts` L81 and in the probe.
-2. Partition the ceiling so preparation cannot starve final routing.
-3. Emit a `warn`-severity routing diagnostic when the final budget is reduced to 0, with a
+2. Emit a `warn`-severity routing diagnostic when the final budget is reduced to 0, with a
    JSON `details` payload. It must be `warn`, not `error`:
    `src/renderer/previewWorkflow.ts` L267 suppresses the artifact when
    `hasErrors(diagnostics) && !force`, so an error-severity diagnostic would change
-   artifact behavior.
-4. Expose `preparationExpansionPasses` on `ScenarioFlowRoutingStages`, following the
+   artifact behavior. This is required by the degrade-visibly contract regardless of
+   whether any geometry fix lands, and it is the one item that ships value on its own.
+3. Expose `preparationExpansionPasses` on `ScenarioFlowRoutingStages`, following the
    existing `finalResolutionTrace` precedent. It already flows out through
    `renderScenarioFlowStagedSvg` → `routingStages`, which tests already read.
+
+**Deferred pending the two defects above:**
+
+4. ~~Partition the ceiling so preparation cannot starve final routing.~~ Measured to be
+   ineffective on its own. Revisit only after defect 2 is addressed, at which point
+   relieving starvation may become worthwhile.
+
+**New items:**
+
+5. Investigate the non-convergent `preparedLanes: 32` demand — why does
+   `requiredLaneExpansions` keep requesting 32px that gutter growth cannot satisfy?
+6. Investigate the expand callback's deficit model — why does it derive no deficit from
+   `collinear_overlap` / `endpoint_intrusion` / `track_separation` / `node_intersection`?
 
 Scope note: the identical pattern exists in `serviceBlueprintRouting.ts`
 (L3958/4001/4122/4129, ceiling 4) and `outcomeOpportunityMapRouting.ts` (L5055/5109,
 ceiling 4). Neither is starved today — both pass their expansion gates with
 `expansionPasses > 0`. Deferred per the proof-case-first rule in `AGENTS.md`.
+
+---
+
+## Item 4 — the eight gates were not blocked by starvation (2026-09-18)
+
+Full record: `invalid_valley_2026-09-18.md`.
+
+Item 3 established that expansion was structurally dead. It left open whether that was
+*why* the eight `routingHardeningScenario` gates fail. It is not.
+
+A third defect was found, in the shared routing core rather than in any adapter: the
+repair loop can only perturb one existing segment coordinate at a time
+(`buildTerminalTurnAlternatives`), and its queueing rule refuses any state carrying a
+violation outside the traversable set. When the emitted route is already structurally
+wrong, no single move reaches a correct shape and every intermediate is refused, so the
+**repair frontier dies at depth one**. Measured: 2312 one-move alternatives, zero
+queueable, identically in all eight cells. Raising `maxCandidates` or
+`maxRepairRevisions` cannot help — the frontier is empty, not exhausted.
+
+This is why the partition fix (follow-up 4) could not work: it relieves starvation, but
+starvation was never the operative blocker for these gates. Corroborating evidence — the
+six gates that now pass do so with `expansionPasses: 0`, i.e. **without** expansion.
+
+**Fix 1 (corridor recovery) is implemented** in `routingCore/geometry.ts`,
+`routingCore/candidates.ts`, and `routingCore/lifecycle.ts`. It seeds the repair search
+with routes constructed from the two declared ports, rebuilding all implicated connectors
+together. Result: `routingHardeningScenario.spec.ts` goes from 11/19 to **17/19**. The two
+remaining failures are the `none` cells, which are now hard-clean but exhaust
+`maxCandidates: 4096` while still improving — a budget limit, not a structural one.
+
+`routingHardeningOutcome.spec.ts` `detailed / type,id` still fails and is **pre-existing**:
+verified by stashing the three changed files and re-running, it fails identically on the
+clean tree.
+
+Items 5 and 6 above remain open and independent. Fix 1 touches neither.

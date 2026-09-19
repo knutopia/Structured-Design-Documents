@@ -29,6 +29,26 @@
 // Full record: docs/routing_hardening/routing_triage_2026-09-18.md,
 // "Item 3 verification record".
 //
+// UPDATE (2026-09-18, after corridor recovery landed): this cell now RESOLVES, but the
+// starvation it measures is UNCHANGED. Re-measured with the fix present:
+//   preparationPasses 8, finalBudget 0, expandInvocations 0, expansionPasses 0,
+//   status resolved.
+// Every starvation metric is identical; only `status` changed, from failed to resolved.
+//
+// READ THE VERDICT LABEL WITH CARE. It now prints "not starved — expansion ran", which is
+// MISLEADING: expansion did NOT run (`expansionPasses: 0`, `expandInvocations: 0`). The
+// `classify()` helper below returns that label whenever `status === "resolved"`, so it
+// conflates "the route set resolved" with "expansion ran". The cell resolved via corridor
+// recovery in the shared routing core, WITHOUT any expansion pass.
+//
+// This is the strongest available evidence that starvation was never the OPERATIVE defect
+// behind these gates: it is still fully present, and the geometry is now correct anyway.
+// See docs/routing_hardening/invalid_valley_2026-09-18.md.
+//
+// The Item 3 fix has NOT landed. Preparation is still non-convergent and the expand
+// callback still has a deficit-model gap, so this probe is retained: it remains the only
+// instrument measuring the shared-ceiling starvation, which is still open.
+//
 // Delete or convert this file once the Item 3 fix lands.
 import { readFile } from "node:fs/promises";
 import { afterEach, describe, expect, it, vi } from "vitest";

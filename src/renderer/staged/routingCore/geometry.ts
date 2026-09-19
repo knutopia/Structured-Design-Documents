@@ -1,4 +1,4 @@
-import type { Point, PositionedRoute } from "../contracts.js";
+import type { Point, PortSide, PositionedRoute } from "../contracts.js";
 import {
   createRoutingSegmentId,
   type RoutingAxis,
@@ -256,6 +256,28 @@ export function endpointDepartsIntoBox(
     y: endpoint.y + (adjacent.y - endpoint.y) * ratio
   };
   return pointInsideBoxInterior(probe, box, epsilon / 2);
+}
+
+/**
+ * True when `to` lies strictly outward from `from` along the declared port side, with
+ * no transverse drift. This is the single definition of port outwardness: acceptance
+ * (`validateFinalRouteSet`) and candidate construction must agree, or a proposed route
+ * could be rejected for a reason its builder believed it had satisfied.
+ */
+export function departsOutwardFromPort(
+  side: PortSide,
+  from: Point,
+  to: Point,
+  epsilon = 0.5
+): boolean {
+  const dx = to.x - from.x;
+  const dy = to.y - from.y;
+  switch (side) {
+    case "east": return dx > epsilon && Math.abs(dy) <= epsilon;
+    case "west": return dx < -epsilon && Math.abs(dy) <= epsilon;
+    case "north": return dy < -epsilon && Math.abs(dx) <= epsilon;
+    case "south": return dy > epsilon && Math.abs(dx) <= epsilon;
+  }
 }
 
 export function perpendicularSegmentsCross(

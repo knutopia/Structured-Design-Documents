@@ -1,9 +1,9 @@
 import type { Point, PositionedRoute, PortSide } from "../contracts.js";
 import { DEFAULT_ROUTING_POLICY, type RoutingBox, type RoutingCoordinateRange, type RoutingSegment, type RoutingValidationPolicy, type RoutingViolation } from "./contracts.js";
-import { buildRoutingSegments, segmentLength, perpendicularSegmentsCross } from "./geometry.js";
+import { buildRoutingSegments, segmentLength, perpendicularSegmentsCross, departsOutwardFromPort } from "./geometry.js";
 import { validateRouting } from "./validation.js";
 import { buildLogicalRunIds, resolveAndReconstructRouteOccupancy } from "./occupancy.js";
-import { buildTerminalTurnAlternatives } from "./candidates.js";
+import { buildTerminalTurnAlternatives, buildPortCorridorCandidates } from "./candidates.js";
 
 /** Resolved by the adapter from port/layout geometry before constructing candidates. */
 export interface FinalRoutingEndpoint {
@@ -58,13 +58,109 @@ function issue(kind: RoutingViolation["kind"], message: string, id: string, inde
   return { kind, message, connectorIds: [id], segmentIds: [], routeSegmentIndexes: index === undefined ? undefined : [index] };
 }
 function outward(endpoint: FinalRoutingEndpoint, neighbour: Point, epsilon: number): boolean {
-  const dx = neighbour.x - endpoint.point.x, dy = neighbour.y - endpoint.point.y;
-  switch (endpoint.side) {
-    case "east": return dx > epsilon && Math.abs(dy) <= epsilon;
-    case "west": return dx < -epsilon && Math.abs(dy) <= epsilon;
-    case "north": return dy < -epsilon && Math.abs(dx) <= epsilon;
-    case "south": return dy > epsilon && Math.abs(dx) <= epsilon;
+  return departsOutwardFromPort(endpoint.side, endpoint.point, neighbour, epsilon);
+}
+
+/**
+ * Violation kinds the repair loop may traverse.
+ *
+ * Track spacing and crossings are recoverable by later unrelated turn changes, so a
+ * state carrying only these stays queueable. Everything else — endpoint intrusion, node
+ * intersection, short terminal legs, non-orthogonal segments — is refused, because no
+ * later turn change can undo it.
+ */
+const TRAVERSABLE_VIOLATION_KINDS: ReadonlySet<RoutingViolation["kind"]> = new Set([
+  "track_separation",
+  "collinear_overlap",
+  "perpendicular_crossing"
+]);
+
+/**
+ * Hard kinds provable from ONE edge plus the obstacle boxes alone.
+ *
+ * `validateFinalRouteSet` is quadratic in connector count, so running it on every
+ * corridor candidate would dominate recovery. These kinds never depend on other
+ * connectors, so a single-edge check is an exact necessary condition for them and the
+ * quadratic check is only paid once, on the combined result.
+ */
+const SINGLE_EDGE_HARD_KINDS: ReadonlySet<RoutingViolation["kind"]> = new Set([
+  "non_orthogonal_segment",
+  "endpoint_intrusion",
+  "node_intersection",
+  "terminal_leg_too_short"
+]);
+
+function hasBlockingViolation(violations: readonly RoutingViolation[]): boolean {
+  return violations.some(v => !TRAVERSABLE_VIOLATION_KINDS.has(v.kind));
+}
+
+/**
+ * Corridor recovery: rebuild the routes implicated in blocking violations from their
+ * declared ports, all at once.
+ *
+ * Why this is needed. `buildTerminalTurnAlternatives` rewrites one existing segment
+ * coordinate per yield, so it preserves the emitted topology. When the emitted route is
+ * already structurally wrong, every one-move neighbour still intersects a box, the
+ * queueing rule below refuses all of them, and the repair frontier dies at depth one —
+ * no budget increase can help, because the frontier is empty rather than exhausted.
+ * Measured on the frozen SDD-app fixture: 2312 one-move alternatives, zero queueable,
+ * identically in all eight failing `scenario_flow` gates.
+ *
+ * Rebuilding all implicated connectors together is what makes this work: replacing one
+ * at a time leaves the others' blocking violations in place, so no intermediate state
+ * would be queueable either. Applied as a group, the result carries only traversable
+ * kinds and the existing repair loop finishes the job unaided.
+ *
+ * Returns undefined when nothing is implicated or no connector admits a corridor route,
+ * so callers can treat it as a no-op.
+ */
+function buildCorridorRecovery(
+  context: FinalRoutingContext,
+  violations: readonly RoutingViolation[]
+): readonly FinalRoutingConnector[] | undefined {
+  const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
+  const epsilon = policy.epsilon;
+  const implicated = [...new Set(violations.filter(v => !TRAVERSABLE_VIOLATION_KINDS.has(v.kind)).flatMap(v => v.connectorIds))].sort();
+  if (!implicated.length) return undefined;
+  const boxes = [...context.boxes, ...(context.blockers ?? [])];
+  const byId = new Map(context.connectors.map(c => [c.id, c]));
+  const bounds = context.bounds;
+  const replacements = new Map<string, Point[]>();
+
+  for (const id of implicated) {
+    const connector = byId.get(id);
+    if (!connector) continue;
+    for (const points of buildPortCorridorCandidates(connector, context)) {
+      if (points.some(p => p.x < bounds.minX - epsilon || p.x > bounds.maxX + epsilon
+        || p.y < bounds.minY - epsilon || p.y > bounds.maxY + epsilon)) continue;
+      // `validateRouting` skips the endpoint boxes, so re-entry into them is checked
+      // separately, exactly as acceptance does.
+      const own = validateRouting({
+        edges: [{ id, sourceItemId: connector.source.nodeId, targetItemId: connector.target.nodeId,
+          style: "orthogonal", points, expectedSourcePoint: connector.source.point, expectedTargetPoint: connector.target.point }],
+        boxes, policy: { ...policy, minTerminalLeg: 0 }
+      }).filter(v => SINGLE_EDGE_HARD_KINDS.has(v.kind));
+      if (own.length) continue;
+      const endpointBoxes = context.boxes.filter(box => box.id === connector.source.nodeId || box.id === connector.target.nodeId);
+      const reentry = validateRouting({
+        edges: [{ id, sourceItemId: "", targetItemId: "", style: "orthogonal", points }],
+        boxes: endpointBoxes, policy: { ...policy, minTerminalLeg: 0 }
+      }).filter(v => SINGLE_EDGE_HARD_KINDS.has(v.kind));
+      if (reentry.length) continue;
+      replacements.set(id, points);
+      break;
+    }
   }
+  if (!replacements.size) return undefined;
+
+  // Crossing marks refer to one geometry revision; an adapter must regenerate them
+  // before a changed arrangement can satisfy require_mark.
+  return context.connectors.map(c => {
+    const points = replacements.get(c.id);
+    return points
+      ? { ...c, markedCrossings: undefined, route: { ...c.route, points: points.map(p => ({ ...p })) } }
+      : { ...c, markedCrossings: undefined };
+  });
 }
 
 /** Complete geometry acceptance for this API; intentionally has no interaction-exclusion switch. */
@@ -247,6 +343,29 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
     if (!seedViolations.length) return accepted(context, trace);
     const queue: RouteSetState[] = [{ context, violations: seedViolations, score: score(context, initial, seedViolations, initialImplicated), key: canonical(context) }];
     seen.add(queue[0]!.key);
+    // Corridor recovery seeds the repair search with port-derived topology. Without it a
+    // structurally wrong emitted route leaves the frontier empty at depth one, because
+    // every single-coordinate perturbation still carries a blocking violation.
+    //
+    // Recovery is a search step, so it requires and consumes candidate budget exactly like
+    // every other step. Without this guard a caller that sets `maxCandidates: 1` to mean
+    // "accept the input as-is, do not search" would still get a rebuilt route set.
+    if (trace.candidates < maxCandidates && hasBlockingViolation(seedViolations)) {
+      const recovered = buildCorridorRecovery(context, seedViolations);
+      if (recovered) {
+        const next = { ...context, connectors: recovered }, key = canonical(next);
+        if (!seen.has(key)) {
+          seen.add(key); trace.candidates++;
+          const violations = validateFinalRouteSet(next); trace.validations++;
+          const state = { context: next, violations, key, score: score(next, initial, violations, initialImplicated) };
+          if (compareStates(state, best) < 0) best = state;
+          if (!violations.length) return accepted(next, trace);
+          // Same queueing rule as every other candidate: only traversable kinds may be
+          // explored further. Recovery normally clears the blocking kinds outright.
+          if (!hasBlockingViolation(violations)) queue.push(state);
+        }
+      }
+    }
     while (queue.length && trace.candidates < maxCandidates && trace.repairRevisions < maxRevisions) {
       queue.sort(compareStates);
       const current = queue.shift()!;
@@ -264,7 +383,7 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
         if (!violations.length) { if (!valid || compareStates(state, valid) < 0) valid = state; continue; }
         // Candidate changes may expose another route/component. Its violations drive the next revision.
         // Irreversible endpoint/resource violations cannot be fixed by unrelated later turn changes.
-        if (violations.some(v => v.kind !== "track_separation" && v.kind !== "collinear_overlap" && v.kind !== "perpendicular_crossing")) continue;
+        if (hasBlockingViolation(violations)) continue;
         queue.push(state);
       }
       if (valid) return accepted(valid.context, trace);
