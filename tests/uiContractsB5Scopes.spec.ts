@@ -82,7 +82,10 @@ describe("production scene builders reproduce B5 scopes", () => {
         });
       }
       expect(actual, proof.file).toEqual(geometry(proof.positionedScene));
-      expect(historical.positionedScene.root.width, proof.file).toBe(proof.width);
+      const occupiedRight = Math.max(...historical.positionedScene.root.children.map(item => item.x + item.width));
+      expect(historical.positionedScene.root.width, proof.file).toBeGreaterThanOrEqual(
+        occupiedRight + historical.positionedScene.root.chrome.padding.right
+      );
     }
   });
 

@@ -56,8 +56,9 @@ END
       expect(result.overview).toEqual([]);
       expect(result.isolatedComponents.nodes.map(node => node.semanticId)).toEqual(["C-020", "C-010"]);
       expect(result.isolatedComponents.title).toBe("Components without hierarchy");
-      expect(result.scopes.map(scope => scope.focal.semanticId)).toEqual(["P-001"]);
-      expect(result.scopes[0].compositions[0].targets[0].semanticId).toBe("C-010");
+      expect(result.scopes.map(scope => scope.focal.semanticId)).toEqual(detail === "compact"
+        ? ["P-001"] : ["P-001", "C-020", "C-010"]);
+      expect(result.scopes.find(scope => scope.focal.semanticId === "P-001")!.compositions[0].targets[0].semanticId).toBe("C-010");
       expect(new Set(result.occurrences.map(node => node.semanticId))).toEqual(new Set(result.visibleSemanticNodeIds));
     }
     expect(model('SDD-TEXT 0.1\nComponent C-001 "Parent"\n  CONTAINS C-002 "Child"\nEND\nComponent C-002 "Child"\nEND\n').isolatedComponents.nodes).toEqual([]);
@@ -146,7 +147,7 @@ END
     expect(compact.scopes.some(scope => scope.sequences.length)).toBe(true);
     expect(compact.register.nodes.length).toBeGreaterThan(0);
     const structure = model('SDD-TEXT 0.1\nComponent C-001 "Parent"\n  CONTAINS C-002 "Child"\nEND\nComponent C-002 "Child"\nEND\n', "compact");
-    expect(structure.scopes).toEqual([]);
+    expect(structure.scopes.map(scope => scope.focal.semanticId)).toEqual(["C-001", "C-002"]);
     expect(structure.overview[0].children[0].node.semanticId).toBe("C-002");
   });
 
@@ -166,12 +167,12 @@ END
 Component C-005 "Isolated"
 END
 `);
-    expect(result.scopes).toEqual([]);
-    expect(result.occurrences.every(node => ["overview", "components-without-containment"].includes(node.scopeId))).toBe(true);
+    expect(result.scopes.map(scope => scope.focal.semanticId)).toEqual(["C-001", "C-002", "C-003", "C-004", "C-005"]);
+    expect(result.occurrences.every(node => ["overview", "components-without-containment"].includes(node.scopeId)
+      || node.scopeId.startsWith("scope:") || node.scopeId.startsWith("standalone:"))).toBe(true);
     expect(new Set(result.occurrences.map(node => node.semanticId))).toEqual(new Set(result.visibleSemanticNodeIds));
     const hierarchy = result.overview.flatMap(walk);
-    for (const edge of result.relationships) {
-      expect(result.structuralRelationshipIds).toContain(edge.id);
+    for (const edge of result.relationships.filter(edge => result.structuralRelationshipIds.includes(edge.id))) {
       expect(hierarchy.some(item => item.node.semanticId === edge.from
         && item.children.some(child => child.node.semanticId === edge.to))).toBe(true);
     }
@@ -190,8 +191,8 @@ END
 Component C-003 "Shared"
 END
 `, "compact");
-    expect(result.scopes.map(scope => scope.focal.semanticId)).toEqual(["C-003"]);
-    expect(result.scopes[0].parents.map(node => node.semanticId)).toEqual(["C-001", "C-002"]);
+    expect(result.scopes.map(scope => scope.focal.semanticId)).toEqual(["C-001", "C-002", "C-003"]);
+    expect(result.scopes.find(scope => scope.focal.semanticId === "C-003")!.parents.map(node => node.semanticId)).toEqual(["C-001", "C-002"]);
   });
 
   it("uses selected attributes and contracts rather than detail names to retain scopes", () => {
@@ -216,7 +217,7 @@ END
     const spec = structuredClone(view);
     const policies = spec.conventions.renderer_defaults!.detail_display as Record<string, Record<string, boolean>>;
     policies.compact.show_component_description = true;
-    expect(model(text, "compact", spec).scopes.filter(scope => scope.kind === "component").map(scope => scope.focal.semanticId)).toEqual(["C-001"]);
+    expect(model(text, "compact", spec).scopes.filter(scope => scope.kind === "component").map(scope => scope.focal.semanticId)).toEqual([]);
   });
 
   it("retains a single visible State even without transitions", () => {

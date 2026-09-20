@@ -505,6 +505,14 @@ export interface UiContractsPresentationConfig {
   relationships: UiContractsRelationshipConfig[];
   content: Record<UiContractsPresentationRole, UiContractsAttributeConfig[]>;
   ownership: { primary_property: string; secondary_property: string };
+  scope_policy: {
+    simple_scope_kinds: Array<"place" | "component" | "standalone">;
+    simple_occurrence_count: number;
+    simple_connector_count: number;
+    retain_component_scopes_when_overview: string;
+    omit_simple_scopes: string;
+    pack_consecutive_simple_scopes: string;
+  };
   visibility: { hierarchy: string; secondary: string; support: string; omit_empty_places: string };
   hierarchy: { order: "source_depth_first"; reuse: "first_expansion"; locator_prefix: string; isolated_components: "grouped" | "individual_roots" };
   place_description: { property: string; visible_when: string };

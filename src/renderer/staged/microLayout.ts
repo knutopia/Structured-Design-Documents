@@ -1145,6 +1145,7 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     viewMetadata: cloneViewMetadata(container.viewMetadata),
     layout: {
       ...container.layout,
+      ...(container.layout.pack ? { pack: { ...container.layout.pack, eligibleItemIds: [...container.layout.pack.eligibleItemIds] } } : {}),
       ...(container.layout.slots ? { slots: { ...container.layout.slots } } : {}),
       ...(container.layout.grid
         ? { grid: {

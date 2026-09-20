@@ -12,7 +12,7 @@ export const UI_CONTRACTS_SPACING = { padding: 16, localGap: 16, siblingGap: 24,
 
 export function uiContractsStack(id: string, children: SceneItem[], direction: "horizontal" | "vertical" = "vertical", gap = 0): SceneContainer {
   return { kind: "container", id, role: "ui_contracts_group", primitive: "stack", classes: [],
-    layout: { strategy: "stack", direction, gap, crossAlignment: "start" },
+    layout: { strategy: "stack", direction, gap, crossAlignment: "start", sizing: "intrinsic" },
     chrome: { padding: { top: 0, right: 0, bottom: 0, left: 0 }, headerBandHeight: 0 }, children, ports: buildCardinalPorts() };
 }
 
@@ -270,6 +270,9 @@ export class UiContractsSceneBuilder {
       ...(model.isolatedComponents.nodes.length ? [uiContractsEnclosure(model.isolatedComponents.id,
         model.isolatedComponents.nodes.map(node => this.node(node)), model.isolatedComponents.title)] : []), ...model.scopes.map(scope => this.scope(scope, true))];
     if (model.register.nodes.length) this.scene.root.children.push(uiContractsEnclosure(model.register.id, model.register.nodes.map(node => this.node(node)), model.register.title));
+    this.scene.root.layout.pack = model.packSimpleScopeIds.length > 0
+      ? { eligibleItemIds: [...model.packSimpleScopeIds], gap: UI_CONTRACTS_SPACING.sectionGap }
+      : undefined;
     const represented = new Set(this.occurrenceSemanticIds.values());
     for (const id of model.visibleSemanticNodeIds) if (!represented.has(id)) this.scene.diagnostics.push(createSceneDiagnostic(
       "renderer.scene.ui_contracts_missing_identity", `Visible identity '${id}' has no scene occurrence.`, { targetId: id, severity: "error" }));

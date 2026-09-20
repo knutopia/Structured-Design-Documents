@@ -1,0 +1,55 @@
+SDD-TEXT 0.1
+
+Place P-001 "Wide Place"
+  COMPOSED_OF C-020 "Multi Node Component"
+  COMPOSED_OF C-050 "Simple Component"
+END
+
+Place P-010 "Simple Place"
+  description="A descriptive simple place"
+END
+
+Component C-020 "Multi Node Component"
+  CONTAINS C-021 "Nested Component"
+  EMITS E-020 "Component Updated"
+END
+
+Component C-021 "Nested Component"
+END
+
+Component C-050 "Simple Component"
+END
+
+Component C-060 "Unreferenced Simple Component"
+END
+
+Event E-020 "Component Updated"
+END
+
+ViewState VS-050 "First Contract"
+  TRANSITIONS_TO VS-060 "Second Contract" ["Next"]
+  TRANSITIONS_TO VS-010 "Third Contract" ["Branch"]
+END
+
+ViewState VS-060 "Second Contract"
+  TRANSITIONS_TO VS-010 "Third Contract" ["Next"]
+  TRANSITIONS_TO VS-040 "Sixth Contract" ["Branch"]
+  TRANSITIONS_TO VS-070 "Seventh Contract" ["Branch"]
+END
+
+ViewState VS-010 "Third Contract"
+  TRANSITIONS_TO VS-020 "Fourth Contract" ["Next"]
+  TRANSITIONS_TO VS-030 "Fifth Contract" ["Branch"]
+END
+
+ViewState VS-020 "Fourth Contract"
+END
+
+ViewState VS-030 "Fifth Contract"
+END
+
+ViewState VS-040 "Sixth Contract"
+END
+
+ViewState VS-070 "Seventh Contract"
+END

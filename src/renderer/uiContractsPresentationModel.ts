@@ -35,6 +35,7 @@ export interface UiContractsScope {
   focal: UiContractsOccurrence; parents: UiContractsOccurrence[]; children: UiContractsOccurrence[];
   containment: UiContractsVisualEdge[];
   sequences: UiContractsSequence[]; compositions: UiContractsLocalGroup[]; contracts: UiContractsLocalGroup[];
+  simple: boolean;
   description?: string;
 }
 export interface UiContractsPresentationModel {
@@ -45,6 +46,7 @@ export interface UiContractsPresentationModel {
   /** Relationships represented by scope ownership or actual overview nesting rather than requiring arrows. */
   structuralRelationshipIds: string[]; visibleSemanticNodeIds: string[];
   omissions: Array<{ id: string; reason: string }>; omittedPlaceIds: string[];
+  simpleScopeIds: string[]; packSimpleScopeIds: string[];
   notes: string[]; diagnostics: RendererDiagnostic[];
 }
 
@@ -242,7 +244,21 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     selected.forEach(edge => sequenceRelationships.add(edge.id));
     return [{ id, nodes: references, edges: selected.map(edge => visualEdge(edge, bySemanticId.get(edge.from)!, bySemanticId.get(edge.to)!, id)) }];
   });
-  const scopes: UiContractsScope[] = [], omittedPlaceIds: string[] = [];
+  const scopes: UiContractsScope[] = [], omittedPlaceIds: string[] = [], omittedSimpleScopeIds = new Set<string>();
+  const simpleScopeIds: string[] = [], packSimpleScopeIds: string[] = [];
+  const isSimpleScope = (scope: UiContractsScope): boolean => {
+    if (!config.scope_policy.simple_scope_kinds.includes(scope.kind)) return false;
+    const occurrenceIds = new Set<string>([scope.focal.id]);
+    for (const item of [...scope.parents, ...scope.children, ...scope.sequences.flatMap(sequence => sequence.nodes),
+      ...scope.compositions.flatMap(group => [group.source, ...group.targets]),
+      ...scope.contracts.flatMap(group => [group.source, ...group.targets])]) occurrenceIds.add(item.id);
+    const connectorCount = scope.containment.length
+      + scope.sequences.reduce((count, sequence) => count + sequence.edges.length, 0)
+      + scope.compositions.reduce((count, group) => count + group.edges.length, 0)
+      + scope.contracts.reduce((count, group) => count + group.edges.length, 0);
+    return occurrenceIds.size === config.scope_policy.simple_occurrence_count
+      && connectorCount === config.scope_policy.simple_connector_count;
+  };
   for (const ownerId of [...placeIds, ...componentIds]) {
     const kind = roleOf(ownerId) === "place" ? "place" : "component", id = `scope:${ownerId}`;
     const hasContent = relationships.some(edge => edge.from === ownerId && ["composition", "contract"].includes(edge.kind))
@@ -270,25 +286,48 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
       && focal.attributes.every(attribute => item.node.attributes.some(other => other.groupId === attribute.groupId
         && other.label === attribute.label && other.value === attribute.value))
       && children.every(child => item.children.some(other => other.node.semanticId === child.semanticId)));
-    if (kind === "component" && !sequences.length && !contracts.length && !compositions.length
+    if (!enabled(config.scope_policy.retain_component_scopes_when_overview)
+      && kind === "component" && !sequences.length && !contracts.length && !compositions.length
       && parents.length <= 1 && overviewCoversFocal
       && containment.every(edge => overviewContainmentIds.has(edge.relationshipId))) {
       occurrences.splice(occurrenceStart);
       continue;
     }
-    scopes.push({ id, kind, title: format(config.labels[kind === "place" ? "place_scope" : "component_scope"], { name: focal.title }), focal,
+    const scope: UiContractsScope = { id, kind, title: format(config.labels[kind === "place" ? "place_scope" : "component_scope"], { name: focal.title }), focal,
       parents, children, containment, sequences, compositions, contracts,
-      ...(kind === "place" && enabled(config.place_description.visible_when) ? { description: graphNodes.get(ownerId)?.props[config.place_description.property] } : {}) });
+      simple: false,
+      ...(kind === "place" && enabled(config.place_description.visible_when) ? { description: graphNodes.get(ownerId)?.props[config.place_description.property] } : {}) };
+    scope.simple = isSimpleScope(scope);
+    if (scope.simple) simpleScopeIds.push(scope.id);
+    if (scope.simple && enabled(config.scope_policy.omit_simple_scopes)) {
+      omittedSimpleScopeIds.add(ownerId);
+      occurrences.splice(occurrenceStart);
+      omissions.push({ id, reason: "simple_scope" });
+      continue;
+    }
+    if (scope.simple && enabled(config.scope_policy.pack_consecutive_simple_scopes)) packSimpleScopeIds.push(scope.id);
+    scopes.push(scope);
   }
   const represented = new Set(occurrences.map(node => node.semanticId));
-  const orphanIds = order([...visible].filter(id => !represented.has(id) && roleOf(id) !== "support"));
+  const orphanIds = order([...visible].filter(id => !represented.has(id) && !omittedSimpleScopeIds.has(id) && roleOf(id) !== "support"));
   for (const ownerId of orphanIds) {
     if (represented.has(ownerId)) continue;
+    const occurrenceStart = occurrences.length;
     const id = `standalone:${ownerId}`, focal = occurrence(ownerId, id, "focal", [], true);
     const compositions = [makeGroup(ownerId, "composition", id, focal)].filter((g): g is UiContractsLocalGroup => Boolean(g));
     const contracts = [makeGroup(ownerId, "contract", id)].filter((g): g is UiContractsLocalGroup => Boolean(g));
-    scopes.push({ id, kind: "standalone", title: format(config.labels.standalone_scope, { name: focal.title }), focal,
-      parents: [], children: [], containment: [], sequences: [], compositions, contracts });
+    const scope: UiContractsScope = { id, kind: "standalone", title: format(config.labels.standalone_scope, { name: focal.title }), focal,
+      parents: [], children: [], containment: [], sequences: [], compositions, contracts, simple: false };
+    scope.simple = isSimpleScope(scope);
+    if (scope.simple) simpleScopeIds.push(scope.id);
+    if (scope.simple && enabled(config.scope_policy.omit_simple_scopes)) {
+      omittedSimpleScopeIds.add(ownerId);
+      occurrences.splice(occurrenceStart);
+      omissions.push({ id, reason: "simple_scope" });
+      continue;
+    }
+    if (scope.simple && enabled(config.scope_policy.pack_consecutive_simple_scopes)) packSimpleScopeIds.push(scope.id);
+    scopes.push(scope);
     represented.add(ownerId);
   }
   // Cross-scope/unowned transitions get explicit reference context rather than disappearing.
@@ -299,19 +338,21 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     const focal = refs[0];
     scopes.push({ id, kind: "standalone", title: format(config.labels.standalone_scope, { name: focal.title }), focal,
       parents: [], children: [], containment: [], compositions: [], contracts: [],
-      sequences: [{ id: `${id}:sequence`, nodes: refs, edges: remainingTransitions.map(edge => visualEdge(edge, lookup.get(edge.from)!, lookup.get(edge.to)!, id)) }] });
+      sequences: [{ id: `${id}:sequence`, nodes: refs, edges: remainingTransitions.map(edge => visualEdge(edge, lookup.get(edge.from)!, lookup.get(edge.to)!, id)) }], simple: false });
   }
   const supportIds = order([...visible].filter(id => roleOf(id) === "support"));
   for (const ownerId of supportIds) {
     const id = `standalone:${ownerId}`, group = makeGroup(ownerId, "contract", id);
     if (group) scopes.push({ id, kind: "standalone", title: format(config.labels.standalone_scope, { name: group.source.title }), focal: group.source,
-      parents: [], children: [], containment: [], sequences: [], compositions: [], contracts: [group] });
+      parents: [], children: [], containment: [], sequences: [], compositions: [], contracts: [group], simple: false });
   }
   const register = { id: "target-register", title: config.labels.target_register,
     nodes: supportIds.map(id => occurrence(id, "target-register", "register", [])) };
   const notes = omittedPlaceIds.length ? [`Omitted empty ui_contracts containers in compact detail: ${omittedPlaceIds.map(id => nodes.get(id)!.name).join(", ")}.`] : [];
   const localContainmentIds = new Set(scopes.flatMap(scope => scope.containment.map(edge => edge.relationshipId)));
+  const representedAfterOmissions = new Set(occurrences.map(node => node.semanticId));
+  for (const id of [...visible]) if (!representedAfterOmissions.has(id)) visible.delete(id);
   return { overview, isolatedComponents, scopes, register, occurrences, relationships,
     structuralRelationshipIds: relationships.filter(edge => edge.kind === "ownership" || overviewContainmentIds.has(edge.id) && !localContainmentIds.has(edge.id)).map(edge => edge.id),
-    visibleSemanticNodeIds: order(visible), omittedPlaceIds, omissions, notes, diagnostics };
+    visibleSemanticNodeIds: order(visible), omittedPlaceIds, simpleScopeIds, packSimpleScopeIds, omissions, notes, diagnostics };
 }

@@ -6,7 +6,7 @@ import { resolveRendererTheme } from "./theme.js";
 
 function fanoutStack(id: string, children: SceneItem[], direction: "horizontal" | "vertical", gap = 0): SceneContainer {
   return { kind: "container", id, role: "fanout_proof", primitive: "stack", classes: [],
-    layout: { strategy: "stack", direction, gap, crossAlignment: "start" },
+    layout: { strategy: "stack", direction, gap, crossAlignment: "start", sizing: "intrinsic" },
     chrome: { padding: { top: 0, right: 0, bottom: 0, left: 0 }, headerBandHeight: 0 }, children, ports: [] };
 }
 

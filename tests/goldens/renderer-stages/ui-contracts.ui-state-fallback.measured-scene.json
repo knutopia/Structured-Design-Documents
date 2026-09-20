@@ -17,7 +17,8 @@
       "strategy": "stack",
       "direction": "vertical",
       "gap": 28,
-      "crossAlignment": "start"
+      "crossAlignment": "start",
+      "sizing": "intrinsic"
     },
     "chrome": {
       "padding": {
@@ -47,7 +48,8 @@
           "strategy": "stack",
           "direction": "vertical",
           "gap": 16,
-          "crossAlignment": "start"
+          "crossAlignment": "start",
+          "sizing": "intrinsic"
         },
         "chrome": {
           "padding": {
@@ -222,7 +224,8 @@
           "strategy": "stack",
           "direction": "vertical",
           "gap": 16,
-          "crossAlignment": "start"
+          "crossAlignment": "start",
+          "sizing": "intrinsic"
         },
         "chrome": {
           "padding": {
@@ -261,7 +264,8 @@
               "strategy": "layered",
               "direction": "horizontal",
               "gap": 24,
-              "crossAlignment": "start"
+              "crossAlignment": "start",
+              "sizing": "intrinsic"
             },
             "chrome": {
               "padding": {
@@ -686,7 +690,8 @@
               "strategy": "layered",
               "direction": "horizontal",
               "gap": 24,
-              "crossAlignment": "start"
+              "crossAlignment": "start",
+              "sizing": "intrinsic"
             },
             "chrome": {
               "padding": {
@@ -976,7 +981,8 @@
           "strategy": "stack",
           "direction": "vertical",
           "gap": 16,
-          "crossAlignment": "start"
+          "crossAlignment": "start",
+          "sizing": "intrinsic"
         },
         "chrome": {
           "padding": {
@@ -1015,7 +1021,8 @@
               "strategy": "stack",
               "direction": "vertical",
               "gap": 12,
-              "crossAlignment": "center"
+              "crossAlignment": "center",
+              "sizing": "intrinsic"
             },
             "chrome": {
               "padding": {
@@ -1369,7 +1376,8 @@
               "strategy": "layered",
               "direction": "horizontal",
               "gap": 24,
-              "crossAlignment": "start"
+              "crossAlignment": "start",
+              "sizing": "intrinsic"
             },
             "chrome": {
               "padding": {
@@ -1619,7 +1627,8 @@
               "strategy": "stack",
               "direction": "vertical",
               "gap": 24,
-              "crossAlignment": "start"
+              "crossAlignment": "start",
+              "sizing": "intrinsic"
             },
             "chrome": {
               "padding": {
@@ -1643,7 +1652,8 @@
                   "strategy": "stack",
                   "direction": "horizontal",
                   "gap": 131.748,
-                  "crossAlignment": "start"
+                  "crossAlignment": "start",
+                  "sizing": "intrinsic"
                 },
                 "chrome": {
                   "padding": {
@@ -1840,7 +1850,8 @@
                   "strategy": "stack",
                   "direction": "horizontal",
                   "gap": 155.748,
-                  "crossAlignment": "center"
+                  "crossAlignment": "center",
+                  "sizing": "intrinsic"
                 },
                 "chrome": {
                   "padding": {
@@ -1864,7 +1875,8 @@
                       "strategy": "stack",
                       "direction": "vertical",
                       "gap": 0,
-                      "crossAlignment": "start"
+                      "crossAlignment": "start",
+                      "sizing": "intrinsic"
                     },
                     "chrome": {
                       "padding": {
@@ -1990,7 +2002,8 @@
                   "strategy": "stack",
                   "direction": "horizontal",
                   "gap": 171.748,
-                  "crossAlignment": "center"
+                  "crossAlignment": "center",
+                  "sizing": "intrinsic"
                 },
                 "chrome": {
                   "padding": {
@@ -2014,7 +2027,8 @@
                       "strategy": "stack",
                       "direction": "vertical",
                       "gap": 0,
-                      "crossAlignment": "start"
+                      "crossAlignment": "start",
+                      "sizing": "intrinsic"
                     },
                     "chrome": {
                       "padding": {
@@ -2185,7 +2199,8 @@
           "strategy": "stack",
           "direction": "vertical",
           "gap": 16,
-          "crossAlignment": "start"
+          "crossAlignment": "start",
+          "sizing": "intrinsic"
         },
         "chrome": {
           "padding": {

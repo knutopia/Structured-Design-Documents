@@ -50,8 +50,8 @@ describe("public staged UI contracts B5 renderer", () => {
     const scene = buildUiContractsRendererScene(projection, graph, view, { detailId });
     expect(scene.diagnostics).toEqual([]);
     expect(scene.edges).toEqual([]);
-    expect(scene.root.children).toHaveLength(1);
-    const group = scene.root.children[0];
+    expect(scene.root.children).toHaveLength(detailId === "compact" ? 1 : 3);
+    const group = scene.root.children.find(child => child.id === "components-without-containment")!;
     expect(group.kind).toBe("container");
     if (group.kind !== "container") throw new Error("Missing shared enclosure");
     expect(group.viewMetadata?.uiContracts?.title).toBe("Uncontained cards");

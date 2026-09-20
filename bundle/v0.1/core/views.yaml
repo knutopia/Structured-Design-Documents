@@ -3156,6 +3156,13 @@ views:
             - {kind: contract, edge_type: DEPENDS_ON, from: [Component, ViewState], to: [SystemAction], style: solid, label: depends on}
             - {kind: contract, edge_type: BINDS_TO, from: [Component], to: [DataEntity], style: dotted, label: binds to, field_property: field, field_label: 'binds field {value}'}
           ownership: {primary_property: place_id, secondary_property: scope_id}
+          scope_policy:
+            simple_scope_kinds: [place, component, standalone]
+            simple_occurrence_count: 1
+            simple_connector_count: 0
+            retain_component_scopes_when_overview: retain_component_scopes_when_overview
+            omit_simple_scopes: omit_simple_scopes
+            pack_consecutive_simple_scopes: pack_consecutive_simple_scopes
           visibility:
             hierarchy: show_component_hierarchy
             secondary: show_secondary_state_groups_when_primary_view_state
@@ -3206,6 +3213,9 @@ views:
             show_secondary_state_groups_when_primary_view_state: false
             show_supporting_contract_lane_when_primary_view_state: false
             omit_empty_place_containers: true
+            retain_component_scopes_when_overview: true
+            omit_simple_scopes: true
+            pack_consecutive_simple_scopes: false
           detailed:
             show_component_hierarchy: true
             show_component_description: true
@@ -3219,3 +3229,6 @@ views:
             show_secondary_state_groups_when_primary_view_state: true
             show_supporting_contract_lane_when_primary_view_state: true
             omit_empty_place_containers: false
+            retain_component_scopes_when_overview: true
+            omit_simple_scopes: false
+            pack_consecutive_simple_scopes: true

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="912" height="392" viewBox="0 0 912 392" class="staged-svg view-ia_place_map detail-compact theme-default theme-revision-public-sans-v0-2" data-view-id="ia_place_map" data-detail-id="compact" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="728" viewBox="0 0 1240 728" class="staged-svg view-scenario_flow detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="scenario_flow" data-detail-id="detailed" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -36,7 +36,6 @@
     .scene-marker { fill: #1d4ed8; }
     .scene-text { fill: #0f172a; }
     .scene-text.block-kind-metadata, .scene-text.block-region-secondary, .scene-text.text-role-subtitle, .scene-text.text-role-metadata { fill: #475569; }
-    .scene-container__chrome--canvas { fill: #f7f8fb; }
     .staged-svg { --sdd-shared-node-font-family: 'Public Sans'; --sdd-shared-node-width: 224px; --sdd-shared-node-min-height: 48px; --sdd-shared-node-container-padding-top: 0px; --sdd-shared-node-container-padding-right: 0px; --sdd-shared-node-container-padding-bottom: 0px; --sdd-shared-node-container-padding-left: 0px; --sdd-shared-node-container-gap: 0px; --sdd-shared-node-radius: 14px; --sdd-shared-node-stroke-width: 1.5px; --sdd-shared-node-stroke-placement: inside; --sdd-shared-node-fill: #ffffff; --sdd-shared-node-stroke: #387575; --sdd-shared-node-text: #0f172a; --sdd-shared-node-decorator-height: 19px; --sdd-shared-node-decorator-gap: 4px; --sdd-shared-node-decorator-padding-top: 0px; --sdd-shared-node-decorator-padding-right: 14px; --sdd-shared-node-decorator-padding-bottom: 0px; --sdd-shared-node-decorator-padding-left: 14px; --sdd-shared-node-decorator-fill: #dbe4f0; --sdd-shared-node-body-padding-top: 6px; --sdd-shared-node-body-padding-right: 14px; --sdd-shared-node-body-padding-bottom: 6px; --sdd-shared-node-body-padding-left: 14px; --sdd-shared-node-body-gap: 4px; --sdd-shared-node-attribute-padding-top: 0px; --sdd-shared-node-attribute-padding-right: 0px; --sdd-shared-node-attribute-padding-bottom: 0px; --sdd-shared-node-attribute-padding-left: 0px; --sdd-shared-node-attribute-gap: 2px; --sdd-shared-node-decorator-font-size: 10px; --sdd-shared-node-decorator-font-weight: 600; --sdd-shared-node-decorator-line-height: 12px; --sdd-shared-node-decorator-letter-spacing: 0px; --sdd-shared-node-title-font-size: 16px; --sdd-shared-node-title-font-weight: 600; --sdd-shared-node-title-line-height: 19px; --sdd-shared-node-title-letter-spacing: -0.32px; --sdd-shared-node-attribute-label-font-size: 10px; --sdd-shared-node-attribute-label-font-weight: 400; --sdd-shared-node-attribute-label-line-height: 12px; --sdd-shared-node-attribute-label-letter-spacing: 0px; --sdd-shared-node-attribute-value-font-size: 12px; --sdd-shared-node-attribute-value-font-weight: 400; --sdd-shared-node-attribute-value-line-height: 14px; --sdd-shared-node-attribute-value-letter-spacing: 0px; }
     .shared-node__chrome { fill: #ffffff; stroke: none; }
     .shared-node__decorator-header { fill: #dbe4f0; }
@@ -61,262 +60,291 @@
     </marker>
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
-    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="910.5" height="390.5" rx="17.25" ry="17.25"/>
-    </g>
-    <g id="scene-container-a-010" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-010" data-role="area">
-      <rect class="scene-container__chrome" x="24" y="24" width="256" height="344" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="24" y="24" width="256" height="40" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-a-020" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-020" data-role="area">
-      <rect class="scene-container__chrome" x="328" y="24" width="256" height="271" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="328" y="24" width="256" height="40" rx="16" ry="16"/>
-    </g>
-    <g id="scene-container-a-030" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-030" data-role="area">
-      <rect class="scene-container__chrome" x="632" y="24" width="256" height="271" rx="16" ry="16"/>
-      <rect class="scene-container__header-band" x="632" y="24" width="256" height="40" rx="16" ry="16"/>
+    <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram scenario_flow scenario_flow" data-item-id="root" data-role="diagram_root">
+      <rect class="scene-container__chrome" x="0.75" y="0.75" width="1238.5" height="726.5" rx="17.25" ry="17.25"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">
-    <g id="scene-node-p-010" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-010" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="40.75" y="80.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 41.5 100.5 L 41.5 94 Q 41.5 81.5 54 81.5 L 250 81.5 Q 262.5 81.5 262.5 94 L 262.5 100.5 Z"/>
-      <rect class="shared-node__outline" x="40.75" y="80.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-010" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense" data-item-id="J-010" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="142.75" y="38.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 143.5 58.5 L 143.5 52 Q 143.5 39.5 156 39.5 L 352 39.5 Q 364.5 39.5 364.5 52 L 364.5 58.5 Z"/>
+      <rect class="shared-node__outline" x="142.75" y="38.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-012" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-012" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="40.75" y="153.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 41.5 173.5 L 41.5 167 Q 41.5 154.5 54 154.5 L 250 154.5 Q 262.5 154.5 262.5 167 L 262.5 173.5 Z"/>
-      <rect class="shared-node__outline" x="40.75" y="153.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-020" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense" data-item-id="J-020" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="410.75" y="38.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 411.5 58.5 L 411.5 52 Q 411.5 39.5 424 39.5 L 620 39.5 Q 632.5 39.5 632.5 52 L 632.5 58.5 Z"/>
+      <rect class="shared-node__outline" x="410.75" y="38.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-014" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-014" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="40.75" y="226.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 41.5 246.5 L 41.5 240 Q 41.5 227.5 54 227.5 L 250 227.5 Q 262.5 227.5 262.5 240 L 262.5 246.5 Z"/>
-      <rect class="shared-node__outline" x="40.75" y="226.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-021" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense" data-item-id="J-021" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="710.75" y="38.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 711.5 58.5 L 711.5 52 Q 711.5 39.5 724 39.5 L 920 39.5 Q 932.5 39.5 932.5 52 L 932.5 58.5 Z"/>
+      <rect class="shared-node__outline" x="710.75" y="38.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-016" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-016" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="40.75" y="299.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 41.5 319.5 L 41.5 313 Q 41.5 300.5 54 300.5 L 250 300.5 Q 262.5 300.5 262.5 313 L 262.5 319.5 Z"/>
-      <rect class="shared-node__outline" x="40.75" y="299.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-022" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense" data-item-id="J-022" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="978.75" y="38.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 979.5 58.5 L 979.5 52 Q 979.5 39.5 992 39.5 L 1188 39.5 Q 1200.5 39.5 1200.5 52 L 1200.5 58.5 Z"/>
+      <rect class="shared-node__outline" x="978.75" y="38.75" width="222.5" height="70.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-020" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-020" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="344.75" y="80.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 345.5 100.5 L 345.5 94 Q 345.5 81.5 358 81.5 L 554 81.5 Q 566.5 81.5 566.5 94 L 566.5 100.5 Z"/>
-      <rect class="shared-node__outline" x="344.75" y="80.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-040" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-branch_step shape-box type-step shared-node shared-node-dense" data-item-id="J-040" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="410.75" y="154.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 411.5 174.5 L 411.5 168 Q 411.5 155.5 424 155.5 L 620 155.5 Q 632.5 155.5 632.5 168 L 632.5 174.5 Z"/>
+      <rect class="shared-node__outline" x="410.75" y="154.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-030" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-030" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="344.75" y="153.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 345.5 173.5 L 345.5 167 Q 345.5 154.5 358 154.5 L 554 154.5 Q 566.5 154.5 566.5 167 L 566.5 173.5 Z"/>
-      <rect class="shared-node__outline" x="344.75" y="153.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-041" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-branch_step shape-box type-step shared-node shared-node-dense" data-item-id="J-041" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="710.75" y="154.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 711.5 174.5 L 711.5 168 Q 711.5 155.5 724 155.5 L 920 155.5 Q 932.5 155.5 932.5 168 L 932.5 174.5 Z"/>
+      <rect class="shared-node__outline" x="710.75" y="154.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-040" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-040" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="344.75" y="226.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 345.5 246.5 L 345.5 240 Q 345.5 227.5 358 227.5 L 554 227.5 Q 566.5 227.5 566.5 240 L 566.5 246.5 Z"/>
-      <rect class="shared-node__outline" x="344.75" y="226.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-042" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-branch_step shape-box type-step shared-node shared-node-dense" data-item-id="J-042" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="710.75" y="270.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 711.5 290.5 L 711.5 284 Q 711.5 271.5 724 271.5 L 920 271.5 Q 932.5 271.5 932.5 284 L 932.5 290.5 Z"/>
+      <rect class="shared-node__outline" x="710.75" y="270.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-050" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-050" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="648.75" y="80.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 649.5 100.5 L 649.5 94 Q 649.5 81.5 662 81.5 L 858 81.5 Q 870.5 81.5 870.5 94 L 870.5 100.5 Z"/>
-      <rect class="shared-node__outline" x="648.75" y="80.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-043" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-branch_step shape-box type-step shared-node shared-node-dense" data-item-id="J-043" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="710.75" y="386.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 711.5 406.5 L 711.5 400 Q 711.5 387.5 724 387.5 L 920 387.5 Q 932.5 387.5 932.5 400 L 932.5 406.5 Z"/>
+      <rect class="shared-node__outline" x="710.75" y="386.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-060" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-060" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="648.75" y="153.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 649.5 173.5 L 649.5 167 Q 649.5 154.5 662 154.5 L 858 154.5 Q 870.5 154.5 870.5 167 L 870.5 173.5 Z"/>
-      <rect class="shared-node__outline" x="648.75" y="153.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-030" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense" data-item-id="J-030" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="142.75" y="618.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 143.5 638.5 L 143.5 632 Q 143.5 619.5 156 619.5 L 352 619.5 Q 364.5 619.5 364.5 632 L 364.5 638.5 Z"/>
+      <rect class="shared-node__outline" x="142.75" y="618.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
-    <g id="scene-node-p-070" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-070" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="648.75" y="226.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
-      <path class="shared-node__decorator-header" d="M 649.5 246.5 L 649.5 240 Q 649.5 227.5 662 227.5 L 858 227.5 Q 870.5 227.5 870.5 240 L 870.5 246.5 Z"/>
-      <rect class="shared-node__outline" x="648.75" y="226.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    <g id="scene-node-j-031" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense" data-item-id="J-031" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="410.75" y="618.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 411.5 638.5 L 411.5 632 Q 411.5 619.5 424 619.5 L 620 619.5 Q 632.5 619.5 632.5 632 L 632.5 638.5 Z"/>
+      <rect class="shared-node__outline" x="410.75" y="618.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+    </g>
+    <g id="scene-node-j-032" class="scene-node primitive-card role-step paint-nodes semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense" data-item-id="J-032" data-role="step" data-node-density="dense">
+      <rect class="shared-node__chrome" x="710.75" y="618.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
+      <path class="shared-node__decorator-header" d="M 711.5 638.5 L 711.5 632 Q 711.5 619.5 724 619.5 L 920 619.5 Q 932.5 619.5 932.5 632 L 932.5 638.5 Z"/>
+      <rect class="shared-node__outline" x="710.75" y="618.75" width="222.5" height="51.5" rx="13.25" ry="13.25"/>
     </g>
   </g>
   <g class="paint-layer paint-labels" data-paint-group="labels">
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-010" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="40" y="50">
-          <tspan x="40" dy="0">Core</tspan>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-010" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="157.5" y="52.625">
+            <tspan x="157.5" y="52.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="183.775" y="52.625">
+            <tspan x="183.775" y="52.625">J-010</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="157.5" y="79.8">
+              <tspan x="157.5" y="79.8">Select a Node</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-020" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="425.5" y="52.625">
+            <tspan x="425.5" y="52.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="451.775" y="52.625">
+            <tspan x="451.775" y="52.625">J-020</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="425.5" y="79.8">
+              <tspan x="425.5" y="79.8">Review Diagrams</tspan>
+              <tspan x="425.5" y="98.8">Containing Current Node</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-021" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="725.5" y="52.625">
+            <tspan x="725.5" y="52.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="751.775" y="52.625">
+            <tspan x="751.775" y="52.625">J-021</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="725.5" y="79.8">
+              <tspan x="725.5" y="79.8">Select Diagram</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-022" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="993.5" y="52.625">
+            <tspan x="993.5" y="52.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="1019.775" y="52.625">
+            <tspan x="1019.775" y="52.625">J-022</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="993.5" y="79.8">
+              <tspan x="993.5" y="79.8">View Node in New</tspan>
+              <tspan x="993.5" y="98.8">Diagram Context</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-branch_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-040" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="425.5" y="168.625">
+            <tspan x="425.5" y="168.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="451.775" y="168.625">
+            <tspan x="451.775" y="168.625">J-040</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="425.5" y="195.8">
+              <tspan x="425.5" y="195.8">Add Relationship</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-branch_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-041" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="725.5" y="168.625">
+            <tspan x="725.5" y="168.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="751.775" y="168.625">
+            <tspan x="751.775" y="168.625">J-041</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="725.5" y="195.8">
+              <tspan x="725.5" y="195.8">Add relationship, by node</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-branch_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-042" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="725.5" y="284.625">
+            <tspan x="725.5" y="284.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="751.775" y="284.625">
+            <tspan x="751.775" y="284.625">J-042</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="725.5" y="311.8">
+              <tspan x="725.5" y="311.8">Add outgoing relationship</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-branch_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-043" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="725.5" y="400.625">
+            <tspan x="725.5" y="400.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="751.775" y="400.625">
+            <tspan x="751.775" y="400.625">J-043</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="725.5" y="427.8">
+              <tspan x="725.5" y="427.8">Add incoming relationship</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-030" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="157.5" y="632.625">
+            <tspan x="157.5" y="632.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="183.775" y="632.625">
+            <tspan x="183.775" y="632.625">J-030</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="157.5" y="659.8">
+              <tspan x="157.5" y="659.8">Select Diagram Content</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-031" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="425.5" y="632.625">
+            <tspan x="425.5" y="632.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="451.775" y="632.625">
+            <tspan x="451.775" y="632.625">J-031</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="425.5" y="659.8">
+              <tspan x="425.5" y="659.8">Adjust View</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g class="scene-node primitive-card role-step paint-labels semantic_node scenario_flow_node scenario-flow-lane-step scenario-flow-role-spine_step shape-box type-step shared-node shared-node-dense shared-node__labels" data-item-id="J-032" data-role="step">
+      <g class="shared-node__decorator">
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="725.5" y="632.625">
+            <tspan x="725.5" y="632.625">Step</tspan>
+          </text>
+        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="751.775" y="632.625">
+            <tspan x="751.775" y="632.625">J-032</tspan>
+          </text>
+      </g>
+      <g class="shared-node__body">
+        <g class="shared-node__title">
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="725.5" y="659.8">
+              <tspan x="725.5" y="659.8">Name the New View</tspan>
+            </text>
+        </g>
+      </g>
+    </g>
+    <g id="scene-decoration-lane-step__title" class="scene-decoration scene-decoration-text paint-labels scenario_flow_lane_title lane-step" data-decoration-id="lane-step__title">
+      <text class="scene-text text-role-label block-kind-text" x="24" y="367">
+          <tspan x="24" dy="0">Steps</tspan>
         </text>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-010" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="55.5" y="94.625">
-            <tspan x="55.5" y="94.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="85.82" y="94.625">
-            <tspan x="85.82" y="94.625">P-010</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="55.5" y="121.8">
-              <tspan x="55.5" y="121.8">SDD Viewer/Editor</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-012" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="55.5" y="167.625">
-            <tspan x="55.5" y="167.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="85.82" y="167.625">
-            <tspan x="85.82" y="167.625">P-012</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="55.5" y="194.8">
-              <tspan x="55.5" y="194.8">Source Pane</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-014" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="55.5" y="240.625">
-            <tspan x="55.5" y="240.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="85.82" y="240.625">
-            <tspan x="85.82" y="240.625">P-014</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="55.5" y="267.8">
-              <tspan x="55.5" y="267.8">Diagram Pane</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-016" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="55.5" y="313.625">
-            <tspan x="55.5" y="313.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="85.82" y="313.625">
-            <tspan x="85.82" y="313.625">P-016</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="55.5" y="340.8">
-              <tspan x="55.5" y="340.8">Inspector Pane</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-020" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="344" y="50">
-          <tspan x="344" dy="0">Browser</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-020" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="359.5" y="94.625">
-            <tspan x="359.5" y="94.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="389.82" y="94.625">
-            <tspan x="389.82" y="94.625">P-020</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="359.5" y="121.8">
-              <tspan x="359.5" y="121.8">Project Browser</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-030" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="359.5" y="167.625">
-            <tspan x="359.5" y="167.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="389.82" y="167.625">
-            <tspan x="389.82" y="167.625">P-030</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="359.5" y="194.8">
-              <tspan x="359.5" y="194.8">Template Browser</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-040" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="359.5" y="240.625">
-            <tspan x="359.5" y="240.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="389.82" y="240.625">
-            <tspan x="389.82" y="240.625">P-040</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="359.5" y="267.8">
-              <tspan x="359.5" y="267.8">Prompt Browser</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-container primitive-cluster role-area paint-labels area" data-item-id="A-030" data-role="area">
-      <text class="scene-text text-role-title block-kind-text block-region-primary" x="648" y="50">
-          <tspan x="648" dy="0">Updates</tspan>
-        </text>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-050" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="663.5" y="94.625">
-            <tspan x="663.5" y="94.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="693.82" y="94.625">
-            <tspan x="693.82" y="94.625">P-050</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="663.5" y="121.8">
-              <tspan x="663.5" y="121.8">Comments</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-060" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="663.5" y="167.625">
-            <tspan x="663.5" y="167.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="693.82" y="167.625">
-            <tspan x="693.82" y="167.625">P-060</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="663.5" y="194.8">
-              <tspan x="663.5" y="194.8">External Links</tspan>
-            </text>
-        </g>
-      </g>
-    </g>
-    <g class="scene-node primitive-card role-place paint-labels semantic_node place root_place depth-0 shared-node shared-node-dense shared-node__labels" data-item-id="P-070" data-role="place">
-      <g class="shared-node__decorator">
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="663.5" y="240.625">
-            <tspan x="663.5" y="240.625">Place</tspan>
-          </text>
-        <text class="scene-text text-role-shared_node_decorator block-kind-text block-region-primary shared-node__decorator-item" x="693.82" y="240.625">
-            <tspan x="693.82" y="240.625">P-070</tspan>
-          </text>
-      </g>
-      <g class="shared-node__body">
-        <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="663.5" y="267.8">
-              <tspan x="663.5" y="267.8">Updates</tspan>
-            </text>
-        </g>
-      </g>
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
+    <g id="scene-edge-j-010__precedes__j-020" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-010__precedes__J-020" data-role="precedes">
+      <path class="scene-edge__path" d="M 366 64.5 L 410 64.5" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-j-010__precedes__j-040" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-010__precedes__J-040" data-role="precedes">
+      <path class="scene-edge__path" d="M 366 80.5 L 394 80.5 L 394 180.5 L 410 180.5" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-j-020__precedes__j-021" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-020__precedes__J-021" data-role="precedes">
+      <path class="scene-edge__path" d="M 634 64.5 L 710 64.5" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-j-040__precedes__j-041" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-040__precedes__J-041" data-role="precedes">
+      <path class="scene-edge__path" d="M 634 164.5 L 710 164.5" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-j-040__precedes__j-042" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-040__precedes__J-042" data-role="precedes">
+      <path class="scene-edge__path" d="M 634 180.5 L 672 180.5 L 672 296.5 L 710 296.5" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-j-040__precedes__j-043" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-040__precedes__J-043" data-role="precedes">
+      <path class="scene-edge__path" d="M 634 196.5 L 656 196.5 L 656 412.5 L 710 412.5" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-j-021__precedes__j-022" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-021__precedes__J-022" data-role="precedes">
+      <path class="scene-edge__path" d="M 934 74 L 978 74" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-j-030__precedes__j-031" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-030__precedes__J-031" data-role="precedes">
+      <path class="scene-edge__path" d="M 366 644.5 L 410 644.5" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-j-031__precedes__j-032" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-031__precedes__J-032" data-role="precedes">
+      <path class="scene-edge__path" d="M 634 644.5 L 710 644.5" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">
   </g>

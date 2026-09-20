@@ -296,6 +296,38 @@ describe("staged macro-layout", () => {
     }));
   });
 
+  it("packs eligible stack children greedily without stretching or crossing an interruption", async () => {
+    const breakNode = buildCardNode("break", "standard", "Break");
+    breakNode.fixedSize = { width: 208, height: 48 };
+    const scene = buildRootScene(
+      {
+        strategy: "stack",
+        direction: "vertical",
+        gap: 28,
+        crossAlignment: "start",
+        sizing: "intrinsic",
+        pack: { eligibleItemIds: ["simple-a", "simple-b", "simple-d"], gap: 16 }
+      },
+      [
+        buildCardNode("simple-a", "chip", "A"),
+        buildCardNode("simple-b", "chip", "B"),
+        breakNode,
+        buildCardNode("simple-d", "chip", "D")
+      ]
+    );
+
+    const result = await runStagedRendererPipeline(scene);
+    const a = findPositionedItem(result.positionedScene.root, "simple-a");
+    const b = findPositionedItem(result.positionedScene.root, "simple-b");
+    const breaker = findPositionedItem(result.positionedScene.root, "break");
+    const d = findPositionedItem(result.positionedScene.root, "simple-d");
+    expect(a).toEqual(expect.objectContaining({ x: 16, y: 16, width: 96 }));
+    expect(b).toEqual(expect.objectContaining({ x: 128, y: 16, width: 96 }));
+    expect(breaker).toEqual(expect.objectContaining({ x: 16, y: 80, width: 208 }));
+    expect(d).toEqual(expect.objectContaining({ x: 16, y: 144, width: 96 }));
+    expect(result.positionedScene.root.width).toBe(240);
+  });
+
   it("lays out fixed-column grids in row-major order", async () => {
     const scene = buildRootScene(
       {

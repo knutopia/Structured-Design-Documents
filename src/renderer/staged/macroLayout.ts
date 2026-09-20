@@ -108,6 +108,7 @@ function roundMetric(value: number): number {
 function cloneLayoutIntent(layout: LayoutIntent): LayoutIntent {
   return {
     ...layout,
+    ...(layout.pack ? { pack: { ...layout.pack, eligibleItemIds: [...layout.pack.eligibleItemIds] } } : {}),
     ...(layout.slots ? { slots: { ...layout.slots } } : {}),
     ...(layout.grid
       ? { grid: {
@@ -457,6 +458,49 @@ async function layoutStackContainer(
   _ownedEdges: MeasuredEdge[],
   context: LayoutContext
 ): Promise<ContainerLayoutResult> {
+  if (container.layout.pack && (container.layout.direction ?? "vertical") === "vertical") {
+    const eligible = new Set(container.layout.pack.eligibleItemIds);
+    const packedChildren = children.filter(child => eligible.has(child.id));
+    if (packedChildren.length > 0) {
+      const budget = Math.max(
+        ...children.filter(child => !eligible.has(child.id)).map(child => child.width),
+        ...packedChildren.map(child => child.width)
+      );
+      const gap = Math.max(0, container.layout.pack.gap);
+      const rows: PositionedItem[][] = [];
+      let current: PositionedItem[] = [];
+      let currentWidth = 0;
+      const flush = (): void => {
+        if (current.length > 0) rows.push(current);
+        current = [];
+        currentWidth = 0;
+      };
+      for (const child of children) {
+        if (!eligible.has(child.id)) {
+          flush();
+          rows.push([child]);
+          continue;
+        }
+        const nextWidth = current.length === 0 ? child.width : currentWidth + gap + child.width;
+        if (current.length > 0 && nextWidth > budget + 0.001) flush();
+        current.push(child);
+        currentWidth = current.length === 1 ? child.width : currentWidth + gap + child.width;
+      }
+      flush();
+      let y = 0;
+      rows.forEach((row, rowIndex) => {
+        let x = 0;
+        const rowHeight = Math.max(...row.map(child => child.height));
+        row.forEach((child, childIndex) => {
+          child.x = roundMetric(x);
+          child.y = roundMetric(y);
+          x += child.width + (childIndex < row.length - 1 ? gap : 0);
+        });
+        y += rowHeight + (rowIndex < rows.length - 1 ? gap : 0);
+      });
+      return { contentWidth: roundMetric(budget), contentHeight: roundMetric(Math.max(0, y)) };
+    }
+  }
   return layoutLinearContainer(container, children, context, {
     defaultDirection: "vertical",
     alwaysStretchContainers: false
@@ -821,6 +865,9 @@ async function layoutContainer(
   const width = roundMetric(chrome.padding.left + layoutResult.contentWidth + chrome.padding.right);
   const headerWidth = resolveContainerHeaderWidth(container.headerContent, chrome);
   const height = roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0) + layoutResult.contentHeight + chrome.padding.bottom);
+  const intrinsic = container.layout.sizing === "intrinsic";
+  const naturalWidth = roundMetric(chrome.padding.left + layoutResult.contentWidth + chrome.padding.right);
+  const naturalHeight = roundMetric(chrome.padding.top + (chrome.headerBandHeight ?? 0) + layoutResult.contentHeight + chrome.padding.bottom);
   const positioned: PositionedContainer = {
     kind: "container",
     id: container.id,
@@ -835,8 +882,12 @@ async function layoutContainer(
     ports: container.ports.map((port) => cloneMeasuredPort(port)),
     x: 0,
     y: 0,
-    width: Math.max(width, headerWidth, container.width),
-    height: Math.max(height, container.height),
+    width: intrinsic
+      ? Math.max(naturalWidth, headerWidth, container.sharedWidthGroup ? container.width : 0)
+      : Math.max(width, headerWidth, container.width),
+    height: intrinsic
+      ? Math.max(naturalHeight, container.sharedHeightGroup ? container.height : 0)
+      : Math.max(height, container.height),
     ...(container.resolvedSlotHeight !== undefined ? { resolvedSlotHeight: container.resolvedSlotHeight } : {}),
     sharedWidthGroup: container.sharedWidthGroup,
     sharedHeightGroup: container.sharedHeightGroup

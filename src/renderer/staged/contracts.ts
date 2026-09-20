@@ -340,6 +340,13 @@ export interface LayoutIntent {
   direction?: LayoutDirection;
   gap?: number;
   crossAlignment?: CrossAlignment;
+  /** Intrinsic containers derive final bounds from the layout result instead of retaining provisional estimates. */
+  sizing?: "minimum" | "intrinsic";
+  /** Optional source-order packing for consecutive children in a vertical stack. */
+  pack?: {
+    eligibleItemIds: string[];
+    gap: number;
+  };
   columns?: number;
   /** Reserve equal-height slots without resizing their children. Vertical stacks only. */
   slots?: {

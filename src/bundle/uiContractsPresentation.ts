@@ -25,6 +25,18 @@ export function uiContractsPresentationProblems(value: unknown, policies?: unkno
     errors.push("relationships must contain valid endpoint selectors and presentation rules");
   }
   if (!isRecord(value.ownership) || !text(value.ownership.primary_property) || !text(value.ownership.secondary_property)) errors.push("ownership must declare both property selectors");
+  const scopePolicy = value.scope_policy;
+  if (!isRecord(scopePolicy)
+    || !Array.isArray(scopePolicy.simple_scope_kinds)
+    || scopePolicy.simple_scope_kinds.length === 0
+    || !scopePolicy.simple_scope_kinds.every(kind => ["place", "component", "standalone"].includes(String(kind)))
+    || scopePolicy.simple_occurrence_count !== 1
+    || scopePolicy.simple_connector_count !== 0
+    || !text(scopePolicy.retain_component_scopes_when_overview)
+    || !text(scopePolicy.omit_simple_scopes)
+    || !text(scopePolicy.pack_consecutive_simple_scopes)) {
+    errors.push("scope_policy must declare simple scope selectors and detail switches");
+  }
   const visibility = value.visibility;
   if (!isRecord(visibility) || !["hierarchy", "secondary", "support", "omit_empty_places"].every(key => text(visibility[key]))) errors.push("visibility must declare detail switches");
   if (!isRecord(value.hierarchy) || value.hierarchy.order !== "source_depth_first" || value.hierarchy.reuse !== "first_expansion" || !text(value.hierarchy.locator_prefix)) errors.push("hierarchy must declare source_depth_first / first_expansion and a locator prefix");
@@ -38,6 +50,9 @@ export function uiContractsPresentationProblems(value: unknown, policies?: unkno
   if (errors.length === 0 && policies !== undefined) {
     const config = value as unknown as UiContractsPresentationConfig;
     const switches = [...Object.values(config.visibility), config.place_description.visible_when,
+      config.scope_policy.retain_component_scopes_when_overview,
+      config.scope_policy.omit_simple_scopes,
+      config.scope_policy.pack_consecutive_simple_scopes,
       ...Object.values(config.content).flatMap(attributes => attributes.map(attribute => attribute.visible_when))];
     if (!isRecord(policies)) errors.push("detail policies are required");
     else for (const [detail, policy] of Object.entries(policies)) for (const key of switches) {

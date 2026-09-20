@@ -34,6 +34,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 9-20
+
+- More predictable ui_contracts layout
+
 ## Sat 9-19
 
 - Diagnosed failing FigJam imports
