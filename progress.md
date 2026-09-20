@@ -2,7 +2,13 @@
 
 ## Open Issues
 
--Remove $PWD syntax from docs
+-UI contracts misses components in detail compact
+-Remove no-detail single items from UI contracts detail compact
+
+-Test failure: B5 immutable baseline (pipeline.ts hash)
+-Test failure: Outcome gate detailed / type,id
+-Test failure: Spacing regression (2 Scenario Flow trims)
+
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -28,6 +34,21 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 9-19
+
+- Diagnosed failing FigJam imports
+- Set up diagrams in FigJam for whiteboarding
+
+## Fri 9-18
+
+- Routing triage assessment
+- Expanded test timeouts
+- Removed 16 individual test timeouts
+- Memoization for buildRoutingSegments, saving a millon calls
+- Confirmed expansion starvation hypothesis for scenario_flow
+- Found starvation hypothesis without effect
+- Slight scenario_flow routing fix by seeding the repair search with port-derived corridor routes
+
 ## Thu 9-17
 
 - Abandoned ui_contracts routing fix
@@ -40,6 +61,7 @@ z
 - Linter fixes in a random test file
 - Label placement for ui_contracts failed
 - SDD app details added
+- Addressed shared candidate explosion
 
 ## Wed 9-16
 

@@ -10,7 +10,10 @@ import { registerRendererTheme, resolveRendererTheme } from "../src/renderer/sta
 import { markerRoutingClearance } from "../src/renderer/staged/markerGeometry.js";
 import { flattenPositionedItems, routeIntersectsRect } from "./stagedVisualHarness.js";
 
-const exact = "docs/sdd_app_planning/sdd_for_sdd.sdd";
+// Frozen copy of the production SDD-app document. Tests must not read the live
+// `docs/sdd_app_planning/sdd_for_sdd.sdd`: it is work-in-progress, so coupling to it makes
+// these gates change whenever the document is edited, independent of any code change.
+const exact = "tests/fixtures/render/sdd_for_sdd_frozen.sdd";
 async function inputContext(source: string) {
   const bundle = await loadBundle("bundle/v0.1/manifest.yaml"), input = { path: source, text: await readFile(source, "utf8") };
   const compiled = compileSource(input, bundle), graph = compiled.graph!;

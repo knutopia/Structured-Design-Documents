@@ -110,7 +110,7 @@ describe("Stage 4 render-detail identity", () => {
       expect(staged.measuredScene.detailId).toBe("detailed");
       expect(staged.positionedScene.detailId).toBe("detailed");
     }
-  }, 60_000);
+  });
 
   it("keeps validation diagnostics fixed when only detail changes", async () => {
     for (const [viewId, example] of cases) {

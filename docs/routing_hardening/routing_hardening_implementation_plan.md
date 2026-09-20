@@ -401,9 +401,25 @@ Tasks:
 
 ### 8.1 Finite coverage requirements
 
+> **Amendment (2026-09-18).** "Exact production input" originally named the live document
+> `docs/sdd_app_planning/sdd_for_sdd.sdd`. That document is work-in-progress and its
+> containing folder is expected to disappear, so tests and verification commands must not
+> read it. Coverage now uses the frozen fixture
+> `tests/fixtures/render/sdd_for_sdd_frozen.sdd`, a byte-identical copy taken on
+> 2026-09-18 (sha256 `c43579920b85102b129067b88a022ec27397b829a1b59999acf2763590c242d8`).
+>
+> This resolves a prior authority conflict: the plan mandated the live document while the
+> maintainer instructed that tests must not depend on it. An earlier decoupling instruction
+> was never carried out because the conflict was not surfaced. The frozen fixture satisfies
+> both: exact production geometry is still covered, and the gates are hermetic, so a red
+> gate now means a code regression rather than document drift.
+>
+> Section 3.1 retains the original live-path command as a historical record of the reported
+> defect. It is evidence, not an instruction to re-run.
+
 | Coverage | Required cases/settings |
 | --- | --- |
-| Exact production input | `docs/sdd_app_planning/sdd_for_sdd.sdd` in Outcome, Service, and Scenario; each with `compact` and `detailed`, crossed with `none`, `type`, `id`, and `type,id` decorators. |
+| Exact production input | The frozen fixture `tests/fixtures/render/sdd_for_sdd_frozen.sdd` in Outcome, Service, and Scenario; each with `compact` and `detailed`, crossed with `none`, `type`, `id`, and `type,id` decorators. |
 | Existing accepted proofs | Outcome `multiple_outcomes`, `outcome_to_ia_trace`, `metric_event_instrumentation`; Service/Scenario fixtures already exercised by their focused and visual suites. |
 | Decorator/measurement sensitivity | The full 2×4 settings matrix for `multiple_outcomes` and one representative existing Service and Scenario proof selected and named in Stage 0. Longer-label/decorator cases exercise measured geometry rather than assuming one shape. |
 | Core adversarial geometry | Stage 2/3 cases, neutral IDs, reordered input, translations, transposed axes, alternate candidates, all-fixed conflicts, new span interactions, and bounded failures. |
@@ -423,11 +439,11 @@ Run from the repository root with Node 22 and `TMPDIR=/tmp`. Use `source ~/.nvm/
 ```bash
 TMPDIR=/tmp pnpm run build
 mkdir -p /tmp/sdd-routing-hardening
-TMPDIR=/tmp pnpm sdd show "$PWD/docs/sdd_app_planning/sdd_for_sdd.sdd" \
+TMPDIR=/tmp pnpm sdd show "$PWD/tests/fixtures/render/sdd_for_sdd_frozen.sdd" \
   --view outcome_opportunity_map --profile simple --detail detailed \
   --decorators type,id --diagnostics json \
   --out /tmp/sdd-routing-hardening/outcome.detailed.type-id.svg
-TMPDIR=/tmp pnpm sdd show "$PWD/docs/sdd_app_planning/sdd_for_sdd.sdd" \
+TMPDIR=/tmp pnpm sdd show "$PWD/tests/fixtures/render/sdd_for_sdd_frozen.sdd" \
   --view outcome_opportunity_map --profile simple --detail detailed \
   --decorators type,id --format png --diagnostics json \
   --out /tmp/sdd-routing-hardening/outcome.detailed.type-id.png

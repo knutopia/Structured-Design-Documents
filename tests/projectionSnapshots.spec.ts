@@ -37,7 +37,7 @@ describe("projectView projection snapshots", () => {
         );
       }
     }
-  }, 15000);
+  });
 
   it("uses the journey bundle reference sort instead of a hidden projection default", async () => {
     const bundle = await loadBundle(manifestPath);

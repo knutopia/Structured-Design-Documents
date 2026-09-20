@@ -1329,7 +1329,7 @@ describe("journey map Gate 6 non-adjacent same-Stage routing", () => {
       "J-202→J-204",
       "J-203→J-204"
     ]);
-  }, 10_000);
+  });
 
   it("uses a bounds-derived south-to-south bypass below the Step row without moving accepted geometry", async () => {
     const fixture = await buildFixture("ordering_ownership");
@@ -4513,7 +4513,7 @@ describe("journey map Gate 8 crossing continuity and terminal diagnostics", () =
         expect(warning).toBeDefined();
       }
     }
-  }, 20_000);
+  });
 
   it("collects strict interior perpendicular crossings but excludes touches and collinear runs", async () => {
     const fixture = await buildFixture("primary");

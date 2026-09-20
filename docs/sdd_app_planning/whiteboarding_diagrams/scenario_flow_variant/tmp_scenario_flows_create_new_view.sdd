@@ -1,0 +1,22 @@
+SDD-TEXT 0.1
+
+# SDD for SDD
+# Only steps
+# Create New View scenario flow only
+
+# Scenario Flows: (we are missing multiple-flow markup)
+
+Step J-030 "Select Diagram Content"
+  description="Select a node or multiple nodes in a diagram"
+  PRECEDES J-031 "Adjust View"
+  # PRECEDES J-032 "Name the New View" ...this crashes scenario_flow renderer
+END
+
+Step J-031 "Adjust View"
+  description="Make the view just right"
+  PRECEDES J-032 "Name the New View"
+END
+
+Step J-032 "Name the New View"
+  description="Enter a name for the new view"
+END

@@ -15,6 +15,16 @@ import {
   spansOverlap
 } from "./geometry.js";
 
+/**
+ * Search-state budget applied when a caller does not declare one.
+ *
+ * The budget is a wall-clock guard, not a quality target: `searchAssignments` seeds an
+ * incumbent from a greedy pass and keeps the best assignment found when the budget runs
+ * out, so a bounded search still resolves. The previous 100_000 default let one dense
+ * claim component search for minutes, which surfaced as `sdd show --view all` hanging.
+ */
+export const DEFAULT_SOLVER_SEARCH_STATES = 2_000;
+
 export interface SolveRoutingClaimsOptions {
   resources?: readonly RoutingResource[];
   policy?: Partial<RoutingPolicy>;
@@ -480,6 +490,8 @@ export function solveRoutingClaims(
   }
 
   const resolvedCoordinates = new Map<RoutingSegmentId, number>();
+  const searchStates = options.maxSearchStates ?? DEFAULT_SOLVER_SEARCH_STATES;
+  const searchOrder = options.searchOrder ?? "stable";
   for (const component of buildClaimComponents(claims, policy)) {
     const unchanged = zeroDisplacementAssignment(component, candidatesById, policy);
     if (unchanged) {
@@ -492,8 +504,8 @@ export function solveRoutingClaims(
       component,
       candidatesById,
       policy,
-      options.maxSearchStates ?? 100_000,
-      options.searchOrder ?? "stable"
+      searchStates,
+      searchOrder
     );
     if (search.best) {
       for (const [segmentId, coordinate] of search.best.assignments) {
@@ -505,7 +517,7 @@ export function solveRoutingClaims(
     const violation: RoutingViolation = {
       kind: "assignment_exhausted",
       message: search.exhausted
-        ? `Routing assignment search exhausted its ${options.maxSearchStates ?? 100_000}-state bound.`
+        ? `Routing assignment search exhausted its ${searchStates}-state bound.`
         : "No separation-preserving assignment was found in the enumerated coordinate candidates.",
       connectorIds: [...new Set(component.map((claim) => claim.segment.connectorId))].sort(),
       segmentIds: component.map((claim) => claim.segment.id)

@@ -112,8 +112,8 @@ async function loadExampleInput(fileName: string): Promise<{ path: string; text:
   };
 }
 
-async function loadDocumentationInput(relativePath: string): Promise<{ path: string; text: string }> {
-  const filePath = path.join(repoRoot, "docs", relativePath);
+async function loadFixtureInput(fileName: string): Promise<{ path: string; text: string }> {
+  const filePath = path.join(repoRoot, "tests/fixtures/render", fileName);
   return {
     path: filePath,
     text: await readFile(filePath, "utf8")
@@ -365,7 +365,8 @@ describe("staged service_blueprint", () => {
   it.each(["compact", "detailed"])(
     "renders the Step-only sdd_for_sdd blueprint without node intersections (%s)",
     async (detailId) => {
-      const input = await loadDocumentationInput("sdd_app_planning/sdd_for_sdd.sdd");
+      // Frozen copy of the production SDD-app document; the live one is work-in-progress.
+      const input = await loadFixtureInput("sdd_for_sdd_frozen.sdd");
       const context = await resolveServiceBlueprintContext(input, "simple");
       const rendered = await renderServiceBlueprintStagedSvg(
         context.projection,

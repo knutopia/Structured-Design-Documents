@@ -159,8 +159,7 @@ describe("sdd-helper entrypoint integration", () => {
         path: documentPath,
         view_id: "ia_place_map"
       });
-    },
-    30000
+    }
   );
 
   it(
@@ -292,8 +291,7 @@ describe("sdd-helper entrypoint integration", () => {
         })
       ])
       });
-    },
-    30000
+    }
   );
 
   it(
@@ -571,8 +569,7 @@ describe("sdd-helper entrypoint integration", () => {
         should_stop: false
       });
       });
-    },
-    40000
+    }
   );
 
   it("reports specific preview diagnostics for invalid intermediate documents and succeeds once the document is valid", async () => {
@@ -676,7 +673,7 @@ describe("sdd-helper entrypoint integration", () => {
       });
       await rm(path.dirname(payload.artifact_path), { recursive: true, force: true });
     });
-  }, 15000);
+  });
 
   it(
     "returns unique materialized artifact paths for svg and png preview output",
@@ -785,7 +782,6 @@ describe("sdd-helper entrypoint integration", () => {
         await rm(path.dirname(secondSvgPath), { recursive: true, force: true });
         await rm(path.dirname(pngPath), { recursive: true, force: true });
       }
-    },
-    15000
+    }
   );
 });

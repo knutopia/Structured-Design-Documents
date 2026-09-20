@@ -1,0 +1,36 @@
+SDD-TEXT 0.1
+
+# SDD for SDD
+# Only steps
+# Add relationship scenarion flow only
+
+# Scenario Flows: (we are missing multiple-flow markup)
+
+Step J-010 "Select a Node"
+  description="Select a Node in Source viewer or in Diagram viewer"
+  # PRECEDES J-020 "Review Diagrams Containing Current Node"
+  PRECEDES J-040 "Add Relationship"
+END
+
+Step J-040 "Add Relationship"
+  description="Add a relationship to an existing node"
+  PRECEDES J-041 "Add relationship, by node"
+  PRECEDES J-042 "Add outgoing relationship"
+  PRECEDES J-043 "Add incoming relationship"
+  # REALIZED_BY VS-010 "Add Relationship Method Choice"
+END
+
+Step J-041 "Add relationship, by node"
+  description="Add relationship, by choosing another node first (incoming or outgoing)"
+  # REALIZED_BY VS-020 "Add Relationship by Node"
+END
+
+Step J-042 "Add outgoing relationship"
+  description="Add outgoing relationship, by choosing the relationship type or a node first"
+  # REALIZED_BY VS-030 "Add Outgoing Relationship"
+END
+
+Step J-043 "Add incoming relationship"
+  description="Add incoming relationship, by choosing the relationship type or a node first"
+  # REALIZED_BY VS-040 "Add Incoming Relationship"
+END

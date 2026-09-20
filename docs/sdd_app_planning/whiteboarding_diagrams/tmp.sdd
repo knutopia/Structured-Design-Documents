@@ -28,6 +28,12 @@ Opportunity OP-020 "Low-Friction SDD consumption"
   SUPPORTS O-010 "Access to Structural Design Artifacts"
 END
 
+Opportunity OP-030 "Reusable, Repeatable Structural Elements for Authoring"
+  owner=Design
+  description="Capture and reuse dynamic, repeatable structures for SDD authoring"
+  SUPPORTS O-020 "Well-aligned Product Structure"
+END
+
 Initiative I-010 "Basic Layout Structure"
   owner=Product
   description="Source- , diagram-, inspector pane"
@@ -86,12 +92,6 @@ Initiative I-030 "Infrastructure"
   ADDRESSES OP-010 "Low-Friction SDD authoring"
   ADDRESSES OP-020 "Low-Friction SDD consumption"
   # IMPLEMENTED_BY P-0 ""
-END
-
-Opportunity OP-030 "Reusable, Repeatable Structural Elements for Authoring"
-  owner=Design
-  description="Capture and reuse dynamic, repeatable structures for SDD authoring"
-  SUPPORTS O-020 "Well-aligned Product Structure"
 END
 
 Initiative I-040 "Templates and Patterns"

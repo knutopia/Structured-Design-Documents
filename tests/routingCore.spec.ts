@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { PositionedRoute } from "../src/renderer/staged/contracts.js";
 import {
   DEFAULT_ROUTING_POLICY,
+  DEFAULT_SOLVER_SEARCH_STATES,
   aggregateRoutingObservations,
   buildRoutingSegments,
   createRoutingSegmentId,
@@ -295,6 +296,72 @@ describe("shared routing track solver", () => {
         .join("|");
     };
     expect(solve(segments)).toBe(solve([...segments].reverse()));
+  });
+
+  it("bounds a dense competing component so the search cannot run away", () => {
+    // Regression guard for the `sdd show --view all` hang: a single connected component of
+    // many overlapping movable runs used to enumerate thousands of track candidates per
+    // claim, so each branch-and-bound state cost milliseconds and one component consumed the
+    // entire search budget. This component exhausts whatever budget it is given rather than
+    // pruning early, so it resolves deterministically only because the default budget is
+    // bounded. The budget itself is asserted in "keeps the solver search budget bounded".
+    const segments = Array.from({ length: 28 }, (_, index) =>
+      oneSegment(`dense-${String(index).padStart(2, "0")}`, index % 4, { priority: index })
+    );
+    const observations = segments.map((segment): RoutingObservation => ({
+      segmentId: segment.id,
+      allowedRange: { min: -256, max: 256 }
+    }));
+
+    const solve = (ordered: readonly RoutingSegment[]): string => {
+      const result = solveRoutingClaims(claimsFor(ordered, observations));
+      expect(result.status).toBe("resolved");
+      if (result.status !== "resolved") {
+        return "";
+      }
+      expect(result.assignments.size).toBe(segments.length);
+      // Separation must hold between every pair of assigned tracks.
+      const coordinates = [...result.assignments.values()]
+        .map((assignment) => assignment.coordinate)
+        .sort((left, right) => left - right);
+      for (let index = 1; index < coordinates.length; index += 1) {
+        expect(coordinates[index]! - coordinates[index - 1]!)
+          .toBeGreaterThanOrEqual(DEFAULT_ROUTING_POLICY.minSeparation - DEFAULT_ROUTING_POLICY.epsilon);
+      }
+      return [...result.assignments.values()]
+        .sort((left, right) => String(left.segmentId).localeCompare(String(right.segmentId)))
+        .map((assignment) => `${assignment.segmentId}=${assignment.coordinate}`)
+        .join("|");
+    };
+
+    expect(solve(segments)).toBe(solve([...segments].reverse()));
+  });
+
+  it("keeps an already-valid wide claim population unchanged", () => {
+    // A wide claim population inflates the anchor sweep quadratically, which is what made
+    // dense scenes expensive. An already-separated layout must still resolve at zero
+    // displacement rather than being perturbed by the larger candidate set.
+    const segments = Array.from({ length: 40 }, (_, index) =>
+      oneSegment(`wide-${String(index).padStart(2, "0")}`, index * 64, { priority: index })
+    );
+    const result = solveRoutingClaims(claimsFor(segments));
+    expect(result.status).toBe("resolved");
+    if (result.status !== "resolved") {
+      return;
+    }
+    for (const segment of segments) {
+      expect(result.assignments.get(segment.id)?.coordinate).toBe(segment.coordinate);
+      expect(result.assignments.get(segment.id)?.displacement).toBe(0);
+    }
+  });
+
+  it("keeps the solver search budget bounded", () => {
+    // Deterministic guard for the `sdd show --view all` hang. The dense component above
+    // exhausts whatever budget it is given rather than pruning early, so the budget is what
+    // keeps the search finite. Asserting the constant catches a raised or removed budget
+    // without depending on wall-clock timing, which would flake under CI load.
+    expect(DEFAULT_SOLVER_SEARCH_STATES).toBeGreaterThan(0);
+    expect(DEFAULT_SOLVER_SEARCH_STATES).toBeLessThanOrEqual(2_000);
   });
 
   it("reconstructs adjacent bends from segment assignments", () => {
