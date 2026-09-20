@@ -1,10 +1,7 @@
 SDD-TEXT 0.1
 
 # SDD for SDD
-# Structural Design Document for the Structural Design Documents application
-# covering editing, viewing, comparing SDDs
-# and working with SDDs in the context of the product structure and product variants
-# by linking external content and tracking comments in some form (tbd)
+# Outcome-Opportunity Map Variant
 
 Outcome O-010 "Access to Structural Design Artifacts"
   owner=Product

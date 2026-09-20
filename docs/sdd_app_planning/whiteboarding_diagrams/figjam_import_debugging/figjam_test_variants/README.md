@@ -140,10 +140,14 @@ differ:
 
 Cross-check with the originals confirms **height alone** splits them:
 `journey_map` is 4314 **wide** × 475 tall and imports **clean**, so width and area
-are irrelevant. All clean files are ≤ 475 tall; all scrambled files are ≥ 625 tall.
+are irrelevant. All clean files are ≤ 475 tall; all scrambled files are ≥ 1041 tall.
+Width is ruled out (clean journey_map at 4314 wide > scrambled outcome at 1199);
+area is ruled out (clean journey_map at 2.05M > scrambled outcome at 1.25M).
 
-**Threshold: between 475 px and 625 px canvas height.** (Pin it precisely with a
-finer series — e.g. heights 500 / 550 / 600 — before choosing a safe export budget.)
+**Threshold: PINNED to (480, 500] px canvas height.** The fine series in
+`../figjam_threshold_series/` (uniform scale, aspect held constant at w/h=1.152)
+found h=480 CLEAN and h=500 SCRAMBLED, with 520–620 all SCRAMBLED. Use **480 px**
+as the safe export ceiling (or lower, with margin).
 
 ### Likely mechanism (hypothesis, symptom-consistent)
 

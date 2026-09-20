@@ -1,0 +1,50 @@
+SDD-TEXT 0.1
+
+# SDD for SDD
+# UI Contracts Variant
+# Components Only
+
+Component C-010 "Source Editor"
+  description="SDD source code editor"
+END
+
+Component C-020 "Graphical Editor"
+  description="Interactive graphical diagram editor"
+  CONTAINS C-022 "Node Action Menu"
+  CONTAINS C-024 "Edge Action Menu"
+  CONTAINS C-026 "Selection Actions"
+END
+
+Component C-022 "Node Action Menu"
+  description="Actions for a selected node"
+END
+
+Component C-024 "Edge Action Menu"
+  description="Actions for a selected edge"
+END
+
+Component C-026 "Selection Actions"
+  description="Contextual actions for selected nodes and edges"
+END
+
+Component C-050 "Node Properties Inspector"
+  description="Properties for a selected node"
+END
+
+Component C-060 "Edge Properties Inspector"
+  description="Properties for a selected edge"
+END
+
+Component C-070 "View Selector"
+  description="Manages different views of the SDD"
+  CONTAINS C-071 "Diagram Type Selector"
+  CONTAINS C-072 "View Mode Selector"
+END
+
+Component C-071 "Diagram Type Selector"
+  description="Select from the diagrams available for the current SDD file"
+END
+
+Component C-072 "View Mode Selector"
+  description="Overlay, side-by-side, diff"
+END

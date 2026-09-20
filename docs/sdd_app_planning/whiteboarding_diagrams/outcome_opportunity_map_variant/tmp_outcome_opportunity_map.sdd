@@ -1,10 +1,7 @@
 SDD-TEXT 0.1
 
 # SDD for SDD
-# Structural Design Document for the Structural Design Documents application
-# covering editing, viewing, comparing SDDs
-# and working with SDDs in the context of the product structure and product variants
-# by linking external content and tracking comments in some form (tbd)
+# Outcome-Opportunity Map Variant
 
 Outcome O-010 "Access to Structural Design Artifacts"
   owner=Product
@@ -14,6 +11,12 @@ END
 Outcome O-020 "Well-aligned Product Structure"
   owner=Product
   description="Rich, consistent, well-rationalized product structure to drive ease of use, engineering efficency, and product value"
+END
+
+Opportunity OP-030 "Reusable, Repeatable Structural Elements for Authoring"
+  owner=Design
+  description="Capture and reuse dynamic, repeatable structures for SDD authoring"
+  SUPPORTS O-020 "Well-aligned Product Structure"
 END
 
 Opportunity OP-010 "Low-Friction SDD authoring"
@@ -26,12 +29,6 @@ Opportunity OP-020 "Low-Friction SDD consumption"
   owner=Design
   description="Exploring, comparing, annotating SDD diagrams and their relationships"
   SUPPORTS O-010 "Access to Structural Design Artifacts"
-END
-
-Opportunity OP-030 "Reusable, Repeatable Structural Elements for Authoring"
-  owner=Design
-  description="Capture and reuse dynamic, repeatable structures for SDD authoring"
-  SUPPORTS O-020 "Well-aligned Product Structure"
 END
 
 Initiative I-010 "Basic Layout Structure"

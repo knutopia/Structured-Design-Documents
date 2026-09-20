@@ -1,0 +1,174 @@
+SDD-TEXT 0.1
+
+# SDD for SDD
+# UI Contracts Variant
+
+# Areas, Places (IA)
+
+Area A-010 "Core"
+  description="Editor / Viewer providing core SDD authoring and consumption capabilities"
+  CONTAINS P-010 "SDD Viewer/Editor"
+  CONTAINS P-012 "Source Pane"
+  CONTAINS P-014 "Diagram Pane"
+  CONTAINS P-016 "Inspector Pane"
+
+  + Place P-010 "SDD Viewer/Editor"
+      description="Work with SDD content in source and diagram form"
+      CONTAINS P-012 "Source Pane"
+      CONTAINS P-014 "Diagram Pane"
+      CONTAINS P-016 "Inspector Pane"
+    END
+
+  + Place P-012 "Source Pane"
+      description="Source code view"
+      COMPOSED_OF C-010 "Source Editor"
+    END
+
+  + Place P-014 "Diagram Pane"
+      description="Graphical diagram view"
+      COMPOSED_OF C-020 "Graphical Editor"
+      COMPOSED_OF C-070 "View Selector"
+      CONTAINS VS-004 "Diagram Browsing, No Selection"
+      CONTAINS VS-006 "Diagram Browsing, Single Node Selected"
+
+      + ViewState VS-004 "Diagram Browsing, No Selection"
+        description="Diagram browsing while nothing is selected"
+        TRANSITIONS_TO VS-006 "Diagram Browsing, Single Node Selected" ["Select Node"]
+      END
+
+      + ViewState VS-006 "Diagram Browsing, Single Node Selected"
+        description="Browsing a diagram while a single node is selected, enabling single select actions"
+        TRANSITIONS_TO VS-010 "Add Relationship Method Choice" ["Select: Add Relationship"]
+        TRANSITIONS_TO VS-004 "Diagram Browsing, No Selection" ["Cancel Selection"]
+        TRANSITIONS_TO VS-050 "Browse Diagrams Containing Current Node" ["Select: Diagrams Containing This Node"]
+      END
+  END
+
+  + Place P-016 "Inspector Pane"
+      description="Context-driven properties view"
+      COMPOSED_OF C-050 "Node Properties Inspector"
+      COMPOSED_OF C-060 "Edge Properties Inspector"
+    END
+
+END
+
+Area A-020 "Browser"
+  description="Accessing projects, templates, re-usable content"
+  CONTAINS P-020 "Project Browser"
+  CONTAINS P-030 "Template Browser"
+  CONTAINS P-040 "Prompt Browser"  
+
+  + Place P-020 "Project Browser"
+      description="Browse and select projects"
+      # COMPOSED_OF
+    END
+
+  + Place P-030 "Template Browser"
+      description="Browse and select templates"
+      # COMPOSED_OF
+    END
+
+  + Place P-040 "Prompt Browser"
+      description="Browse and select ready-to use prompts"
+      # COMPOSED_OF
+    END
+
+END
+
+Area A-030 "Updates"
+  description="Tracking comments, changes, external links"
+  CONTAINS P-050 "Comments"
+  CONTAINS P-060 "External Links"
+  CONTAINS P-070 "Updates"
+
+  + Place P-050 "Comments"
+      description="Comment threads and change tracking"
+      # COMPOSED_OF
+    END
+
+  + Place P-060 "External Links"
+      description="Browse and track external links"
+      # COMPOSED_OF
+    END
+
+  + Place P-070 "Updates"
+      description="Browse and track SDD activity and changes"
+      # COMPOSED_OF
+    END
+
+END
+
+# ViewStates, Components (UI Contracts)
+
+ViewState VS-050 "Browse Diagrams Containing Current Node"
+  description="Browse diagrams in which the currently selected node appears"
+  TRANSITIONS_TO VS-060 "Diagram Selection Confirmation" ["Select Diagram"]
+END
+
+ViewState VS-060 "Diagram Selection Confirmation"
+  description="Confirms the selected diagram containing the current node"
+END
+
+ViewState VS-010 "Add Relationship Method Choice"
+  description="Choose by which method to add a relationship to a node"
+  TRANSITIONS_TO VS-020 "Add Relationship by Node"
+  TRANSITIONS_TO VS-030 "Add Outgoing Relationship"
+  TRANSITIONS_TO VS-040 "Add Incoming Relationship"
+END
+
+ViewState VS-020 "Add Relationship by Node"
+  description="(Multiple sub-states:) choose target node, choose relationship type"
+END
+
+ViewState VS-030 "Add Outgoing Relationship"
+  description="(Multiple sub-states:) choose relationship type, choose or created destination node"
+END
+
+ViewState VS-040 "Add Incoming Relationship"
+  description="(Multiple sub-states:) choose relationship type, choose or create originating node"
+END
+
+Component C-010 "Source Editor"
+  description="SDD source code editor"
+END
+
+Component C-020 "Graphical Editor"
+  description="Interactive graphical diagram editor"
+  CONTAINS C-022 "Node Action Menu"
+  CONTAINS C-024 "Edge Action Menu"
+  CONTAINS C-026 "Selection Actions"
+END
+
+Component C-022 "Node Action Menu"
+  description="Actions for a selected node"
+END
+
+Component C-024 "Edge Action Menu"
+  description="Actions for a selected edge"
+END
+
+Component C-026 "Selection Actions"
+  description="Contextual actions for selected nodes and edges"
+END
+
+Component C-050 "Node Properties Inspector"
+  description="Properties for a selected node"
+END
+
+Component C-060 "Edge Properties Inspector"
+  description="Properties for a selected edge"
+END
+
+Component C-070 "View Selector"
+  description="Manages different views of the SDD"
+  CONTAINS C-071 "Diagram Type Selector"
+  CONTAINS C-072 "View Mode Selector"
+END
+
+Component C-071 "Diagram Type Selector"
+  description="Select from the diagrams available for the current SDD file"
+END
+
+Component C-072 "View Mode Selector"
+  description="Overlay, side-by-side, diff"
+END

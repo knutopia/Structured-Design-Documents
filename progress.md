@@ -2,6 +2,9 @@
 
 ## Open Issues
 
+-UI contracts misses components in detail compact
+-Remove no-detail single items from UI contracts detail compact
+
 -Test failure: B5 immutable baseline (pipeline.ts hash)
 -Test failure: Outcome gate detailed / type,id
 -Test failure: Spacing regression (2 Scenario Flow trims)
@@ -34,6 +37,7 @@ z
 ## Sat 9-19
 
 - Diagnosed failing FigJam imports
+- Set up diagrams in FigJam for whiteboarding
 
 ## Fri 9-18
 
