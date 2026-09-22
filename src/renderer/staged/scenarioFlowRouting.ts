@@ -3807,7 +3807,9 @@ export function buildScenarioFlowRoutingStages(
             minLeg: markerRoutingClearance(plan.markers?.end, theme.paint.arrowSize, theme.paint.edgeStrokeWidth) }
         };
       }),
-      boxes: workingIndex.nodeBoxes.map(box => ({ ...box, id: box.itemId })),
+      // Preparation uses 16px terminal stubs and 18px obstacle detours. Preserve
+      // its minimum stand-off through shared repair instead of exporting bare boxes.
+      boxes: workingIndex.nodeBoxes.map(box => ({ ...box, id: box.itemId, clearance: FIXED_SEPARATION_DISTANCE })),
       blockers: buildScenarioFlowLaneDecorations(workingScene, middleLayer).flatMap(decoration => {
         if (decoration.kind !== "text") return [];
         const style = theme.textStyles[decoration.textStyleRole] ?? theme.textStyles.label!;

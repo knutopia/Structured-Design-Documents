@@ -16,6 +16,7 @@ import {
   perpendicularSegmentsCross,
   pointsEqual,
   routingSegmentKey,
+  routingObstacleEnvelope,
   segmentIntersectsBoxInterior,
   segmentLength,
   spanOverlapLength
@@ -148,10 +149,8 @@ function validateSingleEdge(
 
   for (const segment of segments) {
     for (const box of boxes) {
-      if (box.id === edge.sourceItemId || box.id === edge.targetItemId) {
-        continue;
-      }
-      if (segmentIntersectsBoxInterior(segment.start, segment.end, box, policy.epsilon)) {
+      const endpointBox = box.id === edge.sourceItemId || box.id === edge.targetItemId;
+      if (!endpointBox && segmentIntersectsBoxInterior(segment.start, segment.end, box, policy.epsilon)) {
         violations.push(violationForSegment(
           "node_intersection",
           `Connector "${edge.id}" segment ${segment.routeSegmentIndex} intersects non-endpoint box "${box.id}".`,
@@ -159,6 +158,15 @@ function validateSingleEdge(
           segment,
           box.id
         ));
+      } else if ((box.clearance ?? 0) > 0
+        // Only the incident leg may cross its own attachment envelope. Later runs
+        // must preserve the same obstacle margin as runs beside unrelated nodes.
+        && !(box.id === edge.sourceItemId && segment.routeSegmentIndex === 0)
+        && !(box.id === edge.targetItemId && segment.routeSegmentIndex === edge.points.length - 2)
+        && segmentIntersectsBoxInterior(segment.start, segment.end, routingObstacleEnvelope(box), policy.epsilon)) {
+        violations.push(violationForSegment("node_clearance",
+          `Connector "${edge.id}" segment ${segment.routeSegmentIndex} violates the ${box.clearance}px clearance of node "${box.id}".`,
+          edge.id, segment, box.id));
       }
     }
   }

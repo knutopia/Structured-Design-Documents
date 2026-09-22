@@ -9,6 +9,13 @@ import {
 
 export const ROUTING_METRIC_PRECISION = 1000;
 
+/** Routing envelope only; attachment points remain on the original node boundary. */
+export function routingObstacleEnvelope(box: RoutingBox): RoutingBox {
+  const clearance = box.clearance ?? 0;
+  return { ...box, x: box.x - clearance, y: box.y - clearance,
+    width: box.width + clearance * 2, height: box.height + clearance * 2 };
+}
+
 export function roundRoutingMetric(value: number): number {
   return Math.round(value * ROUTING_METRIC_PRECISION) / ROUTING_METRIC_PRECISION;
 }

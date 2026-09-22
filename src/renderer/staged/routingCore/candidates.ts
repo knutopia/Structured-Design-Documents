@@ -8,7 +8,7 @@ import {
   type RoutingViolationKind
 } from "./contracts.js";
 import { validateRouting } from "./validation.js";
-import { collapseRoutePoints, roundRoutingMetric } from "./geometry.js";
+import { collapseRoutePoints, roundRoutingMetric, routingObstacleEnvelope } from "./geometry.js";
 
 export interface OrderedRouteCandidate {
   id: string;
@@ -36,6 +36,7 @@ const DEFAULT_BLOCKING_KINDS = new Set<RoutingViolationKind>([
   "endpoint_mismatch",
   "endpoint_intrusion",
   "node_intersection",
+  "node_clearance",
   "terminal_leg_too_short"
 ]);
 
@@ -146,8 +147,8 @@ const CORRIDOR_MIN_STUB = 8;
  */
 const MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR = 256;
 
-function corridorStub(endpoint: FinalRoutingEndpoint): Point {
-  const distance = Math.max(endpoint.minLeg, CORRIDOR_MIN_STUB);
+function corridorStub(endpoint: FinalRoutingEndpoint, clearance = 0): Point {
+  const distance = Math.max(endpoint.minLeg, CORRIDOR_MIN_STUB, clearance);
   switch (endpoint.side) {
     case "east": return { x: roundRoutingMetric(endpoint.point.x + distance), y: endpoint.point.y };
     case "west": return { x: roundRoutingMetric(endpoint.point.x - distance), y: endpoint.point.y };
@@ -204,9 +205,9 @@ export function* buildPortCorridorCandidates(
   const policy: RoutingPolicy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
   const separation = policy.minSeparation;
   const epsilon = policy.epsilon;
-  const sourceStub = corridorStub(connector.source);
-  const targetStub = corridorStub(connector.target);
-  const boxes = [...context.boxes, ...(context.blockers ?? [])];
+  const sourceStub = corridorStub(connector.source, context.boxes.find(box => box.id === connector.source.nodeId)?.clearance);
+  const targetStub = corridorStub(connector.target, context.boxes.find(box => box.id === connector.target.nodeId)?.clearance);
+  const boxes = [...context.boxes, ...(context.blockers ?? [])].map(routingObstacleEnvelope);
 
   // Candidate middle-run coordinates, drawn from the same event sources the turn
   // generator uses: box edges, other routes' points, and this route's own points. The
@@ -323,7 +324,7 @@ export function* buildTerminalTurnAlternatives(
         const value = transverse(p);
         add(value); add(value - policy.minSeparation); add(value + policy.minSeparation);
       }
-      for (const box of [...context.boxes, ...(context.blockers ?? [])]) {
+      for (const box of [...context.boxes, ...(context.blockers ?? [])].map(routingObstacleEnvelope)) {
         const low = horizontal ? box.y : box.x, high = low + (horizontal ? box.height : box.width);
         for (const value of [low, high]) { add(value); add(value - policy.minSeparation); add(value + policy.minSeparation); }
       }

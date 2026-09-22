@@ -14,6 +14,8 @@ export interface RoutingBox {
   y: number;
   width: number;
   height: number;
+  /** Existing adapter-owned obstacle margin, retained through final repair. */
+  clearance?: number;
 }
 
 export interface RoutingSegment {
@@ -96,6 +98,7 @@ export type RoutingViolationKind =
   | "endpoint_mismatch"
   | "endpoint_intrusion"
   | "node_intersection"
+  | "node_clearance"
   | "terminal_leg_too_short"
   | "track_separation"
   | "collinear_overlap"

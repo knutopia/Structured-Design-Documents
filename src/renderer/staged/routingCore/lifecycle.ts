@@ -1,6 +1,6 @@
 import type { Point, PositionedRoute, PortSide } from "../contracts.js";
 import { DEFAULT_ROUTING_POLICY, type RoutingBox, type RoutingCoordinateRange, type RoutingSegment, type RoutingValidationPolicy, type RoutingViolation } from "./contracts.js";
-import { buildRoutingSegments, segmentLength, perpendicularSegmentsCross, departsOutwardFromPort } from "./geometry.js";
+import { buildRoutingSegments, segmentLength, perpendicularSegmentsCross, departsOutwardFromPort, routingObstacleEnvelope, spanOverlapLength } from "./geometry.js";
 import { validateRouting } from "./validation.js";
 import { buildLogicalRunIds, resolveAndReconstructRouteOccupancy } from "./occupancy.js";
 import { buildTerminalTurnAlternatives, buildPortCorridorCandidates } from "./candidates.js";
@@ -87,6 +87,7 @@ const SINGLE_EDGE_HARD_KINDS: ReadonlySet<RoutingViolation["kind"]> = new Set([
   "non_orthogonal_segment",
   "endpoint_intrusion",
   "node_intersection",
+  "node_clearance",
   "terminal_leg_too_short"
 ]);
 
@@ -126,10 +127,19 @@ function buildCorridorRecovery(
   const byId = new Map(context.connectors.map(c => [c.id, c]));
   const bounds = context.bounds;
   const replacements = new Map<string, Point[]>();
+  // When an adapter supplies obstacle envelopes, recovery must find room for
+  // their tracks as well as their nodes. Keep already settled routes present:
+  // independently choosing the first clear corridor can put every return on
+  // the same track and exhaust bend repair before another topology is tried.
+  const preserveClearance = context.boxes.some(box => (box.clearance ?? 0) > 0);
+  const pending = new Set(implicated);
 
   for (const id of implicated) {
     const connector = byId.get(id);
     if (!connector) continue;
+    pending.delete(id);
+    let bestPoints: Point[] | undefined;
+    let bestConflictCount = Infinity;
     for (const points of buildPortCorridorCandidates(connector, context)) {
       if (points.some(p => p.x < bounds.minX - epsilon || p.x > bounds.maxX + epsilon
         || p.y < bounds.minY - epsilon || p.y > bounds.maxY + epsilon)) continue;
@@ -141,15 +151,33 @@ function buildCorridorRecovery(
         boxes, policy: { ...policy, minTerminalLeg: 0 }
       }).filter(v => SINGLE_EDGE_HARD_KINDS.has(v.kind));
       if (own.length) continue;
-      const endpointBoxes = context.boxes.filter(box => box.id === connector.source.nodeId || box.id === connector.target.nodeId);
+      const endpointBoxes = context.boxes.filter(box => box.id === connector.source.nodeId || box.id === connector.target.nodeId)
+        .map(box => ({ ...box, clearance: 0 }));
       const reentry = validateRouting({
         edges: [{ id, sourceItemId: "", targetItemId: "", style: "orthogonal", points }],
         boxes: endpointBoxes, policy: { ...policy, minTerminalLeg: 0 }
       }).filter(v => SINGLE_EDGE_HARD_KINDS.has(v.kind));
       if (reentry.length) continue;
-      replacements.set(id, points);
-      break;
+      if (!preserveClearance) {
+        replacements.set(id, points);
+        break;
+      }
+      const settled = context.connectors.filter(other => other.id !== id && !pending.has(other.id));
+      const interactions = validateRouting({
+        edges: [
+          { id, sourceItemId: connector.source.nodeId, targetItemId: connector.target.nodeId, style: "orthogonal", points },
+          ...settled.map(other => ({ id: other.id, sourceItemId: other.source.nodeId, targetItemId: other.target.nodeId,
+            style: other.route.style, points: replacements.get(other.id) ?? other.route.points }))
+        ],
+        policy: { ...policy, minTerminalLeg: 0 }
+      }).filter(v => v.connectorIds.includes(id));
+      if (interactions.length < bestConflictCount) {
+        bestPoints = points;
+        bestConflictCount = interactions.length;
+      }
+      if (bestConflictCount === 0) break;
     }
+    if (bestPoints) replacements.set(id, bestPoints);
   }
   if (!replacements.size) return undefined;
 
@@ -163,6 +191,47 @@ function buildCorridorRecovery(
   });
 }
 
+/** Reuse track assignment after recovery has supplied a viable topology. The
+ * node envelopes are observations, not frozen segment-coordinate locks; full
+ * validation below still checks the spans changed by reconstruction. */
+function assignRecoveredTracks(context: FinalRoutingContext, violations: readonly RoutingViolation[]): FinalRoutingContext | undefined {
+  const implicated = new Set(violations.flatMap(v => v.connectorIds));
+  const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
+  const envelopes = [...context.boxes, ...(context.blockers ?? [])].map(routingObstacleEnvelope);
+  const assignment = resolveAndReconstructRouteOccupancy(context.connectors.map(c => {
+    const segments = buildRoutingSegments(c.id, c.route, { logicalRunIds: buildLogicalRunIds(c.route) });
+    return { connectorId: c.id, route: c.route, priority: c.priority,
+      sharedTrackGroupBySegmentIndex: c.sharedTrackGroupBySegmentIndex,
+      lockedSegmentKeys: implicated.has(c.id) ? undefined : new Set(segments.map(s => `${c.id}|${s.routeSegmentIndex}`)),
+      observationsBySegmentKey: new Map(segments.map(s => {
+        const horizontal = s.axis === "horizontal";
+        const constraint = c.runConstraints?.get(s.logicalRunId);
+        const obstacles = envelopes.filter(box =>
+          !(box.id === c.source.nodeId && s.endpointRole === "source")
+          && !(box.id === c.target.nodeId && s.endpointRole === "target")
+          && spanOverlapLength(s.spanStart, s.spanEnd, horizontal ? box.x : box.y,
+            horizontal ? box.x + box.width : box.y + box.height) > policy.epsilon
+        );
+        let min = horizontal ? context.bounds.minY : context.bounds.minX;
+        let max = horizontal ? context.bounds.maxY : context.bounds.maxX;
+        for (const box of obstacles) {
+          const low = horizontal ? box.y : box.x;
+          const high = horizontal ? box.y + box.height : box.x + box.width;
+          if (s.coordinate <= low + policy.epsilon) max = Math.min(max, low);
+          else if (s.coordinate >= high - policy.epsilon) min = Math.max(min, high);
+        }
+        return [`${c.id}|${s.routeSegmentIndex}`, [
+          { allowedRange: { min, max } },
+          ...(constraint ? [constraint] : [])
+        ]];
+      }))
+    };
+  }), { buildSegmentKey: (id, index) => `${id}|${index}`, policy });
+  if (assignment.status !== "resolved") return undefined;
+  return { ...context, connectors: context.connectors.map(c => ({ ...c, markedCrossings: undefined,
+    route: assignment.routeByConnectorId.get(c.id)! })) };
+}
+
 /** Complete geometry acceptance for this API; intentionally has no interaction-exclusion switch. */
 export function validateFinalRouteSet(context: FinalRoutingContext): RoutingViolation[] {
   const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
@@ -174,7 +243,8 @@ export function validateFinalRouteSet(context: FinalRoutingContext): RoutingViol
     || policy.minSeparation <= 0 || policy.epsilon < 0 || policy.epsilon >= policy.minSeparation
     || !Number.isInteger(policy.maxExpansionPasses) || policy.maxExpansionPasses < 0
     || [...context.boxes, ...(context.blockers ?? [])].some(box =>
-      ![box.x, box.y, box.width, box.height].every(Number.isFinite) || box.width < 0 || box.height < 0)) {
+      ![box.x, box.y, box.width, box.height, box.clearance ?? 0].every(Number.isFinite)
+      || box.width < 0 || box.height < 0 || (box.clearance ?? 0) < 0)) {
     return [issue("endpoint_mismatch", "Final routing requires finite policy and obstacle geometry.", "")];
   }
   if (![b.minX, b.minY, b.maxX, b.maxY].every(Number.isFinite) || b.minX > b.maxX || b.minY > b.maxY) {
@@ -220,7 +290,8 @@ export function validateFinalRouteSet(context: FinalRoutingContext): RoutingViol
   // Existing compatibility validation skips endpoint boxes. Here every section must stay outside
   // them, including later reentry; boundary attachment itself has no interior intersection.
   for (const c of context.connectors) {
-    const endpointBoxes = context.boxes.filter(box => box.id === c.source.nodeId || box.id === c.target.nodeId);
+    const endpointBoxes = context.boxes.filter(box => box.id === c.source.nodeId || box.id === c.target.nodeId)
+      .map(box => ({ ...box, clearance: 0 }));
     const reentry = validateRouting({ edges: [{ id: c.id, sourceItemId: "", targetItemId: "", style: c.route.style, points: c.route.points }], boxes: endpointBoxes, policy: { ...policy, minTerminalLeg: 0 } });
     violations.push(...reentry.map(v => ({ ...v, kind: "endpoint_intrusion" as const })));
   }
@@ -370,6 +441,23 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
       queue.sort(compareStates);
       const current = queue.shift()!;
       trace.repairRevisions++;
+      if (!hasBlockingViolation(current.violations) && current.context.boxes.some(box => (box.clearance ?? 0) > 0)
+        && trace.candidates < maxCandidates) {
+        trace.candidates++;
+        const assigned = assignRecoveredTracks(current.context, current.violations);
+        if (assigned) {
+          const assignedKey = canonical(assigned);
+          if (!seen.has(assignedKey)) {
+            seen.add(assignedKey);
+            const assignedViolations = validateFinalRouteSet(assigned); trace.validations++;
+            if (!assignedViolations.length) return accepted(assigned, trace);
+            const assignedState = { context: assigned, violations: assignedViolations, key: assignedKey,
+              score: score(assigned, initial, assignedViolations, initialImplicated) };
+            if (compareStates(assignedState, best) < 0) best = assignedState;
+            if (!hasBlockingViolation(assignedViolations)) queue.push(assignedState);
+          }
+        }
+      }
       let valid: RouteSetState | undefined = assignmentCandidate;
       assignmentCandidate = undefined;
       for (const connectors of buildTerminalTurnAlternatives(current.context, current.violations)) {
@@ -409,7 +497,10 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
               || retained.allowedRange.min < constraint.allowedRange.min || retained.allowedRange.max > constraint.allowedRange.max);
         })
         || JSON.stringify([...(c.sharedTrackGroupBySegmentIndex ?? [])]) !== JSON.stringify([...(next.sharedTrackGroupBySegmentIndex ?? [])]);
-    }) || initial.boxes.some(box => !boxes.has(box.id)) || initial.blockers?.some(box => !blockers.has(box.id))) {
+    }) || initial.boxes.some(box => !boxes.has(box.id)
+      || (expanded.boxes.find(next => next.id === box.id)?.clearance ?? 0) < (box.clearance ?? 0))
+      || initial.blockers?.some(box => !blockers.has(box.id)
+        || (expanded.blockers?.find(next => next.id === box.id)?.clearance ?? 0) < (box.clearance ?? 0))) {
       return { status: "failed", reason: "invalid_context", violations: [issue("endpoint_mismatch", "Expansion dropped required routing context or weakened endpoint, resource, or sharing constraints.", "")], debugConnectors: context.connectors, trace };
     }
     const before = context.bounds, after = expanded.bounds;
