@@ -120,7 +120,12 @@ describe("bundle-owned render details", () => {
       component_order: "source",
       component_gap_rows: 1,
       branch_order: "source",
-      trailing_track_policy: "trim"
+      trailing_track_policy: "trim",
+      secondary_placement: {
+        edge_types: ["TRANSITIONS_TO"],
+        strategy: "source_next_band",
+        overflow: "extend_semantic_bands"
+      }
     });
 
     expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
@@ -142,6 +147,14 @@ describe("bundle-owned render details", () => {
       view.conventions.renderer_defaults!.scenario_flow_layout!.lanes.push({
         ...view.conventions.renderer_defaults!.scenario_flow_layout!.lanes[0]!
       });
+    });
+    expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
+      const view = cloned.views.views.find((candidate) => candidate.id === "scenario_flow")!;
+      view.conventions.renderer_defaults!.scenario_flow_layout!.secondary_placement.edge_types = [];
+    });
+    expectInvalid("bundle.scenario_flow.layout_shape", (cloned) => {
+      const view = cloned.views.views.find((candidate) => candidate.id === "scenario_flow")!;
+      (view.conventions.renderer_defaults!.scenario_flow_layout!.secondary_placement as unknown as Record<string, unknown>).strategy = "target_previous_band";
     });
   });
 

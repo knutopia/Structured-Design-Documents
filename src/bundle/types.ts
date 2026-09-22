@@ -443,6 +443,12 @@ export interface RendererScenarioFlowLaneConfig {
   node_types: string[];
 }
 
+export interface RendererScenarioFlowSecondaryPlacementConfig {
+  edge_types: string[];
+  strategy: "source_next_band";
+  overflow: "extend_semantic_bands";
+}
+
 export interface RendererScenarioFlowLayoutConfig {
   primary_lane_id: "step" | "place" | "view_state";
   lanes: RendererScenarioFlowLaneConfig[];
@@ -451,6 +457,7 @@ export interface RendererScenarioFlowLayoutConfig {
   component_gap_rows: number;
   branch_order: "source";
   trailing_track_policy: "trim" | "preserve";
+  secondary_placement: RendererScenarioFlowSecondaryPlacementConfig;
 }
 
 export interface RendererCellSizingConfig {

@@ -133,6 +133,72 @@ describe("scenario_flow middle layer", () => {
     });
   });
 
+  it("uses bundle-owned secondary edges to place unresolved ViewStates one band after an anchored source", async () => {
+    const source = `
+SDD-TEXT 0.1
+
+Step J-100 "First"
+  PRECEDES J-110 "Browse"
+END
+
+Step J-110 "Browse"
+  PRECEDES J-120 "Choose"
+  REALIZED_BY VS-050 "Browse Diagrams"
+END
+
+Step J-120 "Choose"
+  PRECEDES J-130 "Confirm"
+END
+
+Step J-130 "Confirm"
+  REALIZED_BY VS-006 "Node Selected"
+END
+
+ViewState VS-050 "Browse Diagrams"
+  TRANSITIONS_TO VS-060 "Diagram Confirmed"
+END
+
+ViewState VS-060 "Diagram Confirmed"
+END
+
+ViewState VS-004 "Nothing Selected"
+  TRANSITIONS_TO VS-006 "Node Selected"
+END
+
+ViewState VS-006 "Node Selected"
+  TRANSITIONS_TO VS-004 "Nothing Selected"
+END
+`;
+    const middle = await buildMiddleLayer(source);
+    const bandById = new Map(middle.bands.map((band) => [band.id, band.label]));
+    const placementByNodeId = new Map(middle.placements.map((placement) => [placement.nodeId, placement]));
+    const bandOf = (nodeId: string) => bandById.get(placementByNodeId.get(nodeId)!.bandId);
+
+    expect(middle.bands.map((band) => band.label)).toEqual(["C1", "C2", "C3", "C4", "C5"]);
+    expect({
+      "VS-050": bandOf("VS-050"),
+      "VS-060": bandOf("VS-060"),
+      "VS-006": bandOf("VS-006"),
+      "VS-004": bandOf("VS-004")
+    }).toEqual({
+      "VS-050": "C2",
+      "VS-060": "C3",
+      "VS-006": "C4",
+      "VS-004": "C5"
+    });
+    expect(placementByNodeId.get("VS-060")?.placementRole).toBe("realized_view_state");
+    expect(placementByNodeId.get("VS-004")?.placementRole).toBe("realized_view_state");
+    expect(middle.diagnostics).toEqual([]);
+
+    const withoutTransitions = await buildMiddleLayer(source, "strict", (view) => {
+      view.conventions.renderer_defaults!.scenario_flow_layout!.secondary_placement.edge_types = ["NAVIGATES_TO"];
+    });
+    expect(withoutTransitions.bands.map((band) => band.label)).toEqual(["C1", "C2", "C3", "C4", "P1"]);
+    expect(withoutTransitions.diagnostics
+      .filter((diagnostic) => diagnostic.code === "renderer.scene.scenario_flow_disconnected_scoped_node")
+      .map((diagnostic) => diagnostic.targetId)).toEqual(["VS-004", "VS-060"]);
+  });
+
   it("derives persistent lineages in source order and reuses ended physical rows", async () => {
     const middle = await buildMiddleLayer(fs.readFileSync(scenarioBranchingPath, "utf8"));
 

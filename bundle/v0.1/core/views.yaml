@@ -2610,6 +2610,10 @@ views:
           component_gap_rows: 1
           branch_order: source
           trailing_track_policy: trim
+          secondary_placement:
+            edge_types: [TRANSITIONS_TO]
+            strategy: source_next_band
+            overflow: extend_semantic_bands
         detail_display:
           compact:
             show_branch_labels: false

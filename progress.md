@@ -2,9 +2,6 @@
 
 ## Open Issues
 
--UI contracts misses components in detail compact
--Remove no-detail single items from UI contracts detail compact
-
 -Test failure: B5 immutable baseline (pipeline.ts hash)
 -Test failure: Outcome gate detailed / type,id
 -Test failure: Spacing regression (2 Scenario Flow trims)
@@ -33,6 +30,10 @@ z
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+- Tue 9-22
+
+- Semi-successful scenario_flow placement & routing mess
 
 ## Sun 9-20
 

@@ -147,6 +147,17 @@ interface StepPlacementSeed {
   branchLabelSource?: string;
 }
 
+interface ScenarioFlowPlacementTarget {
+  laneId: ScenarioFlowLaneId;
+  bandOrder: number;
+  trackId: string;
+  componentId: string;
+  lineageId: string;
+  trackOrder: number;
+  rowOrder: number;
+  placementRole: ScenarioFlowPlacementRole;
+}
+
 function compareNodeOrder(
   left: Pick<ScenarioFlowRenderNode, "authorOrder" | "id">,
   right: Pick<ScenarioFlowRenderNode, "authorOrder" | "id">
@@ -616,26 +627,6 @@ function buildBands(
     });
 }
 
-function needsParkingBand(
-  model: ScenarioFlowRenderModel,
-  seeds: readonly StepPlacementSeed[]
-): boolean {
-  if (model.nodes.length === 0) {
-    return false;
-  }
-
-  const placedStepIds = new Set(seeds.map((seed) => seed.node.id));
-  const realizedTargetIds = new Set(
-    model.edges
-      .filter((edge) => edge.type === "REALIZED_BY" && placedStepIds.has(edge.from))
-      .map((edge) => edge.to)
-  );
-
-  return model.nodes.some((node) => node.type === "Step"
-    ? !placedStepIds.has(node.id)
-    : !realizedTargetIds.has(node.id));
-}
-
 function resolveEdgeChannel(edge: ScenarioFlowRenderEdge): ScenarioFlowEdgeChannel {
   switch (edge.type) {
     case "PRECEDES":
@@ -663,6 +654,101 @@ function resolvePlacementRole(nodeType: string, trackOrder: number): ScenarioFlo
   }
 }
 
+function resolveSemanticPlacementTargets(
+  model: ScenarioFlowRenderModel,
+  nodeMap: ReadonlyMap<string, ScenarioFlowRenderNode>,
+  laneByNodeId: ReadonlyMap<string, ScenarioFlowLaneId>,
+  seeds: readonly StepPlacementSeed[]
+): Map<string, ScenarioFlowPlacementTarget> {
+  const bandOrderByPosition = new Map<number, number>();
+  [...new Set(seeds.map((seed) => seed.position))]
+    .sort((left, right) => left - right)
+    .forEach((position, bandOrder) => bandOrderByPosition.set(position, bandOrder));
+
+  const targets = new Map<string, ScenarioFlowPlacementTarget>();
+  for (const seed of seeds) {
+    const bandOrder = bandOrderByPosition.get(seed.position);
+    if (bandOrder === undefined) {
+      continue;
+    }
+    targets.set(seed.node.id, {
+      laneId: "step",
+      bandOrder,
+      trackId: seed.trackId,
+      componentId: seed.componentId,
+      lineageId: seed.lineageId,
+      trackOrder: seed.trackOrder,
+      rowOrder: seed.rowOrder,
+      placementRole: resolvePlacementRole(seed.node.type, seed.trackOrder)
+    });
+  }
+
+  for (const edge of model.edges.filter((edge) => edge.type === "REALIZED_BY").sort(compareEdgeOrder)) {
+    const source = targets.get(edge.from);
+    const target = nodeMap.get(edge.to);
+    const laneId = laneByNodeId.get(edge.to);
+    if (!source || source.laneId !== "step" || !target || !laneId || laneId === "step") {
+      continue;
+    }
+    targets.set(edge.to, {
+      ...source,
+      laneId,
+      placementRole: resolvePlacementRole(target.type, source.trackOrder)
+    });
+  }
+
+  const policy = model.layout.secondary_placement;
+  if (policy.strategy !== "source_next_band" || policy.overflow !== "extend_semantic_bands") {
+    throw new Error("Scenario-flow layout requires a supported bundle-owned secondary_placement policy");
+  }
+  const secondaryEdgeTypes = new Set(policy.edge_types);
+  const secondaryEdges = model.edges
+    .filter((edge) => secondaryEdgeTypes.has(edge.type))
+    .sort(compareEdgeOrder);
+
+  let placedTarget = true;
+  while (placedTarget) {
+    placedTarget = false;
+    for (const edge of secondaryEdges) {
+      if (targets.has(edge.to)) {
+        continue;
+      }
+      const source = targets.get(edge.from);
+      const target = nodeMap.get(edge.to);
+      const laneId = laneByNodeId.get(edge.to);
+      if (!source || !target || !laneId || laneId === "step") {
+        continue;
+      }
+      targets.set(edge.to, {
+        ...source,
+        laneId,
+        bandOrder: source.bandOrder + 1,
+        placementRole: resolvePlacementRole(target.type, source.trackOrder)
+      });
+      placedTarget = true;
+    }
+  }
+
+  return targets;
+}
+
+function extendSemanticBands(
+  semanticBands: readonly ScenarioFlowBand[],
+  placementTargets: ReadonlyMap<string, ScenarioFlowPlacementTarget>
+): ScenarioFlowBand[] {
+  const bands = [...semanticBands];
+  const maximumBandOrder = Math.max(-1, ...[...placementTargets.values()].map((target) => target.bandOrder));
+  for (let bandOrder = bands.length; bandOrder <= maximumBandOrder; bandOrder += 1) {
+    bands.push({
+      id: `band:${bandOrder + 1}`,
+      label: `C${bandOrder + 1}`,
+      bandOrder,
+      kind: "linear"
+    });
+  }
+  return bands;
+}
+
 function buildCellsAndPlacements(
   model: ScenarioFlowRenderModel,
   nodeMap: ReadonlyMap<string, ScenarioFlowRenderNode>,
@@ -670,104 +756,22 @@ function buildCellsAndPlacements(
   bands: readonly ScenarioFlowBand[],
   tracks: readonly ScenarioFlowTrack[],
   lineages: readonly ScenarioFlowLineage[],
-  seeds: readonly StepPlacementSeed[],
+  semanticPlacementTargets: ReadonlyMap<string, ScenarioFlowPlacementTarget>,
   diagnostics: RendererDiagnostic[]
 ): {
   cells: ScenarioFlowCell[];
   placements: ScenarioFlowNodePlacement[];
 } {
-  const bandByPosition = new Map<number, ScenarioFlowBand>();
-  [...new Set(seeds.map((seed) => seed.position))]
-    .sort((left, right) => left - right)
-    .forEach((position, index) => {
-      const band = bands[index];
-      if (band) {
-        bandByPosition.set(position, band);
-      }
-    });
+  const bandByOrder = new Map(bands.map((band) => [band.bandOrder, band] as const));
   const parkingBand = bands.find((band) => band.kind === "parking");
   const parkingTrack = parkingBand ? tracks[0] : undefined;
-  const trackById = new Map(tracks.map((track) => [track.id, track] as const));
   const activeLineageByTrackAndBand = new Map<string, ScenarioFlowLineage>();
   for (const lineage of lineages) {
     for (let bandOrder = lineage.startBandOrder; bandOrder <= lineage.endBandOrder; bandOrder += 1) {
       activeLineageByTrackAndBand.set(`${lineage.trackId}::${bandOrder}`, lineage);
     }
   }
-  const stepPlacementByNodeId = new Map<string, {
-    bandId: string;
-    trackId: string;
-    componentId: string;
-    lineageId: string;
-    trackOrder: number;
-    rowOrder: number;
-  }>();
-
-  for (const seed of seeds) {
-    const band = bandByPosition.get(seed.position);
-    const track = trackById.get(seed.trackId);
-    if (!band || !track) {
-      continue;
-    }
-    stepPlacementByNodeId.set(seed.node.id, {
-      bandId: band.id,
-      trackId: track.id,
-      componentId: seed.componentId,
-      lineageId: seed.lineageId,
-      trackOrder: track.localTrackOrder,
-      rowOrder: track.rowOrder
-    });
-  }
-
-  const nodePlacementTargetByNodeId = new Map<string, {
-    laneId: ScenarioFlowLaneId;
-    bandId: string;
-    trackId: string;
-    componentId: string;
-    lineageId: string;
-    trackOrder: number;
-    rowOrder: number;
-    placementRole: ScenarioFlowPlacementRole;
-  }>();
-
-  for (const seed of seeds) {
-    const placement = stepPlacementByNodeId.get(seed.node.id);
-    if (!placement) {
-      continue;
-    }
-    nodePlacementTargetByNodeId.set(seed.node.id, {
-      laneId: "step",
-      bandId: placement.bandId,
-      trackId: placement.trackId,
-      componentId: placement.componentId,
-      lineageId: placement.lineageId,
-      trackOrder: placement.trackOrder,
-      rowOrder: placement.rowOrder,
-      placementRole: resolvePlacementRole(seed.node.type, placement.trackOrder)
-    });
-  }
-
-  const realizationEdges = model.edges
-    .filter((edge) => edge.type === "REALIZED_BY")
-    .sort(compareEdgeOrder);
-  for (const edge of realizationEdges) {
-    const sourcePlacement = stepPlacementByNodeId.get(edge.from);
-    const target = nodeMap.get(edge.to);
-    const laneId = laneByNodeId.get(edge.to);
-    if (!sourcePlacement || !target || !laneId || laneId === "step") {
-      continue;
-    }
-    nodePlacementTargetByNodeId.set(edge.to, {
-      laneId,
-      bandId: sourcePlacement.bandId,
-      trackId: sourcePlacement.trackId,
-      componentId: sourcePlacement.componentId,
-      lineageId: sourcePlacement.lineageId,
-      trackOrder: sourcePlacement.trackOrder,
-      rowOrder: sourcePlacement.rowOrder,
-      placementRole: resolvePlacementRole(target.type, sourcePlacement.trackOrder)
-    });
-  }
+  const nodePlacementTargetByNodeId = new Map(semanticPlacementTargets);
 
   for (const node of model.nodes) {
     if (nodePlacementTargetByNodeId.has(node.id)) {
@@ -790,7 +794,7 @@ function buildCellsAndPlacements(
     if (parkingBand && parkingTrack) {
       nodePlacementTargetByNodeId.set(node.id, {
         laneId,
-        bandId: parkingBand.id,
+        bandOrder: parkingBand.bandOrder,
         trackId: parkingTrack.id,
         componentId: parkingTrack.componentId,
         lineageId: "lineage:parking",
@@ -804,10 +808,11 @@ function buildCellsAndPlacements(
   const nodesByCellId = new Map<string, ScenarioFlowRenderNode[]>();
   for (const [nodeId, target] of nodePlacementTargetByNodeId.entries()) {
     const node = nodeMap.get(nodeId);
-    if (!node) {
+    const band = bandByOrder.get(target.bandOrder);
+    if (!node || !band) {
       continue;
     }
-    const cellId = `${target.laneId}__cell__${target.bandId}__${target.trackId}`;
+    const cellId = `${target.laneId}__cell__${band.id}__${target.trackId}`;
     const nodes = nodesByCellId.get(cellId) ?? [];
     nodes.push(node);
     nodesByCellId.set(cellId, nodes);
@@ -819,17 +824,20 @@ function buildCellsAndPlacements(
   for (const track of tracks) {
     for (const band of bands) {
       const activeLineage = activeLineageByTrackAndBand.get(`${track.id}::${band.bandOrder}`);
-      if (!activeLineage) {
-        continue;
-      }
       for (const lane of model.lanes) {
         const cellId = `${lane.id}__cell__${band.id}__${track.id}`;
         const nodeIds = (nodesByCellId.get(cellId) ?? [])
           .sort(compareNodeOrder)
           .map((node) => node.id);
+        if (!activeLineage && nodeIds.length === 0) {
+          continue;
+        }
         const lineageId = nodeIds
           .map((nodeId) => nodePlacementTargetByNodeId.get(nodeId)?.lineageId)
-          .find((value): value is string => value !== undefined) ?? activeLineage.id;
+          .find((value): value is string => value !== undefined) ?? activeLineage?.id;
+        if (!lineageId) {
+          continue;
+        }
         cells.push({
           id: cellId,
           laneId: lane.id,
@@ -857,7 +865,7 @@ function buildCellsAndPlacements(
             nodeId,
             nodeType: node.type,
             laneId: target.laneId,
-            bandId: target.bandId,
+            bandId: band.id,
             trackId: target.trackId,
             componentId: target.componentId,
             lineageId: target.lineageId,
@@ -937,8 +945,15 @@ export function buildScenarioFlowMiddleLayer(
   const diagnostics: RendererDiagnostic[] = [];
   const stepLayout = deriveStepLayout(model, diagnostics);
   const stepPlacementSeeds = stepLayout.seeds;
-  const semanticBands = buildBands(stepPlacementSeeds, model);
-  const parkingBand: ScenarioFlowBand[] = needsParkingBand(model, stepPlacementSeeds)
+  const initialSemanticBands = buildBands(stepPlacementSeeds, model);
+  const semanticPlacementTargets = resolveSemanticPlacementTargets(
+    model,
+    nodeMap,
+    laneByNodeId,
+    stepPlacementSeeds
+  );
+  const semanticBands = extendSemanticBands(initialSemanticBands, semanticPlacementTargets);
+  const parkingBand: ScenarioFlowBand[] = model.nodes.some((node) => !semanticPlacementTargets.has(node.id))
     ? [{
         id: "band:parking:1",
         label: "P1",
@@ -976,7 +991,7 @@ export function buildScenarioFlowMiddleLayer(
     bands,
     tracks,
     lineages,
-    stepPlacementSeeds,
+    semanticPlacementTargets,
     diagnostics
   );
   const edges = buildMiddleEdges(model.edges);

@@ -485,6 +485,8 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
       const lanes = Array.isArray(layout?.lanes) ? layout.lanes : undefined;
       const laneRecords = lanes?.map(record);
       const laneIds = laneRecords?.map((lane) => lane?.id).filter((id): id is string => typeof id === "string");
+      const secondaryPlacement = record(layout?.secondary_placement);
+      const secondaryPlacementEdgeTypes = strings(secondaryPlacement?.edge_types);
       const validLanes = laneRecords !== undefined
         && laneRecords.length > 0
         && laneRecords.every((lane) => lane
@@ -504,7 +506,8 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
           "component_order",
           "component_gap_rows",
           "branch_order",
-          "trailing_track_policy"
+          "trailing_track_policy",
+          "secondary_placement"
         ])
         || !validLanes
         || !laneIds
@@ -517,6 +520,13 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
         || (layout.component_gap_rows as number) < 0
         || layout.branch_order !== "source"
         || (layout.trailing_track_policy !== "trim" && layout.trailing_track_policy !== "preserve")
+        || !secondaryPlacement
+        || !sameStringSet(Object.keys(secondaryPlacement), ["edge_types", "strategy", "overflow"])
+        || !secondaryPlacementEdgeTypes
+        || secondaryPlacementEdgeTypes.length === 0
+        || duplicateValues(secondaryPlacementEdgeTypes).length > 0
+        || secondaryPlacement.strategy !== "source_next_band"
+        || secondaryPlacement.overflow !== "extend_semantic_bands"
       ) {
         add(
           "bundle.scenario_flow.layout_shape",
