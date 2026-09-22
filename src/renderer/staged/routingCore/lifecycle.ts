@@ -1,6 +1,6 @@
 import type { Point, PositionedRoute, PortSide } from "../contracts.js";
 import { DEFAULT_ROUTING_POLICY, type RoutingBox, type RoutingCoordinateRange, type RoutingSegment, type RoutingValidationPolicy, type RoutingViolation } from "./contracts.js";
-import { buildRoutingSegments, segmentLength, perpendicularSegmentsCross, departsOutwardFromPort, routingObstacleEnvelope, spanOverlapLength } from "./geometry.js";
+import { buildRoutingSegments, segmentLength, perpendicularSegmentsCross, departsOutwardFromPort } from "./geometry.js";
 import { validateRouting } from "./validation.js";
 import { buildLogicalRunIds, resolveAndReconstructRouteOccupancy } from "./occupancy.js";
 import { buildTerminalTurnAlternatives, buildPortCorridorCandidates } from "./candidates.js";
@@ -121,6 +121,7 @@ function buildCorridorRecovery(
 ): readonly FinalRoutingConnector[] | undefined {
   const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
   const epsilon = policy.epsilon;
+  const preserveClearance = context.boxes.some(box => (box.clearance ?? 0) > 0);
   const implicated = [...new Set(violations.filter(v => !TRAVERSABLE_VIOLATION_KINDS.has(v.kind)).flatMap(v => v.connectorIds))].sort();
   if (!implicated.length) return undefined;
   const boxes = [...context.boxes, ...(context.blockers ?? [])];
@@ -131,7 +132,6 @@ function buildCorridorRecovery(
   // their tracks as well as their nodes. Keep already settled routes present:
   // independently choosing the first clear corridor can put every return on
   // the same track and exhaust bend repair before another topology is tried.
-  const preserveClearance = context.boxes.some(box => (box.clearance ?? 0) > 0);
   const pending = new Set(implicated);
 
   for (const id of implicated) {
@@ -189,47 +189,6 @@ function buildCorridorRecovery(
       ? { ...c, markedCrossings: undefined, route: { ...c.route, points: points.map(p => ({ ...p })) } }
       : { ...c, markedCrossings: undefined };
   });
-}
-
-/** Reuse track assignment after recovery has supplied a viable topology. The
- * node envelopes are observations, not frozen segment-coordinate locks; full
- * validation below still checks the spans changed by reconstruction. */
-function assignRecoveredTracks(context: FinalRoutingContext, violations: readonly RoutingViolation[]): FinalRoutingContext | undefined {
-  const implicated = new Set(violations.flatMap(v => v.connectorIds));
-  const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
-  const envelopes = [...context.boxes, ...(context.blockers ?? [])].map(routingObstacleEnvelope);
-  const assignment = resolveAndReconstructRouteOccupancy(context.connectors.map(c => {
-    const segments = buildRoutingSegments(c.id, c.route, { logicalRunIds: buildLogicalRunIds(c.route) });
-    return { connectorId: c.id, route: c.route, priority: c.priority,
-      sharedTrackGroupBySegmentIndex: c.sharedTrackGroupBySegmentIndex,
-      lockedSegmentKeys: implicated.has(c.id) ? undefined : new Set(segments.map(s => `${c.id}|${s.routeSegmentIndex}`)),
-      observationsBySegmentKey: new Map(segments.map(s => {
-        const horizontal = s.axis === "horizontal";
-        const constraint = c.runConstraints?.get(s.logicalRunId);
-        const obstacles = envelopes.filter(box =>
-          !(box.id === c.source.nodeId && s.endpointRole === "source")
-          && !(box.id === c.target.nodeId && s.endpointRole === "target")
-          && spanOverlapLength(s.spanStart, s.spanEnd, horizontal ? box.x : box.y,
-            horizontal ? box.x + box.width : box.y + box.height) > policy.epsilon
-        );
-        let min = horizontal ? context.bounds.minY : context.bounds.minX;
-        let max = horizontal ? context.bounds.maxY : context.bounds.maxX;
-        for (const box of obstacles) {
-          const low = horizontal ? box.y : box.x;
-          const high = horizontal ? box.y + box.height : box.x + box.width;
-          if (s.coordinate <= low + policy.epsilon) max = Math.min(max, low);
-          else if (s.coordinate >= high - policy.epsilon) min = Math.max(min, high);
-        }
-        return [`${c.id}|${s.routeSegmentIndex}`, [
-          { allowedRange: { min, max } },
-          ...(constraint ? [constraint] : [])
-        ]];
-      }))
-    };
-  }), { buildSegmentKey: (id, index) => `${id}|${index}`, policy });
-  if (assignment.status !== "resolved") return undefined;
-  return { ...context, connectors: context.connectors.map(c => ({ ...c, markedCrossings: undefined,
-    route: assignment.routeByConnectorId.get(c.id)! })) };
 }
 
 /** Complete geometry acceptance for this API; intentionally has no interaction-exclusion switch. */
@@ -441,23 +400,6 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
       queue.sort(compareStates);
       const current = queue.shift()!;
       trace.repairRevisions++;
-      if (!hasBlockingViolation(current.violations) && current.context.boxes.some(box => (box.clearance ?? 0) > 0)
-        && trace.candidates < maxCandidates) {
-        trace.candidates++;
-        const assigned = assignRecoveredTracks(current.context, current.violations);
-        if (assigned) {
-          const assignedKey = canonical(assigned);
-          if (!seen.has(assignedKey)) {
-            seen.add(assignedKey);
-            const assignedViolations = validateFinalRouteSet(assigned); trace.validations++;
-            if (!assignedViolations.length) return accepted(assigned, trace);
-            const assignedState = { context: assigned, violations: assignedViolations, key: assignedKey,
-              score: score(assigned, initial, assignedViolations, initialImplicated) };
-            if (compareStates(assignedState, best) < 0) best = assignedState;
-            if (!hasBlockingViolation(assignedViolations)) queue.push(assignedState);
-          }
-        }
-      }
       let valid: RouteSetState | undefined = assignmentCandidate;
       assignmentCandidate = undefined;
       for (const connectors of buildTerminalTurnAlternatives(current.context, current.violations)) {

@@ -27,6 +27,8 @@ import { collapseRoutePoints } from "./routing.js";
 import {
   runRoutingLifecycle,
   validateFinalRouteSet,
+  buildRoutingSegments,
+  measureRoutingCorridorDeficits,
   type FinalRoutingContext,
   type FinalRoutingTrace
 } from "./routingCore/index.js";
@@ -3754,6 +3756,24 @@ export function buildScenarioFlowRoutingStages(
         segmentCoordinates
       )
     );
+
+    // Obstacle and endpoint tracks share physical space even when their local
+    // occupancy owners differ. Account for both margins before final repair.
+    const capacityDeficits = measureRoutingCorridorDeficits(
+      nominalPrepared.connectorPlans.flatMap(plan => buildRoutingSegments(plan.id, plan.step3Route)),
+      workingIndex.nodeBoxes.map(box => ({ ...box, id: box.itemId, clearance: FIXED_SEPARATION_DISTANCE })),
+      { minSeparation: FIXED_SEPARATION_DISTANCE, epsilon: EPSILON }
+    );
+    for (const deficit of capacityDeficits) {
+      const before = workingIndex.nodeById.get(deficit.beforeBoxId)?.cell;
+      const after = workingIndex.nodeById.get(deficit.afterBoxId)?.cell;
+      if (!before || !after) continue;
+      if (deficit.axis === "vertical" && before.columnOrder < after.columnOrder) {
+        recordRequiredExpansion(columnExpansions, before.columnOrder, deficit.requiredSize - deficit.availableSize);
+      } else if (deficit.axis === "horizontal" && before.rowOrder < after.rowOrder) {
+        recordRequiredExpansion(laneExpansions, before.rowOrder, deficit.requiredSize - deficit.availableSize);
+      }
+    }
 
     if (!hasNonZeroExpansion(columnExpansions) && !hasNonZeroExpansion(laneExpansions)) {
       finalPrepared = buildPreparedRoutes(

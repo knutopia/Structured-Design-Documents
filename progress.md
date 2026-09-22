@@ -33,7 +33,7 @@ z
 
 - Tue 9-22
 
-- Semi-successful scenario_flow placement & routing mess
+- Slow progress scenario_flow placement & routing mess
 
 ## Sun 9-20
 

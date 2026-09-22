@@ -9,13 +9,20 @@ import { independentParallelConflicts } from "./routingHardeningOracle.js";
 afterEach(() => vi.restoreAllMocks());
 
 describe("Scenario transition placement retains obstacle clearance through repair", () => {
-  for (const detailId of ["compact", "detailed"]) for (const mode of ["none", "type", "id", "type,id"]) {
-    it(`${detailId}/${mode}`, async () => {
+  const cases = [
+    ...["compact", "detailed"].flatMap(detailId => ["none", "type", "id", "type,id"].map(mode => ({ detailId, mode, parked: false }))),
+    { detailId: "detailed", mode: "type,id", parked: true }
+  ];
+  for (const { detailId, mode, parked } of cases) {
+    it(`${detailId}/${mode}${parked ? " / parked transitions" : ""}`, async () => {
       const bundle = await loadBundle("bundle/v0.1/manifest.yaml");
       const path = "tests/fixtures/render/scenario_transition_clearance.sdd";
       const graph = compileSource({ path, text: await readFile(path, "utf8") }, bundle).graph!;
       const projection = projectView(graph, bundle, "scenario_flow").projection!;
-      const view = bundle.views.views.find(v => v.id === "scenario_flow")!;
+      const view = structuredClone(bundle.views.views.find(v => v.id === "scenario_flow")!);
+      // Keep the formerly failing parked arrangement as an independent proof:
+      // clearance must survive repair regardless of secondary placement policy.
+      if (parked) view.conventions.renderer_defaults!.scenario_flow_layout!.secondary_placement.edge_types = ["NAVIGATES_TO"];
       const spy = vi.spyOn(core, "runRoutingLifecycle");
       const rendered = await renderScenarioFlowStagedSvg(projection, graph, view, {
         detailId, nodeDecoratorMode: { id: mode, showNodeType: mode.includes("type"), showNodeId: mode.includes("id") }
@@ -40,8 +47,13 @@ describe("Scenario transition placement retains obstacle clearance through repai
         }
       }
       const placements = new Map(rendered.middleLayer.placements.map(p => [p.nodeId, p]));
-      expect(placements.get("VS-060")!.bandId).toBe("band:3");
-      expect(placements.get("VS-004")!.bandId).toBe("band:5");
+      if (parked) {
+        expect(placements.get("VS-060")!.placementRole).toBe("parking");
+        expect(placements.get("VS-004")!.placementRole).toBe("parking");
+      } else {
+        expect(placements.get("VS-060")!.bandId).toBe("band:3");
+        expect(placements.get("VS-004")!.bandId).toBe("band:5");
+      }
     });
   }
 });

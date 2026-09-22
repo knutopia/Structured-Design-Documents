@@ -34,8 +34,14 @@ describe("Scenario production final-resolution gate", () => {
       const resolution = spy.mock.results.at(-1)!.value as core.FinalRoutingResult;
       expect(resolution.status, JSON.stringify(resolution)).toBe("resolved");
       if (resolution.status !== "resolved") throw Error(resolution.reason);
-      if (source.endsWith("scenario_branching.sdd") && detailId === "compact") expect(resolution.trace.repairRevisions).toBeGreaterThan(0);
       const context = resolution.context;
+      if (source.endsWith("scenario_branching.sdd") && detailId === "compact") {
+        const before = context.boxes.find(box => box.id === "P-033")!;
+        const after = context.boxes.find(box => box.id === "P-034")!;
+        // Two tracks plus the two node margins need 48px. Preparation now
+        // supplies that capacity instead of requiring final bend repair.
+        expect(after.x - before.x - before.width).toBeGreaterThanOrEqual(48 - 0.5);
+      }
       const byId = new Map(result.positionedScene.edges.map(e => [e.id, e]));
       const connectors = context.connectors.map(connector => ({ ...connector, route: byId.get(connector.id)!.route }));
       expect(core.validateFinalRouteSet({ ...context, connectors })).toEqual([]);
