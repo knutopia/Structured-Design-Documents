@@ -179,6 +179,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -191,6 +198,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -370,6 +384,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -382,6 +403,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -561,6 +589,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -573,6 +608,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -752,6 +794,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -764,6 +813,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -1005,6 +1061,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1017,6 +1080,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -1260,6 +1330,13 @@
                 "y": 26.5
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 53
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1272,6 +1349,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 26.5
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 53
               },
               {
                 "id": "realization_in",
@@ -1451,6 +1535,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1463,6 +1554,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -1642,6 +1740,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1654,6 +1759,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -1833,6 +1945,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1845,6 +1964,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2024,6 +2150,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2036,6 +2169,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2277,6 +2417,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2289,6 +2436,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2530,6 +2684,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2542,6 +2703,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2722,6 +2890,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2734,6 +2909,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2914,6 +3096,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2926,6 +3115,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -3106,6 +3302,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -3118,6 +3321,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -3298,6 +3508,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -3310,6 +3527,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -3552,6 +3776,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -3564,6 +3795,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -3806,6 +4044,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -3818,6 +4063,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",

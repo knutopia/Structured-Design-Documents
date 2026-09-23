@@ -48,7 +48,20 @@ describe("Scenario production final-resolution gate", () => {
       expect(independentParallelConflicts(connectors)).toBe(0);
       for (const edge of connectors) {
         expect(edge.route.points[0]).toEqual(edge.source.point); expect(edge.route.points.at(-1)).toEqual(edge.target.point);
-        for (const box of [...context.boxes, ...(context.blockers ?? [])]) expect(routeIntersectsRect(edge.route, box), `${edge.id} / ${box.id}`).toBe(false);
+        for (const box of [...context.boxes, ...(context.blockers ?? [])]) {
+          if (box.appliesToConnectorIds && !box.appliesToConnectorIds.includes(edge.id)) continue;
+          // Horizontal divider clearance blocks horizontal travel. Realization
+          // connectors legitimately cross it vertically between lanes.
+          if (box.blocksAxis === "horizontal") {
+            for (let i = 1; i < edge.route.points.length; i++) {
+              const a = edge.route.points[i - 1]!, b = edge.route.points[i]!;
+              if (Math.abs(a.y - b.y) > 0.5) continue;
+              expect(routeIntersectsRect({ style: "orthogonal", points: [a, b] }, box), `${edge.id} / ${box.id}`).toBe(false);
+            }
+          } else {
+            expect(routeIntersectsRect(edge.route, box), `${edge.id} / ${box.id}`).toBe(false);
+          }
+        }
       }
     });
   }

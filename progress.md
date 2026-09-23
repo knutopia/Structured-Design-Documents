@@ -31,7 +31,11 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-- Tue 9-22
+## Wed 9-23
+
+- Bottom-port connector routing for scenario_flow
+
+## Tue 9-22
 
 - Slow progress scenario_flow placement & routing mess
 - Connector-to-divider fix solved

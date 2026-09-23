@@ -166,8 +166,10 @@ describe("scenario_flow pre-routing artifacts", () => {
     expect(stepNode.ports.map((port) => port.role)).toEqual([
       "flow_in",
       "flow_out",
+      "flow_out_south",
       "mirror_in",
       "mirror_out",
+      "mirror_out_south",
       "realization_in",
       "realization_out"
     ]);

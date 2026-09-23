@@ -346,25 +346,25 @@
       <path class="scene-edge__path" d="M 366 304 L 506 304" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-p-030__navigates_to__p-032" class="scene-edge role-navigates_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-navigates_to edge-channel-place_navigation" data-edge-id="P-030__navigates_to__P-032" data-role="navigates_to">
-      <path class="scene-edge__path" d="M 366 320 L 436 320 L 436 396 L 506 396" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 254 328 L 254 396 L 506 396" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-p-033__navigates_to__p-034" class="scene-edge role-navigates_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-navigates_to edge-channel-place_navigation" data-edge-id="P-033__navigates_to__P-034" data-role="navigates_to">
       <path class="scene-edge__path" d="M 1030 304 L 1218 304" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-p-033__navigates_to__p-035" class="scene-edge role-navigates_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-navigates_to edge-channel-place_navigation" data-edge-id="P-033__navigates_to__P-035" data-role="navigates_to">
-      <path class="scene-edge__path" d="M 1030 320 L 1124 320 L 1124 396 L 1218 396" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 918 328 L 918 396 L 1218 396" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-vs-030a__transitions_to__vs-031a" class="scene-edge role-transitions_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-transitions_to edge-channel-view_transition" data-edge-id="VS-030a__transitions_to__VS-031a" data-role="transitions_to">
       <path class="scene-edge__path" d="M 366 488 L 506 488" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-vs-030a__transitions_to__vs-032a" class="scene-edge role-transitions_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-transitions_to edge-channel-view_transition" data-edge-id="VS-030a__transitions_to__VS-032a" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 366 504 L 436 504 L 436 580 L 506 580" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 254 512 L 254 580 L 506 580" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-vs-033a__transitions_to__vs-034a" class="scene-edge role-transitions_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-transitions_to edge-channel-view_transition" data-edge-id="VS-033a__transitions_to__VS-034a" data-role="transitions_to">
       <path class="scene-edge__path" d="M 1030 488 L 1218 488" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-vs-033a__transitions_to__vs-035a" class="scene-edge role-transitions_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-transitions_to edge-channel-view_transition" data-edge-id="VS-033a__transitions_to__VS-035a" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 1030 504 L 1124 504 L 1124 580 L 1218 580" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 918 512 L 918 580 L 1218 580" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-030__realized_by__p-030" class="scene-edge role-realized_by route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-realized_by edge-channel-realization edge-dotted" data-edge-id="J-030__realized_by__P-030" data-role="realized_by">
       <path class="scene-edge__path" d="M 254 86 L 254 280" marker-end="url(#scene-marker-arrow-end)"/>

@@ -27,10 +27,14 @@ import { collapseRoutePoints } from "./routing.js";
 import {
   runRoutingLifecycle,
   validateFinalRouteSet,
+  buildPortCorridorCandidates,
   buildRoutingSegments,
+  perpendicularSegmentsCross,
   measureRoutingCorridorDeficits,
   type FinalRoutingContext,
-  type FinalRoutingTrace
+  type FinalRoutingConnector,
+  type FinalRoutingTrace,
+  type RoutingViolation
 } from "./routingCore/index.js";
 import { buildScenarioFlowLaneDecorations, decorateScenarioFlowPositionedScene } from "./scenarioFlowDecorations.js";
 import type {
@@ -1017,6 +1021,19 @@ function buildTemplateRoute(
   const sourceStub = moveOutward(sourcePoint, plan.sourceSide, FIXED_SEPARATION_DISTANCE);
   const targetStub = moveOutward(targetPoint, plan.targetSide, FIXED_SEPARATION_DISTANCE);
   const points: Point[] = [sourcePoint, sourceStub];
+
+  // A south exit must first clear its own node. The west arrival then approaches
+  // from the left, including when the destination lies behind the source.
+  if (plan.sourceSide === "south" && plan.targetSide === "west") {
+    const returnY = roundMetric(Math.max(sourceStub.y, targetStub.y + FIXED_SEPARATION_DISTANCE));
+    points.push(
+      { x: sourceStub.x, y: returnY },
+      { x: targetStub.x, y: returnY },
+      targetStub,
+      targetPoint
+    );
+    return applySegmentCoordinates(buildRoute(points), plan.id, segmentCoordinateByKey, plan, index);
+  }
 
   if (plan.pattern === "realization_corridor" || plan.pattern === "parking_fallback") {
     const connectorIndex = Math.max(0, plan.outgoingOrder);
@@ -3669,6 +3686,182 @@ function emitFinalIntersectionDiagnostics(
   }
 }
 
+const SOUTH_OUTPUT_ROLE_BY_EAST_PORT: Readonly<Record<string, string>> = {
+  flow_out: "flow_out_south",
+  mirror_out: "mirror_out_south"
+};
+
+function routeCost(connectors: readonly FinalRoutingConnector[]): [number, number, number] {
+  const segments = connectors.map(connector => buildRoutingSegments(connector.id, connector.route));
+  let crossings = 0, bends = 0, length = 0;
+  for (let i = 0; i < connectors.length; i++) {
+    const points = connectors[i]!.route.points;
+    bends += Math.max(0, points.length - 2);
+    for (let k = 1; k < points.length; k++) {
+      length += Math.abs(points[k]!.x - points[k - 1]!.x) + Math.abs(points[k]!.y - points[k - 1]!.y);
+    }
+    for (let j = 0; j < i; j++) {
+      for (const left of segments[i]!) for (const right of segments[j]!) {
+        if (perpendicularSegmentsCross(left, right, EPSILON)) crossings++;
+      }
+    }
+  }
+  return [crossings, bends, length];
+}
+
+function compareRouteCosts(left: readonly number[], right: readonly number[]): number {
+  for (let i = 0; i < Math.min(left.length, right.length); i++) {
+    if (Math.abs(left[i]! - right[i]!) > EPSILON) return left[i]! - right[i]!;
+  }
+  return 0;
+}
+
+function violationIdentity(violation: RoutingViolation): string {
+  return JSON.stringify([violation.kind, [...violation.connectorIds].sort(), violation.boxId ?? ""]);
+}
+
+/** Select a declared bottom port before the final router freezes endpoint sides. */
+function selectOptionalBottomExits(
+  plans: ScenarioFlowConnectorPlan[],
+  initialContext: FinalRoutingContext,
+  initialPrepared: PreparedScenarioFlowRoutes,
+  scene: PositionedScene,
+  index: ScenarioFlowPositionedIndex,
+  gutterState: ScenarioFlowGlobalGutterState
+): { context: FinalRoutingContext; prepared: PreparedScenarioFlowRoutes; changedConnectorIds: ReadonlySet<string> } {
+  let context = initialContext;
+  let prepared = initialPrepared;
+  const changedConnectorIds = new Set<string>();
+  // Each connector is tried once. The shared generator is finite, and the selector
+  // never explores combinations of alternative port assignments.
+  for (const plan of plans) {
+    const southRole = SOUTH_OUTPUT_ROLE_BY_EAST_PORT[plan.sourcePortId];
+    if (!southRole || plan.sourceSide !== "east" || plan.targetSide !== "west" || plan.from === plan.to) continue;
+    const source = index.nodeById.get(plan.from), target = index.nodeById.get(plan.to);
+    const southPort = source?.portsByRole.get(southRole);
+    if (!source || !target || !southPort) continue;
+    const sourceCenter = { x: source.node.x + source.node.width / 2, y: source.node.y + source.node.height / 2 };
+    const targetCenter = { x: target.node.x + target.node.width / 2, y: target.node.y + target.node.height / 2 };
+    if (targetCenter.x >= sourceCenter.x - EPSILON && targetCenter.y <= sourceCenter.y + EPSILON) continue;
+
+    const trialPlans = plans.map(other => ({ ...other }));
+    const trialPlan = trialPlans.find(other => other.id === plan.id)!;
+    trialPlan.sourceSide = "south";
+    trialPlan.sourcePortId = southPort.id;
+    const buckets = buildNodeEdgeBuckets(trialPlans, index);
+    const offsets = buildEndpointOffsets(index, buckets);
+    const currentById = new Map(context.connectors.map(connector => [connector.id, connector] as const));
+    const affected = new Set<string>();
+    const endpointsById = new Map<string, ReturnType<typeof resolveFinalPlanEndpoints>>();
+    let capacityAvailable = true;
+    for (const other of trialPlans) {
+      const endpoints = resolveFinalPlanEndpoints(other, index, offsets);
+      endpointsById.set(other.id, endpoints);
+      const current = currentById.get(other.id)!;
+      if (other.sourceSide !== current.source.side
+        || endpoints.sourcePoint.x !== current.source.point.x || endpoints.sourcePoint.y !== current.source.point.y
+        || endpoints.targetPoint.x !== current.target.point.x || endpoints.targetPoint.y !== current.target.point.y) {
+        affected.add(other.id);
+      }
+      if (other.sourceSide === "south" && affected.has(other.id)) {
+        const node = index.nodeById.get(other.from)!.node;
+        if (endpoints.sourcePoint.x < node.x + FIXED_SEPARATION_DISTANCE - EPSILON
+          || endpoints.sourcePoint.x > node.x + node.width - FIXED_SEPARATION_DISTANCE + EPSILON) capacityAvailable = false;
+      }
+    }
+    if (!capacityAvailable || !affected.size) continue;
+    const trialPrepared = buildPreparedRoutes(trialPlans, scene, index, offsets, buckets, gutterState);
+    if (hasNonZeroExpansion(trialPrepared.requiredColumnExpansions)
+      || hasNonZeroExpansion(trialPrepared.requiredLaneExpansions)) continue;
+    const trialById = new Map(trialPrepared.connectorPlans.map(other => [other.id, other] as const));
+    let trialContext: FinalRoutingContext = { ...context,
+      connectors: context.connectors.map(connector => affected.has(connector.id)
+        ? { ...connector,
+          route: trialById.get(connector.id)!.finalRoute,
+          source: { ...connector.source, side: trialById.get(connector.id)!.sourceSide,
+            point: endpointsById.get(connector.id)!.sourcePoint },
+          target: { ...connector.target, point: endpointsById.get(connector.id)!.targetPoint }
+        } : connector)
+    };
+    const processed = new Set<string>();
+    for (const id of [...affected].sort((left, right) =>
+      plans.findIndex(item => item.id === left) - plans.findIndex(item => item.id === right))) {
+      processed.add(id);
+      const connector = trialContext.connectors.find(item => item.id === id)!;
+      let bestRoute = connector.route;
+      let bestScore: number[] | undefined;
+      // The prepared route and the shared corridor proposals are competing
+      // topologies for the same declared endpoints and unchanged scene bounds.
+      const candidates = [connector.route.points, ...buildPortCorridorCandidates(connector, trialContext)];
+      for (const points of candidates.slice(0, 65)) {
+        const candidateContext: FinalRoutingContext = { ...trialContext,
+          connectors: trialContext.connectors.map(item => item.id === id
+            ? { ...item, route: { style: "orthogonal", points } } : item)
+        };
+        const violations = validateFinalRouteSet(candidateContext);
+        const relevant = violations.filter(issue => issue.connectorIds.some(connectorId => processed.has(connectorId)));
+        const [crossings, bends, length] = routeCost(candidateContext.connectors);
+        const score = [relevant.length, crossings, bends, length];
+        if (!bestScore || compareRouteCosts(score, bestScore) < 0) {
+          bestScore = score;
+          bestRoute = { style: "orthogonal", points };
+        }
+      }
+      trialContext = { ...trialContext, connectors: trialContext.connectors.map(item => item.id === id
+        ? { ...item, route: bestRoute } : item) };
+    }
+    const trialViolations = validateFinalRouteSet(trialContext);
+    if (trialViolations.some(issue => issue.connectorIds.some(id => affected.has(id)))) continue;
+    const originalViolations = validateFinalRouteSet(context);
+    const allowed = new Set(originalViolations.filter(issue =>
+      !issue.connectorIds.some(id => affected.has(id))).map(violationIdentity));
+    if (trialViolations.some(issue => !allowed.has(violationIdentity(issue)))) continue;
+    const oldCost = routeCost(context.connectors);
+    const newCost = routeCost(trialContext.connectors);
+    if (newCost[0]! > oldCost[0]!) continue;
+    const oldAffectedViolations = originalViolations.filter(issue => issue.connectorIds.some(id => affected.has(id))).length;
+    if (oldAffectedViolations === 0 && compareRouteCosts(newCost, oldCost) >= 0) continue;
+    plan.sourceSide = "south";
+    plan.sourcePortId = southPort.id;
+    for (const id of affected) changedConnectorIds.add(id);
+    context = trialContext;
+    const selectedById = new Map(trialContext.connectors.map(item => [item.id, item.route] as const));
+    prepared = { ...prepared, connectorPlans: prepared.connectorPlans.map(other => affected.has(other.id)
+      ? { ...trialById.get(other.id)!, finalRoute: selectedById.get(other.id)! } : other) };
+  }
+  return { context, prepared, changedConnectorIds };
+}
+
+function refreshOptionalExitOccupancy(
+  prepared: PreparedScenarioFlowRoutes,
+  changedConnectorIds: ReadonlySet<string>,
+  scene: PositionedScene,
+  index: ScenarioFlowPositionedIndex,
+  gutterState: ScenarioFlowGlobalGutterState
+): PreparedScenarioFlowRoutes {
+  if (!changedConnectorIds.size) return prepared;
+  const gutters = buildGutterRects(scene, index, gutterState);
+  const byConnector = new Map(prepared.occupancyByConnectorId);
+  for (const plan of prepared.connectorPlans) {
+    if (!changedConnectorIds.has(plan.id)) continue;
+    byConnector.set(plan.id, dedupeOccupancy([
+      ...buildEndpointOccupancyForRoute(plan, plan.finalRoute, index),
+      ...buildRectBasedOccupancy(plan, plan.finalRoute, gutters)
+    ]).sort((left, right) =>
+      left.key.localeCompare(right.key)
+      || left.axis.localeCompare(right.axis)
+      || left.routeSegmentIndex - right.routeSegmentIndex
+      || left.connectorId.localeCompare(right.connectorId)
+    ));
+  }
+  return { ...prepared,
+    occupancyByConnectorId: byConnector,
+    occupancy: prepared.connectorPlans.flatMap(plan => byConnector.get(plan.id) ?? []),
+    connectorPlans: prepared.connectorPlans.map(plan => ({ ...plan,
+      occupiedGutters: byConnector.get(plan.id) ?? [] }))
+  };
+}
+
 export function buildScenarioFlowRoutingStages(
   measuredScene: MeasuredScene,
   positionedScene: PositionedScene,
@@ -3863,8 +4056,13 @@ export function buildScenarioFlowRoutingStages(
     };
     return finalContext;
   };
+  const initialContext = prepareFinalContext();
+  const selectedBottomExits = selectOptionalBottomExits(
+    connectorPlans, initialContext, finalPrepared, workingScene, workingIndex, workingGlobalGutterState
+  );
+  finalPrepared = selectedBottomExits.prepared;
   const finalDiagnostics: RendererDiagnostic[] = [...diagnostics];
-  const finalResolution = runRoutingLifecycle(prepareFinalContext(), {
+  const finalResolution = runRoutingLifecycle(selectedBottomExits.context, {
     expand: (context, violations, pass) => {
       if (preparationExpansionPasses + pass > MAX_FINAL_ROUTING_ATTEMPTS) return undefined;
       const implicated = new Set(violations.flatMap(violation => violation.connectorIds));
@@ -3935,6 +4133,10 @@ export function buildScenarioFlowRoutingStages(
       diagnostics: sortRendererDiagnostics([...finalPositionedScene.diagnostics, ...sharedDiagnostics])
     };
   }
+  finalPrepared = refreshOptionalExitOccupancy(
+    finalPrepared, selectedBottomExits.changedConnectorIds,
+    workingScene, workingIndex, workingGlobalGutterState
+  );
   const finalBucketsByNodeId = buildNodeEdgeBuckets(finalPrepared.connectorPlans, workingIndex);
 
   return {

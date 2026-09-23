@@ -179,6 +179,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -191,6 +198,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -374,6 +388,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -386,6 +407,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -569,6 +597,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -581,6 +616,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -764,6 +806,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -776,6 +825,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -1023,6 +1079,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1035,6 +1098,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -1284,6 +1354,13 @@
                 "y": 26.5
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 53
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1296,6 +1373,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 26.5
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 53
               },
               {
                 "id": "realization_in",
@@ -1479,6 +1563,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1491,6 +1582,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -1674,6 +1772,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1686,6 +1791,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -1869,6 +1981,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -1881,6 +2000,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2064,6 +2190,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2076,6 +2209,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2323,6 +2463,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2335,6 +2482,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2582,6 +2736,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2594,6 +2755,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2778,6 +2946,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2790,6 +2965,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -2974,6 +3156,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -2986,6 +3175,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -3170,6 +3366,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -3182,6 +3385,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -3366,6 +3576,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -3378,6 +3595,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -3626,6 +3850,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -3638,6 +3869,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -3886,6 +4124,13 @@
                 "y": 24
               },
               {
+                "id": "flow_out_south",
+                "role": "flow_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
+              },
+              {
                 "id": "mirror_in",
                 "role": "mirror_in",
                 "side": "west",
@@ -3898,6 +4143,13 @@
                 "side": "east",
                 "x": 224,
                 "y": 24
+              },
+              {
+                "id": "mirror_out_south",
+                "role": "mirror_out_south",
+                "side": "south",
+                "x": 112,
+                "y": 48
               },
               {
                 "id": "realization_in",
@@ -4245,9 +4497,9 @@
       ],
       "from": {
         "itemId": "P-030",
-        "portId": "mirror_out",
-        "x": 366,
-        "y": 320
+        "portId": "mirror_out_south",
+        "x": 254,
+        "y": 328
       },
       "to": {
         "itemId": "P-032",
@@ -4259,15 +4511,11 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 366,
-            "y": 320
+            "x": 254,
+            "y": 328
           },
           {
-            "x": 436,
-            "y": 320
-          },
-          {
-            "x": 436,
+            "x": 254,
             "y": 396
           },
           {
@@ -4331,9 +4579,9 @@
       ],
       "from": {
         "itemId": "P-033",
-        "portId": "mirror_out",
-        "x": 1030,
-        "y": 320
+        "portId": "mirror_out_south",
+        "x": 918,
+        "y": 328
       },
       "to": {
         "itemId": "P-035",
@@ -4345,15 +4593,11 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 1030,
-            "y": 320
+            "x": 918,
+            "y": 328
           },
           {
-            "x": 1124,
-            "y": 320
-          },
-          {
-            "x": 1124,
+            "x": 918,
             "y": 396
           },
           {
@@ -4417,9 +4661,9 @@
       ],
       "from": {
         "itemId": "VS-030a",
-        "portId": "mirror_out",
-        "x": 366,
-        "y": 504
+        "portId": "mirror_out_south",
+        "x": 254,
+        "y": 512
       },
       "to": {
         "itemId": "VS-032a",
@@ -4431,15 +4675,11 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 366,
-            "y": 504
+            "x": 254,
+            "y": 512
           },
           {
-            "x": 436,
-            "y": 504
-          },
-          {
-            "x": 436,
+            "x": 254,
             "y": 580
           },
           {
@@ -4503,9 +4743,9 @@
       ],
       "from": {
         "itemId": "VS-033a",
-        "portId": "mirror_out",
-        "x": 1030,
-        "y": 504
+        "portId": "mirror_out_south",
+        "x": 918,
+        "y": 512
       },
       "to": {
         "itemId": "VS-035a",
@@ -4517,15 +4757,11 @@
         "style": "orthogonal",
         "points": [
           {
-            "x": 1030,
-            "y": 504
+            "x": 918,
+            "y": 512
           },
           {
-            "x": 1124,
-            "y": 504
-          },
-          {
-            "x": 1124,
+            "x": 918,
             "y": 580
           },
           {

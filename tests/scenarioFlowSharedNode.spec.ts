@@ -159,8 +159,10 @@ describe("scenario_flow shared-node adoption", () => {
       expect(item.ports.map((port) => ({ id: port.id, role: port.role, side: port.side }))).toEqual([
         { id: "flow_in", role: "flow_in", side: "west" },
         { id: "flow_out", role: "flow_out", side: "east" },
+        { id: "flow_out_south", role: "flow_out_south", side: "south" },
         { id: "mirror_in", role: "mirror_in", side: "west" },
         { id: "mirror_out", role: "mirror_out", side: "east" },
+        { id: "mirror_out_south", role: "mirror_out_south", side: "south" },
         { id: "realization_in", role: "realization_in", side: "north" },
         { id: "realization_out", role: "realization_out", side: "south" }
       ]);

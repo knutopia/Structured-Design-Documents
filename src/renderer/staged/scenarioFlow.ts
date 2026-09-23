@@ -142,8 +142,10 @@ function buildScenarioFlowNodePorts(): SceneNode["ports"] {
   return [
     buildPortSpec("flow_in", "flow_in", "west"),
     buildPortSpec("flow_out", "flow_out", "east"),
+    buildPortSpec("flow_out_south", "flow_out_south", "south"),
     buildPortSpec("mirror_in", "mirror_in", "west"),
     buildPortSpec("mirror_out", "mirror_out", "east"),
+    buildPortSpec("mirror_out_south", "mirror_out_south", "south"),
     buildPortSpec("realization_in", "realization_in", "north"),
     buildPortSpec("realization_out", "realization_out", "south")
   ];

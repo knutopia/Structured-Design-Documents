@@ -323,9 +323,11 @@ The grid strategy may need focused extension if branch tracks require row spans 
 Scenario nodes should expose named ports:
 
 - `flow_in`: west edge, for incoming `PRECEDES`
-- `flow_out`: east edge, for outgoing `PRECEDES`
+- `flow_out`: east edge, the default for outgoing `PRECEDES`
+- `flow_out_south`: south edge, an optional outgoing `PRECEDES` attachment
 - `mirror_in`: west edge, for incoming `NAVIGATES_TO` and `TRANSITIONS_TO`
-- `mirror_out`: east edge, for outgoing `NAVIGATES_TO` and `TRANSITIONS_TO`
+- `mirror_out`: east edge, the default for outgoing `NAVIGATES_TO` and `TRANSITIONS_TO`
+- `mirror_out_south`: south edge, an optional outgoing mirror attachment
 - `realization_in`: north edge, for incoming realization from Step
 - `realization_out`: south edge, for outgoing realization from Step
 
@@ -335,7 +337,8 @@ If Place and ViewState need separate mirror ports to avoid same-edge contention,
 
 Routing must follow the service-blueprint style:
 
-- endpoint side selection is semantic and explicit
+- endpoint sides come from explicit scene ports; a positioned leftward or downward connector may compare its default east output with the declared south output
+- choose the south output only when the affected routes pass whole-scene validation and improve crossings, bends, or length; keep east on ties
 - outgoing connectors leave perpendicular to the originating node edge
 - incoming connectors approach perpendicular to the target node edge
 - connectors never cross the interior of source, target, or non-endpoint nodes
@@ -369,6 +372,7 @@ Expected templates:
 
 - same-track forward flow: direct east-to-west horizontal route
 - cross-track branch flow: east departure, horizontal gutter segment, vertical bridge in a band gutter, horizontal terminal approach
+- optional south departure: outward bottom stub followed by a bounded shared-corridor candidate that reaches the existing west target port
 - realization edge: vertical or near-vertical south-to-north route from Step to Place or ViewState
 - same-band realization pair: prefer straight vertical route when x coordinates align
 - parking or degraded edge: deterministic orthogonal route with diagnostic

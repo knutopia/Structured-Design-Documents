@@ -385,7 +385,10 @@ describe("scenario_flow staged routing", () => {
 
     const j030Vs030a = getEdgeById(rendered.positionedScene.edges, "J-030__realized_by__VS-030a");
     const p030P032 = getEdgeById(rendered.positionedScene.edges, "P-030__navigates_to__P-032");
-    expect(maxVerticalSegmentX(j030Vs030a)).toBeLessThan(maxVerticalSegmentX(p030P032));
+    // The Place branch may now leave from the bottom, putting its vertical leg
+    // on either side of the realization swerve. Their tracks still need clearance.
+    expect(Math.abs(maxVerticalSegmentX(j030Vs030a) - maxVerticalSegmentX(p030P032)))
+      .toBeGreaterThanOrEqual(FIXED_SEPARATION_DISTANCE - 0.5);
     expect(maxExpansion(rendered.routingStages.globalGutterState.columnExpansions)).toBeLessThanOrEqual(160);
     expect(maxExpansion(rendered.routingStages.globalGutterState.laneExpansions)).toBeLessThanOrEqual(64);
     expect(rendered.routingStages.finalPositionedScene.root.width)
