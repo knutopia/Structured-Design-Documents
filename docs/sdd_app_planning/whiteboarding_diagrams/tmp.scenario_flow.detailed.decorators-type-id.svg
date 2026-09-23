@@ -779,7 +779,7 @@
       <path class="scene-edge__path" d="M 634 1598 L 656 1598 L 656 1798 L 710 1798" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-vs-006__transitions_to__vs-010" class="scene-edge role-transitions_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-transitions_to edge-channel-view_transition" data-edge-id="VS-006__transitions_to__VS-010" data-role="transitions_to">
-      <path class="scene-edge__path" d="M 1250 1434 L 1266 1434 L 1266 1366 L 394 1366 L 394 1566 L 410 1566" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 1250 1434 L 1266 1434 L 1266 1348 L 394 1348 L 394 1566 L 410 1566" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-vs-006__transitions_to__vs-004" class="scene-edge role-transitions_to route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-transitions_to edge-channel-view_transition" data-edge-id="VS-006__transitions_to__VS-004" data-role="transitions_to">
       <path class="scene-edge__path" d="M 1250 1450 L 1310 1450" marker-end="url(#scene-marker-arrow-end)"/>
@@ -791,7 +791,7 @@
       <path class="scene-edge__path" d="M 1534 1434 L 1550 1434 L 1550 1382 L 952 1382 L 952 1434 L 1026 1434" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-020__realized_by__vs-050" class="scene-edge role-realized_by route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-realized_by edge-channel-realization edge-dotted" data-edge-id="J-020__realized_by__VS-050" data-role="realized_by">
-      <path class="scene-edge__path" d="M 522 110 L 522 136 L 688 136 L 688 689 L 522 689 L 522 1398" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 522 110 L 522 126 L 688 126 L 688 1382 L 522 1382 L 522 1398" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-040__realized_by__vs-010" class="scene-edge role-realized_by route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-realized_by edge-channel-realization edge-dotted" data-edge-id="J-040__realized_by__VS-010" data-role="realized_by">
       <path class="scene-edge__path" d="M 554 207 L 554 600 L 652 600 L 652 1488 L 554 1488 L 554 1530" marker-end="url(#scene-marker-arrow-end)"/>

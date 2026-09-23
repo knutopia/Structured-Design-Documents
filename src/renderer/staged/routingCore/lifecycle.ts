@@ -440,8 +440,10 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
         })
         || JSON.stringify([...(c.sharedTrackGroupBySegmentIndex ?? [])]) !== JSON.stringify([...(next.sharedTrackGroupBySegmentIndex ?? [])]);
     }) || initial.boxes.some(box => !boxes.has(box.id)
+      || expanded.boxes.find(next => next.id === box.id)?.blocksAxis !== box.blocksAxis
       || (expanded.boxes.find(next => next.id === box.id)?.clearance ?? 0) < (box.clearance ?? 0))
       || initial.blockers?.some(box => !blockers.has(box.id)
+        || expanded.blockers?.find(next => next.id === box.id)?.blocksAxis !== box.blocksAxis
         || (expanded.blockers?.find(next => next.id === box.id)?.clearance ?? 0) < (box.clearance ?? 0))) {
       return { status: "failed", reason: "invalid_context", violations: [issue("endpoint_mismatch", "Expansion dropped required routing context or weakened endpoint, resource, or sharing constraints.", "")], debugConnectors: context.connectors, trace };
     }

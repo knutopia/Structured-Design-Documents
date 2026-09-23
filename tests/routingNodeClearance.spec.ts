@@ -34,6 +34,35 @@ function assertClearance(context: FinalRoutingContext) {
 }
 
 describe("retaining adapter-owned node clearance", () => {
+  it.each([false, true])("keeps parallel runs away from dividers but permits crossings (transpose=%s)", transpose => {
+    const context = fixture(16);
+    context.boxes = context.boxes.slice(0, 2);
+    context.blockers = [{ id: "divider", x: 0, y: 50, width: 250, height: 0,
+      clearance: 16, blocksAxis: "horizontal" }];
+    if (transpose) {
+      for (const box of [...context.boxes, ...context.blockers]) [box.x, box.y, box.width, box.height] = [box.y, box.x, box.height, box.width];
+      context.blockers[0]!.blocksAxis = "vertical";
+      context.bounds = { minX: -50, minY: -50, maxX: 150, maxY: 300 };
+      for (const c of context.connectors) {
+        for (const p of [c.source.point, c.target.point, ...c.route.points]) [p.x, p.y] = [p.y, p.x];
+        c.source.side = "south"; c.target.side = "north";
+      }
+    }
+    const violations = validateFinalRouteSet(context).filter(v => v.boxId === "divider");
+    expect(violations).toHaveLength(1);
+    expect(violations[0]!.routeSegmentIndexes).toEqual([2]);
+    const result = runRoutingLifecycle(context);
+    expect(result.status).toBe("resolved");
+    if (result.status !== "resolved") throw new Error(result.reason);
+    expect(validateFinalRouteSet(result.context)).toEqual([]);
+    // Move the parallel run beyond the margin; its perpendicular legs cross the divider.
+    for (const point of context.connectors[0]!.route.points.slice(2, 4)) {
+      if (transpose) point.x = 80;
+      else point.y = 80;
+    }
+    expect(validateFinalRouteSet(context)).toEqual([]);
+  });
+
   it("leaves callers without obstacle margins unchanged", () => {
     const context = fixture();
     const result = runRoutingLifecycle(context);

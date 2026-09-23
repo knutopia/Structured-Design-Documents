@@ -35,6 +35,14 @@ describe("Scenario transition placement retains obstacle clearance through repai
       const emitted = { ...result.context, connectors: result.context.connectors.map(c => ({ ...c, route: edges.get(c.id)!.route })) };
       expect(core.validateFinalRouteSet(emitted)).toEqual([]);
       expect(independentParallelConflicts(emitted.connectors)).toBe(0);
+      for (const decoration of rendered.positionedScene.decorations) {
+        if (decoration.kind !== "line" || !decoration.classes.includes("scenario_flow_lane_separator")) continue;
+        for (const c of emitted.connectors) for (let i = 1; i < c.route.points.length; i++) {
+          const a = c.route.points[i - 1]!, b = c.route.points[i]!;
+          if (a.y !== b.y || Math.max(a.x, b.x) <= decoration.from.x || Math.min(a.x, b.x) >= decoration.to.x) continue;
+          expect(Math.abs(a.y - decoration.from.y), `${c.id}/divider/${decoration.id}`).toBeGreaterThanOrEqual(15.5);
+        }
+      }
       // Independent rectangle-distance oracle, including nonincident runs beside
       // their own endpoint nodes. The attachment leg is the only exception.
       for (const c of emitted.connectors) for (let i = 0; i < c.route.points.length - 1; i++) {

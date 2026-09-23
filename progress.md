@@ -34,6 +34,7 @@ z
 - Tue 9-22
 
 - Slow progress scenario_flow placement & routing mess
+- Connector-to-divider fix attempt
 
 ## Sun 9-20
 

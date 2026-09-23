@@ -3831,6 +3831,11 @@ export function buildScenarioFlowRoutingStages(
       // its minimum stand-off through shared repair instead of exporting bare boxes.
       boxes: workingIndex.nodeBoxes.map(box => ({ ...box, id: box.itemId, clearance: FIXED_SEPARATION_DISTANCE })),
       blockers: buildScenarioFlowLaneDecorations(workingScene, middleLayer).flatMap(decoration => {
+        if (decoration.kind === "line" && Math.abs(decoration.from.y - decoration.to.y) <= EPSILON) {
+          return [{ id: decoration.id, x: Math.min(decoration.from.x, decoration.to.x), y: decoration.from.y,
+            width: Math.abs(decoration.to.x - decoration.from.x), height: 0,
+            clearance: FIXED_SEPARATION_DISTANCE, blocksAxis: "horizontal" as const }];
+        }
         if (decoration.kind !== "text") return [];
         const style = theme.textStyles[decoration.textStyleRole] ?? theme.textStyles.label!;
         return [{ id: decoration.id, x: decoration.x, y: decoration.y,

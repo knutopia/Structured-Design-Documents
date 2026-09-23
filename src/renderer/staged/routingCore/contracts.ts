@@ -16,6 +16,8 @@ export interface RoutingBox {
   height: number;
   /** Existing adapter-owned obstacle margin, retained through final repair. */
   clearance?: number;
+  /** Restrict a decorative obstacle to parallel runs; perpendicular crossings remain legal. */
+  blocksAxis?: RoutingAxis;
 }
 
 export interface RoutingSegment {
