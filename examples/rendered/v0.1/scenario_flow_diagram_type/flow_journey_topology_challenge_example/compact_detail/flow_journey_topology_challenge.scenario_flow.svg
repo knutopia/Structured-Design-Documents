@@ -220,22 +220,22 @@
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
     <g id="scene-edge-j-010__precedes__j-020" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-010__precedes__J-020" data-role="precedes">
-      <path class="scene-edge__path" d="M 366 62 L 410 62" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 366 64.5 L 410 64.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-010__precedes__j-040" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-010__precedes__J-040" data-role="precedes">
-      <path class="scene-edge__path" d="M 366 78 L 394 78 L 394 159 L 410 159" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 254 86 L 254 159 L 410 159" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-020__precedes__j-021" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-020__precedes__J-021" data-role="precedes">
       <path class="scene-edge__path" d="M 634 62 L 710 62" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-040__precedes__j-041" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-040__precedes__J-041" data-role="precedes">
-      <path class="scene-edge__path" d="M 634 143 L 710 143" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 634 159 L 710 159" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-040__precedes__j-042" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-040__precedes__J-042" data-role="precedes">
-      <path class="scene-edge__path" d="M 634 159 L 672 159 L 672 256 L 710 256" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 634 175 L 672 175 L 672 256 L 710 256" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-040__precedes__j-043" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-040__precedes__J-043" data-role="precedes">
-      <path class="scene-edge__path" d="M 634 175 L 656 175 L 656 353 L 710 353" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 522 183 L 522 353 L 710 353" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-j-021__precedes__j-022" class="scene-edge role-precedes route-orthogonal paint-edges scenario_flow_edge scenario_flow_semantic_edge edge-type-precedes edge-channel-step_flow" data-edge-id="J-021__precedes__J-022" data-role="precedes">
       <path class="scene-edge__path" d="M 934 64.5 L 978 64.5" marker-end="url(#scene-marker-arrow-end)"/>
