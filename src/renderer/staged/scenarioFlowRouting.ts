@@ -3832,9 +3832,25 @@ export function buildScenarioFlowRoutingStages(
       boxes: workingIndex.nodeBoxes.map(box => ({ ...box, id: box.itemId, clearance: FIXED_SEPARATION_DISTANCE })),
       blockers: buildScenarioFlowLaneDecorations(workingScene, middleLayer).flatMap(decoration => {
         if (decoration.kind === "line" && Math.abs(decoration.from.y - decoration.to.y) <= EPSILON) {
-          return [{ id: decoration.id, x: Math.min(decoration.from.x, decoration.to.x), y: decoration.from.y,
+          const appliesToConnectorIds = finalPrepared.connectorPlans.filter(plan => {
+            const source = workingIndex.nodeById.get(plan.from);
+            const target = workingIndex.nodeById.get(plan.to);
+            return !!source && !!target && !!source.cell && !!target.cell
+              && source.placement.laneId === target.placement.laneId
+              && source.node.y > decoration.from.y && target.node.y > decoration.from.y
+              // A long backward transition, or one entering a later row, can
+              // otherwise route around the upper boundary of its own lane.
+              && source.cell.columnOrder > target.cell.columnOrder
+              && (source.cell.columnOrder - target.cell.columnOrder > 1
+                || source.cell.rowOrder < target.cell.rowOrder);
+          }).map(plan => plan.id);
+          const divider = { x: Math.min(decoration.from.x, decoration.to.x), y: decoration.from.y,
             width: Math.abs(decoration.to.x - decoration.from.x), height: 0,
-            clearance: FIXED_SEPARATION_DISTANCE, blocksAxis: "horizontal" as const }];
+            clearance: FIXED_SEPARATION_DISTANCE };
+          return [
+            { id: decoration.id, ...divider, blocksAxis: "horizontal" as const },
+            ...(appliesToConnectorIds.length ? [{ id: `${decoration.id}__lane_guard`, ...divider, appliesToConnectorIds }] : [])
+          ];
         }
         if (decoration.kind !== "text") return [];
         const style = theme.textStyles[decoration.textStyleRole] ?? theme.textStyles.label!;

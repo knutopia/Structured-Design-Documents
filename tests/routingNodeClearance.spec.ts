@@ -112,6 +112,25 @@ describe("retaining adapter-owned node clearance", () => {
     expect("routeByConnectorId" in result).toBe(false);
   });
 
+  it("rejects an expansion that mutates a connector-scoped divider barrier", () => {
+    const context = fixture(16);
+    context.boxes[2]!.y = -50;
+    context.boxes[2]!.height = 200;
+    context.blockers = [{ id: "divider", x: 0, y: 50, width: 250, height: 0,
+      clearance: 16, appliesToConnectorIds: ["edge"] }];
+    let expanded = false;
+    const result = runRoutingLifecycle(context, { expand: current => {
+      expanded = true;
+      (current.blockers![0]!.appliesToConnectorIds as string[]).pop();
+      return { ...current, bounds: { ...current.bounds, maxY: 250 } };
+    } });
+    expect(expanded).toBe(true);
+    expect(result.status).toBe("failed");
+    if (result.status !== "failed") throw new Error("Unexpected acceptance");
+    expect(result.reason).toBe("invalid_context");
+    expect(context.blockers[0]!.appliesToConnectorIds).toEqual(["edge"]);
+  });
+
   it("rejects an expansion that discards the adapter's obstacle margins", () => {
     const context = fixture(16);
     context.boxes[2]!.y = -50;

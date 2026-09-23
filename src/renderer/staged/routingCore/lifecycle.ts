@@ -267,7 +267,10 @@ function accepted(context: FinalRoutingContext, trace: FinalRoutingTrace): Final
  * the authoritative input constraints used to check the returned context. */
 function copyForExpansion(context: FinalRoutingContext): FinalRoutingContext {
   return { ...context, bounds: { ...context.bounds }, policy: { ...context.policy },
-    boxes: context.boxes.map(box => ({ ...box })), blockers: context.blockers?.map(box => ({ ...box })),
+    boxes: context.boxes.map(box => ({ ...box,
+      appliesToConnectorIds: box.appliesToConnectorIds && [...box.appliesToConnectorIds] })),
+    blockers: context.blockers?.map(box => ({ ...box,
+      appliesToConnectorIds: box.appliesToConnectorIds && [...box.appliesToConnectorIds] })),
     connectors: context.connectors.map(connector => ({ ...connector,
       source: { ...connector.source, point: { ...connector.source.point } },
       target: { ...connector.target, point: { ...connector.target.point } },
@@ -441,9 +444,11 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
         || JSON.stringify([...(c.sharedTrackGroupBySegmentIndex ?? [])]) !== JSON.stringify([...(next.sharedTrackGroupBySegmentIndex ?? [])]);
     }) || initial.boxes.some(box => !boxes.has(box.id)
       || expanded.boxes.find(next => next.id === box.id)?.blocksAxis !== box.blocksAxis
+      || JSON.stringify(expanded.boxes.find(next => next.id === box.id)?.appliesToConnectorIds) !== JSON.stringify(box.appliesToConnectorIds)
       || (expanded.boxes.find(next => next.id === box.id)?.clearance ?? 0) < (box.clearance ?? 0))
       || initial.blockers?.some(box => !blockers.has(box.id)
         || expanded.blockers?.find(next => next.id === box.id)?.blocksAxis !== box.blocksAxis
+        || JSON.stringify(expanded.blockers?.find(next => next.id === box.id)?.appliesToConnectorIds) !== JSON.stringify(box.appliesToConnectorIds)
         || (expanded.blockers?.find(next => next.id === box.id)?.clearance ?? 0) < (box.clearance ?? 0))) {
       return { status: "failed", reason: "invalid_context", violations: [issue("endpoint_mismatch", "Expansion dropped required routing context or weakened endpoint, resource, or sharing constraints.", "")], debugConnectors: context.connectors, trace };
     }

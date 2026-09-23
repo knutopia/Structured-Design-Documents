@@ -149,6 +149,7 @@ function validateSingleEdge(
 
   for (const segment of segments) {
     for (const box of boxes) {
+      if (box.appliesToConnectorIds && !box.appliesToConnectorIds.includes(edge.id)) continue;
       if (box.blocksAxis && box.blocksAxis !== segment.axis) continue;
       const endpointBox = box.id === edge.sourceItemId || box.id === edge.targetItemId;
       if (!endpointBox && segmentIntersectsBoxInterior(segment.start, segment.end, box, policy.epsilon)) {

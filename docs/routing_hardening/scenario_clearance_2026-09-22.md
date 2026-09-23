@@ -47,11 +47,14 @@ eight-pass total ceiling. Sequential runs are not counted as simultaneous tracks
 explicit shared-track groups are counted once. No second expansion loop is added.
 
 Lane dividers previously participated only in label placement. Scenario now passes
-them to final routing with the same 16px clearance and an axis restriction:
-horizontal runs must stand off, while vertical crossings remain legal. The shared
-obstacle contract's optional `blocksAxis` expresses this distinction, and expansion
-must preserve it. Regression checks measure distance to the emitted dividers as
-well as to nodes; transposed core tests cover both divider orientations.
+them to final routing with the same 16px clearance. A global horizontal barrier
+keeps all parallel runs away from each divider while permitting vertical crossings.
+A second barrier keeps long backward same-lane links and backward links into a
+later row within their lane. Cross-lane connectors retain legal divider crossings.
+The shared obstacle contract expresses the second barrier with
+`appliesToConnectorIds`, which is retained by candidate generation, final validation,
+and expansion. The frozen production proof checks both horizontal clearance and
+ViewState transition containment against the emitted geometry.
 
 ## Regression evidence
 

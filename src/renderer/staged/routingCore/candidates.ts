@@ -207,7 +207,9 @@ export function* buildPortCorridorCandidates(
   const epsilon = policy.epsilon;
   const sourceStub = corridorStub(connector.source, context.boxes.find(box => box.id === connector.source.nodeId)?.clearance);
   const targetStub = corridorStub(connector.target, context.boxes.find(box => box.id === connector.target.nodeId)?.clearance);
-  const boxes = [...context.boxes, ...(context.blockers ?? [])].map(routingObstacleEnvelope);
+  const boxes = [...context.boxes, ...(context.blockers ?? [])]
+    .filter(box => !box.appliesToConnectorIds || box.appliesToConnectorIds.includes(connector.id))
+    .map(routingObstacleEnvelope);
 
   // Candidate middle-run coordinates, drawn from the same event sources the turn
   // generator uses: box edges, other routes' points, and this route's own points. The
@@ -324,7 +326,9 @@ export function* buildTerminalTurnAlternatives(
         const value = transverse(p);
         add(value); add(value - policy.minSeparation); add(value + policy.minSeparation);
       }
-      for (const box of [...context.boxes, ...(context.blockers ?? [])].map(routingObstacleEnvelope)) {
+      for (const box of [...context.boxes, ...(context.blockers ?? [])]
+        .filter(box => !box.appliesToConnectorIds || box.appliesToConnectorIds.includes(c.id))
+        .map(routingObstacleEnvelope)) {
         const low = horizontal ? box.y : box.x, high = low + (horizontal ? box.height : box.width);
         for (const value of [low, high]) { add(value); add(value - policy.minSeparation); add(value + policy.minSeparation); }
       }

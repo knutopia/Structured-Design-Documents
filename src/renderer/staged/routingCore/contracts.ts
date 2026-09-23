@@ -18,6 +18,8 @@ export interface RoutingBox {
   clearance?: number;
   /** Restrict a decorative obstacle to parallel runs; perpendicular crossings remain legal. */
   blocksAxis?: RoutingAxis;
+  /** When present, the obstacle applies only to these routes. */
+  appliesToConnectorIds?: readonly string[];
 }
 
 export interface RoutingSegment {
