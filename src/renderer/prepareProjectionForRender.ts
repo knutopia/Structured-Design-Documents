@@ -2,6 +2,7 @@ import type { ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
 import { resolveDetailDisplayPolicy } from "./detailDisplay.js";
+import { selectScenarioFlowVisibleNodeIds } from "./scenarioFlowRenderModel.js";
 import { buildUiContractsRenderData } from "./uiContractsRenderModel.js";
 import { buildUiContractsPresentationModel, type UiContractsPresentationModel } from "./uiContractsPresentationModel.js";
 
@@ -19,6 +20,19 @@ export function prepareProjectionForRender(
   detailId: string,
   target: "legacy" | "staged" = "legacy"
 ): PreparedProjectionForRender {
+  if (view.id === "scenario_flow") {
+    const visibleNodeIds = selectScenarioFlowVisibleNodeIds(
+      projection,
+      view,
+      resolveDetailDisplayPolicy(view, detailId)
+    );
+    return {
+      projection,
+      visibleSemanticNodeIds: projection.nodes.filter((node) => visibleNodeIds.has(node.id)).map((node) => node.id),
+      notes: []
+    };
+  }
+
   if (view.id !== "ui_contracts") {
     return {
       projection,

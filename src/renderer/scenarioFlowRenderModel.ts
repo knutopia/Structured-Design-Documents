@@ -48,6 +48,7 @@ export interface ScenarioFlowRenderModel {
 
 interface ScenarioFlowDisplayOptions {
   showBranchLabels: boolean;
+  showDisconnectedPlaces: boolean;
 }
 
 function readScenarioFlowLayout(view: ViewSpec): RendererScenarioFlowLayoutConfig {
@@ -162,8 +163,32 @@ function edgeDisplay(type: string, label?: string): Pick<ScenarioFlowRenderEdge,
 
 function readScenarioFlowDisplayOptions(policy: ResolvedDetailDisplayPolicy): ScenarioFlowDisplayOptions {
   return {
-    showBranchLabels: readBooleanDetailDisplaySetting(policy, "show_branch_labels")
+    showBranchLabels: readBooleanDetailDisplaySetting(policy, "show_branch_labels"),
+    showDisconnectedPlaces: readBooleanDetailDisplaySetting(policy, "show_disconnected_places")
   };
+}
+
+export function selectScenarioFlowVisibleNodeIds(
+  projection: Projection,
+  view: ViewSpec,
+  displayPolicy: ResolvedDetailDisplayPolicy
+): Set<string> {
+  const layout = readScenarioFlowLayout(view);
+  const { showDisconnectedPlaces } = readScenarioFlowDisplayOptions(displayPolicy);
+  const placeNodeTypes = new Set(layout.lanes.find((lane) => lane.id === "place")?.node_types ?? []);
+  const projectedNodeIds = new Set(projection.nodes.map((node) => node.id));
+  const connectedNodeIds = new Set<string>();
+
+  for (const edge of projection.edges) {
+    if (edge.from !== edge.to && projectedNodeIds.has(edge.from) && projectedNodeIds.has(edge.to)) {
+      connectedNodeIds.add(edge.from);
+      connectedNodeIds.add(edge.to);
+    }
+  }
+
+  return new Set(projection.nodes
+    .filter((node) => showDisconnectedPlaces || !placeNodeTypes.has(node.type) || connectedNodeIds.has(node.id))
+    .map((node) => node.id));
 }
 
 export function buildScenarioFlowRenderModel(
@@ -174,10 +199,11 @@ export function buildScenarioFlowRenderModel(
 ): ScenarioFlowRenderModel {
   const layout = readScenarioFlowLayout(view);
   const displayOptions = readScenarioFlowDisplayOptions(displayPolicy);
-  const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
+  const visibleNodeIds = selectScenarioFlowVisibleNodeIds(projection, view, displayPolicy);
+  const visibleNodes = projection.nodes.filter((node) => visibleNodeIds.has(node.id));
   const authorOrderByNodeId = buildAuthorOrderByNodeId(
     graph,
-    projection.nodes.map((node) => node.id)
+    visibleNodes.map((node) => node.id)
   );
   const authorOrderByEdgeKey = buildAuthorOrderByEdgeKey(graph);
   const nodeAnnotationsById = new Map(
@@ -193,7 +219,7 @@ export function buildScenarioFlowRenderModel(
     .map<ScenarioFlowRenderLane | undefined>((lane) => {
       const nodeIds = orderNodeIds(
         graph,
-        projection.nodes.filter((node) => lane.node_types.includes(node.type)).map((node) => node.id)
+        visibleNodes.filter((node) => lane.node_types.includes(node.type)).map((node) => node.id)
       );
       if (nodeIds.length === 0 && layout.empty_lane_policy === "omit") {
         return undefined;
@@ -208,7 +234,7 @@ export function buildScenarioFlowRenderModel(
     })
     .filter((lane): lane is ScenarioFlowRenderLane => lane !== undefined);
 
-  const nodes = projection.nodes.map<ScenarioFlowRenderNode>((node) => {
+  const nodes = visibleNodes.map<ScenarioFlowRenderNode>((node) => {
     const annotation = nodeAnnotationsById.get(node.id);
     const display = nodeDisplay(node.type, annotation?.display?.shape);
     return {
@@ -217,24 +243,26 @@ export function buildScenarioFlowRenderModel(
       authorOrder: authorOrderByNodeId.get(node.id) ?? Number.MAX_SAFE_INTEGER,
       shape: display.shape,
       style: display.style,
-      title: projectionNodesById.get(node.id)?.name ?? node.name
+      title: node.name
     };
   });
 
-  const edges = projection.edges.map<ScenarioFlowRenderEdge>((edge) => {
-    const branchAnnotation = edgeAnnotationsById.get(edgeAnnotationKey(edge.from, edge.to));
-    const branchLabel = normalizeBranchLabelDisplay(branchAnnotation?.display_label);
-    return {
-      id: `${edge.from}__${edge.type.toLowerCase()}__${edge.to}`,
-      from: edge.from,
-      type: edge.type,
-      to: edge.to,
-      ...edgeDisplay(edge.type, displayOptions.showBranchLabels ? branchLabel : undefined),
-      branchLabel,
-      branchLabelSource: branchAnnotation?.label_source,
-      authorOrder: authorOrderByEdgeKey.get(`${edge.from}->${edge.type}->${edge.to}`) ?? Number.MAX_SAFE_INTEGER
-    };
-  });
+  const edges = projection.edges
+    .filter((edge) => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to))
+    .map<ScenarioFlowRenderEdge>((edge) => {
+      const branchAnnotation = edgeAnnotationsById.get(edgeAnnotationKey(edge.from, edge.to));
+      const branchLabel = normalizeBranchLabelDisplay(branchAnnotation?.display_label);
+      return {
+        id: `${edge.from}__${edge.type.toLowerCase()}__${edge.to}`,
+        from: edge.from,
+        type: edge.type,
+        to: edge.to,
+        ...edgeDisplay(edge.type, displayOptions.showBranchLabels ? branchLabel : undefined),
+        branchLabel,
+        branchLabelSource: branchAnnotation?.label_source,
+        authorOrder: authorOrderByEdgeKey.get(`${edge.from}->${edge.type}->${edge.to}`) ?? Number.MAX_SAFE_INTEGER
+      };
+    });
 
   const siblingOrderChains = [
     ...(lanes.length > 1 ? [lanes.map((lane) => lane.headerId)] : []),

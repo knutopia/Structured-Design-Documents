@@ -37,7 +37,11 @@ describe("Scenario transition placement retains obstacle clearance through repai
       expect(independentParallelConflicts(emitted.connectors)).toBe(0);
       const viewStateDivider = rendered.positionedScene.decorations.find(d =>
         d.kind === "line" && d.id === "lane-place__separator");
-      expect(viewStateDivider?.kind).toBe("line");
+      if (detailId === "compact") {
+        expect(viewStateDivider).toBeUndefined();
+      } else {
+        expect(viewStateDivider?.kind).toBe("line");
+      }
       if (viewStateDivider?.kind === "line") {
         const channels = new Map(rendered.middleLayer.edges.map(edge => [edge.id, edge.channel]));
         for (const connector of emitted.connectors) {

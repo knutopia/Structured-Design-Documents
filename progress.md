@@ -34,6 +34,7 @@ z
 ## Wed 9-23
 
 - Bottom-port connector routing for scenario_flow
+- Hiding orphan places in scenario_flow
 
 ## Tue 9-22
 

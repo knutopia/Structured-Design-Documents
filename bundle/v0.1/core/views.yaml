@@ -2617,8 +2617,10 @@ views:
         detail_display:
           compact:
             show_branch_labels: false
+            show_disconnected_places: false
           detailed:
             show_branch_labels: true
+            show_disconnected_places: true
 
   - id: ui_contracts
     name: UI Contracts

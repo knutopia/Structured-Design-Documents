@@ -92,6 +92,8 @@ for a compact list of content available to each diagram type.
 
   The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty lanes for Steps, Places and View States, with persistent rows for branch alternatives and separated row groups for independent flows.
 
+  Compact detail hides Places without a scenario-flow connection to another visible node. If no Places remain, the Places lane is omitted. Detailed detail shows those disconnected Places. Validation profile does not change this display rule.
+
   A direct `REALIZED_BY` relationship aligns a Place or View State with its Step. For a View State without that direct anchor, the bundle-configured `TRANSITIONS_TO` placement rule puts it one band after an already placed source. Transition chains extend the semantic bands as needed; nodes with no anchored path still use deterministic parking.
 
   Example: 
