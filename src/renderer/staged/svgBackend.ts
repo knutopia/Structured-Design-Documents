@@ -1,4 +1,5 @@
 import { arrowMarkerReferenceX } from "./markerGeometry.js";
+import { auditUiContractsFinalScene } from "./uiContractsLabels.js";
 import type {
   MeasuredContentBlock,
   PaintGroup,
@@ -921,7 +922,14 @@ async function buildDefs(scene: PositionedScene, theme: RendererTheme): Promise<
 export async function renderPositionedSceneToSvg(scene: PositionedScene): Promise<StagedSvgArtifact> {
   const resolvedTheme = resolveRendererTheme(scene.themeId, "backend");
   const theme = resolvedTheme.theme;
+  const finalAudit = scene.viewId === "ui_contracts" ? auditUiContractsFinalScene(scene) : [];
   const diagnostics: RendererDiagnostic[] = [...scene.diagnostics, ...resolvedTheme.diagnostics];
+  for (const finding of finalAudit) {
+    if (!diagnostics.some((existing) => existing.code === finding.code
+      && existing.targetId === finding.targetId && existing.message === finding.message)) {
+      diagnostics.push(finding);
+    }
+  }
   const groups = buildPaintElementMap();
   const measurement = createTextMeasurementService(theme.fontFaces);
 

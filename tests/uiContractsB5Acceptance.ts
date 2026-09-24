@@ -71,8 +71,11 @@ export function assessUiContractsGeometry(scene: PositionedScene): string[] {
     for (let i = 1; i < edge.route.points.length; i++) {
       const a = edge.route.points[i - 1], b = edge.route.points[i];
       if (a.x !== b.x && a.y !== b.y) issues.push(`non-orthogonal segment: ${edge.id}`);
-      for (const box of [...nodes, ...labels, ...headers]) if (intersects(a, b, box)) {
+      for (const box of [...nodes, ...headers]) if (intersects(a, b, box)) {
         issues.push(`route/interior: ${edge.id}, ${box.id}`);
+      }
+      for (const label of labels) if (label.id !== edge.id && intersects(a, b, label)) {
+        issues.push(`route/interior: ${edge.id}, ${label.id}`);
       }
     }
   }

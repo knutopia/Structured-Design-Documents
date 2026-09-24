@@ -20,6 +20,8 @@ describe("B5 immutable acceptance baseline", () => {
     const intentionallyExtendedSources = new Set([
       "src/renderer/staged/macroLayout.ts",
       "src/renderer/staged/pipeline.ts",
+      // Final UI-only output audit is intentionally added to the shared SVG entrypoint.
+      "src/renderer/staged/svgBackend.ts",
       // These renderer-core files already differ from the historical B5
       // manifest; the replay and geometry assertions below remain active.
       "src/renderer/staged/routingCore/candidates.ts",
@@ -40,12 +42,17 @@ describe("B5 immutable acceptance baseline", () => {
     expect(assessUiContractsGeometry(result.positionedScene)).toEqual([]);
   });
 
-  it("rejects route/label intersections even when native diagnostics are empty", () => {
+  it("allows a label on its own connector but rejects a neighboring connector", () => {
     const scene = structuredClone(evidence.proofs[0].positionedScene);
     const edge = scene.edges.find(edge => edge.label)!;
-    const point = edge.route.points[0];
+    const ownPoint = edge.route.points[0];
+    edge.label!.x = ownPoint.x - 5;
+    edge.label!.y = ownPoint.y;
+    expect(assessUiContractsGeometry(scene).some(issue => issue.includes(`route/interior: ${edge.id}, ${edge.id}`))).toBe(false);
+    const neighbor = scene.edges.find(candidate => candidate.id !== edge.id && candidate.route.points.length > 1)!;
+    const point = neighbor.route.points[0];
     edge.label!.x = point.x - 5;
     edge.label!.y = point.y;
-    expect(assessUiContractsGeometry(scene).some(issue => issue.startsWith("route/interior:"))).toBe(true);
+    expect(assessUiContractsGeometry(scene).some(issue => issue.includes(`route/interior: ${neighbor.id}, ${edge.id}`))).toBe(true);
   });
 });

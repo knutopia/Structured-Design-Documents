@@ -10,6 +10,7 @@ import { markerRoutingClearance } from "./markerGeometry.js";
 import { resolveRendererTheme } from "./theme.js";
 import {
   runRoutingLifecycle,
+  validatePositionedSceneRouting,
   type FinalRoutingContext,
   type FinalRoutingConnector,
   type FinalRoutingEndpoint
@@ -121,4 +122,21 @@ export function routeUiContractsScene(positionedScene: PositionedScene): Positio
     ...positionedScene,
     diagnostics: sortRendererDiagnostics([...positionedScene.diagnostics, ...diagnostics])
   };
+}
+
+/** Keep intentional terminal sharing identical in the pipeline and final output audit. */
+export function validateUiContractsRoutes(scene: PositionedScene) {
+  const edgeById = new Map(scene.edges.map((edge) => [edge.id, edge] as const));
+  return validatePositionedSceneRouting(scene, {
+    policy: {
+      allowCollinearOverlap: (leftId, leftIndex, rightId, rightIndex) => {
+        const left = edgeById.get(leftId);
+        const right = edgeById.get(rightId);
+        return left !== undefined && right !== undefined
+          && left.to.itemId === right.to.itemId
+          && leftIndex === left.route.points.length - 2
+          && rightIndex === right.route.points.length - 2;
+      }
+    }
+  });
 }

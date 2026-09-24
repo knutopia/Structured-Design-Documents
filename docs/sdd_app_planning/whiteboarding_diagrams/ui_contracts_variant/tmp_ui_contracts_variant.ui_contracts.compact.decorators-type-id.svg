@@ -1454,14 +1454,14 @@
         </text>
     </g>
     <g class="scene-edge-label role-transition" data-edge-id="standalone:transitions:relationship:%5B%22VS-006%22%2C%22TRANSITIONS_TO%22%2C%22VS-010%22%5D:0" data-role="transition">
-      <rect class="scene-edge-label__box" x="366.607" y="3439.5" width="155.316" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="372.607" y="3450.5" dominant-baseline="middle">
-          <tspan x="372.607" dy="0">[Select: Add Relationship]</tspan>
+      <rect class="scene-edge-label__box" x="268" y="3418.5" width="155.316" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="3429.5" dominant-baseline="middle">
+          <tspan x="274" dy="0">[Select: Add Relationship]</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transition" data-edge-id="standalone:transitions:relationship:%5B%22VS-006%22%2C%22TRANSITIONS_TO%22%2C%22VS-050%22%5D:0" data-role="transition">
-      <rect class="scene-edge-label__box" x="268" y="3376.5" width="173.214" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="3387.5" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="268" y="3342.5" width="173.214" height="36" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="3353.5" dominant-baseline="middle">
           <tspan x="274" dy="0">[Select: Diagrams Containing</tspan>
           <tspan x="274" dy="14">This Node]</tspan>
         </text>

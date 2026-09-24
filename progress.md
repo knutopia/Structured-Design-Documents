@@ -31,6 +31,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 9-24
+
+- Ui_contracts label placement solve
+
 ## Wed 9-23
 
 - Bottom-port connector routing for scenario_flow
