@@ -1763,7 +1763,16 @@
           "direction": "vertical",
           "gap": 16,
           "crossAlignment": "start",
-          "sizing": "intrinsic"
+          "sizing": "intrinsic",
+          "pack": {
+            "eligibleItemIds": [
+              "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-010%22%5D",
+              "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-010%22%5D",
+              "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-010%22%5D"
+            ],
+            "gap": 16,
+            "widthSource": "widest_sibling"
+          }
         },
         "chrome": {
           "padding": {

@@ -42,6 +42,8 @@ export function uiContractsPresentationProblems(value: unknown, policies?: unkno
   if (!isRecord(value.hierarchy) || value.hierarchy.order !== "source_depth_first" || value.hierarchy.reuse !== "first_expansion" || !text(value.hierarchy.locator_prefix)) errors.push("hierarchy must declare source_depth_first / first_expansion and a locator prefix");
   if (!isRecord(value.hierarchy) || !["grouped", "individual_roots"].includes(String(value.hierarchy.isolated_components))) errors.push("hierarchy.isolated_components must be grouped or individual_roots");
   if (!isRecord(value.place_description) || !text(value.place_description.property) || !text(value.place_description.visible_when)) errors.push("place_description must declare property and visibility");
+  if (!isRecord(value.target_register_layout)
+    || !["rows_widest_other_section", "column"].includes(String(value.target_register_layout.mode))) errors.push("target_register_layout must declare rows_widest_other_section or column");
   const labels = value.labels;
   if (!isRecord(labels) || !["isolated_components", "hierarchy_root", "hierarchy_expansion", "hierarchy_reference", "component_scope", "place_scope", "standalone_scope", "target_register"].every(key => text(labels[key]))) errors.push("labels must declare all scope and reference templates");
   if (!isRecord(value.transition_label) || typeof value.transition_label.separator !== "string"

@@ -2856,7 +2856,15 @@
           "direction": "vertical",
           "gap": 16,
           "crossAlignment": "start",
-          "sizing": "intrinsic"
+          "sizing": "intrinsic",
+          "pack": {
+            "eligibleItemIds": [
+              "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D",
+              "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D"
+            ],
+            "gap": 16,
+            "widthSource": "widest_sibling"
+          }
         },
         "chrome": {
           "padding": {
@@ -3076,8 +3084,8 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 32,
-            "y": 1369,
+            "x": 272,
+            "y": 1305,
             "width": 224,
             "height": 48
           }
@@ -3087,35 +3095,35 @@
             "id": "north",
             "role": "north",
             "side": "north",
-            "x": 128,
+            "x": 305.874,
             "y": 0
           },
           {
             "id": "south",
             "role": "south",
             "side": "south",
-            "x": 128,
-            "y": 163
+            "x": 305.874,
+            "y": 99
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
-            "x": 256,
-            "y": 81.5
+            "x": 611.748,
+            "y": 49.5
           },
           {
             "id": "west",
             "role": "west",
             "side": "west",
             "x": 0,
-            "y": 81.5
+            "y": 49.5
           }
         ],
         "x": 16,
         "y": 1270,
-        "width": 256,
-        "height": 163
+        "width": 611.748,
+        "height": 99
       }
     ],
     "ports": [
@@ -3131,27 +3139,27 @@
         "role": "south",
         "side": "south",
         "x": 321.874,
-        "y": 1449
+        "y": 1385
       },
       {
         "id": "east",
         "role": "east",
         "side": "east",
         "x": 643.748,
-        "y": 724.5
+        "y": 692.5
       },
       {
         "id": "west",
         "role": "west",
         "side": "west",
         "x": 0,
-        "y": 724.5
+        "y": 692.5
       }
     ],
     "x": 0,
     "y": 0,
     "width": 643.748,
-    "height": 1449
+    "height": 1385
   },
   "edges": [
     {

@@ -346,6 +346,8 @@ export interface LayoutIntent {
   pack?: {
     eligibleItemIds: string[];
     gap: number;
+    /** Use the final width of the widest other child of the parent container. */
+    widthSource?: "widest_sibling";
   };
   columns?: number;
   /** Reserve equal-height slots without resizing their children. Vertical stacks only. */

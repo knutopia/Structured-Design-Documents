@@ -2,7 +2,7 @@ import type { CompiledGraph } from "../compiler/types.js";
 import { getCompiledEdgeSourceSpan, getGraphAuthorOrder } from "../compiler/types.js";
 import { getSourceOrderedStructuralStream } from "../compiler/authorOrder.js";
 import type { Projection } from "../projector/types.js";
-import type { UiContractsPresentationRole, UiContractsRelationshipKind, ViewSpec } from "../bundle/types.js";
+import type { UiContractsPresentationConfig, UiContractsPresentationRole, UiContractsRelationshipKind, ViewSpec } from "../bundle/types.js";
 import { resolveUiContractsPresentation } from "../bundle/uiContractsPresentation.js";
 import { readBooleanDetailDisplaySetting, resolveDetailDisplayPolicy } from "./detailDisplay.js";
 import type { SharedNodeAttribute } from "./staged/contracts.js";
@@ -41,7 +41,7 @@ export interface UiContractsScope {
 export interface UiContractsPresentationModel {
   isolatedComponents: { id: string; title: string; nodes: UiContractsOccurrence[] };
   overview: UiContractsHierarchy[]; scopes: UiContractsScope[];
-  register: { id: string; title: string; nodes: UiContractsOccurrence[] };
+  register: { id: string; title: string; nodes: UiContractsOccurrence[]; layout: UiContractsPresentationConfig["target_register_layout"] };
   occurrences: UiContractsOccurrence[]; relationships: UiContractsRelationship[];
   /** Relationships represented by scope ownership or actual overview nesting rather than requiring arrows. */
   structuralRelationshipIds: string[]; visibleSemanticNodeIds: string[];
@@ -346,7 +346,7 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     if (group) scopes.push({ id, kind: "standalone", title: format(config.labels.standalone_scope, { name: group.source.title }), focal: group.source,
       parents: [], children: [], containment: [], sequences: [], compositions: [], contracts: [group], simple: false });
   }
-  const register = { id: "target-register", title: config.labels.target_register,
+  const register = { id: "target-register", title: config.labels.target_register, layout: config.target_register_layout,
     nodes: supportIds.map(id => occurrence(id, "target-register", "register", [])) };
   const notes = omittedPlaceIds.length ? [`Omitted empty ui_contracts containers in compact detail: ${omittedPlaceIds.map(id => nodes.get(id)!.name).join(", ")}.`] : [];
   const localContainmentIds = new Set(scopes.flatMap(scope => scope.containment.map(edge => edge.relationshipId)));

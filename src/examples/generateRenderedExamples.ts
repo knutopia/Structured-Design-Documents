@@ -96,6 +96,7 @@ function buildReadmeContent(
   lines.push("- Component hierarchy and local parent/child scopes appear in both detail settings");
   lines.push("- ViewState and fallback State sequences read horizontally inside intrinsic-width local scopes");
   lines.push("- single-source contract references, hierarchy locators and native container title bars remain readable");
+  lines.push("- detailed Referenced targets use source-ordered rows across the width set by other diagram sections");
   lines.push("- default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed");
   lines.push("");
   lines.push("`service_blueprint` visual review checklist:");

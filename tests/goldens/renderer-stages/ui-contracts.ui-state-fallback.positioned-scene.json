@@ -2252,7 +2252,16 @@
           "direction": "vertical",
           "gap": 16,
           "crossAlignment": "start",
-          "sizing": "intrinsic"
+          "sizing": "intrinsic",
+          "pack": {
+            "eligibleItemIds": [
+              "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-060%22%5D",
+              "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-060%22%5D",
+              "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-060%22%5D"
+            ],
+            "gap": 16,
+            "widthSource": "widest_sibling"
+          }
         },
         "chrome": {
           "padding": {
@@ -2472,8 +2481,8 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 32,
-            "y": 1120,
+            "x": 272,
+            "y": 1056,
             "width": 224,
             "height": 48
           },
@@ -2571,7 +2580,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1184,
+            "y": 1120,
             "width": 224,
             "height": 48
           }
@@ -2581,35 +2590,35 @@
             "id": "north",
             "role": "north",
             "side": "north",
-            "x": 128,
+            "x": 340.59,
             "y": 0
           },
           {
             "id": "south",
             "role": "south",
             "side": "south",
-            "x": 128,
-            "y": 227
+            "x": 340.59,
+            "y": 163
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
-            "x": 256,
-            "y": 113.5
+            "x": 681.18,
+            "y": 81.5
           },
           {
             "id": "west",
             "role": "west",
             "side": "west",
             "x": 0,
-            "y": 113.5
+            "y": 81.5
           }
         ],
         "x": 16,
         "y": 1021,
-        "width": 256,
-        "height": 227
+        "width": 681.18,
+        "height": 163
       }
     ],
     "ports": [
@@ -2625,27 +2634,27 @@
         "role": "south",
         "side": "south",
         "x": 356.59,
-        "y": 1264
+        "y": 1200
       },
       {
         "id": "east",
         "role": "east",
         "side": "east",
         "x": 713.18,
-        "y": 632
+        "y": 600
       },
       {
         "id": "west",
         "role": "west",
         "side": "west",
         "x": 0,
-        "y": 632
+        "y": 600
       }
     ],
     "x": 0,
     "y": 0,
     "width": 713.18,
-    "height": 1264
+    "height": 1200
   },
   "edges": [
     {

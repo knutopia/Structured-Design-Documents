@@ -85,6 +85,15 @@ END
     }
   });
 
+  it("requires a valid bundle-owned target register layout policy", () => {
+    for (const layout of [undefined, { mode: "diagonal" }, { mode: "rows" }]) {
+      const cloned = structuredClone(bundle);
+      const config = cloned.views.views.find(candidate => candidate.id === "ui_contracts")!.conventions.renderer_defaults!.ui_contracts_presentation!;
+      (config as { target_register_layout?: unknown }).target_register_layout = layout;
+      expect(() => validateLoadedBundle(cloned)).toThrow(BundleValidationError);
+    }
+  });
+
   it("expands H1 once and retains both immediate parents and the child", () => {
     const result = model(), hierarchy = result.overview.flatMap(walk);
     expect(result.overview.map(item => item.node.semanticId)).toEqual(["C-410"]);

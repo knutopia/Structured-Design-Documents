@@ -94,7 +94,8 @@ type LayoutStrategyHandler = (
   container: MeasuredContainer,
   children: PositionedItem[],
   ownedEdges: MeasuredEdge[],
-  context: LayoutContext
+  context: LayoutContext,
+  siblingWidthBudget?: number
 ) => Promise<ContainerLayoutResult>;
 
 const PAINT_ORDER: PositionedScene["paintOrder"] = ["chrome", "nodes", "labels", "edges", "edge_labels"];
@@ -456,7 +457,8 @@ async function layoutStackContainer(
   container: MeasuredContainer,
   children: PositionedItem[],
   _ownedEdges: MeasuredEdge[],
-  context: LayoutContext
+  context: LayoutContext,
+  siblingWidthBudget?: number
 ): Promise<ContainerLayoutResult> {
   if (container.layout.pack && (container.layout.direction ?? "vertical") === "vertical") {
     const eligible = new Set(container.layout.pack.eligibleItemIds);
@@ -464,7 +466,8 @@ async function layoutStackContainer(
     if (packedChildren.length > 0) {
       const budget = Math.max(
         ...children.filter(child => !eligible.has(child.id)).map(child => child.width),
-        ...packedChildren.map(child => child.width)
+        ...packedChildren.map(child => child.width),
+        ...(siblingWidthBudget === undefined ? [] : [siblingWidthBudget - container.chrome.padding.left - container.chrome.padding.right])
       );
       const gap = Math.max(0, container.layout.pack.gap);
       const rows: PositionedItem[][] = [];
@@ -811,7 +814,8 @@ function validateContentBounds(contentWidth: number, contentHeight: number): boo
 async function layoutItem(
   item: MeasuredItem,
   context: LayoutContext,
-  ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>
+  ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>,
+  siblingWidthBudget?: number
 ): Promise<LayoutItemResult> {
   if (item.kind === "node") {
     return {
@@ -820,23 +824,30 @@ async function layoutItem(
     };
   }
 
-  return layoutContainer(item, context, ownedEdgesByContainer);
+  return layoutContainer(item, context, ownedEdgesByContainer, siblingWidthBudget);
 }
 
 async function layoutContainer(
   container: MeasuredContainer,
   context: LayoutContext,
-  ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>
+  ownedEdgesByContainer: ReadonlyMap<string, MeasuredEdge[]>,
+  siblingWidthBudget?: number
 ): Promise<LayoutItemResult> {
-  const childResults: LayoutItemResult[] = [];
-  for (const child of container.children) {
-    childResults.push(await layoutItem(child, context, ownedEdgesByContainer));
+  const childResults: Array<LayoutItemResult | undefined> = new Array(container.children.length);
+  for (const [index, child] of container.children.entries()) {
+    if (child.kind === "container" && child.layout.pack?.widthSource === "widest_sibling") continue;
+    childResults[index] = await layoutItem(child, context, ownedEdgesByContainer);
+  }
+  const widestSibling = Math.max(0, ...childResults.flatMap(result => result ? [result.item.width] : []));
+  for (const [index, child] of container.children.entries()) {
+    if (childResults[index]) continue;
+    childResults[index] = await layoutItem(child, context, ownedEdgesByContainer, widestSibling);
   }
 
-  const positionedChildren = childResults.map((result) => result.item);
+  const positionedChildren = childResults.map((result) => result!.item);
   const descendantRouteHints = new Map<string, Point[]>();
   for (const childResult of childResults) {
-    mergeRouteHints(descendantRouteHints, childResult.routeHints);
+    mergeRouteHints(descendantRouteHints, childResult!.routeHints);
   }
 
   const chrome = cloneChromeSpec(container.chrome);
@@ -846,7 +857,7 @@ async function layoutContainer(
 
   let layoutResult: ContainerLayoutResult;
   try {
-    layoutResult = await handler(container, positionedChildren, ownedEdges, context);
+    layoutResult = await handler(container, positionedChildren, ownedEdges, context, siblingWidthBudget);
     if (!validateContentBounds(layoutResult.contentWidth, layoutResult.contentHeight)) {
       throw new Error(`Strategy "${container.layout.strategy}" produced invalid content bounds.`);
     }
@@ -855,7 +866,7 @@ async function layoutContainer(
     context.diagnostics.push(createLayoutDiagnostic("renderer.layout.strategy_failure", `Layout strategy "${container.layout.strategy}" failed for container "${container.id}". Falling back to "stack". ${message}`, {
       targetId: container.id
     }));
-    layoutResult = await layoutStackContainer(container, positionedChildren, ownedEdges, context);
+    layoutResult = await layoutStackContainer(container, positionedChildren, ownedEdges, context, siblingWidthBudget);
   }
 
   for (const child of positionedChildren) {

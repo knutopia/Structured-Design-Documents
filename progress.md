@@ -35,6 +35,7 @@ z
 
 - Bottom-port connector routing for scenario_flow
 - Hiding orphan places in scenario_flow
+- Reference targets layout in ui_contracts horizontal
 
 ## Tue 9-22
 

@@ -523,6 +523,7 @@ export interface UiContractsPresentationConfig {
   visibility: { hierarchy: string; secondary: string; support: string; omit_empty_places: string };
   hierarchy: { order: "source_depth_first"; reuse: "first_expansion"; locator_prefix: string; isolated_components: "grouped" | "individual_roots" };
   place_description: { property: string; visible_when: string };
+  target_register_layout: { mode: "rows_widest_other_section" | "column" };
   labels: {
     isolated_components: string; hierarchy_root: string; hierarchy_expansion: string; hierarchy_reference: string;
     component_scope: string; place_scope: string; standalone_scope: string; target_register: string;

@@ -3190,6 +3190,7 @@ views:
             secondary: []
             support: []
           place_description: {property: description, visible_when: show_place_description}
+          target_register_layout: {mode: rows_widest_other_section}
           labels:
             isolated_components: Components without hierarchy
             hierarchy_root: 'Component hierarchy · {name}'

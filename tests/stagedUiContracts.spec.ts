@@ -101,6 +101,54 @@ describe("public staged UI contracts B5 renderer", () => {
     expect(result.svg).toContain("Component scope · Parent");
   });
 
+  it("packs referenced targets across the widest positioned section in source order", async () => {
+    const { graph, projection, view, rendererScene, rendered } = await artifacts("docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd");
+    const root = rendered.positionedScene.root;
+    const register = root.children.find(child => child.id === "target-register")!;
+    if (register.kind !== "container") throw new Error("Missing target register");
+    const expectedOrder = rendererScene.root.children.find(child => child.id === "target-register");
+    if (!expectedOrder || expectedOrder.kind !== "container") throw new Error("Missing register scene");
+    expect(register.children.map(child => child.id)).toEqual(expectedOrder.children.map(child => child.id));
+    expect(register.children).toHaveLength(19);
+    expect(register.width).toBeCloseTo(Math.max(...root.children.filter(child => child.id !== register.id).map(child => child.width)), 3);
+    expect(new Set(register.children.map(child => child.y)).size).toBeGreaterThan(1);
+    expect(register.children.some((child, index) => index > 0 && child.y === register.children[index - 1].y)).toBe(true);
+    for (const [index, child] of register.children.entries()) {
+      expect(child.x).toBeGreaterThanOrEqual(register.x + register.chrome.padding.left);
+      expect(child.x + child.width).toBeLessThanOrEqual(register.x + register.width - register.chrome.padding.right + 0.001);
+      expect(child.y + child.height).toBeLessThanOrEqual(register.y + register.height - register.chrome.padding.bottom + 0.001);
+      if (index > 0) expect(child.y > register.children[index - 1].y || child.y === register.children[index - 1].y && child.x > register.children[index - 1].x).toBe(true);
+    }
+
+    const columnView = structuredClone(view);
+    columnView.conventions.renderer_defaults!.ui_contracts_presentation!.target_register_layout.mode = "column";
+    const column = await renderUiContractsStagedSvg(projection, graph, columnView, { detailId: "detailed" });
+    const columnRegister = column.positionedScene.root.children.find(child => child.id === register.id)!;
+    expect(columnRegister.kind).toBe("container");
+    if (columnRegister.kind !== "container") throw new Error("Missing column register");
+    expect(columnRegister.children.map(child => child.id)).toEqual(register.children.map(child => child.id));
+    expect(new Set(columnRegister.children.map(child => child.x)).size).toBe(1);
+    expect(register.height).toBeLessThan(columnRegister.height);
+    expect(root.width).toBe(column.positionedScene.root.width);
+  });
+
+  it("uses the widest card when the register has no sibling section", async () => {
+    for (const count of [1, 2]) {
+      const text = `SDD-TEXT 0.1\n${Array.from({ length: count }, (_, index) => `Event E-00${index + 1} "Target ${index + 1}"\nEND\n`).join("")}`;
+      const graph = compileSource({ path: "/tmp/register-only.sdd", text }, bundle).graph!;
+      const view = bundle.views.views.find(candidate => candidate.id === "ui_contracts")!;
+      const projection = projectView(graph, bundle, view.id).projection!;
+      const result = await renderUiContractsStagedSvg(projection, graph, view, { detailId: "detailed" });
+      expect(result.positionedScene.diagnostics.filter(diagnostic => diagnostic.severity === "error")).toEqual([]);
+      expect(result.positionedScene.root.children).toHaveLength(1);
+      const register = result.positionedScene.root.children[0];
+      if (register.kind !== "container") throw new Error("Missing target register");
+      expect(register.children).toHaveLength(count);
+      expect(register.width).toBe(Math.max(...register.children.map(child => child.width)) + register.chrome.padding.left + register.chrome.padding.right);
+      expect(new Set(register.children.map(child => child.x)).size).toBe(1);
+    }
+  });
+
   it("uses the bundle decorator fallback when the caller omits decorators", async () => {
     const custom = structuredClone(bundle);
     custom.manifest.tool_defaults.node_decorator_mode_id = "type,id";
