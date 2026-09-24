@@ -68,11 +68,7 @@ See also: [Service Blueprint Slice example](service_blueprint_slice_example/), c
 
 ## Using SDD
 
-Until there is a graphical editor, SDD files are authored manually, or by using the sdd-add command line tool, or using an LLM. 
-
-Using SDD command line tools manually ("sdd add", "sdd show" etc): [SDD CLI User Guide](./sdd_cli_tools/)
-
-The SDD Skill helps when using SDD with an LLM: [SDD Skill Guide](sdd-skill/)
+Until there is a graphical editor, SDD files are authored manually, or by using the `sdd add` command line tool, or using an LLM with the SDD Skill: [Using SDD Today](./using_sdd)
 
 ## Technical Core
 
