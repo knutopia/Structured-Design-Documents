@@ -29,8 +29,10 @@ import {
   validateFinalRouteSet,
   buildPortCorridorCandidates,
   buildRoutingSegments,
-  perpendicularSegmentsCross,
   measureRoutingCorridorDeficits,
+  compareRouteCosts,
+  resolveHorizontalSharedY,
+  routeCost,
   type FinalRoutingContext,
   type FinalRoutingConnector,
   type FinalRoutingTrace,
@@ -940,28 +942,18 @@ function resolveAdjacentHorizontalSharedY(
     return undefined;
   }
 
-  const overlapTop = roundMetric(Math.max(source.node.y, target.node.y));
-  const overlapBottom = roundMetric(Math.min(source.node.y + source.node.height, target.node.y + target.node.height));
-  if (overlapBottom - overlapTop <= EPSILON) {
-    return undefined;
-  }
-
   const sourceSideCount = countEndpointOffsets(endpointOffsetsByNodeId, plan.from, plan.sourceSide);
   const targetSideCount = countEndpointOffsets(endpointOffsetsByNodeId, plan.to, plan.targetSide);
-  const preferredY = sourceSideCount > 1 && targetSideCount <= 1 ? sourcePoint.y : targetPoint.y;
-  const sharedY = roundMetric(clampMetric(preferredY, overlapTop, overlapBottom));
-  const preferredWasClamped = Math.abs(sharedY - preferredY) > EPSILON;
-  if (preferredWasClamped && (sourceSideCount > 1 || targetSideCount > 1)) {
-    return undefined;
-  }
-
-  const directStart = { x: source.node.x + source.node.width, y: sharedY };
-  const directEnd = { x: target.node.x, y: sharedY };
-  if (findIntersectingBoxesAlongSegment(directStart, directEnd, getNonEndpointBoxes(plan, index)).length > 0) {
-    return undefined;
-  }
-
-  return sharedY;
+  return resolveHorizontalSharedY({
+    source: source.node,
+    target: target.node,
+    sourcePoint,
+    targetPoint,
+    sourceCount: sourceSideCount,
+    targetCount: targetSideCount,
+    blocked: (start, end) =>
+      findIntersectingBoxesAlongSegment(start, end, getNonEndpointBoxes(plan, index)).length > 0
+  });
 }
 
 function resolveFinalPlanEndpoints(
@@ -3690,31 +3682,6 @@ const SOUTH_OUTPUT_ROLE_BY_EAST_PORT: Readonly<Record<string, string>> = {
   flow_out: "flow_out_south",
   mirror_out: "mirror_out_south"
 };
-
-function routeCost(connectors: readonly FinalRoutingConnector[]): [number, number, number] {
-  const segments = connectors.map(connector => buildRoutingSegments(connector.id, connector.route));
-  let crossings = 0, bends = 0, length = 0;
-  for (let i = 0; i < connectors.length; i++) {
-    const points = connectors[i]!.route.points;
-    bends += Math.max(0, points.length - 2);
-    for (let k = 1; k < points.length; k++) {
-      length += Math.abs(points[k]!.x - points[k - 1]!.x) + Math.abs(points[k]!.y - points[k - 1]!.y);
-    }
-    for (let j = 0; j < i; j++) {
-      for (const left of segments[i]!) for (const right of segments[j]!) {
-        if (perpendicularSegmentsCross(left, right, EPSILON)) crossings++;
-      }
-    }
-  }
-  return [crossings, bends, length];
-}
-
-function compareRouteCosts(left: readonly number[], right: readonly number[]): number {
-  for (let i = 0; i < Math.min(left.length, right.length); i++) {
-    if (Math.abs(left[i]! - right[i]!) > EPSILON) return left[i]! - right[i]!;
-  }
-  return 0;
-}
 
 function violationIdentity(violation: RoutingViolation): string {
   return JSON.stringify([violation.kind, [...violation.connectorIds].sort(), violation.boxId ?? ""]);

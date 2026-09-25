@@ -1344,27 +1344,27 @@
       <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 144 3202.5 L 139 3192.5 L 149 3192.5 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-standalone-transitions-relationship-5b-22vs-006-22-2c-22transitions_to-22-2c-22vs-010-22-5d-0" class="scene-edge role-transition route-orthogonal paint-edges" data-edge-id="standalone:transitions:relationship:%5B%22VS-006%22%2C%22TRANSITIONS_TO%22%2C%22VS-010%22%5D:0" data-role="transition">
-      <path class="scene-edge__path" d="M 256 3406.5 L 354.607 3406.5 L 354.607 3494.5 L 453.214 3494.5"/>
+      <path class="scene-edge__path" d="M 144 3444 L 144 3494.5 L 453.214 3494.5"/>
       <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 454.214 3494.5 L 444.214 3499.5 L 444.214 3489.5 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-standalone-transitions-relationship-5b-22vs-006-22-2c-22transitions_to-22-2c-22vs-050-22-5d-0" class="scene-edge role-transition route-orthogonal paint-edges" data-edge-id="standalone:transitions:relationship:%5B%22VS-006%22%2C%22TRANSITIONS_TO%22%2C%22VS-050%22%5D:0" data-role="transition">
-      <path class="scene-edge__path" d="M 256 3390.5 L 354.607 3390.5 L 354.607 3398.5 L 453.214 3398.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 454.214 3398.5 L 444.214 3403.5 L 444.214 3393.5 Z" fill="#1d4ed8" stroke="none"/>
+      <path class="scene-edge__path" d="M 256 3390.5 L 453.214 3390.5"/>
+      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 454.214 3390.5 L 444.214 3395.5 L 444.214 3385.5 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-standalone-transitions-relationship-5b-22vs-050-22-2c-22transitions_to-22-2c-22vs-060-22-5d-0" class="scene-edge role-transition route-orthogonal paint-edges" data-edge-id="standalone:transitions:relationship:%5B%22VS-050%22%2C%22TRANSITIONS_TO%22%2C%22VS-060%22%5D:0" data-role="transition">
       <path class="scene-edge__path" d="M 677.214 3398.5 L 874.428 3398.5"/>
       <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 875.428 3398.5 L 865.428 3403.5 L 865.428 3393.5 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-standalone-transitions-relationship-5b-22vs-010-22-2c-22transitions_to-22-2c-22vs-020-22-5d-0" class="scene-edge role-transition route-orthogonal paint-edges" data-edge-id="standalone:transitions:relationship:%5B%22VS-010%22%2C%22TRANSITIONS_TO%22%2C%22VS-020%22%5D:0" data-role="transition">
-      <path class="scene-edge__path" d="M 677.214 3478.5 L 775.821 3478.5 L 775.821 3494.5 L 874.428 3494.5"/>
-      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 875.428 3494.5 L 865.428 3499.5 L 865.428 3489.5 Z" fill="#1d4ed8" stroke="none"/>
+      <path class="scene-edge__path" d="M 677.214 3478.5 L 874.428 3478.5"/>
+      <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 875.428 3478.5 L 865.428 3483.5 L 865.428 3473.5 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-standalone-transitions-relationship-5b-22vs-010-22-2c-22transitions_to-22-2c-22vs-030-22-5d-0" class="scene-edge role-transition route-orthogonal paint-edges" data-edge-id="standalone:transitions:relationship:%5B%22VS-010%22%2C%22TRANSITIONS_TO%22%2C%22VS-030%22%5D:0" data-role="transition">
-      <path class="scene-edge__path" d="M 677.214 3494.5 L 775.821 3494.5 L 775.821 3571.5 L 874.428 3571.5"/>
+      <path class="scene-edge__path" d="M 573.214 3540 L 573.214 3571.5 L 874.428 3571.5"/>
       <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 875.428 3571.5 L 865.428 3576.5 L 865.428 3566.5 Z" fill="#1d4ed8" stroke="none"/>
     </g>
     <g id="scene-edge-standalone-transitions-relationship-5b-22vs-010-22-2c-22transitions_to-22-2c-22vs-040-22-5d-0" class="scene-edge role-transition route-orthogonal paint-edges" data-edge-id="standalone:transitions:relationship:%5B%22VS-010%22%2C%22TRANSITIONS_TO%22%2C%22VS-040%22%5D:0" data-role="transition">
-      <path class="scene-edge__path" d="M 677.214 3510.5 L 760 3510.5 L 760 3667.5 L 874.428 3667.5"/>
+      <path class="scene-edge__path" d="M 557.214 3540 L 557.214 3667.5 L 874.428 3667.5"/>
       <path class="ui-contracts-arrowhead" data-arrow-end="true" d="M 875.428 3667.5 L 865.428 3672.5 L 865.428 3662.5 Z" fill="#1d4ed8" stroke="none"/>
     </g>
   </g>
@@ -1454,14 +1454,14 @@
         </text>
     </g>
     <g class="scene-edge-label role-transition" data-edge-id="standalone:transitions:relationship:%5B%22VS-006%22%2C%22TRANSITIONS_TO%22%2C%22VS-010%22%5D:0" data-role="transition">
-      <rect class="scene-edge-label__box" x="366.607" y="3439.5" width="155.316" height="22" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="372.607" y="3450.5" dominant-baseline="middle">
-          <tspan x="372.607" dy="0">[Select: Add Relationship]</tspan>
+      <rect class="scene-edge-label__box" x="268" y="3460.5" width="155.316" height="22" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="3471.5" dominant-baseline="middle">
+          <tspan x="274" dy="0">[Select: Add Relationship]</tspan>
         </text>
     </g>
     <g class="scene-edge-label role-transition" data-edge-id="standalone:transitions:relationship:%5B%22VS-006%22%2C%22TRANSITIONS_TO%22%2C%22VS-050%22%5D:0" data-role="transition">
-      <rect class="scene-edge-label__box" x="268" y="3376.5" width="173.214" height="36" rx="8" ry="8"/>
-      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="3387.5" dominant-baseline="middle">
+      <rect class="scene-edge-label__box" x="268" y="3342.5" width="173.214" height="36" rx="8" ry="8"/>
+      <text class="scene-text text-role-edge_label block-kind-edge_label" x="274" y="3353.5" dominant-baseline="middle">
           <tspan x="274" dy="0">[Select: Diagrams Containing</tspan>
           <tspan x="274" dy="14">This Node]</tspan>
         </text>

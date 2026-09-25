@@ -1,0 +1,17 @@
+SDD-TEXT 0.1
+
+ViewState VS-101 "Starting"
+  TRANSITIONS_TO VS-102 "Upper" ["Choose the upper branch with a longer action"]
+  TRANSITIONS_TO VS-103 "Lower" ["Choose lower branch"]
+END
+
+ViewState VS-102 "Upper"
+  TRANSITIONS_TO VS-104 "Finished" ["Finish upper"]
+END
+
+ViewState VS-103 "Lower"
+  TRANSITIONS_TO VS-104 "Finished" ["Finish lower"]
+END
+
+ViewState VS-104 "Finished"
+END

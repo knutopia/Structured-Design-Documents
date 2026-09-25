@@ -1,0 +1,194 @@
+{
+  "detailId": "detailed",
+  "nodeDecoratorModeId": "type,id",
+  "bounds": {
+    "minX": 0,
+    "minY": 0,
+    "maxX": 1214.77,
+    "maxY": 1066
+  },
+  "boxes": [
+    {
+      "id": "I-010",
+      "x": 38,
+      "y": 66,
+      "width": 224,
+      "height": 53
+    },
+    {
+      "id": "I-011",
+      "x": 38,
+      "y": 186,
+      "width": 224,
+      "height": 131
+    },
+    {
+      "id": "I-012",
+      "x": 38,
+      "y": 365,
+      "width": 224,
+      "height": 131
+    },
+    {
+      "id": "I-020",
+      "x": 38,
+      "y": 544,
+      "width": 224,
+      "height": 101
+    },
+    {
+      "id": "I-021",
+      "x": 38,
+      "y": 693,
+      "width": 224,
+      "height": 85
+    },
+    {
+      "id": "I-022",
+      "x": 38,
+      "y": 826,
+      "width": 224,
+      "height": 101
+    },
+    {
+      "id": "I-030",
+      "x": 38,
+      "y": 975,
+      "width": 224,
+      "height": 53
+    },
+    {
+      "id": "O-010",
+      "x": 904.77,
+      "y": 66,
+      "width": 224,
+      "height": 72
+    },
+    {
+      "id": "OP-010",
+      "x": 539.336,
+      "y": 66,
+      "width": 224,
+      "height": 72
+    },
+    {
+      "id": "OP-020",
+      "x": 539.336,
+      "y": 186,
+      "width": 224,
+      "height": 72
+    }
+  ],
+  "endpoints": [
+    {
+      "id": "connector:1:OP-010__supports__O-010",
+      "source": {
+        "x": 763.336,
+        "y": 102
+      },
+      "target": {
+        "x": 904.77,
+        "y": 102
+      }
+    },
+    {
+      "id": "connector:10:I-030__addresses__OP-020",
+      "source": {
+        "x": 262,
+        "y": 1017.5
+      },
+      "target": {
+        "x": 539.336,
+        "y": 246
+      }
+    },
+    {
+      "id": "connector:2:OP-020__supports__O-010",
+      "source": {
+        "x": 763.336,
+        "y": 222
+      },
+      "target": {
+        "x": 904.77,
+        "y": 118
+      }
+    },
+    {
+      "id": "connector:3:I-010__addresses__OP-010",
+      "source": {
+        "x": 262,
+        "y": 92.5
+      },
+      "target": {
+        "x": 539.336,
+        "y": 78
+      }
+    },
+    {
+      "id": "connector:4:I-011__addresses__OP-010",
+      "source": {
+        "x": 262,
+        "y": 251.5
+      },
+      "target": {
+        "x": 539.336,
+        "y": 94
+      }
+    },
+    {
+      "id": "connector:5:I-012__addresses__OP-010",
+      "source": {
+        "x": 262,
+        "y": 430.5
+      },
+      "target": {
+        "x": 539.336,
+        "y": 110
+      }
+    },
+    {
+      "id": "connector:6:I-020__addresses__OP-020",
+      "source": {
+        "x": 262,
+        "y": 594.5
+      },
+      "target": {
+        "x": 539.336,
+        "y": 198
+      }
+    },
+    {
+      "id": "connector:7:I-021__addresses__OP-020",
+      "source": {
+        "x": 262,
+        "y": 735.5
+      },
+      "target": {
+        "x": 539.336,
+        "y": 214
+      }
+    },
+    {
+      "id": "connector:8:I-022__addresses__OP-020",
+      "source": {
+        "x": 262,
+        "y": 876.5
+      },
+      "target": {
+        "x": 539.336,
+        "y": 230
+      }
+    },
+    {
+      "id": "connector:9:I-030__addresses__OP-010",
+      "source": {
+        "x": 262,
+        "y": 1001.5
+      },
+      "target": {
+        "x": 539.336,
+        "y": 126
+      }
+    }
+  ]
+}

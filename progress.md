@@ -2,10 +2,6 @@
 
 ## Open Issues
 
--Test failure: B5 immutable baseline (pipeline.ts hash)
--Test failure: Outcome gate detailed / type,id
--Test failure: Spacing regression (2 Scenario Flow trims)
-
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -30,6 +26,12 @@ z
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Thu 9-24
+
+- Ui_contracts label placement solve
+- Ui_contracts bottom port routing
+- Mopped up test failures
 
 ## Wed 9-23
 
