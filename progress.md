@@ -34,6 +34,7 @@ z
 ## Thu 9-24
 
 - Ui_contracts label placement solve
+- Ui_contracts bottom port routing
 
 ## Wed 9-23
 

@@ -41,9 +41,12 @@ export async function runStagedRendererPipeline(scene: RendererScene): Promise<S
       // alone does not avoid node boxes; the repair alone greedily picks the
       // first candidate (routing connectors the wrong way around). Together they
       // cover both concerns.
-      positionedScene = routeUiContractsScene(positionedScene);
+      const routingChangedEdgeIds = new Set<string>();
+      positionedScene = routeUiContractsScene(positionedScene, (edgeIds) => {
+        for (const edgeId of edgeIds) routingChangedEdgeIds.add(edgeId);
+      });
       positionedScene = repairPositionedSceneRoutesAroundNodes(positionedScene);
-      positionedScene = repairUiContractsLabels(positionedScene);
+      positionedScene = repairUiContractsLabels(positionedScene, routingChangedEdgeIds);
     }
     const violations = scene.viewId === "ui_contracts"
       ? validateUiContractsRoutes(positionedScene)

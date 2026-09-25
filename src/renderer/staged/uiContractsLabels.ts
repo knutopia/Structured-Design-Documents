@@ -132,13 +132,17 @@ function horizontalLane(edge: PositionedEdge, context: LabelContext): { leftX: n
 }
 
 /** Leaves already valid labels and all non-label geometry untouched. */
-export function repairUiContractsLabels(scene: PositionedScene): PositionedScene {
+export function repairUiContractsLabels(
+  scene: PositionedScene,
+  repositionEdgeIds: ReadonlySet<string> = new Set()
+): PositionedScene {
   const context = buildContext(scene);
   const retained: Array<{ id: string; box: LabelBox }> = [];
   const pending: PositionedEdge[] = [];
   for (const edge of scene.edges) {
     if (!edge.label) continue;
-    if (labelProblems(scene, context, edge, edge.label, retained).length === 0) {
+    if (!repositionEdgeIds.has(edge.id)
+      && labelProblems(scene, context, edge, edge.label, retained).length === 0) {
       retained.push({ id: edge.id, box: edge.label });
     } else {
       pending.push(edge);
