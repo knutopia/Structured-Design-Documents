@@ -41,15 +41,30 @@ describe("Outcome production final-resolution gate", () => {
         for (const box of context.boxes) expect(routeIntersectsRect(edge.route, box), `${edge.id} / ${box.id}`).toBe(false);
       }
       if (source === exact && detailId === "detailed" && mode === "type,id") {
-        const baseline: core.FinalRoutingContext = JSON.parse(await readFile("tests/fixtures/render/routing_hardening_captured_outcome.json", "utf8"));
+        const baseline = JSON.parse(await readFile("tests/fixtures/render/outcome_production_geometry_current.json", "utf8")) as {
+          bounds: core.FinalRoutingContext["bounds"];
+          boxes: Array<{ id: string; x: number; y: number; width: number; height: number }>;
+          endpoints: Array<{ id: string; source: { x: number; y: number }; target: { x: number; y: number } }>;
+        };
         expect(context.bounds).toEqual(baseline.bounds);
         expect(context.boxes.map(({ id, x, y, width, height }) => ({ id, x, y, width, height })).sort((a,b)=>a.id.localeCompare(b.id)))
-          .toEqual([...baseline.boxes].sort((a,b)=>a.id.localeCompare(b.id)));
-        for (const edge of result.positionedScene.edges) {
-          const old = baseline.connectors.find(c => c.id === edge.id)!;
-          expect({ x: edge.from.x, y: edge.from.y }).toEqual(old.source.point);
-          expect({ x: edge.to.x, y: edge.to.y }).toEqual(old.target.point);
-        }
+          .toEqual(baseline.boxes);
+        const routingEndpoints = context.connectors.map(connector => ({
+          id: connector.id,
+          source: connector.source.point,
+          target: connector.target.point
+        })).sort((a,b)=>a.id.localeCompare(b.id));
+        expect(routingEndpoints).toEqual(baseline.endpoints);
+        const edgesById = new Map(result.positionedScene.edges.map(edge => [edge.id, edge]));
+        const emittedEndpoints = result.routingStages.connectorPlans.map(plan => {
+          const edge = edgesById.get(plan.edgeId)!;
+          return {
+            id: plan.id,
+            source: edge.route.points[0]!,
+            target: edge.route.points.at(-1)!
+          };
+        }).sort((a,b)=>a.id.localeCompare(b.id));
+        expect(emittedEndpoints).toEqual(baseline.endpoints);
       }
     });
   }

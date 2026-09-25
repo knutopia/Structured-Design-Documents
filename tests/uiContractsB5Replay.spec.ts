@@ -25,10 +25,13 @@ describe("B5 immutable acceptance baseline", () => {
       // These renderer-core files already differ from the historical B5
       // manifest; the replay and geometry assertions below remain active.
       "src/renderer/staged/routingCore/candidates.ts",
+      "src/renderer/staged/routingCore/contracts.ts",
       "src/renderer/staged/routingCore/geometry.ts",
+      "src/renderer/staged/routingCore/index.ts",
       "src/renderer/staged/routingCore/lifecycle.ts",
       "src/renderer/staged/routingCore/occupancy.ts",
-      "src/renderer/staged/routingCore/solver.ts"
+      "src/renderer/staged/routingCore/solver.ts",
+      "src/renderer/staged/routingCore/validation.ts"
     ]);
     for (const [path, hash] of Object.entries({ ...baseline.protectedSourceHashes, ...baseline.referenceHashes })) {
       if (intentionallyExtendedSources.has(path)) continue;

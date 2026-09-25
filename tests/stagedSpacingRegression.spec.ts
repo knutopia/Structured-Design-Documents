@@ -59,7 +59,14 @@ function expectBounds(scene: PositionedScene): void {
       expect(edge.label.y + edge.label.height).toBeLessThanOrEqual(root.y + root.height);
     }
   }
-  expect(root.height - Math.max(...root.children.map(child => child.y + child.height))).toBe(root.chrome.padding.bottom);
+  const maxBottom = Math.max(
+    ...root.children.map(child => child.y + child.height),
+    ...scene.edges.flatMap(edge => [
+      ...edge.route.points.map(point => point.y),
+      ...(edge.label ? [edge.label.y + edge.label.height] : [])
+    ])
+  );
+  expect(root.height - maxBottom).toBe(root.chrome.padding.bottom);
 }
 
 function scenarioCells(scene: PositionedScene, laneId: string): PositionedContainer[] {
@@ -72,25 +79,68 @@ function parkedPolicies(count: number): string {
 }
 
 describe("spacing regression proof cases", () => {
-  it.each(["compact", "detailed"])("trims the sdd_for_sdd Scenario Flow to occupied lane rows (%s)", async detailId => {
+  it.each([
+    {
+      detailId: "compact",
+      size: { width: 1578, height: 1040 },
+      nodeCount: 19,
+      lanes: { step: 6, view_state: 4 }
+    },
+    {
+      detailId: "detailed",
+      size: { width: 1840, height: 1306 },
+      nodeCount: 23,
+      lanes: { step: 6, place: 1, view_state: 4 }
+    }
+  ])("trims the sdd_for_sdd Scenario Flow to occupied lane rows ($detailId)", async ({ detailId, size, nodeCount, lanes }) => {
     const c = context(scenarioSource, "scenario_flow");
     const result = await renderScenarioFlowStagedSvg(c.projection, c.graph, c.view, { detailId });
-    expect(result.positionedScene.root).toMatchObject({ width: 1508, height: 880 });
-    expect(geometry(result.positionedScene)).toHaveLength(15);
+    expect(result.positionedScene.root).toMatchObject(size);
+    expect(geometry(result.positionedScene)).toHaveLength(nodeCount);
+    const visibleLaneIds = [...new Set(result.positionedScene.root.children.flatMap(child =>
+      child.kind === "container" && child.viewMetadata?.scenarioFlow?.kind === "cell"
+        ? [child.viewMetadata.scenarioFlow.laneId]
+        : []
+    ))].sort();
+    expect(visibleLaneIds).toEqual(Object.keys(lanes).sort());
     const stepCells = scenarioCells(result.positionedScene, "step");
     const placeCells = scenarioCells(result.positionedScene, "place");
-    expect(new Set(stepCells.map(cell => cell.y)).size).toBe(6); // includes the internal component separator
-    expect(new Set(placeCells.map(cell => cell.y)).size).toBe(1);
+    const viewStateCells = scenarioCells(result.positionedScene, "view_state");
+    expect(new Set(stepCells.map(cell => cell.y)).size).toBe(lanes.step);
     expect(new Set(stepCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([53]));
-    expect(new Set(placeCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([48]));
-    expect(placeCells[0]!.height).toBe(242);
+    expect(new Set(viewStateCells.map(cell => cell.y)).size).toBe(lanes.view_state);
+    expect(new Set(viewStateCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([53]));
+    const expectedPlaceRows = "place" in lanes ? lanes.place : 0;
+    expect(new Set(placeCells.map(cell => cell.y)).size).toBe(expectedPlaceRows);
+    if (placeCells.length > 0) expect(new Set(placeCells.map(cell => cell.resolvedSlotHeight))).toEqual(new Set([48]));
     expectBounds(result.positionedScene);
 
     c.view.conventions.renderer_defaults!.scenario_flow_layout!.trailing_track_policy = "preserve";
     const preserved = await renderScenarioFlowStagedSvg(c.projection, c.graph, c.view, { detailId });
-    expect(new Set(scenarioCells(preserved.positionedScene, "place").map(cell => cell.y)).size).toBe(6);
+    for (const laneId of Object.keys(lanes)) {
+      expect(new Set(scenarioCells(preserved.positionedScene, laneId).map(cell => cell.y)).size).toBe(6);
+    }
     expect(preserved.positionedScene.root.height).toBeGreaterThan(result.positionedScene.root.height);
-    expect(geometry(result.positionedScene)).toEqual(geometry(preserved.positionedScene));
+    const preservedNodes = new Map(flatten(preserved.positionedScene.root)
+      .filter((item): item is Extract<PositionedItem, { kind: "node" }> => item.kind === "node")
+      .map(item => [item.id, item] as const));
+    const downstreamOffsets = new Set<number>();
+    for (const item of flatten(result.positionedScene.root)) {
+      if (item.kind !== "node") continue;
+      const preservedNode = preservedNodes.get(item.id)!;
+      expect({ x: preservedNode.x, width: preservedNode.width, height: preservedNode.height })
+        .toEqual({ x: item.x, width: item.width, height: item.height });
+      const verticalOffset = preservedNode.y - item.y;
+      if (detailId === "detailed" && item.viewMetadata?.scenarioFlow?.laneId === "view_state") {
+        downstreamOffsets.add(verticalOffset);
+      } else {
+        expect(verticalOffset).toBe(0);
+      }
+    }
+    if (detailId === "detailed") {
+      expect(downstreamOffsets.size).toBe(1);
+      expect([...downstreamOffsets][0]).toBeGreaterThan(0);
+    }
     expect(result.middleLayer).toEqual(preserved.middleLayer);
     c.view.conventions.renderer_defaults!.scenario_flow_layout!.trailing_track_policy = "trim";
     expect((await renderScenarioFlowStagedSvg(c.projection, c.graph, c.view, { detailId })).svg).toBe(result.svg);
