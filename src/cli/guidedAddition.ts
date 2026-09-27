@@ -3,6 +3,8 @@ import { createInterface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import type { Bundle } from "../bundle/types.js";
 import { getGuidedAdditionDefaultDisplayProfileId } from "../bundle/guidedAuthoring.js";
+import type { DefaultsConfigRuntime } from "../config/index.js";
+import { loadSelectedBundle } from "./bundleResolution.js";
 import { formatPrettyDiagnostics } from "../diagnostics/formatPretty.js";
 import { hasErrors, type Diagnostic } from "../diagnostics/types.js";
 import type { SourceInput } from "../types.js";
@@ -63,6 +65,7 @@ export interface GuidedPromptAdapter {
 
 export interface GuidedAdditionCliDeps {
   cwd: () => string;
+  defaultsConfig: DefaultsConfigRuntime;
   loadBundle: (manifestPath: string) => Promise<Bundle>;
   readSourceInput: (filePath: string) => Promise<SourceInput>;
   findAuthoringRepoRoot: (startDir: string) => Promise<string | null>;
@@ -342,10 +345,13 @@ export async function runGuidedAdditionCommand(
     if (!repoRoot) throw new Error(`Could not find an SDD repository root for '${documentPath}'.`);
     const workspace = deps.createAuthoringWorkspace(repoRoot);
     const publicPath = workspace.normalizeDocumentPath(workspace.toPublicPath(absoluteDocumentPath));
-    const bundlePath = options.bundle
-      ? path.resolve(deps.cwd(), options.bundle)
-      : path.join(repoRoot, "bundle/v0.1/manifest.yaml");
-    const bundle = await deps.loadBundle(bundlePath);
+    const explicitBundlePath = options.bundle ? path.resolve(deps.cwd(), options.bundle) : undefined;
+    const { bundle } = await loadSelectedBundle(
+      deps.defaultsConfig,
+      deps.loadBundle,
+      explicitBundlePath,
+      repoRoot
+    );
     let snapshot: GuidedDocumentSnapshot;
     try {
       const source = await deps.readSourceInput(absoluteDocumentPath);

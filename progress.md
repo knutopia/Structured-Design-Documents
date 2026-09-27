@@ -30,6 +30,7 @@ z
 ## Sun 9-27
 
 - --bundle added to sdd-help
+- Bundle option in sdd defaults
 
 ## Thu 9-24
 

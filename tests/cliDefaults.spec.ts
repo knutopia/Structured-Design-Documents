@@ -433,7 +433,7 @@ describe("persistent defaults CLI resolution", () => {
     ]);
   });
 
-  it("fails profile consumers on malformed configuration but leaves compile and add configuration-free", async () => {
+  it("fails bundle and profile consumers on malformed configuration while add stops before bundle resolution when no repo exists", async () => {
     const memory = createMemoryDefaults();
     memory.read.mockRejectedValue(new DefaultsConfigError("config.parse", "malformed injected configuration"));
     const validateContext = createCliDeps(memory.runtime);
@@ -441,7 +441,7 @@ describe("persistent defaults CLI resolution", () => {
     expect(validateContext.stderr.join("")).toContain("malformed injected configuration");
 
     const compileContext = createCliDeps(memory.runtime);
-    expect((await runCli(["node", "sdd", "compile", "example.sdd"], compileContext.deps)).exitCode).toBe(0);
+    expect((await runCli(["node", "sdd", "compile", "example.sdd"], compileContext.deps)).exitCode).toBe(1);
 
     memory.read.mockClear();
     const addContext = createCliDeps(memory.runtime);
@@ -456,12 +456,53 @@ describe("persistent defaults CLI resolution", () => {
 });
 
 describe("sdd defaults commands", () => {
+  it("sets, shows, and unsets the persistent bundle version", async () => {
+    const memory = createMemoryDefaults({
+      global: { version: "1", defaults: { validation_profile_id: "strict" } }
+    });
+    const setContext = createCliDeps(memory.runtime);
+    expect((await runCli(["node", "sdd", "defaults", "set", "bundle", "0.1"], setContext.deps)).exitCode).toBe(0);
+    expect(memory.files.get("/user/config/sdd/config.yaml")?.defaults.bundle_version).toBe("0.1");
+    expect(memory.files.get("/user/config/sdd/config.yaml")?.defaults.validation_profile_id).toBe("strict");
+
+    const showContext = createCliDeps(memory.runtime);
+    expect((await runCli(["node", "sdd", "defaults", "show"], showContext.deps)).exitCode).toBe(0);
+    expect(showContext.stdout.join("")).toContain("Bundle: 0.1 (user default)");
+
+    const unsetContext = createCliDeps(memory.runtime);
+    expect((await runCli(["node", "sdd", "defaults", "unset", "bundle"], unsetContext.deps)).exitCode).toBe(0);
+    expect(memory.files.get("/user/config/sdd/config.yaml")?.defaults.bundle_version).toBeUndefined();
+  });
+
+  it("rejects a manifest path when setting the saved bundle version", async () => {
+    const memory = createMemoryDefaults();
+    const context = createCliDeps(memory.runtime);
+    expect((await runCli([
+      "node", "sdd", "defaults", "set", "bundle", "0.1", "--bundle", "/alternate/manifest.yaml"
+    ], context.deps)).exitCode).toBe(2);
+    expect(context.stderr.join("")).toContain("cannot be used when setting the default bundle");
+    expect(memory.set).not.toHaveBeenCalled();
+  });
+
+  it("uses the saved bundle version for commands and lets an explicit manifest win", async () => {
+    const memory = createMemoryDefaults({
+      global: { version: "1", defaults: { bundle_version: "0.1" } }
+    });
+    const savedContext = createCliDeps(memory.runtime);
+    await runCli(["node", "sdd", "validate", "example.sdd"], savedContext.deps);
+    expect(savedContext.deps.loadBundle).toHaveBeenCalledWith(path.resolve("bundle/v0.1/manifest.yaml"));
+
+    const explicitContext = createCliDeps(memory.runtime);
+    await runCli(["node", "sdd", "validate", "example.sdd", "--bundle", "/custom/manifest.yaml"], explicitContext.deps);
+    expect(explicitContext.deps.loadBundle).toHaveBeenCalledWith("/custom/manifest.yaml");
+  });
+
   it("makes bare defaults and defaults show equivalent and compact", async () => {
     for (const suffix of [[], ["show"]]) {
       const context = createCliDeps(createMemoryDefaults().runtime);
       expect((await runCli(["node", "sdd", "defaults", ...suffix], context.deps)).exitCode).toBe(0);
       expect(context.stdout.join("")).toBe(
-        "Profile: simple (bundle fallback)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
+        "Bundle: 0.1 (built-in default)\nProfile: simple (bundle fallback)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
       );
     }
 
@@ -470,7 +511,7 @@ describe("sdd defaults commands", () => {
     }).runtime);
     expect((await runCli(["node", "sdd", "defaults"], globalContext.deps)).exitCode).toBe(0);
     expect(globalContext.stdout.join("")).toBe(
-      "Profile: permissive (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
+      "Bundle: 0.1 (built-in default)\nProfile: permissive (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
     );
   });
 
@@ -493,7 +534,7 @@ describe("sdd defaults commands", () => {
     const show = createCliDeps(memory.runtime);
     expect((await runCli(["node", "sdd", "defaults", "show"], show.deps)).exitCode).toBe(0);
     expect(show.stdout.join("")).toBe(
-      "Profile: strict (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
+      "Bundle: 0.1 (built-in default)\nProfile: strict (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
     );
 
     const unset = createCliDeps(memory.runtime);

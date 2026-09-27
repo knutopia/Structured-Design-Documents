@@ -9,7 +9,7 @@ const bundle: Bundle = {
   manifestPath: "/repo/bundle/v0.1/manifest.yaml",
   manifest: {
     bundle_name: "test",
-    bundle_version: "0.1.0",
+    bundle_version: "0.1",
     language: "sdd",
     language_version: "0.1",
     core: {
@@ -2193,7 +2193,7 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Omit --decorators to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Bundle selection:");
     expect(help).toContain("--bundle <manifest> selects the bundle to target by the sdd command.");
-    expect(help).toContain("Omit it to use the current v0.1 bundle.");
+    expect(help).toContain("Omit it to use your saved bundle version, or v0.1 when no default is saved.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all");

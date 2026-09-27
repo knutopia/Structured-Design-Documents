@@ -6,14 +6,15 @@ import {
 import type { Bundle } from "../bundle/types.js";
 import { loadDefaultsSources, resolveDefault } from "../config/resolver.js";
 import type { DefaultsConfigRuntime } from "../config/runtime.js";
-import type { ResolvedDefault } from "../config/types.js";
+import type { LoadedDefaultsSources, ResolvedDefault } from "../config/types.js";
 
 export async function resolveCliValidationProfile(
   runtime: DefaultsConfigRuntime,
   bundle: Bundle,
-  explicitProfileId?: string
+  explicitProfileId?: string,
+  providedSources?: LoadedDefaultsSources
 ): Promise<ResolvedDefault> {
-  const sources = await loadDefaultsSources(runtime);
+  const sources = providedSources ?? await loadDefaultsSources(runtime);
   return resolveDefault({
     setting: "validation_profile_id",
     explicitValue: explicitProfileId,
@@ -36,9 +37,10 @@ export interface ResolvedCliShowSettings extends ResolvedCliRenderSettings {
 export async function resolveCliRenderSettings(
   runtime: DefaultsConfigRuntime,
   bundle: Bundle,
-  explicit?: { profileId?: string; detailId?: string }
+  explicit?: { profileId?: string; detailId?: string },
+  providedSources?: LoadedDefaultsSources
 ): Promise<ResolvedCliRenderSettings> {
-  const sources = await loadDefaultsSources(runtime);
+  const sources = providedSources ?? await loadDefaultsSources(runtime);
   return {
     profile: resolveDefault({
       setting: "validation_profile_id",
@@ -62,9 +64,10 @@ export async function resolveCliRenderSettings(
 export async function resolveCliShowSettings(
   runtime: DefaultsConfigRuntime,
   bundle: Bundle,
-  explicit?: { profileId?: string; detailId?: string; nodeDecoratorModeId?: string }
+  explicit?: { profileId?: string; detailId?: string; nodeDecoratorModeId?: string },
+  providedSources?: LoadedDefaultsSources
 ): Promise<ResolvedCliShowSettings> {
-  const sources = await loadDefaultsSources(runtime);
+  const sources = providedSources ?? await loadDefaultsSources(runtime);
   return {
     profile: resolveDefault({
       setting: "validation_profile_id",

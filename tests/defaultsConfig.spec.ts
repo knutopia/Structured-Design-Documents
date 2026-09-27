@@ -48,6 +48,14 @@ describe("defaults configuration schema", () => {
     expect(serializeDefaultsConfig(parsed)).toBe(
       'version: "1"\ndefaults:\n  validation_profile_id: strict\n  render_detail_id: compact\n  node_decorator_mode_id: type,id\n'
     );
+
+    const withBundle = parseDefaultsConfig(
+      'version: "1"\ndefaults:\n  bundle_version: "0.1"\n  validation_profile_id: simple\n',
+      "/config.yaml"
+    );
+    expect(serializeDefaultsConfig(withBundle)).toBe(
+      'version: "1"\ndefaults:\n  bundle_version: "0.1"\n  validation_profile_id: simple\n'
+    );
   });
 
   it.each([
