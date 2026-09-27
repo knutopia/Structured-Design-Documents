@@ -51,7 +51,7 @@ Five most relevant subcommands:
 - `sdd show <input> --view <view>`: create a diagram
 - `sdd validate <input>`: check that the SDD is self-consistent
 - `sdd compile <input>`: create json from an SDD
-- `sdd defaults show|set|unset`: inspect or manage persistent CLI preferences
+- `sdd defaults show|set|unset`: inspect or manage persistent CLI preferences, including the default bundle version
 
 To edit an SDD without getting an LLM incvolved, remember `sdd add`.
 To make diagrams from SDD, remember `sdd show`.
@@ -72,7 +72,7 @@ pnpm sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001
 - Purpose: interactively add content to an SDD file.  Content can be an incoming/outgoing relationship added to an existing node, or a new standalone node.
 - Use when: you want to create SDD content in a simple way, without writing source code from scratch.
 - Invocation: `pnpm sdd add <document_path>`
-- Common options: `--node <node_id>` supplies an exact starting-node anchor, and `--bundle <manifest>` selects a different bundle.
+- Common options: `--node <node_id>` supplies an exact starting-node anchor, and `--bundle <manifest>` selects a different bundle for this invocation. (When omitted, `sdd add` uses the saved bundle version or `0.1`.)
 - Output: guided choices, a plain-language review, and one Save or Cancel decision.
 
 `sdd add` will ask you what you want to add and where, presenting only correct choices.
@@ -168,6 +168,7 @@ pnpm sdd defaults show
 To set a global default:
 
 ```bash
+pnpm sdd defaults set bundle 0.1
 pnpm sdd defaults set profile simple
 pnpm sdd defaults set detail compact
 pnpm sdd defaults set decorators type,id
@@ -176,18 +177,21 @@ pnpm sdd defaults set decorators type,id
 Revert to the bundle-provided values:
 
 ```bash
+pnpm sdd defaults unset bundle
 pnpm sdd defaults unset profile
 pnpm sdd defaults unset detail
 pnpm sdd defaults unset decorators
 ```
 
-Validation profile is set to `simple`, render detail to `compact`, and decorators to `type,id` as global defaults. Those global defaults are used by command line tools unless an explicit setting is specified with the tool call.
+The default bundle version is `0.1` when no bundle preference is saved. Validation profile is set to `simple`, render detail to `compact`, and decorators to `type,id` as global defaults. Those global defaults are used by command line tools unless an explicit setting is specified with the tool call.
 
 Each setting resolves independently in this order:
 
-1. `--profile`, `--detail`, or `--decorators` for the current invocation (command line option)
+1. `--bundle <manifest>` (or `--profile`, `--detail`, or `--decorators`) for the current invocation
 2. your user-global SDD configuration
-3. the selected bundle's fallback
+3. bundle version `0.1` for bundle selection, or the selected bundle's fallback for the other settings
+
+The saved bundle preference is a version ID such as `0.1` and resolves to `bundle/v<version>/manifest.yaml`. Use `--bundle <manifest>` when you need a one-call manifest override; it does not change the saved default.
 
 The global file is `${XDG_CONFIG_HOME}/sdd/config.yaml`, falling back to `~/.config/sdd/config.yaml`, on Linux and WSL. It is `~/Library/Application Support/sdd/config.yaml` on macOS and `%APPDATA%\sdd\config.yaml` on Windows.
 :::

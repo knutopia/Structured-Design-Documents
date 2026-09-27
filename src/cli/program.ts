@@ -62,7 +62,8 @@ import {
   validateResolvedDefault,
   type DefaultsConfigSource,
   type DefaultsConfigRuntime,
-  type DefaultsConfigSetting
+  type DefaultsConfigSetting,
+  type LoadedDefaultsSources
 } from "../config/index.js";
 import {
   createReadlineGuidedPrompt,
@@ -75,6 +76,10 @@ import {
   resolveCliShowSettings,
   resolveCliValidationProfile
 } from "./profileResolution.js";
+import {
+  loadBundleVersion,
+  loadSelectedBundle
+} from "./bundleResolution.js";
 
 const commanderUnknownOption = (Command.prototype as unknown as {
   unknownOption(flag: string): never;
@@ -184,7 +189,6 @@ class SddCommand extends Command {
   }
 }
 
-const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 const jsonDiagnosticsHint = "Hint: rerun with --diagnostics json for machine-readable diagnostics.";
 
 type DiagnosticsFormat = "pretty" | "json";
@@ -455,21 +459,23 @@ function ensurePreviewFormat(
 interface CompileContext {
   bundle: Bundle;
   input: SourceInput;
+  defaultsSources?: LoadedDefaultsSources;
 }
 
-async function prepareContext(deps: CliDeps, bundlePath: string, inputPath: string): Promise<CompileContext> {
-  const bundle = await deps.loadBundle(bundlePath);
+async function prepareContext(deps: CliDeps, bundlePath: string | undefined, inputPath: string): Promise<CompileContext> {
+  const { bundle, sources } = await loadSelectedBundle(deps.defaultsConfig, deps.loadBundle, bundlePath);
   const input = await deps.readSourceInput(inputPath);
   return {
     bundle,
-    input
+    input,
+    defaultsSources: sources
   };
 }
 
 async function runCompile(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; out?: string; diagnostics: string }
+  options: { bundle?: string; out?: string; diagnostics: string }
 ): Promise<number> {
   try {
     const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
@@ -488,11 +494,11 @@ async function runCompile(
 async function runValidate(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; profile?: string; diagnostics: string }
+  options: { bundle?: string; profile?: string; diagnostics: string }
 ): Promise<number> {
   try {
-    const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
-    const profileId = (await resolveCliValidationProfile(deps.defaultsConfig, bundle, options.profile)).value;
+    const { bundle, input, defaultsSources } = await prepareContext(deps, options.bundle, inputPath);
+    const profileId = (await resolveCliValidationProfile(deps.defaultsConfig, bundle, options.profile, defaultsSources)).value;
     const compileResult = deps.compileSource(input, bundle);
     const diagnostics = [...compileResult.diagnostics];
     if (compileResult.graph && !hasErrors(diagnostics)) {
@@ -514,7 +520,7 @@ async function runValidate(
 async function runRenderText(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; profile?: string; detail?: string; view: string; format: string; out?: string; diagnostics: string }
+  options: { bundle?: string; profile?: string; detail?: string; view: string; format: string; out?: string; diagnostics: string }
 ): Promise<{ exitCode: number; text?: string; sourcePath?: string; bundle?: Bundle; view?: ViewSpec }> {
   try {
     const expectedExtension = options.format === "dot" ? "dot" : options.format === "mermaid" ? "mmd" : undefined;
@@ -526,11 +532,11 @@ async function runRenderText(
       }
     }
 
-    const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
+    const { bundle, input, defaultsSources } = await prepareContext(deps, options.bundle, inputPath);
     const settings = await resolveCliRenderSettings(deps.defaultsConfig, bundle, {
       profileId: options.profile,
       detailId: options.detail
-    });
+    }, defaultsSources);
     const profileId = settings.profile.value;
     const detailId = settings.detail.value;
     const supported = ensureTextFormat(bundle, options.view, options.format);
@@ -581,7 +587,7 @@ async function writePreviewOutput(
 async function runDotCommand(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle: string; profile?: string; detail?: string; out?: string; png?: boolean; pngOut?: string; diagnostics: string }
+  options: { bundle?: string; profile?: string; detail?: string; out?: string; png?: boolean; pngOut?: string; diagnostics: string }
 ): Promise<number> {
   const pngOutputValidation = validateOutputExtension(options.pngOut, "png", "--png-out");
   if (!pngOutputValidation.valid) {
@@ -851,7 +857,7 @@ async function runShowCommand(
   deps: CliDeps,
   inputPath: string,
   options: {
-    bundle: string;
+    bundle?: string;
     profile?: string;
     detail?: string;
     decorators?: string;
@@ -882,12 +888,12 @@ async function runShowCommand(
       return 2;
     }
 
-    const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
+    const { bundle, input, defaultsSources } = await prepareContext(deps, options.bundle, inputPath);
     const settings = await resolveCliShowSettings(deps.defaultsConfig, bundle, {
       profileId: options.profile,
       detailId: options.detail,
       nodeDecoratorModeId: options.decorators
-    });
+    }, defaultsSources);
     const profileId = settings.profile.value;
     const detailId = settings.detail.value;
     const nodeDecoratorModeId = settings.decorators.value;
@@ -976,15 +982,16 @@ async function runShowCommand(
   }
 }
 
-type DefaultsCliSetting = "profile" | "detail" | "decorators";
+type DefaultsCliSetting = "bundle" | "profile" | "detail" | "decorators";
 
 function parseDefaultsSetting(deps: Pick<CliDeps, "stderr">, value: string): DefaultsCliSetting | null {
-  if (value === "profile" || value === "detail" || value === "decorators") return value;
-  deps.stderr(`Unknown defaults setting '${value}'. Choose profile, detail, or decorators.\n`);
+  if (value === "bundle" || value === "profile" || value === "detail" || value === "decorators") return value;
+  deps.stderr(`Unknown defaults setting '${value}'. Choose bundle, profile, detail, or decorators.\n`);
   return null;
 }
 
 function storedSettingForCli(setting: DefaultsCliSetting): DefaultsConfigSetting {
+  if (setting === "bundle") return "bundle_version";
   if (setting === "profile") return "validation_profile_id";
   if (setting === "detail") return "render_detail_id";
   return "node_decorator_mode_id";
@@ -1003,6 +1010,7 @@ function decoratorAvailability(bundle: Bundle): string[] {
 }
 
 function defaultsAvailability(bundle: Bundle, setting: DefaultsCliSetting): string[] {
+  if (setting === "bundle") return [bundle.manifest.bundle_version];
   if (setting === "profile") return profileAvailability(bundle);
   if (setting === "detail") return detailAvailability(bundle);
   return decoratorAvailability(bundle);
@@ -1014,14 +1022,35 @@ function defaultsSourceLabel(source: DefaultsConfigSource): string {
   return "CLI override";
 }
 
+function mergeDefaultsCommandOptions(
+  options: { bundle?: string },
+  command: Command
+): { bundle?: string } {
+  const parentOptions = command.parent?.opts?.() as { bundle?: string } | undefined;
+  return {
+    ...(parentOptions ?? {}),
+    ...options,
+    ...(options.bundle === undefined && parentOptions?.bundle !== undefined
+      ? { bundle: parentOptions.bundle }
+      : {})
+  };
+}
+
 async function runDefaultsShow(
   deps: CliDeps,
-  options: { bundle: string }
+  options: { bundle?: string }
 ): Promise<number> {
   try {
-    const bundle = await deps.loadBundle(options.bundle);
-    const settings = await resolveCliShowSettings(deps.defaultsConfig, bundle);
+    const { bundle, selection, sources } = await loadSelectedBundle(deps.defaultsConfig, deps.loadBundle, options.bundle);
+    const settings = await resolveCliShowSettings(deps.defaultsConfig, bundle, undefined, sources);
+    const bundleVersion = selection.version ?? bundle.manifest.bundle_version;
+    const bundleSource = selection.source === "global"
+      ? "user default"
+      : selection.source === "cli"
+        ? "CLI override"
+        : "built-in default";
     deps.stdout([
+      `Bundle: ${bundleVersion} (${bundleSource})`,
       `Profile: ${settings.profile.value} (${defaultsSourceLabel(settings.profile.source)})`,
       `Detail: ${settings.detail.value} (${defaultsSourceLabel(settings.detail.source)})`,
       `Decorators: ${settings.decorators.value} (${defaultsSourceLabel(settings.decorators.source)})`
@@ -1037,19 +1066,31 @@ async function runDefaultsSet(
   deps: CliDeps,
   settingValue: string,
   value: string,
-  options: { bundle: string }
+  options: { bundle?: string }
 ): Promise<number> {
   const setting = parseDefaultsSetting(deps, settingValue);
   if (!setting) return 2;
 
   try {
-    const bundle = await deps.loadBundle(options.bundle);
-    validateResolvedDefault({
-      setting: storedSettingForCli(setting),
-      selected: { value, source: "cli" },
-      availableValues: defaultsAvailability(bundle, setting),
-      bundlePath: bundle.manifestPath
-    });
+    if (setting === "bundle") {
+      if (options.bundle !== undefined) {
+        deps.stderr("The --bundle option cannot be used when setting the default bundle; provide a bundle version such as 0.1.\n");
+        return 2;
+      }
+      if (value.trim().length === 0) {
+        deps.stderr("The default bundle version must be a non-empty string.\n");
+        return 2;
+      }
+      await loadBundleVersion(deps.loadBundle, value);
+    } else {
+      const { bundle } = await loadSelectedBundle(deps.defaultsConfig, deps.loadBundle, options.bundle);
+      validateResolvedDefault({
+        setting: storedSettingForCli(setting),
+        selected: { value, source: "cli" },
+        availableValues: defaultsAvailability(bundle, setting),
+        bundlePath: bundle.manifestPath
+      });
+    }
 
     const configPath = deps.defaultsConfig.getGlobalConfigPath();
     const result = await deps.defaultsConfig.set(configPath, storedSettingForCli(setting), value, {
@@ -1106,6 +1147,11 @@ function globalHelpText(): string {
     "  type,id      semantic node type and stable node ID",
     "  Omit --decorators to resolve your user default, then the selected-bundle fallback.",
     "",
+    "Bundle selection:",
+    "  --bundle <manifest> selects the bundle to target by the sdd command.",
+    "  Omit it to use your saved bundle version, or v0.1 when no default is saved.",
+    "  Set the saved version with `sdd defaults set bundle 0.1`.",
+    "",
     "Common flows:",
     "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
     "  sdd defaults show",
@@ -1154,7 +1200,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Guide a semantic addition, review a dry run, and Save or Cancel without constructing source text in the CLI.")
     .argument("<document_path>", "repo-owned .sdd path (created on Save if absent)")
     .option("--node <node_id>", "exact anchor node id")
-    .option("--bundle <manifest>", "bundle manifest path")
+    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
     .addHelpText("after", examplesBlock([
       "sdd add tmp_app.sdd",
       "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd",
@@ -1169,7 +1215,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Compile a source .sdd file to canonical graph JSON")
     .description("Compile a source .sdd file to canonical graph JSON.")
     .argument("<input>", "source .sdd file")
-    .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
+    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
     .option("--out <file>", "write compiled JSON to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -1183,28 +1229,28 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   const defaultsCommand = program
     .command("defaults")
     .summary("Show or manage persistent CLI defaults")
-    .description("Show or manage your user defaults for validation profile, render detail, and node decorators.")
-    .option("--bundle <manifest>", "bundle manifest used to validate stored values", defaultManifestPath)
-    .action(async (options) => {
-      setExitCode(await runDefaultsShow(deps, options));
+    .description("Show or manage your user defaults for bundle version, validation profile, render detail, and node decorators.")
+    .option("--bundle <manifest>", "bundle manifest used for this invocation")
+    .action(async (options, command) => {
+      setExitCode(await runDefaultsShow(deps, mergeDefaultsCommandOptions(options, command)));
     });
 
   defaultsCommand
     .command("show")
-    .description("Show the effective profile, detail, and node decorators.")
-    .option("--bundle <manifest>", "bundle manifest used to validate stored values", defaultManifestPath)
-    .action(async (options) => {
-      setExitCode(await runDefaultsShow(deps, options));
+    .description("Show the effective bundle, profile, detail, and node decorators.")
+    .option("--bundle <manifest>", "bundle manifest used for this invocation")
+    .action(async (options, command) => {
+      setExitCode(await runDefaultsShow(deps, mergeDefaultsCommandOptions(options, command)));
     });
 
   defaultsCommand
     .command("set")
     .description("Set one user default.")
-    .argument("<setting>", "profile, detail, or decorators")
-    .argument("<value>", "bundle-declared setting value")
-    .option("--bundle <manifest>", "bundle manifest used to validate the value", defaultManifestPath)
-    .action(async (setting, value, options) => {
-      setExitCode(await runDefaultsSet(deps, setting, value, options));
+    .argument("<setting>", "bundle, profile, detail, or decorators")
+    .argument("<value>", "bundle version or bundle-declared setting value")
+    .option("--bundle <manifest>", "bundle manifest used for this invocation")
+    .action(async (setting, value, options, command) => {
+      setExitCode(await runDefaultsSet(deps, setting, value, mergeDefaultsCommandOptions(options, command)));
     });
 
   defaultsCommand
@@ -1220,7 +1266,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Compile and validate a source .sdd file")
     .description("Compile and validate a source .sdd file against a validation profile.")
     .argument("<input>", "source .sdd file")
-    .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
+    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
@@ -1239,7 +1285,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .requiredOption("--format <format>", "internal text render format (dot or mermaid)")
-    .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
+    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--out <file>", "write rendered output to a file instead of stdout")
@@ -1262,7 +1308,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Internal/debug: render the ia_place_map view as DOT")
     .description("Internal convenience wrapper for `sdd render --view ia_place_map --format dot`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
-    .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
+    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--out <file>", "write internal DOT output to a file instead of stdout")
@@ -1283,7 +1329,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Internal/debug: render the ia_place_map view as Mermaid")
     .description("Internal convenience wrapper for `sdd render --view ia_place_map --format mermaid`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
-    .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
+    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--out <file>", "write internal Mermaid output to a file instead of stdout")
@@ -1307,7 +1353,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Preferred preview command for renderable views. Use `--view all` to generate every operational view with visible content after applying render detail. In v0.1 it defaults to SVG output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id, or all for every applicable view")
-    .option("--bundle <manifest>", "bundle manifest path", defaultManifestPath)
+    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--decorators <mode>", "node decorator mode override; omission uses the resolved user/bundle default")

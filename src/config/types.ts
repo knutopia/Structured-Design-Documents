@@ -1,7 +1,12 @@
-export type DefaultsConfigSetting = "validation_profile_id" | "render_detail_id" | "node_decorator_mode_id";
+export type DefaultsConfigSetting =
+  | "bundle_version"
+  | "validation_profile_id"
+  | "render_detail_id"
+  | "node_decorator_mode_id";
 export type DefaultsConfigSource = "cli" | "global" | "bundle";
 
 export interface DefaultsConfigValues {
+  bundle_version?: string;
   validation_profile_id?: string;
   render_detail_id?: string;
   node_decorator_mode_id?: string;
@@ -42,6 +47,8 @@ export type DefaultsConfigErrorCode =
   | "config.unknown_key"
   | "config.invalid_id"
   | "config.unknown_value"
+  | "config.bundle_not_found"
+  | "config.bundle_version_mismatch"
   | "config.write";
 
 export class DefaultsConfigError extends Error {

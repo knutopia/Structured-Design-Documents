@@ -8,6 +8,7 @@ import {
 
 const ROOT_KEYS = new Set(["version", "defaults"]);
 const DEFAULT_KEYS = new Set<DefaultsConfigSetting>([
+  "bundle_version",
   "validation_profile_id",
   "render_detail_id",
   "node_decorator_mode_id"
@@ -112,6 +113,9 @@ export function parseDefaultsConfig(text: string, sourcePath: string): DefaultsC
 
 export function serializeDefaultsConfig(config: DefaultsConfigV1): string {
   const defaults: DefaultsConfigValues = {};
+  if (config.defaults.bundle_version !== undefined) {
+    defaults.bundle_version = config.defaults.bundle_version;
+  }
   if (config.defaults.validation_profile_id !== undefined) {
     defaults.validation_profile_id = config.defaults.validation_profile_id;
   }
