@@ -2191,6 +2191,9 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Node decorators (bundle-declared; shipped v0.1 values shown):");
     expect(help).toContain("type,id      semantic node type and stable node ID");
     expect(help).toContain("Omit --decorators to resolve your user default, then the selected-bundle fallback.");
+    expect(help).toContain("Bundle selection:");
+    expect(help).toContain("--bundle <manifest> selects the bundle to target by the sdd command.");
+    expect(help).toContain("Omit it to use the current v0.1 bundle.");
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all");

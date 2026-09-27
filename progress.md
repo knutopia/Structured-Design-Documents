@@ -27,6 +27,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 9-27
+
+- --bundle added to sdd-help
+
 ## Thu 9-24
 
 - Ui_contracts label placement solve
