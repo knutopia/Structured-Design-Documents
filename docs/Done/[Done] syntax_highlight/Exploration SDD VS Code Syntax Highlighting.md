@@ -1,4 +1,4 @@
-# Exploration: SDD VS Code Syntax Highlighting
+# [Done] Exploration: SDD VS Code Syntax Highlighting
 
 6-27-26
 

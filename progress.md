@@ -35,6 +35,7 @@ z
 - Investigated publishing a schema
 - Updated bundle refs in AGENTS.md, package.json
 - Many detailed bundle reference updates
+- Planned bundle selection tooling updates
 
 ## Sun 9-27
 
