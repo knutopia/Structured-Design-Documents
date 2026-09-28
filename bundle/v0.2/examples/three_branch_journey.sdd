@@ -1,4 +1,6 @@
-SDD-TEXT 0.1
+SDD-TEXT 0.2
+# Originally was SDD-TEXT 0.1
+
 Stage G-400 "Choose a home improvement path"
   owner=EnergyServices
   description="Turn a household priority into a practical next step"

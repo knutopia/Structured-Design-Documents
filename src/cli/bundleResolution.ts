@@ -4,7 +4,7 @@ import { DefaultsConfigError, type DefaultsConfigRuntime } from "../config/index
 import type { LoadedDefaultsSources } from "../config/types.js";
 import type { Bundle } from "../bundle/types.js";
 
-export const DEFAULT_BUNDLE_VERSION = "0.1";
+export const DEFAULT_BUNDLE_VERSION = "0.2";
 
 export type BundleSelectionSource = "cli" | "global" | "default";
 

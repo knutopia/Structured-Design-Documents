@@ -2,7 +2,7 @@
   "name": "sdd-language",
   "displayName": "SDD Language Support",
   "description": "Syntax highlighting and basic editing ergonomics for Structured Design Documents.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "knutopia",
   "license": "MIT",
   "engines": {

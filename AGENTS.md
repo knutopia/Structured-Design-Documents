@@ -30,15 +30,15 @@ Some diagram types in the past did use the Elkjs (Eclipse Layout Kernel) layout 
 Elkjs project & readme: https://github.com/kieler/elkjs
 Elk documentation: https://eclipse.dev/elk/reference.html
 
-## v0.1 Source-of-Truth Policy
+## Versioned Source-of-Truth Policy
 
-- Files in `bundle/v0.1/` are the machine-readable source of truth for tools.
-- Markdown files in `definitions/v0.1/` remain explanatory commentary and rationale, and should stay consistent with the bundle. (Originally the definitions files served as the normative input to create the bundles.)
+- Files in `bundle/v0.2/` are the machine-readable source of truth for v0.2 development. Files in `bundle/v0.1/` are the preserved v0.1 compatibility baseline.
+- Markdown files in `definitions/v0.2/` explain v0.2 decisions and should stay consistent with the v0.2 bundle. Files in `definitions/v0.1/` document the v0.1 baseline; they originally served as normative input for its bundle extraction.
 
 ### Bundle Authority
 
 - Rule: markdown explains, bundle governs machine behavior, code executes the bundle.
-- For parser, compiler, validator, projection, and renderer feature work, any machine-behavior convention that belongs to the spec must be represented in `bundle/v0.1/` and consumed from the loaded bundle at runtime.
+- For parser, compiler, validator, projection, and renderer feature work, any new v0.2 machine-behavior convention that belongs to the spec must be represented in `bundle/v0.2/` and consumed from the loaded bundle at runtime. Preserve v0.1 behavior through its own bundle.
 - If a feature cannot yet be expressed by the bundle, do not hardcode the feature around that gap. Extend the bundle contract, bundle types, loaders, and generic runtime machinery first, then implement the feature through that path.
 - Do not encode bundle conventions only in TypeScript or tests via literal keyword lists, statement names, regexes, token tables, node kinds, edge kinds, property keys, profile IDs, view IDs, semantic defaults, or feature switches that bypass bundle data.
 - Parser changes must continue to flow through `loadBundle(...)` and `createParserSyntaxRuntime(bundle)`. Do not add ad hoc grammar, token, or statement parsing branches that sidestep the syntax runtime just to make a new feature work.

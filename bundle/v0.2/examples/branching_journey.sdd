@@ -1,4 +1,6 @@
-SDD-TEXT 0.1
+SDD-TEXT 0.2
+# Originally was SDD-TEXT 0.1
+
 Stage G-100 "Discover a cooking class"
   owner=Design
   description="Explore a relaxed weekend activity and see whether it fits"

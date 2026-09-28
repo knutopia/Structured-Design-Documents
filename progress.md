@@ -33,6 +33,8 @@ z
 - Tagged release v0.1.1
 - Created v0.2 bundle folder
 - Investigated publishing a schema
+- Updated bundle refs in AGENTS.md, package.json
+- Many detailed bundle reference updates
 
 ## Sun 9-27
 

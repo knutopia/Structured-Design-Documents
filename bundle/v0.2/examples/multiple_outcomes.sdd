@@ -1,4 +1,6 @@
-SDD-TEXT 0.1
+SDD-TEXT 0.2
+# Originally was SDD-TEXT 0.1
+
 Initiative I-001 "Guided setup priority planner"
   owner="Activation team"
   release_slice="Setup guidance"

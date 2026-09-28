@@ -6,11 +6,10 @@ import { compileSource, loadBundle } from "../src/index.js";
 import { normalizeLineEndings } from "./textNormalization.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
-describe("compileSource", () => {
+describe.each(["0.1", "0.2"])("compileSource v%s", (version) => {
   it("matches the compiled snapshots for all manifest examples", async () => {
-    const bundle = await loadBundle(manifestPath);
+    const bundle = await loadBundle(path.join(repoRoot, `bundle/v${version}/manifest.yaml`));
 
     for (const example of bundle.manifest.examples) {
       const examplePath = path.join(bundle.rootDir, example.path);
