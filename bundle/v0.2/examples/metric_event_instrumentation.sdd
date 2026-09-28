@@ -1,0 +1,82 @@
+SDD-TEXT 0.1
+
+Outcome O-050 "Reduce Risk Review Delays"
+  owner=Product
+  description="Reduce the time required to complete manual risk reviews"
+  time_horizon=Q4
+  scope=risk_review
+  stakeholder=Operations
+  MEASURED_BY M-050 "Alert Stream Coverage"
+  MEASURED_BY M-051 "Manual Review Completion"
+END
+
+Metric M-050 "Alert Stream Coverage"
+  owner=Analytics
+  description="Share of risk alerts captured in the event stream"
+  definition="captured_alerts / emitted_alerts"
+  source=event_stream
+  cadence=daily
+  metric_type=diagnostic
+  INSTRUMENTED_AT E-050 "Alert Emitted"
+  INSTRUMENTED_AT E-051 "Review Completed Event"
+END
+
+Metric M-051 "Manual Review Completion"
+  owner=Analytics
+  description="Share of manual reviews completed without escalation"
+  definition="completed_reviews / started_reviews"
+  source=warehouse
+  cadence=weekly
+  metric_type=kpi
+  INSTRUMENTED_AT J-050 "Review Risk Alert"
+  INSTRUMENTED_AT E-051 "Review Completed Event"
+END
+
+Opportunity OP-050 "Review Queue Visibility"
+  owner=Design
+  description="Analysts lack timely visibility into stuck reviews"
+  evidence="Ops interviews and queue export analysis"
+  segment=ops_analysts
+  severity=high
+  SUPPORTS O-050 "Reduce Risk Review Delays"
+END
+
+Initiative I-050 "Review Queue Instrumentation"
+  owner=Product
+  description="Improve visibility into risk review completion"
+  non_goals="No workflow automation changes"
+  status=active
+  ADDRESSES OP-050 "Review Queue Visibility"
+  IMPLEMENTED_BY P-050 "Risk Review Queue"
+END
+
+Step J-050 "Review Risk Alert"
+  owner=Design
+  description="Analyst reviews a flagged risk alert"
+  actor=Analyst
+  intent="Assess the flagged alert"
+  success_criteria="Alert reviewed and disposition recorded"
+  REALIZED_BY P-050 "Risk Review Queue"
+END
+
+Event E-050 "Alert Emitted"
+  owner=Analytics
+  description="A risk alert was emitted into the event stream"
+  source_kind=system
+  payload_schema="{alert_id,risk_level}"
+END
+
+Event E-051 "Review Completed Event"
+  owner=Analytics
+  description="A manual review completion event was recorded"
+  source_kind=system
+  payload_schema="{review_id,disposition}"
+END
+
+Place P-050 "Risk Review Queue"
+  owner=Design
+  description="Queue where analysts review risk alerts"
+  surface=web
+  route_or_key=/risk/reviews
+  access=role:risk_analyst
+END

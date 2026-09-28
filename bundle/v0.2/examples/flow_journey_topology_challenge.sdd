@@ -1,0 +1,121 @@
+SDD-TEXT 0.1
+Stage G-001 "Maintain Product Map"
+  description="Maintain a map of the existing product"
+  order_index=1
+  owner=Product
+END
+
+Step J-010 "Select a Node"
+  description="Select a Node in Source viewer or in Diagram viewer"
+  actor=Designer
+  intent="Select product-map content for inspection"
+  owner=Product
+  success_criteria="A node is selected"
+  PRECEDES J-020 "Review Diagrams Containing Current Node"
+  PRECEDES J-040 "Add Relationship"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-020 "Review Diagrams Containing Current Node"
+  description="See the set of diagrams in which the current node appears"
+  actor=Designer
+  intent="Review diagrams containing the selected node"
+  owner=Product
+  success_criteria="Relevant diagrams are visible"
+  PRECEDES J-021 "Select Diagram"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-040 "Add Relationship"
+  description="Add a relationship to an existing node"
+  actor=Designer
+  intent="Add a relationship to an existing node"
+  owner=Product
+  success_criteria="A relationship-creation path is chosen"
+  PRECEDES J-041 "Add relationship, by node"
+  PRECEDES J-042 "Add outgoing relationship"
+  PRECEDES J-043 "Add incoming relationship"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-041 "Add relationship, by node"
+  description="Add relationship, by choosing another node first (incoming or outgoing)"
+  actor=Designer
+  intent="Choose another node before setting direction"
+  owner=Product
+  success_criteria="The related node is selected"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-042 "Add outgoing relationship"
+  description="Add outgoing relationship, by choosing the relationship type or a node first"
+  actor=Designer
+  intent="Create an outgoing relationship"
+  owner=Product
+  success_criteria="An outgoing relationship is defined"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-043 "Add incoming relationship"
+  description="Add incoming relationship, by choosing the relationship type or a node first"
+  actor=Designer
+  intent="Create an incoming relationship"
+  owner=Product
+  success_criteria="An incoming relationship is defined"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-021 "Select Diagram"
+  description="Choose a diagram in which the node is used"
+  actor=Designer
+  intent="Choose a diagram containing the node"
+  owner=Product
+  success_criteria="A diagram is selected"
+  PRECEDES J-022 "View Node in New Diagram Context"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-022 "View Node in New Diagram Context"
+  description="View the chosen diagram using the current node"
+  actor=Designer
+  intent="View the node in the chosen diagram"
+  owner=Product
+  success_criteria="The selected context is displayed"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-030 "Select Diagram Content"
+  description="Select a node or multiple nodes in a diagram"
+  actor=Designer
+  intent="Select diagram content for a saved view"
+  owner=Product
+  success_criteria="The intended content is selected"
+  PRECEDES J-031 "Adjust View"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-031 "Adjust View"
+  description="Make the view just right"
+  actor=Designer
+  intent="Adjust the diagram view"
+  owner=Product
+  success_criteria="The view is ready to save"
+  PRECEDES J-032 "Name the New View"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Step J-032 "Name the New View"
+  description="Enter a name for the new view"
+  actor=Designer
+  intent="Name the adjusted view"
+  owner=Product
+  success_criteria="The new view has a name"
+  REALIZED_BY PR-001 "Support Product Map Interaction"
+END
+
+Process PR-001 "Support Product Map Interaction"
+  owner=Product
+  description="Support the product-map interaction steps represented by this topology example"
+  visibility=frontstage
+  sla=interactive
+END

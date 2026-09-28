@@ -1,0 +1,104 @@
+SDD-TEXT 0.1
+Stage G-100 "Discover a cooking class"
+  owner=Design
+  description="Explore a relaxed weekend activity and see whether it fits"
+  order_index=10
+  CONTAINS J-101 "Find an appealing class"
+  CONTAINS J-102 "Review the class details"
+  + Step J-101 "Find an appealing class"
+    owner=Design
+    description="Notice a local weekend cooking class that looks enjoyable"
+    actor=Customer
+    intent="Find a creative activity for the weekend"
+    success_criteria="A promising class is saved for review"
+    PRECEDES J-102 "Review the class details"
+    REALIZED_BY P-100 "Cooking Class Hub"
+  END
+  + Step J-102 "Review the class details"
+    owner=Design
+    description="Check the menu, schedule, location, and skill level"
+    actor=Customer
+    intent="Decide whether the class suits the weekend"
+    success_criteria="The class feels like a good fit"
+    PRECEDES J-201 "Choose how to attend"
+    REALIZED_BY P-100 "Cooking Class Hub"
+  END
+END
+Stage G-200 "Reserve a place"
+  owner=Design
+  description="Choose a convenient way to attend and complete registration"
+  order_index=20
+  CONTAINS J-201 "Choose how to attend"
+  CONTAINS J-202 "Book an in-person seat"
+  CONTAINS J-203 "Book the online session"
+  CONTAINS J-204 "Confirm the registration"
+  + Step J-201 "Choose how to attend"
+    owner=Design
+    description="Compare the available participation formats for the class"
+    actor=Customer
+    intent="Pick the format that feels most convenient"
+    success_criteria="A preferred attendance format is selected"
+    kind=decision
+    PRECEDES J-202 "Book an in-person seat" {prefers the studio}
+    PRECEDES J-203 "Book the online session" {prefers joining from home}
+    REALIZED_BY P-100 "Cooking Class Hub"
+  END
+  + Step J-202 "Book an in-person seat"
+    owner=Design
+    description="Reserve a seat at the studio for the scheduled class"
+    actor=Customer
+    intent="Attend the class at the venue"
+    success_criteria="An in-person seat is held"
+    PRECEDES J-204 "Confirm the registration"
+    REALIZED_BY P-100 "Cooking Class Hub"
+  END
+  + Step J-203 "Book the online session"
+    owner=Design
+    description="Reserve access to join the same class from home"
+    actor=Customer
+    intent="Attend the class remotely"
+    success_criteria="Online access is reserved"
+    PRECEDES J-204 "Confirm the registration"
+    REALIZED_BY P-100 "Cooking Class Hub"
+  END
+  + Step J-204 "Confirm the registration"
+    owner=Design
+    description="Review the selected format and complete the booking"
+    actor=Customer
+    intent="Know that the place in the class is secured"
+    success_criteria="A confirmation and preparation details are available"
+    PRECEDES J-301 "Review preparation details"
+    REALIZED_BY P-100 "Cooking Class Hub"
+  END
+END
+Stage G-300 "Prepare and enjoy"
+  owner=Design
+  description="Get ready for the session and take part with confidence"
+  order_index=30
+  CONTAINS J-301 "Review preparation details"
+  CONTAINS J-303 "Enjoy the cooking class"
+  + Step J-301 "Review preparation details"
+    owner=Design
+    description="Check what to bring, when to arrive, or how to join"
+    actor=Customer
+    intent="Feel ready before the class begins"
+    success_criteria="The setup and timing are clear"
+    PRECEDES J-303 "Enjoy the cooking class"
+    REALIZED_BY P-100 "Cooking Class Hub"
+  END
+  + Step J-303 "Enjoy the cooking class"
+    owner=Design
+    description="Join the session, follow the recipe, and try something new"
+    actor=Customer
+    intent="Have a relaxed and rewarding experience"
+    success_criteria="The class is completed with a new dish to enjoy"
+    REALIZED_BY P-100 "Cooking Class Hub"
+  END
+END
+Place P-100 "Cooking Class Hub"
+  owner=Design
+  description="Online hub for discovering, booking, preparing for, and joining a cooking class"
+  surface=web
+  route_or_key=/classes/cooking
+  access=public
+END

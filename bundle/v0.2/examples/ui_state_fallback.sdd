@@ -1,0 +1,73 @@
+SDD-TEXT 0.1
+
+Place P-060 "Case Review"
+  owner=Design
+  description="Case review place without viewstate-specific rendering"
+  surface=web
+  route_or_key=/cases/review
+  access=auth
+  COMPOSED_OF C-060 "Review Panel"
+END
+
+Component C-060 "Review Panel"
+  owner=DesignSystem
+  description="Panel for reviewing and submitting a case"
+  responsibility="Display case data and submit a review"
+  inputs=CaseRecord
+  outputs=ReviewSubmitted
+  EMITS E-060 "Submit Review"
+  BINDS_TO D-060 "CaseRecord" field=status
+  DEPENDS_ON SA-060 "Save Review"
+END
+
+State ST-060a "Case Review Ready"
+  owner=Design
+  description="The case review container is ready for submission"
+  scope_id=P-060
+  invariants="Case data is loaded"
+  TRANSITIONS_TO ST-060b "Case Review Submitted" [E-060] / SA-060
+END
+
+State ST-060b "Case Review Submitted"
+  owner=Design
+  description="The review has been submitted from the place scope"
+  scope_id=P-060
+  invariants="A submission request has been issued"
+END
+
+State ST-061a "Panel Idle"
+  owner=Design
+  description="The review panel is idle and ready for input"
+  scope_id=C-060
+  invariants="Editable fields are pristine"
+  TRANSITIONS_TO ST-061b "Panel Dirty" [E-060] {draft_ready}
+END
+
+State ST-061b "Panel Dirty"
+  owner=Design
+  description="The review panel has local changes"
+  scope_id=C-060
+  invariants="Local edits are pending submission"
+END
+
+Event E-060 "Submit Review"
+  owner=Design
+  description="User submitted the case review"
+  source_kind=user
+  payload_schema="{case_id}"
+END
+
+SystemAction SA-060 "Save Review"
+  owner=Eng
+  description="Persist the submitted case review"
+  system_name=CaseAPI
+  action=saveReview
+  failure_modes=timeout
+END
+
+DataEntity D-060 "CaseRecord"
+  owner=Data
+  description="Case record used during manual review"
+  fields="case_id,status"
+  system_of_record=CaseDB
+END

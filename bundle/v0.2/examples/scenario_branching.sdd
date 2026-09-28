@@ -1,0 +1,193 @@
+SDD-TEXT 0.1
+
+Step J-030 "Choose Fulfillment"
+  owner=Design
+  description="User selects delivery or pickup"
+  actor=User
+  intent="Choose a fulfillment option"
+  success_criteria="Fulfillment option selected"
+  kind=decision
+  PRECEDES J-031 "Enter Delivery Address" [E-030] {delivery_selected}
+  PRECEDES J-032 "Choose Pickup Store" [E-031] {pickup_selected}
+  REALIZED_BY P-030 "Fulfillment"
+  REALIZED_BY VS-030a "Fulfillment Choice"
+END
+
+Step J-031 "Enter Delivery Address"
+  owner=Design
+  description="User enters a delivery address"
+  actor=User
+  intent="Provide delivery details"
+  success_criteria="Delivery address captured"
+  PRECEDES J-033 "Choose Contact Method"
+  REALIZED_BY P-031 "Delivery Address"
+  REALIZED_BY VS-031a "Delivery Address Form"
+END
+
+Step J-032 "Choose Pickup Store"
+  owner=Design
+  description="User selects a pickup location"
+  actor=User
+  intent="Choose a store for pickup"
+  success_criteria="Pickup store selected"
+  REALIZED_BY P-032 "Pickup Store"
+  REALIZED_BY VS-032a "Pickup Store Selector"
+END
+
+Step J-033 "Choose Contact Method"
+  owner=Design
+  description="User chooses how pickup instructions should be delivered"
+  actor=User
+  intent="Choose an instruction delivery method"
+  success_criteria="Contact method selected"
+  kind=decision
+  PRECEDES J-034 "Confirm Email Notification" [E-032]
+  PRECEDES J-035 "Review Pickup Instructions"
+  REALIZED_BY P-033 "Contact Method"
+  REALIZED_BY VS-033a "Contact Method Choice"
+END
+
+Step J-034 "Confirm Email Notification"
+  owner=Design
+  description="User confirms delivery by email"
+  actor=User
+  intent="Confirm that instructions should be emailed"
+  success_criteria="Email notification confirmed"
+  REALIZED_BY P-034 "Email Confirmation"
+  REALIZED_BY VS-034a "Email Confirmation State"
+END
+
+Step J-035 "Review Pickup Instructions"
+  owner=Design
+  description="User reviews pickup instructions immediately"
+  actor=User
+  intent="Review pickup instructions"
+  success_criteria="Pickup instructions shown"
+  REALIZED_BY P-035 "Pickup Instructions"
+  REALIZED_BY VS-035a "Pickup Instructions State"
+END
+
+Place P-030 "Fulfillment"
+  owner=Design
+  description="Fulfillment decision place"
+  surface=web
+  route_or_key=/checkout/fulfillment
+  access=auth
+  CONTAINS VS-030a "Fulfillment Choice"
+  NAVIGATES_TO P-031 "Delivery Address" [E-030] {delivery_selected}
+  NAVIGATES_TO P-032 "Pickup Store" [E-031] {pickup_selected}
+END
+
+Place P-031 "Delivery Address"
+  owner=Design
+  description="Delivery address place"
+  surface=web
+  route_or_key=/checkout/delivery
+  access=auth
+  CONTAINS VS-031a "Delivery Address Form"
+END
+
+Place P-032 "Pickup Store"
+  owner=Design
+  description="Pickup store selection place"
+  surface=web
+  route_or_key=/checkout/pickup
+  access=auth
+  CONTAINS VS-032a "Pickup Store Selector"
+END
+
+Place P-033 "Contact Method"
+  owner=Design
+  description="Contact method decision place"
+  surface=web
+  route_or_key=/checkout/contact-method
+  access=auth
+  CONTAINS VS-033a "Contact Method Choice"
+  NAVIGATES_TO P-034 "Email Confirmation" [E-032]
+  NAVIGATES_TO P-035 "Pickup Instructions"
+END
+
+Place P-034 "Email Confirmation"
+  owner=Design
+  description="Email confirmation place"
+  surface=web
+  route_or_key=/checkout/contact-method/email
+  access=auth
+  CONTAINS VS-034a "Email Confirmation State"
+END
+
+Place P-035 "Pickup Instructions"
+  owner=Design
+  description="Pickup instructions place"
+  surface=web
+  route_or_key=/checkout/contact-method/instructions
+  access=auth
+  CONTAINS VS-035a "Pickup Instructions State"
+END
+
+ViewState VS-030a "Fulfillment Choice"
+  owner=Design
+  description="Choice state for fulfillment selection"
+  place_id=P-030
+  data_required=FulfillmentOptions
+  TRANSITIONS_TO VS-031a "Delivery Address Form" [E-030] {delivery_selected}
+  TRANSITIONS_TO VS-032a "Pickup Store Selector" [E-031] {pickup_selected}
+END
+
+ViewState VS-031a "Delivery Address Form"
+  owner=Design
+  description="Delivery address entry state"
+  place_id=P-031
+  data_required=AddressForm
+END
+
+ViewState VS-032a "Pickup Store Selector"
+  owner=Design
+  description="Pickup store selection state"
+  place_id=P-032
+  data_required=StoreList
+END
+
+ViewState VS-033a "Contact Method Choice"
+  owner=Design
+  description="Choice state for contact method selection"
+  place_id=P-033
+  data_required=ContactMethodOptions
+  TRANSITIONS_TO VS-034a "Email Confirmation State" [E-032]
+  TRANSITIONS_TO VS-035a "Pickup Instructions State"
+END
+
+ViewState VS-034a "Email Confirmation State"
+  owner=Design
+  description="Email confirmation state"
+  place_id=P-034
+  data_required=EmailAddress
+END
+
+ViewState VS-035a "Pickup Instructions State"
+  owner=Design
+  description="Pickup instructions state"
+  place_id=P-035
+  data_required=PickupInstructions
+END
+
+Event E-030 "Choose Delivery"
+  owner=Design
+  description="Delivery option selected"
+  source_kind=user
+  payload_schema="{fulfillment:delivery}"
+END
+
+Event E-031 "Choose Pickup"
+  owner=Design
+  description="Pickup option selected"
+  source_kind=user
+  payload_schema="{fulfillment:pickup}"
+END
+
+Event E-032 "Choose Email Notification"
+  owner=Design
+  description="Email notification selected"
+  source_kind=user
+  payload_schema="{contact_method:email}"
+END

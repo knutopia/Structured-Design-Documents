@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/sdd-text/0.2/schema.json",
+  "title": "SDD-Text Compiled Graph (v0.1)",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": ["schema", "version", "nodes", "edges"],
+
+  "properties": {
+    "schema": {
+      "const": "sdd-text"
+    },
+    "version": {
+      "const": "0.2"
+    },
+
+    "nodes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/node" },
+      "minItems": 1
+    },
+
+    "edges": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/edge" },
+      "minItems": 0
+    }
+  },
+
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?$"
+    },
+
+    "nodeType": {
+      "type": "string",
+      "enum": [
+        "Outcome", "Metric", "Opportunity", "Initiative",
+        "Stage", "Step",
+        "Area", "Place", "ViewState",
+        "Component", "State", "Event",
+        "Process", "SystemAction", "DataEntity", "Policy"
+      ]
+    },
+
+    "relType": {
+      "type": "string",
+      "enum": [
+        "CONTAINS", "COMPOSED_OF", "PRECEDES", "NAVIGATES_TO",
+        "MEASURED_BY", "SUPPORTS", "ADDRESSES", "IMPLEMENTED_BY", "REALIZED_BY",
+        "TRANSITIONS_TO", "EMITS", "DEPENDS_ON", "CONSTRAINED_BY",
+        "READS", "WRITES", "BINDS_TO", "INSTRUMENTED_AT"
+      ]
+    },
+
+    "jsonValue": {
+      "description": "Permissive value type for props. Tighten in project schemas if desired.",
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "integer" },
+        { "type": "boolean" },
+        { "type": "null" },
+        { "type": "array" },
+        { "type": "object" }
+      ]
+    },
+
+    "props": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/jsonValue" }
+    },
+
+    "node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "name", "props"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "type": { "$ref": "#/$defs/nodeType" },
+        "name": { "type": "string", "minLength": 1 },
+        "props": { "$ref": "#/$defs/props" }
+      }
+    },
+
+    "edge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["from", "type", "to", "props"],
+      "properties": {
+        "from": { "$ref": "#/$defs/id" },
+        "type": { "$ref": "#/$defs/relType" },
+        "to": { "$ref": "#/$defs/id" },
+
+        "to_name": { "type": ["string", "null"], "minLength": 1 },
+
+        "event": { "type": ["string", "null"] },
+        "guard": { "type": ["string", "null"] },
+        "effect": { "type": ["string", "null"] },
+
+        "props": { "$ref": "#/$defs/props" },
+
+        "from_type": {
+          "description": "Optional redundant type emitted by tooling to enable endpoint-contract validation. If present, should match the resolved node type of `from`.",
+          "$ref": "#/$defs/nodeType"
+        },
+        "to_type": {
+          "description": "Optional redundant type emitted by tooling to enable endpoint-contract validation. If present, should match the resolved node type of `to`.",
+          "$ref": "#/$defs/nodeType"
+        }
+      }
+    }
+  }
+}

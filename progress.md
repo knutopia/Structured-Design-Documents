@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-v0.1.1 release doc
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -26,6 +27,12 @@ z
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Mon 9-28
+
+- Tagged release v0.1.1
+- Created v0.2 bundle folder
+- Investigated publishing a schema
 
 ## Sun 9-27
 

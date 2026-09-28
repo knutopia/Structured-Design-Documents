@@ -1,0 +1,388 @@
+SDD-TEXT 0.1
+Place P-410 "Departure Desk"
+  owner=OperationsDesign
+  description="Prepare a loaded container for departure and record its release."
+  surface=web
+  route_or_key=/departures
+  access=auth
+  entry_points="link:/departures"
+  primary_nav=true
+  CONTAINS VS-410a "Staging"
+  CONTAINS VS-410b "Released"
+  COMPOSED_OF C-410 "Load Workbench"
+  CONTAINS VS-410c "Archived"
+  CONTAINS VS-410d "Receipt delivered"
+  CONTAINS VS-410e "Departure closed"
+  CONTAINS VS-415a "Crew message"
+  CONTAINS VS-415b "Crew review"
+  CONTAINS VS-415c "Crew confirmation"
+
+  + ViewState VS-410a "Staging"
+    owner=OperationsDesign
+    description="Prepare the load and review the crew message before release."
+    place_id=P-410
+    data_required=LoadRecord
+    COMPOSED_OF C-460 "Crew Note"
+    TRANSITIONS_TO VS-410b "Released" [E-440] {seal_valid} / SA-440
+  END
+  + ViewState VS-410b "Released"
+    owner=OperationsDesign
+    description="Confirm release while keeping the same crew message component available."
+    place_id=P-410
+    data_required=LoadRecord
+    COMPOSED_OF C-460 "Crew Note"
+    TRANSITIONS_TO VS-410c "Archived" [E-470]
+  END
+  + ViewState VS-410c "Archived"
+    owner=OperationsDesign
+    description="Review the archived departure record after release."
+    place_id=P-410
+    data_required=LoadRecord
+    TRANSITIONS_TO VS-410d "Receipt delivered" [E-520]
+  END
+  + ViewState VS-410d "Receipt delivered"
+    owner=OperationsDesign
+    description="Confirm that the archived departure receipt has been delivered."
+    place_id=P-410
+    data_required=LoadRecord
+    TRANSITIONS_TO VS-410e "Departure closed" [E-530]
+  END
+  + ViewState VS-410e "Departure closed"
+    owner=OperationsDesign
+    description="Show the completed departure record after receipt delivery and closure."
+    place_id=P-410
+    data_required=LoadRecord
+  END
+  + ViewState VS-415a "Crew message"
+    owner=OperationsDesign
+    description="Read the crew message in a separate handoff review path."
+    place_id=P-410
+    data_required=LoadRecord
+    TRANSITIONS_TO VS-415b "Crew review" [E-480]
+  END
+  + ViewState VS-415b "Crew review"
+    owner=OperationsDesign
+    description="Review the crew handoff information before acknowledgement."
+    place_id=P-410
+    data_required=LoadRecord
+    TRANSITIONS_TO VS-415c "Crew confirmation" [E-490]
+  END
+  + ViewState VS-415c "Crew confirmation"
+    owner=OperationsDesign
+    description="Confirm that the crew handoff note has been acknowledged."
+    place_id=P-410
+    data_required=LoadRecord
+  END
+  + Component C-410 "Load Workbench"
+    owner=OperationsDesign
+    description="Coordinate cargo editing, seal verification, release, and status review."
+    responsibility="Expose readiness for release while each child retains its own contracts."
+    inputs=LoadRecord
+    outputs=LoadReady
+    CONTAINS C-420 "Cargo Sheet"
+    CONTAINS C-440 "Release Lever"
+    CONTAINS C-450 "Trail Lens"
+    CONTAINS C-470 "Arrival Review"
+
+    + State ST-410a "Assembling"
+      owner=OperationsDesign
+      description="The load is being prepared and is not yet ready for release."
+      scope_id=C-410
+      invariants="Release readiness has not been confirmed."
+      TRANSITIONS_TO ST-410c "Checking load" [E-420]
+    END
+    + State ST-410c "Checking load"
+      owner=OperationsDesign
+      description="The edited load awaits its seal verification result."
+      scope_id=C-410
+      invariants="Cargo changes have been received; seal acceptance is pending."
+      TRANSITIONS_TO ST-410b "Ready to release" [E-430] {seal_valid}
+    END
+    + State ST-410b "Ready to release"
+      owner=OperationsDesign
+      description="Seal acceptance has made the workbench ready for release."
+      scope_id=C-410
+      invariants="The current load has an accepted seal."
+      TRANSITIONS_TO ST-410d "Release recorded" [E-500]
+    END
+    + State ST-410d "Release recorded"
+      owner=OperationsDesign
+      description="The departure workflow has recorded release of the accepted load."
+      scope_id=C-410
+      invariants="The load release has a persisted departure record."
+      TRANSITIONS_TO ST-410e "Handoff complete" [E-510]
+    END
+    + State ST-410e "Handoff complete"
+      owner=OperationsDesign
+      description="The arrival handoff has been completed after release recording."
+      scope_id=C-410
+      invariants="The recorded release has a completed handoff."
+    END
+    + State ST-415a "Checklist open"
+      owner=OperationsDesign
+      description="The departure checklist remains available for its independent review."
+      scope_id=C-410
+      invariants="The checklist has not yet been reviewed."
+      TRANSITIONS_TO ST-415b "Checklist reviewed" [E-450]
+    END
+    + State ST-415b "Checklist reviewed"
+      owner=OperationsDesign
+      description="The departure checklist has been reviewed but is not yet filed."
+      scope_id=C-410
+      invariants="The checklist review is complete and filing is pending."
+      TRANSITIONS_TO ST-415c "Checklist filed" [E-460]
+    END
+    + State ST-415c "Checklist filed"
+      owner=OperationsDesign
+      description="The reviewed departure checklist has been filed independently of load readiness."
+      scope_id=C-410
+      invariants="The reviewed checklist is filed."
+    END
+    + Event E-450 "Checklist reviewed"
+      owner=OperationsDesign
+      description="The operator has completed a review of the departure checklist."
+      source_kind=user
+      payload_schema="{load_id,checklist_id,reviewer_id}"
+    END
+    + Event E-460 "Checklist filed"
+      owner=OperationsDesign
+      description="The checklist workflow confirms that the reviewed checklist has been filed."
+      source_kind=system
+      payload_schema="{load_id,checklist_id,filing_id}"
+    END
+    + Component C-420 "Cargo Sheet"
+      owner=OperationsDesign
+      description="Edit the item list while keeping the seal check within its local context."
+      responsibility="Capture cargo changes and store the current draft."
+      inputs=LoadContents
+      outputs=CargoChanged
+      CONTAINS C-430 "Seal Check"
+      BINDS_TO D-410 "LoadRecord" field=contents
+      EMITS E-420 "Cargo changed"
+      DEPENDS_ON SA-410 "Store draft"
+
+      + State ST-420a "Untouched"
+        owner=OperationsDesign
+        description="The cargo list still matches its loaded draft."
+        scope_id=C-420
+        invariants="No cargo edits have been made in this editing session."
+        TRANSITIONS_TO ST-420b "Adjusted" [E-420]
+      END
+      + State ST-420b "Adjusted"
+        owner=OperationsDesign
+        description="The operator has changed the cargo list."
+        scope_id=C-420
+        invariants="The current cargo list includes a local edit."
+      END
+      + Component C-430 "Seal Check"
+        owner=OperationsDesign
+        description="Verify the entered seal code against the current load record."
+        responsibility="Confirm the seal independently of cargo editing and emit its result."
+        inputs=SealCode
+        outputs=SealAccepted
+        CONTAINS C-431 "Seal Code Input"
+        EMITS E-430 "Seal accepted"
+        DEPENDS_ON SA-430 "Check seal"
+        BINDS_TO D-410 "LoadRecord" field=seal_code
+
+        + State ST-430a "Unchecked"
+          owner=OperationsDesign
+          description="The current seal code awaits verification."
+          scope_id=C-430
+          invariants="The entered seal has not been accepted."
+          TRANSITIONS_TO ST-430b "Verified" [E-430] {seal_valid}
+        END
+        + State ST-430b "Verified"
+          owner=OperationsDesign
+          description="The current seal code has passed the seal check."
+          scope_id=C-430
+          invariants="The accepted code matches the current load record."
+          TRANSITIONS_TO ST-430c "Result applied" [E-540]
+        END
+        + State ST-430c "Result applied"
+          owner=OperationsDesign
+          description="The verified seal result has been applied to the current load."
+          scope_id=C-430
+          invariants="The current load carries the accepted seal result."
+          TRANSITIONS_TO ST-430d "Result acknowledged" [E-550]
+        END
+        + State ST-430d "Result acknowledged"
+          owner=OperationsDesign
+          description="The receiving workflow has acknowledged the applied seal result."
+          scope_id=C-430
+          invariants="The applied seal result has been acknowledged."
+          TRANSITIONS_TO ST-430e "Check filed" [E-560]
+        END
+        + State ST-430e "Check filed"
+          owner=OperationsDesign
+          description="The completed seal check has been filed for later review."
+          scope_id=C-430
+          invariants="The acknowledged seal check has a filed result record."
+        END
+        + Component C-431 "Seal Code Input"
+          owner=OperationsDesign
+          description="Accept the seal code printed on the loaded container."
+          responsibility="Capture a seal code without deciding whether the load may depart."
+          inputs=SealCode
+          outputs=SealCodeEdited
+        END
+      END
+    END
+    + Component C-440 "Release Lever"
+      owner=OperationsDesign
+      description="Offer the deliberate action that releases the prepared load."
+      responsibility="Emit the release request and invoke departure recording."
+      inputs=ReleasePermission
+      outputs=ReleaseRequested
+      EMITS E-440 "Release load"
+      DEPENDS_ON SA-440 "Record departure"
+    END
+    + Component C-450 "Trail Lens"
+      owner=OperationsDesign
+      description="Show the load status alongside the stored draft context."
+      responsibility="Present departure status using the draft service shared with Cargo Sheet."
+      inputs=LoadStatus
+      outputs=StatusViewed
+      BINDS_TO D-410 "LoadRecord" field=status
+      DEPENDS_ON SA-410 "Store draft"
+    END
+    + Component C-470 "Arrival Review"
+      owner=OperationsDesign
+      description="Review the arrival handoff using the same seal-verification subtree."
+      responsibility="Expose the existing seal check in a second component context without duplicating its identity."
+      inputs=ArrivalReceipt
+      outputs=ArrivalReviewed
+      CONTAINS C-430 "Seal Check"
+    END
+  END
+END
+
+Component C-460 "Crew Note"
+  owner=OperationsDesign
+  description="Present the crew handoff message in both Staging and Released."
+  responsibility="Keep the same message component recognizable across the two ViewState contexts."
+  inputs=CrewMessage
+  outputs=NoteAcknowledged
+END
+
+Event E-420 "Cargo changed"
+  owner=OperationsDesign
+  description="The operator changed the item list through Cargo Sheet."
+  source_kind=user
+  payload_schema="{load_id,contents}"
+END
+
+Event E-430 "Seal accepted"
+  owner=OperationsDesign
+  description="Seal Check accepted the current code for this load."
+  source_kind=system
+  payload_schema="{load_id,seal_code}"
+END
+
+Event E-440 "Release load"
+  owner=OperationsDesign
+  description="The operator requested departure through Release Lever."
+  source_kind=user
+  payload_schema="{load_id}"
+END
+
+Event E-470 "Archive confirmed"
+  owner=OperationsDesign
+  description="The departure workflow confirms that the released load record has been archived."
+  source_kind=system
+  payload_schema="{load_id,archive_id}"
+END
+
+Event E-480 "Crew review opened"
+  owner=OperationsDesign
+  description="The operator opened the crew handoff review."
+  source_kind=user
+  payload_schema="{load_id,crew_message_id}"
+END
+
+Event E-490 "Crew note acknowledged"
+  owner=OperationsDesign
+  description="The operator acknowledged the reviewed crew handoff note."
+  source_kind=user
+  payload_schema="{load_id,crew_message_id,acknowledged_by}"
+END
+
+Event E-500 "Release recorded"
+  owner=OperationsDesign
+  description="The departure system confirms that the accepted load release was recorded."
+  source_kind=system
+  payload_schema="{load_id,departure_record_id}"
+END
+
+Event E-510 "Handoff completed"
+  owner=OperationsDesign
+  description="The receiving workflow confirms completion of the released load handoff."
+  source_kind=system
+  payload_schema="{load_id,handoff_id}"
+END
+
+Event E-520 "Receipt delivered"
+  owner=OperationsDesign
+  description="The departure system confirms delivery of the archived departure receipt."
+  source_kind=system
+  payload_schema="{load_id,receipt_id,delivery_id}"
+END
+
+Event E-530 "Departure closed"
+  owner=OperationsDesign
+  description="The departure system confirms closure of the record after receipt delivery."
+  source_kind=system
+  payload_schema="{load_id,closure_id}"
+END
+
+Event E-540 "Result applied"
+  owner=OperationsDesign
+  description="The seal workflow confirms that the verified result has been applied to the current load."
+  source_kind=system
+  payload_schema="{load_id,seal_code,result_id}"
+END
+
+Event E-550 "Result acknowledged"
+  owner=OperationsDesign
+  description="The receiving workflow confirms acknowledgement of the applied seal result."
+  source_kind=system
+  payload_schema="{load_id,result_id,acknowledgement_id}"
+END
+
+Event E-560 "Check filed"
+  owner=OperationsDesign
+  description="The seal workflow confirms that the acknowledged result has been filed."
+  source_kind=system
+  payload_schema="{load_id,result_id,filing_id}"
+END
+
+SystemAction SA-410 "Store draft"
+  owner=DepartureEngineering
+  description="Persist the prepared load draft used by Cargo Sheet and Trail Lens."
+  system_name=DepartureAPI
+  action=storeLoadDraft
+  failure_modes="timeout,revision_conflict"
+END
+
+SystemAction SA-430 "Check seal"
+  owner=DepartureEngineering
+  description="Check that the supplied seal code belongs to the current load."
+  system_name=DepartureAPI
+  action=verifyLoadSeal
+  failure_modes="timeout,seal_mismatch"
+END
+
+SystemAction SA-440 "Record departure"
+  owner=DepartureEngineering
+  description="Record that the prepared load has been released."
+  system_name=DepartureAPI
+  action=recordLoadDeparture
+  failure_modes="timeout,already_released"
+END
+
+DataEntity D-410 "LoadRecord"
+  owner=OperationsData
+  description="The load data shared by cargo editing, seal verification, and status review."
+  fields="load_id,contents,seal_code,status"
+  system_of_record=DepartureStore
+END

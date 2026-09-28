@@ -1,0 +1,113 @@
+bundle_name: sdd-text-spec-bundle
+bundle_version: "0.2"
+language: sdd-text
+language_version: "0.2"
+
+core:
+  vocab: core/vocab.yaml
+  syntax: core/syntax.yaml
+  schema: core/schema.json
+  contracts: core/contracts.yaml
+  # Downstream projection normalization does not change .sdd authoring.
+  projection_schema: core/projection_schema.json
+  views: core/views.yaml
+  authoring: core/authoring.yaml
+
+tool_defaults:
+  validation_profile_id: simple
+  render_detail_id: compact
+  node_decorator_mode_id: none
+
+profiles:
+  - id: simple
+    path: profiles/simple.yaml
+    intent: Low-noise drafting with strict structural validation.
+  - id: permissive
+    path: profiles/permissive.yaml
+    intent: Warning-first governance with strict structural validation.
+  - id: strict
+    path: profiles/strict.yaml
+    intent: Strict governance for production-ready authoring.
+
+render_details:
+  - id: compact
+    intent: Low-noise rendering that emphasizes the primary structure.
+  - id: detailed
+    intent: Full rendering that includes supporting annotations and labels.
+
+node_decorator_modes:
+  - id: none
+    intent: Render nodes without orientation decorators.
+    show_node_type: false
+    show_node_id: false
+  - id: type
+    intent: Decorate nodes with their semantic type.
+    show_node_type: true
+    show_node_id: false
+  - id: id
+    intent: Decorate nodes with their stable node ID.
+    show_node_type: false
+    show_node_id: true
+  - id: type,id
+    intent: Decorate nodes with both their semantic type and stable node ID.
+    show_node_type: true
+    show_node_id: true
+
+examples:
+  - path: examples/departure_desk.sdd
+    compiled_snapshot: snapshots/departure_desk.compiled.json
+    projection_snapshots:
+      - snapshots/departure_desk.ui_contracts.projection.json
+  - path: examples/outcome_to_ia_trace.sdd
+    compiled_snapshot: snapshots/outcome_to_ia_trace.compiled.json
+    projection_snapshots:
+      - snapshots/outcome_to_ia_trace.outcome_opportunity_map.projection.json
+      - snapshots/outcome_to_ia_trace.journey_map.projection.json
+      - snapshots/outcome_to_ia_trace.ia_place_map.projection.json
+  - path: examples/metric_event_instrumentation.sdd
+    compiled_snapshot: snapshots/metric_event_instrumentation.compiled.json
+    projection_snapshots:
+      - snapshots/metric_event_instrumentation.outcome_opportunity_map.projection.json
+  - path: examples/multiple_outcomes.sdd
+    compiled_snapshot: snapshots/multiple_outcomes.compiled.json
+    projection_snapshots:
+      - snapshots/multiple_outcomes.outcome_opportunity_map.projection.json
+  - path: examples/place_viewstate_transition.sdd
+    compiled_snapshot: snapshots/place_viewstate_transition.compiled.json
+    projection_snapshots:
+      - snapshots/place_viewstate_transition.ui_contracts.projection.json
+      - snapshots/place_viewstate_transition.ia_place_map.projection.json
+  - path: examples/ui_state_fallback.sdd
+    compiled_snapshot: snapshots/ui_state_fallback.compiled.json
+    projection_snapshots:
+      - snapshots/ui_state_fallback.ui_contracts.projection.json
+  - path: examples/scenario_branching.sdd
+    compiled_snapshot: snapshots/scenario_branching.compiled.json
+    projection_snapshots:
+      - snapshots/scenario_branching.scenario_flow.projection.json
+  - path: examples/flow_journey_topology_challenge.sdd
+    compiled_snapshot: snapshots/flow_journey_topology_challenge.compiled.json
+    projection_snapshots:
+      - snapshots/flow_journey_topology_challenge.scenario_flow.projection.json
+  - path: examples/branching_journey.sdd
+    compiled_snapshot: snapshots/branching_journey.compiled.json
+    projection_snapshots:
+      - snapshots/branching_journey.journey_map.projection.json
+  - path: examples/three_branch_journey.sdd
+    compiled_snapshot: snapshots/three_branch_journey.compiled.json
+    projection_snapshots:
+      - snapshots/three_branch_journey.journey_map.projection.json
+  - path: examples/service_blueprint_slice.sdd
+    compiled_snapshot: snapshots/service_blueprint_slice.compiled.json
+    projection_snapshots:
+      - snapshots/service_blueprint_slice.service_blueprint.projection.json
+      - snapshots/service_blueprint_slice.journey_map.projection.json
+
+compatibility:
+  requires_compiler_min: "0.2.0"
+  notes:
+    - Core vocabulary is closed; non-canonical aliases are informative and must not be emitted by compilers.
+    - Source-text parsing follows core/syntax.yaml; post-extraction tooling should treat it as the normative machine-readable parser contract for .sdd files.
+    - Projection snapshots follow core/projection_schema.json; that schema governs downstream renderer outputs, not .sdd authoring.
+    - Views provide operational projection definitions and renderer defaults; full spatial layout remains renderer-specific.
+    - Post-extraction policy treats this bundle as machine-readable source of truth for tooling.

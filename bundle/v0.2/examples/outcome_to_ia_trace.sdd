@@ -1,0 +1,99 @@
+SDD-TEXT 0.1
+
+Outcome O-001 "Reduce Abandonment"
+  owner=Product
+  description="Reduce checkout abandonment"
+  time_horizon=Q3
+  scope=checkout
+  stakeholder=Growth
+  MEASURED_BY M-001 "Checkout Completion Rate"
+END
+
+Metric M-001 "Checkout Completion Rate"
+  owner=Analytics
+  description="Completed checkout sessions over started sessions"
+  definition="completed / started"
+  source=warehouse
+  cadence=weekly
+  metric_type=kpi
+  INSTRUMENTED_AT J-002 "Confirm Payment"
+  INSTRUMENTED_AT E-001 "Payment Submitted"
+END
+
+Opportunity OP-001 "Payment Friction"
+  owner=Design
+  description="Users fail to finish payment step"
+  evidence="Session replays and support tickets"
+  segment=new_users
+  severity=high
+  SUPPORTS O-001 "Reduce Abandonment"
+END
+
+Initiative I-001 "Billing Simplification"
+  owner=Product
+  description="Reduce friction in billing path"
+  non_goals="No pricing changes"
+  status=active
+  ADDRESSES OP-001 "Payment Friction"
+  IMPLEMENTED_BY P-001 "Billing"
+END
+
+Stage G-001 "Checkout"
+  owner=Design
+  description="Checkout journey stage"
+  order_index=10
+  CONTAINS J-001 "Enter Billing"
+  CONTAINS J-002 "Confirm Payment"
+END
+
+Step J-001 "Enter Billing"
+  owner=Design
+  description="User enters billing information"
+  actor=User
+  intent="Provide billing details"
+  success_criteria="Billing data accepted"
+  opportunity_refs=OP-001
+  PRECEDES J-002 "Confirm Payment"
+  REALIZED_BY P-001 "Billing"
+END
+
+Step J-002 "Confirm Payment"
+  owner=Design
+  description="User confirms payment"
+  actor=User
+  intent="Submit payment"
+  success_criteria="Payment confirmed"
+  REALIZED_BY P-002 "Review"
+END
+
+Area A-001 "Checkout Area"
+  owner=Design
+  description="Checkout information architecture area"
+  scope=checkout
+  CONTAINS P-001 "Billing"
+  CONTAINS P-002 "Review"
+END
+
+Event E-001 "Payment Submitted"
+  owner=Analytics
+  description="Checkout payment submission event"
+  source_kind=system
+  payload_schema="{checkout_id}"
+END
+
+Place P-001 "Billing"
+  owner=Design
+  description="Billing place"
+  surface=web
+  route_or_key=/checkout/billing
+  access=auth
+  NAVIGATES_TO P-002 "Review" [E-001] {billingComplete}
+END
+
+Place P-002 "Review"
+  owner=Design
+  description="Review place"
+  surface=web
+  route_or_key=/checkout/review
+  access=auth
+END
