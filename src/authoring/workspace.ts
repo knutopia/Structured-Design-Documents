@@ -1,4 +1,4 @@
-import { access } from "node:fs/promises";
+import { stat } from "node:fs/promises";
 import path from "node:path";
 
 const SDD_EXTENSION = ".sdd";
@@ -35,7 +35,8 @@ export interface AuthoringWorkspace {
   toPublicPath(absolutePath: string): string;
 }
 
-export type RepoRootExists = (candidatePath: string) => Promise<boolean>;
+export type RepoRootEntryKind = "file" | "directory";
+export type RepoRootExists = (candidatePath: string, kind?: RepoRootEntryKind) => Promise<boolean>;
 
 function assertNonEmptyPath(candidate: string, description: string): void {
   if (candidate.trim().length === 0) {
@@ -84,10 +85,10 @@ function resolveFromBase(basePath: string, relativePath: string, description: st
   return absolutePath;
 }
 
-async function defaultPathExists(candidatePath: string): Promise<boolean> {
+async function defaultPathExists(candidatePath: string, kind?: RepoRootEntryKind): Promise<boolean> {
   try {
-    await access(candidatePath);
-    return true;
+    const details = await stat(candidatePath);
+    return kind === "directory" ? details.isDirectory() : kind === "file" ? details.isFile() : true;
   } catch {
     return false;
   }
@@ -98,8 +99,8 @@ export async function looksLikeAuthoringRepoRoot(
   pathExists: RepoRootExists = defaultPathExists
 ): Promise<boolean> {
   return (
-    (await pathExists(path.join(candidatePath, "package.json"))) &&
-    (await pathExists(path.join(candidatePath, "bundle/v0.1/manifest.yaml")))
+    (await pathExists(path.join(candidatePath, "package.json"), "file")) &&
+    (await pathExists(path.join(candidatePath, "bundle"), "directory"))
   );
 }
 

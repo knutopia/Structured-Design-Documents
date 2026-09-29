@@ -1,4 +1,4 @@
-# Current Helper Gaps 4-13-26
+# Current Helper Gaps
 
 This file records the limits of the current helper surface so the skill does not quietly promise more than the repo supports today.
 
@@ -23,7 +23,8 @@ The current helper exposes:
 These are the only helper commands the skill should present as available.
 `capabilities` and `contract` are introspection commands for helper discovery and
 helper contract detail; they do not add new standalone SDD document-authoring
-semantics.
+semantics. `capabilities` remains static. Bundle-resolved `contract` reports the
+loaded manifest path and language version for subsequent `--bundle` calls.
 
 ## Finding Semantic Confirmation
 
@@ -40,7 +41,7 @@ When the skill needs semantic confirmation after a change, it should use:
 The current `create` flow is intentionally narrow:
 
 - create always bootstraps an empty document skeleton
-- version `0.1` is the documented supported version
+- the selected bundle supplies the creation version; optional `--version` asserts that value
 
 The skill should not promise richer bootstrap or starter-pack flows until the helper actually exposes them.
 

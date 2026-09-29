@@ -2,6 +2,7 @@ import path from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import { loadBundle } from "../src/bundle/loadBundle.js";
 import {
+  DEFAULT_BUNDLE_VERSION,
   bundleManifestPath,
   loadBundleVersion,
   loadSelectedBundle
@@ -21,7 +22,7 @@ function runtime(global?: string): DefaultsConfigRuntime {
 }
 
 describe("default bundle selection", () => {
-  it("uses v0.1 when no bundle preference is stored", async () => {
+  it("uses the built-in v0.2 bundle when no bundle preference is stored", async () => {
     const result = await loadSelectedBundle(
       runtime(),
       (manifestPath) => loadBundle(manifestPath),
@@ -29,21 +30,21 @@ describe("default bundle selection", () => {
       path.resolve(".")
     );
     expect(result.selection).toMatchObject({
-      version: "0.1",
+      version: DEFAULT_BUNDLE_VERSION,
       source: "default",
-      manifestPath: bundleManifestPath("0.1", path.resolve("."))
+      manifestPath: bundleManifestPath(DEFAULT_BUNDLE_VERSION, path.resolve("."))
     });
-    expect(result.bundle.manifest.bundle_version).toBe("0.1");
+    expect(result.bundle.manifest.bundle_version).toBe("0.2");
   });
 
-  it("maps a saved version and validates the manifest version", async () => {
-    const savedBundle = {
-      manifest: { bundle_version: "0.2" }
-    } as Bundle;
-    const load = vi.fn(async () => savedBundle);
-    const result = await loadSelectedBundle(runtime("0.2"), load, undefined, "/repo");
-    expect(load).toHaveBeenCalledWith("/repo/bundle/v0.2/manifest.yaml");
-    expect(result.selection.source).toBe("global");
+  it("maps either saved bundle version and validates the manifest version", async () => {
+    for (const version of ["0.1", "0.2"]) {
+      const savedBundle = { manifest: { bundle_version: version } } as Bundle;
+      const load = vi.fn(async () => savedBundle);
+      const result = await loadSelectedBundle(runtime(version), load, undefined, "/repo");
+      expect(load).toHaveBeenCalledWith(`/repo/bundle/v${version}/manifest.yaml`);
+      expect(result.selection).toMatchObject({ version, source: "global" });
+    }
   });
 
   it("rejects missing and mismatched saved bundles", async () => {

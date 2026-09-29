@@ -309,10 +309,10 @@ describe("authoring contract metadata", () => {
     const requestJson = JSON.stringify(requestDetail);
 
     expect(requestDetail).toBeDefined();
-    expect(requestDetail?.subject.detail_modes).toEqual(["static"]);
+    expect(requestDetail?.subject.detail_modes).toEqual(["static", "bundle_resolved"]);
     expect(requestDetail?.subject.detail_modes).not.toContain("request");
     expect(requestDetail?.subject.contract_purposes).toEqual(["request"]);
-    expect(requestDetail?.invocation).toBe("sdd-helper create <document_path> [--version <version>]");
+    expect(requestDetail?.invocation).toBe("sdd-helper create <document_path> [--version <version>] [--bundle <manifest>]");
     expect(requestDetail?.input_shape).toMatchObject({
       shape_id: "shared.shape.create_document_args",
       summary: "Create-document request payload.",
@@ -323,22 +323,29 @@ describe("authoring contract metadata", () => {
           path: {
             type: "string"
           },
-          version: {
-            type: "string",
-            enum: ["0.1"]
-          }
+          version: { type: "string" }
         }
       }
     });
     expect(requestDetail).not.toHaveProperty("request_body");
     expect(requestDetail).not.toHaveProperty("output_shape");
     expect(requestDetail?.constraints).toEqual([]);
-    expect(requestDetail?.bindings).toEqual([]);
+    expect(requestDetail?.bindings).toMatchObject([{
+      binding_id: "shared.binding.create_document.version",
+      applies_to_json_pointer: "/version",
+      bundle_source: {
+        artifact: "syntax_yaml",
+        selector: "document.version_declaration.default_effective_version"
+      }
+    }]);
     expect(requestDetail?.continuation.map((entry) => entry.kind)).toEqual([
       "create_revision_is_bootstrap_continuation_surface",
       "inspect_may_fail_on_empty_bootstrap"
     ]);
-    expect(requestDetail?.resolution).toEqual({ mode: "static" });
+    expect(requestDetail?.resolution).toEqual({
+      mode: "static",
+      unresolved_binding_ids: ["shared.binding.create_document.version"]
+    });
     expect(requestJson).not.toContain("sdd-create-document");
     expect(requestJson).not.toContain("sdd-change-set");
     expect(requestJson).not.toContain("sdd-authoring-outcome-assessment");

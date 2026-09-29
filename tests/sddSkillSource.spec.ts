@@ -89,6 +89,19 @@ describe("canonical sdd-skill source", () => {
     );
   });
 
+  it("pins the resolved bundle through helper and saved rendering workflows", async () => {
+    const { skillMarkdown, workflowMarkdown, helperGapsMarkdown } = await readSkillSourceMarkdown();
+    const selection = extractMarkdownSection(workflowMarkdown, "## 1a. Select And Pin The Bundle");
+    expect(selection).toContain("resolution.manifest_path");
+    expect(selection).toContain("saved global bundle preference or built-in fallback");
+    expect(selection).toContain("For an existing document");
+    expect(selection).toContain("--bundle <manifest>");
+    expect(skillMarkdown).toContain("same bundle as helper validation and projection");
+    expect(workflowMarkdown).toContain("TMPDIR=/tmp pnpm sdd show <document_path> \\\n  --bundle <manifest>");
+    expect(helperGapsMarkdown).toContain("selected bundle supplies the creation version");
+    expect(`${skillMarkdown}\n${workflowMarkdown}`).not.toContain("bundle/v0.1/core/");
+  });
+
   it("keeps the helper documentation aligned with helper authority routing", async () => {
     const helperDocs = await readFile(helperDocsPath, "utf8");
     const documentedCommands = extractHelperDocsCommandNames(helperDocs).sort();
@@ -101,12 +114,12 @@ describe("canonical sdd-skill source", () => {
     expect(helperDocs).toContain("`contract` is deep helper contract detail");
     expect(helperDocs).toContain("`contract --purpose request` is a lossy request-composition view");
     expect(helperDocs).toContain(
-      "`contract --resolve bundle` expands active bundle-owned `view_id`, validation `profile_id`, and render `detail_id` values"
+      "`contract --resolve bundle` expands the selected bundle's creation version"
     );
     expect(helperDocs).toContain("authoring_format_card");
     expect(helperDocs).toContain("capabilities` remains static and does not inline this card");
     expect(helperDocs).toContain("Helper mechanics are not SDD language authority");
-    expect(helperDocs).toContain("Use `bundle/v0.1/` files for SDD language semantics");
+    expect(helperDocs).toContain("Read the selected manifest and follow its relative core and profile paths");
     expect(helperDocs).toContain("Use docs to explain a surface or investigate a mismatch.");
     expect(helperDocs).toContain(
       "Use implementation code for implementation debugging, not normal helper request-shape recovery."
@@ -124,7 +137,7 @@ describe("canonical sdd-skill source", () => {
     expect(helperDocs).toContain(
       "Helper `preview` artifact paths are transient helper output and are not saved artifacts."
     );
-    expect(helperDocs).toContain("TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id> --detail <detail_id>");
+    expect(helperDocs).toContain("TMPDIR=/tmp pnpm sdd show <document_path> --bundle <manifest> --view <view_id> --profile <profile_id> --detail <detail_id>");
     expect(helperDocs).toContain(
       "Use helper discovery for helper mechanics, bundle files for SDD language, docs for explanation or mismatch investigation, and implementation code for implementation debugging."
     );
@@ -152,12 +165,12 @@ describe("canonical sdd-skill source", () => {
     expect(startHere).toContain("contract helper.command.author --purpose request --resolve bundle");
     expect(startHere).toContain("authoring_format_card");
     expect(startHere).toContain(
-      "SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files"
+      "SDD language semantics come from the selected manifest and its referenced core files and profiles"
     );
-    expect(startHere).toContain("bundle/v0.1/core/syntax.yaml");
-    expect(startHere).toContain("bundle/v0.1/core/vocab.yaml");
-    expect(startHere).toContain("bundle/v0.1/core/contracts.yaml");
-    expect(startHere).toContain("bundle/v0.1/core/views.yaml");
+    expect(startHere).toContain("resolution.manifest_path");
+    expect(startHere).toContain("--bundle");
+    expect(startHere).toContain("selected bundle");
+    expect(startHere).toContain("document header");
     expect(startHere).toContain(
       "Shared `assessment` answers whether to stop, continue, commit, or render."
     );
@@ -189,11 +202,11 @@ describe("canonical sdd-skill source", () => {
     expect(bundleSection).toContain("not a normal authoring fallback for helper request shapes");
     expect(bundleSection).toContain("Do not turn this into a broad preflight for every task.");
     expect(bundleSection).toContain("Read only the bundle files that answer the current semantic question");
-    expect(bundleSection).toContain("read `bundle/v0.1/manifest.yaml` first for fresh authoring");
-    expect(bundleSection).toContain("read `bundle/v0.1/core/syntax.yaml`");
-    expect(bundleSection).toContain("read `bundle/v0.1/core/vocab.yaml`");
-    expect(bundleSection).toContain("read `bundle/v0.1/core/contracts.yaml`");
-    expect(bundleSection).toContain("read `bundle/v0.1/core/views.yaml`");
+    expect(bundleSection).toContain("read the selected manifest first for fresh authoring");
+    expect(bundleSection).toContain("read its referenced syntax file");
+    expect(bundleSection).toContain("read its referenced vocabulary file");
+    expect(bundleSection).toContain("read its referenced contracts file");
+    expect(bundleSection).toContain("read its referenced views file");
     expect(createSection).toContain("For new-document authoring, do not use `search`");
     expect(createSection).toContain("Immediate `inspect` is not the normal next step after `create`");
     expect(createSection).toContain("Use the `revision` returned by `create`");
@@ -347,17 +360,17 @@ describe("canonical sdd-skill source", () => {
       "exact request shape, result shape, continuation semantics, helper constraints"
     );
     expect(skillMarkdown).toContain(
-      "SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files"
+      "SDD language semantics come from the selected manifest and its referenced core files and profiles"
     );
     expect(skillMarkdown).toContain(
       "Determine any needed bundle-defined relationship from the active bundle files"
     );
     expect(skillMarkdown).not.toContain("relationship through helper contract");
     expect(skillMarkdown).not.toContain("helper contract/bundle-backed surfaces");
-    expect(skillMarkdown).toContain("bundle/v0.1/core/syntax.yaml");
-    expect(skillMarkdown).toContain("bundle/v0.1/core/vocab.yaml");
-    expect(skillMarkdown).toContain("bundle/v0.1/core/contracts.yaml");
-    expect(skillMarkdown).toContain("bundle/v0.1/core/views.yaml");
+    expect(skillMarkdown).toContain("resolution.manifest_path");
+    expect(skillMarkdown).toContain("--bundle");
+    expect(skillMarkdown).toContain("selected bundle");
+    expect(skillMarkdown).toContain("document header");
     expect(skillMarkdown).toContain(
       "Shared `assessment` answers whether to stop, continue, commit, or render."
     );
@@ -411,13 +424,13 @@ describe("canonical sdd-skill source", () => {
     expect(workflowMarkdown).toContain("<helper> capabilities");
     expect(workflowMarkdown).toContain("<helper> contract helper.command.create --purpose request");
     expect(workflowMarkdown).toContain(
-      "<helper> contract helper.command.author --purpose request --resolve bundle"
+      "<helper> --bundle <manifest> contract helper.command.author --purpose request --resolve bundle"
     );
     expect(workflowMarkdown).toContain(
-      "<helper> contract helper.command.apply --purpose request --resolve bundle"
+      "<helper> --bundle <manifest> contract helper.command.apply --purpose request --resolve bundle"
     );
     expect(workflowMarkdown).toContain(
-      "<helper> contract helper.command.undo --purpose request --resolve bundle"
+      "<helper> --bundle <manifest> contract helper.command.undo --purpose request --resolve bundle"
     );
     expect(workflowMarkdown).toContain(
       "Request-purpose detail is a lossy request-composition view for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`."
@@ -437,19 +450,19 @@ describe("canonical sdd-skill source", () => {
       "not a normal authoring fallback for helper request shapes"
     );
     expect(workflowMarkdown).toContain(
-      "read `bundle/v0.1/manifest.yaml` first for fresh authoring"
+      "read the selected manifest first for fresh authoring"
     );
     expect(workflowMarkdown).toContain(
-      "read `bundle/v0.1/core/syntax.yaml` for node IDs, node headers, edge lines, property lines, nesting, and source syntax"
+      "read its referenced syntax file for node IDs, node headers, edge lines, property lines, nesting, and source syntax"
     );
     expect(workflowMarkdown).toContain(
-      "read `bundle/v0.1/core/vocab.yaml` for node and relationship token selection"
+      "read its referenced vocabulary file for node and relationship token selection"
     );
     expect(workflowMarkdown).toContain(
-      "read `bundle/v0.1/core/contracts.yaml` for relationship endpoint validity"
+      "read its referenced contracts file for relationship endpoint validity"
     );
     expect(workflowMarkdown).toContain(
-      "read `bundle/v0.1/core/views.yaml` for projection scope, hierarchy edges, ordering edges, view-specific annotations, and rendered-view behavior"
+      "read its referenced views file for projection scope, hierarchy edges, ordering edges, view-specific annotations, and rendered-view behavior"
     );
     expect(workflowMarkdown).toContain(
       "read profile files only when profile behavior is needed beyond profile IDs exposed by helper contract resolution"

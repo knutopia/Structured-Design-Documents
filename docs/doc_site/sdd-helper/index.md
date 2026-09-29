@@ -34,9 +34,12 @@ pnpm sdd-helper contract helper.command.author --purpose request --resolve bundl
 pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.preview --resolve bundle
+pnpm sdd-helper --bundle bundle/v0.1/manifest.yaml contract helper.command.create --purpose request --resolve bundle
 ```
 
-`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands active bundle-owned `view_id`, validation `profile_id`, and render `detail_id` values for helper commands that declare those bindings, plus bundle-derived authoring format guidance; it is still helper contract detail, not the general SDD language authority.
+`capabilities` is helper command discovery and remains static. `contract` is deep helper contract detail. `contract --purpose request` is a lossy request-composition view over the same contract metadata and does not change full no-purpose output. The request-purpose view is currently available for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. `contract --resolve bundle` expands the selected bundle's creation version, `view_id`, validation `profile_id`, and render `detail_id` values for helper commands that declare those bindings, plus bundle-derived authoring format guidance. Its `resolution.manifest_path` is an absolute path on the current host; pass it as `--bundle` on later bundle-backed commands to keep a workflow on the same bundle.
+
+Bundle-backed commands accept `--bundle <manifest>` before or after the command. A relative manifest path resolves from the caller's directory. Without the option, the helper uses the saved global bundle version, then the built-in v0.2 fallback. An explicit manifest bypasses a malformed saved preference. A document's header is checked against the selected bundle and does not select or migrate a bundle by itself. `create --version`, when present, asserts the selected bundle's default document version; omit it for normal creation.
 
 The shared library contract index also contains Guided Addition v1 `domain.service.*` metadata for future adapters. Library callers use the public `createGuidedAdditionRuntimeV1(...)` and `applyAdditionProposalV1(...)` boundary plus the exported static or bundle-resolved contract metadata accessors. This does not add guided helper commands: `capabilities` is unchanged, and `sdd-helper contract` deliberately rejects non-`helper.command.*` subjects. Any helper or MCP adapter requires a separate approved plan.
 
@@ -50,6 +53,7 @@ Use this page when you want the same surface explained in practical terms.
 - Relevant success payloads and `sdd-helper-error` payloads may include optional `assessment` data for workflow decisions.
 - Public path inputs are repo-relative and `.sdd`-focused.
 - Direct helper execution works from anywhere inside the repo checkout; bundle-backed commands resolve the repo root at runtime rather than assuming the current directory is the repo root.
+- `capabilities`, static `contract`, and git commands do not load a bundle or read the saved bundle preference. Bundle selection failures return a nonzero `sdd-helper-error`; domain rejections remain structured and can exit zero.
 - `apply`, `author`, and `undo` load request bodies through `--request <file>` or `--request -` for stdin.
 - `stderr` is not part of the public helper contract.
 
@@ -61,7 +65,7 @@ Helper mechanics are not SDD language authority. Use the helper surfaces for hel
 - Use helper `contract <subject_id>` for deep helper request and result shape, continuation semantics, constraints, and helper-specific bundle bindings.
 - Use helper `contract <subject_id> --purpose request` for supported request-composition payloads when the full result schema is unnecessary. The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`.
 - Use `contract --resolve bundle` when a helper command needs active bundle-owned `view_id`, validation `profile_id`, or render `detail_id` values exposed through its contract bindings.
-- Use `bundle/v0.1/` files for SDD language semantics such as syntax, vocabulary, endpoint rules, profile behavior, and view behavior.
+- Read the selected manifest and follow its relative core and profile paths for SDD language semantics such as syntax, vocabulary, endpoint rules, profile behavior, and view behavior.
 - Use docs to explain a surface or investigate a mismatch.
 - Use implementation code for implementation debugging, not normal helper request-shape recovery.
 
@@ -110,17 +114,17 @@ This returns the static helper manifest: command names, invocation patterns, res
 If the next step requires request-shape detail, semantic constraints, or continuation rules before composing JSON, fetch request-purpose contract detail for that specific subject:
 
 ```bash
-pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
+pnpm sdd-helper --bundle bundle/v0.1/manifest.yaml contract helper.command.apply --purpose request --resolve bundle
 ```
 
-Use the full no-purpose contract when you also need the result schema.
+Use the full no-purpose contract when you also need the result schema. This example targets v0.1 documents: read the returned `resolution.manifest_path` and use that absolute path as `<manifest>` in subsequent commands.
 
 ### 2. Find a target document
 
 If you know the document already, go straight to `inspect`. If you need to locate one first, use `search`:
 
 ```bash
-pnpm sdd-helper search --query claim --under bundle/v0.1/examples --limit 5
+pnpm sdd-helper --bundle <manifest> search --query claim --under bundle/v0.1/examples --limit 5
 ```
 
 Search works across compile-valid `.sdd` documents and returns matches plus diagnostics for anything skipped.
@@ -128,7 +132,7 @@ Search works across compile-valid `.sdd` documents and returns matches plus diag
 ### 3. Inspect the document to obtain revision and handle context
 
 ```bash
-pnpm sdd-helper inspect <document_path>
+pnpm sdd-helper --bundle <manifest> inspect <document_path>
 ```
 
 The `sdd-document-inspect` result gives you the current document revision plus stable same-revision handles for nodes and body items. Those handles are what later mutation requests refer to.
@@ -158,13 +162,13 @@ Create a compact `ApplyChangeSetArgs` request like this:
 Then submit it through `apply`:
 
 ```bash
-pnpm sdd-helper apply --request request.json
+pnpm sdd-helper --bundle <manifest> apply --request request.json
 ```
 
 If another tool is generating the JSON stream directly, stdin is still supported:
 
 ```bash
-pnpm sdd-helper apply --request -
+pnpm sdd-helper --bundle <manifest> apply --request -
 ```
 
 Because `mode` is omitted, this is a dry run by default. The same dry-run default also applies to `author`.
@@ -220,6 +224,9 @@ interface HelperCapabilitiesResultCommand {
   detail_modes?: Array<"static" | "bundle_resolved">;
   contract_purposes?: Array<"request">;
 }
+
+// The capabilities payload also has one global_options entry for --bundle.
+// It describes selection for bundle-backed commands without loading a bundle.
 ```
 
 #### `sdd-helper contract <subject_id> [--purpose request] [--resolve bundle]`
@@ -250,18 +257,18 @@ interface HelperCapabilitiesResultCommand {
 - Key inputs: at least one of `--query`, `--node-type`, or `--node-id`; optional `--under` scope and `--limit`.
 - Result kind: `sdd-search-results`
 - Important constraints: at least one search filter is required; compile-invalid documents are skipped and surfaced through diagnostics.
-- Practical notes: `--query` is a case-insensitive substring search over node id, type, and name; `--under` lets you narrow the search to a repo-relative directory.
+- Practical notes: `--query` is a case-insensitive substring search over node id, type, and name; `--under` lets you narrow the search to a repo-relative directory. Search uses one selected bundle. In a mixed-version repository, repeat the search with another explicit manifest and appropriate `--under` scope to cover both versions.
 
 ### Authoring And Change Management
 
-#### `sdd-helper create <document_path> [--version <version>]`
+#### `sdd-helper create <document_path> [--version <version>] [--bundle <manifest>]`
 
 - Purpose: create a new `.sdd` document through the shared authoring core.
 - Use when: you want a repo-safe way to bootstrap a new document instead of hand-creating the file.
-- Invocation: `pnpm sdd-helper create <document_path> [--version <version>]`
+- Invocation: `pnpm sdd-helper create <document_path> [--version <version>] [--bundle <manifest>]`
 - Key inputs: a repo-relative document path and an optional version.
 - Result kind: successful creates return `sdd-create-document`; create domain rejections return a structured `sdd-change-set` and still exit zero.
-- Important constraints: create always bootstraps an empty document skeleton; the current implementation supports version `0.1`.
+- Important constraints: create always bootstraps an empty document skeleton using the selected bundle's default document version. An incompatible explicit `--version` returns a structured rejection before writing the file.
 - Practical notes: the result includes a nested `change_set`, so creation is still described in the same structured change model as later edits. The empty bootstrap document can carry parse diagnostics and may not be inspectable until initial content is authored. Use the returned create `revision` as the continuation surface for the first follow-on `author` or `apply` request; this is helper workflow behavior, not SDD language authority. Use `pnpm sdd-helper contract helper.command.create --purpose request` when you only need the create request shape and bootstrap continuation guidance.
 
 For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSON request from stdin until EOF. Empty stdin fails JSON parsing and returns `sdd-helper-error` with `code: "invalid_json"` and message `Unexpected end of JSON input`.
@@ -269,7 +276,7 @@ For commands that accept `--request <file-or-stdin>`, `-` reads the complete JSO
 For request composition, use request-purpose to learn contract detail for the mutation command you are about to call:
 
 ```bash
-pnpm sdd-helper contract helper.command.create --purpose request
+pnpm sdd-helper contract helper.command.create --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
@@ -344,7 +351,7 @@ For first-pass `author` JSON, prefer the bundle-resolved `helper.command.author`
 When a durable user-facing SVG or PNG is needed, use the main CLI saved-artifact path instead:
 
 ```bash
-TMPDIR=/tmp pnpm sdd show <document_path> --view <view_id> --profile <profile_id> --detail <detail_id>
+TMPDIR=/tmp pnpm sdd show <document_path> --bundle <manifest> --view <view_id> --profile <profile_id> --detail <detail_id>
 ```
 
 Helper `preview` artifact paths are transient helper output and are not saved artifacts.

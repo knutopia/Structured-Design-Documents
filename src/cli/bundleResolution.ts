@@ -5,6 +5,8 @@ import type { LoadedDefaultsSources } from "../config/types.js";
 import type { Bundle } from "../bundle/types.js";
 
 export const DEFAULT_BUNDLE_VERSION = "0.2";
+export const BUNDLE_OPTION_DESCRIPTION =
+  `bundle manifest path; omission uses the saved bundle version or built-in default (${DEFAULT_BUNDLE_VERSION})`;
 
 export type BundleSelectionSource = "cli" | "global" | "default";
 

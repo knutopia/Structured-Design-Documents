@@ -1,4 +1,4 @@
-import { access, mkdir, mkdtemp, readFile, rm } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
@@ -16,6 +16,7 @@ import {
 } from "../src/authoring/revisions.js";
 import {
   createAuthoringWorkspace,
+  findAuthoringRepoRoot,
   WorkspacePathError
 } from "../src/authoring/workspace.js";
 
@@ -91,6 +92,25 @@ function assertPathError(fn: () => unknown, expectedMessagePart: string): void {
 }
 
 describe("authoring foundation", () => {
+  it("finds a nested v0.2-only checkout and rejects a package-only directory", async () => {
+    await withTempRepo(async (parentDir) => {
+      const repoRoot = path.join(parentDir, "repo");
+      const nestedDir = path.join(repoRoot, "packages", "authoring", "nested");
+      await mkdir(path.join(repoRoot, "bundle", "v0.2"), { recursive: true });
+      await mkdir(nestedDir, { recursive: true });
+      await writeFile(path.join(repoRoot, "package.json"), "{}\n", "utf8");
+      await writeFile(path.join(repoRoot, "bundle", "v0.2", "manifest.yaml"), "bundle_version: 0.2\n", "utf8");
+
+      expect(await findAuthoringRepoRoot(nestedDir)).toBe(repoRoot);
+      expect(await findAuthoringRepoRoot(parentDir)).toBeNull();
+    });
+
+    await withTempRepo(async (unrelatedDir) => {
+      await writeFile(path.join(unrelatedDir, "package.json"), "{}\n", "utf8");
+      expect(await findAuthoringRepoRoot(unrelatedDir)).toBeNull();
+    });
+  });
+
   it("resolves repo-relative .sdd paths and rejects out-of-scope or non-.sdd public write targets", async () => {
     await withTempRepo(async (repoRoot) => {
       const workspace = createAuthoringWorkspace(repoRoot);

@@ -8,7 +8,7 @@ The current SDD Skill is written for Codex. It has successfully been used with C
 
 For Codex, install it by copying [skills/sdd-skill](../../../skills/sdd-skill/) to `$CODEX_HOME/skills/sdd-skill`. A typical Codex location is `~/.codex/skills/sdd-skill`.
 
-After copying the folder, restart Codex so it discovers the skill. Then continue with the example prompts below.
+After copying the folder, restart Codex so it discovers the skill. Repository updates do not refresh an existing installation automatically; inspect local changes before copying a newer canonical source over an installed skill, then reload Codex. Continue with the example prompts below.
 
 ## Use Case: Start With An App Idea
 
@@ -216,12 +216,12 @@ Looking at the examples above,
 When an agent is using the skill and needs to understand helper request details, it can ask `sdd-helper` for a request-purpose contract to learn those details, instead of loading the full helper contract. This is useful when the agent only needs to compose the next helper request and does not need the full result schema.
 
 ```bash
-pnpm sdd-helper contract helper.command.create --purpose request
+pnpm sdd-helper contract helper.command.create --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
 pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
 ```
 
-The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. For first-pass `author` JSON, the agent should prefer the bundle-resolved request-purpose contract and read its `authoring_format_card`, which gives compact bundle-derived guidance for IDs, relationship tokens, events, effects, and raw SDD values.
+The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. For a new document without a requested language version, the first resolved create contract uses the saved global bundle preference or the built-in v0.2 fallback. For an existing document, the skill selects a matching available manifest before inspection or editing. It reads the returned absolute `resolution.manifest_path` and passes it with `--bundle` to later helper commands and `sdd show`, so validation and saved rendering use the same bundle. For first-pass `author` JSON, the agent reads the selected bundle's `authoring_format_card` for IDs, relationship tokens, events, effects, and raw SDD values.
 
 For the technical workflow behind the examples, see the canonical repo skill bundle in [sdd-skill](../../../skills/sdd-skill/): the core [SKILL.md](../../../skills/sdd-skill/SKILL.md), [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md). See the [SDD Helper Guide](../sdd-helper/) about the helper used by the skill.

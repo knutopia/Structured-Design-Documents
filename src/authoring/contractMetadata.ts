@@ -841,6 +841,15 @@ const helperCapabilitiesResultSchema = objectSchema(
       },
       ["bare_invocation", "help_flag", "canonical_introspection_command"]
     ),
+    global_options: arraySchema(objectSchema(
+      {
+        flag: stringSchema(),
+        required: booleanSchema(),
+        description: stringSchema(),
+        value_name: stringSchema()
+      },
+      ["flag", "required", "description"]
+    )),
     conventions: objectSchema(
       {
         stdout_success: stringSchema(["exactly_one_json_payload"]),
@@ -863,7 +872,7 @@ const helperCapabilitiesResultSchema = objectSchema(
     ),
     commands: arraySchema(helperCapabilitiesCommandSchema)
   },
-  ["kind", "helper_name", "summary", "discovery", "conventions", "commands"]
+  ["kind", "helper_name", "summary", "discovery", "global_options", "conventions", "commands"]
 );
 
 const nullableHandleSchema: JsonSchema = { type: ["string", "null"] };
@@ -1455,7 +1464,8 @@ const contractBindingSpecSchema = objectSchema(
           "manifest_render_details",
           "views_yaml",
           "vocab_node_types",
-          "vocab_relationship_types"
+          "vocab_relationship_types",
+          "syntax_yaml"
         ]),
         selector: stringSchema()
       },
@@ -1559,6 +1569,8 @@ const contractSubjectDetailSchema = objectSchema(
         mode: stringSchema(["static", "bundle_resolved"]),
         bundle_name: stringSchema(),
         bundle_version: stringSchema(),
+        manifest_path: stringSchema(),
+        language_version: stringSchema(),
         unresolved_binding_ids: stringArraySchema
       },
       ["mode"]
@@ -1621,7 +1633,7 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
     schema: objectSchema(
       {
         path: stringSchema(),
-        version: stringSchema(["0.1"])
+        version: stringSchema()
       },
       ["path"]
     ),
@@ -1947,7 +1959,7 @@ const SUBJECTS: readonly ContractSubjectDescriptor[] = [
     mutates_repo_state: "always",
     input_shape_id: "shared.shape.create_document_args",
     output_shape_id: "shared.shape.create_document_result",
-    detail_modes: ["static"],
+    detail_modes: ["static", "bundle_resolved"],
     contract_purposes: [...CONTRACT_PURPOSES],
     has_deep_introspection: true
   },
@@ -2134,7 +2146,7 @@ const REQUEST_BODIES = new Map<ContractSubjectId, HelperRequestBodySpec>([
 ]);
 
 const REQUEST_INVOCATIONS = new Map<ContractSubjectId, string>([
-  ["helper.command.create", "sdd-helper create <document_path> [--version <version>]"]
+  ["helper.command.create", "sdd-helper create <document_path> [--version <version>] [--bundle <manifest>]"]
 ]);
 
 const CONSTRAINTS: readonly ContractConstraintSpec[] = [
@@ -2451,6 +2463,19 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
 ] as const;
 
 const BINDINGS: readonly ContractBindingSpec[] = [
+  {
+    binding_id: "shared.binding.create_document.version",
+    applies_to_shape_id: "shared.shape.create_document_args",
+    applies_to_json_pointer: "/version",
+    kind: "bundle_value_set",
+    bundle_source: {
+      artifact: "syntax_yaml",
+      selector: "document.version_declaration.default_effective_version"
+    },
+    static_behavior: "reference_only",
+    bundle_resolved_behavior: "expand_values",
+    summary: "If supplied, version must equal the selected bundle's default document version."
+  },
   {
     binding_id: "shared.binding.validate_document.profile_id",
     applies_to_shape_id: "shared.shape.validate_document_args",

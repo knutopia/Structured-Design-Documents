@@ -19,14 +19,25 @@ The result is the canonical JSON command manifest for the helper.
 Use deep helper introspection only when the current task needs it:
 
 `<helper> contract helper.command.author`
-`<helper> contract helper.command.create --purpose request`
-`<helper> contract helper.command.author --purpose request --resolve bundle`
-`<helper> contract helper.command.apply --purpose request --resolve bundle`
-`<helper> contract helper.command.undo --purpose request --resolve bundle`
-`<helper> contract helper.command.preview --resolve bundle`
+`<helper> contract helper.command.create --purpose request --resolve bundle`
+`<helper> --bundle <manifest> contract helper.command.author --purpose request --resolve bundle`
+`<helper> --bundle <manifest> contract helper.command.apply --purpose request --resolve bundle`
+`<helper> --bundle <manifest> contract helper.command.undo --purpose request --resolve bundle`
+`<helper> --bundle <manifest> contract helper.command.preview --resolve bundle`
 
 Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.
 Request-purpose detail is a lossy request-composition view for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. Use it when composing request arguments or JSON and the full result schema is unnecessary. Before composing the first `author` request in a task, prefer the request-purpose resolved author contract and read its `authoring_format_card`; it gives the compact bundle-derived JSON formatting details for IDs and raw event/effect atoms without requiring a full `syntax.yaml` read or the full author result schema.
+
+## 1a. Select And Pin The Bundle
+
+Use one selected manifest through the whole authoring session:
+
+1. If the user supplied a manifest, use it. If they specified a shipped language version, find and verify that version's manifest in this repository. For an existing document whose declaration is known, select its matching available bundle explicitly. A document header does not switch bundles or authorize rewriting the declaration; resolve a mismatch before mutation.
+2. For a new document without a requested version, let the helper use the saved global bundle preference or built-in fallback on the first bundle-resolved contract request. For an existing document, request a bundle-resolved contract relevant to the intended operation before `inspect` or mutation. If a manifest is already known, pass it on this first request too.
+3. Read `resolution.manifest_path` and `resolution.language_version` from that contract. Treat `manifest_path` as an absolute local path. Pass it as `--bundle <manifest>` on every later bundle-consuming helper command and on `sdd show`. This pins the selection against later preference changes.
+4. Follow the loaded manifest's relative references when reading syntax, vocabulary, endpoint rules, authoring metadata, profiles, and views. If that manifest is intentionally edited, refresh contract discovery and rerun the relevant dry run before continuing.
+
+For example, a new-document session may begin with `<helper> contract helper.command.create --purpose request --resolve bundle`, then use the returned manifest for `<helper> --bundle <manifest> create <document_path>`. The optional `create --version` is an assertion of the selected bundle's default document version, not a bundle selector. For mixed-version search, select a bundle explicitly, use `--under` to narrow its scope, and repeat with another manifest when needed. Static `capabilities`, static `contract`, and git commands do not load a bundle.
 
 ## 2. Choose The Task Kind
 
@@ -43,17 +54,17 @@ Use the matching branch below instead of forcing every request through one linea
 ## 3. Targeted Bundle Reading And Language Authority
 
 Use helper `capabilities` and helper `contract` for helper mechanics: command availability, request shape, result shape, request transport, continuation semantics, and helper constraints. Use `contract <subject_id> --purpose request` when `helper.command.create`, `helper.command.author`, `helper.command.apply`, or `helper.command.undo` only needs request-composition guidance. Use the active bundle files for SDD language semantics: source syntax, node and relationship vocabulary, relationship endpoint validity, projection behavior, and profile behavior.
-For routine author request formatting, use `contract helper.command.author --purpose request --resolve bundle` and its `authoring_format_card` first. Read `bundle/v0.1/core/syntax.yaml` only when the card is absent or the task needs deeper language semantics than request formatting.
+For routine author request formatting, use `contract helper.command.author --purpose request --resolve bundle` with the pinned manifest and read its `authoring_format_card` first. Read the syntax file referenced by that manifest only when the card is absent or the task needs deeper language semantics than request formatting.
 
 For implementation audits of bundle authority, the parser path loads bundle data with `loadBundle(...)` and consumes syntax through `createParserSyntaxRuntime(bundle)`. This is evidence of the runtime path, not a normal authoring fallback for helper request shapes.
 
 Do not turn this into a broad preflight for every task. Read only the bundle files that answer the current semantic question:
 
-- read `bundle/v0.1/manifest.yaml` first for fresh authoring or when active core files need confirmation
-- read `bundle/v0.1/core/syntax.yaml` for node IDs, node headers, edge lines, property lines, nesting, and source syntax
-- read `bundle/v0.1/core/vocab.yaml` for node and relationship token selection
-- read `bundle/v0.1/core/contracts.yaml` for relationship endpoint validity
-- read `bundle/v0.1/core/views.yaml` for projection scope, hierarchy edges, ordering edges, view-specific annotations, and rendered-view behavior
+- read the selected manifest first for fresh authoring or when core file references need confirmation
+- read its referenced syntax file for node IDs, node headers, edge lines, property lines, nesting, and source syntax
+- read its referenced vocabulary file for node and relationship token selection
+- read its referenced contracts file for relationship endpoint validity
+- read its referenced views file for projection scope, hierarchy edges, ordering edges, view-specific annotations, and rendered-view behavior
 - read profile files only when profile behavior is needed beyond profile IDs exposed by helper contract resolution
 
 Prompt words are input language. Bundle vocabulary and contracts decide SDD language. A user word that resembles a node or relationship token still needs token selection from `vocab.yaml` and endpoint validation from `contracts.yaml` before it becomes authored source.
@@ -91,7 +102,7 @@ For new-document authoring, do not use `search` to pick a filename or to hunt re
 The current helper creates an empty bootstrap document:
 
 ```bash
-<helper> create <document_path> --version 0.1
+<helper> --bundle <manifest> create <document_path>
 ```
 
 This creates a bootstrap document only. A newly created empty document may still be parse-invalid or validation-incomplete until it is populated, so do not preview immediately after `create`.
@@ -101,7 +112,7 @@ Use the `revision` returned by `create` as the continuation surface for the next
 If the path/version request shape or bootstrap continuation rule matters for planning the next step, fetch request-purpose subject detail explicitly:
 
 ```bash
-<helper> contract helper.command.create --purpose request
+<helper> --bundle <manifest> contract helper.command.create --purpose request --resolve bundle
 ```
 
 For first-pass scaffold creation, prefer `author`. Before composing the request, determine whether the intended result requires a bundle-defined relationship for structure, flow, navigation, ordering, or other view-relevant meaning. Do not rely on nesting alone for semantics. If later follow-on work needs exact handle-based changes, inspect the now-parseable committed result and proceed with low-level `apply` requests.
@@ -111,7 +122,7 @@ For first-pass scaffold creation, prefer `author`. Before composing the request,
 If the target existing `.sdd` document is unknown, search first:
 
 ```bash
-<helper> search --query <query> --under <repo_relative_directory> --limit <count>
+<helper> --bundle <manifest> search --query <query> --under <repo_relative_directory> --limit <count>
 ```
 
 Use the returned paths to choose the most likely existing document, then inspect that document.
@@ -119,7 +130,7 @@ Use the returned paths to choose the most likely existing document, then inspect
 Inspect is the normal starting point for existing-document edits:
 
 ```bash
-<helper> inspect <document_path>
+<helper> --bundle <manifest> inspect <document_path>
 ```
 
 Inspect returns:
@@ -139,9 +150,9 @@ Before composing either request, determine whether the intended result depends o
 Before composing complex nested `author`, `apply`, or `undo` JSON, fetch request-purpose subject detail rather than spelunking code or tests for normal request-shape knowledge:
 
 ```bash
-<helper> contract helper.command.author --purpose request --resolve bundle
-<helper> contract helper.command.apply --purpose request --resolve bundle
-<helper> contract helper.command.undo --purpose request --resolve bundle
+<helper> --bundle <manifest> contract helper.command.author --purpose request --resolve bundle
+<helper> --bundle <manifest> contract helper.command.apply --purpose request --resolve bundle
+<helper> --bundle <manifest> contract helper.command.undo --purpose request --resolve bundle
 ```
 
 ## 7. Read, Validate, Project, Or Render An Existing Document
@@ -151,8 +162,8 @@ If the document is already named and the user only needs a read, validation, pro
 Use persisted-state semantic reads when you want confirmation without issuing a mutation request:
 
 ```bash
-<helper> validate <document_path> --profile <profile_id>
-<helper> project <document_path> --view <view_id>
+<helper> --bundle <manifest> validate <document_path> --profile <profile_id>
+<helper> --bundle <manifest> project <document_path> --view <view_id>
 ```
 
 Read the returned assessment before proceeding. Use `assessment.can_render` as the render gate for persisted-state diagram artifact work.
@@ -160,15 +171,16 @@ Read the returned assessment before proceeding. Use `assessment.can_render` as t
 If the relevant `view_id`, `profile_id`, or `detail_id` is not already known, use `contract --resolve bundle` to expand the active helper-exposed values before choosing command arguments:
 
 ```bash
-<helper> contract helper.command.validate --resolve bundle
-<helper> contract helper.command.project --resolve bundle
-<helper> contract helper.command.preview --resolve bundle
+<helper> --bundle <manifest> contract helper.command.validate --resolve bundle
+<helper> --bundle <manifest> contract helper.command.project --resolve bundle
+<helper> --bundle <manifest> contract helper.command.preview --resolve bundle
 ```
 
 For normal human-facing diagram requests, produce a durable saved file. Use `sdd show` only after the relevant committed persisted state returns `assessment.can_render` for the requested profile and view:
 
 ```bash
 TMPDIR=/tmp pnpm sdd show <document_path> \
+  --bundle <manifest> \
   --view <view_id> \
   --profile <profile_id> \
   --detail <detail_id>
@@ -197,7 +209,7 @@ Inline-image branch:
 Inline-image command:
 
 ```bash
-<helper> preview <document_path> \
+<helper> --bundle <manifest> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
   --detail <detail_id> \
@@ -239,7 +251,7 @@ Example low-level `apply` request shape:
 Submit it with:
 
 ```bash
-<helper> apply --request <request_file>
+<helper> --bundle <manifest> apply --request <request_file>
 ```
 
 Review assessment first:
@@ -301,8 +313,8 @@ Read the committed result assessment. If further edits require fresh handles, ei
 Use persisted-state semantic reads when you want confirmation after commit or when you do not need a mutation request at all:
 
 ```bash
-<helper> validate <document_path> --profile <profile_id>
-<helper> project <document_path> --view <view_id>
+<helper> --bundle <manifest> validate <document_path> --profile <profile_id>
+<helper> --bundle <manifest> project <document_path> --view <view_id>
 ```
 
 These commands read the current on-disk document only. They do not inspect dry-run candidates. Use their returned assessment to decide whether the persisted state is blocked, needs review, or can be rendered.
@@ -315,6 +327,7 @@ Use `sdd show` after the last committed persisted-state assessment has `assessme
 
 ```bash
 TMPDIR=/tmp pnpm sdd show <document_path> \
+  --bundle <manifest> \
   --view <view_id> \
   --profile <profile_id> \
   --detail <detail_id>
@@ -345,7 +358,7 @@ Inline-image branch:
 Inline-image command:
 
 ```bash
-<helper> preview <document_path> \
+<helper> --bundle <manifest> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
   --detail <detail_id> \
@@ -359,7 +372,7 @@ If the relevant `view_id`, `profile_id`, or `detail_id` is unknown, use `contrac
 Use helper preview alone only when the user explicitly asks for preview-only, inline-only, transient raw artifact output, or a chat-safe artifact path rather than the normal saved deliverable:
 
 ```bash
-<helper> preview <document_path> \
+<helper> --bundle <manifest> preview <document_path> \
   --view <view_id> \
   --profile <profile_id> \
   --detail <detail_id> \
@@ -388,7 +401,7 @@ Example request shape:
 Submit it with:
 
 ```bash
-<helper> undo --request <request_file>
+<helper> --bundle <manifest> undo --request <request_file>
 ```
 
 Read the undo dry-run assessment before committing an undo. Commit only when `assessment.can_commit` is true and the user wants the undo applied.

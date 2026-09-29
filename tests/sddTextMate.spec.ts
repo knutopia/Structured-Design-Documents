@@ -8,6 +8,7 @@ import {
   type LanguageRegistration
 } from "shiki";
 import { loadBundle } from "../src/bundle/loadBundle.js";
+import { DEFAULT_BUNDLE_VERSION } from "../src/cli/bundleResolution.js";
 import type { Bundle } from "../src/bundle/types.js";
 import {
   createSddTextMateAssets,
@@ -16,14 +17,10 @@ import {
 } from "../src/highlighting/sddTextMate.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 const extensionRoot = path.join(repoRoot, "editors/vscode-sdd");
 const grammarPath = path.join(extensionRoot, "syntaxes/sdd.tmLanguage.json");
 const languageConfigurationPath = path.join(extensionRoot, "language-configuration.json");
 
-let bundle: Bundle;
-let assets: SddTextMateAssets;
-let highlighter: HighlighterGeneric<never, never>;
 
 interface ScopeSegment {
   start: number;
@@ -88,8 +85,14 @@ function expectScope(
   expect(scopesFor(segments, code, needle, occurrence)).toContain(expectedScope);
 }
 
+for (const version of ["0.1", "0.2"] as const) {
+describe(`bundle v${version}`, () => {
+let bundle: Bundle;
+let assets: SddTextMateAssets;
+let highlighter: HighlighterGeneric<never, never>;
+
 beforeAll(async () => {
-  bundle = await loadBundle(manifestPath);
+  bundle = await loadBundle(path.join(repoRoot, `bundle/v${version}/manifest.yaml`));
   assets = createSddTextMateAssets(bundle);
   highlighter = (await createHighlighter({
     themes: ["github-dark"],
@@ -102,20 +105,6 @@ afterAll(() => {
 });
 
 describe("bundle-generated SDD TextMate assets", () => {
-  it("keeps checked-in generated artifacts in deterministic sync", async () => {
-    const [grammarText, languageConfigurationText] = await Promise.all([
-      readFile(grammarPath, "utf8"),
-      readFile(languageConfigurationPath, "utf8")
-    ]);
-
-    expect(grammarText).toBe(serializeTextMateAsset(assets.grammar));
-    expect(languageConfigurationText).toBe(
-      serializeTextMateAsset(assets.languageConfiguration)
-    );
-    expect(grammarText.endsWith("\n")).toBe(true);
-    expect(grammarText).not.toContain("\r");
-  });
-
   it("derives vocabulary tokens and group suffixes from the bundle", () => {
     const grammarText = serializeTextMateAsset(assets.grammar);
     for (const nodeType of bundle.vocab.node_types) {
@@ -164,7 +153,7 @@ describe("bundle-generated SDD TextMate assets", () => {
     }
   });
 
-  it("changes generated behavior when bundle-only vocabulary changes", () => {
+  it("changes tokenization when bundle-only vocabulary changes", async () => {
     const cloned = structuredClone(bundle) as Bundle;
     cloned.vocab.node_types.push({
       token: "Experiment",
@@ -179,6 +168,23 @@ describe("bundle-generated SDD TextMate assets", () => {
     expect(changed.languageConfiguration.indentationRules.increaseIndentPattern).toContain(
       "Experiment"
     );
+    const changedHighlighter = (await createHighlighter({
+      themes: ["github-dark"],
+      langs: [changed.grammar as LanguageRegistration]
+    })) as HighlighterGeneric<never, never>;
+    try {
+      const code = 'Experiment EX-001 "Proof"\nEND';
+      const changedScopes = flattenScopes(changedHighlighter.codeToTokens(code, {
+        lang: "sdd", theme: "github-dark", includeExplanation: true
+      }));
+      const originalScopes = flattenScopes(highlighter.codeToTokens(code, {
+        lang: "sdd", theme: "github-dark", includeExplanation: true
+      }));
+      expectScope(changedScopes, code, "Experiment", "storage.type.node.sdd.product-intent");
+      expect(scopesFor(originalScopes, code, "Experiment")).not.toContain("storage.type.node.sdd.product-intent");
+    } finally {
+      changedHighlighter.dispose();
+    }
   });
 
   it("changes generated behavior when bundle-only lexical syntax changes", () => {
@@ -231,7 +237,7 @@ describe("bundle-generated SDD TextMate assets", () => {
 });
 
 describe("SDD TextMate tokenization", () => {
-  it("scopes every v0.1 construct without splitting SDD IDs", () => {
+  it("scopes every versioned construct without splitting SDD IDs", () => {
     const escapedQuote = bundle.syntax.lexical.quoted_string.standardized_escapes.find(
       ({ value }) => value === bundle.syntax.lexical.quoted_string.delimiter
     )?.literal;
@@ -239,7 +245,7 @@ describe("SDD TextMate tokenization", () => {
       throw new Error("The test bundle must define its quoted-delimiter escape");
     }
     const quotedValue = `"A ${escapedQuote}quoted # value${escapedQuote}"`;
-    const code = `SDD-TEXT 0.1
+    const code = `SDD-TEXT ${version}
 # document comment
 Outcome O-001 "Increase successful checkout" # header comment
   owner=team_checkout
@@ -256,7 +262,7 @@ END`;
     const segments = flattenScopes(result);
 
     expectScope(segments, code, "SDD-TEXT", "keyword.other.version.sdd");
-    expectScope(segments, code, "0.1", "constant.numeric.version.sdd");
+    expectScope(segments, code, version, "constant.numeric.version.sdd");
     expectScope(segments, code, "# document comment", "comment.line.number-sign.sdd");
     expectScope(
       segments,
@@ -417,6 +423,31 @@ END`;
   });
 });
 
+});
+}
+
+describe("checked-in default TextMate assets", () => {
+  const defaultManifestPath = path.join(repoRoot, `bundle/v${DEFAULT_BUNDLE_VERSION}/manifest.yaml`);
+  let defaultAssets: SddTextMateAssets;
+  beforeAll(async () => {
+    defaultAssets = createSddTextMateAssets(await loadBundle(defaultManifestPath));
+  });
+  it("keeps checked-in generated artifacts in deterministic sync", async () => {
+    const [grammarText, languageConfigurationText] = await Promise.all([
+      readFile(grammarPath, "utf8"),
+      readFile(languageConfigurationPath, "utf8")
+    ]);
+
+    expect(grammarText).toBe(serializeTextMateAsset(defaultAssets.grammar));
+    expect(languageConfigurationText).toBe(
+      serializeTextMateAsset(defaultAssets.languageConfiguration)
+    );
+    expect(grammarText.endsWith("\n")).toBe(true);
+    expect(grammarText).not.toContain("\r");
+  });
+
+});
+
 describe("VS Code extension manifest", () => {
   it("registers .sdd, source.sdd, and generated asset paths", async () => {
     const manifest = JSON.parse(
@@ -432,7 +463,7 @@ describe("VS Code extension manifest", () => {
     };
 
     expect(`${manifest.publisher}.${manifest.name}`).toBe("knutopia.sdd-language");
-    expect(manifest.version).toBe("0.1.0");
+    expect(manifest.version).toBe("0.2.0");
     expect(manifest.contributes.languages).toContainEqual(
       expect.objectContaining({
         id: "sdd",

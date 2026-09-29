@@ -1,6 +1,6 @@
 # Bundle awareness and v0.2 compatibility: implementation guide
 
-Status: proposed implementation, based on repository revision `375b0c2` on 2026-09-28. This document specifies work to perform; it does not claim that the work is already implemented.
+Status: implemented and verified on 2026-09-28, based on the plan written against repository revision `375b0c2`. The canonical skill source and installed skill copy were refreshed as part of this implementation.
 
 ## 1. Goal and scope
 

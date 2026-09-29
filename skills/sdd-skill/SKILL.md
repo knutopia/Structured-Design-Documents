@@ -21,9 +21,10 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 ## Start Here
 
 - Helper discovery is the helper-command authority: use `<helper> capabilities` to confirm which helper commands exist. Use only commands returned by `<helper> capabilities`.
+- Select and pin one bundle for the task using the procedure in `references/workflow.md`. Read `resolution.manifest_path` from a bundle-resolved contract, then pass that absolute path with `--bundle` to every later bundle-backed helper command and to saved `sdd show` rendering.
 - Helper contract detail is the helper request/result authority: use `<helper> contract <subject_id>` for exact request shape, result shape, continuation semantics, helper constraints, and bundle-binding metadata for one helper command; use `--purpose request` for request-composition guidance on `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`.
-- Before composing the first `author` request in a task, use `<helper> contract helper.command.author --purpose request --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
-- SDD language semantics come from `bundle/v0.1/manifest.yaml` plus the active core bundle files, including `bundle/v0.1/core/syntax.yaml`, `bundle/v0.1/core/vocab.yaml`, `bundle/v0.1/core/contracts.yaml`, and `bundle/v0.1/core/views.yaml`.
+- Before composing the first `author` request in a task, use `<helper> --bundle <manifest> contract helper.command.author --purpose request --resolve bundle` and read `authoring_format_card` for compact bundle-derived JSON formatting guidance. Read raw `syntax.yaml` only when deeper SDD language semantics are needed or the card is absent.
+- SDD language semantics come from the selected manifest and its referenced core files and profiles. A document header must match the selected bundle; it does not select or migrate a bundle.
 - Shared `assessment` answers whether to stop, continue, commit, or render.
 - Use docs to explain a surface or investigate a mismatch. Use implementation code for implementation debugging, not normal helper request-shape recovery.
 - For helper commands whose contract reports a JSON request body through `--request`, pass a request file path by default. Use `--request -` only when the JSON is piped in the same shell command.
@@ -36,13 +37,14 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 - Choose the repo-relative `.sdd` path directly. Default to the current working directory unless the user names or clearly implies another location.
 - Do not search repo `.sdd` examples to pick a filename, infer syntax, or infer structure unless the user explicitly asks for comparison or example reuse.
 - Run `create`, then continue from the returned `revision`; immediate `inspect` is not the normal next step because the empty bootstrap may still be parse-invalid.
-- Prefer `author` for first-pass scaffold creation. Use `<helper> contract helper.command.create --purpose request` or `<helper> contract helper.command.author --purpose request --resolve bundle` when bootstrap continuation or author request-shape detail matters.
+- Prefer `author` for first-pass scaffold creation. Use `<helper> contract helper.command.create --purpose request --resolve bundle` to discover the selected creation version and bootstrap continuation, then pin its `resolution.manifest_path` before `create` and `author`.
 - Do not let "nesting is not semantic" become "avoid nesting". For child nodes with one clear local parent and no reuse or cross-cutting placement intent, prefer both the explicit semantic edge and nested source placement under the parent for readability.
 - When nesting child nodes under a parent, keep the parent's semantic edge lines above nested child blocks. Prefer body order: properties, semantic edge lines, nested child blocks. Do not place relationship lines after the nested blocks they introduce.
 
 ### Edit Existing Document
 
 - If the target `.sdd` is unknown, use `<helper> search ...` only to locate the existing document or node.
+- For an existing document with a known declaration, select its matching available bundle explicitly before `inspect` or mutation. Search a mixed-version repository once per selected bundle, using `--under` to narrow each search.
 - Once the target is known, use `<helper> inspect <document_path>` to obtain the current `revision`, handles, and order data before handle-based changes.
 - Prefer `author` for common scaffold creation and `apply` for surgical handle-based edits.
 - Determine any needed bundle-defined relationship from the active bundle files before composing view-sensitive structure. Do not rely on nested source layout as semantic proof.
@@ -56,6 +58,7 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 - Use `contract --resolve bundle` only when active bundle-owned values such as `<view_id>`, `<profile_id>`, or `<detail_id>` are needed and not already known.
 - For create, make, generate, render, draw, show, display, or view diagram requests, produce a saved file artifact by default.
 - Use `sdd show` for saved user-facing diagram artifacts.
+- Pass the pinned manifest to `sdd show --bundle <manifest>` so saved rendering uses the same bundle as helper validation and projection.
 - When the user explicitly requests every applicable diagram type, use `sdd show --view all`; detail-aware empty views are skipped and explicit output names receive per-view modifiers.
 - Use helper `preview` only for transient helper output, raw artifact access, or a chat-safe `artifact_path` for inline image display.
 - If no output path is specified, save beside the `.sdd`; do not invent a new output directory.
@@ -78,6 +81,7 @@ Call the resolved executable `<helper>` in these instructions. For every later h
 ## Hard Stops
 
 - Do not hand-edit `.sdd` structure when the helper supports the operation.
+- Do not change the selected bundle mid-workflow through a saved preference or document header; retain the resolved manifest path across helper and saved-render commands.
 - Use request files by default for helper commands whose contract reports a JSON body through `--request`.
 - Use `--request -` only when JSON is piped in the same shell command.
 - Inspect before handle-based edits to existing documents.
@@ -108,4 +112,4 @@ Read only what you need:
 - `references/workflow.md` for the standard assessment-first helper workflow, preview branches, and helper-error diagnosis
 - `references/change-set-recipes.md` for common `ChangeOperation` patterns
 - `references/current-helper-gaps.md` for the current limits of the helper surface
-- `bundle/v0.1/manifest.yaml` plus active core bundle files when the task needs SDD-language semantics
+- the selected manifest and its referenced core files when the task needs SDD-language semantics

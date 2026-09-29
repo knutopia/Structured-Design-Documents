@@ -325,7 +325,7 @@ function deriveSyntax(bundle: Bundle): DerivedSyntax {
 
   const quote = runtime.syntax.lexical.quoted_string.delimiter;
   if (quote.length !== 1 || runtime.syntax.lexical.quoted_string.multiline) {
-    throw textMateError("v0.1 highlighting requires one-character, single-line quoted strings");
+    throw textMateError("highlighting requires one-character, single-line quoted strings");
   }
   const standardizedEscapes =
     runtime.syntax.lexical.quoted_string.standardized_escapes.map(({ literal }) => literal);
@@ -337,7 +337,7 @@ function deriveSyntax(bundle: Bundle): DerivedSyntax {
   }
   if (runtime.syntax.lexical.quoted_string.other_backslash_sequences !== "literal") {
     throw textMateError(
-      "v0.1 highlighting only supports literal unknown backslash sequences"
+      "highlighting only supports literal unknown backslash sequences"
     );
   }
 
