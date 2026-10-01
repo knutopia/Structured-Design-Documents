@@ -1,47 +1,63 @@
 import { spawn } from "node:child_process";
-import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const helperMainPath = path.join(repoRoot, "dist/cli/helperMain.js");
+const v01Manifest = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
+const v02Manifest = path.join(repoRoot, "bundle/v0.2/manifest.yaml");
+const bundleCommands = new Set(["inspect", "search", "create", "apply", "author", "undo", "validate", "project", "preview"]);
 
 async function runHelperEntrypoint(
   cwd: string,
   args: string[],
-  options: { stdin?: string } = {}
+  options: { stdin?: string; bundle?: string | null; configHome?: string } = {}
 ): Promise<{ exitCode: number; stdout: string; stderr: string }> {
-  return await new Promise((resolve) => {
-    const child = spawn(process.execPath, [helperMainPath, ...args], {
-      cwd
-    });
-
-    const stdoutChunks: Buffer[] = [];
-    const stderrChunks: Buffer[] = [];
-    child.stdout.on("data", (chunk: Buffer | string) => {
-      stdoutChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-    });
-    child.stderr.on("data", (chunk: Buffer | string) => {
-      stderrChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
-    });
-    child.on("error", (error) => {
-      resolve({
-        exitCode: 1,
-        stdout: Buffer.concat(stdoutChunks).toString("utf8"),
-        stderr: `${Buffer.concat(stderrChunks).toString("utf8")}${error.message}`
+  const temporaryConfigHome = options.configHome ? undefined : await mkdtemp(path.join(os.tmpdir(), "sdd-helper-config-"));
+  const configHome = options.configHome ?? temporaryConfigHome!;
+  const needsBundle = bundleCommands.has(args[0] ?? "") ||
+    (args[0] === "contract" && args.includes("--resolve"));
+  const bundleFlag = needsBundle && !args.includes("--bundle") && options.bundle !== null
+    ? ["--bundle", options.bundle ?? v01Manifest]
+    : [];
+  try {
+    return await new Promise((resolve) => {
+      const child = spawn(process.execPath, [helperMainPath, ...args, ...bundleFlag], {
+        cwd,
+        env: { ...process.env, INIT_CWD: "", XDG_CONFIG_HOME: configHome, APPDATA: configHome, HOME: configHome }
       });
-    });
-    child.on("close", (code) => {
-      resolve({
-        exitCode: typeof code === "number" ? code : 1,
-        stdout: Buffer.concat(stdoutChunks).toString("utf8"),
-        stderr: Buffer.concat(stderrChunks).toString("utf8")
-      });
-    });
 
-    child.stdin.end(options.stdin ?? "");
-  });
+      const stdoutChunks: Buffer[] = [];
+      const stderrChunks: Buffer[] = [];
+      child.stdout.on("data", (chunk: Buffer | string) => {
+        stdoutChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      });
+      child.stderr.on("data", (chunk: Buffer | string) => {
+        stderrChunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+      });
+      child.on("error", (error) => {
+        resolve({
+          exitCode: 1,
+          stdout: Buffer.concat(stdoutChunks).toString("utf8"),
+          stderr: `${Buffer.concat(stderrChunks).toString("utf8")}${error.message}`
+        });
+      });
+      child.on("close", (code) => {
+        resolve({
+          exitCode: typeof code === "number" ? code : 1,
+          stdout: Buffer.concat(stdoutChunks).toString("utf8"),
+          stderr: Buffer.concat(stderrChunks).toString("utf8")
+        });
+      });
+
+      child.stdin.end(options.stdin ?? "");
+    });
+  } finally {
+    if (temporaryConfigHome) await rm(temporaryConfigHome, { recursive: true, force: true });
+  }
 }
 
 async function withRepoTempDir(run: (tempDir: string) => Promise<void>): Promise<void> {
@@ -83,6 +99,12 @@ async function writeJsonRequest(tempDir: string, name: string, value: unknown): 
   return requestPath;
 }
 
+async function writeBundlePreference(configHome: string, version: string): Promise<void> {
+  const configDir = path.join(configHome, "sdd");
+  await mkdir(configDir, { recursive: true });
+  await writeFile(path.join(configDir, "config.yaml"), `version: "1"\ndefaults:\n  bundle_version: "${version}"\n`, "utf8");
+}
+
 function strictPlaceProps() {
   return [
     {
@@ -114,6 +136,263 @@ function strictPlaceProps() {
 }
 
 describe("sdd-helper entrypoint integration", () => {
+  for (const [version, manifest] of [["0.1", v01Manifest], ["0.2", v02Manifest]] as const) {
+    it(`completes a ${version} create, author, inspect, validate, project, preview, apply, and undo lifecycle`, async () => {
+      await withRepoTempDir(async (tempDir) => {
+        const documentPath = repoRelativePath(path.join(tempDir, `lifecycle-${version}.sdd`));
+        const execute = (args: string[]) => runHelperEntrypoint(repoRoot, args, { bundle: manifest });
+        const created = await execute(["create", documentPath]);
+        expect(created.exitCode, created.stdout).toBe(0);
+        const createPayload = parseJsonPayload(created);
+        expect(createPayload).toMatchObject({ kind: "sdd-create-document" });
+        expectAssessment(createPayload, { outcome: "review_required", should_stop: false });
+        expect(await readFile(path.join(repoRoot, documentPath), "utf8")).toBe(`SDD-TEXT ${version}\n`);
+
+        const incompatibleVersion = await execute(["create", repoRelativePath(path.join(tempDir, `wrong-${version}.sdd`)), "--version", "9.9"]);
+        expect(incompatibleVersion.exitCode).toBe(0);
+        expect(parseJsonPayload(incompatibleVersion)).toMatchObject({
+          kind: "sdd-change-set",
+          status: "rejected",
+          assessment: { outcome: "blocked" }
+        });
+        await expect(readFile(path.join(tempDir, `wrong-${version}.sdd`), "utf8")).rejects.toMatchObject({ code: "ENOENT" });
+
+        const authorRequest = {
+          path: documentPath,
+          base_revision: createPayload.revision,
+          mode: "commit",
+          intents: [{
+            kind: "insert_node_scaffold",
+            local_id: "billing-place",
+            placement: { mode: "last" },
+            node: {
+              node_type: "Place",
+              node_id: "P-001",
+              name: "Billing",
+              props: strictPlaceProps()
+            }
+          }],
+          validate_profile: "strict",
+          projection_views: ["ia_place_map"]
+        };
+        const authorPath = await writeJsonRequest(tempDir, `author-${version}.json`, authorRequest);
+        const authored = await execute(["author", "--request", authorPath]);
+        expect(authored.exitCode, authored.stdout).toBe(0);
+        const authorPayload = parseJsonPayload(authored);
+        expect(authorPayload).toMatchObject({ kind: "sdd-authoring-intent-result", status: "applied", mode: "commit" });
+        expectAssessment(authorPayload, { outcome: "acceptable", can_render: true, should_stop: false });
+
+        const inspected = await execute(["inspect", documentPath]);
+        expect(inspected.exitCode, inspected.stdout).toBe(0);
+        const inspectPayload = parseJsonPayload(inspected);
+        expect(inspectPayload).toMatchObject({ kind: "sdd-document-inspect", effective_version: version });
+        const node = (inspectPayload.nodes as Array<{ handle: string; node_id: string }>).find((entry) => entry.node_id === "P-001");
+        expect(node?.handle).toBeTruthy();
+
+        const searched = await execute(["search", "--node-id", "P-001", "--under", repoRelativePath(tempDir)]);
+        expect(searched.exitCode, searched.stdout).toBe(0);
+        expect(parseJsonPayload(searched).matches).toEqual(expect.arrayContaining([expect.objectContaining({ path: documentPath })]));
+
+        const validated = await execute(["validate", documentPath, "--profile", "strict"]);
+        expect(validated.exitCode, validated.stdout).toBe(0);
+        expect(parseJsonPayload(validated)).toMatchObject({
+          kind: "sdd-validation",
+          report: { error_count: 0 },
+          assessment: { outcome: "acceptable" }
+        });
+        const projected = await execute(["project", documentPath, "--view", "ia_place_map"]);
+        expect(projected.exitCode, projected.stdout).toBe(0);
+        expect(parseJsonPayload(projected)).toMatchObject({ kind: "sdd-projection", assessment: { outcome: "acceptable" } });
+        const previewed = await execute(["preview", documentPath, "--view", "ia_place_map", "--profile", "strict", "--detail", "compact", "--format", "svg"]);
+        expect(previewed.exitCode, previewed.stdout).toBe(0);
+        const previewPayload = parseJsonPayload(previewed);
+        expect(previewPayload).toMatchObject({ kind: "sdd-preview", assessment: { outcome: "acceptable" } });
+        await rm(path.dirname(previewPayload.artifact_path as string), { recursive: true, force: true });
+
+        const applyRequest = {
+          path: documentPath,
+          base_revision: authorPayload.resulting_revision,
+          operations: [{ kind: "set_node_name", node_handle: node!.handle, name: "Billing revised" }]
+        };
+        const dryRunPath = await writeJsonRequest(tempDir, `apply-dry-${version}.json`, applyRequest);
+        const dryRun = await execute(["apply", "--request", dryRunPath]);
+        expect(dryRun.exitCode, dryRun.stdout).toBe(0);
+        expect(parseJsonPayload(dryRun)).toMatchObject({ kind: "sdd-change-set", status: "applied", mode: "dry_run" });
+        const commitPath = await writeJsonRequest(tempDir, `apply-commit-${version}.json`, { ...applyRequest, mode: "commit" });
+        const committed = await execute(["apply", "--request", commitPath]);
+        expect(committed.exitCode, committed.stdout).toBe(0);
+        const commitPayload = parseJsonPayload(committed);
+        expect(commitPayload).toMatchObject({ kind: "sdd-change-set", status: "applied", mode: "commit" });
+        const undoPath = await writeJsonRequest(tempDir, `undo-${version}.json`, {
+          change_set_id: commitPayload.change_set_id,
+          mode: "commit",
+          validate_profile: "strict"
+        });
+        const undone = await execute(["undo", "--request", undoPath]);
+        expect(undone.exitCode, undone.stdout).toBe(0);
+        expect(parseJsonPayload(undone)).toMatchObject({ kind: "sdd-change-set", status: "applied", origin: "undo_change_set" });
+        expect(await readFile(path.join(repoRoot, documentPath), "utf8")).toContain('Place P-001 "Billing"');
+      });
+    });
+  }
+  it("selects both bundles in either option position and exposes creation metadata", async () => {
+    const nestedCwd = path.join(repoRoot, "src");
+    for (const [version, manifest] of [["0.1", v01Manifest], ["0.2", v02Manifest]] as const) {
+      const relativeManifest = path.relative(nestedCwd, manifest);
+      for (const args of [
+        ["--bundle", relativeManifest, "contract", "helper.command.create", "--purpose", "request", "--resolve", "bundle"],
+        ["contract", "helper.command.create", "--purpose", "request", "--resolve", "bundle", "--bundle", relativeManifest]
+      ]) {
+        const result = await runHelperEntrypoint(nestedCwd, args);
+        expect(result.exitCode, result.stdout).toBe(0);
+        const payload = parseJsonPayload(result);
+        expect(payload).toMatchObject({
+          resolution: {
+            mode: "bundle_resolved",
+            bundle_version: version,
+            language_version: version,
+            manifest_path: manifest
+          },
+          bindings: [expect.objectContaining({
+            binding_id: "shared.binding.create_document.version",
+            resolved_values: [{ value: version }]
+          })]
+        });
+        expect(payload).not.toHaveProperty("output_shape");
+      }
+    }
+  });
+
+  it("uses fallback, saved preference, and explicit override without consulting invalid preferences", async () => {
+    await withRepoTempDir(async (tempDir) => {
+      const configHome = path.join(tempDir, "config");
+      const args = ["contract", "helper.command.create", "--resolve", "bundle"];
+      const fallback = await runHelperEntrypoint(repoRoot, args, { bundle: null, configHome });
+      expect(fallback.exitCode).toBe(0);
+      expect(parseJsonPayload(fallback).resolution).toMatchObject({
+        bundle_version: "0.2", manifest_path: v02Manifest
+      });
+
+      for (const version of ["0.1", "0.2"]) {
+        await writeBundlePreference(configHome, version);
+        const selected = await runHelperEntrypoint(repoRoot, args, { bundle: null, configHome });
+        expect(selected.exitCode).toBe(0);
+        expect(parseJsonPayload(selected).resolution).toMatchObject({
+          bundle_version: version,
+          manifest_path: version === "0.1" ? v01Manifest : v02Manifest
+        });
+      }
+
+      await writeFile(path.join(configHome, "sdd", "config.yaml"), "invalid: [\n", "utf8");
+      const malformed = await runHelperEntrypoint(repoRoot, args, { bundle: null, configHome });
+      expect(malformed.exitCode).toBe(1);
+      expect(parseJsonPayload(malformed)).toMatchObject({
+        kind: "sdd-helper-error",
+        code: "runtime_error",
+        diagnostics: [expect.objectContaining({ code: "config.parse" })]
+      });
+      const explicit = await runHelperEntrypoint(repoRoot, [...args, "--bundle", v01Manifest], { configHome });
+      expect(explicit.exitCode).toBe(0);
+      expect(parseJsonPayload(explicit).resolution).toMatchObject({ manifest_path: v01Manifest });
+      const invalidExplicit = await runHelperEntrypoint(repoRoot, [...args, "--bundle", path.join(tempDir, "absent.yaml")], { configHome });
+      expect(invalidExplicit.exitCode).toBe(1);
+      expect(parseJsonPayload(invalidExplicit)).toMatchObject({ kind: "sdd-helper-error", code: "runtime_error" });
+
+      for (const staticArgs of [
+        ["capabilities"],
+        ["contract", "helper.command.create"],
+        ["git-status"]
+      ]) {
+        const result = await runHelperEntrypoint(repoRoot, staticArgs, { configHome });
+        expect(result.exitCode, result.stdout).toBe(0);
+      }
+
+      await writeBundlePreference(configHome, "9.9");
+      const missing = await runHelperEntrypoint(repoRoot, args, { bundle: null, configHome });
+      expect(missing.exitCode).toBe(1);
+      expect(parseJsonPayload(missing)).toMatchObject({
+        kind: "sdd-helper-error",
+        diagnostics: [expect.objectContaining({ code: "config.bundle_not_found" })]
+      });
+    });
+  });
+
+  it("reports a saved manifest mismatch but accepts an explicit custom path", async () => {
+    await withRepoTempDir(async (tempDir) => {
+      const repo = path.join(tempDir, "repo");
+      const wrongRoot = path.join(repo, "bundle", "v0.2");
+      await mkdir(wrongRoot, { recursive: true });
+      await writeFile(path.join(repo, "package.json"), "{}\n", "utf8");
+      await cp(path.join(repoRoot, "bundle", "v0.1"), wrongRoot, { recursive: true });
+      const configHome = path.join(tempDir, "config");
+      await writeBundlePreference(configHome, "0.2");
+      const args = ["contract", "helper.command.create", "--resolve", "bundle"];
+      const mismatch = await runHelperEntrypoint(repo, args, { bundle: null, configHome });
+      expect(mismatch.exitCode).toBe(1);
+      expect(parseJsonPayload(mismatch)).toMatchObject({
+        kind: "sdd-helper-error",
+        diagnostics: [expect.objectContaining({ code: "config.bundle_version_mismatch" })]
+      });
+
+      const customRoot = path.join(tempDir, "custom-language");
+      await cp(path.join(repoRoot, "bundle", "v0.1"), customRoot, { recursive: true });
+      const customManifest = path.join(customRoot, "manifest.yaml");
+      const explicit = await runHelperEntrypoint(repo, [...args, "--bundle", customManifest], { configHome });
+      expect(explicit.exitCode).toBe(0);
+      expect(parseJsonPayload(explicit).resolution).toMatchObject({
+        bundle_version: "0.1", manifest_path: customManifest
+      });
+    });
+  });
+
+  it("uses a test bundle's changed creation version and actual source paths", async () => {
+    await withRepoTempDir(async (tempDir) => {
+      const customRoot = path.join(tempDir, "arbitrary-bundle-location");
+      await cp(path.join(repoRoot, "bundle", "v0.2"), customRoot, { recursive: true });
+      const manifest = path.join(customRoot, "manifest.yaml");
+      const manifestText = await readFile(manifest, "utf8");
+      await writeFile(manifest, manifestText.replace('language_version: "0.2"', 'language_version: "7.7"'), "utf8");
+      for (const relative of ["core/syntax.yaml", "core/schema.json", "core/projection_schema.json"]) {
+        const filePath = path.join(customRoot, relative);
+        await writeFile(filePath, (await readFile(filePath, "utf8")).replaceAll('"0.2"', '"7.7"'), "utf8");
+      }
+
+      const contract = await runHelperEntrypoint(repoRoot, [
+        "contract", "helper.command.create", "--purpose", "request", "--resolve", "bundle", "--bundle", manifest
+      ]);
+      expect(contract.exitCode, contract.stdout).toBe(0);
+      expect(parseJsonPayload(contract)).toMatchObject({
+        resolution: { manifest_path: manifest, language_version: "7.7" },
+        bindings: [expect.objectContaining({ resolved_values: [{ value: "7.7" }] })]
+      });
+      const authorContract = await runHelperEntrypoint(repoRoot, [
+        "contract", "helper.command.author", "--resolve", "bundle", "--bundle", manifest
+      ]);
+      expect(authorContract.exitCode, authorContract.stdout).toBe(0);
+      expect(JSON.stringify(parseJsonPayload(authorContract))).toContain(path.join(customRoot, "core", "syntax.yaml"));
+
+      const documentPath = repoRelativePath(path.join(tempDir, "custom-version.sdd"));
+      const created = await runHelperEntrypoint(repoRoot, ["create", documentPath, "--bundle", manifest]);
+      expect(created.exitCode, created.stdout).toBe(0);
+      expect(await readFile(path.join(repoRoot, documentPath), "utf8")).toBe("SDD-TEXT 7.7\n");
+      const requestPath = await writeJsonRequest(tempDir, "custom-author.json", {
+        path: documentPath,
+        base_revision: parseJsonPayload(created).revision,
+        mode: "commit",
+        intents: [{
+          kind: "insert_node_scaffold",
+          local_id: "custom-place",
+          placement: { mode: "last" },
+          node: { node_type: "Place", node_id: "P-001", name: "Custom", props: strictPlaceProps() }
+        }],
+        validate_profile: "strict"
+      });
+      const authored = await runHelperEntrypoint(repoRoot, ["author", "--request", requestPath, "--bundle", manifest]);
+      expect(authored.exitCode, authored.stdout).toBe(0);
+      expect(parseJsonPayload(authored)).toMatchObject({ status: "applied", assessment: { outcome: "acceptable" } });
+      expect(await readFile(path.join(repoRoot, documentPath), "utf8")).toContain("SDD-TEXT 7.7\n");
+    });
+  });
   it(
     "supports direct helper execution from nested repo directories for git-only and bundle-backed commands",
     async () => {

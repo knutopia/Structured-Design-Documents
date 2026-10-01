@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+caller_cwd="$(pwd -P)"
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 
 looks_like_repo_root() {
   local candidate="$1"
-  [[ -f "$candidate/package.json" && -f "$candidate/bundle/v0.1/manifest.yaml" ]]
+  [[ -f "$candidate/package.json" && -d "$candidate/bundle" ]]
 }
 
 find_repo_from() {
@@ -56,4 +57,5 @@ if ! command -v node >/dev/null 2>&1 || ! command -v pnpm >/dev/null 2>&1; then
 fi
 
 cd "$repo_root"
-exec pnpm --silent sdd-helper "$@"
+export INIT_CWD="$caller_cwd"
+exec node "$repo_root/dist/cli/helperMain.js" "$@"

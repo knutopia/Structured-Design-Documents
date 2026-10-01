@@ -1,0 +1,101 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.2",
+  "view_id": "ia_place_map",
+  "source_example": "place_viewstate_transition",
+  "nodes": [
+    {
+      "id": "P-010",
+      "type": "Place",
+      "name": "Billing"
+    },
+    {
+      "id": "P-011",
+      "type": "Place",
+      "name": "Confirmation"
+    }
+  ],
+  "edges": [
+    {
+      "from": "P-010",
+      "type": "NAVIGATES_TO",
+      "to": "P-011"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "P-010",
+        "display": {
+          "subtitle": "/billing",
+          "badge": "auth",
+          "metadata": [
+            {
+              "key": "entry_points",
+              "value": "link:/billing,notification:payment_failed"
+            },
+            {
+              "key": "primary_nav",
+              "value": "true"
+            }
+          ]
+        }
+      },
+      {
+        "node_id": "P-011",
+        "display": {
+          "subtitle": "/confirmation",
+          "badge": "role:billing_agent",
+          "metadata": [
+
+          ]
+        }
+      }
+    ],
+    "edge_annotations": [
+
+    ],
+    "node_groups": [
+
+    ],
+    "view_metadata": {
+    }
+  },
+  "omissions": [
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "COMPOSED_OF",
+      "to": "C-010",
+      "reason": "relationship_not_in_scope",
+      "detail": "COMPOSED_OF is outside the ia_place_map edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "CONSTRAINED_BY",
+      "to": "PL-010",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONSTRAINED_BY is outside the ia_place_map edge scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "CONTAINS",
+      "to": "VS-010a",
+      "reason": "endpoint_out_of_scope",
+      "detail": "Target node type ViewState is outside the ia_place_map node scope."
+    },
+    {
+      "kind": "edge",
+      "from": "P-010",
+      "type": "CONTAINS",
+      "to": "VS-010b",
+      "reason": "endpoint_out_of_scope",
+      "detail": "Target node type ViewState is outside the ia_place_map node scope."
+    }
+  ],
+  "notes": [
+    "Place route, access, and entry metadata are available as node annotations for profile-aware rendering."
+  ]
+}

@@ -3,12 +3,32 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { applyAdditionProposalV1, type ApplyAdditionProposalV1Args } from "../src/authoring/additionProposalsV1.js";
+import { compileSource } from "../src/compiler/compileSource.js";
+import { loadBundle } from "../src/bundle/loadBundle.js";
+import { createGuidanceCatalog } from "../src/authoring/guidedAddition/catalog.js";
+import type { DefaultsConfigRuntime } from "../src/config/index.js";
 import { runCli, type CliDeps } from "../src/cli/program.js";
 import { guidedBack, type GuidedBack, type GuidedPromptAdapter, type GuidedPromptChoice } from "../src/cli/guidedAddition.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const acceptanceFixture = path.join(repoRoot, "tests/fixtures/guided_addition_acceptance.sdd");
+const manifests = {
+  "0.1": path.join(repoRoot, "bundle/v0.1/manifest.yaml"),
+  "0.2": path.join(repoRoot, "bundle/v0.2/manifest.yaml")
+} as const;
 let fixtureDir: string;
+
+function defaults(bundleVersion?: string): DefaultsConfigRuntime {
+  return {
+    getGlobalConfigPath: () => "/isolated/sdd/config.yaml",
+    read: async () => bundleVersion === undefined ? undefined : {
+      version: "1",
+      defaults: { bundle_version: bundleVersion }
+    },
+    set: async () => { throw new Error("Unexpected defaults write"); },
+    unset: async () => { throw new Error("Unexpected defaults write"); }
+  };
+}
 
 beforeAll(() => {
   fixtureDir = fs.mkdtempSync(path.join(repoRoot, ".guided-cli-v1-test-"));
@@ -94,10 +114,12 @@ async function run(
   overrides: Partial<CliDeps> = {}
 ): Promise<{ exitCode: number; transcript: string; stderr: string }> {
   const stderr: string[] = [];
+  const hasExplicitBundle = args.includes("--bundle");
   const result = await runCli(
-    ["node", "sdd", "add", target.relative, ...args],
+    ["node", "sdd", "add", target.relative, ...args, ...(hasExplicitBundle || overrides.defaultsConfig ? [] : ["--bundle", manifests["0.1"]])],
     {
       cwd: () => repoRoot,
+      defaultsConfig: defaults(),
       createGuidedPrompt: () => prompt,
       stdout: (content) => prompt.output.push(content),
       stderr: (content) => stderr.push(content),
@@ -433,5 +455,125 @@ Saved guided-addition-acceptance.sdd.
     expect(result.exitCode, result.stderr).toBe(0);
     expect(result.transcript).toMatch(/^What would you like to add\?\n  1\. Add a standalone node\n  2\. Add a relationship\nChoose a number: 1\n/);
     expect(result.transcript).not.toContain("Choose a number (b for back):");
+  });
+});
+
+describe("sdd add bundle selection", () => {
+  const inputValues = {
+    "New node ID": "P-901",
+    "New node Name": "Bundle selection",
+    "New node Description": "Selected bundle proof"
+  };
+
+  for (const version of ["0.1", "0.2"] as const) {
+    it(`creates and cancels a new ${version} document with its explicit bundle`, async () => {
+      const saved = newTarget(`bundle-${version}-save`);
+      const saveResult = await run(saved, new TranscriptPrompt([/^Place —/, "Save"], inputValues, [false]), [
+        "--bundle", manifests[version]
+      ]);
+      expect(saveResult.exitCode, saveResult.stderr).toBe(0);
+      const text = fs.readFileSync(saved.absolute, "utf8");
+      expect(text.startsWith(`SDD-TEXT ${version}\n`)).toBe(true);
+      expect(text.endsWith("\n")).toBe(true);
+      expect(text).not.toContain("\r");
+      const bundle = await loadBundle(manifests[version]);
+      const compiled = compileSource({ path: saved.absolute, text }, bundle);
+      expect(compiled.graph?.version).toBe(version);
+      expect(compiled.diagnostics.filter((item) => item.severity === "error")).toEqual([]);
+
+      const canceled = newTarget(`bundle-${version}-cancel`);
+      const cancelResult = await run(canceled, new TranscriptPrompt([/^Place —/, "Cancel"], inputValues, [false]), [
+        "--bundle", manifests[version]
+      ]);
+      expect(cancelResult.exitCode, cancelResult.stderr).toBe(0);
+      expect(fs.existsSync(canceled.absolute)).toBe(false);
+    });
+
+    it(`edits a matching ${version} document and rejects a mismatched bundle before persistence`, async () => {
+      const target = fixture(`bundle-${version}-edit`);
+      if (version === "0.2") {
+        fs.writeFileSync(target.absolute, target.original.replace("SDD-TEXT 0.1", "SDD-TEXT 0.2"));
+      }
+      const original = fs.readFileSync(target.absolute, "utf8");
+      const mismatch = version === "0.1" ? "0.2" : "0.1";
+      const rejected = await run(target, new TranscriptPrompt([]), ["--bundle", manifests[mismatch]]);
+      expect(rejected.exitCode).toBe(1);
+      expect(fs.readFileSync(target.absolute, "utf8")).toBe(original);
+
+      const saved = await run(target, new TranscriptPrompt(
+        standaloneRules("Save"), inputValues, [false]
+      ), ["--bundle", manifests[version]]);
+      expect(saved.exitCode, saved.stderr).toBe(0);
+      const text = fs.readFileSync(target.absolute, "utf8");
+      expect(text.startsWith(`SDD-TEXT ${version}\n`)).toBe(true);
+      expect(text).toContain('"Bundle selection"');
+    });
+  }
+
+  it("uses each saved preference and lets an explicit manifest override it", async () => {
+    for (const version of ["0.1", "0.2"] as const) {
+      const target = newTarget(`global-${version}`);
+      const result = await run(target, new TranscriptPrompt([/^Place —/, "Save"], inputValues, [false]), [], {
+        defaultsConfig: defaults(version)
+      });
+      expect(result.exitCode, result.stderr).toBe(0);
+      expect(fs.readFileSync(target.absolute, "utf8")).toMatch(new RegExp(`^SDD-TEXT ${version.replace(".", "\\.")}`));
+    }
+
+    const overridden = newTarget("global-overridden");
+    const result = await run(overridden, new TranscriptPrompt([/^Place —/, "Save"], inputValues, [false]), [
+      "--bundle", manifests["0.2"]
+    ], { defaultsConfig: defaults("0.1") });
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(fs.readFileSync(overridden.absolute, "utf8")).toMatch(/^SDD-TEXT 0\.2/);
+  });
+
+  it("resolves a caller-relative manifest from a nested v0.2-only repository", async () => {
+    const isolatedRepo = path.join(fixtureDir, "v02-only");
+    const caller = path.join(isolatedRepo, "nested", "caller");
+    const target = path.join(isolatedRepo, "new.sdd");
+    fs.mkdirSync(path.join(isolatedRepo, "bundle", "v0.2"), { recursive: true });
+    fs.mkdirSync(caller, { recursive: true });
+    fs.writeFileSync(path.join(isolatedRepo, "package.json"), "{}\n");
+    const output: string[] = [];
+    const errors: string[] = [];
+    const prompt = new TranscriptPrompt([/^Place —/, "Save"], inputValues, [false]);
+    const result = await runCli([
+      "node", "sdd", "add", path.relative(caller, target),
+      "--bundle", path.relative(caller, manifests["0.2"])
+    ], {
+      cwd: () => caller,
+      defaultsConfig: defaults("0.1"),
+      createGuidedPrompt: () => prompt,
+      stdout: (text) => output.push(text),
+      stderr: (text) => errors.push(text)
+    });
+    expect(result.exitCode, errors.join("")).toBe(0);
+    expect(output.join("")).toContain("Saved new.sdd.");
+    expect(fs.readFileSync(target, "utf8")).toMatch(/^SDD-TEXT 0\.2/);
+  });
+
+  it("takes a guided form label and suggested ID from the selected bundle", async () => {
+    const changedBundle = structuredClone(await loadBundle(manifests["0.2"]));
+    changedBundle.authoring!.node_forms.common_fields.find((field) => field.source === "name")!.label = "Display title";
+    changedBundle.authoring!.node_id_suggestions.prefix_by_type.Place = "Q";
+    const catalog = createGuidanceCatalog(changedBundle);
+    expect(catalog.getNodeType("Place")!.form.common_fields.find((field) => field.source === "name")!.label).toBe("Display title");
+
+    const target = newTarget("mutated-form");
+    const prompt = new TranscriptPrompt([/^Place —/, "Cancel"], {
+      "New node Display title": "Home",
+      "New node Description": "Starting place"
+    }, [false]);
+    const result = await run(target, prompt, ["--bundle", manifests["0.2"]], {
+      loadBundle: async (manifestPath) => {
+        expect(manifestPath).toBe(manifests["0.2"]);
+        return changedBundle;
+      }
+    });
+    expect(result.exitCode, result.stderr).toBe(0);
+    expect(result.transcript).toContain("New node Node ID [Q-001]: Q-001");
+    expect(result.transcript).toContain("New node Display title: Home");
+    expect(fs.existsSync(target.absolute)).toBe(false);
   });
 });

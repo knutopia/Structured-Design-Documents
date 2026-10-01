@@ -8,9 +8,10 @@ import { projectView } from "../src/projector/projectView.js";
 import { normalizeLineEndings } from "./textNormalization.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
-describe("projectView projection snapshots", () => {
+describe.each(["0.1", "0.2"])("projectView projection snapshots v%s", (version) => {
+  const manifestPath = path.join(repoRoot, `bundle/v${version}/manifest.yaml`);
+
   it("matches every manifest-declared projection snapshot", async () => {
     const bundle = await loadBundle(manifestPath);
 
@@ -44,7 +45,7 @@ describe("projectView projection snapshots", () => {
     const compiled = compileSource({
       path: "journey-reference-sort.sdd",
       text: [
-        "SDD-TEXT 0.1",
+        `SDD-TEXT ${version}`,
         "",
         'Opportunity OP-100 "Clear total cost"',
         "END",

@@ -3,6 +3,7 @@ import path from "node:path";
 import { Command, CommanderError, InvalidArgumentError } from "commander";
 import type { Bundle } from "../bundle/types.js";
 import { loadBundle } from "../bundle/loadBundle.js";
+import { createDefaultsConfigRuntime, DefaultsConfigError, type DefaultsConfigRuntime } from "../config/index.js";
 import type {
   ApplyAuthoringIntentArgs,
   ApplyChangeSetArgs,
@@ -56,6 +57,7 @@ import type { Diagnostic } from "../diagnostics/types.js";
 import { createHelperCapabilities, createHelperHelpStub, shouldReturnHelperHelp } from "./helperDiscovery.js";
 import { writeAllSync } from "./writeAllSync.js";
 import { resolveLauncherCwd, resolveLauncherPath } from "./launcherCwd.js";
+import { loadSelectedBundle, type BundleSelection } from "./bundleResolution.js";
 
 export interface HelperCliDeps {
   cwd: () => string;
@@ -63,6 +65,7 @@ export interface HelperCliDeps {
   stderr: (content: string) => void;
   findRepoRoot: (startDir: string) => Promise<string | null>;
   loadBundle: (manifestPath: string) => Promise<Bundle>;
+  defaultsConfig: DefaultsConfigRuntime;
   createWorkspace: (repoRoot: string) => AuthoringWorkspace;
   inspectDocument: typeof inspectDocument;
   listDocuments: typeof listDocuments;
@@ -118,6 +121,7 @@ function createDefaultDeps(): HelperCliDeps {
     },
     findRepoRoot: findAuthoringRepoRoot,
     loadBundle,
+    defaultsConfig: createDefaultsConfigRuntime(),
     createWorkspace: createAuthoringWorkspace,
     inspectDocument,
     listDocuments,
@@ -892,11 +896,17 @@ async function loadWorkspaceContext(
 }
 
 async function loadBundleContext(
-  deps: HelperCliDeps
-): Promise<{ bundle: Bundle; workspace: AuthoringWorkspace }> {
+  deps: HelperCliDeps,
+  requestedManifest?: string
+): Promise<{ bundle: Bundle; workspace: AuthoringWorkspace; selection: BundleSelection }> {
   const { repoRoot, workspace } = await loadWorkspaceContext(deps);
-  const bundle = await deps.loadBundle(path.join(repoRoot, "bundle/v0.1/manifest.yaml"));
-  return { workspace, bundle };
+  const explicitManifest = requestedManifest === undefined
+    ? undefined
+    : path.resolve(deps.cwd(), requestedManifest);
+  const { bundle, selection } = await loadSelectedBundle(
+    deps.defaultsConfig, deps.loadBundle, explicitManifest, repoRoot
+  );
+  return { workspace, bundle, selection };
 }
 
 function normalizeDocumentArgs(
@@ -927,6 +937,16 @@ function classifyHelperError(error: unknown): HelperCliError {
     return new HelperCliError("invalid_args", error.message);
   }
 
+  if (error instanceof DefaultsConfigError) {
+    return new HelperCliError("runtime_error", error.message, [{
+      stage: "cli",
+      code: error.code,
+      severity: "error",
+      message: error.message,
+      file: "<configuration>"
+    }]);
+  }
+
   if (error instanceof AuthoringGitError) {
     return new HelperCliError("runtime_error", error.message);
   }
@@ -952,12 +972,15 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
   program
     .name("sdd-helper")
     .description("JSON-first helper CLI for SDD authoring workflows")
+    .option("--bundle <manifest>", "bundle manifest path; overrides the saved bundle version")
     .helpOption(false)
     .addHelpCommand(false)
     .configureOutput({
       writeOut: () => undefined,
       writeErr: () => undefined
     });
+
+  const selectedManifest = (): string | undefined => program.optsWithGlobals<{ bundle?: string }>().bundle;
 
   program.command("capabilities").action(() => {
     writeJson(deps, createHelperCapabilities());
@@ -1011,7 +1034,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
       }
 
       if (options.resolve === "bundle") {
-        const { bundle } = await loadBundleContext(deps);
+        const { bundle } = await loadBundleContext(deps, selectedManifest());
         const detail = getBundleResolvedContractSubjectDetail(contractSubjectId, bundle) ?? staticDetail;
         writeJson(deps, contractPurpose ? selectContractSubjectDetailForPurpose(detail, contractPurpose) ?? detail : detail);
         return;
@@ -1027,7 +1050,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .command("inspect")
     .argument("<document_path>", "repo-relative .sdd document path")
     .action(async (documentPath: string) => {
-      const { workspace, bundle } = await loadBundleContext(deps);
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
       const inspected = await deps.inspectDocument(workspace, bundle, normalizedPath);
       if (inspected.kind !== "sdd-inspected-document") {
@@ -1047,25 +1070,32 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .option("--node-id <node_id>", "node id filter")
     .option("--under <path>", "repo-relative directory prefix")
     .option("--limit <count>", "result limit", parseIntegerOption)
-    .action(async (options: SearchGraphArgs) => {
-      if (!options.query && !options.node_type && !options.node_id) {
+    .action(async (options: SearchGraphArgs & { nodeType?: string; nodeId?: string }) => {
+      const searchOptions: SearchGraphArgs = {
+        query: options.query,
+        node_type: options.nodeType ?? options.node_type,
+        node_id: options.nodeId ?? options.node_id,
+        under: options.under,
+        limit: options.limit
+      };
+      if (!searchOptions.query && !searchOptions.node_type && !searchOptions.node_id) {
         throw new HelperCliError("invalid_args", "At least one of --query, --node-type, or --node-id is required.");
       }
 
-      const { workspace, bundle } = await loadBundleContext(deps);
-      if (options.under) {
-        workspace.normalizePublicPath(options.under, { allowDirectory: true });
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
+      if (searchOptions.under) {
+        workspace.normalizePublicPath(searchOptions.under, { allowDirectory: true });
       }
 
-      writeJson(deps, await deps.searchGraph(workspace, bundle, options));
+      writeJson(deps, await deps.searchGraph(workspace, bundle, searchOptions));
     });
 
   program
     .command("create")
     .argument("<document_path>", "repo-relative .sdd document path")
-    .option("--version <version>", "document version")
+    .option("--version <version>", "assert the selected bundle's default document version")
     .action(async (documentPath: string, options: { version?: CreateDocumentArgs["version"] }) => {
-      const { workspace, bundle } = await loadBundleContext(deps);
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
 
       try {
@@ -1086,7 +1116,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .command("apply")
     .requiredOption("--request <file-or-stdin>", "JSON request source or '-' for stdin")
     .action(async (options: { request: string }) => {
-      const { workspace, bundle } = await loadBundleContext(deps);
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const rawRequest = await loadRequestText(deps, options.request);
       const assessmentContext = createRequestAssessmentContext(options.request, rawRequest);
       const request = parseJsonRequest<ApplyChangeSetArgs>(
@@ -1103,7 +1133,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .command("author")
     .requiredOption("--request <file-or-stdin>", "JSON request source or '-' for stdin")
     .action(async (options: { request: string }) => {
-      const { workspace, bundle } = await loadBundleContext(deps);
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const rawRequest = await loadRequestText(deps, options.request);
       const assessmentContext = createRequestAssessmentContext(options.request, rawRequest);
       const request = parseJsonRequest<ApplyAuthoringIntentArgs>(
@@ -1120,7 +1150,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .command("undo")
     .requiredOption("--request <file-or-stdin>", "JSON request source or '-' for stdin")
     .action(async (options: { request: string }) => {
-      const { workspace, bundle } = await loadBundleContext(deps);
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const rawRequest = await loadRequestText(deps, options.request);
       const assessmentContext = createRequestAssessmentContext(options.request, rawRequest);
       const request = parseJsonRequest<UndoChangeSetArgs>(
@@ -1137,7 +1167,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .argument("<document_path>", "repo-relative .sdd document path")
     .requiredOption("--profile <profile_id>", "profile id")
     .action(async (documentPath: string, options: { profile: ValidateDocumentArgs["profile_id"] }) => {
-      const { workspace, bundle } = await loadBundleContext(deps);
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
       const result = await deps.validateDocument(workspace, bundle, {
         path: normalizedPath,
@@ -1151,7 +1181,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .argument("<document_path>", "repo-relative .sdd document path")
     .requiredOption("--view <view_id>", "view id")
     .action(async (documentPath: string, options: { view: ProjectDocumentArgs["view_id"] }) => {
-      const { workspace, bundle } = await loadBundleContext(deps);
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
       const result = await deps.projectDocument(workspace, bundle, {
         path: normalizedPath,
@@ -1178,7 +1208,7 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
         backend?: RenderPreviewArgs["backend_id"];
       }
     ) => {
-      const { workspace, bundle } = await loadBundleContext(deps);
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
       const result = await deps.renderPreview(workspace, bundle, {
         path: normalizedPath,

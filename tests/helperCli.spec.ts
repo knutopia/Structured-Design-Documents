@@ -20,6 +20,16 @@ import { AuthoringMutationError } from "../src/authoring/mutations.js";
 import { AuthoringPreviewError } from "../src/authoring/preview.js";
 import { runHelperCli, type HelperCliDeps } from "../src/cli/helperProgram.js";
 import { createAuthoringWorkspace } from "../src/authoring/workspace.js";
+import type { DefaultsConfigRuntime } from "../src/config/index.js";
+
+function isolatedDefaults(): DefaultsConfigRuntime {
+  return {
+    getGlobalConfigPath: () => "/isolated/sdd/config.yaml",
+    read: vi.fn(async () => ({ version: "1" as const, defaults: { bundle_version: "0.1" } })),
+    set: vi.fn(),
+    unset: vi.fn()
+  };
+}
 
 function createRejectedChangeSet(path: string): ChangeSetResult {
   return {
@@ -74,6 +84,8 @@ function createContractResolutionBundle(
   ]
 ): Bundle {
   return {
+    rootDir: "/repo/bundle/v0.1",
+    manifestPath: "/repo/bundle/v0.1/manifest.yaml",
     manifest: {
       bundle_name: "sdd-text-spec-bundle",
       bundle_version: "0.1",
@@ -105,6 +117,7 @@ function createContractResolutionBundle(
       ]
     },
     syntax: {
+      document: { version_declaration: { default_effective_version: "0.1" } },
       lexical: {
         id_pattern: "^[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?$",
         identifier_pattern: "^[A-Za-z_][A-Za-z0-9_./:-]*$",
@@ -350,6 +363,7 @@ function createDeps(overrides: Partial<HelperCliDeps> = {}) {
     },
     findRepoRoot: vi.fn(async (startDir: string) => startDir),
     loadBundle: vi.fn(async () => createContractResolutionBundle()),
+    defaultsConfig: isolatedDefaults(),
     createWorkspace: createAuthoringWorkspace,
     inspectDocument: inspectDocumentMock,
     listDocuments: vi.fn(),
@@ -471,6 +485,7 @@ describe("sdd-helper CLI", () => {
         help_flag: "returns_help_stub",
         canonical_introspection_command: "sdd-helper capabilities"
       },
+      global_options: [expect.objectContaining({ flag: "--bundle", value_name: "manifest" })],
       conventions: {
         stdout_success: "exactly_one_json_payload",
         path_scope: "repo_relative_sdd_paths"
@@ -552,24 +567,24 @@ describe("sdd-helper CLI", () => {
         }),
         expect.objectContaining({
           name: "create",
-          invocation: "sdd-helper create <document_path> [--version <version>]",
+          invocation: "sdd-helper create <document_path> [--version <version>] [--bundle <manifest>]",
           subject_id: "helper.command.create",
           input_shape_id: "shared.shape.create_document_args",
           output_shape_id: "shared.shape.create_document_result",
           has_deep_introspection: true,
-          detail_modes: ["static"],
+          detail_modes: ["static", "bundle_resolved"],
           contract_purposes: ["request"],
           options: [
             {
               flag: "--version",
               required: false,
               value_name: "version",
-              description: "Document language version."
+              description: "Optional assertion of the selected bundle's default document version."
             }
           ],
           constraints: expect.arrayContaining([
             "Create always bootstraps an empty document skeleton.",
-            "Current implementation supports version 0.1."
+            "The selected bundle supplies the new document's language version."
           ])
         }),
         expect.objectContaining({
@@ -768,10 +783,10 @@ describe("sdd-helper CLI", () => {
       kind: "sdd-contract-subject-detail",
       subject: {
         subject_id: "helper.command.create",
-        detail_modes: ["static"],
+        detail_modes: ["static", "bundle_resolved"],
         contract_purposes: ["request"]
       },
-      invocation: "sdd-helper create <document_path> [--version <version>]",
+      invocation: "sdd-helper create <document_path> [--version <version>] [--bundle <manifest>]",
       input_shape: {
         shape_id: "shared.shape.create_document_args",
         schema: {
@@ -780,15 +795,12 @@ describe("sdd-helper CLI", () => {
             path: {
               type: "string"
             },
-            version: {
-              type: "string",
-              enum: ["0.1"]
-            }
+            version: { type: "string" }
           }
         }
       },
       constraints: [],
-      bindings: [],
+      bindings: [expect.objectContaining({ binding_id: "shared.binding.create_document.version" })],
       continuation: [
         {
           kind: "create_revision_is_bootstrap_continuation_surface"
@@ -962,7 +974,7 @@ describe("sdd-helper CLI", () => {
           expect.objectContaining({
             hint_id: "sdd.v0_1.node_id",
             accepted_pattern: "^[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?$",
-            source: "bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
+            source: "/repo/bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
           }),
           expect.objectContaining({
             hint_id: "sdd.v0_1.effect_atom",
@@ -2165,7 +2177,7 @@ describe("sdd-helper CLI", () => {
           relatedIds: expect.arrayContaining([
             "json_pointer:/intents/0/node/node_id",
             "field_path:intents[0].node.node_id",
-            "bundle_source:bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
+            "bundle_source:/repo/bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
           ])
         }
       ],
@@ -2230,7 +2242,7 @@ describe("sdd-helper CLI", () => {
           relatedIds: expect.arrayContaining([
             "json_pointer:/intents/0/node/edges/0/effect",
             "field_path:intents[0].node.edges[0].effect",
-            "bundle_source:bundle/v0.1/core/syntax.yaml#/atoms/effect_atom"
+            "bundle_source:/repo/bundle/v0.1/core/syntax.yaml#/atoms/effect_atom"
           ])
         }
       ],
@@ -2480,7 +2492,7 @@ describe("sdd-helper CLI", () => {
           relatedIds: expect.arrayContaining([
             "json_pointer:/operations/0/to",
             "field_path:operations[0].to",
-            "bundle_source:bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
+            "bundle_source:/repo/bundle/v0.1/core/syntax.yaml#/lexical/id_pattern"
           ])
         }
       ],
@@ -2531,7 +2543,7 @@ describe("sdd-helper CLI", () => {
           relatedIds: expect.arrayContaining([
             "json_pointer:/operations/0/effect",
             "field_path:operations[0].effect",
-            "bundle_source:bundle/v0.1/core/syntax.yaml#/atoms/effect_atom"
+            "bundle_source:/repo/bundle/v0.1/core/syntax.yaml#/atoms/effect_atom"
           ])
         }
       ]

@@ -2,6 +2,7 @@ import type { Bundle } from "../src/bundle/types.js";
 import type { CompiledGraph } from "../src/compiler/types.js";
 import { describe, expect, it, vi } from "vitest";
 import { createProgram, runCli, type CliDeps } from "../src/cli/program.js";
+import { DEFAULT_BUNDLE_VERSION } from "../src/cli/bundleResolution.js";
 import { createMockSyntaxConfig } from "./mockSyntaxConfig.js";
 
 const bundle: Bundle = {
@@ -304,7 +305,8 @@ function createDeps(overrides: Partial<CliDeps> = {}): {
       cwd: () => "/repo",
       defaultsConfig: {
         getGlobalConfigPath: () => "/user/sdd/config.yaml",
-        read: vi.fn(async () => undefined),
+        // These wrapper fixtures use a v0.1-only synthetic bundle.
+        read: vi.fn(async () => ({ version: "1", defaults: { bundle_version: "0.1" } })),
         set: vi.fn(async (filePath: string) => ({ changed: true, path: filePath })),
         unset: vi.fn(async (filePath: string) => ({ changed: true, path: filePath }))
       },
@@ -2193,7 +2195,7 @@ describe("CLI wrappers", () => {
     expect(help).toContain("Omit --decorators to resolve your user default, then the selected-bundle fallback.");
     expect(help).toContain("Bundle selection:");
     expect(help).toContain("--bundle <manifest> selects the bundle to target by the sdd command.");
-    expect(help).toContain("Omit it to use your saved bundle version, or v0.1 when no default is saved.");
+    expect(help).toContain(`Omit it to use your saved bundle version, or v${DEFAULT_BUNDLE_VERSION} when no default is saved.`);
     expect(help).toContain("Common flows:");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map");
     expect(help).toContain("sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all");

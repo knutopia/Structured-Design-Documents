@@ -3,6 +3,7 @@
 This file maps common authoring intents to the current `ChangeOperation` vocabulary in `src/authoring/contracts.ts`.
 
 These recipes are workflow guidance only for helper operation shape. The helper contract and the shared TypeScript types remain authoritative for operation fields. SDD language values inside examples, such as node types, relationship types, profile IDs, and view IDs, are illustrative placeholders; choose real SDD language values from the active bundle files.
+Use `<manifest>` established by the main skill's [Bundle Startup Procedure](../SKILL.md#bundle-startup-procedure) with every bundle-consuming helper command while applying a recipe.
 
 ## General Rules
 

@@ -7,6 +7,7 @@ import type {
   ContractSubjectId
 } from "./contracts.js";
 import { createApplyFormatCard, createAuthoringFormatCard } from "./authoringFormat.js";
+import { resolveBundleFieldReference } from "../bundle/bundleReferences.js";
 import { getContractSubjectDetail, selectContractSubjectDetailForPurpose } from "./contractMetadata.js";
 
 function expectSelector(binding: ContractBindingSpec, expectedSelector: string): void {
@@ -22,6 +23,16 @@ function resolveAllowedValues(
   bundle: Bundle
 ): ContractResolvedAllowedValue[] {
   switch (binding.bundle_source.artifact) {
+    case "syntax_yaml": {
+      const value = resolveBundleFieldReference(bundle, {
+        artifact: "syntax",
+        selector: binding.bundle_source.selector
+      });
+      if (typeof value !== "string" || value.length === 0) {
+        throw new Error(`Contract binding '${binding.binding_id}' expected a nonempty string at syntax selector '${binding.bundle_source.selector}'.`);
+      }
+      return [{ value }];
+    }
     case "manifest_profiles":
       expectSelector(binding, "profiles");
       return bundle.manifest.profiles.map((profile) => ({
@@ -89,7 +100,9 @@ export function getBundleResolvedContractSubjectDetail(
   detail.resolution = {
     mode: "bundle_resolved",
     bundle_name: bundle.manifest.bundle_name,
-    bundle_version: bundle.manifest.bundle_version
+    bundle_version: bundle.manifest.bundle_version,
+    manifest_path: bundle.manifestPath,
+    language_version: bundle.manifest.language_version
   };
   if (subjectId === "helper.command.author") {
     detail.authoring_format_card = createAuthoringFormatCard(bundle);

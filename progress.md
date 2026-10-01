@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-v0.1.1 release doc
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
@@ -26,6 +27,25 @@ z
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Wed 9-30
+
+- Updated tmp.sdd slightly
+- Simplified sdd-skill bundle awareness
+- Codex WSL integration broken after update
+
+## Tue 9-29
+
+- Bundle-awareness for Guided Addition, sdd-helper, TextMate generation, and sdd-skill
+
+## Mon 9-28
+
+- Tagged release v0.1.1
+- Created v0.2 bundle folder
+- Investigated publishing a schema
+- Updated bundle refs in AGENTS.md, package.json
+- Many detailed bundle reference updates
+- Planned bundle selection tooling updates
 
 ## Sun 9-27
 

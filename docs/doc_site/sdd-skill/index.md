@@ -8,7 +8,7 @@ The current SDD Skill is written for Codex. It has successfully been used with C
 
 For Codex, install it by copying [skills/sdd-skill](../../../skills/sdd-skill/) to `$CODEX_HOME/skills/sdd-skill`. A typical Codex location is `~/.codex/skills/sdd-skill`.
 
-After copying the folder, restart Codex so it discovers the skill. Then continue with the example prompts below.
+After copying the folder, restart Codex so it discovers the skill. Repository updates do not refresh an existing installation automatically; inspect local changes before copying a newer canonical source over an installed skill, then reload Codex. Continue with the example prompts below.
 
 ## Use Case: Start With An App Idea
 
@@ -181,7 +181,7 @@ Using $sdd-skill, show the information architecture.
 The agent, guided by the skill, then calls the `sdd show` command. You could also call the show command directly in a terminal, without using the skill:
 
 ```console
-bash:$ pnpm sdd show shop_sched_exploration.sdd --view ia_place_map --profile simple --detail compact --format png --out "shop_sched_exploration_IA_as_a.png"
+bash:$ pnpm sdd show shop_sched_exploration.sdd --bundle bundle/v0.1/manifest.yaml --view ia_place_map --profile simple --detail compact --format png --out "shop_sched_exploration_IA_as_a.png"
 
 Wrote /home/knut/projects/sdd/shop_sched_exploration_IA_as_a.png
 ```
@@ -216,12 +216,17 @@ Looking at the examples above,
 When an agent is using the skill and needs to understand helper request details, it can ask `sdd-helper` for a request-purpose contract to learn those details, instead of loading the full helper contract. This is useful when the agent only needs to compose the next helper request and does not need the full result schema.
 
 ```bash
-pnpm sdd-helper contract helper.command.create --purpose request
-pnpm sdd-helper contract helper.command.author --purpose request --resolve bundle
-pnpm sdd-helper contract helper.command.apply --purpose request --resolve bundle
-pnpm sdd-helper contract helper.command.undo --purpose request --resolve bundle
+pnpm sdd-helper contract helper.command.create --purpose request --resolve bundle
 ```
 
-The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. For first-pass `author` JSON, the agent should prefer the bundle-resolved request-purpose contract and read its `authoring_format_card`, which gives compact bundle-derived guidance for IDs, relationship tokens, events, effects, and raw SDD values.
+For a new document with no requested version, this initial request lets the helper choose. Retain its returned absolute `resolution.manifest_path` as `<manifest>` for later commands:
+
+```bash
+pnpm sdd-helper --bundle <manifest> contract helper.command.author --purpose request --resolve bundle
+pnpm sdd-helper --bundle <manifest> contract helper.command.apply --purpose request --resolve bundle
+pnpm sdd-helper --bundle <manifest> contract helper.command.undo --purpose request --resolve bundle
+```
+
+The supported request-purpose subjects are `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. The skill follows one [Bundle Startup Procedure](../../../skills/sdd-skill/SKILL.md#bundle-startup-procedure): an explicit manifest or requested shipped version takes precedence; otherwise an existing document uses a matching available bundle, and a new document uses the saved global bundle preference or built-in v0.2 fallback. The first resolved contract establishes the manifest; later contract requests supply detail when needed. Inspection and search can use the create contract for bundle identity without creating a document. Subsequent helper commands and `sdd show` receive the retained manifest, so validation and saved rendering use the same bundle. For first-pass `author` JSON, the agent reads the selected bundle's `authoring_format_card` for IDs, relationship tokens, events, effects, and raw SDD values.
 
 For the technical workflow behind the examples, see the canonical repo skill bundle in [sdd-skill](../../../skills/sdd-skill/): the core [SKILL.md](../../../skills/sdd-skill/SKILL.md), [workflow.md](../../../skills/sdd-skill/references/workflow.md), [change-set-recipes.md](../../../skills/sdd-skill/references/change-set-recipes.md), and [current-helper-gaps.md](../../../skills/sdd-skill/references/current-helper-gaps.md). See the [SDD Helper Guide](../sdd-helper/) about the helper used by the skill.

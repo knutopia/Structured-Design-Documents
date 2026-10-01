@@ -11,9 +11,11 @@ import {
 import { runCli, type CliDeps } from "../src/cli/program.js";
 
 let bundle: Bundle;
+let bundleV02: Bundle;
 
 beforeAll(async () => {
   bundle = await loadBundle(path.resolve("bundle/v0.1/manifest.yaml"));
+  bundleV02 = await loadBundle(path.resolve("bundle/v0.2/manifest.yaml"));
 });
 
 interface MemoryDefaultsOptions {
@@ -106,7 +108,7 @@ function createCliDeps(defaultsConfig: DefaultsConfigRuntime, cwd = "/repo/subdi
     deps: {
       cwd: () => cwd,
       defaultsConfig,
-      loadBundle: vi.fn(async () => bundle),
+      loadBundle: vi.fn(async (manifestPath: string) => manifestPath.includes("/bundle/v0.2/") ? bundleV02 : bundle),
       readSourceInput: vi.fn(async () => ({ path: "/repo/example.sdd", text: "PLACE home" })),
       compileSource: vi.fn(() => ({
         diagnostics: [],
@@ -333,7 +335,9 @@ describe("persistent defaults CLI resolution", () => {
       show_node_id: true
     });
     customBundle.manifest.tool_defaults.node_decorator_mode_id = "orientation";
-    const context = createCliDeps(createMemoryDefaults().runtime);
+    const context = createCliDeps(createMemoryDefaults({
+      global: { version: "1", defaults: { bundle_version: "0.1" } }
+    }).runtime);
 
     const result = await runCli([
       "node", "sdd", "show", "example.sdd", "--view", "ia_place_map"
@@ -372,7 +376,7 @@ describe("persistent defaults CLI resolution", () => {
     expect(context.validateGraph).not.toHaveBeenCalled();
     expect(context.stderr.join("")).toContain("Unknown value 'unknown'");
     expect(context.stderr.join("")).toContain("/user/config/sdd/config.yaml");
-    expect(context.stderr.join("")).toContain(bundle.manifestPath);
+    expect(context.stderr.join("")).toContain(bundleV02.manifestPath);
   });
 
   it("reports an invalid global detail without falling through to the bundle", async () => {
@@ -456,6 +460,20 @@ describe("persistent defaults CLI resolution", () => {
 });
 
 describe("sdd defaults commands", () => {
+  it("derives bundle help wording from the built-in fallback", async () => {
+    const commandContext = createCliDeps(createMemoryDefaults().runtime);
+    expect((await runCli(["node", "sdd", "add", "--help"], commandContext.deps)).exitCode).toBe(0);
+    expect(commandContext.stdout.join("")).toMatch(
+      /bundle manifest path; omission uses the saved bundle\s+version or built-in default \(0\.2\)/
+    );
+
+    const rootContext = createCliDeps(createMemoryDefaults().runtime);
+    expect((await runCli(["node", "sdd", "--help"], rootContext.deps)).exitCode).toBe(0);
+    const rootHelp = rootContext.stdout.join("");
+    expect(rootHelp).toContain("or v0.2 when no default is saved.");
+    expect(rootHelp).not.toContain("or v0.1 when no default is saved.");
+  });
+
   it("sets, shows, and unsets the persistent bundle version", async () => {
     const memory = createMemoryDefaults({
       global: { version: "1", defaults: { validation_profile_id: "strict" } }
@@ -502,7 +520,7 @@ describe("sdd defaults commands", () => {
       const context = createCliDeps(createMemoryDefaults().runtime);
       expect((await runCli(["node", "sdd", "defaults", ...suffix], context.deps)).exitCode).toBe(0);
       expect(context.stdout.join("")).toBe(
-        "Bundle: 0.1 (built-in default)\nProfile: simple (bundle fallback)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
+        "Bundle: 0.2 (built-in default)\nProfile: simple (bundle fallback)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
       );
     }
 
@@ -511,7 +529,7 @@ describe("sdd defaults commands", () => {
     }).runtime);
     expect((await runCli(["node", "sdd", "defaults"], globalContext.deps)).exitCode).toBe(0);
     expect(globalContext.stdout.join("")).toBe(
-      "Bundle: 0.1 (built-in default)\nProfile: permissive (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
+      "Bundle: 0.2 (built-in default)\nProfile: permissive (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
     );
   });
 
@@ -534,7 +552,7 @@ describe("sdd defaults commands", () => {
     const show = createCliDeps(memory.runtime);
     expect((await runCli(["node", "sdd", "defaults", "show"], show.deps)).exitCode).toBe(0);
     expect(show.stdout.join("")).toBe(
-      "Bundle: 0.1 (built-in default)\nProfile: strict (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
+      "Bundle: 0.2 (built-in default)\nProfile: strict (user default)\nDetail: compact (bundle fallback)\nDecorators: none (bundle fallback)\n"
     );
 
     const unset = createCliDeps(memory.runtime);

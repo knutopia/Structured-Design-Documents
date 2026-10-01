@@ -77,6 +77,8 @@ import {
   resolveCliValidationProfile
 } from "./profileResolution.js";
 import {
+  BUNDLE_OPTION_DESCRIPTION,
+  DEFAULT_BUNDLE_VERSION,
   loadBundleVersion,
   loadSelectedBundle
 } from "./bundleResolution.js";
@@ -1149,21 +1151,21 @@ function globalHelpText(): string {
     "",
     "Bundle selection:",
     "  --bundle <manifest> selects the bundle to target by the sdd command.",
-    "  Omit it to use your saved bundle version, or v0.1 when no default is saved.",
+    `  Omit it to use your saved bundle version, or v${DEFAULT_BUNDLE_VERSION} when no default is saved.`,
     "  Set the saved version with `sdd defaults set bundle 0.1`.",
     "",
     "Common flows:",
-    "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
+    "  sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --bundle bundle/v0.1/manifest.yaml",
     "  sdd defaults show",
-    "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict",
-    "  sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple",
-    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
-    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all",
-    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg",
-    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg",
-    "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
-    "  sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
-    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
+    "  sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile strict --bundle bundle/v0.1/manifest.yaml",
+    "  sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple --bundle bundle/v0.1/manifest.yaml",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --bundle bundle/v0.1/manifest.yaml",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --bundle bundle/v0.1/manifest.yaml",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --out ./journey.svg --bundle bundle/v0.1/manifest.yaml",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg --bundle bundle/v0.1/manifest.yaml",
+    "  sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg --bundle bundle/v0.1/manifest.yaml",
+    "  sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg --bundle bundle/v0.1/manifest.yaml",
+    "  sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png --bundle bundle/v0.1/manifest.yaml",
     "",
     "Notes:",
     "  `show` defaults to SVG preview output. Use `--view all` to save every applicable view after render-detail filtering. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.",
@@ -1200,11 +1202,11 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .description("Guide a semantic addition, review a dry run, and Save or Cancel without constructing source text in the CLI.")
     .argument("<document_path>", "repo-owned .sdd path (created on Save if absent)")
     .option("--node <node_id>", "exact anchor node id")
-    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
+    .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .addHelpText("after", examplesBlock([
       "sdd add tmp_app.sdd",
-      "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001"
+      "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --bundle bundle/v0.1/manifest.yaml",
+      "sdd add bundle/v0.1/examples/outcome_to_ia_trace.sdd --node O-001 --bundle bundle/v0.1/manifest.yaml"
     ]))
     .action(async (documentPath, options) => {
       setExitCode(await runGuidedAdditionCommand(deps, documentPath, options));
@@ -1215,12 +1217,12 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Compile a source .sdd file to canonical graph JSON")
     .description("Compile a source .sdd file to canonical graph JSON.")
     .argument("<input>", "source .sdd file")
-    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
+    .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--out <file>", "write compiled JSON to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
-      "sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.json --diagnostics json"
+      "sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --bundle bundle/v0.1/manifest.yaml",
+      "sdd compile bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.json --diagnostics json --bundle bundle/v0.1/manifest.yaml"
     ]))
     .action(async (inputPath, options) => {
       setExitCode(await runCompile(deps, inputPath, options));
@@ -1266,13 +1268,13 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Compile and validate a source .sdd file")
     .description("Compile and validate a source .sdd file against a validation profile.")
     .argument("<input>", "source .sdd file")
-    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
+    .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
-      "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permissive",
-      "sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple"
+      "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --bundle bundle/v0.1/manifest.yaml",
+      "sdd validate bundle/v0.1/examples/outcome_to_ia_trace.sdd --profile permissive --bundle bundle/v0.1/manifest.yaml",
+      "sdd validate real_world_exploration/billSage_example/billSage_simple_structure.sdd --profile simple --bundle bundle/v0.1/manifest.yaml"
     ]))
     .action(async (inputPath, options) => {
       setExitCode(await runValidate(deps, inputPath, options));
@@ -1285,18 +1287,18 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id")
     .requiredOption("--format <format>", "internal text render format (dot or mermaid)")
-    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
+    .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--out <file>", "write rendered output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
-      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot",
-      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid --out ./outcome.mmd",
-      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid --out ./journey.mmd",
-      "sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --format dot --out ./blueprint.dot",
-      "sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot",
-      "sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot"
+      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format dot --bundle bundle/v0.1/manifest.yaml",
+      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format mermaid --out ./outcome.mmd --bundle bundle/v0.1/manifest.yaml",
+      "sdd render bundle/v0.1/examples/outcome_to_ia_trace.sdd --view journey_map --format mermaid --out ./journey.mmd --bundle bundle/v0.1/manifest.yaml",
+      "sdd render bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --format dot --out ./blueprint.dot --bundle bundle/v0.1/manifest.yaml",
+      "sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot --bundle bundle/v0.1/manifest.yaml",
+      "sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot --bundle bundle/v0.1/manifest.yaml"
     ]))
     .action(async (inputPath, options) => {
       const result = await runRenderText(deps, inputPath, options);
@@ -1308,7 +1310,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Internal/debug: render the ia_place_map view as DOT")
     .description("Internal convenience wrapper for `sdd render --view ia_place_map --format dot`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
-    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
+    .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--out <file>", "write internal DOT output to a file instead of stdout")
@@ -1316,9 +1318,9 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--png-out <file>", "write PNG output to an explicit file path")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
-      "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --png",
-      "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot --png-out ./outcome.png"
+      "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --bundle bundle/v0.1/manifest.yaml",
+      "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --png --bundle bundle/v0.1/manifest.yaml",
+      "sdd dot bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.dot --png-out ./outcome.png --bundle bundle/v0.1/manifest.yaml"
     ]))
     .action(async (inputPath, options) => {
       setExitCode(await runDotCommand(deps, inputPath, options));
@@ -1329,14 +1331,14 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Internal/debug: render the ia_place_map view as Mermaid")
     .description("Internal convenience wrapper for `sdd render --view ia_place_map --format mermaid`. Use `sdd show` for supported preview output.")
     .argument("<input>", "source .sdd file")
-    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
+    .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--out <file>", "write internal Mermaid output to a file instead of stdout")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
-      "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd",
-      "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd"
+      "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --bundle bundle/v0.1/manifest.yaml",
+      "sdd mmd bundle/v0.1/examples/outcome_to_ia_trace.sdd --out ./outcome.mmd --bundle bundle/v0.1/manifest.yaml"
     ]))
     .action(async (inputPath, options) => {
       const result = await runRenderText(deps, inputPath, {
@@ -1350,10 +1352,10 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
   program
     .command("show")
     .summary("Compile, validate, and produce preview artifacts for one or all applicable views")
-    .description("Preferred preview command for renderable views. Use `--view all` to generate every operational view with visible content after applying render detail. In v0.1 it defaults to SVG output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.")
+    .description("Preferred preview command for renderable views. Use `--view all` to generate every operational view with visible content after applying render detail. SVG is the default output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.")
     .argument("<input>", "source .sdd file")
     .requiredOption("--view <view>", "view id, or all for every applicable view")
-    .option("--bundle <manifest>", "bundle manifest path; omission uses the saved bundle version or 0.1")
+    .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
     .option("--decorators <mode>", "node decorator mode override; omission uses the resolved user/bundle default")
@@ -1364,18 +1366,18 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .option("--force", "write preview output even when error-severity diagnostics are present")
     .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
     .addHelpText("after", examplesBlock([
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --decorators type,id",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./outcome.svg",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --backend legacy_graphviz_preview --out ./outcome-opportunity-legacy.svg",
-      "sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg",
-      "sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --backend legacy_graphviz_preview --out ./blueprint-legacy.svg",
-      "sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg",
-      "sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out ./ui-contracts-legacy.svg",
-      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --decorators type,id --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./outcome.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --backend legacy_graphviz_preview --out ./outcome-opportunity-legacy.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --backend legacy_graphviz_preview --out ./blueprint-legacy.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --out ./ui-contracts.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --backend legacy_graphviz_preview --out ./ui-contracts-legacy.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png --bundle bundle/v0.1/manifest.yaml",
       "Some bundle-defined views may appear before they become renderable in the CLI."
     ]))
     .action(async (inputPath, options) => {

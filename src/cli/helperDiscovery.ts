@@ -79,7 +79,7 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
   },
   {
     subject_id: "helper.command.create",
-    invocation: "sdd-helper create <document_path> [--version <version>]",
+    invocation: "sdd-helper create <document_path> [--version <version>] [--bundle <manifest>]",
     arguments: [
       {
         name: "document_path",
@@ -92,13 +92,13 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
         flag: "--version",
         required: false,
         value_name: "version",
-        description: "Document language version."
+        description: "Optional assertion of the selected bundle's default document version."
       }
     ],
     result_kind: "sdd-create-document",
     constraints: [
       "Create always bootstraps an empty document skeleton.",
-      "Current implementation supports version 0.1."
+      "The selected bundle supplies the new document's language version."
     ]
   },
   {
@@ -395,6 +395,12 @@ export function createHelperCapabilities(): HelperCapabilitiesResult {
       help_flag: "returns_help_stub",
       canonical_introspection_command: "sdd-helper capabilities"
     },
+    global_options: [{
+      flag: "--bundle",
+      required: false,
+      value_name: "manifest",
+      description: "Select a manifest for bundle-backed commands. Omission uses the saved global bundle version, then the built-in fallback; static discovery and git commands do not load a bundle."
+    }],
     conventions: {
       stdout_success: "exactly_one_json_payload",
       helper_errors: "sdd-helper-error_non_zero_exit",

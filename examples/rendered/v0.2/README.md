@@ -1,0 +1,77 @@
+# Rendered Example Corpus
+
+This directory is generated from the canonical bundle examples and committed as a reviewer-friendly reference corpus.
+
+Regenerate it with:
+
+```bash
+TMPDIR=/tmp pnpm run generate:rendered-examples
+```
+
+Source manifest: `bundle/v0.2/manifest.yaml`
+
+Curated view/example pairs:
+
+- (None yet - v0.2 examples will go here. LLM: Replace this line with the first v0.2 canonical example when it becomes available.)
+
+Render details generated in each pair directory: `compact_detail`, `detailed_detail`.
+
+Each pair directory contains the source `.sdd` at the pair root plus suffixed per-detail subfolders with internal `.dot` and `.mmd` text artifacts alongside `.svg` and `.png` preview outputs.
+Unsuffixed `.svg` and `.png` files are the default preview backend for that view/detail when that backend emits artifacts. When a view keeps parallel preview backends, preserved non-default preview artifacts are committed as backend-suffixed siblings.
+All corpus inputs are validated with the bundle-derived `simple` profile before rendering.
+`compact_detail` omits optional overlays for readability; `detailed_detail` keeps the fuller render detail.
+
+`ia_place_map` visual review checklist:
+
+- top-level items read left-to-right with clean vertical alignment
+- no headers, labels, or routed edges sit visually above the top-level nodes
+- mixed top-level `Place` and `Area` ordering follows source order
+- same-scope follower places align at one indent level under the earliest preceding hub that navigates to them
+- single-child contained places stay directly below the owner; branched child or follower scopes reserve a left connector trunk
+- `compact_detail` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations
+- only forward local structure connectors are drawn, using direct-vertical or shared-trunk routes
+
+`ui_contracts` visual review checklist:
+
+- Component hierarchy and local parent/child scopes appear in both detail settings
+- ViewState and fallback State sequences read horizontally inside intrinsic-width local scopes
+- single-source contract references, hierarchy locators and native container title bars remain readable
+- detailed Referenced targets use source-ordered rows across the width set by other diagram sections
+- default unsuffixed `.svg` and `.png` artifacts come from the staged renderer, while legacy Graphviz siblings remain available when committed
+
+`service_blueprint` visual review checklist:
+
+- staged unsuffixed `.svg` and `.png` artifacts come from the fixed-grid staged renderer with service_blueprint-specific routed connectors
+- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed grid before any edge routing runs
+- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show connectors immediately after edge-side selection, before obstacle swerves or spacing refinement
+- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement
+- customer, frontstage, backstage, support, system, and policy lanes remain legible in semantic top-to-bottom order
+- customer chronology reads left-to-right, `DataEntity` and `Policy` nodes remain visually secondary, band-aligned support nodes in the `system` and `policy` rows, and connector labels remain intentionally absent until a later routing step
+- legacy Graphviz preview siblings remain committed for side-by-side comparison
+
+`scenario_flow` visual review checklist:
+
+- staged unsuffixed `.svg` and `.png` artifacts come from the custom staged scenario-flow renderer
+- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the lane grid before any edge routing runs
+- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show connectors immediately after edge-side selection, before obstacle swerves or spacing refinement
+- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show obstacle-aware provisional connector routes and gutter occupancy before final spacing refinement
+- legacy Graphviz preview siblings remain committed for side-by-side comparison
+
+`outcome_opportunity_map` visual review checklist:
+
+- staged unsuffixed `.svg` and `.png` artifacts come from the custom outcome-opportunity staged renderer
+- columns stay fixed left-to-right as Initiatives, Opportunities, Outcomes, and Metrics
+- outcome bands anchor related opportunities, initiatives, and metrics without duplicating shared nodes
+- additional `.pre_routing.svg` and `.pre_routing.png` siblings capture the fixed column and outcome-band grid before semantic edges are drawn
+- additional `.routing_step_2_edges.svg` and `.routing_step_2_edges.png` siblings show endpoint-side selection and initial connector templates
+- additional `.routing_step_3_gutters.svg` and `.routing_step_3_gutters.png` siblings show gutter-aware provisional routes before final expansion and label placement
+- legacy Graphviz preview siblings remain committed for side-by-side comparison
+
+`journey_map` visual review checklist:
+
+- staged unsuffixed `.svg` and `.png` artifacts use source-ordered Stage/Step placement and dedicated orthogonal `PRECEDES` routing
+- detailed detail shows resolved opportunity badges while compact detail remains title-focused
+- explicit `.legacy_graphviz_preview.svg` and `.legacy_graphviz_preview.png` siblings preserve the Graphviz comparison path
+- focused renderer-stage goldens, rather than nominal corpus debug siblings, prove meaningful pre-routing, step-2, step-3, final, and diagnostic behavior
+- residual perpendicular crossings use deterministic continuity bridges and emit `renderer.routing.journey_map_unavoidable_crossing` warnings
+- dense topologies can remain difficult to trace, and global straight-horizontal connector simplification remains deferred

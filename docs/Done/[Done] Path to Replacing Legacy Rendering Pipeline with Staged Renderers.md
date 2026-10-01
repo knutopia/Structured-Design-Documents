@@ -1,4 +1,4 @@
-# Path to Replacing Legacy Rendering Pipeline with Staged Renderers
+# [Done] Path to Replacing Legacy Rendering Pipeline with Staged Renderers
 
 **KG:**
 We he have "old" renderers that output mermaid and DOT, and we have newer "staged" renderers that output custom-formatted SVG. All but one diagram types are supported by staged renderers. What would it take to entirely deprecate the "old" renderers and to just make the staged renderers the normal rendering pipeline?

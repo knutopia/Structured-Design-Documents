@@ -19,6 +19,37 @@ describe("authoring contract resolution", () => {
     bundle = await loadBundle(manifestPath);
   });
 
+  it("resolves create version from syntax and preserves static metadata across bundles", async () => {
+    const staticBefore = getContractSubjectDetail("helper.command.create");
+    const v02 = await loadBundle(path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
+    for (const current of [bundle, v02]) {
+      const resolved = getBundleResolvedContractSubjectDetailForPurpose("helper.command.create", current, "request");
+      expect(resolved?.resolution).toMatchObject({
+        manifest_path: current.manifestPath,
+        language_version: current.manifest.language_version
+      });
+      expect(resolved?.bindings).toMatchObject([{
+        binding_id: "shared.binding.create_document.version",
+        resolved_values: [{ value: current.syntax.document.version_declaration.default_effective_version }]
+      }]);
+      expect(resolved?.input_shape).toEqual(staticBefore?.input_shape);
+    }
+    expect(getContractSubjectDetail("helper.command.create")).toEqual(staticBefore);
+  });
+
+  it("reflects changed bundle profile, detail, and view ids without changing the original", () => {
+    const changed = structuredClone(bundle);
+    changed.manifest.profiles[0]!.id = "draft_test";
+    changed.manifest.render_details[0]!.id = "quiet_test";
+    changed.views.views[0]!.id = "map_test";
+    const resolved = getBundleResolvedContractSubjectDetail("helper.command.preview", changed);
+    expect(resolved?.bindings.map((binding) => binding.resolved_values?.[0]?.value)).toEqual([
+      "map_test", "draft_test", "quiet_test"
+    ]);
+    const original = getBundleResolvedContractSubjectDetail("helper.command.preview", bundle);
+    expect(original?.bindings[0]?.resolved_values?.[0]?.value).not.toBe("map_test");
+  });
+
   it("resolves preview bindings while preserving structural schemas", () => {
     const staticDetail = getContractSubjectDetail("helper.command.preview");
     const resolvedDetail = getBundleResolvedContractSubjectDetail("helper.command.preview", bundle);
@@ -30,7 +61,9 @@ describe("authoring contract resolution", () => {
     expect(resolvedDetail?.resolution).toEqual({
       mode: "bundle_resolved",
       bundle_name: bundle.manifest.bundle_name,
-      bundle_version: bundle.manifest.bundle_version
+      bundle_version: bundle.manifest.bundle_version,
+      manifest_path: bundle.manifestPath,
+      language_version: bundle.manifest.language_version
     });
 
     const resolvedViewBinding = resolvedDetail?.bindings.find(
@@ -91,7 +124,9 @@ describe("authoring contract resolution", () => {
     expect(requestDetail?.resolution).toEqual({
       mode: "bundle_resolved",
       bundle_name: bundle.manifest.bundle_name,
-      bundle_version: bundle.manifest.bundle_version
+      bundle_version: bundle.manifest.bundle_version,
+      manifest_path: bundle.manifestPath,
+      language_version: bundle.manifest.language_version
     });
     expect(requestDetail?.input_shape?.shape_id).toBe("shared.shape.apply_authoring_intent_args");
     expect(requestDetail).not.toHaveProperty("output_shape");
@@ -111,7 +146,9 @@ describe("authoring contract resolution", () => {
     expect(requestDetail?.resolution).toEqual({
       mode: "bundle_resolved",
       bundle_name: bundle.manifest.bundle_name,
-      bundle_version: bundle.manifest.bundle_version
+      bundle_version: bundle.manifest.bundle_version,
+      manifest_path: bundle.manifestPath,
+      language_version: bundle.manifest.language_version
     });
     expect(requestDetail?.input_shape?.shape_id).toBe("shared.shape.apply_change_set_args");
     expect(requestDetail?.request_body?.top_level_shape).toBe("ApplyChangeSetArgs");
@@ -181,7 +218,9 @@ describe("authoring contract resolution", () => {
     expect(requestDetail?.resolution).toEqual({
       mode: "bundle_resolved",
       bundle_name: bundle.manifest.bundle_name,
-      bundle_version: bundle.manifest.bundle_version
+      bundle_version: bundle.manifest.bundle_version,
+      manifest_path: bundle.manifestPath,
+      language_version: bundle.manifest.language_version
     });
     expect(requestDetail?.subject.detail_modes).toEqual(["static", "bundle_resolved"]);
     expect(requestDetail?.input_shape?.shape_id).toBe("shared.shape.undo_change_set_args");

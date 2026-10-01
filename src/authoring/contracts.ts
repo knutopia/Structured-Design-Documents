@@ -354,7 +354,7 @@ export interface SearchGraphResult {
 
 export interface CreateDocumentArgs {
   path: DocumentPath;
-  version?: "0.1";
+  version?: string;
 }
 
 export interface CreateDocumentResult {
@@ -591,6 +591,7 @@ export interface HelperCapabilitiesResult {
     help_flag: "returns_help_stub";
     canonical_introspection_command: "sdd-helper capabilities";
   };
+  global_options: HelperCapabilitiesResultCommand["options"];
   conventions: {
     stdout_success: "exactly_one_json_payload";
     helper_errors: "sdd-helper-error_non_zero_exit";
@@ -669,6 +670,8 @@ export interface ContractSubjectDetail {
     mode: ContractResolutionMode;
     bundle_name?: string;
     bundle_version?: string;
+    manifest_path?: string;
+    language_version?: string;
     unresolved_binding_ids?: ContractBindingId[];
   };
 }
@@ -720,7 +723,7 @@ export interface ContractBindingSpec {
   applies_to_json_pointer: string;
   kind: "bundle_value_set";
   bundle_source: {
-    artifact: "manifest_profiles" | "manifest_render_details" | "views_yaml" | "vocab_node_types" | "vocab_relationship_types";
+    artifact: "manifest_profiles" | "manifest_render_details" | "views_yaml" | "vocab_node_types" | "vocab_relationship_types" | "syntax_yaml";
     selector: string;
   };
   static_behavior: "reference_only";

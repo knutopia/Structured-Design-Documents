@@ -1,3 +1,4 @@
+import path from "node:path";
 import type { Bundle, SyntaxChoiceAlternative } from "../bundle/types.js";
 import type { Diagnostic } from "../types.js";
 import type {
@@ -10,15 +11,11 @@ const APPLY_AUTHORING_INTENT_SHAPE: ContractShapeId = "shared.shape.apply_author
 const APPLY_CHANGE_SET_SHAPE: ContractShapeId = "shared.shape.apply_change_set_args";
 
 function syntaxDocumentSource(bundle: Bundle): string {
-  const languageVersion = bundle.manifest.language_version ?? "0.1";
-  const syntaxPath = bundle.manifest.core?.syntax ?? "core/syntax.yaml";
-  return `bundle/v${languageVersion}/${syntaxPath}`;
+  return path.resolve(bundle.rootDir, bundle.manifest.core.syntax);
 }
 
 function vocabDocumentSource(bundle: Bundle): string {
-  const languageVersion = bundle.manifest.language_version ?? "0.1";
-  const vocabPath = bundle.manifest.core?.vocab ?? "core/vocab.yaml";
-  return `bundle/v${languageVersion}/${vocabPath}`;
+  return path.resolve(bundle.rootDir, bundle.manifest.core.vocab);
 }
 
 function syntaxSource(bundle: Bundle, fragment: string): string {
