@@ -16,28 +16,7 @@ When you suspect the helper surface may have changed, use `<helper> capabilities
 
 The result is the canonical JSON command manifest for the helper.
 
-Use deep helper introspection only when the current task needs it:
-
-`<helper> contract helper.command.author`
-`<helper> contract helper.command.create --purpose request --resolve bundle`
-`<helper> --bundle <manifest> contract helper.command.author --purpose request --resolve bundle`
-`<helper> --bundle <manifest> contract helper.command.apply --purpose request --resolve bundle`
-`<helper> --bundle <manifest> contract helper.command.undo --purpose request --resolve bundle`
-`<helper> --bundle <manifest> contract helper.command.preview --resolve bundle`
-
 Treat `capabilities` as the thin orientation surface and `contract` as the deep contract surface.
-Request-purpose detail is a lossy request-composition view for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. Use it when composing request arguments or JSON and the full result schema is unnecessary. Before composing the first `author` request in a task, prefer the request-purpose resolved author contract and read its `authoring_format_card`; it gives the compact bundle-derived JSON formatting details for IDs and raw event/effect atoms without requiring a full `syntax.yaml` read or the full author result schema.
-
-## 1a. Select And Pin The Bundle
-
-Use one selected manifest through the whole authoring session:
-
-1. If the user supplied a manifest, use it. If they specified a shipped language version, find and verify that version's manifest in this repository. For an existing document whose declaration is known, select its matching available bundle explicitly. A document header does not switch bundles or authorize rewriting the declaration; resolve a mismatch before mutation.
-2. For a new document without a requested version, let the helper use the saved global bundle preference or built-in fallback on the first bundle-resolved contract request. For an existing document, request a bundle-resolved contract relevant to the intended operation before `inspect` or mutation. If a manifest is already known, pass it on this first request too.
-3. Read `resolution.manifest_path` and `resolution.language_version` from that contract. Treat `manifest_path` as an absolute local path. Pass it as `--bundle <manifest>` on every later bundle-consuming helper command and on `sdd show`. This pins the selection against later preference changes.
-4. Follow the loaded manifest's relative references when reading syntax, vocabulary, endpoint rules, authoring metadata, profiles, and views. If that manifest is intentionally edited, refresh contract discovery and rerun the relevant dry run before continuing.
-
-For example, a new-document session may begin with `<helper> contract helper.command.create --purpose request --resolve bundle`, then use the returned manifest for `<helper> --bundle <manifest> create <document_path>`. The optional `create --version` is an assertion of the selected bundle's default document version, not a bundle selector. For mixed-version search, select a bundle explicitly, use `--under` to narrow its scope, and repeat with another manifest when needed. Static `capabilities`, static `contract`, and git commands do not load a bundle.
 
 ## 2. Choose The Task Kind
 
@@ -46,15 +25,36 @@ Start by classifying the request as one of:
 - create a new document
 - edit an existing document
 - read, validate, project, or render an existing document
+- search for an existing document or node
 - diagnose helper failure
-- use helper git commands
+- use a command that does not consume a bundle, such as static discovery or helper git commands
 
+After classification, follow the main skill's [Bundle Startup Procedure](../SKILL.md#bundle-startup-procedure) for tasks that consume a bundle.
 Use the matching branch below instead of forcing every request through one linear search/inspect path.
+
+### Contract selection
+
+Reuse the bundle-resolved contract needed for the next operation; one request can establish the manifest and supply operation detail. Request-purpose detail is a lossy request-composition view for `helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`. Use `--purpose request` only for those subjects when the full result schema is unnecessary.
+
+When the immediate operation has no bundle-resolved contract (including `inspect` or `search`), use the create contract to obtain bundle identity. Inspecting this contract does not create a document:
+
+```bash
+<helper> contract helper.command.create --purpose request --resolve bundle
+```
+
+This startup example intentionally lets the helper choose. Add `--bundle <initial_manifest>` when the initial selection is known. After startup, later requests using `--resolve bundle` receive `--bundle <manifest>`:
+
+```bash
+<helper> --bundle <manifest> contract helper.command.author --purpose request --resolve bundle
+<helper> --bundle <manifest> contract helper.command.apply --purpose request --resolve bundle
+<helper> --bundle <manifest> contract helper.command.undo --purpose request --resolve bundle
+<helper> --bundle <manifest> contract helper.command.preview --resolve bundle
+```
 
 ## 3. Targeted Bundle Reading And Language Authority
 
 Use helper `capabilities` and helper `contract` for helper mechanics: command availability, request shape, result shape, request transport, continuation semantics, and helper constraints. Use `contract <subject_id> --purpose request` when `helper.command.create`, `helper.command.author`, `helper.command.apply`, or `helper.command.undo` only needs request-composition guidance. Use the active bundle files for SDD language semantics: source syntax, node and relationship vocabulary, relationship endpoint validity, projection behavior, and profile behavior.
-For routine author request formatting, use `contract helper.command.author --purpose request --resolve bundle` with the pinned manifest and read its `authoring_format_card` first. Read the syntax file referenced by that manifest only when the card is absent or the task needs deeper language semantics than request formatting.
+For routine author request formatting, read `authoring_format_card` from the resolved author contract before composing the first request; fetch it only if not already available. It gives compact bundle-derived JSON guidance for IDs and raw event/effect atoms. Read the syntax file referenced by that manifest when the card is absent or the task needs deeper language semantics than request formatting.
 
 For implementation audits of bundle authority, the parser path loads bundle data with `loadBundle(...)` and consumes syntax through `createParserSyntaxRuntime(bundle)`. This is evidence of the runtime path, not a normal authoring fallback for helper request shapes.
 
@@ -76,6 +76,14 @@ Projection checks and rendered views are checks and presentation boundaries; the
 Examples, snapshots, and goldens are downstream evidence only. Do not inspect `.sdd` examples to infer language rules; use them only for comparison, regression investigation, or user-requested reuse after bundle authority is known.
 
 `contract --resolve bundle` expands active helper-exposed values such as `view_id`, validation `profile_id`, and render `detail_id` for commands that declare those bundle bindings. It does not replace the bundle files as the general authority for node or relationship vocabulary, relationship endpoint rules, source syntax, or view behavior.
+
+### Bundle selection edge cases
+
+- **Unknown existing declaration:** use available read-only access to establish it when needed. Resolve any remaining ambiguity about the intended bundle before mutation; do not rewrite the header to make a default selection succeed.
+- **Conflicting explicit selection:** surface a mismatch with the document declaration instead of silently replacing the user's chosen manifest.
+- **Mixed-version search:** run separate searches with explicit bundle selections and suitable `--under` scopes. Each pass uses one bundle.
+- **Intentional bundle changes:** refresh the relevant contract with the intended manifest and rerun the applicable dry run. Retaining a path does not freeze the file's contents.
+- **Creation assertion:** `create --version` asserts the selected bundle's default creation version; it does not select a bundle.
 
 ## 4. Read Outcome Assessment
 
@@ -450,10 +458,7 @@ Use `contract` in static mode when:
 - checking helper constraints that are not safely inferable from top-level discovery
 - checking continuation rules such as bootstrap revision handling or dry-run versus committed continuation surfaces
 
-Use `contract --resolve bundle` only when:
-
-- the task needs active helper-exposed values for `view_id`, `profile_id`, or `detail_id`
-- the relevant values are not already known from the user request or current workflow context
+The initial bundle resolution is required by the main skill's startup procedure. Later introspection is conditional: use a static contract for helper mechanics, or a bundle-resolved contract with `--bundle <manifest>` when request composition, allowed values, or formatting guidance needs active bundle detail.
 
 Use docs to explain a surface or investigate a mismatch. Use implementation code for implementation debugging, not normal helper request-shape recovery. Do not inspect TypeScript contracts, tests, or repo `.sdd` examples to recover normal helper request-shape knowledge when helper contract introspection already provides it.
 

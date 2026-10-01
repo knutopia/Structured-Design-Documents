@@ -91,15 +91,68 @@ describe("canonical sdd-skill source", () => {
 
   it("pins the resolved bundle through helper and saved rendering workflows", async () => {
     const { skillMarkdown, workflowMarkdown, helperGapsMarkdown } = await readSkillSourceMarkdown();
-    const selection = extractMarkdownSection(workflowMarkdown, "## 1a. Select And Pin The Bundle");
-    expect(selection).toContain("resolution.manifest_path");
-    expect(selection).toContain("saved global bundle preference or built-in fallback");
-    expect(selection).toContain("For an existing document");
-    expect(selection).toContain("--bundle <manifest>");
-    expect(skillMarkdown).toContain("same bundle as helper validation and projection");
+    const selection = extractMarkdownSection(skillMarkdown, "### Bundle Startup Procedure");
+    const steps = Array.from(selection.matchAll(/^\d+\. \*\*([^*]+)\*\*/gm), (match) => match[1]);
+    expect(steps).toEqual([
+      "Choose the initial bundle.",
+      "Resolve the initial contract.",
+      "Retain the returned manifest.",
+      "Pass the retained manifest.",
+      "Use the selected language authority.",
+    ]);
+    expect(skillMarkdown.indexOf("First classify the task")).toBeLessThan(
+      skillMarkdown.indexOf("### Bundle Startup Procedure")
+    );
+    expect(selection).toMatch(/Honor a supplied manifest or requested shipped version[\s\S]*Otherwise, select a matching available bundle/);
+    expect(selection).toMatch(/new document without a requested version[\s\S]*saved global bundle preference, then repository fallback/);
+    expect(selection).toMatch(/initial manifest is known[\s\S]*initial resolution is required/);
+    expect(selection).toMatch(/absolute `resolution\.manifest_path`[\s\S]*returned path as `<manifest>`/);
+    expect(selection).toMatch(/Every subsequent bundle-consuming helper command and saved `sdd show` command receives `--bundle <manifest>`/);
+    expect(selection).toMatch(/additional contract detail only when needed for request composition, allowed values, or formatting guidance/);
+    expect(selection).toMatch(/mismatch before mutation[\s\S]*document header does not select or migrate/);
+    expect(selection).toMatch(/Static help, `capabilities`, static contracts, and git-only operations bypass bundle setup/);
+    expect(workflowMarkdown).toContain("[Bundle Startup Procedure](../SKILL.md#bundle-startup-procedure)");
+    expect(workflowMarkdown).not.toContain("## 1a. Select And Pin The Bundle");
+    expect(workflowMarkdown.indexOf("## 2. Choose The Task Kind")).toBeLessThan(
+      workflowMarkdown.indexOf("### Contract selection")
+    );
     expect(workflowMarkdown).toContain("TMPDIR=/tmp pnpm sdd show <document_path> \\\n  --bundle <manifest>");
     expect(helperGapsMarkdown).toContain("selected bundle supplies the creation version");
     expect(`${skillMarkdown}\n${workflowMarkdown}`).not.toContain("bundle/v0.1/core/");
+  });
+
+  it("keeps contract fallback, bundle exceptions, and command examples coherent", async () => {
+    const { skillMarkdown, workflowMarkdown, recipeMarkdown, helperGapsMarkdown } = await readSkillSourceMarkdown();
+    const contractSelection = extractMarkdownSection(workflowMarkdown, "### Contract selection");
+    const edgeCases = extractMarkdownSection(workflowMarkdown, "### Bundle selection edge cases");
+    expect(contractSelection).toMatch(/Reuse the bundle-resolved contract needed for the next operation/);
+    expect(contractSelection).toMatch(/no bundle-resolved contract \(including `inspect` or `search`\)[\s\S]*does not create a document/);
+    expect(contractSelection).toContain("<helper> contract helper.command.create --purpose request --resolve bundle");
+    expect(contractSelection).toMatch(/Add `--bundle <initial_manifest>` when the initial selection is known/);
+    expect(contractSelection).toMatch(/Use `--purpose request` only for those subjects/);
+    expect(edgeCases).toMatch(/read-only access[\s\S]*ambiguity[\s\S]*before mutation[\s\S]*do not rewrite the header/);
+    expect(edgeCases).toMatch(/mismatch[\s\S]*instead of silently replacing the user's chosen manifest/);
+    expect(edgeCases).toMatch(/separate searches[\s\S]*explicit bundle selections[\s\S]*Each pass uses one bundle/);
+    expect(edgeCases).toMatch(/refresh the relevant contract[\s\S]*rerun the applicable dry run[\s\S]*does not freeze the file's contents/);
+    expect(edgeCases).toMatch(/`create --version` asserts[\s\S]*does not select a bundle/);
+
+    const allSkillDocs = [skillMarkdown, workflowMarkdown, recipeMarkdown, helperGapsMarkdown].join("\n");
+    const resolvedCommands = Array.from(allSkillDocs.matchAll(/<helper>[^`\n]*--resolve bundle/g), (match) => match[0]);
+    expect(resolvedCommands.filter((command) => !command.includes("--bundle"))).toEqual([
+      "<helper> contract helper.command.create --purpose request --resolve bundle",
+    ]);
+    const requestSubjects = Array.from(allSkillDocs.matchAll(/contract (helper\.command\.\w+) --purpose request/g), (match) => match[1]);
+    expect([...new Set(requestSubjects)].sort()).toEqual([
+      "helper.command.apply", "helper.command.author", "helper.command.create", "helper.command.undo",
+    ]);
+    expect(allSkillDocs).not.toMatch(/Use `contract --resolve bundle` only when/);
+    expect(allSkillDocs).not.toMatch(/<helper> (?:inspect|search|create|author|apply|undo|validate|project|preview)\s/);
+    const joinedCommands = allSkillDocs.replace(/\\\r?\n\s*/g, " ");
+    for (const command of joinedCommands.matchAll(/pnpm sdd show <document_path>[^\n]*/g)) {
+      expect(command[0]).toContain("--bundle <manifest>");
+    }
+    expect(workflowMarkdown).toContain("<helper> git-status <document_path>");
+    expect(workflowMarkdown).toContain('<helper> git-commit --message "Update example SDD"');
   });
 
   it("keeps the helper documentation aligned with helper authority routing", async () => {
@@ -159,9 +212,6 @@ describe("canonical sdd-skill source", () => {
     expect(startHere).toContain("Helper contract detail is the helper request/result authority");
     expect(startHere).toContain("use `<helper> contract <subject_id>`");
     expect(startHere).toContain("exact request shape, result shape, continuation semantics");
-    expect(startHere).toContain(
-      "`helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`"
-    );
     expect(startHere).toContain("contract helper.command.author --purpose request --resolve bundle");
     expect(startHere).toContain("authoring_format_card");
     expect(startHere).toContain(
@@ -169,7 +219,7 @@ describe("canonical sdd-skill source", () => {
     );
     expect(startHere).toContain("resolution.manifest_path");
     expect(startHere).toContain("--bundle");
-    expect(startHere).toContain("selected bundle");
+    expect(startHere).toContain("selected manifest");
     expect(startHere).toContain("document header");
     expect(startHere).toContain(
       "Shared `assessment` answers whether to stop, continue, commit, or render."
@@ -354,9 +404,6 @@ describe("canonical sdd-skill source", () => {
     );
     expect(skillMarkdown).toContain("use `<helper> contract <subject_id>`");
     expect(skillMarkdown).toContain(
-      "`helper.command.create`, `helper.command.author`, `helper.command.apply`, and `helper.command.undo`"
-    );
-    expect(skillMarkdown).toContain(
       "exact request shape, result shape, continuation semantics, helper constraints"
     );
     expect(skillMarkdown).toContain(
@@ -369,7 +416,7 @@ describe("canonical sdd-skill source", () => {
     expect(skillMarkdown).not.toContain("helper contract/bundle-backed surfaces");
     expect(skillMarkdown).toContain("resolution.manifest_path");
     expect(skillMarkdown).toContain("--bundle");
-    expect(skillMarkdown).toContain("selected bundle");
+    expect(skillMarkdown).toContain("selected manifest");
     expect(skillMarkdown).toContain("document header");
     expect(skillMarkdown).toContain(
       "Shared `assessment` answers whether to stop, continue, commit, or render."
@@ -391,7 +438,7 @@ describe("canonical sdd-skill source", () => {
     expect(skillMarkdown).toContain("references/workflow.md");
     expect(skillMarkdown).toContain("references/change-set-recipes.md");
     expect(skillMarkdown).toContain("references/current-helper-gaps.md");
-    expect(skillMarkdown).toContain("First choose one branch: create a new document; edit an existing document; read, validate, project, or render an existing document; diagnose helper failure; or use helper git commands.");
+    expect(skillMarkdown).toContain("First classify the task:");
     expect(skillMarkdown).toContain("### Create New Document");
     expect(skillMarkdown).toContain("### Edit Existing Document");
     expect(skillMarkdown).toContain("### Read, Validate, Project, Or Render Existing Document");

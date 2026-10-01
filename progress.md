@@ -31,6 +31,8 @@ z
 ## Wed 9-30
 
 - Updated tmp.sdd slightly
+- Simplified sdd-skill bundle awareness
+- Codex WSL integration broken after update
 
 ## Tue 9-29
 
