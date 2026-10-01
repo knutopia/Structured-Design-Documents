@@ -28,6 +28,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Wed 9-30
+
+- Updated tmp.sdd slightly
+
 ## Tue 9-29
 
 - Bundle-awareness for Guided Addition, sdd-helper, TextMate generation, and sdd-skill

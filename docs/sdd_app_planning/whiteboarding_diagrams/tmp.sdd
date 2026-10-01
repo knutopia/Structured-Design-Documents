@@ -1,4 +1,4 @@
-SDD-TEXT 0.1
+SDD-TEXT 0.2
 
 # SDD for SDD
 # Structural Design Document for the Structural Design Documents application
@@ -103,6 +103,12 @@ Initiative I-040 "Templates and Patterns"
   IMPLEMENTED_BY P-010 "SDD Viewer/Editor" 
   IMPLEMENTED_BY P-030 "Template Browser"
   IMPLEMENTED_BY P-040 "Prompt Browser"
+END
+
+Initiative I-050 "Visual Differentiation of Diagram Content"
+  description="Assigning visual appearance to diagrams or parts of them to support user activities"
+  ADDRESSES OP-020 "Low-Friction SDD consumption"
+  IMPLEMENTED_BY P-010 "SDD Viewer/Editor" 
 END
 
 # Journey Placeholders: (we are missing multiple-journey markup)
