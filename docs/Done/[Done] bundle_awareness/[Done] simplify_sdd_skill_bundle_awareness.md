@@ -1,4 +1,4 @@
-# Simplify sdd-skill bundle-awareness instructions
+# [Done] Simplify sdd-skill bundle-awareness instructions
 
 **Intended file:** `docs/sdd_skill_bundle_awareness_simplification_plan.md`  
 **Status:** Prepared in Plan mode; the file has not been written.

@@ -1,6 +1,6 @@
-# SDD skill bundle-awareness simplification report
+# [Done] SDD skill bundle-awareness simplification report
 
-Implemented on 2026-09-30 against the acceptance requirements in [the implementation plan](simplify_sdd_skill_bundle_awareness.md), with [AGENTS.md](../AGENTS.md) as the repository guardrails.
+Implemented on 2026-09-30 against the acceptance requirements in [the implementation plan](<[Done] simplify_sdd_skill_bundle_awareness.md>), with [AGENTS.md](../AGENTS.md) as the repository guardrails.
 
 The authoritative, 198-word **Bundle Startup Procedure** now lives near the beginning of [SKILL.md](../skills/sdd-skill/SKILL.md#bundle-startup-procedure), after helper discovery and task classification. It distinguishes required initial bundle resolution from conditional later introspection. The [workflow reference](../skills/sdd-skill/references/workflow.md) supplies contract-selection detail and one concise subsection for bundle-selection exceptions.
 

@@ -1,4 +1,4 @@
-# Bundle awareness and v0.2 compatibility: implementation guide
+# [Done] Bundle awareness and v0.2 compatibility: implementation guide
 
 Status: implemented and verified on 2026-09-28, based on the plan written against repository revision `375b0c2`. The canonical skill source and installed skill copy were refreshed as part of this implementation.
 
