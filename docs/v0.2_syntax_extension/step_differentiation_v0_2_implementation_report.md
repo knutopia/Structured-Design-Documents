@@ -59,7 +59,7 @@ Two historical test guards required explicit scope corrections. The bottom-exit 
 - Updated the v0.2 canonical inventory and generated corpus index.
 - Updated the current node/edge reference to the v0.2 bundle and differentiated tokens; its contract test now reads that bundle.
 - Added a discoverable documentation page with the mixed proof and explicit-bundle rendering command.
-- Corrected the diagram index's shared-Step implication while retaining its existing v0.1 illustrations and identifying their version.
+- Updated the diagram index's active sources and illustrations to v0.2, regenerated the decorated Departure Desk and BillSage previews with the selected bundle, and commented out the obsolete Journey Map view of the service-blueprint canonical.
 - Updated the hidden-edge reference to v0.2: legal endpoint coverage per view, compact/detailed visibility, Step correspondence and refinement annotations, all three instrumentation targets, and conditional UI/Scenario presentation rules.
 - Added focused discovery links in the repository README and selected-bundle helper guidance.
 

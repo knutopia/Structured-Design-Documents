@@ -5,7 +5,7 @@ This page collects the current diagram families, their status, and links to avai
 See the [node and edge reference](./node_edge_reference.md)
 for a compact list of content available to each diagram type.
 
-The existing illustrations below use the preserved v0.1 bundle. See [Step differentiation in v0.2](step_differentiation.md) for the new types and a mixed example across all three views.
+The examples below use v0.2. See [Step differentiation in v0.2](step_differentiation.md) for the new types and a mixed example across all three views.
 
 ## IA (Information Architecture) / Place Map
 
@@ -18,21 +18,21 @@ The existing illustrations below use the preserved v0.1 bundle. See [Step differ
   
   :::tabs
   == Information Architecture Diagram
-  ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/compact_detail/outcome_to_ia_trace.ia_place_map.svg)
+  ![svg](../../../examples/rendered/v0.2/ia_place_map_diagram_type/outcome_to_ia_trace_example/compact_detail/outcome_to_ia_trace.ia_place_map.svg)
   == Source
   Area- and Place nodes: 
-  showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example {pos: up}
-  showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {69, 73, 74, 84, 90, 93} {lines 68-}
+  showRepoLink /examples/rendered/v0.2/ia_place_map_diagram_type/outcome_to_ia_trace_example {pos: up}
+  showSource ../../../examples/rendered/v0.2/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {69, 73, 74, 84, 90, 93} {lines 68-}
   :::
   ::::
 
   :::: details place_viewstate_transition_example <Badge type="info" text="Detail: Detailed" vertical="top" />
   :::tabs
   == Information Architecture Diagram
-  ![svg](../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ia_place_map.svg)
+  ![svg](../../../examples/rendered/v0.2/ia_place_map_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ia_place_map.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example  
-  showSource ../../../examples/rendered/v0.1/ia_place_map_diagram_type/place_viewstate_transition_example/place_viewstate_transition.sdd {6, 18, 35}
+  showRepoLink /examples/rendered/v0.2/ia_place_map_diagram_type/place_viewstate_transition_example
+  showSource ../../../examples/rendered/v0.2/ia_place_map_diagram_type/place_viewstate_transition_example/place_viewstate_transition.sdd {6, 18, 35}
   :::
   ::::
 
@@ -57,8 +57,8 @@ The existing illustrations below use the preserved v0.1 bundle. See [Step differ
   == UI Contracts Diagram
   ![Departure Desk example](./examples/ui_contracts/departure_desk.ui_contracts.compact.decorators-type-id.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/
-  showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
+  showRepoLink /examples/rendered/v0.2/ui_contracts_diagram_type/departure_desk_example/
+  showSource ../../../examples/rendered/v0.2/ui_contracts_diagram_type/departure_desk_example/departure_desk.sdd
   :::
   ::::
 
@@ -66,10 +66,10 @@ The existing illustrations below use the preserved v0.1 bundle. See [Step differ
   
   :::tabs
   == UI Contracts Diagram
-  ![svg](../../../examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.svg)
+  ![svg](../../../examples/rendered/v0.2/ui_contracts_diagram_type/place_viewstate_transition_example/detailed_detail/place_viewstate_transition.ui_contracts.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/
-  showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/place_viewstate_transition_example/place_viewstate_transition.sdd {6, 14-15,19-32, 66-73, 75-80, 43, 51-63, 82-89, 91-96}
+  showRepoLink /examples/rendered/v0.2/ui_contracts_diagram_type/place_viewstate_transition_example/
+  showSource ../../../examples/rendered/v0.2/ui_contracts_diagram_type/place_viewstate_transition_example/place_viewstate_transition.sdd {6, 14-15,19-32, 66-73, 75-80, 43, 51-63, 82-89, 91-96}
   :::
   ::::
 
@@ -77,10 +77,10 @@ The existing illustrations below use the preserved v0.1 bundle. See [Step differ
   
   :::tabs
   == Ui Contracts Diagram
-  ![svg](../../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts.svg)
+  ![svg](../../../examples/rendered/v0.2/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/
-  showSource ../../../examples/rendered/v0.1/ui_contracts_diagram_type/ui_state_fallback_example/ui_state_fallback.sdd {3, 9, 12, 16-20, 23, 26, 31, 34, 38, 41, 46, 49, 53-58, 60-66, 68-73}
+  showRepoLink /examples/rendered/v0.2/ui_contracts_diagram_type/ui_state_fallback_example/
+  showSource ../../../examples/rendered/v0.2/ui_contracts_diagram_type/ui_state_fallback_example/ui_state_fallback.sdd {3, 9, 12, 16-20, 23, 26, 31, 34, 38, 41, 46, 49, 53-58, 60-66, 68-73}
   :::
   ::::
   The overview shows Component containment with nested enclosures. Each Component also has a local scope containing all immediate parents and children.  
@@ -102,22 +102,22 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   
   :::tabs
   == Scenario Flow Diagram
-  ![svg](../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/compact_detail/scenario_branching.scenario_flow.svg)
+  ![svg](../../../examples/rendered/v0.2/scenario_flow_diagram_type/scenario_branching_example/compact_detail/scenario_branching.scenario_flow.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/
-  showSource ../../../examples/rendered/v0.1/scenario_flow_diagram_type/scenario_branching_example/scenario_branching.sdd
+  showRepoLink /examples/rendered/v0.2/scenario_flow_diagram_type/scenario_branching_example/
+  showSource ../../../examples/rendered/v0.2/scenario_flow_diagram_type/scenario_branching_example/scenario_branching.sdd
   :::
   ::::
 
-  :::: details flow_journey_topology_challenge_example <Badge type="info" text="Advanced topology" vertical="top" />
+  :::: details flow_journey_topology_challenge_example <Badge type="info" text="Detail: Detailed" vertical="top" />
 
   :::tabs
   == Scenario Flow Diagram
-  ![svg](../../../examples/rendered/v0.1/scenario_flow_diagram_type/flow_journey_topology_challenge_example/detailed_detail/flow_journey_topology_challenge.scenario_flow.svg)
+  ![svg](../../../examples/rendered/v0.2/scenario_flow_diagram_type/flow_journey_topology_challenge_example/detailed_detail/flow_journey_topology_challenge.scenario_flow.svg)
   == Source
   This example combines nested branching with a separate parallel flow and intentionally contains no Place or ViewState nodes.
-  showRepoLink /examples/rendered/v0.1/scenario_flow_diagram_type/flow_journey_topology_challenge_example/
-  showSource ../../../examples/rendered/v0.1/scenario_flow_diagram_type/flow_journey_topology_challenge_example/flow_journey_topology_challenge.sdd
+  showRepoLink /examples/rendered/v0.2/scenario_flow_diagram_type/flow_journey_topology_challenge_example/
+  showSource ../../../examples/rendered/v0.2/scenario_flow_diagram_type/flow_journey_topology_challenge_example/flow_journey_topology_challenge.sdd
   :::
   ::::
 
@@ -128,15 +128,15 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   Stages contain source-ordered JourneySteps, while `PRECEDES` relationships define journey flow.
 
   Examples:
-  :::: details three_branch_journey_example <Badge type="info" text="Three-way branch" vertical="top" />
+  :::: details three_branch_journey_example <Badge type="info" text="Detail: Compact" vertical="top" />
 
   :::tabs
   == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/three_branch_journey_example/compact_detail/three_branch_journey.journey_map.svg)
+  ![svg](../../../examples/rendered/v0.2/journey_map_diagram_type/three_branch_journey_example/compact_detail/three_branch_journey.journey_map.svg)
   == Source
   This example follows three source-ordered journey branches from one customer decision.
-  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/three_branch_journey_example/
-  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/three_branch_journey_example/three_branch_journey.sdd
+  showRepoLink /examples/rendered/v0.2/journey_map_diagram_type/three_branch_journey_example/
+  showSource ../../../examples/rendered/v0.2/journey_map_diagram_type/three_branch_journey_example/three_branch_journey.sdd
   :::
   ::::
 
@@ -144,10 +144,10 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
 
   :::tabs
   == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/compact_detail/branching_journey.journey_map.svg)
+  ![svg](../../../examples/rendered/v0.2/journey_map_diagram_type/branching_journey_example/compact_detail/branching_journey.journey_map.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/
-  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/branching_journey_example/branching_journey.sdd
+  showRepoLink /examples/rendered/v0.2/journey_map_diagram_type/branching_journey_example/
+  showSource ../../../examples/rendered/v0.2/journey_map_diagram_type/branching_journey_example/branching_journey.sdd
   :::
   ::::
 
@@ -155,14 +155,15 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
 
   :::tabs
   == Journey Map Diagram
-  ![svg](../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/compact_detail/outcome_to_ia_trace.journey_map.svg)
+  ![svg](../../../examples/rendered/v0.2/journey_map_diagram_type/outcome_to_ia_trace_example/compact_detail/outcome_to_ia_trace.journey_map.svg)
   == Source
   (Same source file is used in outcome-opportunity maps examples.)
-  showRepoLink /examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/
-  showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {41, 45, 46, 49, 56, 57, 60, 66} {lines 40-}
+  showRepoLink /examples/rendered/v0.2/journey_map_diagram_type/outcome_to_ia_trace_example/
+  showSource ../../../examples/rendered/v0.2/journey_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {41, 45, 46, 49, 56, 57, 60, 66} {lines 40-}
   :::
   ::::
 
+  <!-- Obsolete in v0.2: service_blueprint_slice contains BlueprintSteps and has no Journey Map projection.
   :::: details service_blueprint_slice_example <Badge type="info" text="Detail: Compact" vertical="top" />
 
   :::tabs
@@ -174,6 +175,7 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   showSource ../../../examples/rendered/v0.1/journey_map_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd {3, 9, 10, 13, 19}
   :::
   ::::
+  -->
 
 ## Outcome-Opportunity Map
 
@@ -186,10 +188,10 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   
   :::tabs
   == Outcome-Opportunity Map Diagram
-  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/detailed_detail/outcome_to_ia_trace.outcome_opportunity_map.svg)
+  ![svg](../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/detailed_detail/outcome_to_ia_trace.outcome_opportunity_map.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/
-  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {3, 9, 12, 19, 20, 23, 29, 32, 37, 38, 84}
+  showRepoLink /examples/rendered/v0.2/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/
+  showSource ../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {3, 9, 12, 19, 20, 23, 29, 32, 37, 38, 84}
   :::
   ::::
 
@@ -197,10 +199,10 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   
   :::tabs
   == Outcome-Opportunity Map Diagram
-  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/compact_detail/metric_event_instrumentation.outcome_opportunity_map.svg)
+  ![svg](../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/compact_detail/metric_event_instrumentation.outcome_opportunity_map.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/
-  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/metric_event_instrumentation.sdd {3, 9, 10, 13, 20, 21, 24, 31, 32, 35, 41, 44, 49, 50}
+  showRepoLink /examples/rendered/v0.2/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/
+  showSource ../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/metric_event_instrumentation.sdd {3, 9, 10, 13, 20, 21, 24, 31, 32, 35, 41, 44, 49, 50}
   :::
   ::::
 
@@ -208,10 +210,10 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   
   :::tabs
   == Outcome-Opportunity Map Diagram
-  ![svg](../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/compact_detail/multiple_outcomes.outcome_opportunity_map.svg)
+  ![svg](../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/multiple_outcomes_example/compact_detail/multiple_outcomes.outcome_opportunity_map.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/
-  showSource ../../../examples/rendered/v0.1/outcome_opportunity_map_diagram_type/multiple_outcomes_example/multiple_outcomes.sdd
+  showRepoLink /examples/rendered/v0.2/outcome_opportunity_map_diagram_type/multiple_outcomes_example/
+  showSource ../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/multiple_outcomes_example/multiple_outcomes.sdd
   :::
   ::::
 
@@ -228,9 +230,9 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   
   :::tabs
   == Service Blueprint Diagram
-  ![svg](../../../examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/detailed_detail/service_blueprint_slice.service_blueprint.svg)
+  ![svg](../../../examples/rendered/v0.2/service_blueprint_diagram_type/service_blueprint_slice_example/detailed_detail/service_blueprint_slice.service_blueprint.svg)
   == Source
-  showRepoLink /examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/
-  showSource ../../../examples/rendered/v0.1/service_blueprint_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd
+  showRepoLink /examples/rendered/v0.2/service_blueprint_diagram_type/service_blueprint_slice_example/
+  showSource ../../../examples/rendered/v0.2/service_blueprint_diagram_type/service_blueprint_slice_example/service_blueprint_slice.sdd
   :::
   ::::

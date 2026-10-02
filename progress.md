@@ -32,6 +32,7 @@ z
 
 - Step differentiation for v0.2
 - Cleaning up talentless documentation updates
+- Swapped in v0.2 examples
 
 ## Wed 9-30
 

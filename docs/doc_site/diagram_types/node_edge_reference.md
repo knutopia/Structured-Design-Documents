@@ -120,14 +120,14 @@ END
 
 # Incoming edges for Place:
 # Place NAVIGATES_TO Place
-# ScenarioStep REALIZED_BY Place
+# JourneyStep, BlueprintStep, ScenarioStep REALIZED_BY Place
 
 ViewState VS-001 "ViewState Name"
   TRANSITIONS_TO VS-002 "a ViewState"
 END
 
 # Incoming edges for ViewState:
-# ScenarioStep REALIZED_BY ViewState
+# JourneyStep, BlueprintStep, ScenarioStep REALIZED_BY ViewState
 # ViewState TRANSITIONS_TO ViewState
 ```
 
@@ -214,7 +214,7 @@ END
 
 # Incoming edges for Process:
 # Process PRECEDES Process
-# BlueprintStep REALIZED_BY Process
+# JourneyStep, BlueprintStep, ScenarioStep REALIZED_BY Process
 # Process DEPENDS_ON Process
 
 SystemAction SA-001 "SystemAction Name"
