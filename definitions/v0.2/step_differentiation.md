@@ -1,10 +1,10 @@
-# Step differentiation in v0.2
+# Step Differentiation in v0.2
 
 v0.2 has three authorable Step types: `JourneyStep` for meaningful episodes of customer intent or behavior, `BlueprintStep` for customer behavior anchoring service delivery, and `ScenarioStep` for specific actions and decisions. Each type belongs to its corresponding primary view: `journey_map`, `service_blueprint`, or `scenario_flow`.
 
 The [vocabulary](../../bundle/v0.2/core/vocab.yaml) and [compiled schema](../../bundle/v0.2/core/schema.json) remove the v0.2 `Step` token. `BluePrintStep` is not an alias. v0.1 retains `Step` through its own bundle.
 
-## Relationships and obligations
+## Relationships and Obligations
 
 The [contracts](../../bundle/v0.2/core/contracts.yaml) govern these endpoint pairs:
 
@@ -25,7 +25,7 @@ Each type inherits the previous Step property, opportunity-reference, decision-k
 
 Mapped JourneySteps and BlueprintSteps can have different refinement sets. Neither mapping nor refinement supplies another node's realization; each parent and ScenarioStep must satisfy its own direct-realization obligation.
 
-## Views and authoring
+## Views and Authoring
 
 The [view configuration](../../bundle/v0.2/core/views.yaml) selects the corresponding type without importing other Step types into the primary structure. It declares cross-view references independently of render detail: journey and blueprint nodes show **Maps to** and **Refined by**, while scenario nodes show **Refines**. Compact output hides these groups; detailed output shows target names and IDs, sorted by ID. Existing Opportunity references keep their ordering and display behavior.
 
@@ -33,8 +33,6 @@ Journey realization links remain outside the primary journey structure. Blueprin
 
 The [authoring metadata](../../bundle/v0.2/core/authoring.yaml) defines suggested prefixes `J`, `BP`, and `S`, with the existing numeric allocation policy and profile-specific prefix validation. Forms and guided relationship choices follow the selected bundle. Both authored directions of `MAPS_TO` are available; tools neither insert a reverse declaration automatically nor warn merely because the reverse declaration exists.
 
-## Explicit migration and canonical proof
+## Canonical Proof
 
-For documents explicitly migrated to v0.2, use `JourneyStep` for journey content, `BlueprintStep` for service-blueprint content, and `ScenarioStep` for other former Step occurrences. Update prefixes and structured references consistently while retaining numeric portions and suffixes. Resolve collisions through normal bundle ID allocation; preserve prose. Selecting a bundle or changing a document header does not migrate a document.
-
-The [mixed canonical example](../../bundle/v0.2/examples/step_differentiation.sdd) demonstrates many-to-many correspondence, a reciprocal pair, different refinements with shared targets, independent sequences and direct realizations, and instrumentation of all three types. Its [rendered corpus](../../examples/rendered/v0.2/README.md) includes all three views in compact and detailed modes.
+The [mixed canonical example](../../bundle/v0.2/examples/step_differentiation.sdd) demonstrates many-to-many correspondence, a reciprocal pair, different refinements with shared targets, independent sequences and direct realizations, and instrumentation of all three types.

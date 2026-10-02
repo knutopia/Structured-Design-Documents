@@ -28,6 +28,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Fri 10-2
+
+- More documentation cleanup
+
 ## Thu 10-1
 
 - Step differentiation for v0.2

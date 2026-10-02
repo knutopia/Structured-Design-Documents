@@ -42,5 +42,4 @@ TMPDIR=/tmp pnpm sdd show bundle/v0.2/examples/step_differentiation.sdd --bundle
 
 Replace the view with `service_blueprint` or `scenario_flow` for the other projections, and use `--detail compact` to hide the new reference groups.
 
-
 The [v0.2 bundle](https://github.com/knutopia/Structured-Design-Documents/tree/main/bundle/v0.2) governs machine behavior. The [focused definition](https://github.com/knutopia/Structured-Design-Documents/blob/main/definitions/v0.2/step_differentiation.md) links each governing artifact, and the [canonical inventory](https://github.com/knutopia/Structured-Design-Documents/blob/main/bundle/v0.2/examples/README.md) records the migrated examples.

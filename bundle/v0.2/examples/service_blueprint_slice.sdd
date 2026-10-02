@@ -1,7 +1,5 @@
 SDD-TEXT 0.2
 # Originally was SDD-TEXT 0.1
-
-
 BlueprintStep BP-020 "Submit Claim"
   owner=Design
   description="User submits support claim"
