@@ -32,6 +32,7 @@ z
 
 - More documentation cleanup
 - Example corpus generation fixed
+- Example cleaning
 
 ## Thu 10-1
 

@@ -1,5 +1,6 @@
 SDD-TEXT 0.2
 # Originally was SDD-TEXT 0.1
+
 Place P-410 "Departure Desk"
   owner=OperationsDesign
   description="Prepare a loaded container for departure and record its release."

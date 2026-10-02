@@ -1,5 +1,6 @@
 SDD-TEXT 0.2
 # Originally was SDD-TEXT 0.1
+
 ScenarioStep S-030 "Choose Fulfillment"
   owner=Design
   description="User selects delivery or pickup"

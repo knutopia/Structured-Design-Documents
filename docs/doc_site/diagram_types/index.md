@@ -5,8 +5,6 @@ This page collects the current diagram families, their status, and links to avai
 See the [node and edge reference](./node_edge_reference.md)
 for a compact list of content available to each diagram type.
 
-The examples below use v0.2. See [Step differentiation in v0.2](step_differentiation.md) for the new types and a mixed example across all three views.
-
 ## IA (Information Architecture) / Place Map
 
   Source of truth for product structure: what exists, where it lives, and how it connects.
@@ -22,7 +20,7 @@ The examples below use v0.2. See [Step differentiation in v0.2](step_differentia
   == Source
   Area- and Place nodes: 
   showRepoLink /examples/rendered/v0.2/ia_place_map_diagram_type/outcome_to_ia_trace_example {pos: up}
-  showSource ../../../examples/rendered/v0.2/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {69, 73, 74, 84, 90, 93} {lines 68-}
+  showSource ../../../examples/rendered/v0.2/ia_place_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {70, 74, 75, 85, 91, 94} {lines 69-}
   :::
   ::::
 
@@ -42,7 +40,7 @@ The examples below use v0.2. See [Step differentiation in v0.2](step_differentia
   ![svg](../../../real_world_exploration/billSage_example/billSage_simple_structure.ia_place_map.compact.decorators-type-id.svg)
   == Source
   showRepoLink /real_world_exploration/billSage_example
-  showSource ../../../real_world_exploration/billSage_example/billSage_simple_structure.sdd {3, 8, 13, 15-18, 26, 27, 37, 39, 40, 44, 47, 49, 50, 59, 64, 76, 78, 79, 86, 88, 89, 95, 98, 99, 106, 108, 109}
+  showSource ../../../real_world_exploration/billSage_example/billSage_simple_structure.sdd {4, 9, 14, 16-19, 27, 28, 38, 40, 41, 45, 48, 50, 51, 60, 65, 77, 79, 80, 87, 89, 90, 96, 99, 100, 107, 109, 110}
   :::
   ::::
 
@@ -80,7 +78,9 @@ The examples below use v0.2. See [Step differentiation in v0.2](step_differentia
   ![svg](../../../examples/rendered/v0.2/ui_contracts_diagram_type/ui_state_fallback_example/detailed_detail/ui_state_fallback.ui_contracts.svg)
   == Source
   showRepoLink /examples/rendered/v0.2/ui_contracts_diagram_type/ui_state_fallback_example/
-  showSource ../../../examples/rendered/v0.2/ui_contracts_diagram_type/ui_state_fallback_example/ui_state_fallback.sdd {3, 9, 12, 16-20, 23, 26, 31, 34, 38, 41, 46, 49, 53-58, 60-66, 68-73}
+  showSource ../../../examples/rendered/v0.2/ui_contracts_diagram_type/ui_state_fallback_example/ui_state_fallback.sdd {4, 10, 13, 17-21, 24, 27, 32, 35, 39, 42, 47, 50, 54-59, 61-67, 69-74}
+
+  ui_state_fallback_example/ui_state_fallback.sdd {3, 9, 12, 16-20, 23, 26, 31, 34, 38, 41, 46, 49, 53-58, 60-66, 68-73}
   :::
   ::::
   The overview shows Component containment with nested enclosures. Each Component also has a local scope containing all immediate parents and children.  
@@ -159,7 +159,7 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   == Source
   (Same source file is used in outcome-opportunity maps examples.)
   showRepoLink /examples/rendered/v0.2/journey_map_diagram_type/outcome_to_ia_trace_example/
-  showSource ../../../examples/rendered/v0.2/journey_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {41, 45, 46, 49, 56, 57, 60, 66} {lines 40-}
+  showSource ../../../examples/rendered/v0.2/journey_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {42, 46, 47, 50, 57, 58, 61, 67} {lines 41-}
   :::
   ::::
 
@@ -191,7 +191,7 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   ![svg](../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/detailed_detail/outcome_to_ia_trace.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.2/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/
-  showSource ../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {3, 9, 12, 19, 20, 23, 29, 32, 37, 38, 84}
+  showSource ../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example/outcome_to_ia_trace.sdd {4, 10, 13, 20, 21, 24, 30, 33, 38, 39, 85}
   :::
   ::::
 
@@ -202,7 +202,7 @@ The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty l
   ![svg](../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/compact_detail/metric_event_instrumentation.outcome_opportunity_map.svg)
   == Source
   showRepoLink /examples/rendered/v0.2/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/
-  showSource ../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/metric_event_instrumentation.sdd {3, 9, 10, 13, 20, 21, 24, 31, 32, 35, 41, 44, 49, 50}
+  showSource ../../../examples/rendered/v0.2/outcome_opportunity_map_diagram_type/metric_event_instrumentation_example/metric_event_instrumentation.sdd {4, 10, 11, 14, 21, 22, 25, 32, 33, 36, 42, 45, 50, 51}
   :::
   ::::
 

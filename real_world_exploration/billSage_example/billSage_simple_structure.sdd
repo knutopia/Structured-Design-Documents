@@ -1,5 +1,6 @@
 SDD-TEXT 0.2
 # Originally was SDD-TEXT 0.1
+
 Place P-100 "Dashboard"
   description="Shows global status reports, surfaced projections, and recent activities"
   primary_nav=true

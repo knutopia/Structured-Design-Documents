@@ -58,6 +58,8 @@ This probably works with other editors too. The grammar is used for source code 
 
 ### Recent Additions
 
+- introduced separate step node types for different diagrams
+- switched to bundle v0.2 default (under development)
 - simplified current-folder output placement (no more $PWD)
 - hierarchical components in UI Contracts diagram
 - unified node rendering and routing across diagram types

@@ -1,5 +1,6 @@
 SDD-TEXT 0.2
 # Originally was SDD-TEXT 0.1
+
 Stage G-001 "Maintain Product Map"
   description="Maintain a map of the existing product"
   order_index=1
