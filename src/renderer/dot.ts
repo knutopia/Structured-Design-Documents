@@ -1,3 +1,4 @@
+import { referenceAttributeLabelLines } from "./referenceAttributes.js";
 import type { IaPlaceMapRenderModel, IaRenderItem, IaRenderPlace } from "./iaPlaceMapRenderModel.js";
 import { buildLegacyIaPlaceLabelLines } from "./placeLabelLines.js";
 import type {
@@ -275,7 +276,7 @@ function renderServiceBlueprintNode(node: ServiceBlueprintRenderNode, indent: st
     `${indent}${quoteId(node.id)}${formatAttributes({
       shape: node.shape,
       style: node.style,
-      label: formatMultilineLabel([node.title])
+      label: formatMultilineLabel([node.title, ...referenceAttributeLabelLines(node.attributes ?? [])])
     })};`
   );
 }
@@ -344,7 +345,7 @@ function renderScenarioFlowNode(node: ScenarioFlowRenderNode, indent: string, li
     `${indent}${quoteId(node.id)}${formatAttributes({
       shape: node.shape,
       style: node.style,
-      label: formatMultilineLabel([node.title])
+      label: formatMultilineLabel([node.title, ...referenceAttributeLabelLines(node.attributes ?? [])])
     })};`
   );
 }

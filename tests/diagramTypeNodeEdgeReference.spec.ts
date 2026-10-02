@@ -92,7 +92,7 @@ function sddNodeSections(source: string): Map<string, string> {
 describe('diagram type node-and-edge reference', () => {
   it('tracks staged renderer views and their bundle-owned endpoint contracts', async () => {
     const [bundle, markdown, diagramTypesIndex] = await Promise.all([
-      loadBundle('bundle/v0.1/manifest.yaml'),
+      loadBundle('bundle/v0.2/manifest.yaml'),
       readFile(
         'docs/doc_site/diagram_types/node_edge_reference.md',
         'utf8'

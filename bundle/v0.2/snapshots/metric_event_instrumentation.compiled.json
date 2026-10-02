@@ -36,18 +36,6 @@
       }
     },
     {
-      "id": "J-050",
-      "type": "Step",
-      "name": "Review Risk Alert",
-      "props": {
-        "actor": "Analyst",
-        "description": "Analyst reviews a flagged risk alert",
-        "intent": "Assess the flagged alert",
-        "owner": "Design",
-        "success_criteria": "Alert reviewed and disposition recorded"
-      }
-    },
-    {
       "id": "M-050",
       "type": "Metric",
       "name": "Alert Stream Coverage",
@@ -108,6 +96,18 @@
         "route_or_key": "/risk/reviews",
         "surface": "web"
       }
+    },
+    {
+      "id": "S-050",
+      "type": "ScenarioStep",
+      "name": "Review Risk Alert",
+      "props": {
+        "actor": "Analyst",
+        "description": "Analyst reviews a flagged risk alert",
+        "intent": "Assess the flagged alert",
+        "owner": "Design",
+        "success_criteria": "Alert reviewed and disposition recorded"
+      }
     }
   ],
   "edges": [
@@ -124,16 +124,6 @@
     {
       "from": "I-050",
       "type": "IMPLEMENTED_BY",
-      "to": "P-050",
-      "to_name": "Risk Review Queue",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-050",
-      "type": "REALIZED_BY",
       "to": "P-050",
       "to_name": "Risk Review Queue",
       "event": null,
@@ -174,7 +164,7 @@
     {
       "from": "M-051",
       "type": "INSTRUMENTED_AT",
-      "to": "J-050",
+      "to": "S-050",
       "to_name": "Review Risk Alert",
       "event": null,
       "guard": null,
@@ -206,6 +196,16 @@
       "type": "SUPPORTS",
       "to": "O-050",
       "to_name": "Reduce Risk Review Delays",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-050",
+      "type": "REALIZED_BY",
+      "to": "P-050",
+      "to_name": "Risk Review Queue",
       "event": null,
       "guard": null,
       "effect": null,

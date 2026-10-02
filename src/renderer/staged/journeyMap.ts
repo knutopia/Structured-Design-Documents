@@ -121,7 +121,7 @@ function buildJourneyStep(
     ...buildSharedNode({
       title: step.title,
       decoratorMode: nodeDecoratorMode,
-      nodeType: "Step",
+      nodeType: step.type,
       nodeId: step.id,
       attributes: step.references.map(({ groupId, label, value }) => ({ groupId, label, value }))
     }, {
@@ -290,13 +290,12 @@ function buildFirstParentDiagnostics(
   view: ViewSpec,
   placement: JourneyScenePlacement
 ): RendererDiagnostic[] {
-  const nodesById = new Map(projection.nodes.map((node) => [node.id, node] as const));
   const hierarchyEdgeTypes = new Set(view.projection.hierarchy_edges);
   const parentsByStepId = new Map<string, string[]>();
   for (const edge of projection.edges) {
     if (!hierarchyEdgeTypes.has(edge.type)
-      || nodesById.get(edge.from)?.type !== "Stage"
-      || nodesById.get(edge.to)?.type !== "Step") {
+      || placement.metadataByItemId.get(edge.from)?.kind !== "stage"
+      || !placement.globalStepIds.includes(edge.to)) {
       continue;
     }
     const parents = parentsByStepId.get(edge.to) ?? [];

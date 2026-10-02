@@ -121,7 +121,7 @@ const FIXED_LANE_ORDER = [
   "policy"
 ] as const;
 
-const ACTION_NODE_TYPES = new Set(["Step", "Process", "SystemAction"]);
+const ACTION_NODE_TYPES = new Set(["Process", "SystemAction"]);
 const SHARED_RESOURCE_NODE_TYPES = new Set(["DataEntity"]);
 
 function compareNodeOrder(
@@ -136,11 +136,15 @@ function createNodeMap(nodes: readonly ServiceBlueprintRenderNode[]): Map<string
 }
 
 function isActionNode(node: ServiceBlueprintRenderNode | undefined): node is ServiceBlueprintRenderNode {
-  return !!node && ACTION_NODE_TYPES.has(node.type);
+  return !!node && hasActionRole(node);
 }
 
-function isStepNode(node: ServiceBlueprintRenderNode | undefined): node is ServiceBlueprintRenderNode {
-  return !!node && node.type === "Step";
+function hasActionRole(node: ServiceBlueprintRenderNode): boolean {
+  return isStepNode(node) || ACTION_NODE_TYPES.has(node.type);
+}
+
+function isStepNode(node: ServiceBlueprintRenderNode | undefined): boolean {
+  return !!node && node.laneId?.endsWith(":customer") === true;
 }
 
 function stableTopologicalOrder(
@@ -334,7 +338,7 @@ function resolveOrderedSteps(
   actionNodes: readonly ServiceBlueprintRenderNode[],
   edges: readonly ServiceBlueprintRenderEdge[]
 ): ServiceBlueprintRenderNode[] {
-  const steps = actionNodes.filter((node) => node.type === "Step");
+  const steps = actionNodes.filter(isStepNode);
   const stepIds = new Set(steps.map((node) => node.id));
 
   return stableTopologicalOrder(
@@ -402,7 +406,7 @@ function deriveActionBandPositions(
     }
     const from = nodeMap.get(edge.from);
     const to = nodeMap.get(edge.to);
-    if (!isStepNode(from) || !isActionNode(to) || to.type !== "Process") {
+    if (!from || !isStepNode(from) || !isActionNode(to) || to.type !== "Process") {
       continue;
     }
 
@@ -426,7 +430,7 @@ function deriveActionBandPositions(
   }
 
   for (const node of [...actionNodes].sort(compareNodeOrder)) {
-    if (node.type === "Step") {
+    if (isStepNode(node)) {
       continue;
     }
     const componentId = componentByNodeId.get(node.id);
@@ -584,7 +588,7 @@ function resolveEdgeChannel(edge: ServiceBlueprintRenderEdge): ServiceBlueprintE
 function resolveNodeClassification(
   node: ServiceBlueprintRenderNode
 ): ServiceBlueprintNodeClassification {
-  if (ACTION_NODE_TYPES.has(node.type)) {
+  if (hasActionRole(node)) {
     return "action";
   }
   if (SHARED_RESOURCE_NODE_TYPES.has(node.type)) {
@@ -600,7 +604,7 @@ function resolvePlacementMode(
   if (slotKind === "parking") {
     return "parking";
   }
-  if (ACTION_NODE_TYPES.has(node.type)) {
+  if (hasActionRole(node)) {
     return "action_band";
   }
   return slotKind === "spill" ? "band_spill_support" : "band_primary_support";
@@ -780,7 +784,7 @@ function buildCellsAndPlacements(
       continue;
     }
 
-    if (ACTION_NODE_TYPES.has(node.type)) {
+    if (hasActionRole(node)) {
       const position = positionByNodeId.get(node.id);
       const band = position === undefined ? undefined : sharedBandByPosition.get(position);
       if (band) {
@@ -843,8 +847,8 @@ function buildCellsAndPlacements(
     for (const laneShell of laneShells) {
       const key = `${laneShell.id}::${band.id}`;
       const nodes = (nodesByLaneBandId.get(key) ?? []).sort(compareNodeOrder);
-      const actionNodes = nodes.filter((node) => ACTION_NODE_TYPES.has(node.type));
-      const supportNodes = nodes.filter((node) => !ACTION_NODE_TYPES.has(node.type));
+      const actionNodes = nodes.filter(isActionNode);
+      const supportNodes = nodes.filter((node) => !hasActionRole(node));
       const spillCount = actionNodes.length > 0
         ? supportNodes.length
         : Math.max(supportNodes.length - 1, 0);
@@ -960,8 +964,8 @@ function buildCellsAndPlacements(
     for (const laneShell of laneShells) {
       const key = `${laneShell.id}::${band.id}`;
       const nodes = (nodesByLaneBandId.get(key) ?? []).sort(compareNodeOrder);
-      const actionNodes = nodes.filter((node) => ACTION_NODE_TYPES.has(node.type));
-      const supportNodes = nodes.filter((node) => !ACTION_NODE_TYPES.has(node.type));
+      const actionNodes = nodes.filter(isActionNode);
+      const supportNodes = nodes.filter((node) => !hasActionRole(node));
       const primaryNodes = actionNodes.length > 0 ? actionNodes : supportNodes.slice(0, 1);
       const spillNodes = actionNodes.length > 0 ? supportNodes : supportNodes.slice(1);
 
@@ -1115,7 +1119,7 @@ export function buildServiceBlueprintMiddleLayer(
   model: ServiceBlueprintRenderModel
 ): ServiceBlueprintMiddleLayerModel {
   const nodeMap = createNodeMap(model.nodes);
-  const actionNodes = model.nodes.filter((node) => ACTION_NODE_TYPES.has(node.type));
+  const actionNodes = model.nodes.filter(isActionNode);
   const { laneShells, diagnostics: laneDiagnostics } = buildLaneShells(model);
   const diagnostics: RendererDiagnostic[] = [...laneDiagnostics];
 

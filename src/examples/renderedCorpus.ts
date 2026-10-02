@@ -36,6 +36,33 @@ export interface RenderedCorpusOutputPaths {
   pngOutputPath: string;
 }
 
+export async function resolveRenderedCorpusManifestPaths(
+  manifestPath?: string,
+  repoRoot = process.cwd()
+): Promise<string[]> {
+  if (manifestPath) {
+    return [path.resolve(repoRoot, manifestPath)];
+  }
+
+  const bundleDir = path.resolve(repoRoot, "bundle");
+  const entries = await readdir(bundleDir, { withFileTypes: true });
+  const directories = entries.filter((entry) => entry.isDirectory()).sort((left, right) => (
+    left.name < right.name ? -1 : left.name > right.name ? 1 : 0
+  ));
+  const manifests = await Promise.all(directories.map(async (directory) => {
+    const rootDir = path.join(bundleDir, directory.name);
+    const files = await readdir(rootDir, { withFileTypes: true });
+    return files.some((file) => file.isFile() && file.name === "manifest.yaml")
+      ? path.join(rootDir, "manifest.yaml")
+      : undefined;
+  }));
+  const manifestPaths = manifests.filter((manifest): manifest is string => manifest !== undefined);
+  if (manifestPaths.length === 0) {
+    throw new Error(`No bundle manifests found under ${bundleDir}.`);
+  }
+  return manifestPaths;
+}
+
 const previewOnlyRenderedCorpusViewIds = new Set<string>();
 
 const previewOnlyRenderedCorpusViewDirSuffix = " [preview_only]";

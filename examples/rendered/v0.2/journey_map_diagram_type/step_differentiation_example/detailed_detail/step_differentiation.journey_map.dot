@@ -1,0 +1,15 @@
+digraph journey_map {
+  rankdir=LR;
+  graph [fontname="Public Sans"];
+  node [shape=box, style="rounded", fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph cluster_G_001 {
+    label="Purchase";
+    style="rounded";
+    "G-001__anchor" [label="", shape=point, width=0, height=0, style=invis];
+    "J-001" [label="Choose purchase\nMaps to: Prepare order (BP-001)\nMaps to: Submit order (BP-002)\nRefined by: Select item (S-001)\nRefined by: Review order (S-002)"];
+    "J-002" [label="Confirm purchase\nMaps to: Prepare order (BP-001)\nRefined by: Submit purchase (S-003)"];
+  }
+  "G-001__anchor" -> "J-001" [style=invis, weight=100];
+  "J-001" -> "J-002";
+}

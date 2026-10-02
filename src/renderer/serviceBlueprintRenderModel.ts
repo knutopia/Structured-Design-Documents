@@ -1,3 +1,4 @@
+import { buildRelationshipReferenceAttributes, type ReferenceAttribute } from "./referenceAttributes.js";
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
@@ -12,6 +13,7 @@ export interface ServiceBlueprintRenderNode {
   shape: string;
   style?: string;
   title: string;
+  attributes?: ReferenceAttribute[];
 }
 
 export interface ServiceBlueprintRenderLane {
@@ -54,13 +56,9 @@ function buildAuthorOrderByNodeId(graph: CompiledGraph, projectedNodeIds: readon
   );
 }
 
-function nodeDisplay(type: string): Pick<ServiceBlueprintRenderNode, "shape" | "style"> {
+function nodeDisplay(type: string, customer: boolean): Pick<ServiceBlueprintRenderNode, "shape" | "style"> {
+  if (customer) return { shape: "box", style: "rounded" };
   switch (type) {
-    case "Step":
-      return {
-        shape: "box",
-        style: "rounded"
-      };
     case "SystemAction":
       return {
         shape: "component"
@@ -170,11 +168,15 @@ export function buildServiceBlueprintRenderModel(
   );
 
   const nodes = projection.nodes.map<ServiceBlueprintRenderNode>((node) => {
-    const display = nodeDisplay(node.type);
     const lane = laneByNodeId.get(node.id);
+    const display = nodeDisplay(node.type, lane?.label === "customer");
+    const attributes = buildRelationshipReferenceAttributes(
+      projection.derived.node_annotations.find((annotation) => annotation.node_id === node.id), displayPolicy
+    );
     return {
       id: node.id,
       type: node.type,
+      ...(attributes.length > 0 ? { attributes } : {}),
       laneId: lane?.id,
       authorOrder: authorOrderByNodeId.get(node.id) ?? Number.MAX_SAFE_INTEGER,
       shape: display.shape,

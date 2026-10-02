@@ -13,8 +13,19 @@
       }
     },
     {
-      "id": "J-010",
-      "type": "Step",
+      "id": "PR-001",
+      "type": "Process",
+      "name": "Support Product Map Interaction",
+      "props": {
+        "description": "Support the product-map interaction steps represented by this topology example",
+        "owner": "Product",
+        "sla": "interactive",
+        "visibility": "frontstage"
+      }
+    },
+    {
+      "id": "S-010",
+      "type": "ScenarioStep",
       "name": "Select a Node",
       "props": {
         "actor": "Designer",
@@ -25,8 +36,8 @@
       }
     },
     {
-      "id": "J-020",
-      "type": "Step",
+      "id": "S-020",
+      "type": "ScenarioStep",
       "name": "Review Diagrams Containing Current Node",
       "props": {
         "actor": "Designer",
@@ -37,8 +48,8 @@
       }
     },
     {
-      "id": "J-021",
-      "type": "Step",
+      "id": "S-021",
+      "type": "ScenarioStep",
       "name": "Select Diagram",
       "props": {
         "actor": "Designer",
@@ -49,8 +60,8 @@
       }
     },
     {
-      "id": "J-022",
-      "type": "Step",
+      "id": "S-022",
+      "type": "ScenarioStep",
       "name": "View Node in New Diagram Context",
       "props": {
         "actor": "Designer",
@@ -61,8 +72,8 @@
       }
     },
     {
-      "id": "J-030",
-      "type": "Step",
+      "id": "S-030",
+      "type": "ScenarioStep",
       "name": "Select Diagram Content",
       "props": {
         "actor": "Designer",
@@ -73,8 +84,8 @@
       }
     },
     {
-      "id": "J-031",
-      "type": "Step",
+      "id": "S-031",
+      "type": "ScenarioStep",
       "name": "Adjust View",
       "props": {
         "actor": "Designer",
@@ -85,8 +96,8 @@
       }
     },
     {
-      "id": "J-032",
-      "type": "Step",
+      "id": "S-032",
+      "type": "ScenarioStep",
       "name": "Name the New View",
       "props": {
         "actor": "Designer",
@@ -97,8 +108,8 @@
       }
     },
     {
-      "id": "J-040",
-      "type": "Step",
+      "id": "S-040",
+      "type": "ScenarioStep",
       "name": "Add Relationship",
       "props": {
         "actor": "Designer",
@@ -109,8 +120,8 @@
       }
     },
     {
-      "id": "J-041",
-      "type": "Step",
+      "id": "S-041",
+      "type": "ScenarioStep",
       "name": "Add relationship, by node",
       "props": {
         "actor": "Designer",
@@ -121,8 +132,8 @@
       }
     },
     {
-      "id": "J-042",
-      "type": "Step",
+      "id": "S-042",
+      "type": "ScenarioStep",
       "name": "Add outgoing relationship",
       "props": {
         "actor": "Designer",
@@ -133,8 +144,8 @@
       }
     },
     {
-      "id": "J-043",
-      "type": "Step",
+      "id": "S-043",
+      "type": "ScenarioStep",
       "name": "Add incoming relationship",
       "props": {
         "actor": "Designer",
@@ -143,24 +154,13 @@
         "owner": "Product",
         "success_criteria": "An incoming relationship is defined"
       }
-    },
-    {
-      "id": "PR-001",
-      "type": "Process",
-      "name": "Support Product Map Interaction",
-      "props": {
-        "description": "Support the product-map interaction steps represented by this topology example",
-        "owner": "Product",
-        "sla": "interactive",
-        "visibility": "frontstage"
-      }
     }
   ],
   "edges": [
     {
-      "from": "J-010",
+      "from": "S-010",
       "type": "PRECEDES",
-      "to": "J-020",
+      "to": "S-020",
       "to_name": "Review Diagrams Containing Current Node",
       "event": null,
       "guard": null,
@@ -168,9 +168,9 @@
       "props": {}
     },
     {
-      "from": "J-010",
+      "from": "S-010",
       "type": "PRECEDES",
-      "to": "J-040",
+      "to": "S-040",
       "to_name": "Add Relationship",
       "event": null,
       "guard": null,
@@ -178,7 +178,7 @@
       "props": {}
     },
     {
-      "from": "J-010",
+      "from": "S-010",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -188,9 +188,9 @@
       "props": {}
     },
     {
-      "from": "J-020",
+      "from": "S-020",
       "type": "PRECEDES",
-      "to": "J-021",
+      "to": "S-021",
       "to_name": "Select Diagram",
       "event": null,
       "guard": null,
@@ -198,7 +198,7 @@
       "props": {}
     },
     {
-      "from": "J-020",
+      "from": "S-020",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -208,9 +208,9 @@
       "props": {}
     },
     {
-      "from": "J-021",
+      "from": "S-021",
       "type": "PRECEDES",
-      "to": "J-022",
+      "to": "S-022",
       "to_name": "View Node in New Diagram Context",
       "event": null,
       "guard": null,
@@ -218,7 +218,7 @@
       "props": {}
     },
     {
-      "from": "J-021",
+      "from": "S-021",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -228,7 +228,7 @@
       "props": {}
     },
     {
-      "from": "J-022",
+      "from": "S-022",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -238,9 +238,9 @@
       "props": {}
     },
     {
-      "from": "J-030",
+      "from": "S-030",
       "type": "PRECEDES",
-      "to": "J-031",
+      "to": "S-031",
       "to_name": "Adjust View",
       "event": null,
       "guard": null,
@@ -248,7 +248,7 @@
       "props": {}
     },
     {
-      "from": "J-030",
+      "from": "S-030",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -258,9 +258,9 @@
       "props": {}
     },
     {
-      "from": "J-031",
+      "from": "S-031",
       "type": "PRECEDES",
-      "to": "J-032",
+      "to": "S-032",
       "to_name": "Name the New View",
       "event": null,
       "guard": null,
@@ -268,7 +268,7 @@
       "props": {}
     },
     {
-      "from": "J-031",
+      "from": "S-031",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -278,7 +278,7 @@
       "props": {}
     },
     {
-      "from": "J-032",
+      "from": "S-032",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -288,9 +288,9 @@
       "props": {}
     },
     {
-      "from": "J-040",
+      "from": "S-040",
       "type": "PRECEDES",
-      "to": "J-041",
+      "to": "S-041",
       "to_name": "Add relationship, by node",
       "event": null,
       "guard": null,
@@ -298,9 +298,9 @@
       "props": {}
     },
     {
-      "from": "J-040",
+      "from": "S-040",
       "type": "PRECEDES",
-      "to": "J-042",
+      "to": "S-042",
       "to_name": "Add outgoing relationship",
       "event": null,
       "guard": null,
@@ -308,9 +308,9 @@
       "props": {}
     },
     {
-      "from": "J-040",
+      "from": "S-040",
       "type": "PRECEDES",
-      "to": "J-043",
+      "to": "S-043",
       "to_name": "Add incoming relationship",
       "event": null,
       "guard": null,
@@ -318,7 +318,7 @@
       "props": {}
     },
     {
-      "from": "J-040",
+      "from": "S-040",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -328,7 +328,7 @@
       "props": {}
     },
     {
-      "from": "J-041",
+      "from": "S-041",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -338,7 +338,7 @@
       "props": {}
     },
     {
-      "from": "J-042",
+      "from": "S-042",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",
@@ -348,7 +348,7 @@
       "props": {}
     },
     {
-      "from": "J-043",
+      "from": "S-043",
       "type": "REALIZED_BY",
       "to": "PR-001",
       "to_name": "Support Product Map Interaction",

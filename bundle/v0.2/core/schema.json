@@ -38,7 +38,7 @@
       "type": "string",
       "enum": [
         "Outcome", "Metric", "Opportunity", "Initiative",
-        "Stage", "Step",
+        "Stage", "JourneyStep", "BlueprintStep", "ScenarioStep",
         "Area", "Place", "ViewState",
         "Component", "State", "Event",
         "Process", "SystemAction", "DataEntity", "Policy"
@@ -51,7 +51,7 @@
         "CONTAINS", "COMPOSED_OF", "PRECEDES", "NAVIGATES_TO",
         "MEASURED_BY", "SUPPORTS", "ADDRESSES", "IMPLEMENTED_BY", "REALIZED_BY",
         "TRANSITIONS_TO", "EMITS", "DEPENDS_ON", "CONSTRAINED_BY",
-        "READS", "WRITES", "BINDS_TO", "INSTRUMENTED_AT"
+        "READS", "WRITES", "BINDS_TO", "INSTRUMENTED_AT", "MAPS_TO", "REFINED_BY"
       ]
     },
 

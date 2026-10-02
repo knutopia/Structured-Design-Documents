@@ -46,20 +46,13 @@
         "display": {
           "subtitle": "/confirmation",
           "badge": "role:billing_agent",
-          "metadata": [
-
-          ]
+          "metadata": []
         }
       }
     ],
-    "edge_annotations": [
-
-    ],
-    "node_groups": [
-
-    ],
-    "view_metadata": {
-    }
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
   },
   "omissions": [
     {

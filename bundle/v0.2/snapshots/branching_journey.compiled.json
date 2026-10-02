@@ -34,7 +34,7 @@
     },
     {
       "id": "J-101",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Find an appealing class",
       "props": {
         "actor": "Customer",
@@ -46,7 +46,7 @@
     },
     {
       "id": "J-102",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Review the class details",
       "props": {
         "actor": "Customer",
@@ -58,7 +58,7 @@
     },
     {
       "id": "J-201",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Choose how to attend",
       "props": {
         "actor": "Customer",
@@ -71,7 +71,7 @@
     },
     {
       "id": "J-202",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Book an in-person seat",
       "props": {
         "actor": "Customer",
@@ -83,7 +83,7 @@
     },
     {
       "id": "J-203",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Book the online session",
       "props": {
         "actor": "Customer",
@@ -95,7 +95,7 @@
     },
     {
       "id": "J-204",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Confirm the registration",
       "props": {
         "actor": "Customer",
@@ -107,7 +107,7 @@
     },
     {
       "id": "J-301",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Review preparation details",
       "props": {
         "actor": "Customer",
@@ -119,7 +119,7 @@
     },
     {
       "id": "J-303",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Enjoy the cooking class",
       "props": {
         "actor": "Customer",

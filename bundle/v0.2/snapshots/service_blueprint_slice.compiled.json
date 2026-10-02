@@ -3,6 +3,30 @@
   "version": "0.2",
   "nodes": [
     {
+      "id": "BP-020",
+      "type": "BlueprintStep",
+      "name": "Submit Claim",
+      "props": {
+        "actor": "User",
+        "description": "User submits support claim",
+        "intent": "Start claim process",
+        "owner": "Design",
+        "success_criteria": "Claim accepted"
+      }
+    },
+    {
+      "id": "BP-021",
+      "type": "BlueprintStep",
+      "name": "Receive Confirmation",
+      "props": {
+        "actor": "User",
+        "description": "User receives claim confirmation",
+        "intent": "Confirm claim was received",
+        "owner": "Design",
+        "success_criteria": "Confirmation shown"
+      }
+    },
+    {
       "id": "D-020",
       "type": "DataEntity",
       "name": "Claim",
@@ -22,30 +46,6 @@
         "owner": "Ops",
         "payload_schema": "{claim_id}",
         "source_kind": "system"
-      }
-    },
-    {
-      "id": "J-020",
-      "type": "Step",
-      "name": "Submit Claim",
-      "props": {
-        "actor": "User",
-        "description": "User submits support claim",
-        "intent": "Start claim process",
-        "owner": "Design",
-        "success_criteria": "Claim accepted"
-      }
-    },
-    {
-      "id": "J-021",
-      "type": "Step",
-      "name": "Receive Confirmation",
-      "props": {
-        "actor": "User",
-        "description": "User receives claim confirmation",
-        "intent": "Confirm claim was received",
-        "owner": "Design",
-        "success_criteria": "Confirmation shown"
       }
     },
     {
@@ -131,9 +131,9 @@
   ],
   "edges": [
     {
-      "from": "J-020",
+      "from": "BP-020",
       "type": "PRECEDES",
-      "to": "J-021",
+      "to": "BP-021",
       "to_name": "Receive Confirmation",
       "event": null,
       "guard": null,
@@ -141,7 +141,7 @@
       "props": {}
     },
     {
-      "from": "J-020",
+      "from": "BP-020",
       "type": "REALIZED_BY",
       "to": "PR-020",
       "to_name": "Validate Claim",
@@ -151,7 +151,7 @@
       "props": {}
     },
     {
-      "from": "J-021",
+      "from": "BP-021",
       "type": "REALIZED_BY",
       "to": "PR-022",
       "to_name": "Notify Customer",

@@ -1,3 +1,4 @@
+import { buildRelationshipReferenceAttributes, type ReferenceAttribute } from "./referenceAttributes.js";
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { RendererScenarioFlowLayoutConfig, ViewSpec } from "../bundle/types.js";
 import { getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
@@ -14,6 +15,7 @@ export interface ScenarioFlowRenderNode {
   shape: string;
   style?: string;
   title: string;
+  attributes?: ReferenceAttribute[];
 }
 
 export interface ScenarioFlowRenderLane {
@@ -237,9 +239,13 @@ export function buildScenarioFlowRenderModel(
   const nodes = visibleNodes.map<ScenarioFlowRenderNode>((node) => {
     const annotation = nodeAnnotationsById.get(node.id);
     const display = nodeDisplay(node.type, annotation?.display?.shape);
+    const attributes = buildRelationshipReferenceAttributes(
+      projection.derived.node_annotations.find((annotation) => annotation.node_id === node.id), displayPolicy
+    );
     return {
       id: node.id,
       type: node.type,
+      ...(attributes.length > 0 ? { attributes } : {}),
       authorOrder: authorOrderByNodeId.get(node.id) ?? Number.MAX_SAFE_INTEGER,
       shape: display.shape,
       style: display.style,

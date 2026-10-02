@@ -1,4 +1,5 @@
 import { createHash } from "node:crypto";
+import { resolveHierarchyRoles } from "../bundle/viewRoles.js";
 import type { Bundle } from "../bundle/types.js";
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import { getCompiledEdgeSourceSpan, type CompiledEdge, type CompiledGraph } from "../compiler/types.js";
@@ -16,12 +17,14 @@ export interface JourneyRenderReference {
   groupId: string;
   label: string;
   value: string;
+  relationshipReference?: boolean;
 }
 
 export interface JourneyRenderStep {
   kind: "step";
   id: string;
   title: string;
+  type: string;
   references: JourneyRenderReference[];
   orderAnchorId: string;
 }
@@ -209,13 +212,15 @@ export function buildJourneyMapRenderModel(
   displayPolicy: ResolvedDetailDisplayPolicy
 ): JourneyMapRenderModel {
   const displayOptions = readJourneyMapDisplayOptions(displayPolicy);
+  const view = bundle.views.views.find((candidate) => candidate.id === projection.view_id)!;
+  const roles = resolveHierarchyRoles(bundle, view);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
   const annotationsByNodeId = new Map(
     projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])
   );
   const visibleNodeIds = new Set(projection.nodes.map((node) => node.id));
   const visibleStepIds = new Set(
-    projection.nodes.filter((candidate) => candidate.type === "Step").map((node) => node.id)
+    projection.nodes.filter((candidate) => roles.childTypes.has(candidate.type)).map((node) => node.id)
   );
   const hierarchyTypeSet = new Set(hierarchyEdgeTypes);
   const orderingTypeSet = new Set(orderingEdgeTypes);
@@ -224,7 +229,7 @@ export function buildJourneyMapRenderModel(
   for (const edge of projection.edges.filter((candidate) => hierarchyTypeSet.has(candidate.type))) {
     const parentNode = projectionNodesById.get(edge.from);
     const childNode = projectionNodesById.get(edge.to);
-    if (parentNode?.type !== "Stage" || childNode?.type !== "Step" || structuralParentByStepId.has(childNode.id)) {
+    if (!parentNode || !roles.parentTypes.has(parentNode.type) || !childNode || !roles.childTypes.has(childNode.type) || structuralParentByStepId.has(childNode.id)) {
       continue;
     }
     structuralParentByStepId.set(childNode.id, parentNode.id);
@@ -232,24 +237,28 @@ export function buildJourneyMapRenderModel(
 
   const buildStepItem = (stepId: string): JourneyRenderStep | undefined => {
     const projectionNode = projectionNodesById.get(stepId);
-    if (!projectionNode || projectionNode.type !== "Step") {
+    if (!projectionNode || !roles.childTypes.has(projectionNode.type)) {
       return undefined;
     }
 
     const references: JourneyRenderReference[] = [];
-    if (displayOptions.showReferenceBadges) {
-      for (const reference of annotationsByNodeId.get(stepId)?.references ?? []) {
+    for (const reference of annotationsByNodeId.get(stepId)?.references ?? []) {
+      const visible = reference.detail_setting
+        ? readBooleanDetailDisplaySetting(displayPolicy, reference.detail_setting)
+        : displayOptions.showReferenceBadges;
+      if (visible) {
         references.push({
           kind: "reference",
+          ...(reference.detail_setting ? { relationshipReference: true } : {}),
           role: reference.role,
           targetId: reference.target_id,
           targetType: reference.target_type,
           targetName: reference.target_name,
           sourceProp: reference.source_prop,
-          groupId: reference.role,
-          label: journeyReferenceRoleToAttributeLabel(reference.role),
+          groupId: reference.group ?? reference.role,
+          label: reference.label ?? journeyReferenceRoleToAttributeLabel(reference.role),
           value: reference.target_name && reference.target_name.length > 0
-            ? reference.target_name
+            ? reference.detail_setting ? `${reference.target_name} (${reference.target_id})` : reference.target_name
             : reference.target_id
         });
       }
@@ -259,6 +268,7 @@ export function buildJourneyMapRenderModel(
       kind: "step",
       id: stepId,
       title: projectionNode.name,
+      type: projectionNode.type,
       references,
       orderAnchorId: stepId
     };
@@ -266,7 +276,7 @@ export function buildJourneyMapRenderModel(
 
   const buildStageItem = (stageId: string): JourneyRenderStage | undefined => {
     const projectionNode = projectionNodesById.get(stageId);
-    if (!projectionNode || projectionNode.type !== "Stage") {
+    if (!projectionNode || !roles.parentTypes.has(projectionNode.type)) {
       return undefined;
     }
 
@@ -286,15 +296,15 @@ export function buildJourneyMapRenderModel(
   };
 
   const rootNodeIds = projection.nodes
-    .filter((node) => (node.type === "Stage" || node.type === "Step") && !structuralParentByStepId.has(node.id))
+    .filter((node) => (roles.parentTypes.has(node.type) || roles.childTypes.has(node.type)) && !structuralParentByStepId.has(node.id))
     .map((node) => node.id);
   const rootItems = getTopLevelNodeIdsInAuthorOrder(graph, rootNodeIds)
     .map((nodeId) => {
       const node = projectionNodesById.get(nodeId);
-      if (node?.type === "Stage") {
+      if (node && roles.parentTypes.has(node.type)) {
         return buildStageItem(nodeId);
       }
-      if (node?.type === "Step") {
+      if (node && roles.childTypes.has(node.type)) {
         return buildStepItem(nodeId);
       }
       return undefined;

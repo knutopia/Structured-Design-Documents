@@ -62,7 +62,7 @@
             "role": "instrumented_at",
             "group": "experience",
             "target_id": "J-002",
-            "target_type": "Step",
+            "target_type": "JourneyStep",
             "target_name": "Confirm Payment"
           },
           {
@@ -102,7 +102,7 @@
       "type": "INSTRUMENTED_AT",
       "to": "J-002",
       "reason": "derived_annotation_instead_of_edge",
-      "detail": "Rendered as an experience-group metric annotation because the target node type Step is outside the view node scope."
+      "detail": "Rendered as an experience-group metric annotation because the target node type JourneyStep is outside the view node scope."
     }
   ],
   "notes": []

@@ -1,0 +1,137 @@
+SDD-TEXT 0.2
+# Shared example showing different step types for scenario_flow, journey_map, service_blueprint
+
+Stage G-001 "Purchase"
+  owner="Experience Design"
+  description="The purchase journey"
+  order_index="1"
+  CONTAINS J-001
+  CONTAINS J-002
+
+  + JourneyStep J-001 "Choose purchase"
+    owner="Experience Design"
+    description="Choose a suitable purchase"
+    actor="Customer"
+    intent="Choose a suitable purchase"
+    success_criteria="The customer can continue with confidence"
+    PRECEDES J-002
+    REALIZED_BY P-001
+    MAPS_TO BP-001
+    MAPS_TO BP-002
+    REFINED_BY S-001
+    REFINED_BY S-002
+  END
+  + JourneyStep J-002 "Confirm purchase"
+    owner="Experience Design"
+    description="Confirm the purchase"
+    actor="Customer"
+    intent="Confirm the purchase"
+    success_criteria="The customer can continue with confidence"
+    REALIZED_BY P-002
+    REFINED_BY S-003
+  END
+END
+
+BlueprintStep BP-001 "Prepare order"
+  owner="Experience Design"
+  description="Provide an order ready to confirm"
+  actor="Customer"
+  intent="Provide an order ready to confirm"
+  success_criteria="The customer can continue with confidence"
+  PRECEDES BP-002
+  REALIZED_BY PR-001
+  MAPS_TO J-001
+  MAPS_TO J-002
+  REFINED_BY S-002
+  REFINED_BY S-003
+END
+
+BlueprintStep BP-002 "Submit order"
+  owner="Experience Design"
+  description="Submit the order for fulfillment"
+  actor="Customer"
+  intent="Submit the order for fulfillment"
+  success_criteria="The customer can continue with confidence"
+  REALIZED_BY PR-002
+  REFINED_BY S-001
+END
+
+ScenarioStep S-001 "Select item"
+  owner="Experience Design"
+  description="Select the desired item"
+  actor="Customer"
+  intent="Select the desired item"
+  success_criteria="The customer can continue with confidence"
+  PRECEDES S-002
+  REALIZED_BY P-001
+END
+
+ScenarioStep S-002 "Review order"
+  owner="Experience Design"
+  description="Review the order details"
+  actor="Customer"
+  intent="Review the order details"
+  success_criteria="The customer can continue with confidence"
+  PRECEDES S-003
+  REALIZED_BY VS-001
+END
+
+ScenarioStep S-003 "Submit purchase"
+  owner="Experience Design"
+  description="Submit the confirmed purchase"
+  actor="Customer"
+  intent="Submit the confirmed purchase"
+  success_criteria="The customer can continue with confidence"
+  REALIZED_BY P-002
+END
+
+Place P-001 "Checkout"
+  owner="Product"
+  description="Choose and review a purchase"
+  surface="web"
+  route_or_key="/checkout"
+  access="public"
+  CONTAINS VS-001
+END
+
+Place P-002 "Confirmation"
+  owner="Product"
+  description="The confirmed order"
+  surface="web"
+  route_or_key="/confirmation"
+  access="public"
+END
+
+ViewState VS-001 "Order review"
+  owner="Product"
+  description="Review a selected order"
+  place_id="P-001"
+  data_required="Selected item and order total"
+END
+
+Process PR-001 "Prepare purchase"
+  owner="Operations"
+  description="Prepare an order for customer review"
+  visibility="frontstage"
+  sla="Immediate"
+  PRECEDES PR-002
+END
+
+Process PR-002 "Accept purchase"
+  owner="Operations"
+  description="Accept the purchase for fulfillment"
+  visibility="frontstage"
+  sla="Immediate"
+END
+
+Metric M-001 "Purchase completion"
+  owner="Analytics"
+  description="Observe the purchase across all three Step types"
+  definition="Completed purchases divided by started purchases"
+  source="Purchase events"
+  cadence="Daily"
+  metric_type="ratio"
+  INSTRUMENTED_AT J-001
+  INSTRUMENTED_AT BP-001
+  INSTRUMENTED_AT S-001
+END

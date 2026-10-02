@@ -30,6 +30,8 @@ export interface ProjectionNodeAnnotation {
     target_name?: string;
     group?: string;
     source_prop?: string;
+    label?: string;
+    detail_setting?: string;
   }>;
 }
 
@@ -80,4 +82,3 @@ export interface ProjectionResult {
   projection?: Projection;
   diagnostics: Diagnostic[];
 }
-

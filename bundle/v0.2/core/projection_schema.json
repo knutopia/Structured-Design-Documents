@@ -228,14 +228,20 @@
           "enum": [
             "implemented_by",
             "instrumented_at",
-            "opportunity_ref"
+            "opportunity_ref",
+            "maps_to",
+            "refined_by",
+            "refines"
           ]
         },
         "group": {
           "type": "string",
           "enum": [
             "experience",
-            "event"
+            "event",
+            "maps_to",
+            "refined_by",
+            "refines"
           ]
         },
         "target_id": {
@@ -248,6 +254,8 @@
           "type": "string",
           "minLength": 1
         },
+        "label": { "type": "string", "minLength": 1 },
+        "detail_setting": { "type": "string", "minLength": 1 },
         "source_prop": {
           "type": "string",
           "minLength": 1

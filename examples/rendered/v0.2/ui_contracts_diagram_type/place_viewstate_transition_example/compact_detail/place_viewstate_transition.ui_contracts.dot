@@ -1,0 +1,21 @@
+digraph ui_contracts {
+  rankdir=LR;
+  graph [fontname="Public Sans", compound=true, nodesep=0.7, ranksep=1.0];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph cluster_P_010 {
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Billing</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "P-010__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+    subgraph cluster_VS_010a {
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">ViewState: Billing Editing</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];
+      "VS-010a__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+      "C-011" [shape="box", style="rounded", label="Submit Button"];
+    }
+    "VS-010b" [shape="box", style="rounded,dashed", label="Billing Success"];
+    "C-010" [shape="box", style="rounded", label="Billing Form"];
+  }
+  "P-010__anchor" -> "VS-010a__anchor" [style=invis, weight=100];
+  "VS-010b" -> "C-010" [style=invis, weight=100];
+  "VS-010a__anchor" -> "C-011" [style=invis, weight=100];
+  "VS-010a__anchor" -> "VS-010b" [label="[Submit] {payment_valid} / SA-010", style="solid", weight=4];
+}

@@ -1,0 +1,104 @@
+digraph outcome_opportunity_map {
+  rankdir=LR;
+  graph [fontname="Public Sans", nodesep=0.6, ranksep=1.0];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_initiative {
+    rank=same;
+    "lane_initiative" [shape=plaintext, label="Initiatives"];
+    "I-001" [shape="box", label="Guided setup priority planner"];
+    "I-002" [shape="box", label="Data readiness preflight"];
+    "I-003" [shape="box", label="Vocabulary mapping and templates"];
+    "I-004" [shape="box", label="Exception triage workspace"];
+    "I-005" [shape="box", label="Recommendation evidence drawer"];
+    "I-006" [shape="box", label="Controlled automation rollout"];
+    "I-007" [shape="box", label="Operational handoff checklist"];
+  }
+  subgraph rank_opportunity {
+    rank=same;
+    "lane_opportunity" [shape=plaintext, label="Opportunities"];
+    "OP-001" [shape="hexagon", label="Users cannot see which setup steps matter"];
+    "OP-002" [shape="hexagon", label="Imported data quality issues appear too late"];
+    "OP-003" [shape="hexagon", label="Terminology does not match the team workflow"];
+    "OP-004" [shape="hexagon", label="Exception handling requires support escalation"];
+    "OP-005" [shape="hexagon", label="Recommendation evidence is hard to audit"];
+    "OP-006" [shape="hexagon", label="Teams need rollout controls before trusting automation"];
+    "OP-007" [shape="hexagon", label="Handoff gaps hide next ownership"];
+    "OP-008" [shape="hexagon", label="Outcome history is not visible at review time"];
+  }
+  subgraph rank_outcome {
+    rank=same;
+    "lane_outcome" [shape=plaintext, label="Outcomes"];
+    "O-001" [shape="ellipse", label="Shorten time to first value"];
+    "O-002" [shape="ellipse", label="Increase self-serve task completion"];
+    "O-003" [shape="ellipse", label="Improve trust in automated recommendations"];
+  }
+  subgraph rank_metric {
+    rank=same;
+    "lane_metric" [shape=plaintext, label="Metrics"];
+    "M-001" [shape="note", label="Median days to first completed workflow"];
+    "M-002" [shape="note", label="Activation completion rate"];
+    "M-003" [shape="note", label="Self-serve task completion rate"];
+    "M-004" [shape="note", label="Support deflection for recoverable tasks"];
+    "M-005" [shape="note", label="Recommendation acceptance rate"];
+    "M-006" [shape="note", label="Recommendation reversal rate"];
+  }
+  "lane_initiative" -> "lane_opportunity" [style=invis, weight=100];
+  "lane_opportunity" -> "lane_outcome" [style=invis, weight=100];
+  "lane_outcome" -> "lane_metric" [style=invis, weight=100];
+  "lane_initiative" -> "I-001" [style=invis, weight=100];
+  "I-001" -> "I-002" [style=invis, weight=100];
+  "I-002" -> "I-003" [style=invis, weight=100];
+  "I-003" -> "I-004" [style=invis, weight=100];
+  "I-004" -> "I-005" [style=invis, weight=100];
+  "I-005" -> "I-006" [style=invis, weight=100];
+  "I-006" -> "I-007" [style=invis, weight=100];
+  "lane_opportunity" -> "OP-001" [style=invis, weight=100];
+  "OP-001" -> "OP-002" [style=invis, weight=100];
+  "OP-002" -> "OP-003" [style=invis, weight=100];
+  "OP-003" -> "OP-004" [style=invis, weight=100];
+  "OP-004" -> "OP-005" [style=invis, weight=100];
+  "OP-005" -> "OP-006" [style=invis, weight=100];
+  "OP-006" -> "OP-007" [style=invis, weight=100];
+  "OP-007" -> "OP-008" [style=invis, weight=100];
+  "lane_outcome" -> "O-001" [style=invis, weight=100];
+  "O-001" -> "O-002" [style=invis, weight=100];
+  "O-002" -> "O-003" [style=invis, weight=100];
+  "lane_metric" -> "M-001" [style=invis, weight=100];
+  "M-001" -> "M-002" [style=invis, weight=100];
+  "M-002" -> "M-003" [style=invis, weight=100];
+  "M-003" -> "M-004" [style=invis, weight=100];
+  "M-004" -> "M-005" [style=invis, weight=100];
+  "M-005" -> "M-006" [style=invis, weight=100];
+  "I-001" -> "OP-001" [label="addresses"];
+  "I-001" -> "OP-007" [label="addresses"];
+  "I-002" -> "OP-002" [label="addresses"];
+  "I-003" -> "OP-001" [label="addresses"];
+  "I-003" -> "OP-003" [label="addresses"];
+  "I-004" -> "OP-004" [label="addresses"];
+  "I-004" -> "OP-006" [label="addresses"];
+  "I-005" -> "OP-005" [label="addresses"];
+  "I-005" -> "OP-008" [label="addresses"];
+  "I-006" -> "OP-005" [label="addresses"];
+  "I-006" -> "OP-006" [label="addresses"];
+  "I-007" -> "OP-004" [label="addresses"];
+  "I-007" -> "OP-007" [label="addresses"];
+  "O-001" -> "M-001" [label="measured by"];
+  "O-001" -> "M-002" [label="measured by"];
+  "O-002" -> "M-003" [label="measured by"];
+  "O-002" -> "M-004" [label="measured by"];
+  "O-003" -> "M-005" [label="measured by"];
+  "O-003" -> "M-006" [label="measured by"];
+  "OP-001" -> "O-001" [label="supports"];
+  "OP-001" -> "O-002" [label="supports"];
+  "OP-002" -> "O-001" [label="supports"];
+  "OP-002" -> "O-003" [label="supports"];
+  "OP-003" -> "O-002" [label="supports"];
+  "OP-004" -> "O-002" [label="supports"];
+  "OP-005" -> "O-003" [label="supports"];
+  "OP-006" -> "O-002" [label="supports"];
+  "OP-006" -> "O-003" [label="supports"];
+  "OP-007" -> "O-001" [label="supports"];
+  "OP-007" -> "O-002" [label="supports"];
+  "OP-008" -> "O-003" [label="supports"];
+}

@@ -474,6 +474,7 @@ export interface RendererJourneyMapLayoutConfig {
 }
 
 export interface RendererDefaultsConfig {
+  relationship_references?: RendererRelationshipReferenceConfig[];
   ui_contracts_presentation?: UiContractsPresentationConfig;
   preview?: PreviewDefaultsConfig;
   semantic_columns?: RendererSemanticColumnsConfig;
@@ -484,6 +485,15 @@ export interface RendererDefaultsConfig {
   scenario_flow_layout?: RendererScenarioFlowLayoutConfig;
   cell_sizing?: RendererCellSizingConfig;
   [key: string]: unknown;
+}
+
+export interface RendererRelationshipReferenceConfig {
+  relationship: string;
+  node_types: string[];
+  direction: "outgoing" | "incoming" | "incident";
+  role: string;
+  label: string;
+  detail_setting: string;
 }
 
 export type UiContractsPresentationRole = "component" | "place" | "primary" | "secondary" | "support";
@@ -536,6 +546,7 @@ export interface UiContractsPresentationConfig {
 
 export interface RelationshipContract {
   type: string;
+  semantics?: RelationshipSemanticDescriptor;
   meaning?: string;
   authoring?: RelationshipAuthoringConfig;
   allowed_endpoints: Array<{
@@ -543,6 +554,12 @@ export interface RelationshipContract {
     to: string;
   }>;
   constraints: ContractRule[];
+}
+
+export interface RelationshipSemanticDescriptor {
+  directionality: "directed" | "symmetric";
+  reciprocal_declarations: "preserve" | "coalesce";
+  identity_fields: Array<"type" | "from" | "to" | "event" | "guard" | "effect" | "props">;
 }
 
 export type GuidedRelationshipRole = "primary" | "supporting" | "bridge";

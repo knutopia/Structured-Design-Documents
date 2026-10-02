@@ -15,9 +15,14 @@ describe("B5 immutable acceptance baseline", () => {
   it("preserves protected source and accepted design references", () => {
     // The checked-in historical manifest predates the current renderer layout and
     // routing-core sources. Keep those historical hashes as evidence while the
-    // replay and geometry assertions below remain the behavioral guard; semantic
-    // compiler, parser, projector, and validator sources stay protected here.
+    // replay and geometry assertions below remain the behavioral guard. The
+    // v0.2 step-differentiation plan also authorizes generic projector changes;
+    // versioned projection snapshots independently guard their v0.1 behavior.
+    // Compiler, parser, validator, and unaffected projector sources stay protected.
     const intentionallyExtendedSources = new Set([
+      "src/projector/journeyMap.ts",
+      "src/projector/shared.ts",
+      "src/projector/types.ts",
       "src/renderer/staged/macroLayout.ts",
       "src/renderer/staged/pipeline.ts",
       // Final UI-only output audit is intentionally added to the shared SVG entrypoint.

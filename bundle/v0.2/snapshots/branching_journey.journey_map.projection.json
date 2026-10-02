@@ -21,42 +21,42 @@
     },
     {
       "id": "J-101",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Find an appealing class"
     },
     {
       "id": "J-102",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Review the class details"
     },
     {
       "id": "J-201",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Choose how to attend"
     },
     {
       "id": "J-202",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Book an in-person seat"
     },
     {
       "id": "J-203",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Book the online session"
     },
     {
       "id": "J-204",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Confirm the registration"
     },
     {
       "id": "J-301",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Review preparation details"
     },
     {
       "id": "J-303",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Enjoy the cooking class"
     }
   ],

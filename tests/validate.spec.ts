@@ -52,7 +52,7 @@ describe("validateGraph", () => {
   });
 
   it("accepts the BillSage draft example under simple", async () => {
-    const bundle = await loadBundle(manifestPath);
+    const bundle = await loadBundle(path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
     const examplePath = path.join(repoRoot, "real_world_exploration/billSage_example/billSage_simple_structure.sdd");
     const input = {
       path: examplePath,
@@ -68,7 +68,7 @@ describe("validateGraph", () => {
   });
 
   it("flags the BillSage draft example under strict for missing governance metadata", async () => {
-    const bundle = await loadBundle(manifestPath);
+    const bundle = await loadBundle(path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
     const examplePath = path.join(repoRoot, "real_world_exploration/billSage_example/billSage_simple_structure.sdd");
     const input = {
       path: examplePath,
@@ -106,5 +106,21 @@ describe("validateGraph", () => {
     expect(referentialIntegrity?.span).toBeDefined();
     expect(referentialIntegrity?.span?.line).toBe(2);
     expect(referentialIntegrity?.span?.column).toBe(1);
+  });
+});
+
+
+describe.each(["0.1", "0.2"])("canonical validation profiles v%s", version => {
+  it("validates every canonical with its explicit bundle under all three profiles", async () => {
+    const bundle = await loadBundle(path.join(repoRoot, `bundle/v${version}/manifest.yaml`));
+    for (const example of bundle.manifest.examples) {
+      const sourcePath = path.join(bundle.rootDir, example.path);
+      const result = compileSource({ path: sourcePath, text: await readFile(sourcePath, "utf8") }, bundle);
+      expect(result.diagnostics).toEqual([]);
+      for (const profile of ["simple", "permissive", "strict"]) {
+        const report = validateGraph(result.graph!, bundle, profile);
+        expect(report.diagnostics.filter(d => d.severity === "error"), `${example.path}, ${profile}`).toEqual([]);
+      }
+    }
   });
 });

@@ -46,7 +46,7 @@
     },
     {
       "id": "J-001",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Enter Billing",
       "props": {
         "actor": "User",
@@ -59,7 +59,7 @@
     },
     {
       "id": "J-002",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Confirm Payment",
       "props": {
         "actor": "User",

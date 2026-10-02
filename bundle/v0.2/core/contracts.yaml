@@ -10,7 +10,7 @@ common_rules:
     rule_logic:
       kind: all_edges_endpoints_exist
   - id: relationship_directionality
-    description: Relationships are directed and inverse edges must not be inferred.
+    description: Source declarations are directed; contract semantic descriptors may declare symmetric correspondence. No inverse edge is inferred.
     severity_by_profile:
       simple: error
       permissive: error
@@ -25,8 +25,8 @@ common_rules:
       strict: warn
     rule_logic:
       kind: duplicate_edge_identity
-      key_fields: [from, type, to, event, guard, effect, props]
-      ignored_fields: [to_name]
+      key_fields: [ from, type, to, event, guard, effect, props ]
+      ignored_fields: [ to_name ]
   - id: edge_annotation_semantics_scope
     description: Event, guard, and effect annotations are semantically defined for TRANSITIONS_TO and optionally NAVIGATES_TO and PRECEDES.
     severity_by_profile:
@@ -35,7 +35,7 @@ common_rules:
       strict: warn
     rule_logic:
       kind: annotation_semantics_scope
-      semantic_relationships: [TRANSITIONS_TO, NAVIGATES_TO, PRECEDES]
+      semantic_relationships: [ TRANSITIONS_TO, NAVIGATES_TO, PRECEDES ]
   - id: to_name_hint_non_semantic
     description: to_name is a human-readable hint and must not alter edge semantics.
     severity_by_profile:
@@ -45,7 +45,7 @@ common_rules:
     rule_logic:
       kind: to_name_non_semantic
   - id: no_implicit_inverse_edges
-    description: Compiler output remains literal; inferred inverse relationships are renderer-only derived semantics.
+    description: Compiler output remains literal; semantic relationship lookup does not materialize inverse, transitive, or inherited edges.
     severity_by_profile:
       simple: error
       permissive: error
@@ -62,7 +62,7 @@ relationships:
       source_organization: nest_target_under_source
     allowed_endpoints:
       - from: Stage
-        to: Step
+        to: JourneyStep
       - from: Area
         to: Place
       - from: Place
@@ -131,8 +131,12 @@ relationships:
       source_representation: edge_line
       source_organization: same_level
     allowed_endpoints:
-      - from: Step
-        to: Step
+      - from: JourneyStep
+        to: JourneyStep
+      - from: BlueprintStep
+        to: BlueprintStep
+      - from: ScenarioStep
+        to: ScenarioStep
       - from: Process
         to: Process
       - from: State
@@ -141,7 +145,7 @@ relationships:
       - id: precedes_edge_field_support
         rule_logic:
           kind: edge_field_support
-          annotations: [event, guard, effect]
+          annotations: [ event, guard, effect ]
           properties: []
       - id: precedes_cycle_policy
         description: Linear flows should be acyclic; every intentional cyclic component should contain an annotated edge.
@@ -170,7 +174,7 @@ relationships:
       - id: navigates_to_edge_field_support
         rule_logic:
           kind: edge_field_support
-          annotations: [event, guard]
+          annotations: [ event, guard ]
           properties: []
       - id: navigates_to_event_optional
         description: Event and guard annotations are optional and represent trigger/precondition when present.
@@ -180,7 +184,7 @@ relationships:
           strict: info
         rule_logic:
           kind: optional_annotations
-          supports: [event, guard]
+          supports: [ event, guard ]
 
   - type: MEASURED_BY
     meaning: Outcome is measured by metric.
@@ -281,11 +285,23 @@ relationships:
       source_representation: edge_line
       source_organization: unconstrained
     allowed_endpoints:
-      - from: Step
+      - from: JourneyStep
         to: Place
-      - from: Step
+      - from: BlueprintStep
+        to: Place
+      - from: ScenarioStep
+        to: Place
+      - from: JourneyStep
         to: ViewState
-      - from: Step
+      - from: BlueprintStep
+        to: ViewState
+      - from: ScenarioStep
+        to: ViewState
+      - from: JourneyStep
+        to: Process
+      - from: BlueprintStep
+        to: Process
+      - from: ScenarioStep
         to: Process
     constraints:
       - id: realized_by_edge_field_support
@@ -293,14 +309,34 @@ relationships:
           kind: edge_field_support
           annotations: []
           properties: []
-      - id: step_realization_required
-        description: Every Step should have at least one REALIZED_BY edge.
+      - id: journey_step_realization_required
+        description: Every JourneyStep should have at least one REALIZED_BY edge.
         severity_by_profile:
           permissive: warn
           strict: error
         rule_logic:
           kind: min_outgoing_edges_by_type
-          from_type: Step
+          from_type: JourneyStep
+          relationship: REALIZED_BY
+          min_count: 1
+      - id: blueprint_step_realization_required
+        description: Every BlueprintStep should have at least one REALIZED_BY edge.
+        severity_by_profile:
+          permissive: warn
+          strict: error
+        rule_logic:
+          kind: min_outgoing_edges_by_type
+          from_type: BlueprintStep
+          relationship: REALIZED_BY
+          min_count: 1
+      - id: scenario_step_realization_required
+        description: Every ScenarioStep should have at least one REALIZED_BY edge.
+        severity_by_profile:
+          permissive: warn
+          strict: error
+        rule_logic:
+          kind: min_outgoing_edges_by_type
+          from_type: ScenarioStep
           relationship: REALIZED_BY
           min_count: 1
 
@@ -319,7 +355,7 @@ relationships:
       - id: transitions_to_edge_field_support
         rule_logic:
           kind: edge_field_support
-          annotations: [event, guard, effect]
+          annotations: [ event, guard, effect ]
           properties: []
       - id: transitions_event_reference
         description: Event annotation should resolve to Event node ID in strict profile.
@@ -454,7 +490,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: [field]
+          properties: [ field ]
       - id: binds_to_requires_field
         description: BINDS_TO edge must include edge prop field.
         severity_by_profile:
@@ -474,7 +510,11 @@ relationships:
       source_organization: unconstrained
     allowed_endpoints:
       - from: Metric
-        to: Step
+        to: JourneyStep
+      - from: Metric
+        to: BlueprintStep
+      - from: Metric
+        to: ScenarioStep
       - from: Metric
         to: Place
       - from: Metric
@@ -483,6 +523,54 @@ relationships:
         to: Event
     constraints:
       - id: instrumented_at_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
+  - type: MAPS_TO
+    meaning: Optional many-to-many correspondence without equivalence, transitivity, inheritance, or graph expansion.
+    semantics:
+      directionality: symmetric
+      reciprocal_declarations: coalesce
+      identity_fields:
+        - type
+        - from
+        - to
+    authoring:
+      graph_role: reference
+      source_representation: edge_line
+      source_organization: unconstrained
+    allowed_endpoints:
+      - from: JourneyStep
+        to: BlueprintStep
+      - from: BlueprintStep
+        to: JourneyStep
+    constraints:
+      - id: maps_to_edge_field_support
+        rule_logic:
+          kind: edge_field_support
+          annotations: []
+          properties: []
+  - type: REFINED_BY
+    meaning: Optional non-transitive partial elaboration without containment, ownership, inherited realization, or implicit ordering.
+    semantics:
+      directionality: directed
+      reciprocal_declarations: preserve
+      identity_fields:
+        - type
+        - from
+        - to
+    authoring:
+      graph_role: reference
+      source_representation: edge_line
+      source_organization: unconstrained
+    allowed_endpoints:
+      - from: JourneyStep
+        to: ScenarioStep
+      - from: BlueprintStep
+        to: ScenarioStep
+    constraints:
+      - id: refined_by_edge_field_support
         rule_logic:
           kind: edge_field_support
           annotations: []

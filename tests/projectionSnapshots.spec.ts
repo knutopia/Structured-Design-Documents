@@ -53,7 +53,7 @@ describe.each(["0.1", "0.2"])("projectView projection snapshots v%s", (version) 
         'Opportunity OP-200 "Confidence before commitment"',
         "END",
         "",
-        'Step J-201 "Review the recommendation"',
+        `${version === "0.1" ? "Step" : "JourneyStep"} J-201 "Review the recommendation"`,
         '  opportunity_refs="OP-200, OP-100"',
         "END",
         ""

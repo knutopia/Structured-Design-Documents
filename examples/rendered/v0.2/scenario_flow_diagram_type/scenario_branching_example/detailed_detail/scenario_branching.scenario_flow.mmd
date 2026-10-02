@@ -1,0 +1,54 @@
+flowchart TB
+  subgraph n_step["Steps"]
+    n_S_030{"Choose Fulfillment"}
+    n_S_031("Enter Delivery Address")
+    n_S_032("Choose Pickup Store")
+    n_S_033{"Choose Contact Method"}
+    n_S_034("Confirm Email Notification")
+    n_S_035("Review Pickup Instructions")
+  end
+  subgraph n_place["Places"]
+    n_P_030("Fulfillment")
+    n_P_031("Delivery Address")
+    n_P_032("Pickup Store")
+    n_P_033("Contact Method")
+    n_P_034("Email Confirmation")
+    n_P_035("Pickup Instructions")
+  end
+  subgraph n_view_state["View States"]
+    n_VS_030a("Fulfillment Choice")
+    n_VS_031a("Delivery Address Form")
+    n_VS_032a("Pickup Store Selector")
+    n_VS_033a("Contact Method Choice")
+    n_VS_034a("Email Confirmation State")
+    n_VS_035a("Pickup Instructions State")
+  end
+  n_P_030 --> n_P_031
+  n_P_030 --> n_P_032
+  n_P_033 --> n_P_034
+  n_P_033 --> n_P_035
+  n_S_030 -->|delivery selected| n_S_031
+  n_S_030 -->|pickup selected| n_S_032
+  n_S_030 --> n_P_030
+  n_S_030 --> n_VS_030a
+  n_S_031 --> n_S_033
+  n_S_031 --> n_P_031
+  n_S_031 --> n_VS_031a
+  n_S_032 --> n_P_032
+  n_S_032 --> n_VS_032a
+  n_S_033 -->|e-032| n_S_034
+  n_S_033 -->|review pickup instructions| n_S_035
+  n_S_033 --> n_P_033
+  n_S_033 --> n_VS_033a
+  n_S_034 --> n_P_034
+  n_S_034 --> n_VS_034a
+  n_S_035 --> n_P_035
+  n_S_035 --> n_VS_035a
+  n_VS_030a --> n_VS_031a
+  n_VS_030a --> n_VS_032a
+  n_VS_033a --> n_VS_034a
+  n_VS_033a --> n_VS_035a
+  classDef dashedNode stroke-dasharray: 6 4;
+  class n_VS_030a,n_VS_031a,n_VS_032a,n_VS_033a,n_VS_034a,n_VS_035a dashedNode;
+  linkStyle 21,22,23,24 stroke-dasharray: 6 4;
+  linkStyle 6,7,9,10,11,12,15,16,17,18,19,20 stroke-dasharray: 2 4;

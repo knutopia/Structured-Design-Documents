@@ -1,169 +1,252 @@
 # Hidden Edge Reference by Diagram Type
 
-*This is a technical documentation page.*
-Reference for relationships that are not fully visible when a diagram is
-rendered with `profile=simple`, together with how those relationships appear
-when the same diagram is rendered with `profile=strict`.
+Reference for relationships that are hidden, represented as annotations, or
+shown with less detail in the v0.2 staged SVG/PNG renderers. The tables compare
+`--detail compact` with `--detail detailed`. Validation profiles (`simple`,
+`permissive`, and `strict`) govern validation; they do not select render detail.
 
 > [!IMPORTANT]
-> In technical terms, this page is downstream documentation, not a normative source. 
-> Diagram node and edge inclusion comes from `bundle/v0.1/core/views.yaml`; 
-> relationship direction and endpoints come from `bundle/v0.1/core/contracts.yaml`.
+> In technical terms, this page is downstream documentation. The
+> [v0.2 view configuration](https://github.com/knutopia/Structured-Design-Documents/blob/main/bundle/v0.2/core/views.yaml)
+> governs node and edge inclusion, reference annotations, and render-detail
+> policies. The
+> [v0.2 relationship contracts](https://github.com/knutopia/Structured-Design-Documents/blob/main/bundle/v0.2/core/contracts.yaml)
+> govern legal endpoints and relationship directionality.
 
-The same view artifact now carries an explicit guided-authoring entry for every allowed endpoint triple. Those entries classify relationships as `primary`, `supporting`, or `bridge` and state their `simple` and `strict` presence/label behavior. `permissive` aliases `strict` in bundle data. The tables below explain that bundle matrix together with the current renderers; there is no runtime fallback for a missing entry.
+Each section covers legal endpoint triples with at least one node type in that
+view. A relationship can be valid in the document and still be entirely hidden in a
+particular view.
+
+The bundle also contains a complete guided-authoring matrix with `primary`,
+`supporting`, and `bridge` roles and historical `simple`/`strict` display
+classifications (`permissive` aliases `strict`). Those guidance records do not
+select the current renderer's detail policy. The tables below describe the
+staged renderers using `renderer_defaults.detail_display` and, for UI Contracts,
+`ui_contracts_presentation`.
 
 ## Legend
 
 | Marker | Meaning |
 | --- | --- |
-| **A — entirely hidden** | The relationship is not shown in either `simple` or `strict` for this diagram type. This normally occurs because an endpoint is outside the view or the staged renderer does not emit that relationship. |
-| **B — strict annotation** | The relationship is hidden in `simple` and appears as an in-node annotation in `strict`. |
-| **C — strict label** | The connector is visible in `simple`, but its label is hidden. The label appears in `strict`. |
-| **D — strict node** | The relationship is hidden in `simple`; `strict` shows its endpoint node and normally the connector as well. |
-| **D\* — conditional strict node** | The same behavior as **D**, but only when a `ViewState` is the primary UI transition graph. If no `ViewState` exists, UI Contracts can fall back to the `State` graph and the item need not be hidden in `simple`. |
-
-Structural relationships shown through containment or nesting count as visible
-even when the renderer does not draw a separate connector.
+| **A — entirely hidden** | The relationship has no connector, structural presentation, or reference annotation in either detail. An endpoint may be outside the view, or the relationship may be excluded from its presentation. |
+| **B — detailed annotation** | Hidden in compact output; detailed output shows an in-node reference annotation. The counterpart remains outside the primary node set. |
+| **C — detailed label** | The connector is visible in both details. Its branch or relationship label appears only in detailed output. |
+| **D\* — conditional node** | Detailed output shows the secondary or supporting nodes and their connectors. Compact output hides them unless UI Contracts uses its State-only fallback: no `ViewState` nodes and at least one `State` node. |
 
 ::: dropdownSwitch Diagram Type
 == IA Place Map
 
 Available node types: `Area`, `Place`
 
-| Node | Edge | `simple` | `strict` |
+| Node in this view | Edge | `compact` | `detailed` |
 | --- | --- | --- | --- |
-| `Place` | `Place CONTAINS ViewState` | Invisible because `ViewState` is outside the view | **A — entirely hidden** |
+| `Place` | `Place CONTAINS ViewState` | Target `ViewState` is outside the view | **A — entirely hidden** |
+| `Place` | `Place COMPOSED_OF Component` | Target `Component` is outside the view | **A — entirely hidden** |
+| `Place` | `Place CONSTRAINED_BY Policy` | Target `Policy` is outside the view | **A — entirely hidden** |
+| `Place` | `Initiative IMPLEMENTED_BY Place` | Source `Initiative` is outside the view | **A — entirely hidden** |
+| `Place` | `JourneyStep REALIZED_BY Place`<br>`BlueprintStep REALIZED_BY Place`<br>`ScenarioStep REALIZED_BY Place` | Source Step types are outside the view | **A — entirely hidden** |
+| `Place` | `Metric INSTRUMENTED_AT Place` | Source `Metric` is outside the view | **A — entirely hidden** |
 
-The following relationships are visible in `simple` and therefore are not
-invisible edges:
+The following relationships are visible in both details:
 
 - `Area CONTAINS Place`
 - `Place CONTAINS Place`
 - `Place NAVIGATES_TO Place`
 
-IA Place Map has no strict-only relationship annotations or edge labels.
+IA Place Map has no detailed-only relationship annotations or edge labels.
+Its detail policy changes Place metadata, such as route and access information.
 
 == UI Contracts
 
-Available node types: `Place`, `ViewState`, `Component`, `State`, `Event`,
-`DataEntity`, `SystemAction`
+Available node types: `Place`, `ViewState`, `Component`, `State`, `Event`, `DataEntity`, `SystemAction`
 
-| Node | Edge | `simple` | `strict` |
+### Entirely hidden relationships
+
+| Node in this view | Edge | `compact` | `detailed` |
 | --- | --- | --- | --- |
 | `Place` | `Area CONTAINS Place` | Source `Area` is outside the view | **A — entirely hidden** |
-| `Place` | `Place CONTAINS Place` | The staged renderer does not emit this hierarchy | **A — entirely hidden** |
-| `ViewState` | `ViewState EMITS Event` | Supporting contract suppressed | **D\* — conditional strict node** |
-| `ViewState` | `ViewState DEPENDS_ON SystemAction` | Supporting contract suppressed | **D\* — conditional strict node** |
-| `Component` | `Component EMITS Event` | Supporting contract suppressed | **D\* — conditional strict node** |
-| `Component` | `Component DEPENDS_ON SystemAction` | Supporting contract suppressed | **D\* — conditional strict node** |
-| `Component` | `Component BINDS_TO DataEntity` | Supporting contract suppressed | **D\* — conditional strict node** |
-| `State` | `State TRANSITIONS_TO State` | Secondary state group suppressed | **D\* — conditional strict node** |
-| `Event` | `Component EMITS Event` | `Event` node suppressed | **D\* — conditional strict node** |
-| `Event` | `ViewState EMITS Event` | `Event` node suppressed | **D\* — conditional strict node** |
-| `Event` | `SystemAction EMITS Event` | Supporting-contract nodes suppressed | **D\* — conditional strict node** |
+| `Place` | `Place CONTAINS Place` | No UI presentation rule selects this hierarchy | **A — entirely hidden** |
+| `Place` | `Place NAVIGATES_TO Place` | Relationship is outside the view's edge set | **A — entirely hidden** |
+| `State` | `State PRECEDES State` | Relationship is outside the view's edge set | **A — entirely hidden** |
+| `Place`, `ViewState`, `Component`, `SystemAction` | `Initiative IMPLEMENTED_BY Place`<br>`Initiative IMPLEMENTED_BY ViewState`<br>`Initiative IMPLEMENTED_BY Component`<br>`Initiative IMPLEMENTED_BY SystemAction` | Source `Initiative` is outside the view | **A — entirely hidden** |
+| `Place` | `JourneyStep REALIZED_BY Place`<br>`BlueprintStep REALIZED_BY Place`<br>`ScenarioStep REALIZED_BY Place` | Source Step types are outside the view | **A — entirely hidden** |
+| `ViewState` | `JourneyStep REALIZED_BY ViewState`<br>`BlueprintStep REALIZED_BY ViewState`<br>`ScenarioStep REALIZED_BY ViewState` | Source Step types are outside the view | **A — entirely hidden** |
 | `Event` | `Process EMITS Event` | Source `Process` is outside the view | **A — entirely hidden** |
-| `DataEntity` | `Component BINDS_TO DataEntity` | `DataEntity` node suppressed | **D\* — conditional strict node** |
-| `SystemAction` | `ViewState DEPENDS_ON SystemAction` | `SystemAction` node suppressed | **D\* — conditional strict node** |
-| `SystemAction` | `Component DEPENDS_ON SystemAction` | `SystemAction` node suppressed | **D\* — conditional strict node** |
 | `SystemAction` | `Process DEPENDS_ON SystemAction` | Source `Process` is outside the view | **A — entirely hidden** |
-| `SystemAction` | `SystemAction EMITS Event` | Supporting-contract nodes suppressed | **D\* — conditional strict node** |
+| `Place`, `SystemAction` | `Place CONSTRAINED_BY Policy`<br>`SystemAction CONSTRAINED_BY Policy` | Target `Policy` is outside the view | **A — entirely hidden** |
+| `SystemAction`, `DataEntity` | `SystemAction READS DataEntity`<br>`SystemAction WRITES DataEntity` | Relationships are outside the view's edge set | **A — entirely hidden** |
+| `Place`, `ViewState`, `Event` | `Metric INSTRUMENTED_AT Place`<br>`Metric INSTRUMENTED_AT ViewState`<br>`Metric INSTRUMENTED_AT Event` | Source `Metric` is outside the view | **A — entirely hidden** |
 
-In staged SVG/PNG, `Component CONTAINS Component` is visible in both compact and
-detailed output: an enclosure overview shows the hierarchy, and local scopes
-draw labeled parent/child connectors. `Place CONTAINS ViewState` remains visible
-through scope membership. `Place` and `ViewState COMPOSED_OF Component` use
-labeled connectors to lightweight Component references. Legacy DOT/Mermaid and
-Graphviz retain their earlier structural presentation.
+### Secondary and supporting content
 
-Rendering uses `--detail`, independently of `--profile`. The historical
-`simple`/`strict` columns describe the guided-authoring matrix; for current
-render content selection, see [UI Contracts](./index.md#ui-contracts).
+| Node in this view | Edge | `compact` | `detailed` |
+| --- | --- | --- | --- |
+| `ViewState`, `Event` | `ViewState EMITS Event` | Supporting `Event` suppressed | **D\* — conditional node** |
+| `ViewState`, `SystemAction` | `ViewState DEPENDS_ON SystemAction` | Supporting `SystemAction` suppressed | **D\* — conditional node** |
+| `Component`, `Event` | `Component EMITS Event` | Supporting `Event` suppressed except in State-only fallback | **D\* — conditional node** |
+| `Component`, `SystemAction` | `Component DEPENDS_ON SystemAction` | Supporting `SystemAction` suppressed except in State-only fallback | **D\* — conditional node** |
+| `Component`, `DataEntity` | `Component BINDS_TO DataEntity` | Supporting `DataEntity` suppressed except in State-only fallback | **D\* — conditional node** |
+| `State` | `State TRANSITIONS_TO State` | Secondary State graph suppressed except in State-only fallback | **D\* — conditional node** |
+| `SystemAction`, `Event` | `SystemAction EMITS Event` | Supporting nodes suppressed except in State-only fallback | **D\* — conditional node** |
 
-The **D\*** guidance behavior is encoded as ordered `simple` rules using the
-bundle predicate `document_has_node_type: ViewState`, followed by an
-unconditional visible-connector rule. `strict` always exposes the supporting
-connector. The current renderer's matching presentation behavior remains
-controlled by `show_secondary_state_groups_when_primary_view_state` and
+The State-only fallback cannot apply to a relationship sourced by `ViewState`,
+because that source itself establishes the primary ViewState graph. Merely
+having no ViewStates does not enable the fallback: a State node must exist.
+The controlling switches are
+`show_secondary_state_groups_when_primary_view_state` and
 `show_supporting_contract_lane_when_primary_view_state`.
+
+The following relationships remain visible in both details:
+
+- `Component CONTAINS Component`: the enclosure overview shows the hierarchy;
+  local scopes draw labeled parent/child connectors.
+- `Place CONTAINS ViewState`: represented through scope membership.
+- `Place COMPOSED_OF Component` and `ViewState COMPOSED_OF Component`: labeled
+  connectors to lightweight Component references.
+- `ViewState TRANSITIONS_TO ViewState`: the primary transition graph.
+
+Compact output can omit empty Place containers and simple scopes according to
+the bundle's scope policy. Legacy DOT/Mermaid and Graphviz retain their earlier
+structural presentation. See [UI Contracts](./index.md#ui-contracts).
 
 == Scenario Flow
 
-Available node types: `Step`, `Place`, `ViewState`
+Available node types: `ScenarioStep`, `Place`, `ViewState`
 
-| Node | Edge | `simple` | `strict` |
+### Entirely hidden relationships
+
+| Node in this view | Edge | `compact` | `detailed` |
 | --- | --- | --- | --- |
-| `Step` | `Step REALIZED_BY Process` | Target `Process` is outside the view | **A — entirely hidden** |
+| `ScenarioStep` | `ScenarioStep REALIZED_BY Process` | Target `Process` is outside the view | **A — entirely hidden** |
+| `Place` | `Area CONTAINS Place` | Source `Area` is outside the view | **A — entirely hidden** |
+| `Place`, `ViewState` | `Place CONTAINS Place`<br>`Place CONTAINS ViewState` | Containment is outside the view's edge set | **A — entirely hidden** |
+| `Place`, `ViewState` | `Place COMPOSED_OF Component`<br>`ViewState COMPOSED_OF Component` | Target `Component` is outside the view | **A — entirely hidden** |
+| `Place`, `ViewState` | `Initiative IMPLEMENTED_BY Place`<br>`Initiative IMPLEMENTED_BY ViewState` | Source `Initiative` is outside the view | **A — entirely hidden** |
+| `Place` | `JourneyStep REALIZED_BY Place`<br>`BlueprintStep REALIZED_BY Place` | Other Step types are outside the view | **A — entirely hidden** |
+| `ViewState` | `JourneyStep REALIZED_BY ViewState`<br>`BlueprintStep REALIZED_BY ViewState` | Other Step types are outside the view | **A — entirely hidden** |
+| `ViewState` | `ViewState EMITS Event` | Target `Event` is outside the view | **A — entirely hidden** |
+| `ViewState` | `ViewState DEPENDS_ON SystemAction` | Target `SystemAction` is outside the view | **A — entirely hidden** |
+| `Place` | `Place CONSTRAINED_BY Policy` | Target `Policy` is outside the view | **A — entirely hidden** |
+| `ScenarioStep`, `Place`, `ViewState` | `Metric INSTRUMENTED_AT ScenarioStep`<br>`Metric INSTRUMENTED_AT Place`<br>`Metric INSTRUMENTED_AT ViewState` | Source `Metric` is outside the view | **A — entirely hidden** |
 
-All endpoint-compatible relationships have visible connectors in `simple`:
+### Incoming refinement references
 
-- `Step PRECEDES Step`
-- `Step REALIZED_BY Place`
-- `Step REALIZED_BY ViewState`
+| Node in this view | Edge | `compact` | `detailed` |
+| --- | --- | --- | --- |
+| `ScenarioStep` | `JourneyStep REFINED_BY ScenarioStep` | Reference hidden | **B — detailed annotation**: **Refines** lists the JourneyStep parent |
+| `ScenarioStep` | `BlueprintStep REFINED_BY ScenarioStep` | Reference hidden | **B — detailed annotation**: **Refines** lists the BlueprintStep parent |
+
+The parent nodes remain outside the view. Incoming lookup does not create a
+reverse authored relationship. `MAPS_TO` does not supply additional parents or
+ScenarioStep sequence edges.
+
+The following relationships have visible connectors in both details when their
+endpoints are visible:
+
+- `ScenarioStep PRECEDES ScenarioStep`
+- `ScenarioStep REALIZED_BY Place`
+- `ScenarioStep REALIZED_BY ViewState`
 - `Place NAVIGATES_TO Place`
 - `ViewState TRANSITIONS_TO ViewState`
 
-One profile-dependent case affects a label rather than connector visibility:
-
-| Node | Edge | `simple` | `strict` |
+| Node in this view | Edge | `compact` | `detailed` |
 | --- | --- | --- | --- |
-| Decision `Step` | Annotated `Step PRECEDES Step` | Connector visible; branch label hidden | **C — strict label**, selected from `guard`, then `event`, then `to_name` |
+| Decision `ScenarioStep` (`kind=decision`) | `ScenarioStep PRECEDES ScenarioStep` | Connector visible; branch label hidden | **C — detailed label**, selected from `guard`, then `event`, then `to_name`, when present |
+
+Compact output hides Places with no projected edge to another node; detailed
+output includes them (`show_disconnected_places`). An excluded relationship,
+such as `Place CONTAINS ViewState`, does not make a Place connected for this
+purpose. A self-edge alone does not either. `show_branch_labels` controls the
+branch-label difference.
 
 == Journey Map
 
-Available node types: `Stage`, `Step`
+Available node types: `Stage`, `JourneyStep`
 
-There are no invisible relationship edges:
+| Node in this view | Edge | `compact` | `detailed` |
+| --- | --- | --- | --- |
+| `JourneyStep` | `JourneyStep REALIZED_BY Place`<br>`JourneyStep REALIZED_BY ViewState`<br>`JourneyStep REALIZED_BY Process` | Realization targets are outside the view | **A — entirely hidden** |
+| `JourneyStep` | `Metric INSTRUMENTED_AT JourneyStep` | Source `Metric` is outside the view | **A — entirely hidden** |
+| `JourneyStep` | `JourneyStep MAPS_TO BlueprintStep` | Reference hidden | **B — detailed annotation**: **Maps to** lists the BlueprintStep counterpart |
+| `JourneyStep` | `BlueprintStep MAPS_TO JourneyStep` | Reference hidden | **B — detailed annotation**: the same **Maps to** reference |
+| `JourneyStep` | `JourneyStep REFINED_BY ScenarioStep` | Reference hidden | **B — detailed annotation**: **Refined by** lists the ScenarioStep |
 
-- `Stage CONTAINS Step` is visible structurally.
-- `Step PRECEDES Step` is visible as the ordering connector.
+The primary relationships remain visible in both details:
 
-`strict` can add Opportunity reference badges to a `Step`, but
-`opportunity_refs` is a node property rather than a relationship edge.
+- `Stage CONTAINS JourneyStep` is visible structurally.
+- `JourneyStep PRECEDES JourneyStep` is visible as the ordering connector.
+
+`show_relationship_references` controls the new reference groups. Detailed
+output also shows existing Opportunity reference badges when a JourneyStep has
+`opportunity_refs`, under `show_reference_badges`. That property is not a
+relationship edge and retains its existing Opportunity-reference behavior.
 
 == Outcome-Opportunity Map
 
 Available node types: `Outcome`, `Metric`, `Opportunity`, `Initiative`
 
-| Node | Edge | `simple` | `strict` |
+| Node in this view | Edge | `compact` | `detailed` |
 | --- | --- | --- | --- |
-| `Metric` | `Metric INSTRUMENTED_AT Step` | Invisible | **B — strict annotation** |
-| `Metric` | `Metric INSTRUMENTED_AT Place` | Invisible | **B — strict annotation** |
-| `Metric` | `Metric INSTRUMENTED_AT ViewState` | Invisible | **B — strict annotation** |
-| `Metric` | `Metric INSTRUMENTED_AT Event` | Invisible | **B — strict annotation** |
-| `Initiative` | `Initiative IMPLEMENTED_BY Place` | Invisible | **B — strict annotation** |
-| `Initiative` | `Initiative IMPLEMENTED_BY ViewState` | Invisible | **B — strict annotation** |
-| `Initiative` | `Initiative IMPLEMENTED_BY Component` | Invisible | **B — strict annotation** |
-| `Initiative` | `Initiative IMPLEMENTED_BY Process` | Invisible | **B — strict annotation** |
-| `Initiative` | `Initiative IMPLEMENTED_BY SystemAction` | Invisible | **B — strict annotation** |
+| `Metric` | `Metric INSTRUMENTED_AT JourneyStep` | Reference hidden | **B — detailed annotation** |
+| `Metric` | `Metric INSTRUMENTED_AT BlueprintStep` | Reference hidden | **B — detailed annotation** |
+| `Metric` | `Metric INSTRUMENTED_AT ScenarioStep` | Reference hidden | **B — detailed annotation** |
+| `Metric` | `Metric INSTRUMENTED_AT Place` | Reference hidden | **B — detailed annotation** |
+| `Metric` | `Metric INSTRUMENTED_AT ViewState` | Reference hidden | **B — detailed annotation** |
+| `Metric` | `Metric INSTRUMENTED_AT Event` | Reference hidden | **B — detailed annotation** |
+| `Initiative` | `Initiative IMPLEMENTED_BY Place` | Reference hidden | **B — detailed annotation** |
+| `Initiative` | `Initiative IMPLEMENTED_BY ViewState` | Reference hidden | **B — detailed annotation** |
+| `Initiative` | `Initiative IMPLEMENTED_BY Component` | Reference hidden | **B — detailed annotation** |
+| `Initiative` | `Initiative IMPLEMENTED_BY Process` | Reference hidden | **B — detailed annotation** |
+| `Initiative` | `Initiative IMPLEMENTED_BY SystemAction` | Reference hidden | **B — detailed annotation** |
 
-The targets of these relationships are outside the Outcome-Opportunity Map
-node set. In `strict`, the renderer converts them into annotations on the
-source `Metric` or `Initiative` node instead of drawing their target nodes.
+The targets remain outside the primary node set. Detailed output displays their
+references on the source Metric or Initiative under
+`show_instrumentation_annotations` and `show_implementation_annotations`.
+The three Step types, Place, and ViewState are in the instrumentation
+`experience` group; Event is in its `event` group.
 
-`Outcome`, `Opportunity`, and the `MEASURED_BY`, `SUPPORTS`, and `ADDRESSES`
-relationships have no invisible cases.
+The following relationships remain visible in both details:
+
+- `Outcome MEASURED_BY Metric`
+- `Opportunity SUPPORTS Outcome`
+- `Initiative ADDRESSES Opportunity`
 
 == Service Blueprint
 
-Available node types: `Step`, `Process`, `SystemAction`, `DataEntity`, `Policy`
+Available node types: `BlueprintStep`, `Process`, `SystemAction`, `DataEntity`, `Policy`
 
 ### Entirely hidden cross-view edges
 
-| Node | Edge | `simple` | `strict` |
+| Node in this view | Edge | `compact` | `detailed` |
 | --- | --- | --- | --- |
-| `Step` | `Step REALIZED_BY Place` | Target `Place` is outside the view | **A — entirely hidden** |
-| `Step` | `Step REALIZED_BY ViewState` | Target `ViewState` is outside the view | **A — entirely hidden** |
-| `SystemAction` | `ViewState DEPENDS_ON SystemAction` | Source `ViewState` is outside the view | **A — entirely hidden** |
-| `SystemAction` | `Component DEPENDS_ON SystemAction` | Source `Component` is outside the view | **A — entirely hidden** |
+| `BlueprintStep` | `BlueprintStep REALIZED_BY Place`<br>`BlueprintStep REALIZED_BY ViewState` | Realization targets are outside the view | **A — entirely hidden** |
+| `Process` | `JourneyStep REALIZED_BY Process`<br>`ScenarioStep REALIZED_BY Process` | Other Step types are outside the view | **A — entirely hidden** |
+| `Process`, `SystemAction` | `Initiative IMPLEMENTED_BY Process`<br>`Initiative IMPLEMENTED_BY SystemAction` | Source `Initiative` is outside the view | **A — entirely hidden** |
+| `Process`, `SystemAction` | `Process EMITS Event`<br>`SystemAction EMITS Event` | Target `Event` is outside the view | **A — entirely hidden** |
+| `SystemAction` | `ViewState DEPENDS_ON SystemAction`<br>`Component DEPENDS_ON SystemAction` | Sources `ViewState` and `Component` are outside the view | **A — entirely hidden** |
+| `DataEntity` | `Component BINDS_TO DataEntity` | Source `Component` is outside the view | **A — entirely hidden** |
 | `Policy` | `Place CONSTRAINED_BY Policy` | Source `Place` is outside the view | **A — entirely hidden** |
+| `BlueprintStep` | `Metric INSTRUMENTED_AT BlueprintStep` | Source `Metric` is outside the view | **A — entirely hidden** |
 
-### Connectors visible in `simple`, labels visible only in `strict`
+### Correspondence and refinement references
 
-These are **C — strict label** cases rather than fully invisible edges.
+| Node in this view | Edge | `compact` | `detailed` |
+| --- | --- | --- | --- |
+| `BlueprintStep` | `JourneyStep MAPS_TO BlueprintStep` | Reference hidden | **B — detailed annotation**: **Maps to** lists the JourneyStep counterpart |
+| `BlueprintStep` | `BlueprintStep MAPS_TO JourneyStep` | Reference hidden | **B — detailed annotation**: the same **Maps to** reference |
+| `BlueprintStep` | `BlueprintStep REFINED_BY ScenarioStep` | Reference hidden | **B — detailed annotation**: **Refined by** lists the ScenarioStep |
 
-| Node | Edge |
+`show_relationship_references` controls these groups. JourneyStep and
+ScenarioStep targets remain outside the primary node set.
+
+### Connectors visible in compact, labels visible only in detailed
+
+These are **C — detailed label** cases. `show_secondary_edge_labels` controls
+the relationship labels; the connectors are visible in both details.
+
+| Node in this view | Edge |
 | --- | --- |
-| `Step`, `Process` | `Step REALIZED_BY Process` |
+| `BlueprintStep`, `Process` | `BlueprintStep REALIZED_BY Process` |
 | `Process` | `Process DEPENDS_ON Process` |
 | `Process`, `SystemAction` | `Process DEPENDS_ON SystemAction` |
 | `Process`, `Policy` | `Process CONSTRAINED_BY Policy` |
@@ -171,8 +254,7 @@ These are **C — strict label** cases rather than fully invisible edges.
 | `SystemAction`, `DataEntity` | `SystemAction READS DataEntity` |
 | `SystemAction`, `DataEntity` | `SystemAction WRITES DataEntity` |
 
-`PRECEDES` connectors remain visible without a relationship label in both
-profiles. The profile-dependent labels above are controlled by
-`show_secondary_edge_labels`.
+`BlueprintStep PRECEDES BlueprintStep` and `Process PRECEDES Process`
+connectors remain visible without a relationship label in both details.
 
 :::

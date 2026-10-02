@@ -1,4 +1,6 @@
 export { loadBundle } from "./bundle/loadBundle.js";
+export { createSemanticRelationshipReader } from "./relationships/semanticRelationships.js";
+export type { SemanticRelationship, RelationshipLookupDirection } from "./relationships/semanticRelationships.js";
 export {
   getBundleNodeDecoratorModeFallback,
   getBundleRenderDetailFallback,
@@ -129,7 +131,9 @@ export type {
   GuidedDisplayPredicate,
   GuidedDisplayRule,
   GuidedViewRelationship,
-  RelationshipAuthoringConfig
+  RelationshipAuthoringConfig,
+  RelationshipSemanticDescriptor,
+  RendererRelationshipReferenceConfig
 } from "./bundle/types.js";
 export type { ParseResult } from "./parser/types.js";
 export type { CompileResult, CompiledGraph, CompiledEdge, CompiledNode } from "./compiler/types.js";

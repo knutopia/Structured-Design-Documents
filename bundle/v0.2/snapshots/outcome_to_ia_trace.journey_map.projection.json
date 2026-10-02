@@ -11,12 +11,12 @@
     },
     {
       "id": "J-001",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Enter Billing"
     },
     {
       "id": "J-002",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Confirm Payment"
     }
   ],
@@ -52,19 +52,12 @@
         ]
       }
     ],
-    "edge_annotations": [
-
-    ],
-    "node_groups": [
-
-    ],
-    "view_metadata": {
-    }
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
   },
-  "omissions": [
-
-  ],
+  "omissions": [],
   "notes": [
-    "Opportunity references are rendered as step annotations driven by Step.props.opportunity_refs."
+    "Opportunity references are rendered as step annotations driven by JourneyStep.props.opportunity_refs."
   ]
 }

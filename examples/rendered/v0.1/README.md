@@ -5,7 +5,7 @@ This directory is generated from the canonical bundle examples and committed as 
 Regenerate it with:
 
 ```bash
-TMPDIR=/tmp pnpm run generate:rendered-examples
+TMPDIR=/tmp pnpm run generate:rendered-examples bundle/v0.1/manifest.yaml
 ```
 
 Source manifest: `bundle/v0.1/manifest.yaml`

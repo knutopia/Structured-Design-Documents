@@ -1,0 +1,14 @@
+flowchart TB
+  subgraph n_lane_01_customer["customer"]
+    n_BP_001("Prepare order<br/>Maps to: Choose purchase (J-001)<br/>Maps to: Confirm purchase (J-002)<br/>Refined by: Review order (S-002)<br/>Refined by: Submit purchase (S-003)")
+    n_BP_002("Submit order<br/>Maps to: Choose purchase (J-001)<br/>Refined by: Select item (S-001)")
+  end
+  subgraph n_lane_02_frontstage["frontstage"]
+    n_PR_001["Prepare purchase"]
+    n_PR_002["Accept purchase"]
+  end
+  n_BP_001 --> n_BP_002
+  n_BP_001 -->|realized by| n_PR_001
+  n_BP_002 -->|realized by| n_PR_002
+  n_PR_001 --> n_PR_002
+  linkStyle 1,2 stroke-dasharray: 6 4;

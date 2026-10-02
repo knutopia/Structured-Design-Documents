@@ -1,0 +1,35 @@
+digraph scenario_flow {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.7, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_step {
+    rank=same;
+    "lane_step" [shape=plaintext, label="Steps"];
+    "S-001" [shape="box", style="rounded", label="Select item\nRefines: Submit order (BP-002)\nRefines: Choose purchase (J-001)"];
+    "S-002" [shape="box", style="rounded", label="Review order\nRefines: Prepare order (BP-001)\nRefines: Choose purchase (J-001)"];
+    "S-003" [shape="box", style="rounded", label="Submit purchase\nRefines: Prepare order (BP-001)\nRefines: Confirm purchase (J-002)"];
+  }
+  subgraph rank_place {
+    rank=same;
+    "lane_place" [shape=plaintext, label="Places"];
+    "P-001" [shape="box", style="rounded", label="Checkout"];
+    "P-002" [shape="box", style="rounded", label="Confirmation"];
+  }
+  subgraph rank_view_state {
+    rank=same;
+    "lane_view_state" [shape=plaintext, label="View States"];
+    "VS-001" [shape="box", style="rounded,dashed", label="Order review"];
+  }
+  "lane_step" -> "lane_place" [style=invis, weight=100];
+  "lane_place" -> "lane_view_state" [style=invis, weight=100];
+  "lane_step" -> "S-001" [style=invis, weight=100];
+  "lane_place" -> "P-001" [style=invis, weight=100];
+  "P-001" -> "P-002" [style=invis, weight=100];
+  "lane_view_state" -> "VS-001" [style=invis, weight=100];
+  "S-001" -> "S-002" [weight=4];
+  "S-001" -> "P-001" [style="dotted", constraint=false];
+  "S-002" -> "S-003" [weight=4];
+  "S-002" -> "VS-001" [style="dotted", constraint=false];
+  "S-003" -> "P-002" [style="dotted", constraint=false];
+}

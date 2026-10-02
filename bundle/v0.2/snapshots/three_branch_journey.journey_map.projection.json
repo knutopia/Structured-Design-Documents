@@ -11,37 +11,37 @@
     },
     {
       "id": "J-400",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Choose the main priority"
     },
     {
       "id": "J-410",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Explore lower energy bills"
     },
     {
       "id": "J-411",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Review usage opportunities"
     },
     {
       "id": "J-420",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Explore better home comfort"
     },
     {
       "id": "J-421",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Identify comfort problem areas"
     },
     {
       "id": "J-430",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Explore lower emissions"
     },
     {
       "id": "J-431",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Estimate upgrade impact"
     }
   ],
