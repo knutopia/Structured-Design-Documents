@@ -35,10 +35,9 @@ import {
   getRenderedCorpusPreviewOutputPath,
   getRenderedCorpusRoot,
   getRenderedCorpusViewDirName,
-  planRenderedCorpusOutputPaths
+  planRenderedCorpusOutputPaths,
+  resolveRenderedCorpusManifestPaths
 } from "./renderedCorpus.js";
-
-const defaultManifestPath = path.resolve("bundle/v0.1/manifest.yaml");
 
 function buildReadmeContent(
   manifestPath: string,
@@ -146,10 +145,7 @@ function buildReadmeContent(
   return lines.join("\n");
 }
 
-async function main(): Promise<void> {
-  const manifestPath = process.argv[2] ? path.resolve(process.argv[2]) : defaultManifestPath;
-  assertPreviewBackendAvailable("legacy_graphviz_preview");
-
+async function generateRenderedExamples(manifestPath: string): Promise<void> {
   const bundle = await loadBundle(manifestPath);
   const validationProfileId = bundle.manifest.tool_defaults.validation_profile_id;
   const discovery = await discoverCuratedRenderedExamplePairs(bundle);
@@ -497,6 +493,16 @@ async function main(): Promise<void> {
     ),
     "utf8"
   );
+}
+
+async function main(): Promise<void> {
+  const manifestPaths = await resolveRenderedCorpusManifestPaths(process.argv[2]);
+  assertPreviewBackendAvailable("legacy_graphviz_preview");
+
+  for (const manifestPath of manifestPaths) {
+    console.log(`Generating rendered corpus from ${path.relative(process.cwd(), manifestPath)}.`);
+    await generateRenderedExamples(manifestPath);
+  }
 }
 
 await main();

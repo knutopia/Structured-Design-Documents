@@ -31,6 +31,7 @@ z
 ## Fri 10-2
 
 - More documentation cleanup
+- Example corpus generation fixed
 
 ## Thu 10-1
 

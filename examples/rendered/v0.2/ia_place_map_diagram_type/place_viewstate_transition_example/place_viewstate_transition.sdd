@@ -1,7 +1,5 @@
 SDD-TEXT 0.2
 # Originally was SDD-TEXT 0.1
-
-
 # Nested blocks intentionally cover source-level authoring convenience.
 # Relationships remain explicit and are still authored separately.
 
