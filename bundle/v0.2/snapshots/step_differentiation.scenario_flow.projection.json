@@ -1,0 +1,200 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.2",
+  "view_id": "scenario_flow",
+  "source_example": "step_differentiation",
+  "nodes": [
+    {
+      "id": "P-001",
+      "type": "Place",
+      "name": "Checkout"
+    },
+    {
+      "id": "P-002",
+      "type": "Place",
+      "name": "Confirmation"
+    },
+    {
+      "id": "S-001",
+      "type": "ScenarioStep",
+      "name": "Select item"
+    },
+    {
+      "id": "S-002",
+      "type": "ScenarioStep",
+      "name": "Review order"
+    },
+    {
+      "id": "S-003",
+      "type": "ScenarioStep",
+      "name": "Submit purchase"
+    },
+    {
+      "id": "VS-001",
+      "type": "ViewState",
+      "name": "Order review"
+    }
+  ],
+  "edges": [
+    {
+      "from": "S-001",
+      "type": "PRECEDES",
+      "to": "S-002"
+    },
+    {
+      "from": "S-001",
+      "type": "REALIZED_BY",
+      "to": "P-001"
+    },
+    {
+      "from": "S-002",
+      "type": "PRECEDES",
+      "to": "S-003"
+    },
+    {
+      "from": "S-002",
+      "type": "REALIZED_BY",
+      "to": "VS-001"
+    },
+    {
+      "from": "S-003",
+      "type": "REALIZED_BY",
+      "to": "P-002"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "S-001",
+        "references": [
+          {
+            "role": "refines",
+            "target_id": "BP-002",
+            "target_type": "BlueprintStep",
+            "target_name": "Submit order",
+            "group": "refines",
+            "label": "Refines",
+            "detail_setting": "show_relationship_references"
+          },
+          {
+            "role": "refines",
+            "target_id": "J-001",
+            "target_type": "JourneyStep",
+            "target_name": "Choose purchase",
+            "group": "refines",
+            "label": "Refines",
+            "detail_setting": "show_relationship_references"
+          }
+        ]
+      },
+      {
+        "node_id": "S-002",
+        "references": [
+          {
+            "role": "refines",
+            "target_id": "BP-001",
+            "target_type": "BlueprintStep",
+            "target_name": "Prepare order",
+            "group": "refines",
+            "label": "Refines",
+            "detail_setting": "show_relationship_references"
+          },
+          {
+            "role": "refines",
+            "target_id": "J-001",
+            "target_type": "JourneyStep",
+            "target_name": "Choose purchase",
+            "group": "refines",
+            "label": "Refines",
+            "detail_setting": "show_relationship_references"
+          }
+        ]
+      },
+      {
+        "node_id": "S-003",
+        "references": [
+          {
+            "role": "refines",
+            "target_id": "BP-001",
+            "target_type": "BlueprintStep",
+            "target_name": "Prepare order",
+            "group": "refines",
+            "label": "Refines",
+            "detail_setting": "show_relationship_references"
+          },
+          {
+            "role": "refines",
+            "target_id": "J-002",
+            "target_type": "JourneyStep",
+            "target_name": "Confirm purchase",
+            "group": "refines",
+            "label": "Refines",
+            "detail_setting": "show_relationship_references"
+          }
+        ]
+      }
+    ],
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [
+    {
+      "kind": "edge",
+      "from": "BP-001",
+      "type": "REFINED_BY",
+      "to": "S-002",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "REFINED_BY is represented by relationship references."
+    },
+    {
+      "kind": "edge",
+      "from": "BP-001",
+      "type": "REFINED_BY",
+      "to": "S-003",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "REFINED_BY is represented by relationship references."
+    },
+    {
+      "kind": "edge",
+      "from": "BP-002",
+      "type": "REFINED_BY",
+      "to": "S-001",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "REFINED_BY is represented by relationship references."
+    },
+    {
+      "kind": "edge",
+      "from": "J-001",
+      "type": "REFINED_BY",
+      "to": "S-001",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "REFINED_BY is represented by relationship references."
+    },
+    {
+      "kind": "edge",
+      "from": "J-001",
+      "type": "REFINED_BY",
+      "to": "S-002",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "REFINED_BY is represented by relationship references."
+    },
+    {
+      "kind": "edge",
+      "from": "J-002",
+      "type": "REFINED_BY",
+      "to": "S-003",
+      "reason": "derived_annotation_instead_of_edge",
+      "detail": "REFINED_BY is represented by relationship references."
+    },
+    {
+      "kind": "edge",
+      "from": "P-001",
+      "type": "CONTAINS",
+      "to": "VS-001",
+      "reason": "relationship_not_in_scope",
+      "detail": "CONTAINS is outside the scenario_flow edge scope."
+    }
+  ],
+  "notes": []
+}

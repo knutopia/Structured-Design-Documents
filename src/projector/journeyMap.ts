@@ -1,3 +1,4 @@
+import { resolveHierarchyRoles } from "../bundle/viewRoles.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { ProjectionNodeAnnotation, ProjectionResult } from "./types.js";
@@ -28,6 +29,7 @@ function referenceRole(sourceProp: string): string {
 
 function buildReferenceAnnotations(
   graph: CompiledGraph,
+  bundle: Bundle,
   view: ViewSpec,
   graphNodesById: Map<string, { id: string; type: string; name: string; props: Record<string, string> }>,
   projectedNodeIds: Set<string>
@@ -41,9 +43,10 @@ function buildReferenceAnnotations(
   }
 
   const role = referenceRole(sourceProp);
+  const roles = resolveHierarchyRoles(bundle, view);
   const annotations: ProjectionNodeAnnotation[] = [];
   for (const node of graph.nodes) {
-    if (node.type !== "Step" || !projectedNodeIds.has(node.id)) {
+    if (!roles.childTypes.has(node.type) || !projectedNodeIds.has(node.id)) {
       continue;
     }
 
@@ -78,15 +81,17 @@ function buildReferenceAnnotations(
 
 export function buildJourneyMapProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec): ProjectionResult {
   const context = createProjectionBuilderContext(graph, bundle, view);
-  const nodeAnnotations = buildReferenceAnnotations(graph, view, context.graphNodesById, context.projectedNodeIds);
+  const nodeAnnotations = buildReferenceAnnotations(graph, bundle, view, context.graphNodesById, context.projectedNodeIds);
+  const roles = resolveHierarchyRoles(bundle, view);
+  const stepName = [...roles.childTypes][0];
   const notes: string[] = [];
   const referenceSourceProp = (view.conventions.renderer_defaults?.reference_annotations as Record<string, unknown> | undefined)?.source_prop;
 
   if (nodeAnnotations.length > 0 && typeof referenceSourceProp === "string") {
-    notes.push(`Opportunity references are rendered as step annotations driven by Step.props.${referenceSourceProp}.`);
+    notes.push(`Opportunity references are rendered as step annotations driven by ${stepName}.props.${referenceSourceProp}.`);
   }
-  if (!context.projectedNodes.some((node) => node.type === "Stage")) {
-    notes.push("No Stage nodes are present in this example; journey projection remains valid with Step-only sequence.");
+  if (!context.projectedNodes.some((node) => roles.parentTypes.has(node.type))) {
+    notes.push(`No Stage nodes are present in this example; journey projection remains valid with ${stepName}-only sequence.`);
   }
 
   return buildProjectionResult(context, {

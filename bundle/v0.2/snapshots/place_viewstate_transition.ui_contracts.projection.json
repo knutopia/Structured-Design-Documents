@@ -108,12 +108,8 @@
     }
   ],
   "derived": {
-    "node_annotations": [
-
-    ],
-    "edge_annotations": [
-
-    ],
+    "node_annotations": [],
+    "edge_annotations": [],
     "node_groups": [
       {
         "id": "secondary_state_group:C-010",
@@ -161,7 +157,5 @@
       "detail": "WRITES is outside the ui_contracts edge scope."
     }
   ],
-  "notes": [
-
-  ]
+  "notes": []
 }

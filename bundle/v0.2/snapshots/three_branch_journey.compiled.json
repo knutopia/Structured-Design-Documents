@@ -14,7 +14,7 @@
     },
     {
       "id": "J-400",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Choose the main priority",
       "props": {
         "actor": "Homeowner",
@@ -27,7 +27,7 @@
     },
     {
       "id": "J-410",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Explore lower energy bills",
       "props": {
         "actor": "Homeowner",
@@ -39,7 +39,7 @@
     },
     {
       "id": "J-411",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Review usage opportunities",
       "props": {
         "actor": "Homeowner",
@@ -51,7 +51,7 @@
     },
     {
       "id": "J-420",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Explore better home comfort",
       "props": {
         "actor": "Homeowner",
@@ -63,7 +63,7 @@
     },
     {
       "id": "J-421",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Identify comfort problem areas",
       "props": {
         "actor": "Homeowner",
@@ -75,7 +75,7 @@
     },
     {
       "id": "J-430",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Explore lower emissions",
       "props": {
         "actor": "Homeowner",
@@ -87,7 +87,7 @@
     },
     {
       "id": "J-431",
-      "type": "Step",
+      "type": "JourneyStep",
       "name": "Estimate upgrade impact",
       "props": {
         "actor": "Homeowner",

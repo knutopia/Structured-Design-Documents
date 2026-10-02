@@ -30,7 +30,8 @@ z
 
 ## Thu 10-1
 
-- Planned step differentiation for v0.2
+- Step differentiation for v0.2
+- Cleaning up talentless documentation updates
 
 ## Wed 9-30
 

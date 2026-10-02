@@ -1,0 +1,35 @@
+flowchart LR
+  subgraph n_P_410[" "]
+    n_P_410__anchor["Departure Desk"]
+    subgraph n_VS_410a[" "]
+      n_VS_410a__anchor["ViewState: Staging"]
+      n_C_460("Crew Note")
+    end
+    subgraph n_VS_410b[" "]
+      n_VS_410b__anchor["ViewState: Released"]
+      n_C_460("Crew Note")
+    end
+    n_C_410("Load Workbench")
+    n_VS_410c("Archived")
+    n_VS_410d("Receipt delivered")
+    n_VS_410e("Departure closed")
+    n_VS_415a("Crew message")
+    n_VS_415b("Crew review")
+    n_VS_415c("Crew confirmation")
+  end
+  n_C_420("Cargo Sheet")
+  n_C_430("Seal Check")
+  n_C_431("Seal Code Input")
+  n_C_440("Release Lever")
+  n_C_450("Trail Lens")
+  n_C_470("Arrival Review")
+  n_VS_410a__anchor -->|[Release load] {seal_valid} / SA-440| n_VS_410b__anchor
+  n_VS_410b__anchor -->|[Archive confirmed]| n_VS_410c
+  n_VS_410c -->|[Receipt delivered]| n_VS_410d
+  n_VS_410d -->|[Departure closed]| n_VS_410e
+  n_VS_415a -->|[Crew review opened]| n_VS_415b
+  n_VS_415b -->|[Crew note acknowledged]| n_VS_415c
+  classDef dashedNode stroke-dasharray: 6 4;
+  class n_VS_410c,n_VS_410d,n_VS_410e,n_VS_415a,n_VS_415b,n_VS_415c dashedNode;
+  classDef containerTitle fill:transparent,stroke:transparent,color:#111;
+  class n_P_410__anchor,n_VS_410a__anchor,n_VS_410b__anchor containerTitle;

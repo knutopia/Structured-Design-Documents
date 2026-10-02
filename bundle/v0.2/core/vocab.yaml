@@ -17,9 +17,15 @@ node_types:
   - token: Stage
     group: experience
     description: Coarse journey phase.
-  - token: Step
+  - token: JourneyStep
     group: experience
-    description: Unit of user intent or behavior.
+    description: Meaningful episode of user or customer intent and behavior.
+  - token: BlueprintStep
+    group: experience
+    description: User or customer behavior anchoring service delivery.
+  - token: ScenarioStep
+    group: experience
+    description: Specific action or decision within a scenario.
   - token: Area
     group: structure
     description: Information architecture grouping.
@@ -103,6 +109,12 @@ relationship_types:
   - token: INSTRUMENTED_AT
     group: measurement
     description: Metric is observed at an experience or event node.
+  - token: MAPS_TO
+    group: traceability
+    description: Symmetric correspondence between journey and blueprint steps.
+  - token: REFINED_BY
+    group: traceability
+    description: Directed partial elaboration by scenario steps.
 
 aliases_informative:
   TRIGGERS: EMITS

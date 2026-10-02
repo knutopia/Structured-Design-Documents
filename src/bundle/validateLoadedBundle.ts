@@ -289,6 +289,22 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
 
   const triples: string[] = [];
   for (const relationship of bundle.contracts.relationships) {
+    if (relationship.semantics !== undefined) {
+      const semantics = record(relationship.semantics);
+      const fields = semantics?.identity_fields;
+      if (!semantics || !sameStringSet(Object.keys(semantics), ["directionality", "reciprocal_declarations", "identity_fields"])
+        || !["directed", "symmetric"].includes(String(semantics.directionality))
+        || !["preserve", "coalesce"].includes(String(semantics.reciprocal_declarations))
+        || !Array.isArray(fields) || !["type", "from", "to"].every((field) => fields.includes(field))
+        || fields.some((field) => !["type", "from", "to", "event", "guard", "effect", "props"].includes(field))
+        || new Set(fields).size !== fields.length) {
+        add("bundle.contracts.invalid_semantics", `Relationship '${relationship.type}' has an invalid semantic descriptor`);
+      }
+      if (semantics?.directionality === "symmetric" && relationship.allowed_endpoints.some((pair) =>
+        !relationship.allowed_endpoints.some((reverse) => reverse.from === pair.to && reverse.to === pair.from))) {
+        add("bundle.contracts.asymmetric_endpoints", `Symmetric relationship '${relationship.type}' must permit both authored endpoint directions`);
+      }
+    }
     if (!relationshipTypes.has(relationship.type)) {
       add("bundle.contracts.unknown_relationship", `Relationship contract uses unknown token '${relationship.type}'`);
     }
@@ -447,6 +463,47 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
       continue;
     }
     const rendererDefaults = record(view.conventions.renderer_defaults);
+    if (rendererDefaults?.relationship_references !== undefined) {
+      const references = rendererDefaults.relationship_references;
+      if (!Array.isArray(references)) {
+        add("bundle.renderer.relationship_references_shape", `View '${view.id}' relationship_references must be an array`);
+      } else {
+        const roles = new Set<string>();
+        for (const raw of references) {
+          const reference = record(raw);
+          if (!reference || !sameStringSet(Object.keys(reference), ["relationship", "node_types", "direction", "role", "label", "detail_setting"])
+            || !relationshipTypes.has(String(reference.relationship))
+            || !Array.isArray(reference.node_types) || reference.node_types.length === 0
+            || reference.node_types.some((type) => !nodeTypes.has(type) || !view.projection.include_node_types.includes(type))
+            || !["incoming", "outgoing", "incident"].includes(String(reference.direction))
+            || ["role", "label", "detail_setting"].some((key) => typeof reference[key] !== "string" || !String(reference[key]).trim())) {
+            add("bundle.renderer.relationship_reference_invalid", `View '${view.id}' has an invalid relationship reference`);
+            continue;
+          }
+          if (roles.has(String(reference.role))) add("bundle.renderer.relationship_reference_duplicate_role", `View '${view.id}' repeats reference role '${reference.role}'`);
+          roles.add(String(reference.role));
+          const contract = bundle.contracts.relationships.find((relationship) => relationship.type === reference.relationship);
+          if (reference.node_types.some((nodeType) => !contract?.allowed_endpoints.some((pair) =>
+            reference.direction === "outgoing" ? pair.from === nodeType
+              : reference.direction === "incoming" ? pair.to === nodeType
+                : pair.from === nodeType || pair.to === nodeType))) {
+            add("bundle.renderer.relationship_reference_endpoints", `View '${view.id}' reference '${reference.role}' has no legal endpoint for its configured direction`);
+          }
+          const referenceSchema = record(record(bundle.projectionSchema.$defs)?.reference);
+          const properties = record(referenceSchema?.properties);
+          for (const field of ["role", "group"]) {
+            const allowed = record(properties?.[field])?.enum;
+            if (Array.isArray(allowed) && !allowed.includes(reference.role)) {
+              add("bundle.renderer.relationship_reference_schema", `View '${view.id}' reference '${reference.role}' is not permitted by projection reference ${field}`);
+            }
+          }
+          const detailDisplay = record(rendererDefaults.detail_display);
+          if (bundle.manifest.render_details.some(({ id }) => typeof record(detailDisplay?.[id])?.[String(reference.detail_setting)] !== "boolean")) {
+            add("bundle.renderer.relationship_reference_detail_setting", `View '${view.id}' reference '${reference.role}' must declare its detail switch in every detail policy`);
+          }
+        }
+      }
+    }
     const detailDisplay = record(rendererDefaults?.detail_display);
     const batchApplicability = record(rendererDefaults?.batch_applicability);
     if (!rendererDefaults || !detailDisplay) {

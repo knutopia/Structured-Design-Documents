@@ -1,6 +1,8 @@
 import { copyFile, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { formatPrettyDiagnostics } from "../diagnostics/formatPretty.js";
+import { resolveHierarchyRoles } from "../bundle/viewRoles.js";
+import type { Bundle } from "../bundle/types.js";
 import { loadBundle } from "../bundle/loadBundle.js";
 import { assertPreviewBackendAvailable } from "../renderer/previewBackends.js";
 import { renderSourcePreview } from "../renderer/previewWorkflow.js";
@@ -42,8 +44,12 @@ function buildReadmeContent(
   manifestPath: string,
   pairs: Array<{ viewId: string; exampleName: string }>,
   detailIds: string[],
-  validationProfileId: string
+  validationProfileId: string,
+  bundle: Bundle
 ): string {
+  const journeyView = bundle.views.views.find((view) => view.id === "journey_map")!;
+  const journeyRoles = resolveHierarchyRoles(bundle, journeyView);
+  const journeyRoleDescription = `${[...journeyRoles.parentTypes].join("/")}/${[...journeyRoles.childTypes].join("/")}`;
   const lines = [
     "# Rendered Example Corpus",
     "",
@@ -52,7 +58,7 @@ function buildReadmeContent(
     "Regenerate it with:",
     "",
     "```bash",
-    "TMPDIR=/tmp pnpm run generate:rendered-examples",
+    `TMPDIR=/tmp pnpm run generate:rendered-examples ${manifestPath}`,
     "```",
     "",
     `Source manifest: \`${manifestPath}\``,
@@ -129,7 +135,7 @@ function buildReadmeContent(
   lines.push("");
   lines.push("`journey_map` visual review checklist:");
   lines.push("");
-  lines.push("- staged unsuffixed `.svg` and `.png` artifacts use source-ordered Stage/Step placement and dedicated orthogonal `PRECEDES` routing");
+  lines.push(`- staged unsuffixed \`.svg\` and \`.png\` artifacts use source-ordered ${journeyRoleDescription} placement and dedicated orthogonal \`PRECEDES\` routing`);
   lines.push("- detailed detail shows resolved opportunity badges while compact detail remains title-focused");
   lines.push("- explicit `.legacy_graphviz_preview.svg` and `.legacy_graphviz_preview.png` siblings preserve the Graphviz comparison path");
   lines.push("- focused renderer-stage goldens, rather than nominal corpus debug siblings, prove meaningful pre-routing, step-2, step-3, final, and diagnostic behavior");
@@ -486,7 +492,8 @@ async function main(): Promise<void> {
       displayManifestPath,
       outputIndex,
       bundle.manifest.render_details.map((detail) => detail.id),
-      validationProfileId
+      validationProfileId,
+      bundle
     ),
     "utf8"
   );

@@ -1,3 +1,4 @@
+import { referenceAttributeLabelLines } from "./referenceAttributes.js";
 import type { IaPlaceMapRenderModel, IaRenderItem, IaRenderPlace } from "./iaPlaceMapRenderModel.js";
 import { buildLegacyIaPlaceLabelLines } from "./placeLabelLines.js";
 import type {
@@ -322,7 +323,7 @@ function renderServiceBlueprintLane(
       continue;
     }
     const display = inferNodeShape(node.shape, node.style);
-    pushNode(lines, dashedNodeIds, node.id, [node.title], display.shape, display.dashed, `${indent}  `);
+    pushNode(lines, dashedNodeIds, node.id, [node.title, ...referenceAttributeLabelLines(node.attributes ?? [])], display.shape, display.dashed, `${indent}  `);
   }
   lines.push(`${indent}end`);
 }
@@ -356,7 +357,7 @@ export function renderServiceBlueprintMermaid(model: ServiceBlueprintRenderModel
       continue;
     }
     const display = inferNodeShape(node.shape, node.style);
-    pushNode(lines, dashedNodeIds, node.id, [node.title], display.shape, display.dashed, "  ");
+    pushNode(lines, dashedNodeIds, node.id, [node.title, ...referenceAttributeLabelLines(node.attributes ?? [])], display.shape, display.dashed, "  ");
   }
 
   for (const edge of model.edges) {
@@ -382,7 +383,7 @@ function renderScenarioFlowLane(
       continue;
     }
     const display = inferNodeShape(node.shape, node.style);
-    pushNode(lines, dashedNodeIds, node.id, [node.title], display.shape, display.dashed, `${indent}  `);
+    pushNode(lines, dashedNodeIds, node.id, [node.title, ...referenceAttributeLabelLines(node.attributes ?? [])], display.shape, display.dashed, `${indent}  `);
   }
   lines.push(`${indent}end`);
 }

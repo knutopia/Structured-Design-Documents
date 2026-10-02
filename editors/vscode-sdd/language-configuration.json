@@ -54,12 +54,12 @@
   ],
   "wordPattern": "(?:[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?|[A-Za-z_][A-Za-z0-9_./:-]*)",
   "indentationRules": {
-    "increaseIndentPattern": "^\\s*(?:\\+\\s+)?(?:SystemAction|Opportunity|DataEntity|Initiative|Component|ViewState|Outcome|Process|Metric|Policy|Event|Place|Stage|State|Area|Step)\\s+(?:[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)\\s+\"",
+    "increaseIndentPattern": "^\\s*(?:\\+\\s+)?(?:BlueprintStep|ScenarioStep|SystemAction|JourneyStep|Opportunity|DataEntity|Initiative|Component|ViewState|Outcome|Process|Metric|Policy|Event|Place|Stage|State|Area)\\s+(?:[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)\\s+\"",
     "decreaseIndentPattern": "^\\s*END(?:\\s+#.*)?\\s*$"
   },
   "folding": {
     "markers": {
-      "start": "^\\s*(?:\\+\\s+)?(?:SystemAction|Opportunity|DataEntity|Initiative|Component|ViewState|Outcome|Process|Metric|Policy|Event|Place|Stage|State|Area|Step)\\s+(?:[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)\\s+\"",
+      "start": "^\\s*(?:\\+\\s+)?(?:BlueprintStep|ScenarioStep|SystemAction|JourneyStep|Opportunity|DataEntity|Initiative|Component|ViewState|Outcome|Process|Metric|Policy|Event|Place|Stage|State|Area)\\s+(?:[A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)\\s+\"",
       "end": "^\\s*END(?:\\s+#.*)?\\s*$"
     }
   }

@@ -32,7 +32,7 @@ This probably works with other editors too. The grammar is used for source code 
 
 ## Orientation
 
-- [bundle/v0.1/](bundle/v0.1/) houses the tight, machine-readable specifications for version 0.1. These specifications are the source of truth for tooling.
+- [bundle/v0.2/](bundle/v0.2/) governs current language behavior, including [Step differentiation](definitions/v0.2/step_differentiation.md). [bundle/v0.1/](bundle/v0.1/) houses the tight, machine-readable specifications for version 0.1. These specifications are the source of truth for tooling.
 
 - [definitions/v0.1/](definitions/v0.1/) houses explanatory definitions and rationale for version 0.1 and should stay consistent with the bundle.
 

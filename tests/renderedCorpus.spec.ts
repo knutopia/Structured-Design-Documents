@@ -18,6 +18,12 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
 describe("rendered example corpus", () => {
+  it("registers the mixed v0.2 proof in all three views and the blueprint canonical only in its own view", async () => {
+    const bundle = await loadBundle(path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    expect(discovery.pairs.filter(pair => pair.example.name === "step_differentiation").map(pair => pair.viewId)).toEqual(["journey_map", "service_blueprint", "scenario_flow"]);
+    expect(discovery.pairs.filter(pair => pair.example.name === "service_blueprint_slice").map(pair => pair.viewId)).toEqual(["service_blueprint"]);
+  });
   it("plans one collision-free directory per bundle render detail", async () => {
     const bundle = await loadBundle(manifestPath);
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
@@ -44,8 +50,8 @@ describe("rendered example corpus", () => {
     expect(getRenderedCorpusViewDirName("service_blueprint")).toBe("service_blueprint_diagram_type");
   });
 
-  it("contains every committed artifact for each curated render pair", async () => {
-    const bundle = await loadBundle(manifestPath);
+  it.each(["0.1", "0.2"])("contains every committed artifact for each curated render pair in v%s", async version => {
+    const bundle = await loadBundle(path.join(repoRoot, `bundle/v${version}/manifest.yaml`));
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);
     const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs);
 

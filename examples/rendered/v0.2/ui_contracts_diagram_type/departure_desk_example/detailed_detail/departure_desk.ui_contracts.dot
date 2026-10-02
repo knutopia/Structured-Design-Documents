@@ -1,0 +1,159 @@
+digraph ui_contracts {
+  rankdir=LR;
+  graph [fontname="Public Sans", compound=true, nodesep=0.7, ranksep=1.0];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph cluster_P_410 {
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Departure Desk</TD></TR><TR><TD ALIGN="LEFT">/departures</TD></TR><TR><TD ALIGN="LEFT">[auth]</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "P-410__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+    subgraph cluster_VS_410a {
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">ViewState: Staging</TD></TR><TR><TD ALIGN="LEFT">data: LoadRecord</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];
+      "VS-410a__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+      "C-460" [shape="box", style="rounded", label="Crew Note"];
+    }
+    subgraph cluster_VS_410b {
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">ViewState: Released</TD></TR><TR><TD ALIGN="LEFT">data: LoadRecord</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];
+      "VS-410b__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+      "C-460" [shape="box", style="rounded", label="Crew Note"];
+    }
+    subgraph cluster_C_410 {
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Component: Load Workbench</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+      "C-410__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+      subgraph cluster_secondary_state_group_C_410 {
+        graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">State detail: Load Workbench</TD></TR><TR><TD ALIGN="LEFT">scope_id=C-410</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];
+        "secondary_state_group:C-410__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+        "ST-410a" [shape="ellipse", style="dashed", label="Assembling"];
+        "ST-410b" [shape="ellipse", style="dashed", label="Ready to release"];
+        "ST-410c" [shape="ellipse", style="dashed", label="Checking load"];
+        "ST-410d" [shape="ellipse", style="dashed", label="Release recorded"];
+        "ST-410e" [shape="ellipse", style="dashed", label="Handoff complete"];
+        "ST-415a" [shape="ellipse", style="dashed", label="Checklist open"];
+        "ST-415b" [shape="ellipse", style="dashed", label="Checklist reviewed"];
+        "ST-415c" [shape="ellipse", style="dashed", label="Checklist filed"];
+      }
+    }
+    "VS-410c" [shape="box", style="rounded,dashed", label="Archived\ndata: LoadRecord"];
+    "VS-410d" [shape="box", style="rounded,dashed", label="Receipt delivered\ndata: LoadRecord"];
+    "VS-410e" [shape="box", style="rounded,dashed", label="Departure closed\ndata: LoadRecord"];
+    "VS-415a" [shape="box", style="rounded,dashed", label="Crew message\ndata: LoadRecord"];
+    "VS-415b" [shape="box", style="rounded,dashed", label="Crew review\ndata: LoadRecord"];
+    "VS-415c" [shape="box", style="rounded,dashed", label="Crew confirmation\ndata: LoadRecord"];
+  }
+  subgraph cluster_C_420 {
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Component: Cargo Sheet</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "C-420__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+    "E-420" [shape="oval", label="Cargo changed"];
+    subgraph cluster_secondary_state_group_C_420 {
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">State detail: Cargo Sheet</TD></TR><TR><TD ALIGN="LEFT">scope_id=C-420</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];
+      "secondary_state_group:C-420__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+      "ST-420a" [shape="ellipse", style="dashed", label="Untouched"];
+      "ST-420b" [shape="ellipse", style="dashed", label="Adjusted"];
+    }
+  }
+  subgraph cluster_C_430 {
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Component: Seal Check</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "C-430__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+    "E-430" [shape="oval", label="Seal accepted"];
+    "SA-430" [shape="component", label="Check seal"];
+    subgraph cluster_secondary_state_group_C_430 {
+      graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">State detail: Seal Check</TD></TR><TR><TD ALIGN="LEFT">scope_id=C-430</TD></TR></TABLE>>, style="rounded,dashed", labelloc="t", labeljust="l"];
+      "secondary_state_group:C-430__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+      "ST-430a" [shape="ellipse", style="dashed", label="Unchecked"];
+      "ST-430b" [shape="ellipse", style="dashed", label="Verified"];
+      "ST-430c" [shape="ellipse", style="dashed", label="Result applied"];
+      "ST-430d" [shape="ellipse", style="dashed", label="Result acknowledged"];
+      "ST-430e" [shape="ellipse", style="dashed", label="Check filed"];
+    }
+  }
+  "C-431" [shape="box", style="rounded", label="Seal Code Input"];
+  subgraph cluster_C_440 {
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Component: Release Lever</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "C-440__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+    "E-440" [shape="oval", label="Release load"];
+    "SA-440" [shape="component", label="Record departure"];
+  }
+  "C-450" [shape="box", style="rounded", label="Trail Lens"];
+  "C-470" [shape="box", style="rounded", label="Arrival Review"];
+  subgraph cluster_shared_supporting_contracts {
+    graph [label=<<TABLE BORDER="0" CELLBORDER="0" CELLPADDING="0"><TR><TD ALIGN="LEFT">Shared Supporting Contracts</TD></TR></TABLE>>, style="rounded", labelloc="t", labeljust="l"];
+    "shared_supporting_contracts__anchor" [label="", shape="point", width=0, height=0, style="invis"];
+    "E-470" [shape="oval", label="Archive confirmed"];
+    "E-480" [shape="oval", label="Crew review opened"];
+    "E-490" [shape="oval", label="Crew note acknowledged"];
+    "E-500" [shape="oval", label="Release recorded"];
+    "E-510" [shape="oval", label="Handoff completed"];
+    "E-520" [shape="oval", label="Receipt delivered"];
+    "E-530" [shape="oval", label="Departure closed"];
+    "E-540" [shape="oval", label="Result applied"];
+    "E-550" [shape="oval", label="Result acknowledged"];
+    "E-560" [shape="oval", label="Check filed"];
+    "SA-410" [shape="component", label="Store draft"];
+    "D-410" [shape="cylinder", label="LoadRecord"];
+    "E-450" [shape="oval", label="Checklist reviewed"];
+    "E-460" [shape="oval", label="Checklist filed"];
+  }
+  "P-410__anchor" -> "C-420__anchor" [style=invis, weight=100];
+  "C-420__anchor" -> "C-430__anchor" [style=invis, weight=100];
+  "C-430__anchor" -> "C-431" [style=invis, weight=100];
+  "C-431" -> "C-440__anchor" [style=invis, weight=100];
+  "C-440__anchor" -> "C-450" [style=invis, weight=100];
+  "C-450" -> "C-470" [style=invis, weight=100];
+  "C-470" -> "shared_supporting_contracts__anchor" [style=invis, weight=100];
+  "P-410__anchor" -> "VS-410a__anchor" [style=invis, weight=100];
+  "VS-410b__anchor" -> "C-410__anchor" [style=invis, weight=100];
+  "C-410__anchor" -> "VS-410c" [style=invis, weight=100];
+  "VS-410e" -> "VS-415a" [style=invis, weight=100];
+  "VS-410a__anchor" -> "C-460" [style=invis, weight=100];
+  "VS-410b__anchor" -> "C-460" [style=invis, weight=100];
+  "C-410__anchor" -> "secondary_state_group:C-410__anchor" [style=invis, weight=100];
+  "secondary_state_group:C-410__anchor" -> "ST-410a" [style=invis, weight=100];
+  "ST-410a" -> "ST-410b" [style=invis, weight=100];
+  "ST-410b" -> "ST-410c" [style=invis, weight=100];
+  "ST-410c" -> "ST-410d" [style=invis, weight=100];
+  "ST-410e" -> "ST-415a" [style=invis, weight=100];
+  "E-420" -> "secondary_state_group:C-420__anchor" [style=invis, weight=100];
+  "secondary_state_group:C-420__anchor" -> "ST-420a" [style=invis, weight=100];
+  "SA-430" -> "secondary_state_group:C-430__anchor" [style=invis, weight=100];
+  "secondary_state_group:C-430__anchor" -> "ST-430a" [style=invis, weight=100];
+  "shared_supporting_contracts__anchor" -> "E-470" [style=invis, weight=100];
+  "E-470" -> "E-480" [style=invis, weight=100];
+  "E-480" -> "E-490" [style=invis, weight=100];
+  "E-490" -> "E-500" [style=invis, weight=100];
+  "E-500" -> "E-510" [style=invis, weight=100];
+  "E-510" -> "E-520" [style=invis, weight=100];
+  "E-520" -> "E-530" [style=invis, weight=100];
+  "E-530" -> "E-540" [style=invis, weight=100];
+  "E-540" -> "E-550" [style=invis, weight=100];
+  "E-550" -> "E-560" [style=invis, weight=100];
+  "E-560" -> "SA-410" [style=invis, weight=100];
+  "SA-410" -> "D-410" [style=invis, weight=100];
+  "D-410" -> "E-450" [style=invis, weight=100];
+  "E-450" -> "E-460" [style=invis, weight=100];
+  "C-420__anchor" -> "D-410" [label="binds field contents", style="dotted", constraint=false];
+  "C-420__anchor" -> "SA-410" [label="depends on", constraint=false];
+  "C-420__anchor" -> "E-420" [label="emits", style="dashed", constraint=true];
+  "C-430__anchor" -> "D-410" [label="binds field seal_code", style="dotted", constraint=false];
+  "C-430__anchor" -> "SA-430" [label="depends on", constraint=true];
+  "C-430__anchor" -> "E-430" [label="emits", style="dashed", constraint=true];
+  "C-440__anchor" -> "SA-440" [label="depends on", constraint=true];
+  "C-440__anchor" -> "E-440" [label="emits", style="dashed", constraint=true];
+  "C-450" -> "D-410" [label="binds field status", style="dotted", constraint=false];
+  "C-450" -> "SA-410" [label="depends on", constraint=false];
+  "ST-410a" -> "ST-410c" [label="[Cargo changed]", style="dashed", weight=3];
+  "ST-410b" -> "ST-410d" [label="[Release recorded]", style="dashed", weight=3];
+  "ST-410c" -> "ST-410b" [label="[Seal accepted] {seal_valid}", style="dashed", weight=3];
+  "ST-410d" -> "ST-410e" [label="[Handoff completed]", style="dashed", weight=3];
+  "ST-415a" -> "ST-415b" [label="[Checklist reviewed]", style="dashed", weight=3];
+  "ST-415b" -> "ST-415c" [label="[Checklist filed]", style="dashed", weight=3];
+  "ST-420a" -> "ST-420b" [label="[Cargo changed]", style="dashed", weight=3];
+  "ST-430a" -> "ST-430b" [label="[Seal accepted] {seal_valid}", style="dashed", weight=3];
+  "ST-430b" -> "ST-430c" [label="[Result applied]", style="dashed", weight=3];
+  "ST-430c" -> "ST-430d" [label="[Result acknowledged]", style="dashed", weight=3];
+  "ST-430d" -> "ST-430e" [label="[Check filed]", style="dashed", weight=3];
+  "VS-410a__anchor" -> "VS-410b__anchor" [label="[Release load] {seal_valid} / SA-440", style="solid", weight=4];
+  "VS-410b__anchor" -> "VS-410c" [label="[Archive confirmed]", style="solid", weight=4];
+  "VS-410c" -> "VS-410d" [label="[Receipt delivered]", style="solid", weight=4];
+  "VS-410d" -> "VS-410e" [label="[Departure closed]", style="solid", weight=4];
+  "VS-415a" -> "VS-415b" [label="[Crew review opened]", style="solid", weight=4];
+  "VS-415b" -> "VS-415c" [label="[Crew note acknowledged]", style="solid", weight=4];
+}

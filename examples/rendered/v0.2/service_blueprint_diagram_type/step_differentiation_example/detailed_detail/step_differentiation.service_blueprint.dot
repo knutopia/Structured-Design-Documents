@@ -1,0 +1,25 @@
+digraph service_blueprint {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.6, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_lane_01_customer {
+    rank=same;
+    "lane:01:customer__header" [shape=plaintext, label="customer"];
+    "BP-001" [shape="box", style="rounded", label="Prepare order\nMaps to: Choose purchase (J-001)\nMaps to: Confirm purchase (J-002)\nRefined by: Review order (S-002)\nRefined by: Submit purchase (S-003)"];
+    "BP-002" [shape="box", style="rounded", label="Submit order\nMaps to: Choose purchase (J-001)\nRefined by: Select item (S-001)"];
+  }
+  subgraph rank_lane_02_frontstage {
+    rank=same;
+    "lane:02:frontstage__header" [shape=plaintext, label="frontstage"];
+    "PR-001" [shape="box", label="Prepare purchase"];
+    "PR-002" [shape="box", label="Accept purchase"];
+  }
+  "lane:01:customer__header" -> "lane:02:frontstage__header" [style=invis, weight=100];
+  "lane:01:customer__header" -> "BP-001" [style=invis, weight=100];
+  "lane:02:frontstage__header" -> "PR-001" [style=invis, weight=100];
+  "BP-001" -> "BP-002" [weight=4];
+  "BP-001" -> "PR-001" [label="realized by", style="dashed", constraint=false];
+  "BP-002" -> "PR-002" [label="realized by", style="dashed", constraint=false];
+  "PR-001" -> "PR-002" [weight=4];
+}

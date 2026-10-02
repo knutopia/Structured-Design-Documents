@@ -22,7 +22,9 @@ node_id_suggestions:
     Opportunity: OP
     Initiative: I
     Stage: G
-    Step: J
+    JourneyStep: J
+    BlueprintStep: BP
+    ScenarioStep: S
     Area: A
     Place: P
     ViewState: VS
@@ -78,14 +80,84 @@ node_forms:
       properties:
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: order_index, prominence: advanced, label: Order index }
-    Step:
+    JourneyStep:
       properties:
-        - { source: property, property: owner, prominence: advanced, label: Owner }
-        - { source: property, property: actor, prominence: advanced, label: Actor }
-        - { source: property, property: intent, prominence: advanced, label: Intent }
-        - { source: property, property: success_criteria, prominence: advanced, label: Success criteria }
-        - { source: property, property: opportunity_refs, prominence: advanced, label: Opportunity references }
-        - { source: property, property: kind, prominence: advanced, label: Kind }
+        - source: property
+          property: owner
+          prominence: advanced
+          label: Owner
+        - source: property
+          property: actor
+          prominence: advanced
+          label: Actor
+        - source: property
+          property: intent
+          prominence: advanced
+          label: Intent
+        - source: property
+          property: success_criteria
+          prominence: advanced
+          label: Success criteria
+        - source: property
+          property: opportunity_refs
+          prominence: advanced
+          label: Opportunity references
+        - source: property
+          property: kind
+          prominence: advanced
+          label: Kind
+    BlueprintStep:
+      properties:
+        - source: property
+          property: owner
+          prominence: advanced
+          label: Owner
+        - source: property
+          property: actor
+          prominence: advanced
+          label: Actor
+        - source: property
+          property: intent
+          prominence: advanced
+          label: Intent
+        - source: property
+          property: success_criteria
+          prominence: advanced
+          label: Success criteria
+        - source: property
+          property: opportunity_refs
+          prominence: advanced
+          label: Opportunity references
+        - source: property
+          property: kind
+          prominence: advanced
+          label: Kind
+    ScenarioStep:
+      properties:
+        - source: property
+          property: owner
+          prominence: advanced
+          label: Owner
+        - source: property
+          property: actor
+          prominence: advanced
+          label: Actor
+        - source: property
+          property: intent
+          prominence: advanced
+          label: Intent
+        - source: property
+          property: success_criteria
+          prominence: advanced
+          label: Success criteria
+        - source: property
+          property: opportunity_refs
+          prominence: advanced
+          label: Opportunity references
+        - source: property
+          property: kind
+          prominence: advanced
+          label: Kind
     Area:
       properties:
         - { source: property, property: owner, prominence: advanced, label: Owner }

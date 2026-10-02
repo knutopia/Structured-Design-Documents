@@ -36,80 +36,6 @@
       }
     },
     {
-      "id": "J-030",
-      "type": "Step",
-      "name": "Choose Fulfillment",
-      "props": {
-        "actor": "User",
-        "description": "User selects delivery or pickup",
-        "intent": "Choose a fulfillment option",
-        "kind": "decision",
-        "owner": "Design",
-        "success_criteria": "Fulfillment option selected"
-      }
-    },
-    {
-      "id": "J-031",
-      "type": "Step",
-      "name": "Enter Delivery Address",
-      "props": {
-        "actor": "User",
-        "description": "User enters a delivery address",
-        "intent": "Provide delivery details",
-        "owner": "Design",
-        "success_criteria": "Delivery address captured"
-      }
-    },
-    {
-      "id": "J-032",
-      "type": "Step",
-      "name": "Choose Pickup Store",
-      "props": {
-        "actor": "User",
-        "description": "User selects a pickup location",
-        "intent": "Choose a store for pickup",
-        "owner": "Design",
-        "success_criteria": "Pickup store selected"
-      }
-    },
-    {
-      "id": "J-033",
-      "type": "Step",
-      "name": "Choose Contact Method",
-      "props": {
-        "actor": "User",
-        "description": "User chooses how pickup instructions should be delivered",
-        "intent": "Choose an instruction delivery method",
-        "kind": "decision",
-        "owner": "Design",
-        "success_criteria": "Contact method selected"
-      }
-    },
-    {
-      "id": "J-034",
-      "type": "Step",
-      "name": "Confirm Email Notification",
-      "props": {
-        "actor": "User",
-        "description": "User confirms delivery by email",
-        "intent": "Confirm that instructions should be emailed",
-        "owner": "Design",
-        "success_criteria": "Email notification confirmed"
-      }
-    },
-    {
-      "id": "J-035",
-      "type": "Step",
-      "name": "Review Pickup Instructions",
-      "props": {
-        "actor": "User",
-        "description": "User reviews pickup instructions immediately",
-        "intent": "Review pickup instructions",
-        "owner": "Design",
-        "success_criteria": "Pickup instructions shown"
-      }
-    },
-    {
       "id": "P-030",
       "type": "Place",
       "name": "Fulfillment",
@@ -182,6 +108,80 @@
       }
     },
     {
+      "id": "S-030",
+      "type": "ScenarioStep",
+      "name": "Choose Fulfillment",
+      "props": {
+        "actor": "User",
+        "description": "User selects delivery or pickup",
+        "intent": "Choose a fulfillment option",
+        "kind": "decision",
+        "owner": "Design",
+        "success_criteria": "Fulfillment option selected"
+      }
+    },
+    {
+      "id": "S-031",
+      "type": "ScenarioStep",
+      "name": "Enter Delivery Address",
+      "props": {
+        "actor": "User",
+        "description": "User enters a delivery address",
+        "intent": "Provide delivery details",
+        "owner": "Design",
+        "success_criteria": "Delivery address captured"
+      }
+    },
+    {
+      "id": "S-032",
+      "type": "ScenarioStep",
+      "name": "Choose Pickup Store",
+      "props": {
+        "actor": "User",
+        "description": "User selects a pickup location",
+        "intent": "Choose a store for pickup",
+        "owner": "Design",
+        "success_criteria": "Pickup store selected"
+      }
+    },
+    {
+      "id": "S-033",
+      "type": "ScenarioStep",
+      "name": "Choose Contact Method",
+      "props": {
+        "actor": "User",
+        "description": "User chooses how pickup instructions should be delivered",
+        "intent": "Choose an instruction delivery method",
+        "kind": "decision",
+        "owner": "Design",
+        "success_criteria": "Contact method selected"
+      }
+    },
+    {
+      "id": "S-034",
+      "type": "ScenarioStep",
+      "name": "Confirm Email Notification",
+      "props": {
+        "actor": "User",
+        "description": "User confirms delivery by email",
+        "intent": "Confirm that instructions should be emailed",
+        "owner": "Design",
+        "success_criteria": "Email notification confirmed"
+      }
+    },
+    {
+      "id": "S-035",
+      "type": "ScenarioStep",
+      "name": "Review Pickup Instructions",
+      "props": {
+        "actor": "User",
+        "description": "User reviews pickup instructions immediately",
+        "intent": "Review pickup instructions",
+        "owner": "Design",
+        "success_criteria": "Pickup instructions shown"
+      }
+    },
+    {
       "id": "VS-030a",
       "type": "ViewState",
       "name": "Fulfillment Choice",
@@ -249,176 +249,6 @@
     }
   ],
   "edges": [
-    {
-      "from": "J-030",
-      "type": "PRECEDES",
-      "to": "J-031",
-      "to_name": "Enter Delivery Address",
-      "event": "E-030",
-      "guard": "delivery_selected",
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-030",
-      "type": "PRECEDES",
-      "to": "J-032",
-      "to_name": "Choose Pickup Store",
-      "event": "E-031",
-      "guard": "pickup_selected",
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-030",
-      "type": "REALIZED_BY",
-      "to": "P-030",
-      "to_name": "Fulfillment",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-030",
-      "type": "REALIZED_BY",
-      "to": "VS-030a",
-      "to_name": "Fulfillment Choice",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-031",
-      "type": "PRECEDES",
-      "to": "J-033",
-      "to_name": "Choose Contact Method",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-031",
-      "type": "REALIZED_BY",
-      "to": "P-031",
-      "to_name": "Delivery Address",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-031",
-      "type": "REALIZED_BY",
-      "to": "VS-031a",
-      "to_name": "Delivery Address Form",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-032",
-      "type": "REALIZED_BY",
-      "to": "P-032",
-      "to_name": "Pickup Store",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-032",
-      "type": "REALIZED_BY",
-      "to": "VS-032a",
-      "to_name": "Pickup Store Selector",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-033",
-      "type": "PRECEDES",
-      "to": "J-034",
-      "to_name": "Confirm Email Notification",
-      "event": "E-032",
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-033",
-      "type": "PRECEDES",
-      "to": "J-035",
-      "to_name": "Review Pickup Instructions",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-033",
-      "type": "REALIZED_BY",
-      "to": "P-033",
-      "to_name": "Contact Method",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-033",
-      "type": "REALIZED_BY",
-      "to": "VS-033a",
-      "to_name": "Contact Method Choice",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-034",
-      "type": "REALIZED_BY",
-      "to": "P-034",
-      "to_name": "Email Confirmation",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-034",
-      "type": "REALIZED_BY",
-      "to": "VS-034a",
-      "to_name": "Email Confirmation State",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-035",
-      "type": "REALIZED_BY",
-      "to": "P-035",
-      "to_name": "Pickup Instructions",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
-    {
-      "from": "J-035",
-      "type": "REALIZED_BY",
-      "to": "VS-035a",
-      "to_name": "Pickup Instructions State",
-      "event": null,
-      "guard": null,
-      "effect": null,
-      "props": {}
-    },
     {
       "from": "P-030",
       "type": "CONTAINS",
@@ -512,6 +342,176 @@
     {
       "from": "P-035",
       "type": "CONTAINS",
+      "to": "VS-035a",
+      "to_name": "Pickup Instructions State",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-030",
+      "type": "PRECEDES",
+      "to": "S-031",
+      "to_name": "Enter Delivery Address",
+      "event": "E-030",
+      "guard": "delivery_selected",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-030",
+      "type": "PRECEDES",
+      "to": "S-032",
+      "to_name": "Choose Pickup Store",
+      "event": "E-031",
+      "guard": "pickup_selected",
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-030",
+      "type": "REALIZED_BY",
+      "to": "P-030",
+      "to_name": "Fulfillment",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-030",
+      "type": "REALIZED_BY",
+      "to": "VS-030a",
+      "to_name": "Fulfillment Choice",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-031",
+      "type": "PRECEDES",
+      "to": "S-033",
+      "to_name": "Choose Contact Method",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-031",
+      "type": "REALIZED_BY",
+      "to": "P-031",
+      "to_name": "Delivery Address",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-031",
+      "type": "REALIZED_BY",
+      "to": "VS-031a",
+      "to_name": "Delivery Address Form",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-032",
+      "type": "REALIZED_BY",
+      "to": "P-032",
+      "to_name": "Pickup Store",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-032",
+      "type": "REALIZED_BY",
+      "to": "VS-032a",
+      "to_name": "Pickup Store Selector",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-033",
+      "type": "PRECEDES",
+      "to": "S-034",
+      "to_name": "Confirm Email Notification",
+      "event": "E-032",
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-033",
+      "type": "PRECEDES",
+      "to": "S-035",
+      "to_name": "Review Pickup Instructions",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-033",
+      "type": "REALIZED_BY",
+      "to": "P-033",
+      "to_name": "Contact Method",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-033",
+      "type": "REALIZED_BY",
+      "to": "VS-033a",
+      "to_name": "Contact Method Choice",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-034",
+      "type": "REALIZED_BY",
+      "to": "P-034",
+      "to_name": "Email Confirmation",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-034",
+      "type": "REALIZED_BY",
+      "to": "VS-034a",
+      "to_name": "Email Confirmation State",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-035",
+      "type": "REALIZED_BY",
+      "to": "P-035",
+      "to_name": "Pickup Instructions",
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-035",
+      "type": "REALIZED_BY",
       "to": "VS-035a",
       "to_name": "Pickup Instructions State",
       "event": null,

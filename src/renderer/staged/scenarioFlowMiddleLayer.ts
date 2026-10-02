@@ -641,13 +641,13 @@ function resolveEdgeChannel(edge: ScenarioFlowRenderEdge): ScenarioFlowEdgeChann
   }
 }
 
-function resolvePlacementRole(nodeType: string, trackOrder: number): ScenarioFlowPlacementRole {
-  switch (nodeType) {
-    case "Step":
+function resolvePlacementRole(laneId: ScenarioFlowLaneId | undefined, trackOrder: number): ScenarioFlowPlacementRole {
+  switch (laneId) {
+    case "step":
       return trackOrder > 0 ? "branch_step" : "spine_step";
-    case "Place":
+    case "place":
       return "realized_place";
-    case "ViewState":
+    case "view_state":
       return "realized_view_state";
     default:
       return "parking";
@@ -679,7 +679,7 @@ function resolveSemanticPlacementTargets(
       lineageId: seed.lineageId,
       trackOrder: seed.trackOrder,
       rowOrder: seed.rowOrder,
-      placementRole: resolvePlacementRole(seed.node.type, seed.trackOrder)
+      placementRole: resolvePlacementRole(laneByNodeId.get(seed.node.id), seed.trackOrder)
     });
   }
 
@@ -693,7 +693,7 @@ function resolveSemanticPlacementTargets(
     targets.set(edge.to, {
       ...source,
       laneId,
-      placementRole: resolvePlacementRole(target.type, source.trackOrder)
+      placementRole: resolvePlacementRole(laneByNodeId.get(target.id), source.trackOrder)
     });
   }
 
@@ -723,7 +723,7 @@ function resolveSemanticPlacementTargets(
         ...source,
         laneId,
         bandOrder: source.bandOrder + 1,
-        placementRole: resolvePlacementRole(target.type, source.trackOrder)
+        placementRole: resolvePlacementRole(laneByNodeId.get(target.id), source.trackOrder)
       });
       placedTarget = true;
     }

@@ -3,12 +3,14 @@
 Compact reference of content relationships per diagram type, listing available nodes and edges (relationships).
 
 > [!IMPORTANT]
-> In technical terms, this page is downstream documentation, 
-> not a normative source. Diagram node and edge inclusion comes 
-> from `bundle/v0.1/core/views.yaml`; relationship direction 
-> and endpoints come from `bundle/v0.1/core/contracts.yaml`.
+> In technical terms, this page is downstream documentation,
+> not a normative source. Diagram node and edge inclusion comes
+> from `bundle/v0.2/core/views.yaml`; relationship direction
+> and endpoints come from `bundle/v0.2/core/contracts.yaml`.
 
 Guided relationship role and profile-aware presence/label classification come from the complete endpoint-triple matrix in the same view artifact. Guided tools consume those bundle records directly; this page does not establish additional relationship choices.
+
+v0.2 introduces [Step differentiation]:(step_differentiation.md): `JourneyStep`, `BlueprintStep`, and `ScenarioStep` replacing  `Step` of v0.1.
 
 ::: dropdownSwitch Choose Diagram Type:
 == IA Place Map
@@ -93,24 +95,24 @@ END
 # Incoming edges for SystemAction:
 # Process, ViewState, Component DEPENDS_ON SystemAction
 ```
-Shows Component containment in an enclosure overview and local parent/child scopes.  
+Shows Component containment in an enclosure overview and local parent/child scopes.
 Composition uses labeled reference connectors.  Supporting contracts and secondary State sequences appear in detailed
 output, or in compact output when the projection uses the State-only fallback.
 
 == Scenario Flow
 
-Available node types: `Step`, `Place`, `ViewState`
+Available node types: `ScenarioStep`, `Place`, `ViewState`
 
 ```sdd
-Step J-001 "Step Name"
-  PRECEDES J-002 "a Step"
+ScenarioStep S-001 "ScenarioStep Name"
+  PRECEDES S-002 "a ScenarioStep"
   REALIZED_BY P-001 "a Place"
   REALIZED_BY VS-001 "a ViewState"
   REALIZED_BY PR-001 "a Process" # (hidden)
 END
 
-# Incoming edges for Step:
-# Step PRECEDES Step
+# Incoming edges for ScenarioStep:
+# ScenarioStep PRECEDES ScenarioStep
 
 Place P-001 "Place Name"
   NAVIGATES_TO P-002 "a Place"
@@ -118,33 +120,33 @@ END
 
 # Incoming edges for Place:
 # Place NAVIGATES_TO Place
-# Step REALIZED_BY Place
+# ScenarioStep REALIZED_BY Place
 
 ViewState VS-001 "ViewState Name"
   TRANSITIONS_TO VS-002 "a ViewState"
 END
 
 # Incoming edges for ViewState:
-# Step REALIZED_BY ViewState
+# ScenarioStep REALIZED_BY ViewState
 # ViewState TRANSITIONS_TO ViewState
 ```
 
 == Journey Map
 
-Available node types: `Stage`, `Step`
+Available node types: `Stage`, `JourneyStep`
 
 ```sdd
 Stage G-001 "Stage Name"
-  CONTAINS J-001 "a Step"
+  CONTAINS J-001 "a JourneyStep"
 END
 
-Step J-001 "Step Name"
-  PRECEDES J-002 "a Step"
+JourneyStep J-001 "JourneyStep Name"
+  PRECEDES J-002 "a JourneyStep"
 END
 
-# Incoming edges for Step:
-# Stage CONTAINS Step
-# Step PRECEDES Step
+# Incoming edges for JourneyStep:
+# Stage CONTAINS JourneyStep
+# JourneyStep PRECEDES JourneyStep
 ```
 
 == Outcome-Opportunity Map
@@ -160,7 +162,9 @@ END
 # Opportunity SUPPORTS Outcome
 
 Metric M-001 "Metric Name"
-  INSTRUMENTED_AT J-001 "a Step" # (shown with strict profile)
+  INSTRUMENTED_AT J-001 "a JourneyStep" # (shown with strict profile)
+  INSTRUMENTED_AT BP-001 "a BlueprintStep" # (shown with strict profile)
+  INSTRUMENTED_AT S-001 "a ScenarioStep" # (shown with strict profile)
   INSTRUMENTED_AT P-001 "a Place" # (shown with strict profile)
   INSTRUMENTED_AT VS-001 "a ViewState" # (shown with strict profile)
   INSTRUMENTED_AT E-001 "an Event" # (shown with strict profile)
@@ -188,18 +192,18 @@ END
 
 == Service Blueprint
 
-Available node types: `Step`, `Process`, `SystemAction`, `DataEntity`, `Policy`
+Available node types: `BlueprintStep`, `Process`, `SystemAction`, `DataEntity`, `Policy`
 
 ```sdd
-Step J-001 "Step Name"
-  PRECEDES J-002 "a Step"
+BlueprintStep BP-001 "BlueprintStep Name"
+  PRECEDES BP-002 "a BlueprintStep"
   REALIZED_BY P-001 "a Place" # (hidden)
   REALIZED_BY VS-001 "a ViewState" # (hidden)
   REALIZED_BY PR-001 "a Process"
 END
 
-# Incoming edges for Step:
-# Step PRECEDES Step
+# Incoming edges for BlueprintStep:
+# BlueprintStep PRECEDES BlueprintStep
 
 Process PR-001 "Process Name"
   PRECEDES PR-002 "a Process"
@@ -210,7 +214,7 @@ END
 
 # Incoming edges for Process:
 # Process PRECEDES Process
-# Step REALIZED_BY Process
+# BlueprintStep REALIZED_BY Process
 # Process DEPENDS_ON Process
 
 SystemAction SA-001 "SystemAction Name"

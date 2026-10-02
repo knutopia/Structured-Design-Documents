@@ -14,7 +14,12 @@ describe("Scenario Flow optional bottom exits", () => {
   it("shortens the backward View State transition in tmp.sdd without routing regressions", async () => {
     const bundle = await loadBundle("bundle/v0.1/manifest.yaml");
     const path = "docs/sdd_app_planning/whiteboarding_diagrams/tmp.sdd";
-    const graph = compileSource({ path, text: await readFile(path, "utf8") }, bundle).graph!;
+    // This routing proof uses the historical Step topology. The planning source
+    // carries a v0.2 header, so select v0.1 in memory without migrating the source.
+    const text = (await readFile(path, "utf8")).replace(/^SDD-TEXT 0\.2\b/u, "SDD-TEXT 0.1");
+    const compiled = compileSource({ path, text }, bundle);
+    expect(compiled.diagnostics.filter(diagnostic => diagnostic.severity === "error")).toEqual([]);
+    const graph = compiled.graph!;
     const projection = projectView(graph, bundle, "scenario_flow").projection!;
     const view = bundle.views.views.find(candidate => candidate.id === "scenario_flow")!;
     const spy = vi.spyOn(core, "runRoutingLifecycle");

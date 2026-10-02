@@ -1,0 +1,452 @@
+{
+  "schema": "sdd-text",
+  "version": "0.2",
+  "nodes": [
+    {
+      "id": "BP-001",
+      "type": "BlueprintStep",
+      "name": "Prepare order",
+      "props": {
+        "actor": "Customer",
+        "description": "Provide an order ready to confirm",
+        "intent": "Provide an order ready to confirm",
+        "owner": "Experience Design",
+        "success_criteria": "The customer can continue with confidence"
+      }
+    },
+    {
+      "id": "BP-002",
+      "type": "BlueprintStep",
+      "name": "Submit order",
+      "props": {
+        "actor": "Customer",
+        "description": "Submit the order for fulfillment",
+        "intent": "Submit the order for fulfillment",
+        "owner": "Experience Design",
+        "success_criteria": "The customer can continue with confidence"
+      }
+    },
+    {
+      "id": "G-001",
+      "type": "Stage",
+      "name": "Purchase",
+      "props": {
+        "description": "The purchase journey",
+        "order_index": "1",
+        "owner": "Experience Design"
+      }
+    },
+    {
+      "id": "J-001",
+      "type": "JourneyStep",
+      "name": "Choose purchase",
+      "props": {
+        "actor": "Customer",
+        "description": "Choose a suitable purchase",
+        "intent": "Choose a suitable purchase",
+        "owner": "Experience Design",
+        "success_criteria": "The customer can continue with confidence"
+      }
+    },
+    {
+      "id": "J-002",
+      "type": "JourneyStep",
+      "name": "Confirm purchase",
+      "props": {
+        "actor": "Customer",
+        "description": "Confirm the purchase",
+        "intent": "Confirm the purchase",
+        "owner": "Experience Design",
+        "success_criteria": "The customer can continue with confidence"
+      }
+    },
+    {
+      "id": "M-001",
+      "type": "Metric",
+      "name": "Purchase completion",
+      "props": {
+        "cadence": "Daily",
+        "definition": "Completed purchases divided by started purchases",
+        "description": "Observe the purchase across all three Step types",
+        "metric_type": "ratio",
+        "owner": "Analytics",
+        "source": "Purchase events"
+      }
+    },
+    {
+      "id": "P-001",
+      "type": "Place",
+      "name": "Checkout",
+      "props": {
+        "access": "public",
+        "description": "Choose and review a purchase",
+        "owner": "Product",
+        "route_or_key": "/checkout",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "P-002",
+      "type": "Place",
+      "name": "Confirmation",
+      "props": {
+        "access": "public",
+        "description": "The confirmed order",
+        "owner": "Product",
+        "route_or_key": "/confirmation",
+        "surface": "web"
+      }
+    },
+    {
+      "id": "PR-001",
+      "type": "Process",
+      "name": "Prepare purchase",
+      "props": {
+        "description": "Prepare an order for customer review",
+        "owner": "Operations",
+        "sla": "Immediate",
+        "visibility": "frontstage"
+      }
+    },
+    {
+      "id": "PR-002",
+      "type": "Process",
+      "name": "Accept purchase",
+      "props": {
+        "description": "Accept the purchase for fulfillment",
+        "owner": "Operations",
+        "sla": "Immediate",
+        "visibility": "frontstage"
+      }
+    },
+    {
+      "id": "S-001",
+      "type": "ScenarioStep",
+      "name": "Select item",
+      "props": {
+        "actor": "Customer",
+        "description": "Select the desired item",
+        "intent": "Select the desired item",
+        "owner": "Experience Design",
+        "success_criteria": "The customer can continue with confidence"
+      }
+    },
+    {
+      "id": "S-002",
+      "type": "ScenarioStep",
+      "name": "Review order",
+      "props": {
+        "actor": "Customer",
+        "description": "Review the order details",
+        "intent": "Review the order details",
+        "owner": "Experience Design",
+        "success_criteria": "The customer can continue with confidence"
+      }
+    },
+    {
+      "id": "S-003",
+      "type": "ScenarioStep",
+      "name": "Submit purchase",
+      "props": {
+        "actor": "Customer",
+        "description": "Submit the confirmed purchase",
+        "intent": "Submit the confirmed purchase",
+        "owner": "Experience Design",
+        "success_criteria": "The customer can continue with confidence"
+      }
+    },
+    {
+      "id": "VS-001",
+      "type": "ViewState",
+      "name": "Order review",
+      "props": {
+        "data_required": "Selected item and order total",
+        "description": "Review a selected order",
+        "owner": "Product",
+        "place_id": "P-001"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "from": "BP-001",
+      "type": "MAPS_TO",
+      "to": "J-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "BP-001",
+      "type": "MAPS_TO",
+      "to": "J-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "BP-001",
+      "type": "PRECEDES",
+      "to": "BP-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "BP-001",
+      "type": "REALIZED_BY",
+      "to": "PR-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "BP-001",
+      "type": "REFINED_BY",
+      "to": "S-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "BP-001",
+      "type": "REFINED_BY",
+      "to": "S-003",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "BP-002",
+      "type": "REALIZED_BY",
+      "to": "PR-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "BP-002",
+      "type": "REFINED_BY",
+      "to": "S-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-001",
+      "type": "CONTAINS",
+      "to": "J-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "G-001",
+      "type": "CONTAINS",
+      "to": "J-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-001",
+      "type": "MAPS_TO",
+      "to": "BP-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-001",
+      "type": "MAPS_TO",
+      "to": "BP-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-001",
+      "type": "PRECEDES",
+      "to": "J-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-001",
+      "type": "REALIZED_BY",
+      "to": "P-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-001",
+      "type": "REFINED_BY",
+      "to": "S-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-001",
+      "type": "REFINED_BY",
+      "to": "S-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-002",
+      "type": "REALIZED_BY",
+      "to": "P-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "J-002",
+      "type": "REFINED_BY",
+      "to": "S-003",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-001",
+      "type": "INSTRUMENTED_AT",
+      "to": "BP-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-001",
+      "type": "INSTRUMENTED_AT",
+      "to": "J-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "M-001",
+      "type": "INSTRUMENTED_AT",
+      "to": "S-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "P-001",
+      "type": "CONTAINS",
+      "to": "VS-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "PR-001",
+      "type": "PRECEDES",
+      "to": "PR-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-001",
+      "type": "PRECEDES",
+      "to": "S-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-001",
+      "type": "REALIZED_BY",
+      "to": "P-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-002",
+      "type": "PRECEDES",
+      "to": "S-003",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-002",
+      "type": "REALIZED_BY",
+      "to": "VS-001",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    },
+    {
+      "from": "S-003",
+      "type": "REALIZED_BY",
+      "to": "P-002",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {}
+    }
+  ]
+}

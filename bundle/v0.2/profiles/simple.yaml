@@ -17,17 +17,39 @@ rules:
     source: core/contracts.yaml
     applies_to: BINDS_TO
     severity: error
-  - id: step_opportunity_refs_valid
+  - id: journey_step_opportunity_refs_valid
     source: profile
     severity: warn
-    applies_to: Step
+    applies_to: JourneyStep
     rule_logic:
       kind: delimited_node_references
-      node_type: Step
+      node_type: JourneyStep
       property: opportunity_refs
       delimiter: ","
       target_type: Opportunity
-      id_pattern: '^OP-[0-9]{3,}([a-z][a-z0-9]*)?$'
+      id_pattern: ^OP-[0-9]{3,}([a-z][a-z0-9]*)?$
+  - id: blueprint_step_opportunity_refs_valid
+    source: profile
+    severity: warn
+    applies_to: BlueprintStep
+    rule_logic:
+      kind: delimited_node_references
+      node_type: BlueprintStep
+      property: opportunity_refs
+      delimiter: ","
+      target_type: Opportunity
+      id_pattern: ^OP-[0-9]{3,}([a-z][a-z0-9]*)?$
+  - id: scenario_step_opportunity_refs_valid
+    source: profile
+    severity: warn
+    applies_to: ScenarioStep
+    rule_logic:
+      kind: delimited_node_references
+      node_type: ScenarioStep
+      property: opportunity_refs
+      delimiter: ","
+      target_type: Opportunity
+      id_pattern: ^OP-[0-9]{3,}([a-z][a-z0-9]*)?$
   - id: process_visibility_enum
     source: profile
     severity: warn
@@ -36,7 +58,7 @@ rules:
       kind: enum_property
       node_type: Process
       property: visibility
-      allowed_values: [frontstage, backstage, support]
+      allowed_values: [ frontstage, backstage, support ]
       accepted_aliases:
         customer-visible: frontstage
         not-visible: backstage
@@ -69,17 +91,40 @@ rules:
       kind: enum_property
       node_type: Place
       property: primary_nav
-      allowed_values: ["true", "false"]
+      allowed_values: [ "true", "false" ]
       optional: true
-  - id: step_kind_enum
+  - id: journey_step_kind_enum
     source: profile
     severity: warn
-    applies_to: Step
+    applies_to: JourneyStep
     rule_logic:
       kind: enum_property
-      node_type: Step
+      node_type: JourneyStep
       property: kind
-      allowed_values: [decision]
+      allowed_values:
+        - decision
+      optional: true
+  - id: blueprint_step_kind_enum
+    source: profile
+    severity: warn
+    applies_to: BlueprintStep
+    rule_logic:
+      kind: enum_property
+      node_type: BlueprintStep
+      property: kind
+      allowed_values:
+        - decision
+      optional: true
+  - id: scenario_step_kind_enum
+    source: profile
+    severity: warn
+    applies_to: ScenarioStep
+    rule_logic:
+      kind: enum_property
+      node_type: ScenarioStep
+      property: kind
+      allowed_values:
+        - decision
       optional: true
   - id: state_scope_reference
     source: profile
@@ -89,4 +134,4 @@ rules:
       kind: node_reference_property
       node_type: State
       property: scope_id
-      allowed_target_types: [Place, Component]
+      allowed_target_types: [ Place, Component ]

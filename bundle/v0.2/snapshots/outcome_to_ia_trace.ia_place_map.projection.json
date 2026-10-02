@@ -44,9 +44,7 @@
         "display": {
           "subtitle": "/checkout/billing",
           "badge": "auth",
-          "metadata": [
-
-          ]
+          "metadata": []
         }
       },
       {
@@ -54,20 +52,13 @@
         "display": {
           "subtitle": "/checkout/review",
           "badge": "auth",
-          "metadata": [
-
-          ]
+          "metadata": []
         }
       }
     ],
-    "edge_annotations": [
-
-    ],
-    "node_groups": [
-
-    ],
-    "view_metadata": {
-    }
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
   },
   "omissions": [],
   "notes": [

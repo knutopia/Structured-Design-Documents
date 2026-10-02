@@ -1,4 +1,5 @@
 import path from "node:path";
+import { buildRelationshipReferences } from "./relationshipReferences.js";
 import type { ErrorObject } from "ajv";
 import Ajv2020Import from "ajv/dist/2020.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
@@ -241,6 +242,21 @@ export function buildProjectionResult(
   output: ProjectionBuilderOutput = {}
 ): ProjectionResult {
   const derived = output.derived ?? createEmptyDerived();
+  const relationshipReferences = buildRelationshipReferences(context);
+  let nodeAnnotations = derived.node_annotations;
+  if (relationshipReferences.annotations.length > 0) {
+    const annotationsById = new Map(nodeAnnotations.map((annotation) => [annotation.node_id, annotation]));
+    for (const annotation of relationshipReferences.annotations) {
+      const previous = annotationsById.get(annotation.node_id);
+      annotationsById.set(annotation.node_id, {
+        ...previous, ...annotation, references: [...(previous?.references ?? []), ...(annotation.references ?? [])]
+      });
+    }
+    nodeAnnotations = [...annotationsById.values()];
+  }
+  const referenceRelationshipTypes = new Set(
+    (context.view.conventions.renderer_defaults?.relationship_references ?? []).map((config) => config.relationship)
+  );
   const projection: Projection = {
     schema: "sdd-text-view-projection",
     version: context.graph.version,
@@ -249,12 +265,15 @@ export function buildProjectionResult(
     nodes: context.projectedNodes,
     edges: context.projectedEdges,
     derived: {
-      node_annotations: sortProjectionNodeAnnotations(derived.node_annotations),
+      node_annotations: sortProjectionNodeAnnotations(nodeAnnotations),
       edge_annotations: sortProjectionEdgeAnnotations(derived.edge_annotations),
       node_groups: sortProjectionNodeGroups(derived.node_groups),
       view_metadata: { ...derived.view_metadata }
     },
-    omissions: sortProjectionOmissions(output.omissions ?? []),
+    omissions: sortProjectionOmissions([
+      ...(output.omissions ?? []).filter((omission) => !referenceRelationshipTypes.has(omission.type)),
+      ...relationshipReferences.omissions
+    ]),
     notes: [...(output.notes ?? [])]
   };
 

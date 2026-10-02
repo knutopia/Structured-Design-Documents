@@ -190,7 +190,7 @@ function buildScenarioFlowNode(
       decoratorMode: nodeDecoratorMode,
       nodeType: node.type,
       nodeId: node.id,
-      attributes: []
+      attributes: node.attributes ?? []
     }, {
       classes: buildNodeClasses(node, placement),
       ports: buildScenarioFlowNodePorts()

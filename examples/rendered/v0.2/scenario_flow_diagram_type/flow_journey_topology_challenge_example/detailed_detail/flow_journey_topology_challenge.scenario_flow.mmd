@@ -1,0 +1,23 @@
+flowchart TB
+  subgraph n_step["Steps"]
+    n_S_010("Select a Node")
+    n_S_020("Review Diagrams Containing Current Node")
+    n_S_040("Add Relationship")
+    n_S_041("Add relationship, by node")
+    n_S_042("Add outgoing relationship")
+    n_S_043("Add incoming relationship")
+    n_S_021("Select Diagram")
+    n_S_022("View Node in New Diagram Context")
+    n_S_030("Select Diagram Content")
+    n_S_031("Adjust View")
+    n_S_032("Name the New View")
+  end
+  n_S_010 --> n_S_020
+  n_S_010 --> n_S_040
+  n_S_020 --> n_S_021
+  n_S_021 --> n_S_022
+  n_S_030 --> n_S_031
+  n_S_031 --> n_S_032
+  n_S_040 --> n_S_041
+  n_S_040 --> n_S_042
+  n_S_040 --> n_S_043

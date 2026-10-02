@@ -108,3 +108,19 @@ describe("validateGraph", () => {
     expect(referentialIntegrity?.span?.column).toBe(1);
   });
 });
+
+
+describe.each(["0.1", "0.2"])("canonical validation profiles v%s", version => {
+  it("validates every canonical with its explicit bundle under all three profiles", async () => {
+    const bundle = await loadBundle(path.join(repoRoot, `bundle/v${version}/manifest.yaml`));
+    for (const example of bundle.manifest.examples) {
+      const sourcePath = path.join(bundle.rootDir, example.path);
+      const result = compileSource({ path: sourcePath, text: await readFile(sourcePath, "utf8") }, bundle);
+      expect(result.diagnostics).toEqual([]);
+      for (const profile of ["simple", "permissive", "strict"]) {
+        const report = validateGraph(result.graph!, bundle, profile);
+        expect(report.diagnostics.filter(d => d.severity === "error"), `${example.path}, ${profile}`).toEqual([]);
+      }
+    }
+  });
+});

@@ -147,7 +147,7 @@ function buildBlueprintNode(
       decoratorMode: nodeDecoratorMode,
       nodeType: node.type,
       nodeId: node.id,
-      attributes: []
+      attributes: node.attributes ?? []
     }, {
       classes: buildNodeClasses(node, extraClasses),
       ports: buildServiceBlueprintNodePorts()

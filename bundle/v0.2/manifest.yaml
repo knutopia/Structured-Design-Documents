@@ -101,7 +101,12 @@ examples:
     compiled_snapshot: snapshots/service_blueprint_slice.compiled.json
     projection_snapshots:
       - snapshots/service_blueprint_slice.service_blueprint.projection.json
-      - snapshots/service_blueprint_slice.journey_map.projection.json
+  - path: examples/step_differentiation.sdd
+    compiled_snapshot: snapshots/step_differentiation.compiled.json
+    projection_snapshots:
+      - snapshots/step_differentiation.journey_map.projection.json
+      - snapshots/step_differentiation.service_blueprint.projection.json
+      - snapshots/step_differentiation.scenario_flow.projection.json
 
 compatibility:
   requires_compiler_min: "0.2.0"

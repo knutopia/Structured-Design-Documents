@@ -5,106 +5,106 @@
   "source_example": "flow_journey_topology_challenge",
   "nodes": [
     {
-      "id": "J-010",
-      "type": "Step",
+      "id": "S-010",
+      "type": "ScenarioStep",
       "name": "Select a Node"
     },
     {
-      "id": "J-020",
-      "type": "Step",
+      "id": "S-020",
+      "type": "ScenarioStep",
       "name": "Review Diagrams Containing Current Node"
     },
     {
-      "id": "J-021",
-      "type": "Step",
+      "id": "S-021",
+      "type": "ScenarioStep",
       "name": "Select Diagram"
     },
     {
-      "id": "J-022",
-      "type": "Step",
+      "id": "S-022",
+      "type": "ScenarioStep",
       "name": "View Node in New Diagram Context"
     },
     {
-      "id": "J-030",
-      "type": "Step",
+      "id": "S-030",
+      "type": "ScenarioStep",
       "name": "Select Diagram Content"
     },
     {
-      "id": "J-031",
-      "type": "Step",
+      "id": "S-031",
+      "type": "ScenarioStep",
       "name": "Adjust View"
     },
     {
-      "id": "J-032",
-      "type": "Step",
+      "id": "S-032",
+      "type": "ScenarioStep",
       "name": "Name the New View"
     },
     {
-      "id": "J-040",
-      "type": "Step",
+      "id": "S-040",
+      "type": "ScenarioStep",
       "name": "Add Relationship"
     },
     {
-      "id": "J-041",
-      "type": "Step",
+      "id": "S-041",
+      "type": "ScenarioStep",
       "name": "Add relationship, by node"
     },
     {
-      "id": "J-042",
-      "type": "Step",
+      "id": "S-042",
+      "type": "ScenarioStep",
       "name": "Add outgoing relationship"
     },
     {
-      "id": "J-043",
-      "type": "Step",
+      "id": "S-043",
+      "type": "ScenarioStep",
       "name": "Add incoming relationship"
     }
   ],
   "edges": [
     {
-      "from": "J-010",
+      "from": "S-010",
       "type": "PRECEDES",
-      "to": "J-020"
+      "to": "S-020"
     },
     {
-      "from": "J-010",
+      "from": "S-010",
       "type": "PRECEDES",
-      "to": "J-040"
+      "to": "S-040"
     },
     {
-      "from": "J-020",
+      "from": "S-020",
       "type": "PRECEDES",
-      "to": "J-021"
+      "to": "S-021"
     },
     {
-      "from": "J-021",
+      "from": "S-021",
       "type": "PRECEDES",
-      "to": "J-022"
+      "to": "S-022"
     },
     {
-      "from": "J-030",
+      "from": "S-030",
       "type": "PRECEDES",
-      "to": "J-031"
+      "to": "S-031"
     },
     {
-      "from": "J-031",
+      "from": "S-031",
       "type": "PRECEDES",
-      "to": "J-032"
+      "to": "S-032"
     },
     {
-      "from": "J-040",
+      "from": "S-040",
       "type": "PRECEDES",
-      "to": "J-041"
+      "to": "S-041"
     },
     {
-      "from": "J-040",
+      "from": "S-040",
       "type": "PRECEDES",
-      "to": "J-042"
+      "to": "S-042"
     },
     {
-      "from": "J-040",
+      "from": "S-040",
       "type": "PRECEDES",
-      "to": "J-043"
+      "to": "S-043"
     }
   ],
   "derived": {

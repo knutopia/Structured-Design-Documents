@@ -90,8 +90,8 @@
           {
             "role": "instrumented_at",
             "group": "experience",
-            "target_id": "J-050",
-            "target_type": "Step",
+            "target_id": "S-050",
+            "target_type": "ScenarioStep",
             "target_name": "Review Risk Alert"
           },
           {
@@ -145,9 +145,9 @@
       "kind": "edge",
       "from": "M-051",
       "type": "INSTRUMENTED_AT",
-      "to": "J-050",
+      "to": "S-050",
       "reason": "derived_annotation_instead_of_edge",
-      "detail": "Rendered as an experience-group metric annotation because the target node type Step is outside the view node scope."
+      "detail": "Rendered as an experience-group metric annotation because the target node type ScenarioStep is outside the view node scope."
     }
   ],
   "notes": []

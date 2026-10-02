@@ -5,36 +5,6 @@
   "source_example": "scenario_branching",
   "nodes": [
     {
-      "id": "J-030",
-      "type": "Step",
-      "name": "Choose Fulfillment"
-    },
-    {
-      "id": "J-031",
-      "type": "Step",
-      "name": "Enter Delivery Address"
-    },
-    {
-      "id": "J-032",
-      "type": "Step",
-      "name": "Choose Pickup Store"
-    },
-    {
-      "id": "J-033",
-      "type": "Step",
-      "name": "Choose Contact Method"
-    },
-    {
-      "id": "J-034",
-      "type": "Step",
-      "name": "Confirm Email Notification"
-    },
-    {
-      "id": "J-035",
-      "type": "Step",
-      "name": "Review Pickup Instructions"
-    },
-    {
       "id": "P-030",
       "type": "Place",
       "name": "Fulfillment"
@@ -63,6 +33,36 @@
       "id": "P-035",
       "type": "Place",
       "name": "Pickup Instructions"
+    },
+    {
+      "id": "S-030",
+      "type": "ScenarioStep",
+      "name": "Choose Fulfillment"
+    },
+    {
+      "id": "S-031",
+      "type": "ScenarioStep",
+      "name": "Enter Delivery Address"
+    },
+    {
+      "id": "S-032",
+      "type": "ScenarioStep",
+      "name": "Choose Pickup Store"
+    },
+    {
+      "id": "S-033",
+      "type": "ScenarioStep",
+      "name": "Choose Contact Method"
+    },
+    {
+      "id": "S-034",
+      "type": "ScenarioStep",
+      "name": "Confirm Email Notification"
+    },
+    {
+      "id": "S-035",
+      "type": "ScenarioStep",
+      "name": "Review Pickup Instructions"
     },
     {
       "id": "VS-030a",
@@ -97,109 +97,109 @@
   ],
   "edges": [
     {
-      "from": "J-030",
-      "type": "PRECEDES",
-      "to": "J-031"
+      "from": "P-030",
+      "type": "NAVIGATES_TO",
+      "to": "P-031"
     },
     {
-      "from": "J-030",
-      "type": "PRECEDES",
-      "to": "J-032"
+      "from": "P-030",
+      "type": "NAVIGATES_TO",
+      "to": "P-032"
     },
     {
-      "from": "J-030",
+      "from": "P-033",
+      "type": "NAVIGATES_TO",
+      "to": "P-034"
+    },
+    {
+      "from": "P-033",
+      "type": "NAVIGATES_TO",
+      "to": "P-035"
+    },
+    {
+      "from": "S-030",
+      "type": "PRECEDES",
+      "to": "S-031"
+    },
+    {
+      "from": "S-030",
+      "type": "PRECEDES",
+      "to": "S-032"
+    },
+    {
+      "from": "S-030",
       "type": "REALIZED_BY",
       "to": "P-030"
     },
     {
-      "from": "J-030",
+      "from": "S-030",
       "type": "REALIZED_BY",
       "to": "VS-030a"
     },
     {
-      "from": "J-031",
+      "from": "S-031",
       "type": "PRECEDES",
-      "to": "J-033"
+      "to": "S-033"
     },
     {
-      "from": "J-031",
+      "from": "S-031",
       "type": "REALIZED_BY",
       "to": "P-031"
     },
     {
-      "from": "J-031",
+      "from": "S-031",
       "type": "REALIZED_BY",
       "to": "VS-031a"
     },
     {
-      "from": "J-032",
+      "from": "S-032",
       "type": "REALIZED_BY",
       "to": "P-032"
     },
     {
-      "from": "J-032",
+      "from": "S-032",
       "type": "REALIZED_BY",
       "to": "VS-032a"
     },
     {
-      "from": "J-033",
+      "from": "S-033",
       "type": "PRECEDES",
-      "to": "J-034"
+      "to": "S-034"
     },
     {
-      "from": "J-033",
+      "from": "S-033",
       "type": "PRECEDES",
-      "to": "J-035"
+      "to": "S-035"
     },
     {
-      "from": "J-033",
+      "from": "S-033",
       "type": "REALIZED_BY",
       "to": "P-033"
     },
     {
-      "from": "J-033",
+      "from": "S-033",
       "type": "REALIZED_BY",
       "to": "VS-033a"
     },
     {
-      "from": "J-034",
+      "from": "S-034",
       "type": "REALIZED_BY",
       "to": "P-034"
     },
     {
-      "from": "J-034",
+      "from": "S-034",
       "type": "REALIZED_BY",
       "to": "VS-034a"
     },
     {
-      "from": "J-035",
+      "from": "S-035",
       "type": "REALIZED_BY",
       "to": "P-035"
     },
     {
-      "from": "J-035",
+      "from": "S-035",
       "type": "REALIZED_BY",
       "to": "VS-035a"
-    },
-    {
-      "from": "P-030",
-      "type": "NAVIGATES_TO",
-      "to": "P-031"
-    },
-    {
-      "from": "P-030",
-      "type": "NAVIGATES_TO",
-      "to": "P-032"
-    },
-    {
-      "from": "P-033",
-      "type": "NAVIGATES_TO",
-      "to": "P-034"
-    },
-    {
-      "from": "P-033",
-      "type": "NAVIGATES_TO",
-      "to": "P-035"
     },
     {
       "from": "VS-030a",
@@ -225,13 +225,13 @@
   "derived": {
     "node_annotations": [
       {
-        "node_id": "J-030",
+        "node_id": "S-030",
         "display": {
           "shape": "diamond"
         }
       },
       {
-        "node_id": "J-033",
+        "node_id": "S-033",
         "display": {
           "shape": "diamond"
         }
@@ -239,33 +239,33 @@
     ],
     "edge_annotations": [
       {
-        "from": "J-030",
+        "from": "S-030",
         "type": "PRECEDES",
-        "to": "J-031",
+        "to": "S-031",
         "role": "branch_label",
         "display_label": "delivery_selected",
         "label_source": "guard"
       },
       {
-        "from": "J-030",
+        "from": "S-030",
         "type": "PRECEDES",
-        "to": "J-032",
+        "to": "S-032",
         "role": "branch_label",
         "display_label": "pickup_selected",
         "label_source": "guard"
       },
       {
-        "from": "J-033",
+        "from": "S-033",
         "type": "PRECEDES",
-        "to": "J-034",
+        "to": "S-034",
         "role": "branch_label",
         "display_label": "E-032",
         "label_source": "event"
       },
       {
-        "from": "J-033",
+        "from": "S-033",
         "type": "PRECEDES",
-        "to": "J-035",
+        "to": "S-035",
         "role": "branch_label",
         "display_label": "Review Pickup Instructions",
         "label_source": "to_name"

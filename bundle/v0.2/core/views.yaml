@@ -39,8 +39,8 @@ views:
     name: Outcome-Opportunity Map
     status: operational
     projection:
-      include_node_types: [Outcome, Metric, Opportunity, Initiative]
-      include_edge_types: [MEASURED_BY, SUPPORTS, ADDRESSES, IMPLEMENTED_BY, INSTRUMENTED_AT]
+      include_node_types: [ Outcome, Metric, Opportunity, Initiative ]
+      include_edge_types: [ MEASURED_BY, SUPPORTS, ADDRESSES, IMPLEMENTED_BY, INSTRUMENTED_AT ]
       hierarchy_edges: []
       ordering_edges: []
     conventions:
@@ -50,7 +50,7 @@ views:
         relationships:
           - from: Stage
             type: CONTAINS
-            to: Step
+            to: JourneyStep
             role: bridge
             display_by_profile:
               simple:
@@ -125,9 +125,31 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: PRECEDES
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: PRECEDES
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: PRECEDES
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -257,7 +279,7 @@ views:
               strict:
                 - presence: annotation
                   label: visible
-          - from: Step
+          - from: JourneyStep
             type: REALIZED_BY
             to: Place
             role: bridge
@@ -268,7 +290,29 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
             type: REALIZED_BY
             to: ViewState
             role: bridge
@@ -279,7 +323,51 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
             type: REALIZED_BY
             to: Process
             role: bridge
@@ -468,7 +556,29 @@ views:
                   label: not_applicable
           - from: Metric
             type: INSTRUMENTED_AT
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: annotation
+                  label: visible
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -510,6 +620,50 @@ views:
               strict:
                 - presence: annotation
                   label: visible
+          - from: JourneyStep
+            type: MAPS_TO
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: MAPS_TO
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
       normative_defaults:
         - id: include_edge_only_when_both_endpoints_included
           description: Edge is included only if both endpoints pass node-type filter.
@@ -572,21 +726,21 @@ views:
               label:
                 visible: true
                 text: instrumented at
-          priority_order: [SUPPORTS, ADDRESSES, MEASURED_BY, IMPLEMENTED_BY, INSTRUMENTED_AT]
+          priority_order: [ SUPPORTS, ADDRESSES, MEASURED_BY, IMPLEMENTED_BY, INSTRUMENTED_AT ]
         instrumentation_annotations:
           source_edge_type: INSTRUMENTED_AT
           render_mode: annotate_metric_when_target_out_of_scope
-          group_order: [experience, event]
-          experience_target_types: [Step, Place, ViewState]
-          event_target_types: [Event]
-          target_type_order: [Step, Place, ViewState, Event]
+          group_order: [ experience, event ]
+          experience_target_types: [ JourneyStep, BlueprintStep, ScenarioStep, Place, ViewState ]
+          event_target_types: [ Event ]
+          target_type_order: [ JourneyStep, BlueprintStep, ScenarioStep, Place, ViewState, Event ]
           display:
             include_target_id: true
             include_target_name_when_available: true
         implementation_annotations:
           source_edge_type: IMPLEMENTED_BY
           render_mode: annotate_initiative_when_target_out_of_scope
-          target_type_order: [Place, ViewState, Component, Process, SystemAction]
+          target_type_order: [ Place, ViewState, Component, Process, SystemAction ]
           display:
             label: Implemented by
             include_target_id: true
@@ -603,10 +757,10 @@ views:
     name: Journey Map
     status: operational
     projection:
-      include_node_types: [Stage, Step]
-      include_edge_types: [CONTAINS, PRECEDES]
-      hierarchy_edges: [CONTAINS]
-      ordering_edges: [PRECEDES]
+      include_node_types: [ Stage, JourneyStep ]
+      include_edge_types: [ CONTAINS, PRECEDES ]
+      hierarchy_edges: [ CONTAINS ]
+      ordering_edges: [ PRECEDES ]
     conventions:
       guided_addition:
         profile_aliases:
@@ -614,7 +768,7 @@ views:
         relationships:
           - from: Stage
             type: CONTAINS
-            to: Step
+            to: JourneyStep
             role: primary
             display_by_profile:
               simple:
@@ -689,9 +843,9 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: PRECEDES
-            to: Step
+            to: JourneyStep
             role: primary
             display_by_profile:
               simple:
@@ -700,6 +854,28 @@ views:
               strict:
                 - presence: connector
                   label: hidden
+          - from: BlueprintStep
+            type: PRECEDES
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: PRECEDES
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
           - from: Process
             type: PRECEDES
             to: Process
@@ -821,7 +997,7 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: REALIZED_BY
             to: Place
             role: bridge
@@ -832,7 +1008,29 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
             type: REALIZED_BY
             to: ViewState
             role: bridge
@@ -843,7 +1041,51 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
             type: REALIZED_BY
             to: Process
             role: bridge
@@ -1032,7 +1274,29 @@ views:
                   label: not_applicable
           - from: Metric
             type: INSTRUMENTED_AT
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -1074,9 +1338,59 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
+          - from: JourneyStep
+            type: MAPS_TO
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+              strict:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+          - from: BlueprintStep
+            type: MAPS_TO
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+              strict:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+          - from: JourneyStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+              strict:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+          - from: BlueprintStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
       normative_defaults:
         - id: stage_step_hierarchy
-          description: Stage CONTAINS Step edges define hierarchy.
+          description: Stage CONTAINS JourneyStep edges define hierarchy.
       renderer_defaults:
         batch_applicability:
           kind: visible_semantic_node_count
@@ -1096,17 +1410,34 @@ views:
         detail_display:
           compact:
             show_reference_badges: false
+            show_relationship_references: false
           detailed:
             show_reference_badges: true
+            show_relationship_references: true
+        relationship_references:
+          - relationship: MAPS_TO
+            node_types:
+              - JourneyStep
+            direction: incident
+            role: maps_to
+            label: Maps to
+            detail_setting: show_relationship_references
+          - relationship: REFINED_BY
+            node_types:
+              - JourneyStep
+            direction: outgoing
+            role: refined_by
+            label: Refined by
+            detail_setting: show_relationship_references
 
   - id: service_blueprint
     name: Service Blueprint
     status: operational
     projection:
-      include_node_types: [Step, Process, SystemAction, DataEntity, Policy]
-      include_edge_types: [REALIZED_BY, DEPENDS_ON, READS, WRITES, CONSTRAINED_BY, PRECEDES]
+      include_node_types: [ BlueprintStep, Process, SystemAction, DataEntity, Policy ]
+      include_edge_types: [ REALIZED_BY, DEPENDS_ON, READS, WRITES, CONSTRAINED_BY, PRECEDES ]
       hierarchy_edges: []
-      ordering_edges: [PRECEDES]
+      ordering_edges: [ PRECEDES ]
     conventions:
       guided_addition:
         profile_aliases:
@@ -1114,7 +1445,7 @@ views:
         relationships:
           - from: Stage
             type: CONTAINS
-            to: Step
+            to: JourneyStep
             role: bridge
             display_by_profile:
               simple:
@@ -1189,9 +1520,20 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: PRECEDES
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: PRECEDES
+            to: BlueprintStep
             role: primary
             display_by_profile:
               simple:
@@ -1200,6 +1542,17 @@ views:
               strict:
                 - presence: connector
                   label: hidden
+          - from: ScenarioStep
+            type: PRECEDES
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
           - from: Process
             type: PRECEDES
             to: Process
@@ -1321,7 +1674,7 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: REALIZED_BY
             to: Place
             role: bridge
@@ -1332,7 +1685,29 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
             type: REALIZED_BY
             to: ViewState
             role: bridge
@@ -1343,7 +1718,40 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
             type: REALIZED_BY
             to: Process
             role: primary
@@ -1354,6 +1762,17 @@ views:
               strict:
                 - presence: connector
                   label: visible
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
           - from: ViewState
             type: TRANSITIONS_TO
             to: ViewState
@@ -1532,7 +1951,29 @@ views:
                   label: not_applicable
           - from: Metric
             type: INSTRUMENTED_AT
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -1574,6 +2015,56 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
+          - from: JourneyStep
+            type: MAPS_TO
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+              strict:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+          - from: BlueprintStep
+            type: MAPS_TO
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+              strict:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+          - from: JourneyStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+              strict:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
       normative_defaults:
         - id: process_sequence
           description: PRECEDES edges provide optional process ordering overlays.
@@ -1585,30 +2076,47 @@ views:
           node_tier_scope: diagram
           stack_alignment: center
         lane_mapping:
-          lane_order: [customer, frontstage, backstage, support, system, policy]
-          process_visibility_values: [frontstage, backstage, support]
+          lane_order: [ customer, frontstage, backstage, support, system, policy ]
+          process_visibility_values: [ frontstage, backstage, support ]
           aliases:
             customer-visible: frontstage
             not-visible: backstage
           node_type_defaults:
-            Step: customer
             Process: by_visibility
             SystemAction: system
             DataEntity: system
             Policy: policy
+            BlueprintStep: customer
         detail_display:
           compact:
             show_secondary_edge_labels: false
+            show_relationship_references: false
           detailed:
             show_secondary_edge_labels: true
+            show_relationship_references: true
+        relationship_references:
+          - relationship: MAPS_TO
+            node_types:
+              - BlueprintStep
+            direction: incident
+            role: maps_to
+            label: Maps to
+            detail_setting: show_relationship_references
+          - relationship: REFINED_BY
+            node_types:
+              - BlueprintStep
+            direction: outgoing
+            role: refined_by
+            label: Refined by
+            detail_setting: show_relationship_references
 
   - id: ia_place_map
     name: IA Place Map
     status: operational
     projection:
-      include_node_types: [Area, Place]
-      include_edge_types: [CONTAINS, NAVIGATES_TO]
-      hierarchy_edges: [CONTAINS]
+      include_node_types: [ Area, Place ]
+      include_edge_types: [ CONTAINS, NAVIGATES_TO ]
+      hierarchy_edges: [ CONTAINS ]
       ordering_edges: []
     conventions:
       guided_addition:
@@ -1617,7 +2125,7 @@ views:
         relationships:
           - from: Stage
             type: CONTAINS
-            to: Step
+            to: JourneyStep
             role: bridge
             display_by_profile:
               simple:
@@ -1692,9 +2200,31 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: PRECEDES
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: PRECEDES
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: PRECEDES
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -1824,7 +2354,7 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: REALIZED_BY
             to: Place
             role: bridge
@@ -1835,7 +2365,29 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
             type: REALIZED_BY
             to: ViewState
             role: bridge
@@ -1846,7 +2398,51 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
             type: REALIZED_BY
             to: Process
             role: bridge
@@ -2035,7 +2631,29 @@ views:
                   label: not_applicable
           - from: Metric
             type: INSTRUMENTED_AT
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -2069,6 +2687,50 @@ views:
           - from: Metric
             type: INSTRUMENTED_AT
             to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: MAPS_TO
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: MAPS_TO
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REFINED_BY
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -2089,8 +2751,8 @@ views:
         node_annotations:
           subtitle_prop: route_or_key
           badge_prop: access
-          metadata_props: [entry_points, primary_nav]
-          access_examples: [public, auth, "role:<slug>"]
+          metadata_props: [ entry_points, primary_nav ]
+          access_examples: [ public, auth, "role:<slug>" ]
         detail_display:
           compact:
             show_place_route_or_key: false
@@ -2107,10 +2769,10 @@ views:
     name: Scenario Flow
     status: operational
     projection:
-      include_node_types: [Step, Place, ViewState]
-      include_edge_types: [PRECEDES, REALIZED_BY, NAVIGATES_TO, TRANSITIONS_TO]
+      include_node_types: [ ScenarioStep, Place, ViewState ]
+      include_edge_types: [ PRECEDES, REALIZED_BY, NAVIGATES_TO, TRANSITIONS_TO ]
       hierarchy_edges: []
-      ordering_edges: [PRECEDES]
+      ordering_edges: [ PRECEDES ]
     conventions:
       guided_addition:
         profile_aliases:
@@ -2118,7 +2780,7 @@ views:
         relationships:
           - from: Stage
             type: CONTAINS
-            to: Step
+            to: JourneyStep
             role: bridge
             display_by_profile:
               simple:
@@ -2193,9 +2855,31 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: PRECEDES
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: PRECEDES
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: PRECEDES
+            to: ScenarioStep
             role: primary
             display_by_profile:
               simple:
@@ -2325,7 +3009,29 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
             type: REALIZED_BY
             to: Place
             role: primary
@@ -2336,7 +3042,29 @@ views:
               strict:
                 - presence: connector
                   label: hidden
-          - from: Step
+          - from: JourneyStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
             type: REALIZED_BY
             to: ViewState
             role: primary
@@ -2347,7 +3075,29 @@ views:
               strict:
                 - presence: connector
                   label: hidden
-          - from: Step
+          - from: JourneyStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
             type: REALIZED_BY
             to: Process
             role: bridge
@@ -2536,7 +3286,29 @@ views:
                   label: not_applicable
           - from: Metric
             type: INSTRUMENTED_AT
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -2578,9 +3350,57 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
+          - from: JourneyStep
+            type: MAPS_TO
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: MAPS_TO
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+              strict:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+          - from: BlueprintStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
+              strict:
+                - presence: annotation
+                  label: visible
+                  explanation: Cross-view reference, visible in detailed render output.
       normative_defaults:
         - id: step_ordering_primary
-          description: PRECEDES on Step is the primary flow spine.
+          description: PRECEDES on ScenarioStep is the primary flow spine.
       renderer_defaults:
         batch_applicability:
           kind: visible_semantic_node_count
@@ -2588,7 +3408,7 @@ views:
         decision_nodes:
           kind_prop: kind
           decision_value: decision
-          branch_label_precedence: [guard, event, to_name]
+          branch_label_precedence: [ guard, event, to_name ]
           render_shape: diamond
         cell_sizing:
           node_tier_scope: lane
@@ -2598,38 +3418,49 @@ views:
           lanes:
             - id: step
               label: Steps
-              node_types: [Step]
+              node_types:
+                - ScenarioStep
             - id: place
               label: Places
-              node_types: [Place]
+              node_types: [ Place ]
             - id: view_state
               label: View States
-              node_types: [ViewState]
+              node_types: [ ViewState ]
           empty_lane_policy: omit
           component_order: source
           component_gap_rows: 1
           branch_order: source
           trailing_track_policy: trim
           secondary_placement:
-            edge_types: [TRANSITIONS_TO]
+            edge_types: [ TRANSITIONS_TO ]
             strategy: source_next_band
             overflow: extend_semantic_bands
         detail_display:
           compact:
             show_branch_labels: false
             show_disconnected_places: false
+            show_relationship_references: false
           detailed:
             show_branch_labels: true
             show_disconnected_places: true
+            show_relationship_references: true
+        relationship_references:
+          - relationship: REFINED_BY
+            node_types:
+              - ScenarioStep
+            direction: incoming
+            role: refines
+            label: Refines
+            detail_setting: show_relationship_references
 
   - id: ui_contracts
     name: UI Contracts
     status: operational
     projection:
-      include_node_types: [Place, ViewState, Component, State, Event, DataEntity, SystemAction]
-      include_edge_types: [COMPOSED_OF, CONTAINS, TRANSITIONS_TO, EMITS, BINDS_TO, DEPENDS_ON]
-      hierarchy_edges: [COMPOSED_OF, CONTAINS]
-      ordering_edges: [TRANSITIONS_TO]
+      include_node_types: [ Place, ViewState, Component, State, Event, DataEntity, SystemAction ]
+      include_edge_types: [ COMPOSED_OF, CONTAINS, TRANSITIONS_TO, EMITS, BINDS_TO, DEPENDS_ON ]
+      hierarchy_edges: [ COMPOSED_OF, CONTAINS ]
+      ordering_edges: [ TRANSITIONS_TO ]
     conventions:
       guided_addition:
         profile_aliases:
@@ -2637,7 +3468,7 @@ views:
         relationships:
           - from: Stage
             type: CONTAINS
-            to: Step
+            to: JourneyStep
             role: bridge
             display_by_profile:
               simple:
@@ -2712,9 +3543,31 @@ views:
               strict:
                 - presence: connector
                   label: visible
-          - from: Step
+          - from: JourneyStep
             type: PRECEDES
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: PRECEDES
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: PRECEDES
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -2844,7 +3697,7 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: JourneyStep
             type: REALIZED_BY
             to: Place
             role: bridge
@@ -2855,7 +3708,29 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: Place
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
             type: REALIZED_BY
             to: ViewState
             role: bridge
@@ -2866,7 +3741,51 @@ views:
               strict:
                 - presence: hidden
                   label: not_applicable
-          - from: Step
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
+            type: REALIZED_BY
+            to: ViewState
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REALIZED_BY
+            to: Process
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: ScenarioStep
             type: REALIZED_BY
             to: Process
             role: bridge
@@ -3090,7 +4009,29 @@ views:
                   label: visible
           - from: Metric
             type: INSTRUMENTED_AT
-            to: Step
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: Metric
+            type: INSTRUMENTED_AT
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -3124,6 +4065,50 @@ views:
           - from: Metric
             type: INSTRUMENTED_AT
             to: Event
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: MAPS_TO
+            to: BlueprintStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: MAPS_TO
+            to: JourneyStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: JourneyStep
+            type: REFINED_BY
+            to: ScenarioStep
+            role: bridge
+            display_by_profile:
+              simple:
+                - presence: hidden
+                  label: not_applicable
+              strict:
+                - presence: hidden
+                  label: not_applicable
+          - from: BlueprintStep
+            type: REFINED_BY
+            to: ScenarioStep
             role: bridge
             display_by_profile:
               simple:
@@ -3147,23 +4132,23 @@ views:
           fallback_to_secondary_when_primary_absent: true
         ui_contracts_presentation:
           roles:
-            component: [Component]
-            place: [Place]
-            primary: [ViewState]
-            secondary: [State]
-            support: [Event, DataEntity, SystemAction]
+            component: [ Component ]
+            place: [ Place ]
+            primary: [ ViewState ]
+            secondary: [ State ]
+            support: [ Event, DataEntity, SystemAction ]
           relationships:
-            - {kind: containment, edge_type: CONTAINS, from: [Component], to: [Component], style: solid, label: Contains}
-            - {kind: ownership, edge_type: CONTAINS, from: [Place], to: [ViewState], style: solid}
-            - {kind: composition, edge_type: COMPOSED_OF, from: [Place, ViewState], to: [Component], style: solid, label: composed of}
-            - {kind: transition, edge_type: TRANSITIONS_TO, from: [ViewState], to: [ViewState], style: solid}
-            - {kind: transition, edge_type: TRANSITIONS_TO, from: [State], to: [State], style: solid, secondary_style: dashed}
-            - {kind: contract, edge_type: EMITS, from: [Component, ViewState, SystemAction], to: [Event], style: dashed, label: emits}
-            - {kind: contract, edge_type: DEPENDS_ON, from: [Component, ViewState], to: [SystemAction], style: solid, label: depends on}
-            - {kind: contract, edge_type: BINDS_TO, from: [Component], to: [DataEntity], style: dotted, label: binds to, field_property: field, field_label: 'binds field {value}'}
-          ownership: {primary_property: place_id, secondary_property: scope_id}
+            - { kind: containment, edge_type: CONTAINS, from: [ Component ], to: [ Component ], style: solid, label: Contains }
+            - { kind: ownership, edge_type: CONTAINS, from: [ Place ], to: [ ViewState ], style: solid }
+            - { kind: composition, edge_type: COMPOSED_OF, from: [ Place, ViewState ], to: [ Component ], style: solid, label: composed of }
+            - { kind: transition, edge_type: TRANSITIONS_TO, from: [ ViewState ], to: [ ViewState ], style: solid }
+            - { kind: transition, edge_type: TRANSITIONS_TO, from: [ State ], to: [ State ], style: solid, secondary_style: dashed }
+            - { kind: contract, edge_type: EMITS, from: [ Component, ViewState, SystemAction ], to: [ Event ], style: dashed, label: emits }
+            - { kind: contract, edge_type: DEPENDS_ON, from: [ Component, ViewState ], to: [ SystemAction ], style: solid, label: depends on }
+            - { kind: contract, edge_type: BINDS_TO, from: [ Component ], to: [ DataEntity ], style: dotted, label: binds to, field_property: field, field_label: 'binds field {value}' }
+          ownership: { primary_property: place_id, secondary_property: scope_id }
           scope_policy:
-            simple_scope_kinds: [place, component, standalone]
+            simple_scope_kinds: [ place, component, standalone ]
             simple_occurrence_count: 1
             simple_connector_count: 0
             retain_component_scopes_when_overview: retain_component_scopes_when_overview
@@ -3174,23 +4159,23 @@ views:
             secondary: show_secondary_state_groups_when_primary_view_state
             support: show_supporting_contract_lane_when_primary_view_state
             omit_empty_places: omit_empty_place_containers
-          hierarchy: {order: source_depth_first, reuse: first_expansion, locator_prefix: H, isolated_components: grouped}
+          hierarchy: { order: source_depth_first, reuse: first_expansion, locator_prefix: H, isolated_components: grouped }
           content:
             component:
-              - {property: description, label: description, visible_when: show_component_description}
-              - {property: inputs, label: inputs, visible_when: show_component_inputs_outputs}
-              - {property: outputs, label: outputs, visible_when: show_component_inputs_outputs}
+              - { property: description, label: description, visible_when: show_component_description }
+              - { property: inputs, label: inputs, visible_when: show_component_inputs_outputs }
+              - { property: outputs, label: outputs, visible_when: show_component_inputs_outputs }
             place:
-              - {property: route_or_key, label: Route, visible_when: show_place_route_or_key}
-              - {property: access, label: Access, visible_when: show_place_access}
-              - {property: entry_points, label: Entry points, visible_when: show_place_entry_points}
-              - {property: primary_nav, label: Primary navigation, visible_when: show_place_primary_nav}
+              - { property: route_or_key, label: Route, visible_when: show_place_route_or_key }
+              - { property: access, label: Access, visible_when: show_place_access }
+              - { property: entry_points, label: Entry points, visible_when: show_place_entry_points }
+              - { property: primary_nav, label: Primary navigation, visible_when: show_place_primary_nav }
             primary:
-              - {property: data_required, label: Data required, visible_when: show_view_state_data_required}
+              - { property: data_required, label: Data required, visible_when: show_view_state_data_required }
             secondary: []
             support: []
-          place_description: {property: description, visible_when: show_place_description}
-          target_register_layout: {mode: rows_widest_other_section}
+          place_description: { property: description, visible_when: show_place_description }
+          target_register_layout: { mode: rows_widest_other_section }
           labels:
             isolated_components: Components without hierarchy
             hierarchy_root: 'Component hierarchy · {name}'
@@ -3203,9 +4188,9 @@ views:
           transition_label:
             separator: ' '
             parts:
-              - {field: event, template: '[{value}]', resolve_node_name: true}
-              - {field: guard, template: '{{value}}', resolve_node_name: false}
-              - {field: effect, template: '/ {value}', resolve_node_name: false}
+              - { field: event, template: '[{value}]', resolve_node_name: true }
+              - { field: guard, template: '{{value}}', resolve_node_name: false }
+              - { field: effect, template: '/ {value}', resolve_node_name: false }
         detail_display:
           compact:
             show_component_hierarchy: true

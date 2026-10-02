@@ -5,19 +5,19 @@
   "source_example": "service_blueprint_slice",
   "nodes": [
     {
-      "id": "D-020",
-      "type": "DataEntity",
-      "name": "Claim"
-    },
-    {
-      "id": "J-020",
-      "type": "Step",
+      "id": "BP-020",
+      "type": "BlueprintStep",
       "name": "Submit Claim"
     },
     {
-      "id": "J-021",
-      "type": "Step",
+      "id": "BP-021",
+      "type": "BlueprintStep",
       "name": "Receive Confirmation"
+    },
+    {
+      "id": "D-020",
+      "type": "DataEntity",
+      "name": "Claim"
     },
     {
       "id": "PL-020",
@@ -57,17 +57,17 @@
   ],
   "edges": [
     {
-      "from": "J-020",
+      "from": "BP-020",
       "type": "PRECEDES",
-      "to": "J-021"
+      "to": "BP-021"
     },
     {
-      "from": "J-020",
+      "from": "BP-020",
       "type": "REALIZED_BY",
       "to": "PR-020"
     },
     {
-      "from": "J-021",
+      "from": "BP-021",
       "type": "REALIZED_BY",
       "to": "PR-022"
     },
@@ -128,20 +128,16 @@
     }
   ],
   "derived": {
-    "node_annotations": [
-
-    ],
-    "edge_annotations": [
-
-    ],
+    "node_annotations": [],
+    "edge_annotations": [],
     "node_groups": [
       {
         "id": "lane:01:customer",
         "role": "lane",
         "label": "customer",
         "node_ids": [
-          "J-020",
-          "J-021"
+          "BP-020",
+          "BP-021"
         ]
       },
       {
@@ -188,8 +184,7 @@
         ]
       }
     ],
-    "view_metadata": {
-    }
+    "view_metadata": {}
   },
   "omissions": [
     {
@@ -201,7 +196,5 @@
       "detail": "Target node type Event is outside the service_blueprint node scope."
     }
   ],
-  "notes": [
-
-  ]
+  "notes": []
 }

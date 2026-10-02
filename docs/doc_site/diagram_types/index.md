@@ -5,6 +5,8 @@ This page collects the current diagram families, their status, and links to avai
 See the [node and edge reference](./node_edge_reference.md)
 for a compact list of content available to each diagram type.
 
+The existing illustrations below use the preserved v0.1 bundle. See [Step differentiation in v0.2](step_differentiation.md) for the new types and a mixed example across all three views.
+
 ## IA (Information Architecture) / Place Map
 
   Source of truth for product structure: what exists, where it lives, and how it connects.
@@ -89,8 +91,7 @@ for a compact list of content available to each diagram type.
 ## Scenario Flow
 
   Step-by-step UI-level activities (but *without* collapsing the world into screens). 
-
-  The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty lanes for Steps, Places and View States, with persistent rows for branch alternatives and separated row groups for independent flows.
+The x-axis shows horizontal progressions ("bands"). The y-axis shows non-empty lanes for ScenarioSteps, Places and View States, with persistent rows for branch alternatives and separated row groups for independent flows.
 
   Compact detail hides Places without a scenario-flow connection to another visible node. If no Places remain, the Places lane is omitted. Detailed detail shows those disconnected Places. Validation profile does not change this display rule.
 
@@ -122,9 +123,9 @@ for a compact list of content available to each diagram type.
 
 ## Journey Map
 
-  User / customer journey, expressing the high-level sequence of interactions with the product. (Steps also appear in the more technical service blueprint, see above.)
+  User / customer journey, expressing the high-level sequence of interactions with the product.
 
-  Stages contain source-ordered Steps, while `PRECEDES` relationships define journey flow.
+  Stages contain source-ordered JourneySteps, while `PRECEDES` relationships define journey flow.
 
   Examples:
   :::: details three_branch_journey_example <Badge type="info" text="Three-way branch" vertical="top" />
@@ -216,9 +217,9 @@ for a compact list of content available to each diagram type.
 
 ## Service Blueprint
 
-  Connects user experience steps to the layers needed to realize it.
+  Connects customer steps (BlueprintSteps) to the layers needed to realize them.
 
-  The x-axis shows customer journey progression over time: Anchor bands (columns) for steps connect a customer step the frontstage and backstage operations that make the step happen. Steps are ordered by `PRECEDES`. Additional interstitial bands are shown for work that advances between customer steps. The y-axis shows fixed service lanes: customer, frontstage, backstage, support, system, and policy.
+  The x-axis shows customer journey progression over time: Anchor bands (columns) for BlueprintSteps connect a customer step the frontstage and backstage operations that make the step happen. BlueprintSteps are ordered by `PRECEDES`. Additional interstitial bands are shown for work that advances between customer steps. The y-axis shows fixed service lanes: customer, frontstage, backstage, support, system, and policy.
 
   Note: a single column is sometimes called a *slice*, but a slice can also be broader, covering an entire feature.
 

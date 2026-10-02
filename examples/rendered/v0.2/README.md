@@ -5,14 +5,30 @@ This directory is generated from the canonical bundle examples and committed as 
 Regenerate it with:
 
 ```bash
-TMPDIR=/tmp pnpm run generate:rendered-examples
+TMPDIR=/tmp pnpm run generate:rendered-examples bundle/v0.2/manifest.yaml
 ```
 
 Source manifest: `bundle/v0.2/manifest.yaml`
 
 Curated view/example pairs:
 
-- (None yet - v0.2 examples will go here. LLM: Replace this line with the first v0.2 canonical example when it becomes available.)
+- `journey_map_diagram_type/branching_journey_example`
+- `ui_contracts_diagram_type/departure_desk_example`
+- `scenario_flow_diagram_type/flow_journey_topology_challenge_example`
+- `outcome_opportunity_map_diagram_type/metric_event_instrumentation_example`
+- `outcome_opportunity_map_diagram_type/multiple_outcomes_example`
+- `outcome_opportunity_map_diagram_type/outcome_to_ia_trace_example`
+- `journey_map_diagram_type/outcome_to_ia_trace_example`
+- `ia_place_map_diagram_type/outcome_to_ia_trace_example`
+- `ia_place_map_diagram_type/place_viewstate_transition_example`
+- `ui_contracts_diagram_type/place_viewstate_transition_example`
+- `scenario_flow_diagram_type/scenario_branching_example`
+- `service_blueprint_diagram_type/service_blueprint_slice_example`
+- `journey_map_diagram_type/step_differentiation_example`
+- `service_blueprint_diagram_type/step_differentiation_example`
+- `scenario_flow_diagram_type/step_differentiation_example`
+- `journey_map_diagram_type/three_branch_journey_example`
+- `ui_contracts_diagram_type/ui_state_fallback_example`
 
 Render details generated in each pair directory: `compact_detail`, `detailed_detail`.
 
@@ -69,7 +85,7 @@ All corpus inputs are validated with the bundle-derived `simple` profile before 
 
 `journey_map` visual review checklist:
 
-- staged unsuffixed `.svg` and `.png` artifacts use source-ordered Stage/Step placement and dedicated orthogonal `PRECEDES` routing
+- staged unsuffixed `.svg` and `.png` artifacts use source-ordered Stage/JourneyStep placement and dedicated orthogonal `PRECEDES` routing
 - detailed detail shows resolved opportunity badges while compact detail remains title-focused
 - explicit `.legacy_graphviz_preview.svg` and `.legacy_graphviz_preview.png` siblings preserve the Graphviz comparison path
 - focused renderer-stage goldens, rather than nominal corpus debug siblings, prove meaningful pre-routing, step-2, step-3, final, and diagnostic behavior

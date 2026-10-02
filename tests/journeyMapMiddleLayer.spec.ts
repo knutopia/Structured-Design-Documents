@@ -37,6 +37,7 @@ function buildJourneyMapRendererSceneFromModel(
 function step(id: string): JourneyRenderStep {
   return {
     kind: "step",
+    type: "Step",
     id,
     title: id,
     references: [],

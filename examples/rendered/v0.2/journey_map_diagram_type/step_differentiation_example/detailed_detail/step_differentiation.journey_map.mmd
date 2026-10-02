@@ -1,0 +1,6 @@
+flowchart LR
+  subgraph n_G_001["Purchase"]
+    n_J_001["Choose purchase<br/>Maps to: Prepare order (BP-001)<br/>Maps to: Submit order (BP-002)<br/>Refined by: Select item (S-001)<br/>Refined by: Review order (S-002)"]
+    n_J_002["Confirm purchase<br/>Maps to: Prepare order (BP-001)<br/>Refined by: Submit purchase (S-003)"]
+  end
+  n_J_001 --> n_J_002
