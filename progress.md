@@ -28,6 +28,11 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 10-3
+
+- Fixed codex-app-wsl access
+
+
 ## Fri 10-2
 
 - More documentation cleanup
