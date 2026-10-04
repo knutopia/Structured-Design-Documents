@@ -2,6 +2,7 @@ import type { ParseDocument, ParseBodyItem, NodeBlock } from "../parser/types.js
 import type { Diagnostic } from "../types.js";
 import {
   attachCompiledEdgeSourceSpan,
+  attachCompiledNodeSourceSpan,
   attachGraphAuthorOrder,
   type AuthorOrderedEdge,
   type CompiledEdge,
@@ -111,12 +112,14 @@ export function buildGraph(document: ParseDocument, sourcePath: string): { graph
         .filter((item): item is Extract<ParseBodyItem, { kind: "PropertyLine" }> => item.kind === "PropertyLine")
         .map((item) => [item.key, item.rawValue])
     );
-    nodes.push({
+    const node: CompiledNode = {
       id: block.id,
       type: block.nodeType,
       name: block.name,
       props
-    });
+    };
+    attachCompiledNodeSourceSpan(node, block.headerSpan);
+    nodes.push(node);
     edgeLineOrderByParentId.set(block.id, collectEdgeLineOrder(block));
     edges.push(...collectEdges(block));
   }

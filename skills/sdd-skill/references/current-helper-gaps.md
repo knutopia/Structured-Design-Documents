@@ -6,6 +6,7 @@ This file records the limits of the current helper surface so the skill does not
 
 The current helper exposes:
 
+- `diagrams`
 - `inspect`
 - `search`
 - `create`
@@ -31,7 +32,7 @@ loaded manifest path and language version for subsequent `--bundle` calls.
 When the skill needs semantic confirmation after a change, it should use:
 
 - `author` or `apply` with `validate_profile` for pre-commit candidate validation
-- `author` or `apply` with `projection_views` for pre-commit candidate projection feedback
+- `author` or `apply` with `projection_views` for combined-view candidate projection feedback or `projection_diagrams` for named Diagram IDs
 - standalone `validate` for current persisted-state validation
 - standalone `project` for current persisted-state projection
 - `preview` when rendered confirmation is more useful than structured data
@@ -54,3 +55,9 @@ When in doubt, resolve `<helper>` as described in the main skill file, then veri
 - `<helper> capabilities`
 - `docs/doc_site/sdd-helper/index.md`
 - `src/authoring/contracts.ts`
+
+## Named Diagrams
+
+The v0.2 helper supports declaration and membership authoring through existing node operations and generic `set_edge_property` / `remove_edge_property` edits. Discover names and counts through `diagrams`, and inspect exact inventories with `diagrams --details`; select a named ID with `project --diagram` or `preview --diagram`. A view is inferred, and an optional `--view` must agree. Unknown IDs, invalid memberships, and empty visible named content never fall back to combined content.
+
+Read the active bundle’s declaration type, type property, membership property, enabled views, and reference delimiter. Use fresh revision-bound edge handles for edge membership, inspect the result, and validate the full document. Existing guided diagram filters retain view-type semantics; named membership is not assigned automatically.

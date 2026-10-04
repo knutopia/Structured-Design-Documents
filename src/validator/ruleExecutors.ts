@@ -2,6 +2,8 @@ import { getCompiledEdgeSourceSpan, type CompiledEdge, type CompiledNode } from 
 import type { Diagnostic, Severity, SourceSpan } from "../types.js";
 import { resolveProfileRuleField } from "../bundle/bundleReferences.js";
 import type { RuleExecutor, RuleSource, ValidationContext } from "./types.js";
+import { semanticEdgeIdentity } from "../relationships/edgeIdentity.js";
+import { resolveDocumentDiagrams } from "../diagrams/resolveDiagrams.js";
 
 function createDiagnostic(
   context: ValidationContext,
@@ -23,21 +25,6 @@ function createDiagnostic(
     profileId: context.profileId,
     relatedIds
   };
-}
-
-function stablePropsKey(props: Record<string, string>): string {
-  return JSON.stringify(Object.fromEntries(Object.entries(props).sort(([left], [right]) => left.localeCompare(right))));
-}
-
-function edgeIdentity(edge: CompiledEdge, keyFields: string[]): string {
-  const parts = keyFields.map((field) => {
-    if (field === "props") {
-      return stablePropsKey(edge.props);
-    }
-    const value = edge[field as keyof CompiledEdge];
-    return String(value ?? "");
-  });
-  return parts.join("|");
 }
 
 function getRelationshipEdges(context: ValidationContext, relationship: string): CompiledEdge[] {
@@ -178,14 +165,11 @@ export const allEdgesEndpointsExist: RuleExecutor = (context, rule, _logic, seve
 export const directedEdgesOnly: RuleExecutor = () => [];
 
 export const duplicateEdgeIdentity: RuleExecutor = (context, rule, logic, severity) => {
-  const keyFields = Array.isArray(logic.key_fields)
-    ? logic.key_fields.filter((value): value is string => typeof value === "string")
-    : ["from", "type", "to", "event", "guard", "effect", "props"];
   const seen = new Map<string, CompiledEdge>();
   const diagnostics: Diagnostic[] = [];
 
   for (const edge of context.graph.edges) {
-    const key = edgeIdentity(edge, keyFields);
+    const key = semanticEdgeIdentity(edge, context.bundle);
     if (seen.has(key)) {
       diagnostics.push(
         createDiagnostic(
@@ -722,6 +706,7 @@ export const ruleExecutors: Record<string, RuleExecutor> = {
   all_edges_endpoints_exist: allEdgesEndpointsExist,
   directed_edges_only: directedEdgesOnly,
   duplicate_edge_identity: duplicateEdgeIdentity,
+  diagram_membership: (context, rule) => resolveDocumentDiagrams(context.graph, context.bundle).diagnostics.map((diagnostic) => ({ ...diagnostic, ruleId: rule.id, profileId: context.profileId })),
   annotation_semantics_scope: annotationSemanticsScope,
   to_name_non_semantic: toNameNonSemantic,
   no_inverse_materialization: noInverseMaterialization,

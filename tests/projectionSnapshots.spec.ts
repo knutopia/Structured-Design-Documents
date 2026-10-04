@@ -29,8 +29,8 @@ describe.each(["0.1", "0.2"])("projectView projection snapshots v%s", (version) 
       for (const snapshotRelativePath of example.projection_snapshots ?? []) {
         const snapshotPath = path.join(bundle.rootDir, snapshotRelativePath);
         const expectedSnapshotText = await readFile(snapshotPath, "utf8");
-        const expectedSnapshot = JSON.parse(expectedSnapshotText) as { view_id: string };
-        const projected = projectView(compiled.graph!, bundle, expectedSnapshot.view_id);
+        const expectedSnapshot = JSON.parse(expectedSnapshotText) as { view_id: string; diagram_id?: string };
+        const projected = projectView(compiled.graph!, bundle, expectedSnapshot.view_id, { diagramId: expectedSnapshot.diagram_id });
 
         expect(projected.diagnostics).toEqual([]);
         expect(normalizeLineEndings(JSON.stringify(projected.projection, null, 2))).toBe(

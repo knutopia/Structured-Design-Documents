@@ -1,0 +1,23 @@
+flowchart TB
+  subgraph n_step["Steps"]
+    n_SS_001{"Choose an editing action"}
+    n_SS_002("Choose the source node")
+    n_SS_003("Choose the relationship")
+    n_SS_004("Choose the target node")
+    n_SS_005("Review the new relationship")
+    n_SS_006("Choose the pivot node")
+    n_SS_007("Inspect related content")
+    n_SS_008("Return to the document")
+    n_SS_009("Choose a diagram type")
+    n_SS_010("Name the new view")
+    n_SS_011("Review the empty view")
+  end
+  n_SS_001 --> n_SS_002
+  n_SS_001 --> n_SS_006
+  n_SS_002 --> n_SS_003
+  n_SS_003 --> n_SS_004
+  n_SS_004 --> n_SS_005
+  n_SS_006 --> n_SS_007
+  n_SS_007 --> n_SS_008
+  n_SS_009 --> n_SS_010
+  n_SS_010 --> n_SS_011

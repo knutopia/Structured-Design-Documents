@@ -472,7 +472,7 @@ describe("CLI wrappers", () => {
 
     expect(result.exitCode).toBe(1);
     expect(stderr.join("")).toBe(
-      "error: required option '--view <view>' not specified\n"
+      "error: select --view <view> or --diagram <id>\n"
       + "Run 'sdd show --help' for usage.\n"
     );
     expect(renderSourcePreviewMock).not.toHaveBeenCalled();
@@ -490,7 +490,7 @@ describe("CLI wrappers", () => {
       const error = stderr.join("");
 
       expect(result.exitCode).toBe(1);
-      expect(error).toContain("required option '--view <view>' not specified");
+      expect(error).toContain("error:");
       expect(error).toContain("Run 'sdd show --help' for usage.");
       expect(error).not.toContain("Did you mean '--view'?");
       expect(error).not.toContain("Usage:");

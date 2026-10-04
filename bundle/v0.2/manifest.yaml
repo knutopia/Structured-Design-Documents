@@ -107,6 +107,13 @@ examples:
       - snapshots/step_differentiation.journey_map.projection.json
       - snapshots/step_differentiation.service_blueprint.projection.json
       - snapshots/step_differentiation.scenario_flow.projection.json
+  - path: examples/scenario_separation.sdd
+    compiled_snapshot: snapshots/scenario_separation.compiled.json
+    projection_snapshots:
+      - snapshots/scenario_separation.scenario_flow.projection.json
+      - snapshots/scenario_separation.scenario_flow.diagram-DG-001.projection.json
+      - snapshots/scenario_separation.scenario_flow.diagram-DG-002.projection.json
+      - snapshots/scenario_separation.scenario_flow.diagram-DG-003.projection.json
 
 compatibility:
   requires_compiler_min: "0.2.0"

@@ -4,6 +4,7 @@ import type { Bundle } from "../../bundle/types.js";
 import { compileSource } from "../../compiler/compileSource.js";
 import { sortDiagnostics } from "../../diagnostics/types.js";
 import type { Diagnostic } from "../../types.js";
+import { semanticEdgeIdentity } from "../../relationships/edgeIdentity.js";
 import { createEmptyDocumentBootstrap } from "../bootstrap.js";
 import { inspectDocumentText, type InspectedDocument } from "../inspect.js";
 import type { Handle } from "../contracts.js";
@@ -64,10 +65,6 @@ function throwUnavailable(file: string, diagnostics: Diagnostic[], message: stri
   );
 }
 
-function edgeKey(from: string, type: string, to: string): string {
-  return `${from}\u0000${type}\u0000${to}`;
-}
-
 function increment(map: Map<string, number>, key: string): void {
   map.set(key, (map.get(key) ?? 0) + 1);
 }
@@ -118,7 +115,8 @@ function verifyCompiledSemantics(
   edges: GuidedExistingEdge[],
   graph: NonNullable<ReturnType<typeof compileSource>["graph"]>,
   file: string,
-  diagnostics: Diagnostic[]
+  diagnostics: Diagnostic[],
+  bundle: Bundle
 ): void {
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   for (const node of nodes) {
@@ -130,10 +128,16 @@ function verifyCompiledSemantics(
 
   const compiledEdgeCounts = new Map<string, number>();
   for (const edge of graph.edges) {
-    increment(compiledEdgeCounts, edgeKey(edge.from, edge.type, edge.to));
+    increment(compiledEdgeCounts, semanticEdgeIdentity(edge, bundle));
   }
   for (const edge of edges) {
-    if (!consume(compiledEdgeCounts, edgeKey(edge.from, edge.type, edge.to))) {
+    const inspectedEdge = inspected.resource.body_items.find((item) => item.handle === edge.handle)?.edge;
+    const key = inspectedEdge ? semanticEdgeIdentity({
+      from: edge.from, type: edge.type, to: edge.to,
+      to_name: inspectedEdge.to_name, event: inspectedEdge.event, guard: inspectedEdge.guard,
+      effect: inspectedEdge.effect, props: inspectedEdge.props
+    }, bundle) : "";
+    if (!consume(compiledEdgeCounts, key)) {
       throwUnavailable(
         file,
         diagnostics,
@@ -201,7 +205,7 @@ export function createGuidedDocumentSnapshot(bundle: Bundle, input: GuidedDocume
 
   const nodes = createNodes(inspected);
   const edges = createEdges(inspected);
-  verifyCompiledSemantics(inspected, nodes, edges, compiled.graph, file, compiled.diagnostics);
+  verifyCompiledSemantics(inspected, nodes, edges, compiled.graph, file, compiled.diagnostics, bundle);
 
   const snapshot: GuidedDocumentSnapshot = {
     kind: "sdd-guided-document-snapshot",

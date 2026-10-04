@@ -102,6 +102,27 @@
       "patterns": [
         {
           "name": "meta.block.header.node.sdd",
+          "begin": "^(\\s*)(Diagram)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "storage.type.node.sdd.metadata"
+            },
+            "4": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
+        {
+          "name": "meta.block.header.node.sdd",
           "begin": "^(\\s*)(Opportunity|Initiative|Outcome|Metric)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
           "beginCaptures": {
             "2": {
@@ -209,6 +230,30 @@
     },
     "nested-node-header": {
       "patterns": [
+        {
+          "name": "meta.block.header.node.nested.sdd",
+          "begin": "^(\\s*)(\\+)(\\s+)(Diagram)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",
+          "beginCaptures": {
+            "2": {
+              "name": "punctuation.definition.block.nested.sdd"
+            },
+            "4": {
+              "name": "storage.type.node.sdd.metadata"
+            },
+            "6": {
+              "name": "constant.other.identifier.node.sdd"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "include": "#quoted-string"
+            },
+            {
+              "include": "#line-comment"
+            }
+          ]
+        },
         {
           "name": "meta.block.header.node.nested.sdd",
           "begin": "^(\\s*)(\\+)(\\s+)(Opportunity|Initiative|Outcome|Metric)(\\s+)([A-Z]{1,3}-[0-9]{3,}([a-z][a-z0-9]*)?)(?=\\s+\")",

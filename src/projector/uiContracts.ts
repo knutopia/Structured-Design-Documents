@@ -2,6 +2,7 @@ import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { ProjectionNodeGroup, ProjectionOmission, ProjectionResult } from "./types.js";
 import {
+  type ProjectionBuilderOptions,
   buildProjectionResult,
   createEmptyDerived,
   createEndpointOutOfScopeOmission,
@@ -91,8 +92,8 @@ function buildOmissions(
   return omissions;
 }
 
-export function buildUiContractsProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec): ProjectionResult {
-  const context = createProjectionBuilderContext(graph, bundle, view);
+export function buildUiContractsProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec, options?: ProjectionBuilderOptions): ProjectionResult {
+  const context = createProjectionBuilderContext(graph, bundle, view, options);
   const config = readTransitionGraphPriorityConfig(view);
   const nodeGroups = buildSecondaryStateGroups(
     graph,

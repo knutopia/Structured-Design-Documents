@@ -23,6 +23,10 @@ Curated view/example pairs:
 - `ia_place_map_diagram_type/place_viewstate_transition_example`
 - `ui_contracts_diagram_type/place_viewstate_transition_example`
 - `scenario_flow_diagram_type/scenario_branching_example`
+- `scenario_flow_diagram_type/scenario_separation_example`
+- `scenario_flow_diagram_type/scenario_separation_example` (Diagram DG-001)
+- `scenario_flow_diagram_type/scenario_separation_example` (Diagram DG-002)
+- `scenario_flow_diagram_type/scenario_separation_example` (Diagram DG-003)
 - `service_blueprint_diagram_type/service_blueprint_slice_example`
 - `journey_map_diagram_type/step_differentiation_example`
 - `service_blueprint_diagram_type/step_differentiation_example`

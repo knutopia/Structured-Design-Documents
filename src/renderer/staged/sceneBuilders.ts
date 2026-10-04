@@ -145,3 +145,33 @@ export function buildSharedNode(
     ports: [...(integration.ports ?? [])]
   };
 }
+
+export function applyDiagramMetadata<T extends import("./contracts.js").RendererScene>(scene: T, projection: import("../../projector/types.js").Projection): T {
+  if (projection.diagram_id && projection.diagram_name) {
+    scene.root.viewMetadata = { ...scene.root.viewMetadata, diagram: { id: projection.diagram_id, name: projection.diagram_name } };
+  }
+  return scene;
+}
+
+/** Complete explicitly identified connectors that a specialized local planner did not represent. */
+export function completeExactSceneConnections(
+  edges: import("./contracts.js").SceneEdge[],
+  expected: Array<{ from: string; to: string; source_edge_id?: string; role: string }>
+): import("./diagnostics.js").RendererDiagnostic[] {
+  const diagnostics: import("./diagnostics.js").RendererDiagnostic[] = [];
+  for (const connection of expected) {
+    if (!connection.source_edge_id) continue;
+    const parallels = expected.filter(candidate => candidate.from === connection.from && candidate.to === connection.to && candidate.role === connection.role);
+    if (parallels.length > 1) {
+      diagnostics.push({ phase: "scene", code: "renderer.scene.unsupported_parallel_occurrences", severity: "error",
+        message: `This scene connector planner cannot represent parallel ${connection.role} occurrences without loss.`, targetId: connection.source_edge_id });
+      continue;
+    }
+    if (edges.some(edge => edge.viewMetadata?.sourceEdgeIds?.includes(connection.source_edge_id!))) continue;
+    edges.push({ id: `${connection.from}__${connection.role}__${connection.to}__${connection.source_edge_id}`,
+      role: connection.role, classes: ["exact_connector"], viewMetadata: { sourceEdgeIds: [connection.source_edge_id] },
+      from: { itemId: connection.from, portId: "east" }, to: { itemId: connection.to, portId: "west" },
+      routing: { style: "orthogonal", preferAxis: "horizontal" }, markers: { end: "arrow" } });
+  }
+  return diagnostics;
+}

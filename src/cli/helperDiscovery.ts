@@ -18,6 +18,13 @@ interface HelperCommandPresentation {
 
 const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
   {
+    subject_id: "helper.command.diagrams",
+    invocation: "sdd-helper diagrams <document_path> [--details]",
+    arguments: [{ name: "document_path", required: true, description: "Repo-relative .sdd document path." }],
+    options: [{ flag: "--details", required: false, description: "Include exact inventories and derived inclusion reasons." }], result_kind: "sdd-diagram-list",
+    constraints: ["Inventories are derived from exact node and edge membership; inclusion reasons are never stored in source.", "An unsupported bundle returns a capability diagnostic; empty declarations remain discoverable."]
+  },
+  {
     subject_id: "helper.command.inspect",
     invocation: "sdd-helper inspect <document_path>",
     arguments: [
@@ -182,7 +189,7 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
   },
   {
     subject_id: "helper.command.project",
-    invocation: "sdd-helper project <document_path> --view <view_id>",
+    invocation: "sdd-helper project <document_path> [--view <view_id>] [--diagram <diagram_id>]",
     arguments: [
       {
         name: "document_path",
@@ -193,21 +200,26 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
     options: [
       {
         flag: "--view",
-        required: true,
+        required: false,
         value_name: "view_id",
-        description: "Projection view identifier."
+        description: "Combined projection view identifier, or consistency assertion for a named diagram."
+      },
+      {
+        flag: "--diagram", required: false, value_name: "diagram_id",
+        description: "Named Diagram ID; its declared view is inferred."
       }
     ],
     result_kind: "sdd-projection",
     constraints: [
       "Projection reads the current on-disk LF-normalized document revision only.",
-      "Use inline projection_views on apply/author for pre-commit candidate feedback."
+      "Use inline projection_views for combined types or projection_diagrams for named IDs on apply/author for candidate feedback.",
+      "Supply at least one selector. If both are supplied they must agree. Unknown, conflicting, unsupported, and 'all' selections never fall back."
     ]
   },
   {
     subject_id: "helper.command.preview",
     invocation:
-      "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]",
+      "sdd-helper preview <document_path> [--view <view_id>] [--diagram <diagram_id>] --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]",
     arguments: [
       {
         name: "document_path",
@@ -218,9 +230,13 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
     options: [
       {
         flag: "--view",
-        required: true,
+        required: false,
         value_name: "view_id",
-        description: "Projection view identifier."
+        description: "Combined projection view identifier, or named diagram type assertion."
+      },
+      {
+        flag: "--diagram", required: false, value_name: "diagram_id",
+        description: "Named Diagram ID; its declared view is inferred."
       },
       {
         flag: "--profile",
@@ -252,7 +268,8 @@ const COMMAND_PRESENTATIONS: readonly HelperCommandPresentation[] = [
       "If preview cannot produce an artifact, the helper returns runtime_error with stage-specific messaging and any available diagnostics.",
       "Successful preview responses materialize the rendered SVG or PNG to a helper-owned temp file and return artifact_path.",
       "artifact_path is an absolute, ephemeral local path under /tmp/unique-previews with a unique parent directory per preview invocation.",
-      "Preview responses do not include inline SVG text or base64 PNG data."
+      "Preview responses do not include inline SVG text or base64 PNG data.",
+      "Supply a view or Diagram ID. Both selectors must agree; 'all' is unsupported. Invalid membership and empty named content fail without combined fallback."
     ]
   },
   {

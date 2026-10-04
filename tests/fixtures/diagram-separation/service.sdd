@@ -1,0 +1,32 @@
+SDD-TEXT 0.2
+Diagram DG-201 "Selected service"
+  diagram_type=service_blueprint
+END
+BlueprintStep B-201 "Submit request"
+  REALIZED_BY PR-201 diagrams=DG-201
+END
+Process PR-201 "Review request"
+  visibility=frontstage
+  DEPENDS_ON PR-202 diagrams=DG-201
+  DEPENDS_ON SA-201 diagrams=DG-201
+  CONSTRAINED_BY PL-201 diagrams=DG-201
+  DEPENDS_ON PR-203
+END
+Process PR-202 "Approve request"
+  visibility=backstage
+END
+Process PR-203 "Excluded service"
+  visibility=support
+  DEPENDS_ON SA-202
+END
+SystemAction SA-201 "Save request"
+  READS D-201 diagrams=DG-201
+  WRITES D-201 diagrams=DG-201
+END
+SystemAction SA-202 "Excluded action"
+  READS D-201
+END
+DataEntity D-201 "Request record"
+END
+Policy PL-201 "Retention rule"
+END

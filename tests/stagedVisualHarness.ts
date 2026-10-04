@@ -47,9 +47,10 @@ export interface EdgeLabelBox extends Rect {
 export async function renderStagedArtifacts(
   sourcePath: string,
   viewId: "ia_place_map" | "service_blueprint" | "scenario_flow" | "ui_contracts" | "outcome_opportunity_map",
-  detailId: string
+  detailId: string,
+  bundleManifest = manifestPath
 ): Promise<RenderedStagedArtifacts> {
-  const bundle = await loadBundle(manifestPath);
+  const bundle = await loadBundle(bundleManifest);
   const input = {
     path: sourcePath,
     text: await readFile(sourcePath, "utf8")

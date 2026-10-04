@@ -1,6 +1,20 @@
 version: "0.2"
 
+diagram_membership:
+  declaration_type: Diagram
+  type_property: diagram_type
+  membership_property: diagrams
+  metadata_only: true
+  references: { delimiter: ",", trim: true, semantics: set, repeated: warn }
+  source_multiplicity: { membership: error, declaration_type: error }
+  selection: { edges: explicit_occurrences, nodes: explicit_and_edge_endpoints, closure: none }
+  diagnostics: { invalid: error, empty: warn }
+
 common_rules:
+  - id: diagram_membership_valid
+    description: Named diagram metadata and memberships obey the loaded declaration, reference, and eligibility contract.
+    severity_by_profile: { simple: error, permissive: error, strict: error }
+    rule_logic: { kind: diagram_membership }
   - id: referential_integrity
     description: Every edge endpoint must resolve to an existing node ID.
     severity_by_profile:
@@ -27,6 +41,8 @@ common_rules:
       kind: duplicate_edge_identity
       key_fields: [ from, type, to, event, guard, effect, props ]
       ignored_fields: [ to_name ]
+      property_exclusion_refs:
+        - { artifact: contracts, selector: diagram_membership.membership_property }
   - id: edge_annotation_semantics_scope
     description: Event, guard, and effect annotations are semantically defined for TRANSITIONS_TO and optionally NAVIGATES_TO and PRECEDES.
     severity_by_profile:
@@ -76,7 +92,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
       - id: contains_acyclic
         description: Containment should be acyclic.
         severity_by_profile:
@@ -113,7 +129,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
       - id: composed_of_acyclic
         description: Composition should be acyclic.
         severity_by_profile:
@@ -146,7 +162,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: [ event, guard, effect ]
-          properties: []
+          properties: [ diagrams ]
       - id: precedes_cycle_policy
         description: Linear flows should be acyclic; every intentional cyclic component should contain an annotated edge.
         severity_by_profile:
@@ -175,7 +191,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: [ event, guard ]
-          properties: []
+          properties: [ diagrams ]
       - id: navigates_to_event_optional
         description: Event and guard annotations are optional and represent trigger/precondition when present.
         severity_by_profile:
@@ -200,7 +216,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
       - id: outcome_has_metric
         description: Each Outcome should have one or more outgoing MEASURED_BY edges.
         severity_by_profile:
@@ -226,7 +242,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
 
   - type: ADDRESSES
     meaning: Initiative addresses an opportunity.
@@ -242,7 +258,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
       - id: initiative_addresses_opportunity
         description: Each Initiative should address one or more opportunities.
         severity_by_profile:
@@ -276,7 +292,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
 
   - type: REALIZED_BY
     meaning: Step is realized by product structure, UI state, or service delivery process.
@@ -308,7 +324,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
       - id: journey_step_realization_required
         description: Every JourneyStep should have at least one REALIZED_BY edge.
         severity_by_profile:
@@ -356,7 +372,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: [ event, guard, effect ]
-          properties: []
+          properties: [ diagrams ]
       - id: transitions_event_reference
         description: Event annotation should resolve to Event node ID in strict profile.
         severity_by_profile:
@@ -389,7 +405,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
 
   - type: DEPENDS_ON
     meaning: Declares required dependency for execution or correctness.
@@ -411,7 +427,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
 
   - type: CONSTRAINED_BY
     meaning: Declares policy or rule constraint.
@@ -431,7 +447,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
       - id: policy_enforcement_coverage
         description: Policy enforcement_point should correspond to at least one incoming CONSTRAINED_BY edge.
         severity_by_profile:
@@ -458,7 +474,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
 
   - type: WRITES
     meaning: System action writes data entity.
@@ -474,7 +490,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
 
   - type: BINDS_TO
     meaning: Component binds to data entity field.
@@ -490,7 +506,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: [ field ]
+          properties: [ field, diagrams ]
       - id: binds_to_requires_field
         description: BINDS_TO edge must include edge prop field.
         severity_by_profile:
@@ -526,7 +542,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
   - type: MAPS_TO
     meaning: Optional many-to-many correspondence without equivalence, transitivity, inheritance, or graph expansion.
     semantics:
@@ -550,7 +566,7 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]
   - type: REFINED_BY
     meaning: Optional non-transitive partial elaboration without containment, ownership, inherited realization, or implicit ordering.
     semantics:
@@ -574,4 +590,4 @@ relationships:
         rule_logic:
           kind: edge_field_support
           annotations: []
-          properties: []
+          properties: [ diagrams ]

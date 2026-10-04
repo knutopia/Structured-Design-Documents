@@ -4,7 +4,7 @@ import {
   getBundleValidationProfileFallback
 } from "../bundle/toolDefaults.js";
 import { compileSource } from "../compiler/compileSource.js";
-import type { CompiledGraph } from "../compiler/types.js";
+import { getGraphSourcePath, type CompiledGraph } from "../compiler/types.js";
 import { hasErrors, sortDiagnostics, type Diagnostic } from "../diagnostics/types.js";
 import { projectView } from "../projector/projectView.js";
 import type { Projection } from "../projector/types.js";
@@ -17,6 +17,7 @@ import {
 import {
   getPreviewBackend,
   renderPreviewArtifact,
+  PreviewArtifactRenderingError,
   type PreviewArtifactResult
 } from "./previewBackends.js";
 import { renderPreparedProjectionText } from "./renderView.js";
@@ -31,6 +32,7 @@ import {
 
 export interface SourcePreviewRenderOptions {
   viewId: string;
+  diagramId?: string;
   format: PreviewFormat;
   profileId?: string;
   detailId?: string;
@@ -40,6 +42,8 @@ export interface SourcePreviewRenderOptions {
 }
 
 export interface SourcePreviewRenderResult {
+  diagramId?: string;
+  diagramName?: string;
   profileId: string;
   detailId: string;
   view: ViewSpec;
@@ -52,6 +56,7 @@ export interface SourcePreviewRenderResult {
 
 export interface CompiledPreviewRenderOptions {
   viewId: string;
+  diagramId?: string;
   format: PreviewFormat;
   profileId: string;
   detailId: string;
@@ -61,6 +66,8 @@ export interface CompiledPreviewRenderOptions {
 }
 
 export interface PreparedCompiledGraphPreview {
+  diagramId?: string;
+  diagramName?: string;
   profileId: string;
   detailId: string;
   view: ViewSpec;
@@ -128,15 +135,29 @@ function projectCompiledGraph(
   view: ViewSpec,
   detailId: string,
   diagnostics: Diagnostic[],
-  target: "legacy" | "staged"
+  target: "legacy" | "staged",
+  diagramId?: string
 ): PreparedProjectionForRender | undefined {
-  const projected = projectView(graph, bundle, view.id);
+  const projected = projectView(graph, bundle, view.id, { diagramId });
   diagnostics.push(...projected.diagnostics);
   if (!projected.projection) {
     return undefined;
   }
 
-  return prepareProjectionForRender(view, projected.projection, graph, detailId, target);
+  try {
+    const prepared = prepareProjectionForRender(view, projected.projection, graph, detailId, target);
+    if (diagramId && prepared.visibleSemanticNodeIds.length === 0) {
+      diagnostics.push({ stage: "render", code: "renderer.diagram_no_visible_content", severity: "error",
+        message: `Diagram '${diagramId}' has no visible content at render detail '${detailId}'.`,
+        file: getGraphSourcePath(graph) ?? "<compiled>", relatedIds: [diagramId] });
+      return undefined;
+    }
+    return prepared;
+  } catch (error) {
+    diagnostics.push({ stage: "render", code: "renderer.invalid_source_edge_reference", severity: "error",
+      message: error instanceof Error ? error.message : String(error), file: getGraphSourcePath(graph) ?? "<compiled>" });
+    return undefined;
+  }
 }
 
 export function prepareCompiledGraphPreview(
@@ -162,7 +183,7 @@ export function prepareCompiledGraphPreview(
   const prepared = hasErrors(diagnostics)
     ? undefined
     : projectCompiledGraph(graph, bundle, view, options.detailId, diagnostics,
-      getPreviewBackend(previewCapability.backendId).backendClass === "staged" ? "staged" : "legacy");
+      getPreviewBackend(previewCapability.backendId).backendClass === "staged" ? "staged" : "legacy", options.diagramId);
 
   return {
     profileId: options.profileId,
@@ -172,6 +193,7 @@ export function prepareCompiledGraphPreview(
     previewCapability,
     nodeDecoratorModeId: options.nodeDecoratorModeId,
     prepared,
+    ...(prepared?.projection.diagram_id ? { diagramId: prepared.projection.diagram_id, diagramName: prepared.projection.diagram_name } : {}),
     diagnostics: sortDiagnostics(diagnostics),
     force: options.force
   };
@@ -192,7 +214,9 @@ export async function renderPreparedCompiledGraphPreview(
     previewCapability,
     prepared,
     nodeDecoratorModeId,
-    force
+    force,
+    diagramId,
+    diagramName
   } = preparedResult;
   const notes = [...(prepared?.notes ?? [])];
 
@@ -210,9 +234,11 @@ export async function renderPreparedCompiledGraphPreview(
 
   const previewBackend = getPreviewBackend(previewCapability.backendId);
   let artifact: PreviewArtifactResult;
+  try {
   if (previewBackend.inputRequirement.kind === "text") {
     const renderResult = renderPreparedProjectionText(graph, bundle, view, prepared.projection, {
       viewId: view.id,
+      diagramId,
       format: previewBackend.inputRequirement.sourceFormat,
       profileId,
       detailId
@@ -257,6 +283,13 @@ export async function renderPreparedCompiledGraphPreview(
     });
   }
 
+  } catch (error) {
+    if (!(error instanceof PreviewArtifactRenderingError)) throw error;
+    diagnostics.push(...error.diagnostics.map(diagnostic => mapRendererDiagnostic(sourcePath, diagnostic)));
+    return { profileId, detailId, view, capability, previewCapability, notes, diagnostics: sortDiagnostics(diagnostics),
+      ...(diagramId ? { diagramId, diagramName } : {}) };
+  }
+
   diagnostics.push(...(artifact.diagnostics ?? []).map((diagnostic) => mapRendererDiagnostic(sourcePath, diagnostic)));
   return {
     profileId,
@@ -264,7 +297,8 @@ export async function renderPreparedCompiledGraphPreview(
     view,
     capability,
     previewCapability,
-    artifact: hasErrors(diagnostics) && !force ? undefined : artifact,
+    artifact: hasErrors(diagnostics) && (!force || diagramId) ? undefined : artifact,
+    ...(diagramId ? { diagramId, diagramName } : {}),
     notes,
     diagnostics: sortDiagnostics(diagnostics)
   };
@@ -342,6 +376,7 @@ export async function renderSourcePreview(
 
   const rendered = await renderCompiledGraphPreview(input.path, compileResult.graph, bundle, {
     viewId: options.viewId,
+    diagramId: options.diagramId,
     format: options.format,
     profileId,
     detailId,
@@ -351,7 +386,7 @@ export async function renderSourcePreview(
   });
   return {
     ...rendered,
-    artifact: hasErrors([...diagnostics, ...rendered.diagnostics]) && !options.force ? undefined : rendered.artifact,
+    artifact: hasErrors([...diagnostics, ...rendered.diagnostics]) && (!options.force || options.diagramId) ? undefined : rendered.artifact,
     diagnostics: sortDiagnostics([...diagnostics, ...rendered.diagnostics])
   };
 }

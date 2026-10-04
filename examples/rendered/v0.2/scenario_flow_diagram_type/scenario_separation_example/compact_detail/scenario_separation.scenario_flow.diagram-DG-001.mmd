@@ -1,0 +1,12 @@
+flowchart TB
+  subgraph n_step["Steps"]
+    n_SS_001{"Choose an editing action"}
+    n_SS_002("Choose the source node")
+    n_SS_003("Choose the relationship")
+    n_SS_004("Choose the target node")
+    n_SS_005("Review the new relationship")
+  end
+  n_SS_001 --> n_SS_002
+  n_SS_002 --> n_SS_003
+  n_SS_003 --> n_SS_004
+  n_SS_004 --> n_SS_005

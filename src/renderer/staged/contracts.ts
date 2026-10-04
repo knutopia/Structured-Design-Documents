@@ -211,6 +211,7 @@ export type JourneyMapItemMetadata =
     };
 
 export interface ViewMetadata {
+  diagram?: { id: string; name: string };
   uiContracts?: { kind: "enclosure" | "sheet"; title?: string; tone?: "inset" | "hierarchy" };
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
@@ -224,6 +225,7 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
   }
 
   return {
+    ...(viewMetadata.diagram ? { diagram: { ...viewMetadata.diagram } } : {}),
     ...(viewMetadata.uiContracts ? { uiContracts: { ...viewMetadata.uiContracts } } : {}),
     ...(viewMetadata.serviceBlueprint
       ? {
@@ -303,6 +305,7 @@ export interface JourneyMapEdgeMetadata {
 }
 
 export interface EdgeViewMetadata {
+  sourceEdgeIds?: string[];
   journeyMap?: JourneyMapEdgeMetadata;
 }
 
@@ -312,6 +315,7 @@ export function cloneEdgeViewMetadata(viewMetadata?: EdgeViewMetadata): EdgeView
   }
 
   return {
+    ...(viewMetadata.sourceEdgeIds ? { sourceEdgeIds: [...viewMetadata.sourceEdgeIds] } : {}),
     ...(viewMetadata.journeyMap
       ? {
         journeyMap: {

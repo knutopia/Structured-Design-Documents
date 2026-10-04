@@ -12,6 +12,7 @@ guided_addition:
     guard: Condition
     effect: Effect
     field: Field
+    diagrams: Diagrams
 
 node_id_suggestions:
   sequence_policy: max_numeric_plus_one
@@ -35,6 +36,7 @@ node_id_suggestions:
     SystemAction: SA
     DataEntity: D
     Policy: PL
+    Diagram: DG
 
 node_forms:
   common_fields:
@@ -52,14 +54,32 @@ node_forms:
       label: Description
       description: Short explanation of the node's purpose.
   by_type:
+    Diagram:
+      properties:
+        - source: property
+          property: diagram_type
+          required: true
+          prominence: advanced
+          label: Diagram type
+          choices_from: { artifact: views, selector: "views.*.id", where: { selector: projection.named_diagrams.enabled, equals: true } }
     Outcome:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: time_horizon, prominence: advanced, label: Time horizon }
         - { source: property, property: scope, prominence: advanced, label: Scope }
         - { source: property, property: stakeholder, prominence: advanced, label: Stakeholder }
     Metric:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: definition, prominence: advanced, label: Definition }
         - { source: property, property: source, prominence: advanced, label: Source }
@@ -67,21 +87,41 @@ node_forms:
         - { source: property, property: metric_type, prominence: advanced, label: Metric type }
     Opportunity:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: evidence, prominence: advanced, label: Evidence }
         - { source: property, property: segment, prominence: advanced, label: Segment }
         - { source: property, property: severity, prominence: advanced, label: Severity }
     Initiative:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: non_goals, prominence: advanced, label: Non-goals }
         - { source: property, property: status, prominence: advanced, label: Status }
     Stage:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: order_index, prominence: advanced, label: Order index }
     JourneyStep:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - source: property
           property: owner
           prominence: advanced
@@ -109,6 +149,11 @@ node_forms:
     BlueprintStep:
       properties:
         - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
+        - source: property
           property: owner
           prominence: advanced
           label: Owner
@@ -135,6 +180,11 @@ node_forms:
     ScenarioStep:
       properties:
         - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
+        - source: property
           property: owner
           prominence: advanced
           label: Owner
@@ -160,10 +210,20 @@ node_forms:
           label: Kind
     Area:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: scope, prominence: advanced, label: Scope }
     Place:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: surface, prominence: advanced, label: Surface }
         - { source: property, property: route_or_key, prominence: advanced, label: Route or key }
@@ -172,43 +232,83 @@ node_forms:
         - { source: property, property: primary_nav, prominence: advanced, label: Primary navigation }
     ViewState:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: place_id, prominence: advanced, label: Place ID }
         - { source: property, property: data_required, prominence: advanced, label: Data required }
     Component:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: responsibility, prominence: advanced, label: Responsibility }
         - { source: property, property: inputs, prominence: advanced, label: Inputs }
         - { source: property, property: outputs, prominence: advanced, label: Outputs }
     State:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: scope_id, prominence: advanced, label: Scope ID }
         - { source: property, property: invariants, prominence: advanced, label: Invariants }
     Event:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: source_kind, prominence: advanced, label: Source kind }
         - { source: property, property: payload_schema, prominence: advanced, label: Payload schema }
     Process:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: visibility, prominence: advanced, label: Visibility }
         - { source: property, property: sla, prominence: advanced, label: SLA }
     SystemAction:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: system_name, prominence: advanced, label: System name }
         - { source: property, property: action, prominence: advanced, label: Action }
         - { source: property, property: failure_modes, prominence: advanced, label: Failure modes }
     DataEntity:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: fields, prominence: advanced, label: Fields }
         - { source: property, property: system_of_record, prominence: advanced, label: System of record }
     Policy:
       properties:
+        - source: property
+          property: diagrams
+          prominence: advanced
+          label: Diagrams
+          input_hint: reference_list
         - { source: property, property: owner, prominence: advanced, label: Owner }
         - { source: property, property: policy_owner, prominence: advanced, label: Policy owner }
         - { source: property, property: enforcement_point, prominence: advanced, label: Enforcement point }

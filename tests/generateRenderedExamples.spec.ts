@@ -1,5 +1,5 @@
 import { execFile } from "node:child_process";
-import { cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { access, cp, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -58,6 +58,47 @@ describe("rendered corpus manifest selection", () => {
 });
 
 describe("rendered corpus generator entrypoint", () => {
+  it("skips detail-hidden named drafts and validates the full document before replacing evidence", async () => {
+    await withTempDirectory(async root => {
+      const bundleRoot = path.join(root, "bundle/v0.2");
+      await cp(path.join(repoRoot, "bundle/v0.2"), bundleRoot, { recursive: true });
+      const manifestPath = path.join(bundleRoot, "manifest.yaml");
+      const manifest = YAML.parse(await readFile(manifestPath, "utf8")) as BundleManifest;
+      manifest.examples = [{ path: "examples/named_only.sdd", compiled_snapshot: "snapshots/named_only.compiled.json", projection_snapshots: [] }];
+      await writeFile(manifestPath, YAML.stringify(manifest));
+      const sourcePath = path.join(bundleRoot, "examples/named_only.sdd");
+      const source = [
+        "SDD-TEXT 0.2", 'Diagram DG-001 "Detailed place"', "  diagram_type=scenario_flow", "END",
+        'Diagram DG-002 "Visible step"', "  diagram_type=scenario_flow", "END",
+        'Diagram DG-003 "Empty draft"', "  diagram_type=scenario_flow", "END",
+        'Place P-001 "Isolated place"', "  diagrams=DG-001", "END",
+        'ScenarioStep S-001 "Visible member"', "  diagrams=DG-002", "END", ""
+      ].join("\n");
+      await writeFile(sourcePath, source);
+      const env = { ...process.env, TMPDIR: "/tmp" };
+      await run(process.execPath, [generator, manifestPath], { cwd: root, env, timeout: 60_000 });
+      const exampleRoot = path.join(root, "examples/rendered/v0.2/scenario_flow_diagram_type/named_only_example");
+      const stem = "named_only.scenario_flow";
+      await expect(access(path.join(exampleRoot, "compact_detail", `${stem}.diagram-DG-001.svg`))).rejects.toMatchObject({ code: "ENOENT" });
+      expect(await readFile(path.join(exampleRoot, "detailed_detail", `${stem}.diagram-DG-001.svg`), "utf8")).toContain("Isolated place");
+      for (const detail of ["compact", "detailed"]) {
+        expect(await readFile(path.join(exampleRoot, `${detail}_detail`, `${stem}.diagram-DG-002.svg`), "utf8")).toContain("Visible member");
+      }
+      const readme = await readFile(path.join(root, "examples/rendered/v0.2/README.md"), "utf8");
+      expect(readme).toContain("Named targets skipped by presentation policy");
+      expect(readme).toContain("DG-001, compact");
+      expect(readme).toContain("DG-003, compact");
+      expect(readme).toContain("DG-003, detailed");
+
+      const sentinel = path.join(exampleRoot, "preserve.txt");
+      await writeFile(sentinel, "accepted evidence\n");
+      // This unassigned relationship is invalid globally, even though named selection excludes it.
+      await writeFile(sourcePath, source.replace('  diagrams=DG-002\nEND', '  diagrams=DG-002\n  CONTAINS P-001\nEND'));
+      await expect(run(process.execPath, [generator, manifestPath], { cwd: root, env, timeout: 60_000 })).rejects.toBeDefined();
+      expect(await readFile(sentinel, "utf8")).toBe("accepted evidence\n");
+    });
+  }, 90_000);
+
   it("generates both bundles by default and refreshes only the explicit bundle when supplied", async () => {
     await withTempDirectory(async (root) => {
       for (const version of ["0.1", "0.2"]) {

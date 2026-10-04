@@ -1,5 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
+import { compileSource } from "../compiler/compileSource.js";
+import { resolveDocumentDiagrams } from "../diagrams/resolveDiagrams.js";
 import type { Bundle, BundleManifestExample } from "../bundle/types.js";
 import type { PreviewFormat, PreviewRendererBackendId } from "../renderer/renderArtifacts.js";
 
@@ -13,6 +15,7 @@ export interface CuratedRenderedExamplePair {
   example: CanonicalBundleExampleFile;
   manifestExample: BundleManifestExample;
   viewId: string;
+  diagramId?: string;
 }
 
 export interface CuratedRenderedExampleVariant extends CuratedRenderedExamplePair {
@@ -69,12 +72,12 @@ const previewOnlyRenderedCorpusViewDirSuffix = " [preview_only]";
 
 export function getRenderedCorpusDebugOutputPath(
   bundle: Bundle,
-  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId">,
+  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId" | "diagramId">,
   debugStem: string,
   format: PreviewFormat
 ): string {
   const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
-  const renderedStem = `${variant.example.name}.${variant.viewId}`;
+  const renderedStem = `${variant.example.name}.${variant.viewId}${variant.diagramId ? `.diagram-${encodeURIComponent(variant.diagramId)}` : ""}`;
   return path.join(outputPaths.detailDir, `${renderedStem}.${debugStem}.${format}`);
 }
 
@@ -136,8 +139,8 @@ async function readProjectionSnapshotViewIds(bundle: Bundle, manifestExample: Bu
   for (const snapshotRelativePath of manifestExample.projection_snapshots ?? []) {
     const snapshotPath = path.join(bundle.rootDir, snapshotRelativePath);
     const rawSnapshot = await readFile(snapshotPath, "utf8");
-    const snapshot = JSON.parse(rawSnapshot) as { view_id?: unknown };
-    if (typeof snapshot.view_id === "string") {
+    const snapshot = JSON.parse(rawSnapshot) as { view_id?: unknown; diagram_id?: unknown };
+    if (typeof snapshot.view_id === "string" && snapshot.diagram_id === undefined) {
       seen.add(snapshot.view_id);
     }
   }
@@ -161,6 +164,14 @@ export async function discoverCuratedRenderedExamplePairs(bundle: Bundle): Promi
       continue;
     }
 
+    const compiled = compileSource({ path: example.absolutePath, text: await readFile(example.absolutePath, "utf8") }, bundle);
+    if (!compiled.graph || compiled.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
+      throw new Error(`Cannot discover diagram targets in '${example.relativePath}': invalid source.`);
+    }
+    const named = resolveDocumentDiagrams(compiled.graph, bundle);
+    if (named.diagnostics.some((diagnostic) => diagnostic.severity === "error")) {
+      throw new Error(`Cannot discover diagram targets in '${example.relativePath}': invalid membership.`);
+    }
     const viewIds = await readProjectionSnapshotViewIds(bundle, manifestExample);
     for (const viewId of viewIds) {
       pairs.push({
@@ -168,6 +179,9 @@ export async function discoverCuratedRenderedExamplePairs(bundle: Bundle): Promi
         manifestExample,
         viewId
       });
+    }
+    for (const diagram of named.diagrams) {
+      if (diagram.viewId) pairs.push({ example, manifestExample, viewId: diagram.viewId, diagramId: diagram.diagramId });
     }
   }
 
@@ -192,13 +206,13 @@ export function expandCuratedRenderedExampleVariants(
 
 export function planRenderedCorpusOutputPaths(
   bundle: Bundle,
-  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId">
+  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId" | "diagramId">
 ): RenderedCorpusOutputPaths {
   const rootDir = getRenderedCorpusRoot(bundle);
   const viewDir = path.join(rootDir, getRenderedCorpusViewDirName(variant.viewId));
   const exampleDir = path.join(viewDir, getRenderedCorpusExampleDirName(variant.example.name));
   const detailDir = path.join(exampleDir, getRenderedCorpusDetailDirName(variant.detailId));
-  const renderedStem = `${variant.example.name}.${variant.viewId}`;
+  const renderedStem = `${variant.example.name}.${variant.viewId}${variant.diagramId ? `.diagram-${encodeURIComponent(variant.diagramId)}` : ""}`;
 
   return {
     exampleDir,
@@ -213,13 +227,13 @@ export function planRenderedCorpusOutputPaths(
 
 export function getRenderedCorpusPreviewOutputPath(
   bundle: Bundle,
-  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId">,
+  variant: Pick<CuratedRenderedExampleVariant, "example" | "viewId" | "detailId" | "diagramId">,
   format: PreviewFormat,
   backendId: PreviewRendererBackendId,
   defaultBackendId: PreviewRendererBackendId
 ): string {
   const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
-  const renderedStem = `${variant.example.name}.${variant.viewId}`;
+  const renderedStem = `${variant.example.name}.${variant.viewId}${variant.diagramId ? `.diagram-${encodeURIComponent(variant.diagramId)}` : ""}`;
   const backendSuffix = backendId === defaultBackendId ? "" : `.${backendId}`;
 
   return path.join(outputPaths.detailDir, `${renderedStem}${backendSuffix}.${format}`);

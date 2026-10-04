@@ -1,4 +1,4 @@
-# Step Differentiation for SDD v0.2
+# [Done] Step Differentiation for SDD v0.2
 
 ## 1. Purpose, authority, and boundaries
 

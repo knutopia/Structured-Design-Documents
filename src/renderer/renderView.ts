@@ -1,3 +1,4 @@
+import { ensureProjectionSourceEdgeIndex, projectionOccurrenceDiagnostics } from "../projector/edgeOccurrences.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import {
   getBundleRenderDetailFallback,
@@ -10,6 +11,7 @@ import { projectView } from "../projector/projectView.js";
 import type { Projection } from "../projector/types.js";
 import type { RenderOptions, RenderResult, SourceInput } from "../types.js";
 import { validateGraph } from "../validator/validateGraph.js";
+import { prepareProjectionForRender } from "./prepareProjectionForRender.js";
 import { getTextArtifactCapability, getViewTextRenderer } from "./viewRenderers.js";
 
 type ResolvedRenderOptions = RenderOptions & { profileId: string; detailId: string };
@@ -21,6 +23,10 @@ export function renderPreparedProjectionText(
   projection: Projection,
   options: ResolvedRenderOptions
 ): RenderResult {
+  if (projection.diagram_id) ensureProjectionSourceEdgeIndex(graph, bundle);
+  const occurrenceDiagnostics = projectionOccurrenceDiagnostics(projection, graph, bundle);
+  if (occurrenceDiagnostics.length) return { format: options.format, viewId: options.viewId, profileId: options.profileId,
+    detailId: options.detailId, notes: [], diagnostics: occurrenceDiagnostics };
   const renderer = getViewTextRenderer(options.viewId);
   if (!renderer || !getTextArtifactCapability(renderer.capability, options.format)) {
     return {
@@ -39,6 +45,13 @@ export function renderPreparedProjectionText(
     };
   }
 
+  if (projection.diagram_id && prepareProjectionForRender(view, projection, graph, options.detailId).visibleSemanticNodeIds.length === 0) {
+    return { format: options.format, viewId: view.id, diagramId: projection.diagram_id, diagramName: projection.diagram_name,
+      profileId: options.profileId, detailId: options.detailId, notes: [], diagnostics: [{ stage: "render",
+        code: "renderer.diagram_no_visible_content", severity: "error",
+        message: `Diagram '${projection.diagram_id}' has no visible content at render detail '${options.detailId}'.`,
+        file: getGraphSourcePath(graph) ?? "<compiled>" }] };
+  }
   const rendered = renderer.render(
     projection,
     graph,
@@ -48,11 +61,15 @@ export function renderPreparedProjectionText(
     options.detailId
   );
 
+  if (projection.diagram_id && options.format === "dot") {
+    rendered.text = rendered.text.replace(/^digraph [^\n]+ \{/, `digraph ${JSON.stringify(projection.diagram_name)} {`);
+  }
   return {
     format: options.format,
     viewId: options.viewId,
     profileId: options.profileId,
     detailId: options.detailId,
+    ...(projection.diagram_id ? { diagramId: projection.diagram_id, diagramName: projection.diagram_name } : {}),
     text: rendered.text,
     notes: rendered.notes,
     diagnostics: []
@@ -64,7 +81,7 @@ export function renderCompiledGraphText(
   bundle: Bundle,
   options: ResolvedRenderOptions
 ): RenderResult {
-  const projected = projectView(graph, bundle, options.viewId);
+  const projected = projectView(graph, bundle, options.viewId, { diagramId: options.diagramId });
   const diagnostics = [...projected.diagnostics];
   if (!projected.projection) {
     return {
@@ -158,6 +175,7 @@ export function renderSource(input: SourceInput, bundle: Bundle, options: Render
     viewId: options.viewId,
     profileId,
     detailId,
+    ...(rendered.diagramId ? { diagramId: rendered.diagramId, diagramName: rendered.diagramName } : {}),
     text: rendered.text,
     notes: rendered.notes,
     diagnostics: sortDiagnostics([...diagnostics, ...rendered.diagnostics])

@@ -1,0 +1,20 @@
+digraph "Add relationship" {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.7, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_step {
+    rank=same;
+    "lane_step" [shape=plaintext, label="Steps"];
+    "SS-001" [shape="diamond", label="Choose an editing action"];
+    "SS-002" [shape="box", style="rounded", label="Choose the source node"];
+    "SS-003" [shape="box", style="rounded", label="Choose the relationship"];
+    "SS-004" [shape="box", style="rounded", label="Choose the target node"];
+    "SS-005" [shape="box", style="rounded", label="Review the new relationship"];
+  }
+  "lane_step" -> "SS-001" [style=invis, weight=100];
+  "SS-001" -> "SS-002" [weight=4];
+  "SS-002" -> "SS-003" [weight=4];
+  "SS-003" -> "SS-004" [weight=4];
+  "SS-004" -> "SS-005" [weight=4];
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.2",
+  "view_id": "scenario_flow",
+  "diagram_id": "DG-003",
+  "diagram_name": "Create new view",
+  "source_example": "scenario_separation",
+  "nodes": [
+    {
+      "id": "SS-009",
+      "type": "ScenarioStep",
+      "name": "Choose a diagram type"
+    },
+    {
+      "id": "SS-010",
+      "type": "ScenarioStep",
+      "name": "Name the new view"
+    },
+    {
+      "id": "SS-011",
+      "type": "ScenarioStep",
+      "name": "Review the empty view"
+    }
+  ],
+  "edges": [
+    {
+      "from": "SS-009",
+      "type": "PRECEDES",
+      "to": "SS-010",
+      "source_edge_id": "source-edge-88a484f6663dd0389bfec0abe350dda1190d1d2e802cd97d98d84447c963b754-0"
+    },
+    {
+      "from": "SS-010",
+      "type": "PRECEDES",
+      "to": "SS-011",
+      "source_edge_id": "source-edge-ca5f4c5815040860c02ff5354e3f18ccaa3c9829f12b84c8789849472004d0af-0"
+    }
+  ],
+  "derived": {
+    "node_annotations": [],
+    "edge_annotations": [],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [],
+  "notes": []
+}

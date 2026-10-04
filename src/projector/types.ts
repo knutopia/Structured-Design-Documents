@@ -7,6 +7,7 @@ export interface ProjectionNode {
 }
 
 export interface ProjectionEdge {
+  source_edge_id?: string;
   from: string;
   type: string;
   to: string;
@@ -36,6 +37,7 @@ export interface ProjectionNodeAnnotation {
 }
 
 export interface ProjectionEdgeAnnotation {
+  source_edge_id?: string;
   from: string;
   type: string;
   to: string;
@@ -65,6 +67,8 @@ export interface Projection {
   schema: "sdd-text-view-projection";
   version: string;
   view_id: string;
+  diagram_id?: string;
+  diagram_name?: string;
   source_example: string;
   nodes: ProjectionNode[];
   edges: ProjectionEdge[];

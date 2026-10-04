@@ -1,5 +1,6 @@
 import type { Bundle } from "../bundle/types.js";
 import type { CompiledEdge, CompiledGraph } from "../compiler/types.js";
+import { semanticEdgeIdentity } from "./edgeIdentity.js";
 
 export interface SemanticRelationship {
   identity: string;
@@ -32,11 +33,7 @@ export function createSemanticRelationshipReader(graph: CompiledGraph, bundle: B
       ? [edge.from, edge.to].sort((a, b) => a.localeCompare(b))
       : [edge.from, edge.to];
     const fields = semantics?.identity_fields ?? defaultIdentity;
-    const identity = JSON.stringify(fields.map((field) => [field,
-      field === "from" ? from : field === "to" ? to : field === "props"
-        ? Object.fromEntries(Object.entries(edge.props).sort(([a], [b]) => a.localeCompare(b)))
-        : edge[field as keyof CompiledEdge] ?? null
-    ]));
+    const identity = semanticEdgeIdentity(edge, bundle, { keyFields: fields, canonicalEndpoints: directionality === "symmetric" });
     const existing = semantics?.reciprocal_declarations === "coalesce" ? coalesced.get(identity) : undefined;
     if (existing) {
       existing.declarations.push(edge);

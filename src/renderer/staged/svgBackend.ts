@@ -975,6 +975,10 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
 
   const lines = [
     `<svg xmlns="http://www.w3.org/2000/svg" width="${formatNumber(viewWidth)}" height="${formatNumber(viewHeight)}" viewBox="${formatNumber(scene.root.x)} ${formatNumber(scene.root.y)} ${formatNumber(viewWidth)} ${formatNumber(viewHeight)}" class="${svgClasses}" data-view-id="${escapeXml(scene.viewId)}" data-detail-id="${escapeXml(scene.detailId)}" data-theme-id="${escapeXml(theme.id)}">`,
+    ...(scene.root.viewMetadata?.diagram ? [
+      `  <title>${escapeXml(scene.root.viewMetadata.diagram.name)}</title>`,
+      `  <metadata data-diagram-id="${escapeXml(scene.root.viewMetadata.diagram.id)}"/>`
+    ] : []),
     "  <defs>",
     ...defs.flatMap((entry) => indentLines(entry, 4)),
     "  </defs>"

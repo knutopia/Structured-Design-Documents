@@ -1,0 +1,208 @@
+{
+  "schema": "sdd-text",
+  "version": "0.2",
+  "nodes": [
+    {
+      "id": "DG-001",
+      "type": "Diagram",
+      "name": "Add relationship",
+      "props": {
+        "diagram_type": "scenario_flow"
+      }
+    },
+    {
+      "id": "DG-002",
+      "type": "Diagram",
+      "name": "Node pivot",
+      "props": {
+        "diagram_type": "scenario_flow"
+      }
+    },
+    {
+      "id": "DG-003",
+      "type": "Diagram",
+      "name": "Create new view",
+      "props": {
+        "diagram_type": "scenario_flow"
+      }
+    },
+    {
+      "id": "SS-001",
+      "type": "ScenarioStep",
+      "name": "Choose an editing action",
+      "props": {
+        "kind": "decision"
+      }
+    },
+    {
+      "id": "SS-002",
+      "type": "ScenarioStep",
+      "name": "Choose the source node",
+      "props": {}
+    },
+    {
+      "id": "SS-003",
+      "type": "ScenarioStep",
+      "name": "Choose the relationship",
+      "props": {}
+    },
+    {
+      "id": "SS-004",
+      "type": "ScenarioStep",
+      "name": "Choose the target node",
+      "props": {}
+    },
+    {
+      "id": "SS-005",
+      "type": "ScenarioStep",
+      "name": "Review the new relationship",
+      "props": {}
+    },
+    {
+      "id": "SS-006",
+      "type": "ScenarioStep",
+      "name": "Choose the pivot node",
+      "props": {}
+    },
+    {
+      "id": "SS-007",
+      "type": "ScenarioStep",
+      "name": "Inspect related content",
+      "props": {}
+    },
+    {
+      "id": "SS-008",
+      "type": "ScenarioStep",
+      "name": "Return to the document",
+      "props": {}
+    },
+    {
+      "id": "SS-009",
+      "type": "ScenarioStep",
+      "name": "Choose a diagram type",
+      "props": {}
+    },
+    {
+      "id": "SS-010",
+      "type": "ScenarioStep",
+      "name": "Name the new view",
+      "props": {}
+    },
+    {
+      "id": "SS-011",
+      "type": "ScenarioStep",
+      "name": "Review the empty view",
+      "props": {}
+    }
+  ],
+  "edges": [
+    {
+      "from": "SS-001",
+      "type": "PRECEDES",
+      "to": "SS-002",
+      "to_name": null,
+      "event": null,
+      "guard": "add relationship",
+      "effect": null,
+      "props": {
+        "diagrams": "DG-001"
+      }
+    },
+    {
+      "from": "SS-001",
+      "type": "PRECEDES",
+      "to": "SS-006",
+      "to_name": null,
+      "event": null,
+      "guard": "pivot node",
+      "effect": null,
+      "props": {
+        "diagrams": "DG-002"
+      }
+    },
+    {
+      "from": "SS-002",
+      "type": "PRECEDES",
+      "to": "SS-003",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "diagrams": "DG-001"
+      }
+    },
+    {
+      "from": "SS-003",
+      "type": "PRECEDES",
+      "to": "SS-004",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "diagrams": "DG-001"
+      }
+    },
+    {
+      "from": "SS-004",
+      "type": "PRECEDES",
+      "to": "SS-005",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "diagrams": "DG-001"
+      }
+    },
+    {
+      "from": "SS-006",
+      "type": "PRECEDES",
+      "to": "SS-007",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "diagrams": "DG-002"
+      }
+    },
+    {
+      "from": "SS-007",
+      "type": "PRECEDES",
+      "to": "SS-008",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "diagrams": "DG-002"
+      }
+    },
+    {
+      "from": "SS-009",
+      "type": "PRECEDES",
+      "to": "SS-010",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "diagrams": "DG-003"
+      }
+    },
+    {
+      "from": "SS-010",
+      "type": "PRECEDES",
+      "to": "SS-011",
+      "to_name": null,
+      "event": null,
+      "guard": null,
+      "effect": null,
+      "props": {
+        "diagrams": "DG-003"
+      }
+    }
+  ]
+}

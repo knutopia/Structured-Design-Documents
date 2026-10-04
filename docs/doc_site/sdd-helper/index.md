@@ -294,7 +294,7 @@ For first-pass `author` JSON, prefer the bundle-resolved `helper.command.author`
 - Key inputs: an `ApplyChangeSetArgs` JSON body loaded from a file path or from stdin via `--request -`.
 - Result kind: `sdd-change-set`
 - Important constraints: dry-run is the default when `mode` is omitted; rejected change sets remain structured and still exit zero.
-- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; successful insertions now populate returned node and edge handles when deterministically knowable; dry-run first is the safest default for both humans and LLMs. The low-level operation inventory includes `reparent_node_block` for moving a complete node subtree between top-level and nested streams. It remains revision/handle-bound, rejects self or descendant cycles, and reports old/new parents and stream indexes. This does not add a guided helper command; the human `sdd add` client uses the separate shared guided proposal boundary.
+- Practical notes: the request usually includes `path`, `base_revision`, and `operations`, with optional validation and projection requests; successful insertions now populate returned node and edge handles when deterministically knowable; dry-run first is the safest default for both humans and LLMs. The low-level operation inventory includes `set_edge_property` and `remove_edge_property` for in-place edits identified by the current revision’s `edge_handle`. `set_edge_property` takes `key`, `value_kind`, and `raw_value`; removal takes `key`. These edits preserve other edge fields and comments and participate in ordinary journal undo. Invalid named memberships reject the entire candidate without writing; edited reference lists use the active bundle delimiter, unique IDs, and ascending order. Node membership and Diagram declarations use existing node operations. The inventory also includes `reparent_node_block` for moving a complete node subtree between top-level and nested streams. It remains revision/handle-bound, rejects self or descendant cycles, and reports old/new parents and stream indexes. This does not add a guided helper command; the human `sdd add` client uses the separate shared guided proposal boundary.
 
 #### `sdd-helper author --request <file-or-stdin>`
 
@@ -304,7 +304,7 @@ For first-pass `author` JSON, prefer the bundle-resolved `helper.command.author`
 - Key inputs: an `ApplyAuthoringIntentArgs` JSON body loaded from a file path or from stdin via `--request -`.
 - Result kind: `sdd-authoring-intent-result`
 - Important constraints: dry-run is the default when `mode` is omitted; committed results are the continuation-safe source of `created_targets`; dry-run `created_targets` are informational previews only.
-- Practical notes: the result includes both the high-level `created_targets` mapping and a nested derived `sdd-change-set`; use inline `validate_profile` and `projection_views` here for pre-commit candidate feedback.
+- Practical notes: the result includes both the high-level `created_targets` mapping and a nested derived `sdd-change-set`; use inline `validate_profile`, combined `projection_views`, and named `projection_diagrams` here for pre-commit candidate feedback.
 
 #### `sdd-helper undo --request <file-or-stdin>`
 
@@ -326,24 +326,28 @@ For first-pass `author` JSON, prefer the bundle-resolved `helper.command.author`
 - Important constraints: this reads the current persisted document only; it does not inspect dry-run candidates.
 - Practical notes: use inline `validate_profile` on `apply` or `author` when you need pre-commit candidate feedback. If a caller needs the active bundle-owned `profile_id` values first, use `pnpm sdd-helper contract helper.command.validate --resolve bundle`.
 
-#### `sdd-helper project <document_path> --view <view_id>`
+#### `sdd-helper diagrams <document_path> [--details]`
+
+Lists named declarations, their IDs and titles, resolved view types, and exact node and edge counts. Add `--details` for exact inventories and derived inclusion reasons. Invalid declarations include diagnostics without fabricated counts. Responses include document revision/version and bundle context. Empty drafts remain discoverable. The response kind is `sdd-diagram-list`; unsupported bundles return a capability diagnostic.
+
+#### `sdd-helper project <document_path> [--view <view_id>] [--diagram <diagram_id>]`
 
 - Purpose: return a structured projection for the current persisted document revision.
 - Use when: you want the current read-side semantic projection without issuing a write request.
-- Invocation: `pnpm sdd-helper project <document_path> --view <view_id>`
-- Key inputs: a repo-relative document path and a projection view id.
+- Invocation: `pnpm sdd-helper project <document_path> [--view <view_id>] [--diagram <diagram_id>]`
+- Key inputs: a repo-relative document path and a view ID or named Diagram ID. A Diagram infers its view; supplying both is a consistency assertion and they must agree. `all` is unsupported on this single-target helper path.
 - Result kind: `sdd-projection`
 - Important constraints: this reads the current persisted document only; it does not inspect dry-run candidates.
-- Practical notes: use inline `projection_views` on `apply` or `author` when you need pre-commit candidate feedback. If a caller needs the active bundle-owned `view_id` values first, use `pnpm sdd-helper contract helper.command.project --resolve bundle`.
+- Practical notes: use inline `projection_views` for combined types or `projection_diagrams` for named IDs on `apply` or `author` when you need pre-commit candidate feedback. If a caller needs the active bundle-owned `view_id` values first, use `pnpm sdd-helper contract helper.command.project --resolve bundle`.
 
 ### Preview Generation
 
-#### `sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]`
+#### `sdd-helper preview <document_path> [--view <view_id>] [--diagram <diagram_id>] --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]`
 
 - Purpose: render a preview artifact for a repo-relative `.sdd` document.
 - Use when: another tool, UI, or workflow needs preview output directly from the helper surface.
-- Invocation: `pnpm sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]`
-- Key inputs: document path, projection `view`, validation `profile`, render `detail`, and `format`, with optional `backend`.
+- Invocation: `pnpm sdd-helper preview <document_path> [--view <view_id>] [--diagram <diagram_id>] --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]`
+- Key inputs: document path, `view` or named `diagram`, validation `profile`, render `detail`, and `format`, with optional `backend`. A named result includes `diagram_id` and `diagram_name`; its artifact basename includes `diagram-<ID>` after the view. Duplicate titles do not collide. Invalid selectors, invalid memberships, and named diagrams without visible content fail without falling back to the combined view.
 - Result kind: `sdd-preview`
 - Important constraints: if preview generation cannot produce or materialize an artifact, the helper returns `sdd-helper-error` with `code: "runtime_error"`, a stage-specific message, and any available diagnostics.
 - Practical notes: SVG and PNG previews are materialized to a helper-owned temp file and returned through `artifact_path`; the helper no longer returns inline SVG text or base64 PNG data. `artifact_path` is an absolute, ephemeral local path under `/tmp/unique-previews/<timestamp-and-suffix>/<basename>`, with a unique parent directory for every successful preview invocation and a detail-based basename matching the `sdd show` default naming convention. The result reports both `profile_id` validation provenance and `detail_id` rendering identity. This temp path is for immediate tool/UI consumption and is not the canonical saved preview artifact. Preview helper errors can also reflect an invalid intermediate document state under the requested profile, so callers should inspect the returned message and diagnostics before assuming the preview environment is broken. If a caller needs the active bundle-owned `view_id`, `profile_id`, or `detail_id` values first, use `pnpm sdd-helper contract helper.command.preview --resolve bundle`.
@@ -389,6 +393,7 @@ Helper `preview` artifact paths are transient helper output and are not saved ar
 - `sdd-authoring-intent-result`: the structured result for `author`, including `created_targets` plus a nested derived change set.
 - `sdd-change-set`: the structured result for `apply` and `undo`, whether applied or rejected, and for create domain rejections.
 - `sdd-validation`: validation diagnostics for the current persisted document revision.
+- `sdd-diagram-list`: declarations and derived semantic inventories for named diagrams.
 - `sdd-projection`: projection output for the current persisted document revision.
 - `sdd-preview`: preview metadata plus an ephemeral local `artifact_path` for the materialized SVG or PNG file.
 - `sdd-git-status`: narrow `.sdd`-scoped git status information.
@@ -443,3 +448,9 @@ Helper `preview` artifact paths are transient helper output and are not saved ar
 - Helper design intent: [`docs/future_explorations/mcp_server/sdd_mcp_server_design.md`](../../future_explorations/mcp_server/sdd_mcp_server_design.md)
 
 When in doubt, the machine-readable capability payload and the shared contract types govern the command surface. This page exists to explain that surface, not to redefine it.
+
+### Named diagrams and guided filters
+
+The v0.2 bundle supplies Diagram declaration/type/membership conventions. Resolve the active bundle rather than assuming spellings in a custom bundle. `--view` selects the existing whole-document combined view, including unassigned content. `--diagram` selects exact assigned edges, their endpoints, and explicitly assigned nodes. Include structural grouping edges explicitly. Validation always retains the complete document’s semantic obligations; authorized supporting references can annotate selected members without importing their targets.
+
+Existing guided `browse_filters.diagram_id` values continue to identify view types. They do not identify authored Diagram nodes. Guided addition provides no named-diagram workflow or automatic membership assignment.

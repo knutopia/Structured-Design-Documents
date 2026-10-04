@@ -44,7 +44,7 @@ import { listDocuments, searchGraph } from "../authoring/listing.js";
 import { applyChangeSet, AuthoringMutationError, createDocument } from "../authoring/mutations.js";
 import { AuthoringPreviewError, renderPreview } from "../authoring/preview.js";
 import { PreviewMaterializationError } from "../authoring/previewMaterialization.js";
-import { projectDocument, validateDocument } from "../authoring/readServices.js";
+import { listDocumentDiagrams, projectDocument, validateDocument } from "../authoring/readServices.js";
 import { undoChangeSet } from "../authoring/undo.js";
 import { stringifyCanonicalJson } from "../authoring/revisions.js";
 import {
@@ -76,6 +76,7 @@ export interface HelperCliDeps {
   undoChangeSet: typeof undoChangeSet;
   validateDocument: typeof validateDocument;
   projectDocument: typeof projectDocument;
+  listDocumentDiagrams: typeof listDocumentDiagrams;
   renderPreview: typeof renderPreview;
   getGitStatus: typeof getGitStatus;
   gitCommit: typeof gitCommit;
@@ -132,6 +133,7 @@ function createDefaultDeps(): HelperCliDeps {
     undoChangeSet,
     validateDocument,
     projectDocument,
+    listDocumentDiagrams,
     renderPreview,
     getGitStatus,
     gitCommit,
@@ -438,6 +440,11 @@ function validateChangeOperation(value: unknown, fieldPath: string): string | un
       );
     case "remove_node_property":
       return requireStringField(value, "node_handle", fieldPath) ?? requireStringField(value, "key", fieldPath);
+    case "set_edge_property":
+      return requireStringField(value, "edge_handle", fieldPath) ?? requireStringField(value, "key", fieldPath) ??
+        validateValueKind(value.value_kind, `${fieldPath}.value_kind`) ?? requireStringField(value, "raw_value", fieldPath);
+    case "remove_edge_property":
+      return requireStringField(value, "edge_handle", fieldPath) ?? requireStringField(value, "key", fieldPath);
     case "insert_edge_line":
       return (
         requireStringField(value, "parent_handle", fieldPath) ??
@@ -521,6 +528,9 @@ function validateApplyChangeSetArgs(value: unknown, bundle: Bundle, requestSourc
   }
   if (value.projection_views !== undefined && !isStringArray(value.projection_views)) {
     return "projection_views must be an array of strings when provided.";
+  }
+  if (value.projection_diagrams !== undefined && !isStringArray(value.projection_diagrams)) {
+    return "projection_diagrams must be an array of strings when provided.";
   }
   for (const [index, operation] of value.operations.entries()) {
     const operationError = validateChangeOperation(operation, `operations[${index}]`);
@@ -833,6 +843,9 @@ function validateApplyAuthoringIntentArgs(value: unknown, bundle: Bundle, reques
   }
   if (value.projection_views !== undefined && !isStringArray(value.projection_views)) {
     return "projection_views must be an array of strings when provided.";
+  }
+  if (value.projection_diagrams !== undefined && !isStringArray(value.projection_diagrams)) {
+    return "projection_diagrams must be an array of strings when provided.";
   }
   const seenLocalIds = new Set<string>();
   const availableNodeLocalIds = new Set<string>();
@@ -1177,15 +1190,28 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     });
 
   program
+    .command("diagrams")
+    .argument("<document_path>", "repo-relative .sdd document path")
+    .option("--details", "include exact inventories and inclusion reasons")
+    .action(async (documentPath: string, options: { details?: boolean }) => {
+      const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
+      writeJson(deps, await deps.listDocumentDiagrams(workspace, bundle, { path: workspace.normalizeDocumentPath(documentPath), ...(options.details ? { details: true } : {}) }));
+    });
+
+  program
     .command("project")
     .argument("<document_path>", "repo-relative .sdd document path")
-    .requiredOption("--view <view_id>", "view id")
-    .action(async (documentPath: string, options: { view: ProjectDocumentArgs["view_id"] }) => {
+    .option("--view <view_id>", "combined view id or named diagram type assertion")
+    .option("--diagram <diagram_id>", "named diagram id")
+    .action(async (documentPath: string, options: { view?: ProjectDocumentArgs["view_id"]; diagram?: string }) => {
+      if (!options.view && !options.diagram) throw new HelperCliError("invalid_args", "project requires --view or --diagram.");
+      if (options.view === "all" || options.diagram === "all") throw new HelperCliError("invalid_args", "project accepts a single target; 'all' is not supported.");
       const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
       const result = await deps.projectDocument(workspace, bundle, {
         path: normalizedPath,
-        view_id: options.view
+        view_id: options.view,
+        ...(options.diagram ? { diagram_id: options.diagram } : {})
       });
       writeJson(deps, withAssessment(result));
     });
@@ -1193,7 +1219,8 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
   program
     .command("preview")
     .argument("<document_path>", "repo-relative .sdd document path")
-    .requiredOption("--view <view_id>", "view id")
+    .option("--view <view_id>", "combined view id or named diagram type assertion")
+    .option("--diagram <diagram_id>", "named diagram id")
     .requiredOption("--profile <profile_id>", "profile id")
     .requiredOption("--detail <detail_id>", "render detail id")
     .requiredOption("--format <format>", "preview format")
@@ -1201,18 +1228,22 @@ export function createHelperProgram(overrides: Partial<HelperCliDeps> = {}): Com
     .action(async (
       documentPath: string,
       options: {
-        view: string;
+        view?: string;
+        diagram?: string;
         profile: RenderPreviewArgs["profile_id"];
         detail: RenderPreviewArgs["detail_id"];
         format: RenderPreviewArgs["format"];
         backend?: RenderPreviewArgs["backend_id"];
       }
     ) => {
+      if (!options.view && !options.diagram) throw new HelperCliError("invalid_args", "preview requires --view or --diagram.");
+      if (options.view === "all" || options.diagram === "all") throw new HelperCliError("invalid_args", "preview accepts a single target; 'all' is not supported.");
       const { workspace, bundle } = await loadBundleContext(deps, selectedManifest());
       const normalizedPath = workspace.normalizeDocumentPath(documentPath);
       const result = await deps.renderPreview(workspace, bundle, {
         path: normalizedPath,
         view_id: options.view,
+        ...(options.diagram ? { diagram_id: options.diagram } : {}),
         profile_id: options.profile,
         detail_id: options.detail,
         format: options.format,

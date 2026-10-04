@@ -1,3 +1,4 @@
+import { graphForProjection, resolveProjectionEdge } from "../projector/edgeOccurrences.js";
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledEdge, CompiledGraph } from "../compiler/types.js";
 import type { Projection, ProjectionNodeGroup } from "../projector/types.js";
@@ -23,6 +24,7 @@ export interface UiContractsRenderNode {
 }
 
 export interface UiContractsRenderEdge {
+  id?: string;
   from: string;
   to: string;
   label?: string;
@@ -528,6 +530,7 @@ export function buildUiContractsRenderData(
   graph: CompiledGraph,
   displayPolicy: ResolvedDetailDisplayPolicy
 ): UiContractsRenderData {
+  graph = graphForProjection(projection, graph);
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const projectedNodeIds = new Set(projection.nodes.map((node) => node.id));
   const hierarchyEdges = projection.edges.filter((edge) => edge.type === "COMPOSED_OF" || edge.type === "CONTAINS");
@@ -911,11 +914,10 @@ export function buildUiContractsRenderData(
         isRenderedEndpoint(edge.to)
     )
     .map<UiContractsRenderEdge>((edge) => {
-      const sourceEdge = graph.edges.find(
-        (candidate) => candidate.from === edge.from && candidate.type === edge.type && candidate.to === edge.to
-      );
+      const sourceEdge = resolveProjectionEdge(edge, graph, !!projection.diagram_id);
       if (edge.type === "TRANSITIONS_TO") {
         return {
+          ...(edge.source_edge_id ? { id: edge.source_edge_id } : {}),
           from: resolveRenderedEndpointId(edge.from),
           to: resolveRenderedEndpointId(edge.to),
           ...transitionEdgeDisplay(sourceEdge ?? { ...edge, event: null, guard: null, effect: null, from: edge.from }, graphNodesById, effectiveTransitionNodeType)
@@ -923,6 +925,7 @@ export function buildUiContractsRenderData(
       }
 
       return {
+        ...(edge.source_edge_id ? { id: edge.source_edge_id } : {}),
         from: resolveRenderedEndpointId(edge.from),
         to: resolveRenderedEndpointId(edge.to),
         ...contractEdgeDisplay(
@@ -958,5 +961,6 @@ export function buildUiContractsRenderModel(
   graph: CompiledGraph,
   displayPolicy: ResolvedDetailDisplayPolicy
 ): UiContractsRenderModel {
+  graph = graphForProjection(projection, graph);
   return buildUiContractsRenderData(projection, graph, displayPolicy).model;
 }

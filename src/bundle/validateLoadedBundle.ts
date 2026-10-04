@@ -3,6 +3,7 @@ import { isRendererCellSizingConfig } from "./rendererCellSizing.js";
 import { uiContractsPresentationProblems } from "./uiContractsPresentation.js";
 import type { Diagnostic } from "../types.js";
 import { resolveBundleFieldReference, resolveProfileRuleField } from "./bundleReferences.js";
+import { COMPILED_EDGE_FIELD_REGISTRY } from "../compiler/types.js";
 import type {
   AuthoringFieldDescriptor,
   Bundle,
@@ -106,6 +107,12 @@ export class BundleValidationError extends Error {
 
 function expectedNodeProperties(bundle: Bundle): Map<string, Set<string>> {
   const result = new Map(bundle.vocab.node_types.map(({ token }) => [token, new Set<string>()]));
+  const membership = bundle.contracts.diagram_membership;
+  if (membership) {
+    for (const [type, properties] of result) {
+      properties.add(type === membership.declaration_type ? membership.type_property : membership.membership_property);
+    }
+  }
 
   for (const profile of Object.values(bundle.profiles)) {
     for (const rule of profile.rules) {
@@ -149,6 +156,86 @@ function validateFieldDescriptor(
   }
   if (descriptor.source !== "property" && descriptor.property !== undefined) {
     add("bundle.authoring.unexpected_property_reference", `${label} may declare a property only when source is 'property'`);
+  }
+}
+
+function validateDiagramMembership(bundle: Bundle, add: (code: string, message: string) => void): void {
+  const descriptor = bundle.contracts.diagram_membership;
+  const identityLogic = bundle.contracts.common_rules.find((rule) => rule.rule_logic?.kind === "duplicate_edge_identity")?.rule_logic;
+  const edgeFields = new Set(Object.keys(COMPILED_EDGE_FIELD_REGISTRY));
+  const propertyPattern = new RegExp(`^(?:${bundle.syntax.lexical.identifier_pattern})$`);
+  if (identityLogic) {
+    const keyFields = strings(identityLogic.key_fields);
+    if (!keyFields || !["from", "type", "to"].every((field) => keyFields.includes(field))
+      || keyFields.some((field) => !edgeFields.has(field)) || duplicateValues(keyFields).length) {
+      add("bundle.identity.invalid_key_fields", "Duplicate identity key_fields must contain unique compiled-edge fields and include from, type, and to");
+    }
+    const ignoredFields = identityLogic.ignored_fields === undefined ? [] : strings(identityLogic.ignored_fields);
+    if (!ignoredFields || ignoredFields.some((field) => !edgeFields.has(field) || ["from", "type", "to"].includes(field)) || duplicateValues(ignoredFields).length) {
+      add("bundle.identity.invalid_ignored_fields", "Duplicate identity ignored_fields must contain unique optional compiled-edge field names");
+    }
+    const ignoredProperties = identityLogic.ignored_properties === undefined ? [] : strings(identityLogic.ignored_properties);
+    if (!ignoredProperties || ignoredProperties.some((property) => !propertyPattern.test(property)) || duplicateValues(ignoredProperties).length) {
+      add("bundle.identity.invalid_property_exclusion", "Duplicate identity ignored_properties must contain unique valid property names");
+    }
+  } else if (descriptor) {
+    add("bundle.identity.missing", "Diagram membership requires a common duplicate-edge identity contract");
+  }
+  const refs = identityLogic?.property_exclusion_refs;
+  for (const reference of Array.isArray(refs) ? refs : []) {
+    const resolved = reference && typeof reference === "object"
+      ? resolveBundleFieldReference(bundle, reference as { artifact: string; selector: string }) : undefined;
+    if (!(typeof resolved === "string" && propertyPattern.test(resolved))
+      && !(Array.isArray(resolved) && resolved.every((value) => typeof value === "string" && propertyPattern.test(value)))) {
+      add("bundle.identity.invalid_property_exclusion", "Duplicate identity property exclusion reference must resolve to a property name or list");
+    }
+  }
+  if (refs !== undefined && !Array.isArray(refs)) add("bundle.identity.invalid_property_exclusion", "property_exclusion_refs must be an array");
+  if (!descriptor) {
+    if (bundle.views.views.some((view) => view.projection.named_diagrams !== undefined)) {
+      add("bundle.diagram_membership.missing_descriptor", "Named view enablement requires a diagram_membership descriptor");
+    }
+    if (bundle.contracts.common_rules.some((rule) => rule.rule_logic?.kind === "diagram_membership")) {
+      add("bundle.diagram_membership.missing_descriptor", "Membership validation requires a diagram_membership descriptor");
+    }
+    return;
+  }
+  const fail = (message: string): void => add("bundle.diagram_membership.invalid", message);
+  if (!record(descriptor) || !sameStringSet(Object.keys(descriptor), ["declaration_type", "type_property", "membership_property", "metadata_only", "references", "source_multiplicity", "selection", "diagnostics"])) {
+    fail("diagram_membership has missing or unexpected fields");
+  }
+  if (!bundle.vocab.node_types.some((entry) => entry.token === descriptor.declaration_type && entry.group === "metadata")) {
+    fail("diagram_membership.declaration_type must reference a metadata vocabulary node");
+  }
+  const schemaTypes = ((bundle.schema.$defs as Record<string, unknown>)?.nodeType as {enum?: unknown[]})?.enum;
+  if (!schemaTypes?.includes(descriptor.declaration_type)) fail("Declaration type must exist in the compiled schema");
+  if (![descriptor.type_property, descriptor.membership_property].every((value) => typeof value === "string" && propertyPattern.test(value))
+    || descriptor.type_property === descriptor.membership_property) fail("Reserved property names must be distinct valid identifiers");
+  if (descriptor.metadata_only !== true) fail("Only metadata declarations are supported");
+  const references = record(descriptor.references);
+  if (!references || !sameStringSet(Object.keys(references), ["delimiter", "trim", "semantics", "repeated"])
+    || typeof references.delimiter !== "string" || !references.delimiter.length || typeof references.trim !== "boolean"
+    || references.semantics !== "set" || references.repeated !== "warn") fail("Reference-list descriptor has invalid policies");
+  const multiplicity = record(descriptor.source_multiplicity);
+  if (!multiplicity || !sameStringSet(Object.keys(multiplicity), ["membership", "declaration_type"])
+    || multiplicity.membership !== "error" || multiplicity.declaration_type !== "error") fail("Reserved fields must reject source duplicates");
+  const selection = record(descriptor.selection);
+  if (!selection || !sameStringSet(Object.keys(selection), ["edges", "nodes", "closure"])
+    || selection.edges !== "explicit_occurrences" || selection.nodes !== "explicit_and_edge_endpoints" || selection.closure !== "none") fail("Unsupported diagram selection policy");
+  const policies = record(descriptor.diagnostics);
+  if (!policies || !sameStringSet(Object.keys(policies), ["invalid", "empty"])
+    || policies.invalid !== "error" || policies.empty !== "warn") fail("Diagram diagnostics must reject invalid membership and warn on empty drafts");
+  for (const view of bundle.views.views) {
+    const enablement = view.projection.named_diagrams;
+    if (enablement && (!sameStringSet(Object.keys(enablement), ["enabled"]) || typeof enablement.enabled !== "boolean")) fail(`View '${view.id}' has invalid named enablement`);
+    if (view.projection.include_node_types.includes(descriptor.declaration_type)) fail(`View '${view.id}' cannot select metadata as primary content`);
+  }
+  if (bundle.contracts.relationships.some((relationship) => relationship.allowed_endpoints.some((pair) => pair.from === descriptor.declaration_type || pair.to === descriptor.declaration_type))) {
+    fail("Metadata declaration may not be a semantic relationship endpoint");
+  }
+  for (const [id, profile] of Object.entries(bundle.profiles)) {
+    const rule = bundle.contracts.common_rules.find((candidate) => candidate.rule_logic?.kind === "diagram_membership");
+    if (!rule || rule.severity_by_profile?.[id] !== "error") fail(`Profile '${id}' must activate structural membership validation`);
   }
 }
 
@@ -262,6 +349,7 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
   const relationshipTokens = bundle.vocab.relationship_types.map(({ token }) => token);
   const nodeTypes = new Set(nodeTokens);
   const relationshipTypes = new Set(relationshipTokens);
+  validateDiagramMembership(bundle, add);
 
   for (const collision of caseInsensitiveTokenCollisions(bundle)) {
     add(
@@ -801,6 +889,18 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
     form.properties.forEach((descriptor, index) =>
       validateFieldDescriptor(descriptor, `Authoring field ${nodeType}[${index}]`, add)
     );
+    for (const descriptor of form.properties) {
+      if (descriptor.choices_from !== undefined && !Array.isArray(resolveBundleFieldReference(bundle, descriptor.choices_from))) {
+        add("bundle.authoring.invalid_choices_reference", `Authoring choices for '${nodeType}.${descriptor.property}' must resolve to a list`);
+      }
+      const where = descriptor.choices_from?.where;
+      if (where && (!record(where) || !sameStringSet(Object.keys(where), ["selector", "equals"])
+        || typeof where.selector !== "string" || !where.selector || !["string", "number", "boolean"].includes(typeof where.equals)
+        || !descriptor.choices_from!.selector.includes("*"))) {
+        add("bundle.authoring.invalid_choices_filter", `Authoring choices filter for '${nodeType}.${descriptor.property}' is invalid`);
+      }
+      if (descriptor.required !== undefined && typeof descriptor.required !== "boolean") add("bundle.authoring.invalid_required_field", `Authoring required flag for '${nodeType}.${descriptor.property}' must be boolean`);
+    }
     if (form.properties.some((descriptor) => descriptor.source !== "property" || descriptor.prominence !== "advanced")) {
       add("bundle.authoring.advanced_field_shape", `Authoring fields for '${nodeType}' must be advanced property fields`);
     }

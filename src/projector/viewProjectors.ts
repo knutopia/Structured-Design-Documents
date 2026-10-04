@@ -1,5 +1,6 @@
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
+import type { ProjectionBuilderOptions } from "./shared.js";
 import type { ProjectionResult } from "./types.js";
 import { buildIaPlaceMapProjection } from "./iaPlaceMap.js";
 import { buildJourneyMapProjection } from "./journeyMap.js";
@@ -8,7 +9,7 @@ import { buildScenarioFlowProjection } from "./scenarioFlow.js";
 import { buildServiceBlueprintProjection } from "./serviceBlueprint.js";
 import { buildUiContractsProjection } from "./uiContracts.js";
 
-export type ViewProjector = (graph: CompiledGraph, bundle: Bundle, view: ViewSpec) => ProjectionResult;
+export type ViewProjector = (graph: CompiledGraph, bundle: Bundle, view: ViewSpec, options?: ProjectionBuilderOptions) => ProjectionResult;
 
 const viewProjectors: Partial<Record<string, ViewProjector>> = {
   outcome_opportunity_map: buildOutcomeOpportunityMapProjection,

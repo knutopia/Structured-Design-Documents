@@ -1,3 +1,5 @@
+import { semanticEdgeIdentity } from "../relationships/edgeIdentity.js";
+import { graphForProjection, resolveProjectionEdge, projectionEdgeRenderId } from "../projector/edgeOccurrences.js";
 import { createHash } from "node:crypto";
 import { resolveHierarchyRoles } from "../bundle/viewRoles.js";
 import type { Bundle } from "../bundle/types.js";
@@ -86,30 +88,6 @@ function collectSiblingOrderChains(items: JourneyRenderItem[]): string[][] {
   return chains;
 }
 
-function duplicateEdgeIdentityFields(bundle: Bundle): string[] {
-  const rule = bundle.contracts.common_rules.find(
-    (candidate) => candidate.rule_logic?.kind === "duplicate_edge_identity"
-  );
-  const keyFields = rule?.rule_logic?.key_fields;
-  if (!Array.isArray(keyFields) || !keyFields.every((field): field is string => typeof field === "string")) {
-    throw new Error("Journey render-model construction requires bundle duplicate-edge identity key_fields.");
-  }
-  return keyFields;
-}
-
-function stableProps(props: Record<string, string>): Record<string, string> {
-  return Object.fromEntries(Object.entries(props).sort(([left], [right]) => left.localeCompare(right)));
-}
-
-function semanticIdentityKey(edge: CompiledEdge, keyFields: string[]): string {
-  return JSON.stringify(
-    keyFields.map((field) => [
-      field,
-      field === "props" ? stableProps(edge.props) : edge[field as keyof CompiledEdge] ?? null
-    ])
-  );
-}
-
 function tripleKey(edge: Pick<CompiledEdge, "from" | "type" | "to">): string {
   return JSON.stringify([edge.from, edge.type, edge.to]);
 }
@@ -139,7 +117,6 @@ function buildJourneyRenderEdges(
   orderingTypeSet: Set<string>,
   visibleNodeIds: Set<string>
 ): JourneyRenderEdge[] {
-  const identityFields = duplicateEdgeIdentityFields(bundle);
   const qualifyingCompiledEdges = sourceOrderedEdges(
     graph.edges.filter(
       (edge) => orderingTypeSet.has(edge.type) && visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to)
@@ -162,14 +139,21 @@ function buildJourneyRenderEdges(
     )
     .map((projectedEdge) => {
       const endpointKey = tripleKey(projectedEdge);
-      const compiledEdge = compiledByTriple.get(endpointKey)?.shift();
+      const compiledEdge = projectedEdge.source_edge_id
+        ? resolveProjectionEdge(projectedEdge, graph, !!projection.diagram_id)
+        : compiledByTriple.get(endpointKey)?.shift();
+      if (projectedEdge.source_edge_id && compiledEdge) {
+        const queue = compiledByTriple.get(endpointKey);
+        const index = queue?.indexOf(compiledEdge) ?? -1;
+        if (index >= 0) queue!.splice(index, 1);
+      }
       if (!compiledEdge) {
         throw new Error(
           `Journey render-model construction could not match projected edge occurrence ${endpointKey} to compiled semantics.`
         );
       }
 
-      const identityKey = semanticIdentityKey(compiledEdge, identityFields);
+      const identityKey = semanticEdgeIdentity(compiledEdge, bundle);
       const sameEndpointOrdinal = sameEndpointCounts.get(endpointKey) ?? 0;
       const exactIdentityOrdinal = exactIdentityCounts.get(identityKey) ?? 0;
       sameEndpointCounts.set(endpointKey, sameEndpointOrdinal + 1);
@@ -177,7 +161,7 @@ function buildJourneyRenderEdges(
       const identityHash = createHash("sha256").update(identityKey).digest("hex");
 
       return {
-        id: `${compiledEdge.from}__${compiledEdge.type}__${compiledEdge.to}__${identityHash}__${exactIdentityOrdinal}`,
+        id: projectionEdgeRenderId(projectedEdge, `${compiledEdge.from}__${compiledEdge.type}__${compiledEdge.to}__${identityHash}__${exactIdentityOrdinal}`),
         from: compiledEdge.from,
         type: compiledEdge.type,
         to: compiledEdge.to,
@@ -211,6 +195,7 @@ export function buildJourneyMapRenderModel(
   orderingEdgeTypes: string[],
   displayPolicy: ResolvedDetailDisplayPolicy
 ): JourneyMapRenderModel {
+  graph = graphForProjection(projection, graph);
   const displayOptions = readJourneyMapDisplayOptions(displayPolicy);
   const view = bundle.views.views.find((candidate) => candidate.id === projection.view_id)!;
   const roles = resolveHierarchyRoles(bundle, view);

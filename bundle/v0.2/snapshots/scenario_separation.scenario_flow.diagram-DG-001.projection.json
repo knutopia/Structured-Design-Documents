@@ -1,0 +1,86 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.2",
+  "view_id": "scenario_flow",
+  "diagram_id": "DG-001",
+  "diagram_name": "Add relationship",
+  "source_example": "scenario_separation",
+  "nodes": [
+    {
+      "id": "SS-001",
+      "type": "ScenarioStep",
+      "name": "Choose an editing action"
+    },
+    {
+      "id": "SS-002",
+      "type": "ScenarioStep",
+      "name": "Choose the source node"
+    },
+    {
+      "id": "SS-003",
+      "type": "ScenarioStep",
+      "name": "Choose the relationship"
+    },
+    {
+      "id": "SS-004",
+      "type": "ScenarioStep",
+      "name": "Choose the target node"
+    },
+    {
+      "id": "SS-005",
+      "type": "ScenarioStep",
+      "name": "Review the new relationship"
+    }
+  ],
+  "edges": [
+    {
+      "from": "SS-001",
+      "type": "PRECEDES",
+      "to": "SS-002",
+      "source_edge_id": "source-edge-edfa6eaff0784c01493fdd3dbf277dc106bddb3e6aa09fa07ba0b382ba34792d-0"
+    },
+    {
+      "from": "SS-002",
+      "type": "PRECEDES",
+      "to": "SS-003",
+      "source_edge_id": "source-edge-c08819753732258e902b940e349447d1f4737fe620e5fb0023412fc4779ef437-0"
+    },
+    {
+      "from": "SS-003",
+      "type": "PRECEDES",
+      "to": "SS-004",
+      "source_edge_id": "source-edge-dbb2731d7b531b723f5fc33a3c758759ff7ffa8ce235fec1a0c045638b9059b5-0"
+    },
+    {
+      "from": "SS-004",
+      "type": "PRECEDES",
+      "to": "SS-005",
+      "source_edge_id": "source-edge-541b79e79f100182d3a4b3655abd46d0192cbeeeb62bd641ea9eb1d4f3f8e0ef-0"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "SS-001",
+        "display": {
+          "shape": "diamond"
+        }
+      }
+    ],
+    "edge_annotations": [
+      {
+        "from": "SS-001",
+        "type": "PRECEDES",
+        "to": "SS-002",
+        "role": "branch_label",
+        "display_label": "add relationship",
+        "label_source": "guard",
+        "source_edge_id": "source-edge-edfa6eaff0784c01493fdd3dbf277dc106bddb3e6aa09fa07ba0b382ba34792d-0"
+      }
+    ],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [],
+  "notes": []
+}

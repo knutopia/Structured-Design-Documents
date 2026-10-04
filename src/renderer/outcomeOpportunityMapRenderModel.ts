@@ -1,6 +1,7 @@
+import { graphForProjection, resolveProjectionEdge, projectionEdgeRenderId } from "../projector/edgeOccurrences.js";
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { RendererConnectorChannelConfig, ViewSpec } from "../bundle/types.js";
-import { getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
+import { getCompiledEdgeSourceSpan, getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
 import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
 import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
@@ -375,6 +376,7 @@ export function buildOutcomeOpportunityMapRenderModel(
   view: ViewSpec,
   displayPolicy: ResolvedDetailDisplayPolicy
 ): OutcomeOpportunityMapRenderModel {
+  graph = graphForProjection(projection, graph);
   const rendererDefaults = readOutcomeOpportunityRendererDefaults(view);
   const displayOptions = readOutcomeOpportunityMapDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
@@ -387,6 +389,9 @@ export function buildOutcomeOpportunityMapRenderModel(
   );
   const nodeRankById = new Map(orderedProjectionNodeIds.map((nodeId, index) => [nodeId, index]));
   const authorOrderByEdgeKey = buildAuthorOrderByEdgeKey(graph);
+  const occurrenceAuthorOrder = new Map(graph.edges.map((edge, index) => ({ edge, index, offset: getCompiledEdgeSourceSpan(edge)?.startOffset }))
+    .sort((a, b) => (a.offset ?? a.index) - (b.offset ?? b.index) || a.index - b.index)
+    .map(({ edge }, index) => [edge, index]));
   const columns = rendererDefaults.semanticColumns.map<OutcomeOpportunityRenderColumn>((column, order) => ({
     id: column.id,
     label: column.label,
@@ -469,15 +474,16 @@ export function buildOutcomeOpportunityMapRenderModel(
     }
 
     return {
-      id: edgeId(edge.from, edge.type, edge.to),
+      id: projectionEdgeRenderId(edge, edgeId(edge.from, edge.type, edge.to)),
       from: edge.from,
       type: edge.type,
       to: edge.to,
       channel: connector.channel,
       label: connector.label.visible ? connector.label.text : "",
       priority: priorityByEdgeType.get(edge.type) ?? Number.MAX_SAFE_INTEGER,
-      authorOrder: authorOrderByEdgeKey.get(`${edge.from}->${edge.type}->${edge.to}`)
-        ?? Number.MAX_SAFE_INTEGER
+      authorOrder: edge.source_edge_id
+        ? occurrenceAuthorOrder.get(resolveProjectionEdge(edge, graph, true)!) ?? Number.MAX_SAFE_INTEGER
+        : authorOrderByEdgeKey.get(`${edge.from}->${edge.type}->${edge.to}`) ?? Number.MAX_SAFE_INTEGER
     };
   });
 

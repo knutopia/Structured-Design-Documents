@@ -1,3 +1,4 @@
+import { ensureProjectionSourceEdgeIndex, projectionOccurrenceDiagnostics } from "../projector/edgeOccurrences.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
@@ -291,9 +292,27 @@ export function assertPreviewBackendAvailable(backendId: PreviewRendererBackendI
   previewBackends[backendId].assertAvailable?.();
 }
 
+export class PreviewArtifactRenderingError extends Error {
+  constructor(public readonly diagnostics: RendererDiagnostic[]) {
+    super(diagnostics.map(diagnostic => diagnostic.message).join("\n"));
+    this.name = "PreviewArtifactRenderingError";
+  }
+}
+
 export async function renderPreviewArtifact(request: RenderPreviewArtifactRequest): Promise<PreviewArtifactResult> {
+  if (request.source.kind === "projection" && request.source.projection.diagram_id) {
+    ensureProjectionSourceEdgeIndex(request.source.graph, request.bundle);
+    const diagnostics = projectionOccurrenceDiagnostics(request.source.projection, request.source.graph, request.bundle);
+    if (diagnostics.length) throw new PreviewArtifactRenderingError(diagnostics.map(diagnostic => ({
+      phase: "scene", code: diagnostic.code, severity: diagnostic.severity, message: diagnostic.message
+    })));
+  }
   const backend = getPreviewBackend(request.backendId);
   const rendered = await backend.render(request);
+  if (request.source.kind === "projection" && request.source.projection.diagram_id
+    && rendered.diagnostics?.some(diagnostic => diagnostic.severity === "error")) {
+    throw new PreviewArtifactRenderingError(rendered.diagnostics);
+  }
   const sourceArtifacts = request.source.kind === "text"
     ? {
       ...rendered.sourceArtifacts,

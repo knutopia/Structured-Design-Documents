@@ -7,7 +7,7 @@ export function buildRelationshipReferences(context: ProjectionBuilderContext) {
   const annotations: ProjectionNodeAnnotation[] = [];
   const omissions = new Map<string, ProjectionOmission>();
   if (configs.length === 0) return { annotations, omissions: [] as ProjectionOmission[] };
-  const reader = createSemanticRelationshipReader(context.graph, context.bundle);
+  const reader = createSemanticRelationshipReader(context.documentGraph, context.bundle);
   for (const node of context.projectedNodes) {
     const references: NonNullable<ProjectionNodeAnnotation["references"]> = [];
     for (const config of configs) {

@@ -31,7 +31,7 @@ z
 ## Sat 10-3
 
 - Fixed codex-app-wsl access
-- Diagram separation plan
+- Diagram separation
 
 ## Fri 10-2
 

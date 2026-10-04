@@ -441,6 +441,7 @@ describe("sdd-helper CLI", () => {
       note: "This is machine business: the helper is intended primarily for machine and LLM automation, and it returns JSON rather than text help.",
       capabilities_command: "sdd-helper capabilities",
       commands: [
+        "diagrams",
         "inspect",
         "search",
         "create",
@@ -618,7 +619,7 @@ describe("sdd-helper CLI", () => {
         expect.objectContaining({
           name: "preview",
           invocation:
-            "sdd-helper preview <document_path> --view <view_id> --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]",
+            "sdd-helper preview <document_path> [--view <view_id>] [--diagram <diagram_id>] --profile <profile_id> --detail <detail_id> --format <svg|png> [--backend <backend_id>]",
           result_kind: "sdd-preview",
           subject_id: "helper.command.preview",
           input_shape_id: "shared.shape.render_preview_args",
@@ -1035,7 +1036,8 @@ describe("sdd-helper CLI", () => {
       "forbidden_if",
       "unique_within_request",
       "must_reference_earlier_local_id",
-      "same_revision_handle"
+      "same_revision_handle",
+      "atomic_membership_validation"
     ]);
     expect(requestPayload.bindings).toEqual([]);
     expect(requestPayload.continuation).toEqual([]);
@@ -1122,7 +1124,8 @@ describe("sdd-helper CLI", () => {
     });
     expect(requestPayload).not.toHaveProperty("output_shape");
     expect((requestPayload.constraints as Array<{ kind: string }>).map((constraint) => constraint.kind)).toEqual([
-      "same_revision_handle"
+      "same_revision_handle",
+      "atomic_membership_validation"
     ]);
     const bindings = requestPayload.bindings as Array<{
       binding_id: string;

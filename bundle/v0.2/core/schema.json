@@ -37,7 +37,7 @@
     "nodeType": {
       "type": "string",
       "enum": [
-        "Outcome", "Metric", "Opportunity", "Initiative",
+        "Diagram", "Outcome", "Metric", "Opportunity", "Initiative",
         "Stage", "JourneyStep", "BlueprintStep", "ScenarioStep",
         "Area", "Place", "ViewState",
         "Component", "State", "Event",

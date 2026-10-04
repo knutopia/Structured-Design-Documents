@@ -1,3 +1,4 @@
+import { applyDiagramMetadata } from "./sceneBuilders.js";
 import type { RendererCellSizingConfig, RendererScenarioFlowLayoutConfig, ViewSpec } from "../../bundle/types.js";
 import { resolveCellSizingPolicy } from "../../bundle/rendererCellSizing.js";
 import { buildCellSlots } from "./stackSlots.js";
@@ -442,6 +443,7 @@ function buildScenarioFlowRenderContext(
     diagnostics: middleLayer.diagnostics
   };
 
+  applyDiagramMetadata(rendererScene, projection);
   return {
     rendererScene,
     middleLayer

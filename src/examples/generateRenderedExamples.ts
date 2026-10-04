@@ -5,7 +5,10 @@ import { resolveHierarchyRoles } from "../bundle/viewRoles.js";
 import type { Bundle } from "../bundle/types.js";
 import { loadBundle } from "../bundle/loadBundle.js";
 import { assertPreviewBackendAvailable } from "../renderer/previewBackends.js";
-import { renderSourcePreview } from "../renderer/previewWorkflow.js";
+import { prepareCompiledGraphPreview, renderSourcePreview } from "../renderer/previewWorkflow.js";
+import { validateGraph } from "../validator/validateGraph.js";
+import type { CompiledGraph } from "../compiler/types.js";
+import type { SourceInput } from "../types.js";
 import { renderSource } from "../renderer/renderView.js";
 import { projectView } from "../projector/projectView.js";
 import { compileSource } from "../compiler/compileSource.js";
@@ -41,10 +44,11 @@ import {
 
 function buildReadmeContent(
   manifestPath: string,
-  pairs: Array<{ viewId: string; exampleName: string }>,
+  pairs: Array<{ viewId: string; exampleName: string; diagramId?: string }>,
   detailIds: string[],
   validationProfileId: string,
-  bundle: Bundle
+  bundle: Bundle,
+  skippedNamedTargets: string[] = []
 ): string {
   const journeyView = bundle.views.views.find((view) => view.id === "journey_map")!;
   const journeyRoles = resolveHierarchyRoles(bundle, journeyView);
@@ -68,10 +72,14 @@ function buildReadmeContent(
 
   for (const pair of pairs) {
     lines.push(
-      `- \`${getRenderedCorpusViewDirName(pair.viewId)}/${getRenderedCorpusExampleDirName(pair.exampleName)}\``
+      `- \`${getRenderedCorpusViewDirName(pair.viewId)}/${getRenderedCorpusExampleDirName(pair.exampleName)}\`${pair.diagramId ? ` (Diagram ${pair.diagramId})` : ""}`
     );
   }
 
+  if (skippedNamedTargets.length) {
+    lines.push("", "Named targets skipped by presentation policy:", "");
+    lines.push(...skippedNamedTargets.map(target => `- ${target}`));
+  }
   lines.push("");
   lines.push(
     `Render details generated in each pair directory: ${detailIds.map((detailId) => `\`${getRenderedCorpusDetailDirName(detailId)}\``).join(", ")}.`
@@ -151,6 +159,39 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
   const discovery = await discoverCuratedRenderedExamplePairs(bundle);
   const variants = expandCuratedRenderedExampleVariants(bundle, discovery.pairs);
   const outputRoot = getRenderedCorpusRoot(bundle);
+  const documents = new Map<string, { input: SourceInput; graph: CompiledGraph }>();
+  // Validate full documents before replacing any stored evidence or writing debug artifacts.
+  for (const pair of discovery.pairs) {
+    if (documents.has(pair.example.absolutePath)) continue;
+    const input = { path: pair.example.absolutePath, text: await readFile(pair.example.absolutePath, "utf8") };
+    const compiled = compileSource(input, bundle);
+    const diagnostics = [...compiled.diagnostics];
+    if (compiled.graph) diagnostics.push(...validateGraph(compiled.graph, bundle, validationProfileId).diagnostics);
+    if (!compiled.graph || diagnostics.some(diagnostic => diagnostic.severity === "error")) {
+      throw new Error(`Cannot generate evidence for ${pair.example.relativePath}.\n${formatPrettyDiagnostics(diagnostics)}`);
+    }
+    documents.set(pair.example.absolutePath, { input, graph: compiled.graph });
+  }
+  const skippedNamedTargets: string[] = [];
+  const activeVariants = variants.filter(variant => {
+    if (!variant.diagramId) return true;
+    const document = documents.get(variant.example.absolutePath)!;
+    const prepared = prepareCompiledGraphPreview(document.input.path, document.graph, bundle, {
+      viewId: variant.viewId, diagramId: variant.diagramId, format: "svg",
+      profileId: validationProfileId, detailId: variant.detailId
+    });
+    if (prepared.diagnostics.some(diagnostic => diagnostic.code === "renderer.diagram_no_visible_content")) {
+      const message = `${variant.example.relativePath} (${variant.diagramId}, ${variant.detailId}): no visible content`;
+      console.warn(`Skipping ${message}.`);
+      skippedNamedTargets.push(message);
+      return false;
+    }
+    if (!prepared.prepared || prepared.diagnostics.some(diagnostic => diagnostic.severity === "error")) {
+      throw new Error(`Cannot prepare named evidence ${variant.diagramId}.\n${formatPrettyDiagnostics(prepared.diagnostics)}`);
+    }
+    return true;
+  });
+  if (variants.length && !activeVariants.length) throw new Error("No visible artifact targets remain after presentation policy.");
 
   await rm(outputRoot, { recursive: true, force: true });
   await mkdir(outputRoot, { recursive: true });
@@ -159,34 +200,23 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
     console.warn(`Skipping ${skippedExample}: file exists under bundle examples but is not declared in the manifest.`);
   }
 
-  const outputIndex: Array<{ viewId: string; exampleName: string }> = [];
+  const outputIndex: Array<{ viewId: string; exampleName: string; diagramId?: string }> = [];
 
-  for (const variant of variants) {
+  for (const variant of activeVariants) {
     const view = bundle.views.views.find((candidate) => candidate.id === variant.viewId);
     if (!view) {
       throw new Error(`Unknown view '${variant.viewId}' referenced by ${variant.manifestExample.path}.`);
     }
 
+    const { input, graph: validatedGraph } = documents.get(variant.example.absolutePath)!;
     const outputPaths = planRenderedCorpusOutputPaths(bundle, variant);
     await mkdir(outputPaths.exampleDir, { recursive: true });
     await mkdir(outputPaths.detailDir, { recursive: true });
     await copyFile(variant.example.absolutePath, outputPaths.sourceOutputPath);
 
-    const input = {
-      path: variant.example.absolutePath,
-      text: await readFile(variant.example.absolutePath, "utf8")
-    };
-
     if (variant.viewId === "service_blueprint") {
-      const compiled = compileSource(input, bundle);
-      const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
-      if (compileErrors.length > 0 || !compiled.graph) {
-        throw new Error(
-          `Failed to compile service_blueprint input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
-        );
-      }
-
-      const projected = projectView(compiled.graph, bundle, variant.viewId);
+      const compiled = { graph: validatedGraph };
+      const projected = projectView(compiled.graph, bundle, variant.viewId, { diagramId: variant.diagramId });
       const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (projectionErrors.length > 0 || !projected.projection) {
         throw new Error(
@@ -237,15 +267,8 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
     }
 
     if (variant.viewId === "scenario_flow") {
-      const compiled = compileSource(input, bundle);
-      const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
-      if (compileErrors.length > 0 || !compiled.graph) {
-        throw new Error(
-          `Failed to compile scenario_flow input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
-        );
-      }
-
-      const projected = projectView(compiled.graph, bundle, variant.viewId);
+      const compiled = { graph: validatedGraph };
+      const projected = projectView(compiled.graph, bundle, variant.viewId, { diagramId: variant.diagramId });
       const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (projectionErrors.length > 0 || !projected.projection) {
         throw new Error(
@@ -296,15 +319,8 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
     }
 
     if (variant.viewId === "outcome_opportunity_map") {
-      const compiled = compileSource(input, bundle);
-      const compileErrors = compiled.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
-      if (compileErrors.length > 0 || !compiled.graph) {
-        throw new Error(
-          `Failed to compile outcome_opportunity_map input for pre-routing artifacts ${variant.example.relativePath} (detail=${variant.detailId}).\n${formatPrettyDiagnostics(compiled.diagnostics)}`
-        );
-      }
-
-      const projected = projectView(compiled.graph, bundle, variant.viewId);
+      const compiled = { graph: validatedGraph };
+      const projected = projectView(compiled.graph, bundle, variant.viewId, { diagramId: variant.diagramId });
       const projectionErrors = projected.diagnostics.filter((diagnostic) => diagnostic.severity === "error");
       if (projectionErrors.length > 0 || !projected.projection) {
         throw new Error(
@@ -356,12 +372,14 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
 
     const dotResult = renderSource(input, bundle, {
       viewId: variant.viewId,
+      ...(variant.diagramId ? { diagramId: variant.diagramId } : {}),
       format: "dot",
       profileId: validationProfileId,
       detailId: variant.detailId
     });
     const mermaidResult = renderSource(input, bundle, {
       viewId: variant.viewId,
+      ...(variant.diagramId ? { diagramId: variant.diagramId } : {}),
       format: "mermaid",
       profileId: validationProfileId,
       detailId: variant.detailId
@@ -396,6 +414,7 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
 
     const svgResult = await renderSourcePreview(input, bundle, {
       viewId: variant.viewId,
+      ...(variant.diagramId ? { diagramId: variant.diagramId } : {}),
       format: "svg",
       profileId: validationProfileId,
       detailId: variant.detailId,
@@ -403,6 +422,7 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
     });
     const pngResult = await renderSourcePreview(input, bundle, {
       viewId: variant.viewId,
+      ...(variant.diagramId ? { diagramId: variant.diagramId } : {}),
       format: "png",
       profileId: validationProfileId,
       detailId: variant.detailId,
@@ -432,6 +452,7 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
     )) {
       const extraSvgResult = await renderSourcePreview(input, bundle, {
         viewId: variant.viewId,
+        ...(variant.diagramId ? { diagramId: variant.diagramId } : {}),
         format: "svg",
         profileId: validationProfileId,
         detailId: variant.detailId,
@@ -454,6 +475,7 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
     )) {
       const extraPngResult = await renderSourcePreview(input, bundle, {
         viewId: variant.viewId,
+        ...(variant.diagramId ? { diagramId: variant.diagramId } : {}),
         format: "png",
         profileId: validationProfileId,
         detailId: variant.detailId,
@@ -470,9 +492,10 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
       );
     }
 
-    if (!outputIndex.some((entry) => entry.viewId === variant.viewId && entry.exampleName === variant.example.name)) {
+    if (!outputIndex.some((entry) => entry.viewId === variant.viewId && entry.exampleName === variant.example.name && entry.diagramId === variant.diagramId)) {
       outputIndex.push({
         viewId: variant.viewId,
+        ...(variant.diagramId ? { diagramId: variant.diagramId } : {}),
         exampleName: variant.example.name
       });
     }
@@ -489,7 +512,8 @@ async function generateRenderedExamples(manifestPath: string): Promise<void> {
       outputIndex,
       bundle.manifest.render_details.map((detail) => detail.id),
       validationProfileId,
-      bundle
+      bundle,
+      skippedNamedTargets
     ),
     "utf8"
   );

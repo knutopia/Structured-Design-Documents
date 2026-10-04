@@ -18,6 +18,18 @@ export interface CompiledEdge {
   props: Record<string, string>;
 }
 
+/** Architectural fields of a literal compiled declaration, independent of bundle vocabulary. */
+export const COMPILED_EDGE_FIELD_REGISTRY = {
+  from: true,
+  type: true,
+  to: true,
+  to_name: true,
+  event: true,
+  guard: true,
+  effect: true,
+  props: true
+} as const satisfies Record<keyof CompiledEdge, true>;
+
 export interface CompiledGraph {
   schema: "sdd-text";
   version: string;
@@ -43,6 +55,16 @@ export interface CompileResult {
 const graphSourcePath = new WeakMap<CompiledGraph, string>();
 const graphAuthorOrder = new WeakMap<CompiledGraph, CompiledGraphAuthorOrder>();
 const compiledEdgeSourceSpan = new WeakMap<CompiledEdge, SourceSpan>();
+const compiledNodeSourceSpan = new WeakMap<CompiledNode, SourceSpan>();
+
+export function attachCompiledNodeSourceSpan(node: CompiledNode, span: SourceSpan): void {
+  compiledNodeSourceSpan.set(node, cloneSourceSpan(span));
+}
+
+export function getCompiledNodeSourceSpan(node: CompiledNode): SourceSpan | undefined {
+  const span = compiledNodeSourceSpan.get(node);
+  return span ? cloneSourceSpan(span) : undefined;
+}
 
 function cloneSourceSpan(span: SourceSpan): SourceSpan {
   return {

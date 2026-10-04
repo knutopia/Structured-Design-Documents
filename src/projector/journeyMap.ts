@@ -3,6 +3,7 @@ import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { ProjectionNodeAnnotation, ProjectionResult } from "./types.js";
 import {
+  type ProjectionBuilderOptions,
   buildProjectionResult,
   createEmptyDerived,
   createProjectionBuilderContext
@@ -79,8 +80,8 @@ function buildReferenceAnnotations(
   return annotations;
 }
 
-export function buildJourneyMapProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec): ProjectionResult {
-  const context = createProjectionBuilderContext(graph, bundle, view);
+export function buildJourneyMapProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec, options?: ProjectionBuilderOptions): ProjectionResult {
+  const context = createProjectionBuilderContext(graph, bundle, view, options);
   const nodeAnnotations = buildReferenceAnnotations(graph, bundle, view, context.graphNodesById, context.projectedNodeIds);
   const roles = resolveHierarchyRoles(bundle, view);
   const stepName = [...roles.childTypes][0];

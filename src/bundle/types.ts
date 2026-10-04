@@ -599,6 +599,19 @@ export interface ContractsConfig {
   version: string;
   common_rules: ContractRule[];
   relationships: RelationshipContract[];
+  diagram_membership?: DiagramMembershipContract;
+}
+
+/** Optional capability: identifiers and authoring conventions are loaded from the bundle. */
+export interface DiagramMembershipContract {
+  declaration_type: string;
+  type_property: string;
+  membership_property: string;
+  metadata_only: true;
+  references: { delimiter: string; trim: boolean; semantics: "set"; repeated: "warn" };
+  source_multiplicity: { membership: "error"; declaration_type: "error" };
+  selection: { edges: "explicit_occurrences"; nodes: "explicit_and_edge_endpoints"; closure: "none" };
+  diagnostics: { invalid: "error"; empty: "warn" };
 }
 
 export interface ViewSpec {
@@ -610,6 +623,7 @@ export interface ViewSpec {
     include_edge_types: string[];
     hierarchy_edges: string[];
     ordering_edges: string[];
+    named_diagrams?: { enabled: boolean };
   };
   conventions: {
     normative_defaults?: Array<{
@@ -645,6 +659,7 @@ export interface ProfileRule {
 export interface BundleFieldReference {
   artifact: string;
   selector: string;
+  where?: { selector: string; equals: string | number | boolean };
 }
 
 export type AuthoringFieldSource = "node_id" | "name" | "property";
@@ -658,6 +673,8 @@ export interface AuthoringFieldDescriptor {
   label?: string;
   description?: string;
   input_hint?: string;
+  choices_from?: BundleFieldReference;
+  required?: boolean;
 }
 
 export interface AuthoringNodeForm {

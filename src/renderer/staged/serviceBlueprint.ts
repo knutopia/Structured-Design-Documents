@@ -1,3 +1,4 @@
+import { applyDiagramMetadata } from "./sceneBuilders.js";
 import type { RendererCellSizingConfig, ViewSpec } from "../../bundle/types.js";
 import { resolveCellSizingPolicy } from "../../bundle/rendererCellSizing.js";
 import { buildCellSlots } from "./stackSlots.js";
@@ -383,6 +384,7 @@ function buildServiceBlueprintRenderContext(
     diagnostics: middleLayer.diagnostics
   };
 
+  applyDiagramMetadata(rendererScene, projection);
   return {
     rendererScene,
     middleLayer,

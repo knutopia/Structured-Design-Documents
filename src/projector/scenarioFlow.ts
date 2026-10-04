@@ -2,6 +2,7 @@ import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { ProjectionEdgeAnnotation, ProjectionNodeAnnotation, ProjectionOmission, ProjectionResult } from "./types.js";
 import {
+  type ProjectionBuilderOptions,
   buildProjectionResult,
   createEmptyDerived,
   createProjectionBuilderContext,
@@ -80,7 +81,8 @@ function buildBranchLabelAnnotations(
   decisionNodeIds: Set<string>,
   projectedNodeIds: Set<string>,
   orderingEdgeTypes: Set<string>,
-  config: DecisionNodeConfig
+  config: DecisionNodeConfig,
+  options?: ProjectionBuilderOptions
 ): ProjectionEdgeAnnotation[] {
   return graph.edges
     .filter(
@@ -102,7 +104,8 @@ function buildBranchLabelAnnotations(
         to: edge.to,
         role: "branch_label",
         display_label: label.displayLabel,
-        label_source: label.labelSource
+        label_source: label.labelSource,
+        ...(options?.diagramId ? { source_edge_id: options.sourceEdgeIndex.idFor(edge)! } : {})
       } satisfies ProjectionEdgeAnnotation;
     })
     .filter((annotation): annotation is ProjectionEdgeAnnotation => annotation !== undefined);
@@ -119,8 +122,8 @@ function buildOmissions(
     .map((edge) => createRelationshipNotInScopeOmission(edge, viewId));
 }
 
-export function buildScenarioFlowProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec): ProjectionResult {
-  const context = createProjectionBuilderContext(graph, bundle, view);
+export function buildScenarioFlowProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec, options?: ProjectionBuilderOptions): ProjectionResult {
+  const context = createProjectionBuilderContext(graph, bundle, view, options);
   const config = readDecisionNodeConfig(view);
   const nodeAnnotations = buildDecisionNodeAnnotations(graph, context.projectedNodeIds, config);
   const decisionNodeIds = new Set(nodeAnnotations.map((annotation) => annotation.node_id));
@@ -129,7 +132,8 @@ export function buildScenarioFlowProjection(graph: CompiledGraph, bundle: Bundle
     decisionNodeIds,
     context.projectedNodeIds,
     new Set(view.projection.ordering_edges),
-    config
+    config,
+    options
   );
 
   return buildProjectionResult(context, {

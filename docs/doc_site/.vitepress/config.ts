@@ -50,6 +50,7 @@ export default defineConfig({
         text: 'Using SDD',
         items: [
           { text: 'Using SDD Today', link: '/using_sdd/' },
+          { text: 'Named diagrams (v0.2)', link: '/using_sdd/named_diagrams' },
           { text: 'Command Line Tools', link: '/sdd_cli_tools/' },
           { text: 'SDD Skill for LLMs', link: '/sdd-skill/' },
           { text: 'Profiles', link:'/profiles/' }

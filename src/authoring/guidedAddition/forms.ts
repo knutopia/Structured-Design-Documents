@@ -153,7 +153,11 @@ export function createNodeFieldDefinitions(
         ? { format: "sdd_node_id" as const, pattern: schemaPattern(catalog, "id") ?? catalog.syntax.id_pattern }
         : source === "name"
           ? { format: "non_empty_text" as const }
-          : fieldFormat(property ? ruleForProperty(catalog, profileId, nodeType.node_type, property) : undefined);
+          : property && nodeType.field_choices?.[property]
+            ? { format: "enum" as const, allowed_values: nodeType.field_choices[property] }
+            : property && property === catalog.diagram_membership?.membership_property
+              ? { format: "node_reference" as const, allowed_target_types: [catalog.diagram_membership.declaration_type] }
+            : fieldFormat(property ? ruleForProperty(catalog, profileId, nodeType.node_type, property) : undefined);
     return {
       field_id: property ? `node_property:${property}` : source,
       source,
@@ -162,7 +166,7 @@ export function createNodeFieldDefinitions(
       ...(descriptor.description ? { description: descriptor.description } : {}),
       ...(descriptor.input_hint ? { input_hint: descriptor.input_hint } : {}),
       value_kind: source === "node_id" ? "bare_value" : "quoted_string",
-      required: source === "node_id" || source === "name",
+      required: source === "node_id" || source === "name" || descriptor.required === true,
       prominence: descriptor.prominence,
       ...format
     };
@@ -277,8 +281,10 @@ function validatePropertyFormat(
     return [];
   }
   const rule = definition.property ? ruleForProperty(catalog, profileId, nodeType, definition.property) : undefined;
-  const delimiter = typeof rule?.rule_logic?.delimiter === "string" ? rule.rule_logic.delimiter : undefined;
-  const ids = delimiter ? rawValue.split(delimiter).map((value) => value.trim()).filter(Boolean) : [rawValue];
+  const membership = definition.property === catalog.diagram_membership?.membership_property ? catalog.diagram_membership : undefined;
+  const delimiter = membership?.references.delimiter ?? (typeof rule?.rule_logic?.delimiter === "string" ? rule.rule_logic.delimiter : undefined);
+  const references = delimiter ? rawValue.split(delimiter).map((value) => membership?.references.trim === false ? value : value.trim()) : [rawValue];
+  const ids = membership ? references : references.filter(Boolean);
   const idPattern = typeof rule?.rule_logic?.id_pattern === "string"
     ? rule.rule_logic.id_pattern
     : schemaPattern(catalog, "id") ?? catalog.syntax.id_pattern;
@@ -288,7 +294,7 @@ function validatePropertyFormat(
     return !new RegExp(idPattern).test(id) || !node ||
       (definition.allowed_target_types?.length && !definition.allowed_target_types.includes(node.node_type));
   });
-  return invalid
+  return invalid !== undefined
     ? [diagnostic(snapshot, "guided_addition.invalid_field_value", "error", `${definition.property} contains unavailable node reference '${invalid}'`)]
     : [];
 }
@@ -334,6 +340,11 @@ export function normalizeAndValidateNodeFields(
     diagnostics.push(...validateValueKind(catalog, snapshot, property.value_kind, property.raw_value, property.key));
     diagnostics.push(...validatePropertyFormat(catalog, snapshot, nodeType.node_type, definition, property.raw_value, profileId));
     properties.push({ ...property });
+  }
+  for (const definition of definitions) {
+    if (definition.required && definition.source === "node_property" && !properties.some((property) => property.key === definition.property)) {
+      diagnostics.push(diagnostic(snapshot, "guided_addition.required_field_missing", "error", `${definition.property} is required`));
+    }
   }
 
   return {

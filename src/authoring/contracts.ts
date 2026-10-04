@@ -151,6 +151,8 @@ export interface ProjectionResource {
   path: DocumentPath;
   revision: DocumentRevision;
   view_id: ViewId;
+  diagram_id?: string;
+  diagram_name?: string;
   projection?: unknown;
   diagnostics: Diagnostic[];
   assessment?: AuthoringOutcomeAssessment;
@@ -194,6 +196,7 @@ export interface ChangeSetSummary {
   node_deletions: Array<{ handle: Handle; node_id?: string }>;
   node_renames: Array<{ handle: Handle; from: string; to: string }>;
   property_changes: Array<{ node_handle: Handle; key: string; from?: string; to?: string }>;
+  edge_property_changes?: Array<{ edge_handle: Handle; key: string; from?: string; to?: string }>;
   edge_insertions: Array<{ handle?: Handle; parent_handle: Handle; rel_type: string; to: string }>;
   edge_deletions: Array<{ handle: Handle; parent_handle: Handle; rel_type: string; to: string }>;
   ordering_changes: OrderingChange[];
@@ -201,6 +204,8 @@ export interface ChangeSetSummary {
 
 export interface ProjectionResultEntry {
   view_id: ViewId;
+  diagram_id?: string;
+  diagram_name?: string;
   projection?: unknown;
   diagnostics: Diagnostic[];
 }
@@ -276,6 +281,20 @@ export interface RemoveEdgeLineOp {
   edge_handle: Handle;
 }
 
+export interface SetEdgePropertyOp {
+  kind: "set_edge_property";
+  edge_handle: Handle;
+  key: string;
+  value_kind: ValueKind;
+  raw_value: string;
+}
+
+export interface RemoveEdgePropertyOp {
+  kind: "remove_edge_property";
+  edge_handle: Handle;
+  key: string;
+}
+
 export interface RepositionTopLevelNodeOp {
   kind: "reposition_top_level_node";
   node_handle: Handle;
@@ -308,6 +327,8 @@ export type ChangeOperation =
   | RemoveNodePropertyOp
   | InsertEdgeLineOp
   | RemoveEdgeLineOp
+  | SetEdgePropertyOp
+  | RemoveEdgePropertyOp
   | RepositionTopLevelNodeOp
   | RepositionStructuralEdgeOp
   | MoveNestedNodeBlockOp
@@ -373,7 +394,34 @@ export interface ValidateDocumentArgs {
 
 export interface ProjectDocumentArgs {
   path: DocumentPath;
-  view_id: ViewId;
+  view_id?: ViewId;
+  diagram_id?: string;
+}
+
+export interface ListDocumentDiagramsArgs {
+  path: DocumentPath;
+  details?: boolean;
+}
+
+export interface ListDocumentDiagramsResult {
+  kind: "sdd-diagram-list";
+  uri: DocumentUri;
+  path: DocumentPath;
+  revision: DocumentRevision;
+  effective_version: string;
+  bundle: { manifest_path: string; version: string; fingerprint: string };
+  diagrams: Array<{
+    diagram_id: string;
+    diagram_name: string;
+    view_id?: ViewId;
+    node_ids?: string[];
+    edge_ids?: string[];
+    node_count?: number;
+    edge_count?: number;
+    inclusions?: Array<{ node_id: string; reasons: string[] }>;
+    diagnostics: Diagnostic[];
+  }>;
+  diagnostics: Diagnostic[];
 }
 
 export interface ApplyChangeSetArgs {
@@ -383,6 +431,7 @@ export interface ApplyChangeSetArgs {
   operations: ChangeOperation[];
   validate_profile?: ProfileId;
   projection_views?: ViewId[];
+  projection_diagrams?: string[];
 }
 
 export interface NodeSelector {
@@ -438,6 +487,7 @@ export interface ApplyAuthoringIntentArgs {
   intents: AuthoringIntent[];
   validate_profile?: ProfileId;
   projection_views?: ViewId[];
+  projection_diagrams?: string[];
 }
 
 export interface AuthoringIntentDiagnostic {
@@ -476,7 +526,8 @@ export interface UndoChangeSetArgs {
 
 export interface RenderPreviewArgs {
   path: DocumentPath;
-  view_id: ViewId;
+  view_id?: ViewId;
+  diagram_id?: string;
   profile_id: ProfileId;
   detail_id: RenderDetailId;
   format: "svg" | "png";
@@ -488,6 +539,8 @@ export interface RenderPreviewResult {
   path: DocumentPath;
   revision: DocumentRevision;
   view_id: ViewId;
+  diagram_id?: string;
+  diagram_name?: string;
   profile_id: ProfileId;
   detail_id: RenderDetailId;
   backend_id: PreviewBackendId | string;
@@ -696,6 +749,8 @@ export interface ContractConstraintSpec {
     | "unique_within_request"
     | "must_reference_earlier_local_id"
     | "same_revision_handle"
+    | "resolved_diagram_selection"
+    | "atomic_membership_validation"
     | "undo_change_set_eligibility"
     | "commit_safe_continuation"
     | "dry_run_informational_only"

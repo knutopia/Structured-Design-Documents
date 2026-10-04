@@ -55,6 +55,7 @@ export interface ApplyAdditionProposalV1Args {
   mode?: ChangeSetMode;
   validate_profile?: ProfileId;
   projection_views?: ViewId[];
+  projection_diagrams?: string[];
   accepted_warning_token?: string;
 }
 
@@ -996,6 +997,7 @@ export async function applyAdditionProposalV1(
       operations: verified.operations,
       validate_profile: args.validate_profile,
       projection_views: args.projection_views,
+      projection_diagrams: args.projection_diagrams,
       origin: "apply_addition_proposal",
       allowEmptyTemplateBootstrap: createsDocument,
       ...(createsDocument
