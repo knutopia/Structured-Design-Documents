@@ -22,7 +22,7 @@ When we accept that working with SDD takes some technical skill and manual steps
 ## Resources
 
 [Diagram Types](/diagram_types/) …an overview  
-[Nodes and Edges per Diagram Type](/diagram_types/node_edge_reference) …details  
+[Syntax](/syntax/) …nodes, edges, and formatting  
 [SDD Command Line Tools](/sdd_cli_tools/) …to create SDDs, add content, generate diagrams  
 [Using Profiles](/profiles/) …probably stick with `simple`  
 [SDD-Skill](/sdd-skill/) …for working with LLMs  

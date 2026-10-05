@@ -50,7 +50,8 @@ export default defineConfig({
         text: 'Using SDD',
         items: [
           { text: 'Using SDD Today', link: '/using_sdd/' },
-          { text: 'Named diagrams (v0.2)', link: '/using_sdd/named_diagrams' },
+          { text: '&ensp; Using SDD in the Future', link: '/using_sdd/future_ux.md' },
+          { text: '&ensp; Evolution of the SDD Core', link: '/using_sdd/core_evolution.md' },
           { text: 'Command Line Tools', link: '/sdd_cli_tools/' },
           { text: 'SDD Skill for LLMs', link: '/sdd-skill/' },
           { text: 'Profiles', link:'/profiles/' }
@@ -69,10 +70,10 @@ export default defineConfig({
         text: 'Syntax',
         items: [
           { text: 'Syntax Topics', link: '/syntax/' },
-          { text: 'Step Differentiation', link: '/syntax/step_differentiation/' },
-          { text: 'Named Diagrams', link: '/syntax/named_diagrams/' },
-          { text: 'Node- and Edge Reference', link: '/syntax/node_and_edge_reference/' },
-          { text: 'Hidden Edge Reference', link: '/syntax/hidden_edge_reference/' }
+          { text: '&ensp; Step Differentiation', link: '/syntax/step_differentiation/' },
+          { text: '&ensp; Named Diagrams', link: '/syntax/named_diagrams/' },
+          { text: '&ensp; Node- and Edge Reference', link: '/syntax/node_and_edge_reference/' },
+          { text: '&ensp; Hidden Edge Reference', link: '/syntax/hidden_edge_reference/' }
         ]
       }
     ],

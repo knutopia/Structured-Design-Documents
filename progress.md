@@ -32,7 +32,8 @@ z
 
 - Moved syntax pages into new syntax/ doc site folder
 - Footer nav cleanup
- 
+- Main menu cleanup
+
 ## Sat 10-3
 
 - Fixed codex-app-wsl access
