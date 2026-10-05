@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-ia_place_map multi-edge issue
 -v0.1.1 release doc
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
 -Journey map needs a title per journey ("lane"?)... scenario flow too
@@ -33,6 +34,7 @@ z
 - Moved syntax pages into new syntax/ doc site folder
 - Footer nav cleanup
 - Main menu cleanup
+- Reformatted practical applications page
 
 ## Sat 10-3
 

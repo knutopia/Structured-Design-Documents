@@ -4,6 +4,32 @@ This directory contains repository-owned Markdown-it extensions used by the
 documentation site. They are installed in `../config.ts` and should have
 focused renderer tests under the repository's `tests/` directory.
 
+## `topicCarousel`
+
+Set `topicCarousel: true` in a page's frontmatter to show its top-level `##`
+sections one at a time. Content before the first topic (normally the title and
+introduction) becomes the page header. At least two topics are required.
+Keep authoring normal Markdown: titles, IDs, order, navigation dots, and links
+are generated from the headings after VitePress assigns their canonical IDs.
+
+The page receives `topicCarouselTopics` metadata and the `topic-carousel-page`
+class. Its built-in outline is disabled, and the theme supplies separate
+desktop and mobile topic navigation. All controls use the layout's page-scoped
+selection state. Other pages retain their existing outline and vertical
+navigation behavior, including backup Markdown without the opt-in.
+
+Topic changes update the URL hash and support browser Back/Forward and direct
+links. Later topics slide in from the right, earlier topics from the left, with
+a 280ms decelerating transition; reduced-motion mode switches immediately.
+The title and introduction hide on downward scroll and return on upward scroll,
+while Previous, the position dots, and Next stay visible. Topic selection from
+a scrolled position starts at the incoming heading. The carousel stops at both
+ends and has no autoplay or swipe handling.
+
+Run the focused `docsTopicCarousel` tests and the documentation build after
+changes. Browser-check sticky behavior, transitions, history, reduced motion,
+and the desktop/mobile navigation at the 1280px breakpoint.
+
 ## `showSource`
 
 `showSource.ts` renders a repository file as a titled code block. Paths are

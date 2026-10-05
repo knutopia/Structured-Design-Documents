@@ -14,6 +14,7 @@ import { showRepoLinkMarkdownPlugin } from './markdown/showRepoLink'
 import { dropdownSwitchMarkdownPlugin } from './markdown/dropdownSwitch'
 import { sideBySideMarkdownPlugin } from './markdown/sideBySide'
 import { containerTitleMarkdownPlugin } from './markdown/containerTitle'
+import { topicCarouselMarkdownPlugin } from './markdown/topicCarousel'
 
 const showSourceOptions = {
   lineNumbers: true
@@ -129,6 +130,8 @@ export default defineConfig({
       md.use(sideBySideMarkdownPlugin);
       // Restyle VitePress container titles, as in `::: info {h4} Title`.
       md.use(containerTitleMarkdownPlugin);
+      // Opt-in pages expose their Markdown sections as horizontally selected topics.
+      md.use(topicCarouselMarkdownPlugin);
 
       // Store the default link renderer
       const defaultRender = md.renderer.rules.link_open || function (tokens, idx, options, env, self) {

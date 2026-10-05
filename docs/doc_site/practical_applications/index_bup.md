@@ -1,6 +1,5 @@
 ---
 pageClass: wide-sidebar
-topicCarousel: true
 
 prev:
   text: Strategic Potential
