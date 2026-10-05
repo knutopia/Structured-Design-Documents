@@ -116,7 +116,7 @@ In v0.2, `--diagram DG-001` selects a named diagram and infers its type. Supplyi
 `--view` as well asserts that the type matches. `--diagram all` renders declared
 named diagrams in ID order and keeps combined views separate. `sdd diagrams
 <input> --json --details` lists semantic membership counts, exact edge references,
-and node inclusion reasons. See [Named diagrams](../using_sdd/named_diagrams.md)
+and node inclusion reasons. See [Named diagrams](../syntax/named_diagrams.md)
 for declaration and assignment syntax.
 
 Named default paths add `.diagram-<ID>` after the view and before detail. For a

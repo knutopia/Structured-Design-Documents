@@ -1,8 +1,10 @@
-# Named diagrams
+# Named Diagrams
 
-SDD v0.2 lets one document contain several named diagrams of the same type.
-They share semantic nodes and relationships. The combined view of each type
-remains available and includes unassigned content.
+We often need several diagrams of the same type. For example, a product encompasses many journeys and scenario flows, and we might want to explore several information architectures in parallel. 
+
+SDD v0.2 serves this need: one document can contain several named diagrams of the same type. They share semantic nodes and relationships. 
+
+The combined view of each type (e.g. "all scenario flows together") remains available and includes unassigned content.
 
 Declare a diagram, then assign individual nodes or relationships with the
 `diagrams` property:
