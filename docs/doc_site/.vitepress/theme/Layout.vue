@@ -2,14 +2,23 @@
 // for https://github.com/BadgerHobbs/vitepress-plugin-lightbox
 
 import DefaultTheme from "vitepress/theme";
-import { onMounted, onUnmounted, nextTick } from "vue";
-import { useRouter } from "vitepress";
+import { onMounted, onUnmounted, nextTick, reactive, provide, watch } from "vue";
+import { useRouter, useData } from "vitepress";
 import mediumZoom from "medium-zoom";
 import { useOutlineNavigationTransition } from "./components/useOutlineNavigationTransition";
+import TopicNavigation from "./components/TopicNavigation.vue";
+import { TopicCarouselSelection } from "./components/topicCarouselSelection";
+import { topicCarouselKey } from "./components/topicCarouselContext";
 
 const { Layout } = DefaultTheme;
 const router = useRouter();
 const { animatePendingOutlineNavigation } = useOutlineNavigationTransition();
+const { frontmatter, page } = useData();
+const topicSelection = reactive(new TopicCarouselSelection());
+provide(topicCarouselKey, topicSelection);
+watch(() => [page.value.relativePath, frontmatter.value.topicCarouselTopics], () => {
+  topicSelection.reset(frontmatter.value.topicCarouselTopics ?? []);
+}, { immediate: true, flush: 'sync' });
 
 let zoom;
 let observer;
@@ -60,7 +69,14 @@ router.onAfterRouteChange = () => {
 </script>
 
 <template>
-  <Layout />
+  <Layout>
+    <template #layout-top>
+      <TopicNavigation v-if="frontmatter.topicCarousel" mobile />
+    </template>
+    <template #aside-outline-before>
+      <TopicNavigation v-if="frontmatter.topicCarousel" />
+    </template>
+  </Layout>
 </template>
 
 <style>

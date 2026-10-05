@@ -105,3 +105,14 @@
   overflow-wrap: anywhere;
   text-overflow: clip;
 }
+
+/* The opted-in page supplies its own topic navigation; legacy outlines stay intact. */
+.topic-carousel-page .VPDocAsideOutline,
+.topic-carousel-page > .VPLocalNav {
+  display: none;
+}
+
+/* Put the custom local-navigation row after the site navbar in the flex layout. */
+.topic-carousel-page > .VPNav {
+  order: -1;
+}
