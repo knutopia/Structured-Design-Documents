@@ -1,3 +1,4 @@
+import { applyDiagramMetadata } from "./sceneBuilders.js";
 import type { ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
@@ -383,6 +384,7 @@ function buildOutcomeOpportunityRenderContext(
     diagnostics: middleLayer.diagnostics
   };
 
+  applyDiagramMetadata(rendererScene, projection);
   return {
     rendererScene,
     middleLayer

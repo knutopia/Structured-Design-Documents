@@ -18,8 +18,27 @@ describe("B5 immutable acceptance baseline", () => {
     // replay and geometry assertions below remain the behavioral guard. The
     // v0.2 step-differentiation plan also authorizes generic projector changes;
     // versioned projection snapshots independently guard their v0.1 behavior.
-    // Compiler, parser, validator, and unaffected projector sources stay protected.
+    // The v0.2 diagram-separation plan authorizes source occurrence checks,
+    // bundle-driven identity and exact selection. Historical hashes remain
+    // evidence; unchanged v0.1 compilation/projection snapshots and B5 replay
+    // below independently guard behavior. Parser and layout sources remain
+    // protected.
     const intentionallyExtendedSources = new Set([
+      // docs/v0.2_syntax_extension/diagram_separation_v0_2_implementation_plan.md
+      "src/compiler/buildGraph.ts",
+      "src/compiler/canonicalize.ts",
+      "src/compiler/compileSource.ts",
+      "src/compiler/types.ts",
+      "src/projector/iaPlaceMap.ts",
+      "src/projector/outcomeOpportunityMap.ts",
+      "src/projector/projectSource.ts",
+      "src/projector/projectView.ts",
+      "src/projector/scenarioFlow.ts",
+      "src/projector/serviceBlueprint.ts",
+      "src/projector/uiContracts.ts",
+      "src/projector/viewProjectors.ts",
+      "src/renderer/staged/sceneBuilders.ts",
+      "src/validator/ruleExecutors.ts",
       "src/projector/journeyMap.ts",
       "src/projector/shared.ts",
       "src/projector/types.ts",

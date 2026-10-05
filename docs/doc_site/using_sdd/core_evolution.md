@@ -1,3 +1,9 @@
+---
+prev:
+  text: Using SDD in the Future
+  link: /using_sdd/future_ux.md
+---
+
 # Evolution of the SDD Core
 
 Besides the user experience of SDD, the actual language and tools at the core of SDD are also meant to evolve.

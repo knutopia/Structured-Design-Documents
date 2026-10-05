@@ -210,7 +210,7 @@ Inline-image branch:
 
 - run `sdd show`
 - link the saved sibling artifact in the response
-- call helper `preview` with the same document, view, profile, detail, and format
+- call helper `preview` with the same document, view, named Diagram ID (or combined scope), profile, detail, and format
 - use the returned `artifact_path` as the Markdown image source in the final response
 - keep the saved sibling artifact as the canonical file link
 
@@ -345,7 +345,7 @@ If the user did not request a specific output path, let `sdd show` write beside 
 
 For an explicit request to render every applicable diagram type, use `--view all`. Applicability is resolved after detail policy, so views without visible semantic content are skipped. An explicit `--out` is a filename template with per-view modifiers, and `--dot-out` remains single-view only.
 
-If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering. A preview matches only when it came from the same document, committed revision, view, profile, detail, format, and backend in the same workflow context. If matching metadata is unavailable, use `sdd show` instead of copying. The default durable path still stays beside the `.sdd`.
+If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering. A preview matches only when it came from the same document, committed revision, view, named Diagram ID (or combined scope), profile, detail, format, and backend in the same workflow context. If matching metadata is unavailable, use `sdd show` instead of copying. The default durable path still stays beside the `.sdd`.
 
 Use one of these branches and stop after the one that matches the final response:
 

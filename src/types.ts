@@ -38,6 +38,7 @@ export interface Diagnostic {
 }
 
 export interface RenderOptions {
+  diagramId?: string;
   viewId: string;
   format: "dot" | "mermaid";
   profileId?: string;
@@ -45,6 +46,8 @@ export interface RenderOptions {
 }
 
 export interface RenderResult {
+  diagramId?: string;
+  diagramName?: string;
   format: "dot" | "mermaid";
   viewId: string;
   profileId: string;

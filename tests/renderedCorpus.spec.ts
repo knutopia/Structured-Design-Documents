@@ -18,6 +18,20 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."
 const manifestPath = path.join(repoRoot, "bundle/v0.1/manifest.yaml");
 
 describe("rendered example corpus", () => {
+  it("discovers combined and named scenario targets from loaded declarations with collision-free paths", async () => {
+    const bundle = await loadBundle(path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
+    const discovery = await discoverCuratedRenderedExamplePairs(bundle);
+    const pairs = discovery.pairs.filter(pair => pair.example.name === "scenario_separation");
+    expect(pairs.map(pair => [pair.viewId, pair.diagramId])).toEqual([
+      ["scenario_flow", undefined], ["scenario_flow", "DG-001"],
+      ["scenario_flow", "DG-002"], ["scenario_flow", "DG-003"]
+    ]);
+    const variants = expandCuratedRenderedExampleVariants(bundle, pairs);
+    const paths = variants.map(variant => planRenderedCorpusOutputPaths(bundle, variant));
+    expect(paths).toHaveLength(8);
+    expect(new Set(paths.map(output => output.svgOutputPath)).size).toBe(8);
+    expect(paths.filter(output => output.svgOutputPath.includes(".diagram-")).length).toBe(6);
+  });
   it("registers the mixed v0.2 proof in all three views and the blueprint canonical only in its own view", async () => {
     const bundle = await loadBundle(path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
     const discovery = await discoverCuratedRenderedExamplePairs(bundle);

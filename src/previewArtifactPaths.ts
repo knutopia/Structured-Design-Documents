@@ -3,6 +3,7 @@ import type { PreviewFormat, PreviewRendererBackendId } from "./renderer/viewRen
 
 export interface PreviewArtifactPathOptions {
   viewId: string;
+  diagramId?: string;
   detailId: string;
   nodeDecoratorModeId?: string;
   format: PreviewFormat;
@@ -14,7 +15,9 @@ export function buildPreviewArtifactBasename(
   options: PreviewArtifactPathOptions
 ): string {
   const parsed = path.parse(documentPath);
-  const stemParts = [parsed.name, options.viewId, options.detailId];
+  const stemParts = [parsed.name, options.viewId];
+  if (options.diagramId !== undefined) stemParts.push(`diagram-${encodeURIComponent(options.diagramId)}`);
+  stemParts.push(options.detailId);
   if (options.nodeDecoratorModeId && options.nodeDecoratorModeId !== "none") {
     stemParts.push(`decorators-${options.nodeDecoratorModeId.replaceAll(",", "-")}`);
   }
@@ -34,8 +37,10 @@ export function buildShowPreviewOutputPath(
 
 export function buildExplicitBatchPreviewOutputPath(
   filePath: string,
-  viewId: string
+  viewId: string,
+  diagramId?: string
 ): string {
   const parsed = path.parse(path.resolve(filePath));
-  return path.join(parsed.dir, `${parsed.name}.${viewId}${parsed.ext}`);
+  const diagramPart = diagramId === undefined ? "" : `.diagram-${encodeURIComponent(diagramId)}`;
+  return path.join(parsed.dir, `${parsed.name}.${viewId}${diagramPart}${parsed.ext}`);
 }

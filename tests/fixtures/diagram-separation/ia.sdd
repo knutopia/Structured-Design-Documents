@@ -1,0 +1,19 @@
+SDD-TEXT 0.2
+Diagram DG-301 "Selected places"
+  diagram_type=ia_place_map
+END
+Area A-301 "Support"
+  CONTAINS P-301 diagrams=DG-301
+END
+Place P-301 "Overview"
+  CONTAINS P-302
+  CONTAINS P-304
+END
+Place P-302 "Details"
+  diagrams=DG-301
+  NAVIGATES_TO P-303 diagrams=DG-301
+END
+Place P-303 "Review"
+END
+Place P-304 "Excluded sibling"
+END

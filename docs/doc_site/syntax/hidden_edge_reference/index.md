@@ -1,4 +1,14 @@
-# Hidden Edge Reference by Diagram Type
+---
+prev:
+  text: Diagram Node- and Edge Reference
+  link: ../node_edge_reference
+
+next:
+  text: Step Differentiation
+  link: ../step_differentiation
+---
+
+# Hidden Edge Reference
 
 Reference for relationships that are hidden, represented as annotations, or
 shown with less detail in the v0.2 staged SVG/PNG renderers. The tables compare

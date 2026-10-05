@@ -331,7 +331,7 @@ describe("canonical sdd-skill source", () => {
     expect(previewSection).toContain("If the user did not request a specific output path, let `sdd show` write beside the `.sdd`");
     expect(previewSection).toContain("Do not create a new output directory unless the user explicitly named that directory in the requested output path.");
     expect(previewSection).toContain("If the current workflow already has a matching helper `preview` `artifact_path` and the user asks to save the diagram, copy that artifact to the durable output path instead of rerendering.");
-    expect(previewSection).toContain("A preview matches only when it came from the same document, committed revision, view, profile, detail, format, and backend in the same workflow context.");
+    expect(previewSection).toContain("A preview matches only when it came from the same document, committed revision, view, named Diagram ID (or combined scope), profile, detail, format, and backend in the same workflow context.");
     expect(previewSection).toContain("If matching metadata is unavailable, use `sdd show` instead of copying.");
     expect(previewSection).toContain("run `sdd show`");
     expect(previewSection).toContain("link the saved sibling artifact");

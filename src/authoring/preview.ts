@@ -1,6 +1,8 @@
 import { readFile } from "node:fs/promises";
 import type { Bundle } from "../bundle/types.js";
 import type { Diagnostic } from "../diagnostics/types.js";
+import { evaluateDocumentText } from "./evaluation.js";
+import { resolveDiagramSelection } from "../diagrams/resolveDiagrams.js";
 import { buildPreviewArtifactBasename } from "../previewArtifactPaths.js";
 import { renderSourcePreview } from "../renderer/previewWorkflow.js";
 import type { RenderPreviewArgs, RenderPreviewResult } from "./contracts.js";
@@ -61,6 +63,15 @@ export async function renderPreview(
   const rawText = await readFile(resolvedPath.absolutePath, "utf8");
   const canonicalText = normalizeTextToLf(rawText);
   const revision = computeDocumentRevision(canonicalText);
+  const evaluated = evaluateDocumentText(bundle, resolvedPath.publicPath, canonicalText);
+  const selection = evaluated.graph ? resolveDiagramSelection(evaluated.graph, bundle, {
+    viewId: args.view_id,
+    diagramId: args.diagram_id
+  }) : undefined;
+  const selectionErrors = [...evaluated.diagnostics, ...(selection?.diagnostics ?? [])].filter((diagnostic) => diagnostic.severity === "error");
+  if (!selection || selectionErrors.length > 0) {
+    throw new AuthoringPreviewError(buildPreviewFailureMessage(resolvedPath.publicPath, args, selectionErrors), selectionErrors);
+  }
   const previewResult = await renderSourcePreview(
     {
       path: resolvedPath.publicPath,
@@ -68,7 +79,8 @@ export async function renderPreview(
     },
     bundle,
     {
-      viewId: args.view_id,
+      viewId: selection.viewId,
+      diagramId: args.diagram_id,
       format: args.format,
       profileId: args.profile_id,
       detailId: args.detail_id,
@@ -91,7 +103,8 @@ export async function renderPreview(
     artifactPath = await materializePreviewArtifact(
       previewResult.artifact,
       buildPreviewArtifactBasename(resolvedPath.publicPath, {
-        viewId: args.view_id,
+        viewId: selection.viewId,
+        diagramId: args.diagram_id,
         detailId: args.detail_id,
         format,
         backendId: args.backend_id ? previewResult.previewCapability.backendId : undefined
@@ -109,7 +122,9 @@ export async function renderPreview(
     kind: "sdd-preview",
     path: resolvedPath.publicPath,
     revision,
-    view_id: args.view_id,
+    view_id: selection.viewId,
+    ...(args.diagram_id ? { diagram_id: args.diagram_id } : {}),
+    ...(selection.diagramName ? { diagram_name: selection.diagramName } : {}),
     profile_id: args.profile_id,
     detail_id: args.detail_id,
     backend_id: previewResult.previewCapability.backendId,

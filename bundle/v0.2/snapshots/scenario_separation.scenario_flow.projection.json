@@ -1,0 +1,142 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.2",
+  "view_id": "scenario_flow",
+  "source_example": "scenario_separation",
+  "nodes": [
+    {
+      "id": "SS-001",
+      "type": "ScenarioStep",
+      "name": "Choose an editing action"
+    },
+    {
+      "id": "SS-002",
+      "type": "ScenarioStep",
+      "name": "Choose the source node"
+    },
+    {
+      "id": "SS-003",
+      "type": "ScenarioStep",
+      "name": "Choose the relationship"
+    },
+    {
+      "id": "SS-004",
+      "type": "ScenarioStep",
+      "name": "Choose the target node"
+    },
+    {
+      "id": "SS-005",
+      "type": "ScenarioStep",
+      "name": "Review the new relationship"
+    },
+    {
+      "id": "SS-006",
+      "type": "ScenarioStep",
+      "name": "Choose the pivot node"
+    },
+    {
+      "id": "SS-007",
+      "type": "ScenarioStep",
+      "name": "Inspect related content"
+    },
+    {
+      "id": "SS-008",
+      "type": "ScenarioStep",
+      "name": "Return to the document"
+    },
+    {
+      "id": "SS-009",
+      "type": "ScenarioStep",
+      "name": "Choose a diagram type"
+    },
+    {
+      "id": "SS-010",
+      "type": "ScenarioStep",
+      "name": "Name the new view"
+    },
+    {
+      "id": "SS-011",
+      "type": "ScenarioStep",
+      "name": "Review the empty view"
+    }
+  ],
+  "edges": [
+    {
+      "from": "SS-001",
+      "type": "PRECEDES",
+      "to": "SS-002"
+    },
+    {
+      "from": "SS-001",
+      "type": "PRECEDES",
+      "to": "SS-006"
+    },
+    {
+      "from": "SS-002",
+      "type": "PRECEDES",
+      "to": "SS-003"
+    },
+    {
+      "from": "SS-003",
+      "type": "PRECEDES",
+      "to": "SS-004"
+    },
+    {
+      "from": "SS-004",
+      "type": "PRECEDES",
+      "to": "SS-005"
+    },
+    {
+      "from": "SS-006",
+      "type": "PRECEDES",
+      "to": "SS-007"
+    },
+    {
+      "from": "SS-007",
+      "type": "PRECEDES",
+      "to": "SS-008"
+    },
+    {
+      "from": "SS-009",
+      "type": "PRECEDES",
+      "to": "SS-010"
+    },
+    {
+      "from": "SS-010",
+      "type": "PRECEDES",
+      "to": "SS-011"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "SS-001",
+        "display": {
+          "shape": "diamond"
+        }
+      }
+    ],
+    "edge_annotations": [
+      {
+        "from": "SS-001",
+        "type": "PRECEDES",
+        "to": "SS-002",
+        "role": "branch_label",
+        "display_label": "add relationship",
+        "label_source": "guard"
+      },
+      {
+        "from": "SS-001",
+        "type": "PRECEDES",
+        "to": "SS-006",
+        "role": "branch_label",
+        "display_label": "pivot node",
+        "label_source": "guard"
+      }
+    ],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [],
+  "notes": []
+}

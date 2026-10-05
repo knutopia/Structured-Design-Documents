@@ -1,3 +1,4 @@
+import { graphForProjection } from "../projector/edgeOccurrences.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import { getCompiledEdgeSourceSpan, getGraphAuthorOrder } from "../compiler/types.js";
 import { getSourceOrderedStructuralStream } from "../compiler/authorOrder.js";
@@ -59,6 +60,7 @@ function triple(edge: { from: string; type: string; to: string }): string {
 
 /** Rendering occurrences are distinct from semantic identities; raw projection is never changed. */
 export function buildUiContractsPresentationModel(projection: Projection, graph: CompiledGraph, view: ViewSpec, detailId: string): UiContractsPresentationModel {
+  graph = graphForProjection(projection, graph);
   const config = resolveUiContractsPresentation(view), policy = resolveDetailDisplayPolicy(view, detailId);
   const enabled = (key: string) => readBooleanDetailDisplaySetting(policy, key);
   const graphNodes = new Map(graph.nodes.map(node => [node.id, node]));
@@ -106,7 +108,8 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
     projectedCounts.set(key, remaining - 1);
     const ordinal = occurrenceCounts.get(key) ?? 0;
     occurrenceCounts.set(key, ordinal + 1);
-    const id = `relationship:${encodeURIComponent(key)}:${ordinal}`;
+    const sourceRef = projection.diagram_id ? projection.edges[graph.edges.indexOf(edge)]?.source_edge_id : undefined;
+    const id = sourceRef ? `relationship:${sourceRef}` : `relationship:${encodeURIComponent(key)}:${ordinal}`;
     const selectors = config.relationships.filter(rule => rule.edge_type === edge.type && rule.from.includes(nodes.get(edge.from)!.type) && rule.to.includes(nodes.get(edge.to)!.type));
     if (selectors.length > 1) {
       diagnostics.push(createSceneDiagnostic("renderer.scene.ui_contracts_ambiguous_relationship", `More than one presentation rule selects '${id}'.`, { targetId: id, severity: "error" }));
@@ -223,7 +226,7 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
 
   const ownerOf = (id: string): string | undefined => {
     if (roleOf(id) === "primary") return relationships.find(edge => edge.kind === "ownership" && edge.to === id)?.from
-      ?? graphNodes.get(id)?.props[config.ownership.primary_property];
+      ?? (projection.diagram_id ? undefined : graphNodes.get(id)?.props[config.ownership.primary_property]);
     if (roleOf(id) === "secondary") return graphNodes.get(id)?.props[config.ownership.secondary_property];
     return undefined;
   };

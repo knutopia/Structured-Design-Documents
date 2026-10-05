@@ -1,4 +1,4 @@
-# Step differentiation v0.2 implementation evidence
+# [Done] Step differentiation v0.2 implementation evidence
 
 ## Governing contract and runtime consumption
 

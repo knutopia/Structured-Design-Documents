@@ -1,0 +1,30 @@
+SDD-TEXT 0.2
+Diagram DG-501 "Selected UI"
+  diagram_type=ui_contracts
+END
+Diagram DG-502 "Fallback states"
+  diagram_type=ui_contracts
+END
+Diagram DG-503 "Alternate states"
+  diagram_type=ui_contracts
+END
+Place P-501 "Requests"
+  CONTAINS VS-501 diagrams=DG-501
+END
+ViewState VS-501 "Request form"
+  COMPOSED_OF C-501 diagrams=DG-501
+END
+ViewState VS-599 "Unrelated global UI"
+END
+Component C-501 "Request editor"
+END
+State S-501 "Ready"
+  scope_id=C-501
+  TRANSITIONS_TO S-502 [E-501] {zebra} diagrams="DG-501,DG-502"
+  TRANSITIONS_TO S-502 [E-501] {apple} diagrams=DG-503
+END
+State S-502 "Saved"
+  scope_id=C-501
+END
+Event E-501 "Save request"
+END

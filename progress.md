@@ -28,10 +28,16 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 10-4
+
+- Moved syntax pages into new syntax/ doc site folder
+- Footer nav cleanup
+- Main menu cleanup
+
 ## Sat 10-3
 
 - Fixed codex-app-wsl access
-
+- Diagram separation
 
 ## Fri 10-2
 

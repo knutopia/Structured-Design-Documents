@@ -54,8 +54,14 @@ export {
 export { BundleValidationError, collectBundleDiagnostics, validateLoadedBundle } from "./bundle/validateLoadedBundle.js";
 export { parseSource } from "./parser/parseSource.js";
 export { compileSource } from "./compiler/compileSource.js";
-export { projectSource } from "./projector/projectSource.js";
-export { projectView } from "./projector/projectView.js";
+export { projectSource, projectDiagramSource } from "./projector/projectSource.js";
+export { projectView, projectDiagram } from "./projector/projectView.js";
+export type { ProjectOptions } from "./projector/projectView.js";
+export { listDiagrams, resolveDocumentDiagrams, resolveDiagramSelection } from "./diagrams/resolveDiagrams.js";
+export type { DiagramInventory, DocumentDiagrams, DiagramSelection } from "./diagrams/resolveDiagrams.js";
+export { semanticEdgeIdentity, semanticEdgeProperties, createSourceEdgeIndex } from "./relationships/edgeIdentity.js";
+export type { SourceEdgeIndex } from "./relationships/edgeIdentity.js";
+export { listDocumentDiagrams } from "./authoring/readServices.js";
 export { validateGraph } from "./validator/validateGraph.js";
 export { renderSource } from "./renderer/renderView.js";
 export {
@@ -116,6 +122,12 @@ export type {
   OrderingChange,
   ProfileId,
   ReparentNodeBlockOp
+} from "./authoring/contracts.js";
+export type {
+  SetEdgePropertyOp,
+  RemoveEdgePropertyOp,
+  ListDocumentDiagramsArgs,
+  ListDocumentDiagramsResult
 } from "./authoring/contracts.js";
 export type {
   AuthoringConfig,

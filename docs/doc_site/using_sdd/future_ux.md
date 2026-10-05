@@ -1,7 +1,11 @@
 ---
+prev:
+  text: Using SDD Today
+  link: /using_sdd/index.md
+
 next:
   text: Evolution of the SDD Core
-  link: using_sdd/core_evolution.md
+  link: /using_sdd/core_evolution.md
 ---
 
 # Using SDD in the Future

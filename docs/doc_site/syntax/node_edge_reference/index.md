@@ -1,3 +1,13 @@
+---
+prev:
+  text: Named Diagrams
+  link: ../named_diagrams
+
+next:
+  text: Hidden Edge Reference
+  link: ../hidden_edge_reference
+---
+
 # Diagram Node and Edge Reference
 
 Compact reference of content relationships per diagram type, listing available nodes and edges (relationships).
@@ -10,7 +20,7 @@ Compact reference of content relationships per diagram type, listing available n
 
 Guided relationship role and profile-aware presence/label classification come from the complete endpoint-triple matrix in the same view artifact. Guided tools consume those bundle records directly; this page does not establish additional relationship choices.
 
-v0.2 introduces [Step differentiation](step_differentiation.md): `JourneyStep`, `BlueprintStep`, and `ScenarioStep` replacing  `Step` of v0.1.
+v0.2 introduces [Step differentiation](./step_differentiation.md): `JourneyStep`, `BlueprintStep`, and `ScenarioStep` replacing  `Step` of v0.1.
 
 ::: dropdownSwitch Choose Diagram Type:
 == IA Place Map
@@ -242,4 +252,4 @@ END
 
 :::
 
-To create readable diagrams, not all diagrams *do* show all edges that they *could* show. For technical users, [Hidden Edge Reference](hidden_edge_reference.md) shows which edge types are suppressed per diagram type with more detail.
+To create readable diagrams, not all diagrams *do* show all edges that they *could* show. For technical users, [Hidden Edge Reference](./hidden_edge_reference/index.md) shows which edge types are suppressed per diagram type with more detail.

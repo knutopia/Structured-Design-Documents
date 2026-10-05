@@ -7,6 +7,7 @@ import type { SourceInput, Diagnostic } from "../types.js";
 import { buildGraph } from "./buildGraph.js";
 import { canonicalizeGraph } from "./canonicalize.js";
 import { attachGraphSourcePath, type CompileResult } from "./types.js";
+import { checkDiagramSourceProperties } from "../diagrams/sourceProperties.js";
 
 const Ajv2020 = Ajv2020Import as unknown as new (options: Record<string, unknown>) => {
   compile(schema: object): {
@@ -35,6 +36,8 @@ export function compileSource(input: SourceInput, bundle: Bundle): CompileResult
     };
   }
 
+  const propertyDiagnostics = checkDiagramSourceProperties(parseResult.document, bundle, input.path);
+  if (propertyDiagnostics.length) return { diagnostics: sortDiagnostics([...parseResult.diagnostics, ...propertyDiagnostics]) };
   const built = buildGraph(parseResult.document, input.path);
   if (!built.graph) {
     return {

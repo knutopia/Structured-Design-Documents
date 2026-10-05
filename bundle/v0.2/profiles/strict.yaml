@@ -9,6 +9,9 @@ severity_defaults:
   governance: error
 
 rules:
+  - id: diagram_membership_valid
+    source: core/contracts.yaml
+    severity: error
   - id: endpoint_pairs_enforced
     source: core/contracts.yaml
     applies_to: all_relationships

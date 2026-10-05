@@ -1,7 +1,8 @@
+import { graphForProjection, resolveProjectionEdge, projectionEdgeRenderId } from "../projector/edgeOccurrences.js";
 import { buildRelationshipReferenceAttributes, type ReferenceAttribute } from "./referenceAttributes.js";
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { RendererScenarioFlowLayoutConfig, ViewSpec } from "../bundle/types.js";
-import { getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
+import { getCompiledEdgeSourceSpan, getGraphAuthorOrder, type CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
 import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
 import { readBooleanDetailDisplaySetting } from "./detailDisplay.js";
@@ -199,6 +200,7 @@ export function buildScenarioFlowRenderModel(
   view: ViewSpec,
   displayPolicy: ResolvedDetailDisplayPolicy
 ): ScenarioFlowRenderModel {
+  graph = graphForProjection(projection, graph);
   const layout = readScenarioFlowLayout(view);
   const displayOptions = readScenarioFlowDisplayOptions(displayPolicy);
   const visibleNodeIds = selectScenarioFlowVisibleNodeIds(projection, view, displayPolicy);
@@ -208,13 +210,16 @@ export function buildScenarioFlowRenderModel(
     visibleNodes.map((node) => node.id)
   );
   const authorOrderByEdgeKey = buildAuthorOrderByEdgeKey(graph);
+  const occurrenceAuthorOrder = new Map(graph.edges.map((edge, index) => ({ edge, index, offset: getCompiledEdgeSourceSpan(edge)?.startOffset }))
+    .sort((a, b) => (a.offset ?? a.index) - (b.offset ?? b.index) || a.index - b.index)
+    .map(({ edge }, index) => [edge, index]));
   const nodeAnnotationsById = new Map(
     projection.derived.node_annotations.map((annotation) => [annotation.node_id, annotation])
   );
   const edgeAnnotationsById = new Map(
     projection.derived.edge_annotations
       .filter((annotation) => annotation.role === "branch_label")
-      .map((annotation) => [edgeAnnotationKey(annotation.from, annotation.to), annotation])
+      .map((annotation) => [annotation.source_edge_id ?? edgeAnnotationKey(annotation.from, annotation.to), annotation])
   );
 
   const lanes = layout.lanes
@@ -256,17 +261,19 @@ export function buildScenarioFlowRenderModel(
   const edges = projection.edges
     .filter((edge) => visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to))
     .map<ScenarioFlowRenderEdge>((edge) => {
-      const branchAnnotation = edgeAnnotationsById.get(edgeAnnotationKey(edge.from, edge.to));
+      const branchAnnotation = edgeAnnotationsById.get(edge.source_edge_id ?? edgeAnnotationKey(edge.from, edge.to));
       const branchLabel = normalizeBranchLabelDisplay(branchAnnotation?.display_label);
       return {
-        id: `${edge.from}__${edge.type.toLowerCase()}__${edge.to}`,
+        id: projectionEdgeRenderId(edge, `${edge.from}__${edge.type.toLowerCase()}__${edge.to}`),
         from: edge.from,
         type: edge.type,
         to: edge.to,
         ...edgeDisplay(edge.type, displayOptions.showBranchLabels ? branchLabel : undefined),
         branchLabel,
         branchLabelSource: branchAnnotation?.label_source,
-        authorOrder: authorOrderByEdgeKey.get(`${edge.from}->${edge.type}->${edge.to}`) ?? Number.MAX_SAFE_INTEGER
+        authorOrder: edge.source_edge_id
+          ? occurrenceAuthorOrder.get(resolveProjectionEdge(edge, graph, true)!) ?? Number.MAX_SAFE_INTEGER
+          : authorOrderByEdgeKey.get(`${edge.from}->${edge.type}->${edge.to}`) ?? Number.MAX_SAFE_INTEGER
       };
     });
 

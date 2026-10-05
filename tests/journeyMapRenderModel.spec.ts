@@ -242,6 +242,13 @@ describe("journey map render model", () => {
       "to_name"
     ];
 
+    // A key remains excluded while the bundle explicitly marks it ignored.
+    const stillIgnored = buildModel(base.projection, base.graph, mutatedBundle, journeyView(mutatedBundle), "strict");
+    expect(stillIgnored.edges.map((edge) => edge.id)).toEqual(base.model.edges.map((edge) => edge.id));
+    identityRule!.rule_logic!.ignored_fields = (identityRule!.rule_logic!.ignored_fields as string[]).filter(
+      (field) => field !== "to_name"
+    );
+
     const mutated = buildModel(base.projection, base.graph, mutatedBundle, journeyView(mutatedBundle), "strict");
     expect(mutated.edges.map((edge) => edge.exactIdentityOrdinal)).toEqual([0, 0, 0]);
     expect(mutated.edges[0]?.semanticIdentityKey).not.toBe(mutated.edges[2]?.semanticIdentityKey);

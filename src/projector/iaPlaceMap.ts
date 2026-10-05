@@ -6,6 +6,7 @@ import type {
   ProjectionResult
 } from "./types.js";
 import {
+  type ProjectionBuilderOptions,
   buildProjectionResult,
   createEmptyDerived,
   createEndpointOutOfScopeOmission,
@@ -61,8 +62,8 @@ function buildNodeAnnotations(graph: CompiledGraph, nodes: ProjectionNode[], vie
   return annotations.sort((left, right) => left.node_id.localeCompare(right.node_id));
 }
 
-export function buildIaPlaceMapProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec): ProjectionResult {
-  const context = createProjectionBuilderContext(graph, bundle, view);
+export function buildIaPlaceMapProjection(graph: CompiledGraph, bundle: Bundle, view: ViewSpec, options?: ProjectionBuilderOptions): ProjectionResult {
+  const context = createProjectionBuilderContext(graph, bundle, view, options);
   const nodeAnnotations = buildNodeAnnotations(graph, context.projectedNodes, view);
   const omissions = [];
 

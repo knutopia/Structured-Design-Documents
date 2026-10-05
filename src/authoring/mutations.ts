@@ -4,6 +4,7 @@ import path from "node:path";
 import { getPlacementPolicyInputs } from "../bundle/guidedAuthoring.js";
 import type { AuthoringConfig, Bundle, SyntaxStatementDefinition } from "../bundle/types.js";
 import { sortDiagnostics, type Diagnostic } from "../diagnostics/types.js";
+import { resolveDocumentDiagrams } from "../diagrams/resolveDiagrams.js";
 import { stripTrailingComment } from "../parser/classifyLine.js";
 import type {
   BlankLine,
@@ -144,6 +145,8 @@ interface EdgeModel extends BaseModelItem {
   guard: string | null;
   effect: string | null;
   props: Record<string, string>;
+  propertyValueKinds?: Record<string, ValueKind>;
+  propertyOccurrences?: Array<{ key: string; rawValue: string; valueKind: ValueKind }>;
   rawLine: string | null;
   commentSuffix: string;
   lineChanged: boolean;
@@ -373,8 +376,13 @@ function emitEdgeLine(bundle: Bundle, syntax: AuthoringSyntax, nodeDepth: number
         }
         break;
       case "props":
-        for (const key of Object.keys(edge.props).sort()) {
-          fragments.push(`${key}=${emitEdgePropertyValue(syntax, bundle, edge.props[key] ?? "")}`);
+        if (edge.propertyOccurrences) {
+          for (const property of edge.propertyOccurrences) {
+            fragments.push(`${property.key}=${emitPropertyValue(bundle, property.valueKind, property.rawValue)}`);
+          }
+        } else for (const key of Object.keys(edge.props).sort()) {
+          const valueKind = edge.propertyValueKinds?.[key];
+          fragments.push(`${key}=${valueKind ? emitPropertyValue(bundle, valueKind, edge.props[key] ?? "") : emitEdgePropertyValue(syntax, bundle, edge.props[key] ?? "")}`);
         }
         break;
       default:
@@ -525,6 +533,8 @@ function buildNodeModel(
         guard: bodyItem.guard,
         effect: bodyItem.effect,
         props: Object.fromEntries(bodyItem.props.map((prop) => [prop.key, prop.rawValue])),
+        propertyValueKinds: Object.fromEntries(bodyItem.props.map((prop) => [prop.key, prop.valueKind])),
+        propertyOccurrences: bodyItem.props.map((prop) => ({ key: prop.key, rawValue: prop.rawValue, valueKind: prop.valueKind })),
         rawLine: inspected.source.sliceSpan(bodyItem.span),
         commentSuffix: extractTrailingCommentSuffix(inspected.source.sliceSpan(bodyItem.span)),
         lineChanged: false
@@ -1607,6 +1617,37 @@ function applyOperation(
       return applyInsertEdgeLine(model, documentPath, operation, placementPolicy, summary);
     case "remove_edge_line":
       return applyRemoveEdgeLine(model, documentPath, operation, summary);
+    case "set_edge_property":
+    case "remove_edge_property": {
+      const location = findBodyItemLocation(model.topLevelNodes, operation.edge_handle);
+      if (!location || location.item.kind !== "edge_line") return handleError(documentPath, operation.edge_handle);
+      const edge = location.item;
+      const from = edge.props[operation.key];
+      const occurrences = edge.propertyOccurrences?.filter((property) => property.key === operation.key) ?? [];
+      if (occurrences.length > 1) return createDiagnostic(documentPath, "sdd.ambiguous_property", `Edge property '${operation.key}' occurs more than once on the selected declaration.`);
+      if (operation.kind === "remove_edge_property" && from === undefined) return undefined;
+      if (operation.kind === "set_edge_property") {
+        edge.props[operation.key] = operation.raw_value;
+        edge.propertyValueKinds = { ...edge.propertyValueKinds, [operation.key]: operation.value_kind };
+        if (edge.propertyOccurrences) {
+          const property = occurrences[0];
+          if (property) { property.rawValue = operation.raw_value; property.valueKind = operation.value_kind; }
+          else edge.propertyOccurrences.push({ key: operation.key, rawValue: operation.raw_value, valueKind: operation.value_kind });
+        }
+      } else {
+        delete edge.props[operation.key];
+        if (edge.propertyValueKinds) delete edge.propertyValueKinds[operation.key];
+        if (edge.propertyOccurrences) edge.propertyOccurrences = edge.propertyOccurrences.filter((property) => property.key !== operation.key);
+      }
+      edge.lineChanged = true;
+      (summary.edge_property_changes ??= []).push({
+        edge_handle: operation.edge_handle,
+        key: operation.key,
+        from,
+        ...(operation.kind === "set_edge_property" ? { to: operation.raw_value } : {})
+      });
+      return undefined;
+    }
     case "reposition_top_level_node":
       return applyRepositionTopLevelNode(model, documentPath, operation, summary);
     case "reposition_structural_edge":
@@ -1732,6 +1773,9 @@ export function remapOperationHandles(
           kind: operation.kind,
           edge_handle: resolveMappedHandle(operation.edge_handle, mapping) ?? operation.edge_handle
         };
+      case "set_edge_property":
+      case "remove_edge_property":
+        return { ...operation, edge_handle: resolveMappedHandle(operation.edge_handle, mapping) ?? operation.edge_handle };
       case "reposition_top_level_node":
         return {
           kind: operation.kind,
@@ -1781,6 +1825,12 @@ function remapSummaryHandles(
       ...entry,
       node_handle: resolveMappedHandle(entry.node_handle, mapping) ?? entry.node_handle
     })),
+    ...(summary.edge_property_changes ? {
+      edge_property_changes: summary.edge_property_changes.map((entry) => ({
+        ...entry,
+        edge_handle: resolveMappedHandle(entry.edge_handle, mapping) ?? entry.edge_handle
+      }))
+    } : {}),
     edge_insertions: summary.edge_insertions.map((entry) => ({
       ...entry,
       handle: resolveMappedHandle(entry.handle, mapping),
@@ -1857,6 +1907,28 @@ function prepareOperationsForExecution(
   });
 }
 
+/** Canonical serialization follows the active bundle's reference-list convention. */
+function normalizeMembershipOperations(bundle: Bundle, operations: ChangeOperation[]): ChangeOperation[] {
+  const descriptor = bundle.contracts.diagram_membership;
+  if (!descriptor) return operations;
+  const normalize = (key: string, value: string): string => {
+    if (key !== descriptor.membership_property) return value;
+    const references = value.split(descriptor.references.delimiter).map((entry) => descriptor.references.trim ? entry.trim() : entry);
+    // Invalid empty entries must survive to the resolver instead of being silently repaired.
+    if (references.some((entry) => entry.length === 0)) return value;
+    return [...new Set(references)].sort().join(descriptor.references.delimiter);
+  };
+  return operations.map((operation) => {
+    if (operation.kind === "set_node_property" || operation.kind === "set_edge_property") {
+      return { ...operation, raw_value: normalize(operation.key, operation.raw_value) };
+    }
+    if (operation.kind === "insert_edge_line" && operation.props) {
+      return { ...operation, props: Object.fromEntries(Object.entries(operation.props).map(([key, value]) => [key, normalize(key, value)])) };
+    }
+    return operation;
+  });
+}
+
 export async function executeChangeOperations(
   workspace: AuthoringWorkspace,
   bundle: Bundle,
@@ -1867,7 +1939,8 @@ export async function executeChangeOperations(
   const mode = args.mode ?? "dry_run";
   const evaluationOptions: EvaluationOptions = {
     validate_profile: args.validate_profile,
-    projection_views: args.projection_views
+    projection_views: args.projection_views,
+    projection_diagrams: args.projection_diagrams
   };
   const createsDocument = args.initialDocument?.kind === "must_not_exist";
   const changeSet = createBaseChangeSetResult(
@@ -1879,7 +1952,7 @@ export async function executeChangeOperations(
     mode,
     []
   );
-  const preparedOperations = prepareOperationsForExecution(changeSet.change_set_id, args.operations);
+  const preparedOperations = prepareOperationsForExecution(changeSet.change_set_id, normalizeMembershipOperations(bundle, args.operations));
   changeSet.operations = remapOperationHandles(preparedOperations, new Map());
 
   let rawText: string;
@@ -1986,6 +2059,29 @@ export async function executeChangeOperations(
 
   const candidateText = renderDocumentModel(bundle, syntax, model);
   const evaluated = evaluateDocumentText(bundle, resolvedPath.publicPath, candidateText, evaluationOptions);
+  const changesEdgeProperties = preparedOperations.some((operation) =>
+    operation.kind === "set_edge_property" || operation.kind === "remove_edge_property"
+  );
+  const membership = bundle.contracts.diagram_membership;
+  const changesReservedMetadata = membership && preparedOperations.some((operation) =>
+    ((operation.kind === "set_node_property" || operation.kind === "remove_node_property" || operation.kind === "set_edge_property" || operation.kind === "remove_edge_property") &&
+      [membership.membership_property, membership.type_property].includes(operation.key)) ||
+    (operation.kind === "insert_node_block" && operation.node_type === membership.declaration_type) ||
+    (operation.kind === "insert_edge_line" && operation.props && Object.prototype.hasOwnProperty.call(operation.props, membership.membership_property))
+  );
+  const candidateErrors = evaluated.graph
+    ? [
+        ...resolveDocumentDiagrams(evaluated.graph, bundle).diagnostics.filter((diagnostic) => diagnostic.severity === "error"),
+        ...evaluated.diagnostics.filter((diagnostic) => changesEdgeProperties && diagnostic.severity === "error" &&
+          (diagnostic.stage === "parse" || diagnostic.stage === "compile"))
+      ]
+    : evaluated.diagnostics.filter((diagnostic) => diagnostic.severity === "error" &&
+        (changesEdgeProperties || changesReservedMetadata || diagnostic.code === "compile.duplicate_reserved_property"));
+  if (candidateErrors.length > 0) {
+    const rejected = createRejectedChangeSet(changeSet, candidateErrors, evaluated);
+    if (mode === "dry_run") await journal.recordChangeSet(rejected);
+    return { changeSet: rejected, tempHandleMapping: new Map() };
+  }
   const candidateInspected = inspectDocumentText(bundle, resolvedPath.publicPath, candidateText);
   const tempHandleMapping =
     candidateInspected.kind === "sdd-inspected-document"

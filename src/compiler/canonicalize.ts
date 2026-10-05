@@ -1,7 +1,9 @@
 import {
   attachCompiledEdgeSourceSpan,
+  attachCompiledNodeSourceSpan,
   attachGraphAuthorOrder,
   getCompiledEdgeSourceSpan,
+  getCompiledNodeSourceSpan,
   getGraphAuthorOrder,
   type CompiledEdge,
   type CompiledGraph,
@@ -22,10 +24,13 @@ function compareNullableString(left: string | null, right: string | null): numbe
 }
 
 export function canonicalizeNode(node: CompiledNode): CompiledNode {
-  return {
+  const canonicalNode: CompiledNode = {
     ...node,
     props: sortProps(node.props)
   };
+  const span = getCompiledNodeSourceSpan(node);
+  if (span) attachCompiledNodeSourceSpan(canonicalNode, span);
+  return canonicalNode;
 }
 
 export function canonicalizeEdge(edge: CompiledEdge): CompiledEdge {

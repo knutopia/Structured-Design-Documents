@@ -13,9 +13,12 @@ import {
   createNewGuidedDocumentSnapshot
 } from "../authoring/guidedAddition/snapshot.js";
 import { createAuthoringWorkspace, findAuthoringRepoRoot } from "../authoring/workspace.js";
+import { computeDocumentRevision } from "../authoring/revisions.js";
+import { computeBundleFingerprint } from "../bundle/fingerprint.js";
 import { loadBundle } from "../bundle/loadBundle.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import { compileSource } from "../compiler/compileSource.js";
+import { listDiagrams, resolveDiagramSelection, resolveDocumentDiagrams } from "../diagrams/resolveDiagrams.js";
 import type { CompiledGraph, CompileResult } from "../compiler/types.js";
 import { formatJsonDiagnostics } from "../diagnostics/formatJson.js";
 import { formatPrettyDiagnostics } from "../diagnostics/formatPretty.js";
@@ -202,6 +205,7 @@ export interface CliDeps extends GuidedAdditionCliDeps {
   renderSource: (input: SourceInput, bundle: Bundle, options: RenderOptions) => RenderResult;
   renderSourcePreview: (input: SourceInput, bundle: Bundle, options: {
     viewId: string;
+    diagramId?: string;
     format: PreviewFormat;
     profileId: string;
     detailId: string;
@@ -522,9 +526,13 @@ async function runValidate(
 async function runRenderText(
   deps: CliDeps,
   inputPath: string,
-  options: { bundle?: string; profile?: string; detail?: string; view: string; format: string; out?: string; diagnostics: string }
+  options: { bundle?: string; profile?: string; detail?: string; view?: string; diagram?: string; format: string; out?: string; diagnostics: string }
 ): Promise<{ exitCode: number; text?: string; sourcePath?: string; bundle?: Bundle; view?: ViewSpec }> {
   try {
+    if ((!options.view && !options.diagram) || options.view === "all" || options.diagram === "all") {
+      deps.stderr(appendLine("Select one target with --view <view> or --diagram <id>."));
+      return { exitCode: 2 };
+    }
     const expectedExtension = options.format === "dot" ? "dot" : options.format === "mermaid" ? "mmd" : undefined;
     if (expectedExtension) {
       const outputValidation = validateOutputExtension(options.out, expectedExtension, "--out");
@@ -541,14 +549,29 @@ async function runRenderText(
     }, defaultsSources);
     const profileId = settings.profile.value;
     const detailId = settings.detail.value;
-    const supported = ensureTextFormat(bundle, options.view, options.format);
+    let viewId = options.view!;
+    if (options.diagram !== undefined) {
+      const compiled = deps.compileSource(input, bundle);
+      if (!compiled.graph || hasErrors(compiled.diagnostics)) {
+        writeDiagnostics(deps, compiled.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+        return { exitCode: 1 };
+      }
+      const selected = resolveDiagramSelection(compiled.graph, bundle, { viewId: options.view, diagramId: options.diagram });
+      if (hasErrors(selected.diagnostics)) {
+        writeDiagnostics(deps, selected.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+        return { exitCode: 1 };
+      }
+      viewId = selected.viewId;
+    }
+    const supported = ensureTextFormat(bundle, viewId, options.format);
     if (!supported.capability) {
       deps.stderr(appendLine(supported.message ?? `Unsupported render request for view '${options.view}'.`));
       return { exitCode: 2 };
     }
 
     const result = deps.renderSource(input, bundle, {
-      viewId: options.view,
+      viewId,
+      ...(options.diagram !== undefined ? { diagramId: options.diagram } : {}),
       format: options.format as TextRenderFormat,
       profileId,
       detailId
@@ -665,6 +688,7 @@ function resolveShowPreviewCapability(
 }
 
 interface ShowAllCandidate {
+  diagramId?: string;
   view: ViewSpec;
   capability: ViewRenderCapability;
   previewCapability: NonNullable<ReturnType<typeof resolveShowPreviewCapability>>;
@@ -675,6 +699,7 @@ async function runShowAllCommand(
   bundle: Bundle,
   input: SourceInput,
   options: {
+    named?: boolean;
     profileId: string;
     detailId: string;
     nodeDecoratorModeId: string;
@@ -685,56 +710,94 @@ async function runShowAllCommand(
     diagnostics: string;
   }
 ): Promise<number> {
-  const candidates: ShowAllCandidate[] = bundle.views.views.flatMap((view) => {
-    if (view.status !== "operational") return [];
+  if (options.named && !bundle.contracts.diagram_membership) {
+    deps.stderr(appendLine("The loaded bundle does not support named diagrams."));
+    return 1;
+  }
+  const namedCompile = options.named ? deps.compileSource(input, bundle) : undefined;
+  if (namedCompile && (!namedCompile.graph || hasErrors(namedCompile.diagnostics))) {
+    writeDiagnostics(deps, namedCompile.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+    return 1;
+  }
+  const namedSourceDiagnostics = [...(namedCompile?.diagnostics ?? [])];
+  if (namedCompile?.graph) {
+    const validation = deps.validateGraph(namedCompile.graph, bundle, options.profileId);
+    namedSourceDiagnostics.push(...validation.diagnostics);
+    if (validation.errorCount > 0) {
+      writeDiagnostics(deps, namedSourceDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+      return 1;
+    }
+  }
+  const targets = options.named
+    ? listDiagrams(namedCompile!.graph!, bundle).map((diagram) => ({
+      view: bundle.views.views.find((view) => view.id === diagram.viewId),
+      diagramId: diagram.diagramId
+    }))
+    : bundle.views.views.map((view) => ({ view, diagramId: undefined }));
+  const candidates: ShowAllCandidate[] = targets.flatMap(({ view, diagramId }) => {
+    if (!view || view.status !== "operational") return [];
     const capability = getViewRenderCapability(view.id);
     if (!capability || !getSupportedPreviewFormats(capability).includes(options.format)) return [];
-    const previewCapability = resolveShowPreviewCapability(
-      capability,
-      options.format,
-      options.backendId,
-      false
-    );
-    return previewCapability ? [{ view, capability, previewCapability }] : [];
+    const previewCapability = resolveShowPreviewCapability(capability, options.format, options.backendId, false);
+    return previewCapability ? [{ view, capability, previewCapability, ...(diagramId ? { diagramId } : {}) }] : [];
   });
 
+  const unsupportedTargets: Array<{ viewId: string; diagramId?: string }> = [];
+  const backendDiagnostics: Diagnostic[] = [];
   if (options.backendId) {
-    const backendIncompatible = bundle.views.views.flatMap((view) => {
-      if (view.status !== "operational") return [];
+    const backendIncompatible = targets.flatMap(({ view, diagramId }) => {
+      if (!view || view.status !== "operational") return [];
       const capability = getViewRenderCapability(view.id);
       if (!capability || !getSupportedPreviewFormats(capability).includes(options.format)) return [];
-      return getPreviewArtifactCapability(capability, options.format, options.backendId) ? [] : [view.id];
+      return getPreviewArtifactCapability(capability, options.format, options.backendId) ? [] : [{ viewId: view.id, diagramId }];
     });
     if (backendIncompatible.length > 0) {
-      deps.stderr(appendLine(
-        `Preview backend '${options.backendId}' is not supported for every available ${options.format} view. Incompatible views: ${formatList(backendIncompatible)}.`
-      ));
-      return 2;
+      if (!options.named) {
+        deps.stderr(appendLine(
+          `Preview backend '${options.backendId}' is not supported for every available ${options.format} view. Incompatible views: ${formatList(backendIncompatible.map(({ viewId }) => viewId))}.`
+        ));
+        return 2;
+      }
+      unsupportedTargets.push(...backendIncompatible);
+      backendDiagnostics.push(...backendIncompatible.map(({ viewId, diagramId }) => ({
+        stage: "render" as const,
+        code: "renderer.unsupported_preview_backend",
+        severity: "error" as const,
+        message: `Diagram '${diagramId}' (${viewId}) does not support preview backend '${options.backendId}' for '${options.format}'.`,
+        file: input.path,
+        relatedIds: diagramId ? [diagramId, viewId] : [viewId]
+      })));
     }
   }
 
-  if (candidates.length === 0) {
-    deps.stderr(appendLine(`No operational renderable views support preview format '${options.format}'.`));
-    return 2;
-  }
-
-  const compileResult = deps.compileSource(input, bundle);
-  const sourceDiagnostics = [...compileResult.diagnostics];
+  const compileResult = namedCompile ?? deps.compileSource(input, bundle);
+  const sourceDiagnostics = options.named ? namedSourceDiagnostics : [...compileResult.diagnostics];
   if (!compileResult.graph || hasErrors(sourceDiagnostics)) {
     writeDiagnostics(deps, sourceDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
     return 1;
   }
-  const validation = deps.validateGraph(compileResult.graph, bundle, options.profileId);
-  sourceDiagnostics.push(...validation.diagnostics);
-  if (validation.errorCount > 0) {
-    writeDiagnostics(deps, sourceDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
-    return 1;
+  if (!options.named) {
+    const validation = deps.validateGraph(compileResult.graph, bundle, options.profileId);
+    sourceDiagnostics.push(...validation.diagnostics);
+    if (validation.errorCount > 0) {
+      writeDiagnostics(deps, sourceDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+      return 1;
+    }
+  }
+
+  if (candidates.length === 0) {
+    writeDiagnostics(deps, [...sourceDiagnostics, ...backendDiagnostics], normalizeDiagnosticsFormat(options.diagnostics));
+    deps.stderr(appendLine(options.named
+      ? "No declared named diagrams can produce the requested artifact."
+      : `No operational renderable views support preview format '${options.format}'.`));
+    return options.named ? 1 : 2;
   }
 
   const preparedCandidates = candidates.map((candidate) => ({
     candidate,
     prepared: deps.prepareCompiledGraphPreview(input.path, compileResult.graph!, bundle, {
       viewId: candidate.view.id,
+      ...(candidate.diagramId ? { diagramId: candidate.diagramId } : {}),
       format: options.format,
       profileId: options.profileId,
       detailId: options.detailId,
@@ -743,43 +806,51 @@ async function runShowAllCommand(
       force: options.force
     })
   }));
+  if (options.named) {
+    for (const { prepared } of preparedCandidates) {
+      prepared.diagnostics = prepared.diagnostics.map((diagnostic) => diagnostic.code === "renderer.diagram_no_visible_content"
+        ? { ...diagnostic, severity: "warn" as const }
+        : diagnostic);
+    }
+  }
   const preparationDiagnostics = preparedCandidates.flatMap(({ prepared }) => prepared.diagnostics);
-  if (hasErrors(preparationDiagnostics)) {
+  if (hasErrors(preparationDiagnostics) && !options.named) {
     writeDiagnostics(
       deps,
-      [...sourceDiagnostics, ...preparationDiagnostics],
+      [...sourceDiagnostics, ...backendDiagnostics, ...preparationDiagnostics],
       normalizeDiagnosticsFormat(options.diagnostics)
     );
     return 1;
   }
 
   const applicable = preparedCandidates.filter(({ candidate, prepared }) =>
-    prepared.prepared && isBatchApplicable(candidate.view, prepared.prepared)
+    prepared.prepared && !hasErrors(prepared.diagnostics) && isBatchApplicable(candidate.view, prepared.prepared)
   );
   const skipped = preparedCandidates.filter(({ candidate, prepared }) =>
-    !prepared.prepared || !isBatchApplicable(candidate.view, prepared.prepared)
+    !prepared.prepared || hasErrors(prepared.diagnostics) || !isBatchApplicable(candidate.view, prepared.prepared)
   );
 
   if (applicable.length === 0) {
     writeDiagnostics(
       deps,
-      [...sourceDiagnostics, ...preparationDiagnostics],
+      [...sourceDiagnostics, ...backendDiagnostics, ...preparationDiagnostics],
       normalizeDiagnosticsFormat(options.diagnostics)
     );
     for (const { prepared } of skipped) writeNotes(deps, prepared.prepared?.notes ?? []);
     deps.stderr(appendLine(
       `No applicable diagrams found for detail '${options.detailId}'. Considered ${candidates.length} view(s).`
     ));
-    return 0;
+    return options.named ? 1 : 0;
   }
 
   const outputEntries = applicable.map(({ candidate, prepared }) => ({
     candidate,
     prepared,
     outputPath: options.out
-      ? buildExplicitBatchPreviewOutputPath(resolveLauncherPath(options.out), candidate.view.id)
+      ? buildExplicitBatchPreviewOutputPath(resolveLauncherPath(options.out), candidate.view.id, candidate.diagramId)
       : buildShowPreviewOutputPath(input.path, {
         viewId: candidate.view.id,
+        ...(candidate.diagramId ? { diagramId: candidate.diagramId } : {}),
         detailId: options.detailId,
         nodeDecoratorModeId: options.nodeDecoratorModeId,
         format: options.format,
@@ -797,7 +868,9 @@ async function runShowAllCommand(
     outputPath: string;
     result: SourcePreviewRenderResult;
   }> = [];
-  const failedRenderers: ShowAllCandidate[] = [];
+  const failedRenderers: ShowAllCandidate[] = skipped
+    .filter(({ prepared }) => hasErrors(prepared.diagnostics))
+    .map(({ candidate }) => candidate);
   for (const entry of outputEntries) {
     try {
       const result = await deps.renderPreparedCompiledGraphPreview(
@@ -807,7 +880,7 @@ async function runShowAllCommand(
         entry.prepared
       );
       renderedEntries.push({ candidate: entry.candidate, outputPath: entry.outputPath, result });
-      deps.stderr(appendLine(`Rendered view '${entry.candidate.view.id}'`));
+      deps.stderr(appendLine(`Rendered ${entry.candidate.diagramId ? `diagram '${entry.candidate.diagramId}'` : `view '${entry.candidate.view.id}'`}`));
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
       deps.stderr(appendLine(appendInstallHint(message, entry.candidate.previewCapability.backendId)));
@@ -818,6 +891,7 @@ async function runShowAllCommand(
   const renderDiagnostics = renderedEntries.flatMap(({ result }) => result.diagnostics);
   const allDiagnostics = [
     ...sourceDiagnostics,
+    ...backendDiagnostics,
     ...skipped.flatMap(({ prepared }) => prepared.diagnostics),
     ...renderDiagnostics
   ];
@@ -838,11 +912,12 @@ async function runShowAllCommand(
     ];
     generatedFiles.push({ outputPath, postfix: notices.length > 0 ? ` (${notices.join(", ")})` : "" });
   }
-  const skippedSuffix = skipped.length > 0
-    ? ` Skipped ${skipped.length} without visible content: ${formatList(skipped.map(({ candidate }) => candidate.view.id))}.`
+  const nonVisible = skipped.filter(({ prepared }) => !hasErrors(prepared.diagnostics));
+  const skippedSuffix = nonVisible.length > 0
+    ? ` Skipped ${nonVisible.length} without visible content: ${formatList(nonVisible.map(({ candidate }) => candidate.diagramId ?? candidate.view.id))}.`
     : "";
   deps.stderr(appendLine(``));
-  deps.stderr(appendLine(`Generated ${generatedFiles.length} diagram(s). Failed ${failedRenderers.length} renderer(s).${skippedSuffix}`));
+  deps.stderr(appendLine(`Generated ${generatedFiles.length} diagram(s). Failed ${failedRenderers.length + unsupportedTargets.length} renderer(s).${skippedSuffix}`));
   if (generatedFiles.length > 0) {
     deps.stderr(appendLine(`Path: ${path.dirname(resolveLauncherPath(generatedFiles[0].outputPath))}`));
   }
@@ -850,7 +925,10 @@ async function runShowAllCommand(
     deps.stderr(appendLine(`${path.basename(outputPath)}${postfix}`));
   }
   for (const candidate of candidates.filter((candidate) => failedRenderers.includes(candidate))) {
-    deps.stderr(appendLine(`Failed renderer: ${candidate.view.id} (${candidate.previewCapability.backendId})`));
+    deps.stderr(appendLine(`Failed renderer: ${candidate.diagramId ?? candidate.view.id} (${candidate.previewCapability.backendId})`));
+  }
+  for (const target of unsupportedTargets) {
+    deps.stderr(appendLine(`Failed renderer: ${target.diagramId ?? target.viewId} (${options.backendId})`));
   }
   return failedRenderers.length > 0 || hasErrors(allDiagnostics) ? 1 : 0;
 }
@@ -863,7 +941,8 @@ async function runShowCommand(
     profile?: string;
     detail?: string;
     decorators?: string;
-    view: string;
+    view?: string;
+    diagram?: string;
     format: string;
     out?: string;
     dotOut?: string;
@@ -873,10 +952,18 @@ async function runShowCommand(
   }
 ): Promise<number> {
   try {
-    const requestedPreviewFormat = (options.format || getViewRenderCapability(options.view)?.defaultPreviewFormat || "svg") as PreviewFormat;
+    if (!options.view && !options.diagram) {
+      deps.stderr(appendLine("Select a target with --view <view> or --diagram <id>."));
+      return 2;
+    }
+    if ((options.view === "all" && options.diagram !== undefined) || (options.diagram === "all" && options.view !== undefined)) {
+      deps.stderr(appendLine("A batch selector cannot be combined with another selector."));
+      return 2;
+    }
+    const requestedPreviewFormat = (options.format || getViewRenderCapability(options.view ?? "")?.defaultPreviewFormat || "svg") as PreviewFormat;
     const requestedBackendId = options.backend as PreviewRendererBackendId | undefined;
-    if (options.view === "all" && options.dotOut) {
-      deps.stderr(appendLine("--dot-out cannot be used with '--view all'. Select one view to keep an intermediate DOT file."));
+    if ((options.view === "all" || options.diagram === "all") && options.dotOut) {
+      deps.stderr(appendLine("--dot-out cannot be used with '--view all' or '--diagram all'. Select one target to keep an intermediate DOT file."));
       return 2;
     }
     const previewOutputValidation = validateOutputExtension(options.out, requestedPreviewFormat, "--out");
@@ -899,8 +986,9 @@ async function runShowCommand(
     const profileId = settings.profile.value;
     const detailId = settings.detail.value;
     const nodeDecoratorModeId = settings.decorators.value;
-    if (options.view === "all") {
+    if (options.view === "all" || options.diagram === "all") {
       return runShowAllCommand(deps, bundle, input, {
+        ...(options.diagram === "all" ? { named: true } : {}),
         profileId,
         detailId,
         nodeDecoratorModeId,
@@ -911,7 +999,21 @@ async function runShowCommand(
         diagnostics: options.diagnostics
       });
     }
-    const supported = ensurePreviewFormat(bundle, options.view, requestedPreviewFormat, requestedBackendId);
+    let viewId = options.view!;
+    if (options.diagram !== undefined) {
+      const compiled = deps.compileSource(input, bundle);
+      if (!compiled.graph || hasErrors(compiled.diagnostics)) {
+        writeDiagnostics(deps, compiled.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+        return 1;
+      }
+      const selected = resolveDiagramSelection(compiled.graph, bundle, { viewId: options.view, diagramId: options.diagram });
+      if (hasErrors(selected.diagnostics)) {
+        writeDiagnostics(deps, selected.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+        return 1;
+      }
+      viewId = selected.viewId;
+    }
+    const supported = ensurePreviewFormat(bundle, viewId, requestedPreviewFormat, requestedBackendId);
     if (!supported.capability || !supported.view) {
       deps.stderr(appendLine(supported.message ?? `Unsupported preview request for view '${options.view}'.`));
       return 2;
@@ -938,7 +1040,8 @@ async function runShowCommand(
     }
 
     const previewPath = options.out ?? buildShowPreviewOutputPath(input.path, {
-      viewId: options.view,
+      viewId,
+      ...(options.diagram !== undefined ? { diagramId: options.diagram } : {}),
       detailId,
       nodeDecoratorModeId,
       format: requestedPreviewFormat,
@@ -947,7 +1050,8 @@ async function runShowCommand(
     try {
       const renderResult = await deps.renderSourcePreview(input, bundle, {
         backendId: previewCapability.backendId,
-        viewId: options.view,
+        viewId,
+        ...(options.diagram !== undefined ? { diagramId: options.diagram } : {}),
         format: requestedPreviewFormat,
         profileId,
         detailId,
@@ -978,6 +1082,61 @@ async function runShowCommand(
       deps.stderr(appendLine(appendInstallHint(message, previewCapability.backendId)));
       return 1;
     }
+  } catch (error) {
+    deps.stderr(appendLine(error instanceof Error ? error.message : String(error)));
+    return 1;
+  }
+}
+
+async function runDiagramsCommand(
+  deps: CliDeps,
+  inputPath: string,
+  options: { bundle?: string; json?: boolean; details?: boolean; diagnostics: string }
+): Promise<number> {
+  try {
+    const { bundle, input } = await prepareContext(deps, options.bundle, inputPath);
+    if (!bundle.contracts.diagram_membership) {
+      deps.stderr(appendLine("The loaded bundle does not support named diagrams."));
+      return 1;
+    }
+    const compiled = deps.compileSource(input, bundle);
+    if (!compiled.graph || hasErrors(compiled.diagnostics)) {
+      writeDiagnostics(deps, compiled.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+      return 1;
+    }
+    const resolved = resolveDocumentDiagrams(compiled.graph, bundle);
+    const diagrams = resolved.diagrams.map((diagram) => ({
+      diagram_id: diagram.diagramId,
+      diagram_name: diagram.diagramName,
+      ...(diagram.viewId !== undefined ? { view_id: diagram.viewId } : {}),
+      ...(diagram.nodeCount !== undefined ? { node_count: diagram.nodeCount } : {}),
+      ...(diagram.edgeCount !== undefined ? { edge_count: diagram.edgeCount } : {}),
+      diagnostics: diagram.diagnostics,
+      ...(options.details ? {
+        node_ids: diagram.nodeIds,
+        source_edge_ids: diagram.edgeIds,
+        inclusions: diagram.inclusions.map(({ nodeId, reasons }) => ({ node_id: nodeId, reasons }))
+      } : {})
+    }));
+    if (options.json) {
+      deps.stdout(appendLine(JSON.stringify({
+        document_path: input.path,
+        revision: computeDocumentRevision(input.text),
+        version: compiled.graph.version,
+        bundle_manifest: bundle.manifestPath,
+        bundle_fingerprint: computeBundleFingerprint(bundle),
+        diagrams,
+        diagnostics: resolved.diagnostics
+      }, null, 2)));
+    } else {
+      for (const diagram of diagrams) {
+        deps.stdout(appendLine(`${diagram.diagram_id}\t${diagram.view_id ?? "invalid"}\t${diagram.diagram_name}\t${diagram.node_count ?? "?"} node(s), ${diagram.edge_count ?? "?"} edge(s)`));
+        if (options.details) deps.stdout(appendLine(JSON.stringify({ node_ids: diagram.node_ids, source_edge_ids: diagram.source_edge_ids, inclusions: diagram.inclusions }, null, 2)));
+      }
+      if (diagrams.length === 0) deps.stdout("No named diagrams declared.\n");
+      writeDiagnostics(deps, resolved.diagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+    }
+    return hasErrors(resolved.diagnostics) ? 1 : 0;
   } catch (error) {
     deps.stderr(appendLine(error instanceof Error ? error.message : String(error)));
     return 1;
@@ -1281,11 +1440,24 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     });
 
   program
+    .command("diagrams")
+    .summary("List declared named diagrams and their semantic inventories")
+    .argument("<input>", "source .sdd file")
+    .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
+    .option("--json", "emit structured diagram discovery")
+    .option("--details", "include member IDs, exact edge references, and inclusion reasons")
+    .option("--diagnostics <format>", "diagnostics format (pretty or json)", "pretty")
+    .action(async (inputPath, options) => {
+      setExitCode(await runDiagramsCommand(deps, inputPath, options));
+    });
+
+  program
     .command("render", { hidden: true })
     .summary("Emit internal DOT or Mermaid text artifacts for a specific view")
     .description("Internal/debug renderer command. These text artifacts are retained for tests, corpus generation, and debugging. Use `sdd show` for supported SVG/PNG preview output.")
     .argument("<input>", "source .sdd file")
-    .requiredOption("--view <view>", "view id")
+    .option("--view <view>", "combined view id")
+    .option("--diagram <id>", "named Diagram ID; infer its view type")
     .requiredOption("--format <format>", "internal text render format (dot or mermaid)")
     .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
@@ -1300,7 +1472,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       "sdd render bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --format dot --out ./scenario.dot --bundle bundle/v0.1/manifest.yaml",
       "sdd render bundle/v0.1/examples/place_viewstate_transition.sdd --view ui_contracts --format dot --out ./ui-contracts.dot --bundle bundle/v0.1/manifest.yaml"
     ]))
-    .action(async (inputPath, options) => {
+    .action(async (inputPath, options, command: Command) => {
+      if (!options.view && !options.diagram) command.error("error: select --view <view> or --diagram <id>");
       const result = await runRenderText(deps, inputPath, options);
       setExitCode(result.exitCode);
     });
@@ -1354,7 +1527,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Compile, validate, and produce preview artifacts for one or all applicable views")
     .description("Preferred preview command for renderable views. Use `--view all` to generate every operational view with visible content after applying render detail. SVG is the default output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.")
     .argument("<input>", "source .sdd file")
-    .requiredOption("--view <view>", "view id, or all for every applicable view")
+    .option("--view <view>", "combined view id, or all for every applicable combined view")
+    .option("--diagram <id>", "named Diagram ID, or all for declared named diagrams")
     .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
@@ -1380,7 +1554,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --format png --out ./outcome.png --bundle bundle/v0.1/manifest.yaml",
       "Some bundle-defined views may appear before they become renderable in the CLI."
     ]))
-    .action(async (inputPath, options) => {
+    .action(async (inputPath, options, command: Command) => {
+      if (!options.view && !options.diagram) command.error("error: select --view <view> or --diagram <id>");
       setExitCode(await runShowCommand(deps, inputPath, options));
     });
 

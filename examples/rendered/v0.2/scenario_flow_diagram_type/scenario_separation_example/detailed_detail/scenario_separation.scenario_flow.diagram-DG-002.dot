@@ -1,0 +1,18 @@
+digraph "Node pivot" {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.7, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_step {
+    rank=same;
+    "lane_step" [shape=plaintext, label="Steps"];
+    "SS-001" [shape="diamond", label="Choose an editing action"];
+    "SS-006" [shape="box", style="rounded", label="Choose the pivot node"];
+    "SS-007" [shape="box", style="rounded", label="Inspect related content"];
+    "SS-008" [shape="box", style="rounded", label="Return to the document"];
+  }
+  "lane_step" -> "SS-001" [style=invis, weight=100];
+  "SS-001" -> "SS-006" [label="pivot node", weight=4];
+  "SS-006" -> "SS-007" [weight=4];
+  "SS-007" -> "SS-008" [weight=4];
+}

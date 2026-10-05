@@ -1,0 +1,16 @@
+digraph "Create new view" {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.7, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_step {
+    rank=same;
+    "lane_step" [shape=plaintext, label="Steps"];
+    "SS-009" [shape="box", style="rounded", label="Choose a diagram type"];
+    "SS-010" [shape="box", style="rounded", label="Name the new view"];
+    "SS-011" [shape="box", style="rounded", label="Review the empty view"];
+  }
+  "lane_step" -> "SS-009" [style=invis, weight=100];
+  "SS-009" -> "SS-010" [weight=4];
+  "SS-010" -> "SS-011" [weight=4];
+}

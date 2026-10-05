@@ -1,0 +1,10 @@
+flowchart TB
+  subgraph n_step["Steps"]
+    n_SS_001{"Choose an editing action"}
+    n_SS_006("Choose the pivot node")
+    n_SS_007("Inspect related content")
+    n_SS_008("Return to the document")
+  end
+  n_SS_001 -->|pivot node| n_SS_006
+  n_SS_006 --> n_SS_007
+  n_SS_007 --> n_SS_008

@@ -2,6 +2,7 @@ import type { Bundle } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import { compileSource } from "../compiler/compileSource.js";
 import { sortDiagnostics, type Diagnostic } from "../diagnostics/types.js";
+import { resolveDiagramSelection } from "../diagrams/resolveDiagrams.js";
 import { projectView } from "../projector/projectView.js";
 import type { ProjectionResult } from "../projector/types.js";
 import { validateGraph } from "../validator/validateGraph.js";
@@ -17,6 +18,7 @@ import { computeDocumentRevision, normalizeTextToLf } from "./revisions.js";
 export interface EvaluationOptions {
   validate_profile?: ProfileId;
   projection_views?: ViewId[];
+  projection_diagrams?: string[];
 }
 
 export interface EvaluatedDocumentText {
@@ -57,11 +59,18 @@ export function evaluateDocumentText(
   }
 
   let projectionResults: ProjectionResultEntry[] | undefined;
-  if (options.projection_views && options.projection_views.length > 0) {
-    projectionResults = options.projection_views.map((viewId) => {
+  const targets = [
+    ...(options.projection_views ?? []).map((viewId) => ({ viewId, diagramId: undefined as string | undefined })),
+    ...(options.projection_diagrams ?? []).map((diagramId) => ({ viewId: undefined as string | undefined, diagramId }))
+  ];
+  if (targets.length > 0) {
+    projectionResults = targets.map((target) => {
       let projected: ProjectionResult;
+      const selection = compileResult.graph ? resolveDiagramSelection(compileResult.graph, bundle, target) : undefined;
       if (compileResult.graph) {
-        projected = projectView(compileResult.graph, bundle, viewId);
+        projected = selection?.diagnostics.some((diagnostic) => diagnostic.severity === "error")
+          ? { diagnostics: selection.diagnostics }
+          : projectView(compileResult.graph, bundle, selection!.viewId, { diagramId: target.diagramId });
       } else {
         projected = {
           diagnostics: compileResult.diagnostics
@@ -69,7 +78,9 @@ export function evaluateDocumentText(
       }
 
       return {
-        view_id: viewId,
+        view_id: selection?.viewId ?? target.viewId ?? "",
+        ...(target.diagramId ? { diagram_id: target.diagramId } : {}),
+        ...(selection?.diagramName ? { diagram_name: selection.diagramName } : {}),
         projection: projected.projection,
         diagnostics: sortDiagnostics(projected.diagnostics)
       };

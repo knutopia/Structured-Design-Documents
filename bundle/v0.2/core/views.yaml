@@ -39,6 +39,7 @@ views:
     name: Outcome-Opportunity Map
     status: operational
     projection:
+      named_diagrams: { enabled: true }
       include_node_types: [ Outcome, Metric, Opportunity, Initiative ]
       include_edge_types: [ MEASURED_BY, SUPPORTS, ADDRESSES, IMPLEMENTED_BY, INSTRUMENTED_AT ]
       hierarchy_edges: []
@@ -757,6 +758,7 @@ views:
     name: Journey Map
     status: operational
     projection:
+      named_diagrams: { enabled: true }
       include_node_types: [ Stage, JourneyStep ]
       include_edge_types: [ CONTAINS, PRECEDES ]
       hierarchy_edges: [ CONTAINS ]
@@ -1434,6 +1436,7 @@ views:
     name: Service Blueprint
     status: operational
     projection:
+      named_diagrams: { enabled: true }
       include_node_types: [ BlueprintStep, Process, SystemAction, DataEntity, Policy ]
       include_edge_types: [ REALIZED_BY, DEPENDS_ON, READS, WRITES, CONSTRAINED_BY, PRECEDES ]
       hierarchy_edges: []
@@ -2114,6 +2117,7 @@ views:
     name: IA Place Map
     status: operational
     projection:
+      named_diagrams: { enabled: true }
       include_node_types: [ Area, Place ]
       include_edge_types: [ CONTAINS, NAVIGATES_TO ]
       hierarchy_edges: [ CONTAINS ]
@@ -2769,6 +2773,7 @@ views:
     name: Scenario Flow
     status: operational
     projection:
+      named_diagrams: { enabled: true }
       include_node_types: [ ScenarioStep, Place, ViewState ]
       include_edge_types: [ PRECEDES, REALIZED_BY, NAVIGATES_TO, TRANSITIONS_TO ]
       hierarchy_edges: []
@@ -3457,6 +3462,7 @@ views:
     name: UI Contracts
     status: operational
     projection:
+      named_diagrams: { enabled: true }
       include_node_types: [ Place, ViewState, Component, State, Event, DataEntity, SystemAction ]
       include_edge_types: [ COMPOSED_OF, CONTAINS, TRANSITIONS_TO, EMITS, BINDS_TO, DEPENDS_ON ]
       hierarchy_edges: [ COMPOSED_OF, CONTAINS ]

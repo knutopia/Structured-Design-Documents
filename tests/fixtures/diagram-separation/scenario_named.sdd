@@ -1,0 +1,56 @@
+SDD-TEXT 0.2
+
+ScenarioStep SS-001 "Choose an editing action"
+  kind=decision
+  PRECEDES SS-002 {add relationship} diagrams=DG-001
+  PRECEDES SS-006 {pivot node} diagrams=DG-002
+END
+
+ScenarioStep SS-002 "Choose the source node"
+  PRECEDES SS-003 diagrams=DG-001
+END
+
+ScenarioStep SS-003 "Choose the relationship"
+  PRECEDES SS-004 diagrams=DG-001
+END
+
+ScenarioStep SS-004 "Choose the target node"
+  PRECEDES SS-005 diagrams=DG-001
+END
+
+ScenarioStep SS-005 "Review the new relationship"
+END
+
+ScenarioStep SS-006 "Choose the pivot node"
+  PRECEDES SS-007 diagrams=DG-002
+END
+
+ScenarioStep SS-007 "Inspect related content"
+  PRECEDES SS-008 diagrams=DG-002
+END
+
+ScenarioStep SS-008 "Return to the document"
+END
+
+ScenarioStep SS-009 "Choose a diagram type"
+  PRECEDES SS-010 diagrams=DG-003
+END
+
+ScenarioStep SS-010 "Name the new view"
+  PRECEDES SS-011 diagrams=DG-003
+END
+
+ScenarioStep SS-011 "Review the empty view"
+END
+
+Diagram DG-001 "Add relationship"
+  diagram_type=scenario_flow
+END
+
+Diagram DG-002 "Node pivot"
+  diagram_type=scenario_flow
+END
+
+Diagram DG-003 "Create new view"
+  diagram_type=scenario_flow
+END

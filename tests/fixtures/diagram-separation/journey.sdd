@@ -1,0 +1,27 @@
+SDD-TEXT 0.2
+Diagram DG-101 "Primary journey"
+  diagram_type=journey_map
+END
+Diagram DG-102 "Other stage"
+  diagram_type=journey_map
+END
+Stage STG-101 "Discover"
+  CONTAINS J-101 diagrams=DG-101
+  CONTAINS J-102
+END
+Stage STG-102 "Review"
+  CONTAINS J-101 diagrams=DG-102
+END
+JourneyStep J-101 "Shared journey step"
+  opportunity_refs=OP-101
+  MAPS_TO B-101
+  REFINED_BY S-101
+END
+JourneyStep J-102 "Excluded sibling"
+END
+Opportunity OP-101 "Reference opportunity"
+END
+BlueprintStep B-101 "Reference service step"
+END
+ScenarioStep S-101 "Reference scenario step"
+END

@@ -614,6 +614,7 @@ export async function applyAuthoringIntent(
       operations: compiled.operations,
       validate_profile: args.validate_profile,
       projection_views: args.projection_views,
+      projection_diagrams: args.projection_diagrams,
       origin: "apply_authoring_intent",
       allowEmptyTemplateBootstrap: true
     },

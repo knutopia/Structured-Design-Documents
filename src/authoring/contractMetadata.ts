@@ -54,6 +54,13 @@ function objectSchema(
   return schema;
 }
 
+function selectionArgumentsSchema(properties: Record<string, JsonSchema>, required: string[]): JsonSchema {
+  return {
+    ...objectSchema(properties, required),
+    anyOf: [{ required: ["view_id"] }, { required: ["diagram_id"] }]
+  };
+}
+
 const anySchema: JsonSchema = {};
 const stringArraySchema = arraySchema(stringSchema());
 
@@ -170,6 +177,7 @@ const changeSetSummarySchema = objectSchema(
         ["node_handle", "key"]
       )
     ),
+    edge_property_changes: arraySchema(objectSchema({ edge_handle: stringSchema(), key: stringSchema(), from: stringSchema(), to: stringSchema() }, ["edge_handle", "key"])),
     edge_insertions: arraySchema(
       objectSchema(
         {
@@ -241,6 +249,8 @@ const changeSetSummarySchema = objectSchema(
 const projectionResultEntrySchema = objectSchema(
   {
     view_id: stringSchema(),
+    diagram_id: stringSchema(),
+    diagram_name: stringSchema(),
     projection: anySchema,
     diagnostics: arraySchema(diagnosticSchema)
   },
@@ -293,6 +303,15 @@ const removeNodePropertyOpSchema = objectSchema(
     key: stringSchema()
   },
   ["kind", "node_handle", "key"]
+);
+
+const setEdgePropertyOpSchema = objectSchema(
+  { kind: stringSchema(["set_edge_property"]), edge_handle: stringSchema(), key: stringSchema(), value_kind: stringSchema(["quoted_string", "bare_value"]), raw_value: stringSchema() },
+  ["kind", "edge_handle", "key", "value_kind", "raw_value"]
+);
+const removeEdgePropertyOpSchema = objectSchema(
+  { kind: stringSchema(["remove_edge_property"]), edge_handle: stringSchema(), key: stringSchema() },
+  ["kind", "edge_handle", "key"]
 );
 
 const insertEdgeLineOpSchema = objectSchema(
@@ -364,6 +383,8 @@ const changeOperationSchema: JsonSchema = {
     removeNodePropertyOpSchema,
     insertEdgeLineOpSchema,
     removeEdgeLineOpSchema,
+    setEdgePropertyOpSchema,
+    removeEdgePropertyOpSchema,
     repositionTopLevelNodeOpSchema,
     repositionStructuralEdgeOpSchema,
     moveNestedNodeBlockOpSchema,
@@ -677,6 +698,8 @@ const projectionResourceSchema = objectSchema(
     path: stringSchema(),
     revision: stringSchema(),
     view_id: stringSchema(),
+    diagram_id: stringSchema(),
+    diagram_name: stringSchema(),
     projection: anySchema,
     diagnostics: arraySchema(diagnosticSchema),
     assessment: authoringOutcomeAssessmentSchema
@@ -690,6 +713,8 @@ const renderPreviewResultSchema = objectSchema(
     path: stringSchema(),
     revision: stringSchema(),
     view_id: stringSchema(),
+    diagram_id: stringSchema(),
+    diagram_name: stringSchema(),
     profile_id: stringSchema(),
     detail_id: stringSchema(),
     backend_id: stringSchema(),
@@ -1357,6 +1382,7 @@ const applyAdditionProposalArgsSchema = objectSchema(
     mode: stringSchema(["dry_run", "commit"]),
     validate_profile: stringSchema(),
     projection_views: stringArraySchema,
+    projection_diagrams: stringArraySchema,
     accepted_warning_token: stringSchema()
   },
   ["proposal"]
@@ -1424,6 +1450,8 @@ const contractConstraintSpecSchema = objectSchema(
       "unique_within_request",
       "must_reference_earlier_local_id",
       "same_revision_handle",
+      "resolved_diagram_selection",
+      "atomic_membership_validation",
       "undo_change_set_eligibility",
       "commit_safe_continuation",
       "dry_run_informational_only",
@@ -1583,6 +1611,26 @@ const CONTRACT_PURPOSES: readonly ContractPurpose[] = ["request"];
 
 const SHAPES: readonly ContractShapeDescriptor[] = [
   {
+    shape_id: "shared.shape.list_diagrams_args", summary: "Inspect derived named-diagram inventories in one document.",
+    schema_format: "json_schema_2020_12", schema: objectSchema({ path: stringSchema(), details: booleanSchema() }, ["path"]), stability: "stable"
+  },
+  {
+    shape_id: "shared.shape.list_diagrams_result", summary: "Named declarations, exact inventories, and derived inclusion reasons.",
+    schema_format: "json_schema_2020_12", stability: "stable",
+    schema: objectSchema({
+      kind: stringSchema(["sdd-diagram-list"]), uri: stringSchema(), path: stringSchema(), revision: stringSchema(),
+      effective_version: stringSchema(),
+      bundle: objectSchema({ manifest_path: stringSchema(), version: stringSchema(), fingerprint: stringSchema() }, ["manifest_path", "version", "fingerprint"]),
+      diagrams: arraySchema(objectSchema({
+        diagram_id: stringSchema(), diagram_name: stringSchema(), view_id: stringSchema(), node_ids: stringArraySchema, edge_ids: stringArraySchema,
+        node_count: integerSchema(), edge_count: integerSchema(),
+        inclusions: arraySchema(objectSchema({ node_id: stringSchema(), reasons: stringArraySchema }, ["node_id", "reasons"])),
+        diagnostics: arraySchema(diagnosticSchema)
+      }, ["diagram_id", "diagram_name", "diagnostics"])),
+      diagnostics: arraySchema(diagnosticSchema)
+    }, ["kind", "uri", "path", "revision", "effective_version", "bundle", "diagrams", "diagnostics"])
+  },
+  {
     shape_id: "shared.shape.inspect_document_args",
     summary: "Input payload for helper inspect operations.",
     schema_format: "json_schema_2020_12",
@@ -1657,7 +1705,8 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
         mode: stringSchema(["dry_run", "commit"]),
         operations: arraySchema(changeOperationSchema),
         validate_profile: stringSchema(),
-        projection_views: stringArraySchema
+        projection_views: stringArraySchema,
+        projection_diagrams: stringArraySchema
       },
       ["path", "base_revision", "operations"]
     ),
@@ -1681,7 +1730,8 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
         mode: stringSchema(["dry_run", "commit"]),
         intents: arraySchema(insertNodeScaffoldIntentSchema),
         validate_profile: stringSchema(),
-        projection_views: stringArraySchema
+        projection_views: stringArraySchema,
+        projection_diagrams: stringArraySchema
       },
       ["path", "base_revision", "intents"]
     ),
@@ -1739,12 +1789,13 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
     shape_id: "shared.shape.project_document_args",
     summary: "Project-document request payload.",
     schema_format: "json_schema_2020_12",
-    schema: objectSchema(
+    schema: selectionArgumentsSchema(
       {
         path: stringSchema(),
-        view_id: stringSchema()
+        view_id: stringSchema(),
+        diagram_id: stringSchema()
       },
-      ["path", "view_id"]
+      ["path"]
     ),
     stability: "stable"
   },
@@ -1759,16 +1810,17 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
     shape_id: "shared.shape.render_preview_args",
     summary: "Preview-render request payload.",
     schema_format: "json_schema_2020_12",
-    schema: objectSchema(
+    schema: selectionArgumentsSchema(
       {
         path: stringSchema(),
         view_id: stringSchema(),
+        diagram_id: stringSchema(),
         profile_id: stringSchema(),
         detail_id: stringSchema(),
         format: stringSchema(["svg", "png"]),
         backend_id: stringSchema()
       },
-      ["path", "view_id", "profile_id", "detail_id", "format"]
+      ["path", "profile_id", "detail_id", "format"]
     ),
     stability: "stable"
   },
@@ -1926,6 +1978,18 @@ const SHAPES: readonly ContractShapeDescriptor[] = [
 ] as const;
 
 const SUBJECTS: readonly ContractSubjectDescriptor[] = [
+  {
+    subject_id: "helper.command.diagrams", surface_kind: "helper_command", surface_name: "diagrams",
+    summary: "List named diagrams and their exact member inventories and inclusion reasons.", stability: "stable", mutates_repo_state: "never",
+    input_shape_id: "shared.shape.list_diagrams_args", output_shape_id: "shared.shape.list_diagrams_result",
+    detail_modes: ["static", "bundle_resolved"], has_deep_introspection: true
+  },
+  {
+    subject_id: "domain.service.list_diagrams", surface_kind: "domain_service", surface_name: "list_diagrams",
+    summary: "List named diagrams for a document through the shared bundle resolver.", stability: "stable", mutates_repo_state: "never",
+    input_shape_id: "shared.shape.list_diagrams_args", output_shape_id: "shared.shape.list_diagrams_result",
+    detail_modes: ["static", "bundle_resolved"], has_deep_introspection: true
+  },
   {
     subject_id: "helper.command.inspect",
     surface_kind: "helper_command",
@@ -2459,7 +2523,20 @@ const CONSTRAINTS: readonly ContractConstraintSpec[] = [
       ]
     },
     summary: "A warned commit requires the token returned for the exact proposal, revisions, bundle, result, and warning set."
-  }
+  },
+  ...(["project_document_args", "render_preview_args"] as const).map((shape) => ({
+    constraint_id: `shared.constraint.${shape}.diagram_selection` as const,
+    applies_to_shape_id: `shared.shape.${shape}` as const,
+    applies_to_json_pointers: ["/view_id", "/diagram_id"], kind: "resolved_diagram_selection" as const,
+    parameters: { at_least_one: ["view_id", "diagram_id"], both: "matching_view_assertion", all: "forbidden", unknown: "error", empty: "no_fallback", unsupported_bundle: "error" },
+    summary: "Supply a view or Diagram ID. The Diagram infers its view; both selectors must agree. Invalid selection never falls back to combined content."
+  })),
+  ...(["apply_change_set_args", "apply_authoring_intent_args"] as const).map((shape) => ({
+    constraint_id: `shared.constraint.${shape}.membership_validation` as const,
+    applies_to_shape_id: `shared.shape.${shape}` as const, kind: "atomic_membership_validation" as const,
+    parameters: { invalid_assignments: "reject_without_write", edge_property_parse_compile_failures: "reject_without_write", source_edge: "revision_bound_handle", normalization: "bundle_delimiter_sorted_unique", projection_diagrams: "named_IDs_infer_view" },
+    summary: "Invalid reserved metadata or parse/compile failures in a generic edge-property candidate reject the whole candidate without writing. Generic edge-property operations preserve the declaration, other fields, comments, and undo. projection_diagrams evaluates named IDs; projection_views evaluates combined types."
+  })),
 ] as const;
 
 const BINDINGS: readonly ContractBindingSpec[] = [

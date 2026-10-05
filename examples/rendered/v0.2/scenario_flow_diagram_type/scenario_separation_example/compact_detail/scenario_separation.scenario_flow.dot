@@ -1,0 +1,33 @@
+digraph scenario_flow {
+  rankdir=TB;
+  graph [fontname="Public Sans", nodesep=0.7, ranksep=0.9];
+  node [fontname="Public Sans"];
+  edge [fontname="Public Sans"];
+  subgraph rank_step {
+    rank=same;
+    "lane_step" [shape=plaintext, label="Steps"];
+    "SS-001" [shape="diamond", label="Choose an editing action"];
+    "SS-002" [shape="box", style="rounded", label="Choose the source node"];
+    "SS-003" [shape="box", style="rounded", label="Choose the relationship"];
+    "SS-004" [shape="box", style="rounded", label="Choose the target node"];
+    "SS-005" [shape="box", style="rounded", label="Review the new relationship"];
+    "SS-006" [shape="box", style="rounded", label="Choose the pivot node"];
+    "SS-007" [shape="box", style="rounded", label="Inspect related content"];
+    "SS-008" [shape="box", style="rounded", label="Return to the document"];
+    "SS-009" [shape="box", style="rounded", label="Choose a diagram type"];
+    "SS-010" [shape="box", style="rounded", label="Name the new view"];
+    "SS-011" [shape="box", style="rounded", label="Review the empty view"];
+  }
+  "lane_step" -> "SS-001" [style=invis, weight=100];
+  "SS-005" -> "SS-006" [style=invis, weight=100];
+  "SS-008" -> "SS-009" [style=invis, weight=100];
+  "SS-001" -> "SS-002" [weight=4];
+  "SS-001" -> "SS-006" [weight=4];
+  "SS-002" -> "SS-003" [weight=4];
+  "SS-003" -> "SS-004" [weight=4];
+  "SS-004" -> "SS-005" [weight=4];
+  "SS-006" -> "SS-007" [weight=4];
+  "SS-007" -> "SS-008" [weight=4];
+  "SS-009" -> "SS-010" [weight=4];
+  "SS-010" -> "SS-011" [weight=4];
+}

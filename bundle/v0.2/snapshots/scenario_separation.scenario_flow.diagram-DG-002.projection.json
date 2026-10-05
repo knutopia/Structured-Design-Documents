@@ -1,0 +1,75 @@
+{
+  "schema": "sdd-text-view-projection",
+  "version": "0.2",
+  "view_id": "scenario_flow",
+  "diagram_id": "DG-002",
+  "diagram_name": "Node pivot",
+  "source_example": "scenario_separation",
+  "nodes": [
+    {
+      "id": "SS-001",
+      "type": "ScenarioStep",
+      "name": "Choose an editing action"
+    },
+    {
+      "id": "SS-006",
+      "type": "ScenarioStep",
+      "name": "Choose the pivot node"
+    },
+    {
+      "id": "SS-007",
+      "type": "ScenarioStep",
+      "name": "Inspect related content"
+    },
+    {
+      "id": "SS-008",
+      "type": "ScenarioStep",
+      "name": "Return to the document"
+    }
+  ],
+  "edges": [
+    {
+      "from": "SS-001",
+      "type": "PRECEDES",
+      "to": "SS-006",
+      "source_edge_id": "source-edge-491d3d8cabba974bee6d13fecc89118fb0fead0c9b50eeabfa23810709470253-0"
+    },
+    {
+      "from": "SS-006",
+      "type": "PRECEDES",
+      "to": "SS-007",
+      "source_edge_id": "source-edge-9077f001ffa53f8ba7ace8009d95c6aa3662e1871cb7ad16f9d94330ada0a5ee-0"
+    },
+    {
+      "from": "SS-007",
+      "type": "PRECEDES",
+      "to": "SS-008",
+      "source_edge_id": "source-edge-0b245e6d35f3b2c5c43273c248dc57cd48bb39b044e81633ec33288737d62419-0"
+    }
+  ],
+  "derived": {
+    "node_annotations": [
+      {
+        "node_id": "SS-001",
+        "display": {
+          "shape": "diamond"
+        }
+      }
+    ],
+    "edge_annotations": [
+      {
+        "from": "SS-001",
+        "type": "PRECEDES",
+        "to": "SS-006",
+        "role": "branch_label",
+        "display_label": "pivot node",
+        "label_source": "guard",
+        "source_edge_id": "source-edge-491d3d8cabba974bee6d13fecc89118fb0fead0c9b50eeabfa23810709470253-0"
+      }
+    ],
+    "node_groups": [],
+    "view_metadata": {}
+  },
+  "omissions": [],
+  "notes": []
+}

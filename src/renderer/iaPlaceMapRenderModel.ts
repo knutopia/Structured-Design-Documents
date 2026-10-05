@@ -1,3 +1,4 @@
+import { graphForProjection } from "../projector/edgeOccurrences.js";
 import { getSourceOrderedStructuralStream, getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
@@ -25,6 +26,7 @@ export interface IaRenderPlace {
 export type IaRenderItem = IaRenderArea | IaRenderPlace;
 
 export interface IaRenderEdge {
+  source_edge_id?: string;
   from: string;
   to: string;
 }
@@ -57,6 +59,7 @@ export function buildIaPlaceMapRenderModel(
   hierarchyEdgeTypes: string[],
   displayPolicy: ResolvedDetailDisplayPolicy
 ): IaPlaceMapRenderModel {
+  graph = graphForProjection(projection, graph);
   const graphNodesById = new Map(graph.nodes.map((node) => [node.id, node]));
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
   const annotationsByNodeId = new Map(
@@ -191,7 +194,8 @@ export function buildIaPlaceMapRenderModel(
     .filter((edge) => edge.type === "NAVIGATES_TO" && visibleNodeIds.has(edge.from) && visibleNodeIds.has(edge.to))
     .map((edge) => ({
       from: edge.from,
-      to: edge.to
+      to: edge.to,
+      ...(edge.source_edge_id ? { source_edge_id: edge.source_edge_id } : {})
     }))
     .sort((left, right) => {
       const fromCompare = left.from.localeCompare(right.from);

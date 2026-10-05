@@ -2,6 +2,7 @@ import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledEdge, CompiledGraph } from "../compiler/types.js";
 import type { ProjectionNodeAnnotation, ProjectionOmission, ProjectionResult } from "./types.js";
 import {
+  type ProjectionBuilderOptions,
   buildProjectionResult,
   createDerivedAnnotationOmission,
   createEmptyDerived,
@@ -132,15 +133,16 @@ function buildImplementationOmission(edge: Pick<CompiledEdge, "from" | "type" | 
 export function buildOutcomeOpportunityMapProjection(
   graph: CompiledGraph,
   bundle: Bundle,
-  view: ViewSpec
+  view: ViewSpec,
+  options?: ProjectionBuilderOptions
 ): ProjectionResult {
-  const context = createProjectionBuilderContext(graph, bundle, view);
+  const context = createProjectionBuilderContext(graph, bundle, view, options);
   const instrumentationConfig = readInstrumentationConfig(view);
   const implementationConfig = readImplementationConfig(view);
   const referencesByNodeId = new Map<string, NonNullable<ProjectionNodeAnnotation["references"]>>();
   const omissions: ProjectionOmission[] = [];
 
-  for (const edge of graph.edges) {
+  for (const edge of context.documentGraph.edges) {
     if (!context.projectedNodeIds.has(edge.from) || context.projectedNodeIds.has(edge.to)) {
       continue;
     }
@@ -180,7 +182,7 @@ export function buildOutcomeOpportunityMapProjection(
       continue;
     }
 
-    if (context.includedEdgeTypes.has(edge.type)) {
+    if (!context.diagramId && context.includedEdgeTypes.has(edge.type)) {
       omissions.push(createEndpointOutOfScopeOmission(edge, targetNode, view.id));
     }
   }

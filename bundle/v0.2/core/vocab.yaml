@@ -2,6 +2,9 @@ version: "0.2"
 closed_vocab: true
 
 node_types:
+  - token: Diagram
+    group: metadata
+    description: Named diagram declaration; presentation membership is explicit.
   - token: Outcome
     group: product_intent
     description: Desired change in user or business reality.

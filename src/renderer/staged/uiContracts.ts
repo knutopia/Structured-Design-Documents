@@ -1,3 +1,4 @@
+import { applyDiagramMetadata } from "./sceneBuilders.js";
 import type { ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
@@ -26,7 +27,7 @@ export function buildUiContractsRendererScene(
   const builder = new UiContractsSceneBuilder(settings.detailId, settings.nodeDecoratorMode ?? {
     id: "none", showNodeType: false, showNodeId: false
   }, settings.themeId);
-  return builder.complete(model);
+  return applyDiagramMetadata(builder.complete(model), projection);
 }
 
 export async function renderUiContractsStagedSvg(

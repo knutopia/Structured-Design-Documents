@@ -1,0 +1,22 @@
+SDD-TEXT 0.2
+Diagram DG-401 "Selected intent"
+  diagram_type=outcome_opportunity_map
+END
+Outcome O-401 "Reduce effort"
+  MEASURED_BY M-401 diagrams=DG-401
+END
+Metric M-401 "Task time"
+  INSTRUMENTED_AT S-401
+END
+Opportunity OP-401 "Simplify requests"
+  SUPPORTS O-401 diagrams=DG-401
+END
+Initiative I-401 "Streamline submission"
+  ADDRESSES OP-401 diagrams=DG-401
+  IMPLEMENTED_BY PR-401
+END
+ScenarioStep S-401 "Reference interaction"
+END
+Process PR-401 "Reference implementation"
+  visibility=frontstage
+END

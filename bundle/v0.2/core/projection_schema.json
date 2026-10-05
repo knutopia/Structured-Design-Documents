@@ -63,6 +63,13 @@
       "items": {
         "type": "string"
       }
+    },
+    "diagram_id": {
+      "$ref": "./schema.json#/$defs/id"
+    },
+    "diagram_name": {
+      "type": "string",
+      "minLength": 1
     }
   },
   "$defs": {
@@ -104,6 +111,10 @@
         },
         "to": {
           "$ref": "./schema.json#/$defs/id"
+        },
+        "source_edge_id": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -254,8 +265,14 @@
           "type": "string",
           "minLength": 1
         },
-        "label": { "type": "string", "minLength": 1 },
-        "detail_setting": { "type": "string", "minLength": 1 },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detail_setting": {
+          "type": "string",
+          "minLength": 1
+        },
         "source_prop": {
           "type": "string",
           "minLength": 1
@@ -301,6 +318,10 @@
             "to_name",
             "literal"
           ]
+        },
+        "source_edge_id": {
+          "type": "string",
+          "minLength": 1
         }
       }
     },
@@ -412,5 +433,51 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "diagram_id"
+        ]
+      },
+      "then": {
+        "required": [
+          "diagram_name"
+        ],
+        "properties": {
+          "edges": {
+            "items": {
+              "required": [
+                "source_edge_id"
+              ]
+            }
+          },
+          "derived": {
+            "properties": {
+              "edge_annotations": {
+                "items": {
+                  "required": [
+                    "source_edge_id"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "diagram_name"
+        ]
+      },
+      "then": {
+        "required": [
+          "diagram_id"
+        ]
+      }
+    }
+  ]
 }

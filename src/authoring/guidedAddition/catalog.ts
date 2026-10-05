@@ -1,4 +1,5 @@
 import { computeBundleFingerprint, type BundleFingerprint } from "../../bundle/fingerprint.js";
+import { resolveBundleFieldReference } from "../../bundle/bundleReferences.js";
 import {
   getNodeAuthoringForm,
   getGuidedAdditionDefaultDisplayProfileId,
@@ -48,6 +49,7 @@ export interface GuidanceNodeTypeRecord {
   description?: string;
   id_suggestion: NodeIdSuggestionInputs;
   form: NodeAuthoringForm;
+  field_choices?: Record<string, string[]>;
 }
 
 export interface GuidanceRelationshipRecord extends AllowedEndpointTriple {
@@ -124,6 +126,7 @@ export class GuidanceCatalog {
   readonly views: GuidanceViewRecord[];
   readonly default_display_profile_id: string;
   readonly placement_policy: AuthoringConfig["placement_policies"]["default"];
+  readonly diagram_membership?: Bundle["contracts"]["diagram_membership"];
 
   readonly #profilesById: Map<string, GuidanceProfileRecord>;
   readonly #nodesByType: Map<string, GuidanceNodeTypeRecord>;
@@ -141,6 +144,7 @@ export class GuidanceCatalog {
     views: GuidanceViewRecord[];
     default_display_profile_id: string;
     placement_policy: AuthoringConfig["placement_policies"]["default"];
+    diagram_membership?: Bundle["contracts"]["diagram_membership"];
   }) {
     this.bundle_fingerprint = args.bundle_fingerprint;
     this.syntax = deepFreeze(args.syntax);
@@ -151,6 +155,7 @@ export class GuidanceCatalog {
     this.views = deepFreeze(args.views);
     this.default_display_profile_id = args.default_display_profile_id;
     this.placement_policy = deepFreeze(args.placement_policy);
+    this.diagram_membership = args.diagram_membership ? deepFreeze(args.diagram_membership) : undefined;
     this.#profilesById = new Map(this.profiles.map((profile) => [profile.profile_id, profile]));
     this.#nodesByType = new Map(this.node_types.map((nodeType) => [nodeType.node_type, nodeType]));
     this.#relationshipsByTriple = new Map(
@@ -274,7 +279,16 @@ export function createGuidanceCatalog(bundle: Bundle): GuidanceCatalog {
       node_type_order: index,
       description: token.description,
       id_suggestion: idSuggestion,
-      form
+      form,
+      field_choices: Object.fromEntries([...form.common_fields, ...form.type_fields]
+        .filter((field) => field.property && field.choices_from)
+        .map((field) => {
+          const values = resolveBundleFieldReference(bundle, field.choices_from!);
+          if (!Array.isArray(values) || !values.every((value) => typeof value === "string")) {
+            throw new Error(`Invalid authoring choices reference for '${token.token}.${field.property}'`);
+          }
+          return [field.property!, values];
+        }))
     };
   });
 
@@ -321,6 +335,7 @@ export function createGuidanceCatalog(bundle: Bundle): GuidanceCatalog {
     relationships,
     views,
     default_display_profile_id: getGuidedAdditionDefaultDisplayProfileId(bundle),
-    placement_policy: getPlacementPolicyInputs(bundle)
+    placement_policy: getPlacementPolicyInputs(bundle),
+    diagram_membership: bundle.contracts.diagram_membership ? structuredClone(bundle.contracts.diagram_membership) : undefined
   });
 }

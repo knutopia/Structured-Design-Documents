@@ -1,4 +1,6 @@
 import path from "node:path";
+import { projectionOccurrenceDiagnostics } from "./edgeOccurrences.js";
+import type { SourceEdgeIndex } from "../relationships/edgeIdentity.js";
 import { buildRelationshipReferences } from "./relationshipReferences.js";
 import type { ErrorObject } from "ajv";
 import Ajv2020Import from "ajv/dist/2020.js";
@@ -29,6 +31,10 @@ export interface ProjectionBuilderContext {
   file: string;
   sourceExample: string;
   graph: CompiledGraph;
+  documentGraph: CompiledGraph;
+  sourceEdgeIndex?: SourceEdgeIndex;
+  diagramId?: string;
+  diagramName?: string;
   bundle: Bundle;
   view: ViewSpec;
   graphNodesById: Map<string, CompiledNode>;
@@ -37,6 +43,15 @@ export interface ProjectionBuilderContext {
   projectedNodeIds: Set<string>;
   includedNodeTypes: Set<string>;
   includedEdgeTypes: Set<string>;
+}
+
+export interface ProjectionBuilderOptions {
+  primaryNodes: CompiledNode[];
+  primaryEdges: CompiledEdge[];
+  documentGraph: CompiledGraph;
+  sourceEdgeIndex: SourceEdgeIndex;
+  diagramId?: string;
+  diagramName?: string;
 }
 
 export interface ProjectionBuilderOutput {
@@ -79,12 +94,12 @@ function sortProjectionEdges(edges: ProjectionEdge[]): ProjectionEdge[] {
 export function createProjectionBuilderContext(
   graph: CompiledGraph,
   bundle: Bundle,
-  view: ViewSpec
+  view: ViewSpec,
+  options?: ProjectionBuilderOptions
 ): ProjectionBuilderContext {
   const includedNodeTypes = new Set(view.projection.include_node_types);
   const includedEdgeTypes = new Set(view.projection.include_edge_types);
-  const projectedNodes = graph.nodes
-    .filter((node) => includedNodeTypes.has(node.type))
+  const projectedNodes = (options?.primaryNodes ?? graph.nodes.filter((node) => includedNodeTypes.has(node.type)))
     .map<ProjectionNode>((node) => ({
       id: node.id,
       type: node.type,
@@ -93,12 +108,12 @@ export function createProjectionBuilderContext(
     .sort((left, right) => left.id.localeCompare(right.id));
   const projectedNodeIds = new Set(projectedNodes.map((node) => node.id));
   const projectedEdges = sortProjectionEdges(
-    graph.edges
-      .filter((edge) => includedEdgeTypes.has(edge.type) && projectedNodeIds.has(edge.from) && projectedNodeIds.has(edge.to))
+    (options?.primaryEdges ?? graph.edges.filter((edge) => includedEdgeTypes.has(edge.type) && projectedNodeIds.has(edge.from) && projectedNodeIds.has(edge.to)))
       .map((edge) => ({
         from: edge.from,
         type: edge.type,
-        to: edge.to
+        to: edge.to,
+        ...(options?.diagramId ? { source_edge_id: options.sourceEdgeIndex.idFor(edge)! } : {})
       }))
   );
 
@@ -106,9 +121,13 @@ export function createProjectionBuilderContext(
     file: getGraphSourcePath(graph) ?? "<compiled>",
     sourceExample: sourceExampleName(graph),
     graph,
+    documentGraph: options?.documentGraph ?? graph,
+    sourceEdgeIndex: options?.sourceEdgeIndex,
+    diagramId: options?.diagramId,
+    diagramName: options?.diagramName,
     bundle,
     view,
-    graphNodesById: new Map(graph.nodes.map((node) => [node.id, node])),
+    graphNodesById: new Map((options?.documentGraph ?? graph).nodes.map((node) => [node.id, node])),
     projectedNodes,
     projectedEdges,
     projectedNodeIds,
@@ -261,6 +280,7 @@ export function buildProjectionResult(
     schema: "sdd-text-view-projection",
     version: context.graph.version,
     view_id: context.view.id,
+    ...(context.diagramId ? { diagram_id: context.diagramId, diagram_name: context.diagramName! } : {}),
     source_example: context.sourceExample,
     nodes: context.projectedNodes,
     edges: context.projectedEdges,
@@ -277,5 +297,8 @@ export function buildProjectionResult(
     notes: [...(output.notes ?? [])]
   };
 
+  const occurrenceDiagnostics = projectionOccurrenceDiagnostics(projection, context.documentGraph, context.bundle,
+    context.diagramId ? new Set(context.graph.edges.map(edge => context.sourceEdgeIndex!.idFor(edge)!)) : undefined);
+  if (occurrenceDiagnostics.length) return { diagnostics: sortDiagnostics(occurrenceDiagnostics) };
   return validateProjection(context.bundle, projection, context.file);
 }

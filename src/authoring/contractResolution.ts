@@ -57,7 +57,8 @@ function resolveAllowedValues(
         value: view.id,
         label: view.name,
         metadata: {
-          status: view.status
+          status: view.status,
+          ...(bundle.contracts?.diagram_membership ? { named_diagrams_enabled: view.projection?.named_diagrams?.enabled === true } : {})
         }
       }));
 
@@ -108,6 +109,14 @@ export function getBundleResolvedContractSubjectDetail(
     detail.authoring_format_card = createAuthoringFormatCard(bundle);
   } else if (subjectId === "helper.command.apply") {
     detail.authoring_format_card = createApplyFormatCard(bundle);
+  }
+  const membership = bundle.contracts?.diagram_membership;
+  if (membership && detail.authoring_format_card) {
+    detail.authoring_format_card.lines.push(
+      `Named metadata declarations use ${membership.declaration_type}; required ${membership.type_property} selects an enabled bundle view.`,
+      `Assign nodes or exact edge declarations through ${membership.membership_property}. Separate multiple references with ${JSON.stringify(membership.references.delimiter)}; edited lists are sorted and unique. Remove the property to clear membership.`,
+      "Use set_edge_property/remove_edge_property on the current revision's edge handle. Invalid assignments reject the entire candidate without writing."
+    );
   }
 
   return detail;

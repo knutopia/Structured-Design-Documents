@@ -1,3 +1,4 @@
+import { graphForProjection, projectionEdgeRenderId } from "../projector/edgeOccurrences.js";
 import { buildRelationshipReferenceAttributes, type ReferenceAttribute } from "./referenceAttributes.js";
 import { getTopLevelNodeIdsInAuthorOrder } from "../compiler/authorOrder.js";
 import type { CompiledGraph } from "../compiler/types.js";
@@ -140,6 +141,7 @@ export function buildServiceBlueprintRenderModel(
   graph: CompiledGraph,
   displayPolicy: ResolvedDetailDisplayPolicy
 ): ServiceBlueprintRenderModel {
+  graph = graphForProjection(projection, graph);
   const displayOptions = readServiceBlueprintDisplayOptions(displayPolicy);
   const projectionNodesById = new Map(projection.nodes.map((node) => [node.id, node]));
   const laneGroups = projection.derived.node_groups.filter((group) => group.role === "lane");
@@ -186,7 +188,7 @@ export function buildServiceBlueprintRenderModel(
   });
 
   const edges = projection.edges.map<ServiceBlueprintRenderEdge>((edge) => ({
-    id: `${edge.from}__${edge.type.toLowerCase()}__${edge.to}`,
+    id: projectionEdgeRenderId(edge, `${edge.from}__${edge.type.toLowerCase()}__${edge.to}`),
     from: edge.from,
     to: edge.to,
     ...edgeDisplay(edge.type, displayOptions.showSecondaryEdgeLabels)

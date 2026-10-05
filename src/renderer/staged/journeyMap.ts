@@ -1,3 +1,4 @@
+import { applyDiagramMetadata } from "./sceneBuilders.js";
 import type { Bundle, RendererJourneyMapLayoutConfig, ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
@@ -587,7 +588,7 @@ export function buildJourneyMapRendererScene(
     resolveDetailDisplayPolicy(view, settings.detailId)
   );
   const placement = buildJourneyScenePlacement(model, layout);
-  return buildJourneyMapRendererSceneFromModel(
+  return applyDiagramMetadata(buildJourneyMapRendererSceneFromModel(
     model,
     settings.detailId,
     layout,
@@ -598,7 +599,7 @@ export function buildJourneyMapRendererScene(
       ...buildDisconnectedChainDiagnostics(model, placement)
     ],
     settings.nodeDecoratorMode
-  );
+  ), projection);
 }
 
 async function buildJourneyMapPreRoutingPipeline(

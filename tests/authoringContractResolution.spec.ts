@@ -154,7 +154,8 @@ describe("authoring contract resolution", () => {
     expect(requestDetail?.request_body?.top_level_shape).toBe("ApplyChangeSetArgs");
     expect(requestDetail).not.toHaveProperty("output_shape");
     expect(requestDetail?.constraints.map((constraint) => constraint.constraint_id)).toEqual([
-      "shared.constraint.apply_change_set.handles_are_revision_bound"
+      "shared.constraint.apply_change_set.handles_are_revision_bound",
+      "shared.constraint.apply_change_set_args.membership_validation"
     ]);
     expect(requestDetail?.bindings.map((binding) => binding.binding_id)).toEqual([
       "shared.binding.apply_change_set.validate_profile",

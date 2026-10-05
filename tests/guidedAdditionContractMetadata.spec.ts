@@ -85,6 +85,7 @@ describe("Guided Addition v1 contract metadata", () => {
   it("publishes the corrected v1 domain subjects and compilable schemas", () => {
     const subjects = createContractIndex().subjects.filter((subject) => subject.surface_kind === "domain_service");
     expect(subjects.map((subject) => subject.subject_id)).toEqual([
+      "domain.service.list_diagrams",
       "domain.service.guided_addition.begin",
       "domain.service.guided_addition.advance",
       "domain.service.addition_proposal.apply"

@@ -1,3 +1,4 @@
+import { applyDiagramMetadata, completeExactSceneConnections } from "./sceneBuilders.js";
 import type { ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
@@ -66,6 +67,7 @@ interface SceneBuildContext {
   navigationTargetsBySourceId: ReadonlyMap<string, ReadonlySet<string>>;
   placeOrderById: ReadonlyMap<string, number>;
   edges: SceneEdge[];
+  sourceIds?: ReadonlyMap<string, string[]>;
 }
 
 export interface IaPlaceMapStagedSvgResult extends StagedRendererPipelineResult, StagedSvgArtifact {}
@@ -319,14 +321,17 @@ function planOwnedScope(
   };
 }
 
-function createLocalStructureEdge(sourceId: string, edgePlan: PlannedLocalStructureEdge): SceneEdge {
+function createLocalStructureEdge(sourceId: string, edgePlan: PlannedLocalStructureEdge, context: SceneBuildContext): SceneEdge {
   const isDirectVertical = edgePlan.localPattern === IA_LOCAL_ROUTE_PATTERNS.directVertical;
   const edgeId = edgePlan.relation === "contains" && !edgePlan.mergedNavigation
     ? `${sourceId}__contains__${edgePlan.targetId}`
     : `${sourceId}__nav__${edgePlan.targetId}`;
 
   return {
-    id: edgeId,
+    id: context.sourceIds?.get(`${sourceId}->${edgePlan.targetId}`)?.length
+      ? `${edgeId}__${context.sourceIds.get(`${sourceId}->${edgePlan.targetId}`)!.join("__")}` : edgeId,
+    ...(context.sourceIds?.get(`${sourceId}->${edgePlan.targetId}`)?.length
+      ? { viewMetadata: { sourceEdgeIds: [...context.sourceIds.get(`${sourceId}->${edgePlan.targetId}`)!] } } : {}),
     role: edgePlan.relation === "contains"
       ? (edgePlan.mergedNavigation ? "contains_navigation" : "contains_place")
       : "navigation",
@@ -381,7 +386,7 @@ function buildPlaceGroup(
     buildPlaceGroup(follower, [], `${scopeId}/${place.id}__followers`, depth + 1, context)
   );
   const ownedChildren = [...explicitChildren, ...followerChildren];
-  context.edges.push(...ownedScope.edgePlans.map((edgePlan) => createLocalStructureEdge(place.id, edgePlan)));
+  context.edges.push(...ownedScope.edgePlans.map((edgePlan) => createLocalStructureEdge(place.id, edgePlan, context)));
 
   const children: SceneItem[] = [buildPlaceNode(place, depth, context)];
   if (ownedScope.kind) {
@@ -459,13 +464,19 @@ export function buildIaPlaceMapRendererScene(
       showNodeType: false,
       showNodeId: false
     },
+    ...(projection.diagram_id ? { sourceIds: new Map(projection.edges.map(edge => {
+      const key = `${edge.from}->${edge.to}`;
+      return [key, projection.edges.filter(candidate => candidate.from === edge.from && candidate.to === edge.to).map(candidate => candidate.source_edge_id!)];
+    })) } : {}),
     navigationTargetsBySourceId: buildNavigationTargetsBySourceId(model.edges),
     placeOrderById,
     edges: []
   };
   const rootChildren = buildScopeSceneItems(model.rootItems, "root", 0, context);
+  const exactConnectionDiagnostics = completeExactSceneConnections(context.edges,
+    model.edges.map(edge => ({ ...edge, role: "navigation" })));
 
-  return {
+  return applyDiagramMetadata({
     viewId: "ia_place_map",
     detailId: settings.detailId,
     themeId: settings.themeId ?? "default",
@@ -490,8 +501,8 @@ export function buildIaPlaceMapRendererScene(
       children: rootChildren
     }),
     edges: context.edges,
-    diagnostics: []
-  };
+    diagnostics: exactConnectionDiagnostics
+  }, projection);
 }
 
 export async function renderIaPlaceMapStagedSvg(

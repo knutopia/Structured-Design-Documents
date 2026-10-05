@@ -62,6 +62,7 @@ describe("authoring contract metadata", () => {
     expect(index.kind).toBe("sdd-contract-index");
     expect(index.contract_version).toBe("0.1");
     expect(index.subjects.filter((subject) => subject.surface_kind === "helper_command").map((subject) => subject.subject_id)).toEqual([
+      "helper.command.diagrams",
       "helper.command.inspect",
       "helper.command.search",
       "helper.command.create",
@@ -255,7 +256,8 @@ describe("authoring contract metadata", () => {
       "forbidden_if",
       "unique_within_request",
       "must_reference_earlier_local_id",
-      "same_revision_handle"
+      "same_revision_handle",
+      "atomic_membership_validation"
     ]);
     expect(requestDetail?.bindings).toEqual([]);
     expect(requestDetail?.continuation).toEqual([]);
@@ -275,7 +277,8 @@ describe("authoring contract metadata", () => {
     expect(requestDetail?.request_body?.top_level_shape).toBe("ApplyChangeSetArgs");
     expect(requestDetail).not.toHaveProperty("output_shape");
     expect(requestDetail?.constraints.map((constraint) => constraint.constraint_id)).toEqual([
-      "shared.constraint.apply_change_set.handles_are_revision_bound"
+      "shared.constraint.apply_change_set.handles_are_revision_bound",
+      "shared.constraint.apply_change_set_args.membership_validation"
     ]);
     expect(requestDetail?.constraints[0]).toMatchObject({
       kind: "same_revision_handle",
@@ -510,6 +513,8 @@ describe("authoring contract metadata", () => {
       "path",
       "revision",
       "view_id",
+      "diagram_id",
+      "diagram_name",
       "profile_id",
       "detail_id",
       "backend_id",
@@ -537,6 +542,7 @@ describe("authoring contract metadata", () => {
     );
 
     expect([...kinds].sort()).toEqual([
+      "atomic_membership_validation",
       "bound_warning_acceptance",
       "canonical_proposal_identity",
       "commit_safe_continuation",
@@ -548,6 +554,7 @@ describe("authoring contract metadata", () => {
       "must_reference_earlier_local_id",
       "proposal_relationship_edge_consistency",
       "required_if",
+      "resolved_diagram_selection",
       "same_bundle_fingerprint",
       "same_document_revision",
       "same_revision_handle",

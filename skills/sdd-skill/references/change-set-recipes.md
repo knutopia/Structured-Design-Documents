@@ -11,7 +11,7 @@ Use `<manifest>` established by the main skill's [Bundle Startup Procedure](../S
 - Inspect first and use fresh handles from the current `revision`.
 - Prefer dry-run `apply` first.
 - Keep public helper paths repo-relative.
-- When an operation can affect semantics, include `validate_profile` and optionally `projection_views`.
+- When an operation can affect semantics, include `validate_profile` and optionally combined `projection_views` or named `projection_diagrams`.
 - Keep the semantic edge explicit even when you also want readable nested source. For singly-owned children, prefer both the explicit relationship line and nested block placement.
 
 ## Rename A Node
@@ -246,3 +246,19 @@ Most mutation requests follow this shape:
 ```
 
 Add `"mode": "commit"` only when the change should actually be written.
+
+## Edit An Edge Property In Place
+
+Inspect the current revision and keep the exact edge’s handle. This operation preserves the edge’s target, event, guard, effect, other properties, and comments, and ordinary journal undo restores the source.
+
+```json
+{
+  "kind": "set_edge_property",
+  "edge_handle": "<current-edge-handle>",
+  "key": "<bundle-membership-property>",
+  "value_kind": "quoted_string",
+  "raw_value": "<diagram-id-list>"
+}
+```
+
+Use the active bundle’s delimiter for multiple IDs; the helper writes sorted unique references. Invalid assignments and parse/compile failures in an edge-property candidate reject the whole candidate without writing. To clear membership, use `remove_edge_property` with the same `edge_handle` and `key`; an empty membership value is invalid. Use existing `set_node_property` / `remove_node_property` for node membership.
