@@ -64,6 +64,16 @@ export default defineConfig({
             link: '/service_blueprint_slice_example/'
           }
         ]
+      },
+      {
+        text: 'Syntax',
+        items: [
+          { text: 'Syntax Topics', link: '/syntax/' },
+          { text: 'Step Differentiation', link: '/syntax/step_differentiation/' },
+          { text: 'Named Diagrams', link: '/syntax/named_diagrams/' },
+          { text: 'Node- and Edge Reference', link: '/syntax/node_and_edge_reference/' },
+          { text: 'Hidden Edge Reference', link: '/syntax/hidden_edge_reference/' }
+        ]
       }
     ],
 /*

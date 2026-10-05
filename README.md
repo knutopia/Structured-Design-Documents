@@ -58,6 +58,7 @@ This probably works with other editors too. The grammar is used for source code 
 
 ### Recent Additions
 
+- introduced named diagrams (multiple diagrams per type in same doc)
 - introduced separate step node types for different diagrams
 - switched to bundle v0.2 default (under development)
 - simplified current-folder output placement (no more $PWD)

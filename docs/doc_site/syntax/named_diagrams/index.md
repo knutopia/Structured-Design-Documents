@@ -1,3 +1,13 @@
+---
+prev:
+  text: Step Differentiation
+  link: ../step_differentiation
+
+next:
+  text: Diagram Node- and Edge Reference
+  link: ../node_edge_reference
+---
+
 # Named Diagrams
 
 We often need several diagrams of the same type. For example, a product encompasses many journeys and scenario flows, and we might want to explore several information architectures in parallel. 

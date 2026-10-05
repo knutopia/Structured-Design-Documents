@@ -31,7 +31,8 @@ z
 ## Mon 10-4
 
 - Moved syntax pages into new syntax/ doc site folder
-
+- Footer nav cleanup
+ 
 ## Sat 10-3
 
 - Fixed codex-app-wsl access

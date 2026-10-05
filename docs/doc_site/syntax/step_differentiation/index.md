@@ -1,3 +1,12 @@
+---
+prev:
+  text: Hidden Edge Reference
+  link: ../hidden_edge_reference
+
+next:
+  text: Named Diagrams
+  link: ../named_diagrams
+---
 # Step Differentiation in v0.2
 
 v0.2 distinguishes three kinds of authored step behavior:
@@ -24,14 +33,14 @@ The mixed canonical proof shows mapped parents with different refinement sets an
 
 ::: tabs
 == Journey Map
-![Journey Map with correspondence and refinement](../../../examples/rendered/v0.2/journey_map_diagram_type/step_differentiation_example/detailed_detail/step_differentiation.journey_map.svg)
+![Journey Map with correspondence and refinement](../../../../examples/rendered/v0.2/journey_map_diagram_type/step_differentiation_example/detailed_detail/step_differentiation.journey_map.svg)
 == Service Blueprint
-![Service Blueprint with correspondence and refinement](../../../examples/rendered/v0.2/service_blueprint_diagram_type/step_differentiation_example/detailed_detail/step_differentiation.service_blueprint.svg)
+![Service Blueprint with correspondence and refinement](../../../../examples/rendered/v0.2/service_blueprint_diagram_type/step_differentiation_example/detailed_detail/step_differentiation.service_blueprint.svg)
 == Scenario Flow
-![Scenario Flow with incoming refinement references](../../../examples/rendered/v0.2/scenario_flow_diagram_type/step_differentiation_example/detailed_detail/step_differentiation.scenario_flow.svg)
+![Scenario Flow with incoming refinement references](../../../../examples/rendered/v0.2/scenario_flow_diagram_type/step_differentiation_example/detailed_detail/step_differentiation.scenario_flow.svg)
 == Source
 showRepoLink /bundle/v0.2/examples/step_differentiation.sdd
-showSource ../../../bundle/v0.2/examples/step_differentiation.sdd
+showSource ../../../../bundle/v0.2/examples/step_differentiation.sdd
 :::
 
 Render the example with the selected bundle:
