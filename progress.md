@@ -29,7 +29,14 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-## Mon 10-4
+## Wed 10-7
+
+- Explored renderer QA agent options
+- Updated tmp.sdd to use step differentiation
+- Updated scenario_flow variations of tmp.sdd to match
+- Added Step-deprecated error messaging to CLI
+
+## Mon 10-5
 
 - Moved syntax pages into new syntax/ doc site folder
 - Footer nav cleanup

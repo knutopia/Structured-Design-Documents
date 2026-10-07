@@ -41,6 +41,9 @@ function createDiagnostic(
 }
 
 function createUnexpectedLineDiagnostic(file: string, classifiedLine: ClassifiedLine): Diagnostic {
+  if (classifiedLine.tokenDeprecation) {
+    return createDiagnostic(file, classifiedLine, classifiedLine.tokenDeprecation.code, classifiedLine.tokenDeprecation.message);
+  }
   const mismatch = classifiedLine.tokenCaseMismatch;
   return mismatch
     ? createDiagnostic(

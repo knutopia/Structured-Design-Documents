@@ -21,9 +21,15 @@ describe("B5 immutable acceptance baseline", () => {
     // The v0.2 diagram-separation plan authorizes source occurrence checks,
     // bundle-driven identity and exact selection. Historical hashes remain
     // evidence; unchanged v0.1 compilation/projection snapshots and B5 replay
-    // below independently guard behavior. Parser and layout sources remain
-    // protected.
+    // below independently guard behavior. The deprecated-token diagnostic
+    // extension changes parser sources while v0.1 parser regression tests and
+    // bundle-mutation proofs guard syntax behavior. Unlisted sources remain protected.
     const intentionallyExtendedSources = new Set([
+      // Bundle-owned deprecation errors; accepted syntax and recovery stay unchanged.
+      "src/parser/classifyLine.ts",
+      "src/parser/parseBlock.ts",
+      "src/parser/parseSource.ts",
+      "src/parser/syntaxRuntime.ts",
       // docs/v0.2_syntax_extension/diagram_separation_v0_2_implementation_plan.md
       "src/compiler/buildGraph.ts",
       "src/compiler/canonicalize.ts",

@@ -306,7 +306,9 @@ export function parseSource(input: SourceInput, bundle: Bundle): ParseResult {
     }
 
     diagnostics.push(
-      tokenCaseMismatchDiagnostic(input, record, classifiedLine) ??
+      (classifiedLine.tokenDeprecation
+        ? createDiagnostic(input, record, classifiedLine.tokenDeprecation.code, classifiedLine.tokenDeprecation.message)
+        : tokenCaseMismatchDiagnostic(input, record, classifiedLine)) ??
       createDiagnostic(
         input,
         record,

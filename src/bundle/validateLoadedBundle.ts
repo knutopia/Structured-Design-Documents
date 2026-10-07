@@ -1,4 +1,5 @@
 import { sortDiagnostics } from "../diagnostics/types.js";
+import { tokenDeprecationErrors } from "./tokenDeprecations.js";
 import { isRendererCellSizingConfig } from "./rendererCellSizing.js";
 import { uiContractsPresentationProblems } from "./uiContractsPresentation.js";
 import type { Diagnostic } from "../types.js";
@@ -350,6 +351,18 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
   const nodeTypes = new Set(nodeTokens);
   const relationshipTypes = new Set(relationshipTokens);
   validateDiagramMembership(bundle, add);
+  for (const [source, config] of Object.entries(bundle.syntax.token_sources)) {
+    const entries = (bundle.vocab as unknown as Record<string, unknown>)[config.key];
+    const tokens = Array.isArray(entries)
+      ? entries.flatMap(entry => {
+        const token = record(entry)?.[config.token_field];
+        return typeof token === "string" ? [token] : [];
+      })
+      : [];
+    for (const message of tokenDeprecationErrors(config, tokens, bundle.syntax.parsing_model.case_sensitive)) {
+      add("bundle.syntax.invalid_token_deprecation", `Token source '${source}': ${message}`);
+    }
+  }
 
   for (const collision of caseInsensitiveTokenCollisions(bundle)) {
     add(

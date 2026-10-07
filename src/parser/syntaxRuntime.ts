@@ -10,8 +10,10 @@ import type {
   SyntaxSequenceItem,
   SyntaxStatementDefinition,
   SyntaxTokenSource,
+  SyntaxTokenDeprecation,
   VocabularyToken
 } from "../bundle/types.js";
+import { tokenDeprecationErrors } from "../bundle/tokenDeprecations.js";
 
 export interface ResolvedTokenSource {
   name: string;
@@ -20,6 +22,7 @@ export interface ResolvedTokenSource {
   tokens: string[];
   tokenSet: Set<string>;
   tokensByFoldedValue: Map<string, string[]>;
+  deprecatedTokens: Map<string, SyntaxTokenDeprecation>;
 }
 
 export interface ParserSyntaxRuntime {
@@ -77,6 +80,8 @@ function resolveTokenSource(bundle: Bundle, name: string, config: SyntaxTokenSou
     .map((entry) => entry[config.token_field])
     .filter((value): value is string => typeof value === "string");
   const tokensByFoldedValue = new Map<string, string[]>();
+  const errors = tokenDeprecationErrors(config, tokens, bundle.syntax.parsing_model.case_sensitive);
+  if (errors.length > 0) throw syntaxError(`token source '${name}': ${errors.join("; ")}`);
   for (const token of tokens) {
     const folded = token.toLowerCase();
     tokensByFoldedValue.set(folded, [...(tokensByFoldedValue.get(folded) ?? []), token]);
@@ -88,7 +93,10 @@ function resolveTokenSource(bundle: Bundle, name: string, config: SyntaxTokenSou
     entries,
     tokens,
     tokenSet: new Set(tokens),
-    tokensByFoldedValue
+    tokensByFoldedValue,
+    deprecatedTokens: new Map(Object.entries(config.deprecated_tokens ?? {}).map(([token, diagnostic]) => [
+      bundle.syntax.parsing_model.case_sensitive ? token : token.toLowerCase(), diagnostic
+    ]))
   };
 }
 
@@ -120,6 +128,16 @@ export function resolveTokenSourceToken(
 
   const matches = tokenSource.tokensByFoldedValue.get(candidate.toLowerCase()) ?? [];
   return matches.length === 1 ? matches[0] : undefined;
+}
+
+export function findTokenSourceDeprecation(
+  runtime: ParserSyntaxRuntime,
+  tokenSourceName: string,
+  candidate: string
+): SyntaxTokenDeprecation | undefined {
+  return getTokenSource(runtime, tokenSourceName).deprecatedTokens.get(
+    runtime.syntax.parsing_model.case_sensitive ? candidate : candidate.toLowerCase()
+  );
 }
 
 export function findTokenSourceCaseMismatch(

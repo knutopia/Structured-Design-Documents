@@ -81,6 +81,12 @@ export interface SyntaxTokenSource {
   path: string;
   key: string;
   token_field: string;
+  deprecated_tokens?: Record<string, SyntaxTokenDeprecation>;
+}
+
+export interface SyntaxTokenDeprecation {
+  code: string;
+  message: string;
 }
 
 export type SyntaxTokenSources = Record<string, SyntaxTokenSource>;
