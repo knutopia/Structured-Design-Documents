@@ -35,6 +35,7 @@ z
 - Updated tmp.sdd to use step differentiation
 - Updated scenario_flow variations of tmp.sdd to match
 - Added Step-deprecated error messaging to CLI
+- Shared connector-overlap recovery for scenario flows
 
 ## Mon 10-5
 
