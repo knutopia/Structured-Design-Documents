@@ -29,6 +29,11 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Thu 10-8
+
+- South-to-west connector routing fix for scenario_flow
+
+
 ## Wed 10-7
 
 - Explored renderer QA agent options

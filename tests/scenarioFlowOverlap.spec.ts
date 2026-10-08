@@ -76,6 +76,15 @@ describe("scenario_flow reconverging overlap recovery", () => {
         expect(independentParallelConflicts(emittedConnectors)).toBe(0);
 
         const scene = rendered.positionedScene;
+        const downwardBranch = scene.edges.find(edge => edge.from.itemId === "S-002" && edge.to.itemId === "S-004")!;
+        // Rebuilding for label capacity must preserve the simplest valid south-to-west route.
+        // Check the emitted geometry rather than a prepared candidate or a particular offset.
+        expect(downwardBranch.from.portId).toBe("flow_out_south");
+        expect(downwardBranch.route.points).toEqual([
+          { x: downwardBranch.from.x, y: downwardBranch.from.y },
+          { x: downwardBranch.from.x, y: downwardBranch.to.y },
+          { x: downwardBranch.to.x, y: downwardBranch.to.y }
+        ]);
         expect(scene.edges.filter(edge => edge.label).map(edge => edge.id)).toEqual(
           rendered.measuredScene.edges.filter(edge => edge.label).map(edge => edge.id)
         );

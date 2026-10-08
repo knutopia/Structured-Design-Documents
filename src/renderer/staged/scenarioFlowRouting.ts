@@ -1033,6 +1033,13 @@ function buildTemplateRoute(
   // A south exit must first clear its own node. The west arrival then approaches
   // from the left, including when the destination lies behind the source.
   if (plan.sourceSide === "south" && plan.targetSide === "west") {
+    // Prefer the single turn when both terminal legs have room. Layout rebuilds
+    // must not reintroduce a detour after the optional south port was selected.
+    // Obstacle refinement and complete route-set acceptance still apply below.
+    if (targetStub.y >= sourceStub.y && targetStub.x >= sourceStub.x) {
+      points.push({ x: sourceStub.x, y: targetStub.y }, targetStub, targetPoint);
+      return applySegmentCoordinates(buildRoute(points), plan.id, segmentCoordinateByKey, plan, index);
+    }
     const returnY = roundMetric(Math.max(sourceStub.y, targetStub.y + FIXED_SEPARATION_DISTANCE));
     points.push(
       { x: sourceStub.x, y: returnY },
