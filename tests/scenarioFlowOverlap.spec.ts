@@ -46,11 +46,12 @@ describe("scenario_flow reconverging overlap recovery", () => {
           detailId,
           nodeDecoratorMode: { id: mode, showNodeType: mode.includes("type"), showNodeId: mode.includes("id") }
         });
-        expect(spy).toHaveBeenCalledTimes(1);
+        expect(spy).toHaveBeenCalled();
         expect(rendered.diagnostics.filter(diagnostic => diagnostic.severity === "error")).toEqual([]);
 
-        const initial = spy.mock.calls[0]![0];
-        const resolution = spy.mock.results[0]!.value as core.FinalRoutingResult;
+        const revision = rendered.routingStages.labelLayoutTrace?.selectedRevision ?? 0;
+        const initial = spy.mock.calls[revision]![0];
+        const resolution = spy.mock.results[revision]!.value as core.FinalRoutingResult;
         expect(resolution.status).toBe("resolved");
         if (resolution.status !== "resolved") throw new Error(resolution.reason);
         // The proof needs geometric recovery; it must not silently pass because a
@@ -75,6 +76,34 @@ describe("scenario_flow reconverging overlap recovery", () => {
         expect(independentParallelConflicts(emittedConnectors)).toBe(0);
 
         const scene = rendered.positionedScene;
+        expect(scene.edges.filter(edge => edge.label).map(edge => edge.id)).toEqual(
+          rendered.measuredScene.edges.filter(edge => edge.label).map(edge => edge.id)
+        );
+        for (const edge of scene.edges.filter(edge => edge.label)) {
+          const label = edge.label!;
+          const associated = edge.route.points.slice(1).some((end, index) => {
+            const start = edge.route.points[index]!;
+            const horizontal = start.y === end.y;
+            const axis = horizontal ? "x" : "y", size = horizontal ? "width" : "height";
+            const length = Math.abs(end[axis] - start[axis]);
+            const overlap = Math.min(label[axis] + label[size], Math.max(start[axis], end[axis]))
+              - Math.max(label[axis], Math.min(start[axis], end[axis]));
+            const dx = Math.max(Math.min(start.x, end.x) - label.x - label.width, label.x - Math.max(start.x, end.x), 0);
+            const dy = Math.max(Math.min(start.y, end.y) - label.y - label.height, label.y - Math.max(start.y, end.y), 0);
+            return length > 0.5 && overlap >= Math.min(24, label[size], length) - 0.5 && Math.hypot(dx, dy) <= 12.5;
+          });
+          expect(associated, `${edge.id} own-segment association`).toBe(true);
+        }
+        const nodes = flattenPositionedItems(scene.root).filter(item => item.kind === "node");
+        for (const edge of scene.edges.filter(edge => edge.label && (
+          (edge.from.itemId === "S-003" && edge.to.itemId === "S-006")
+          || (edge.from.itemId === "S-004" && edge.to.itemId === "S-005"))
+        )) {
+          const endpoints = nodes.filter(node => node.id === edge.from.itemId || node.id === edge.to.itemId);
+          expect(edge.label!.y).toBeGreaterThanOrEqual(Math.min(...endpoints.map(node => node.y)));
+          expect(edge.label!.y + edge.label!.height).toBeLessThanOrEqual(Math.max(...endpoints.map(node => node.y + node.height)));
+        }
+        expect(rendered.diagnostics.filter(d => /edge_label_(unresolved|fallback|omitted)$/.test(d.code))).toEqual([]);
         const labels = collectEdgeLabelBoxes(scene.edges);
         const nodeBoxes = flattenPositionedItems(scene.root).filter(item => item.kind === "node")
           .map(item => ({ itemId: item.id, ...getItemRect(item) }));
@@ -114,6 +143,8 @@ describe("scenario_flow reconverging overlap recovery", () => {
           await writeFile(`${prefix}.svg`, preview.artifact.text);
           await writeFile(`${prefix}.json`, `${JSON.stringify({
             trace: resolution.trace,
+            labelLayoutTrace: rendered.routingStages.labelLayoutTrace,
+            gutters: rendered.routingStages.globalGutterState,
             initial,
             final: resolution.context,
             positionedScene: rendered.positionedScene,

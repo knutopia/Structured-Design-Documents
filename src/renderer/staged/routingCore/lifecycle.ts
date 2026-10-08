@@ -54,6 +54,8 @@ export interface FinalRoutingOptions {
   expand?: (context: FinalRoutingContext, violations: readonly RoutingViolation[], absolutePass: number) => FinalRoutingContext | undefined;
 }
 
+export const DEFAULT_FINAL_ROUTING_LIMITS = Object.freeze({ maxCandidates: 4096, maxRepairRevisions: 128 });
+
 function issue(kind: RoutingViolation["kind"], message: string, id: string, index?: number): RoutingViolation {
   return { kind, message, connectorIds: [id], segmentIds: [], routeSegmentIndexes: index === undefined ? undefined : [index] };
 }
@@ -357,7 +359,7 @@ function compareStates(a: RouteSetState, b: RouteSetState): number {
 /** One final-acceptance coordinator. Every geometry revision is rebuilt and checked globally. */
 export function runRoutingLifecycle(initial: FinalRoutingContext, options: FinalRoutingOptions = {}): FinalRoutingResult {
   const trace: FinalRoutingTrace = { validations: 0, candidates: 0, repairRevisions: 0, expansionPasses: 0, repeatedStates: 0 };
-  const maxCandidates = Math.max(1, options.maxCandidates ?? 4096), maxRevisions = Math.max(0, options.maxRepairRevisions ?? 128);
+  const maxCandidates = Math.max(1, options.maxCandidates ?? DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates), maxRevisions = Math.max(0, options.maxRepairRevisions ?? DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions);
   if (!Number.isSafeInteger(maxCandidates) || !Number.isSafeInteger(maxRevisions)) {
     return { status: "failed", reason: "invalid_context", violations: [issue("assignment_exhausted", "Final routing requires finite integer search budgets.", "")], debugConnectors: initial.connectors, trace };
   }

@@ -52,6 +52,10 @@ describe("B5 immutable acceptance baseline", () => {
       "src/renderer/staged/pipeline.ts",
       // Final UI-only output audit is intentionally added to the shared SVG entrypoint.
       "src/renderer/staged/svgBackend.ts",
+      // The shared-label-space Scenario plan authorizes an opt-in placement
+      // predicate. Preserve the historical hash; unchanged default placement
+      // tests, B5 replay, and final UI label audits guard existing behavior.
+      "src/renderer/staged/connectorLabelPlacement.ts",
       // These renderer-core files already differ from the historical B5
       // manifest; the replay and geometry assertions below remain active.
       "src/renderer/staged/routingCore/candidates.ts",
