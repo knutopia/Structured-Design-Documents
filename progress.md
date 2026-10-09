@@ -31,6 +31,7 @@ z
 ## Fri 10-9
 
 - Small progress edit
+- AGENTS.md edit
 
 ## Thu 10-8
 
