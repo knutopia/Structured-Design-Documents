@@ -1,0 +1,1810 @@
+SDD-TEXT 0.2
+Diagram DG-001 "AEB Help Center: Information Architecture"
+  description="Public German content hierarchy observed on 2026-10-05: all 8 categories and 73 sections, one representative real article and the public community topic, plus home-level utility and external navigation. The article and post collections are not enumerated. Parallel browse edges, breadcrumb navigation and the secondary community post-creation destination are retained in the SDD but omitted from this overview. CONTAINS is content parentage; NAVIGATES_TO is document navigation."
+  diagram_type="ia_place_map"
+  scope="Anonymous public site. Authenticated content is not inventoried."
+  evidence="Public Zendesk category and section APIs, community topic API, rendered pages and browser interaction checks."
+  inventory_sources="https://service.aeb.com/api/v2/help_center/de/categories.json?per_page=100 ; https://service.aeb.com/api/v2/help_center/de/sections.json?per_page=100 ; https://service.aeb.com/api/v2/community/topics.json?per_page=100"
+END
+
+Diagram DG-002 "AEB Help Center: UI Contracts"
+  description="Composition of ten inspected concrete pages: home, Trade Compliance category, glossary category, Compliance Screening parent section, its article-list section, Customs release-planning section, one real article, search, community home and news topic. Shared components are actual front-end structures, not template Places. Local state-mode changes show section filtering and the newsletter overlay. Repeated filter changes within the already-filtered mode remain in the SDD and component contract but their self-loop is omitted from this overview. Page-to-page navigation belongs to the IA model."
+  diagram_type="ui_contracts"
+  scope="Representative UI coverage, not an exhaustive UI inventory of every section or article. Component inputs and outputs describe visible browser contracts, not unpublished application APIs."
+  limitations="Support-request form blocked by Cloudflare. No sign-in, votes, comments, posts, newsletter subscription or support request was submitted."
+END
+
+Place P-001 "AEB Help Center (Deutsch)"
+  description="German help-center entry page. Offers search, four product-family links, four cross-product information cards, promoted articles and a live community preview. The category destinations are separate pages; neither the cards nor the product groups are artificial Places."
+  surface="web"
+  route_or_key="/hc/de"
+  source_url="https://service.aeb.com/hc/de"
+  diagrams="DG-001,DG-002"
+  access="public"
+  primary_nav="true"
+  evidence="Browser-rendered home and category inventory; 2026-10-05."
+  article_scope="Only P-33937234420881 is expanded as a concrete article example. All other article IDs remain in their live collections, not as fabricated aggregate Places."
+  CONTAINS P-360003451898 "Trade Compliance Management" diagrams=DG-001
+  NAVIGATES_TO P-360003451898 "Trade Compliance Management" [OpenLinkedPage]
+  CONTAINS P-360003451838 "Customs Management" diagrams=DG-001
+  NAVIGATES_TO P-360003451838 "Customs Management" [OpenLinkedPage]
+  CONTAINS P-360003454218 "Intralogistics & Supply Chain Collaboration" diagrams=DG-001
+  NAVIGATES_TO P-360003454218 "Intralogistics & Supply Chain Collaboration" [OpenLinkedPage]
+  CONTAINS P-4571272827281 "Add-ons für SAP®-Systeme" diagrams=DG-001
+  NAVIGATES_TO P-4571272827281 "Add-ons für SAP®-Systeme" [OpenLinkedPage]
+  CONTAINS P-360000406318 "Betriebsrelevante Informationen" diagrams=DG-001
+  NAVIGATES_TO P-360000406318 "Betriebsrelevante Informationen" [OpenLinkedPage]
+  CONTAINS P-360003388477 "Grundlegende Bedienung" diagrams=DG-001
+  NAVIGATES_TO P-360003388477 "Grundlegende Bedienung" [OpenLinkedPage]
+  CONTAINS P-360001444317 "AEB-Lexikon" diagrams=DG-001
+  NAVIGATES_TO P-360001444317 "AEB-Lexikon" [OpenLinkedPage]
+  CONTAINS P-360003384237 "Leistungen & Konditionen" diagrams=DG-001
+  NAVIGATES_TO P-360003384237 "Leistungen & Konditionen" [OpenLinkedPage]
+  NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch] diagrams=DG-001
+  NAVIGATES_TO P-003 "AEB Community" [OpenCommunity] diagrams=DG-001
+  NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen] diagrams=DG-001
+  NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden] diagrams=DG-001
+  NAVIGATES_TO P-006 "Help Center (English)" [SwitchToEnglish] diagrams=DG-001
+  NAVIGATES_TO P-010 "Dokumentation & Downloads" [OpenDokumentationDownloads] diagrams=DG-001
+  NAVIGATES_TO P-011 "Cloud Status" [OpenCloudStatus] diagrams=DG-001
+  NAVIGATES_TO P-012 "API Logistik" [OpenAPILogistik] diagrams=DG-001
+  NAVIGATES_TO P-013 "API Customs" [OpenAPICustoms] diagrams=DG-001
+  NAVIGATES_TO P-014 "API Trade Compliance" [OpenAPITradeCompliance] diagrams=DG-001
+  NAVIGATES_TO P-015 "API Add-ons für SAP" [OpenAPIAddOnsFurSAP] diagrams=DG-001
+  COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+  COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+  COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+  COMPOSED_OF C-005 "Search and help banner" diagrams=DG-002
+  COMPOSED_OF C-009 "Home category navigation" diagrams=DG-002
+  COMPOSED_OF C-010 "Recommended articles" diagrams=DG-002
+  COMPOSED_OF C-011 "Community preview" diagrams=DG-002
+
+  + Place P-360003451898 "Trade Compliance Management"
+    description="Product-category landing page for sanctions screening and export control. Separates Compliance Screening and Export Controls entry links from updates, subject knowledge, configuration and on-premises support cards."
+    surface="web"
+    route_or_key="/hc/de/categories/360003451898-Trade-Compliance-Management"
+    source_url="https://service.aeb.com/hc/de/categories/360003451898-Trade-Compliance-Management"
+    diagrams="DG-001,DG-002"
+    access="public"
+    zendesk_id="360003451898"
+    zendesk_kind="category"
+    evidence="Public API identity and parentage; category page inspected in browser."
+    CONTAINS P-360005279158 "Compliance Screening" diagrams=DG-001
+    NAVIGATES_TO P-360005279158 "Compliance Screening" [OpenLinkedPage]
+    CONTAINS P-360005345198 "Export Controls" diagrams=DG-001
+    NAVIGATES_TO P-360005345198 "Export Controls" [OpenLinkedPage]
+    CONTAINS P-360005332998 "Fachliche Änderungen & Updates" diagrams=DG-001
+    NAVIGATES_TO P-360005332998 "Fachliche Änderungen & Updates" [OpenLinkedPage]
+    CONTAINS P-360002044857 "Fachwissen" diagrams=DG-001
+    NAVIGATES_TO P-360002044857 "Fachwissen" [OpenLinkedPage]
+    CONTAINS P-360005673978 "Trade Compliance Management konfigurieren" diagrams=DG-001
+    NAVIGATES_TO P-360005673978 "Trade Compliance Management konfigurieren" [OpenLinkedPage]
+    CONTAINS P-34222273157777 "Trade Compliance Management On-Premises" diagrams=DG-001
+    NAVIGATES_TO P-34222273157777 "Trade Compliance Management On-Premises" [OpenLinkedPage]
+    COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+    COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+    COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+    COMPOSED_OF C-008 "Breadcrumb trail" diagrams=DG-002
+    COMPOSED_OF C-005 "Search and help banner" diagrams=DG-002
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-012 "Product and topic links" diagrams=DG-002
+
+    + Place P-360005279158 "Compliance Screening"
+      description="Section landing page grouping guidance on sanctions screening with Compliance Screening; its child section previews operational how-to articles. Its real child sections are modeled below it."
+      surface="web"
+      route_or_key="/hc/de/sections/360005279158-Compliance-Screening"
+      source_url="https://service.aeb.com/hc/de/sections/360005279158-Compliance-Screening"
+      diagrams="DG-001,DG-002"
+      access="public"
+      zendesk_id="360005279158"
+      zendesk_kind="section"
+      category_id="360003451898"
+      evidence="Public API identity and parentage; page inspected in browser."
+      CONTAINS P-360004885357 "Compliance Screening verwenden" diagrams=DG-001
+      NAVIGATES_TO P-360004885357 "Compliance Screening verwenden" [OpenLinkedPage]
+      NAVIGATES_TO P-33937234420881 "Wie bearbeite ich Adresstreffer in Compliance Screening?" [OpenArticlePreview]
+      COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+      COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+      COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+      COMPOSED_OF C-008 "Breadcrumb trail" diagrams=DG-002
+      COMPOSED_OF C-005 "Search and help banner" diagrams=DG-002
+      NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+      NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+      NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+      NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+      COMPOSED_OF C-013 "Section preview groups" diagrams=DG-002
+
+      + Place P-360004885357 "Compliance Screening verwenden"
+        description="Article-list section for running Compliance Screening, investigating address matches and managing screening results. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/360004885357-Compliance-Screening-verwenden"
+        source_url="https://service.aeb.com/hc/de/sections/360004885357-Compliance-Screening-verwenden"
+        diagrams="DG-001,DG-002"
+        access="public"
+        zendesk_id="360004885357"
+        zendesk_kind="section"
+        category_id="360003451898"
+        parent_section_id="360005279158"
+        evidence="Public API identity and parentage; page inspected in browser."
+        CONTAINS P-33937234420881 "Wie bearbeite ich Adresstreffer in Compliance Screening?" diagrams=DG-001
+        NAVIGATES_TO P-33937234420881 "Wie bearbeite ich Adresstreffer in Compliance Screening?" [OpenLinkedPage]
+        COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+        COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+        COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+        COMPOSED_OF C-008 "Breadcrumb trail" diagrams=DG-002
+        COMPOSED_OF C-005 "Search and help banner" diagrams=DG-002
+        NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+        NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+        NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+        NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+        COMPOSED_OF C-015 "Section article list" diagrams=DG-002
+
+        + Place P-33937234420881 "Wie bearbeite ich Adresstreffer in Compliance Screening?"
+          description="One concrete representative article explaining how to investigate and handle address matches. Contains an article body, topic sidebar, author and update metadata, follow control, helpfulness voting, related articles, support link and sign-in-gated comments. This is an actual article, not a template or a stand-in navigable page for the entire corpus."
+          surface="web"
+          route_or_key="/hc/de/articles/33937234420881-Wie-bearbeite-ich-Adresstreffer-in-Compliance-Screening"
+          source_url="https://service.aeb.com/hc/de/articles/33937234420881-Wie-bearbeite-ich-Adresstreffer-in-Compliance-Screening"
+          diagrams="DG-001,DG-002"
+          access="public"
+          zendesk_id="33937234420881"
+          zendesk_kind="article"
+          section_id="360004885357"
+          sample="true"
+          evidence="Opened by clicking the section article link; a new main-frame document request and new performance.timeOrigin were observed."
+          NAVIGATES_TO P-360004885357 "Compliance Screening verwenden" [OpenSectionBreadcrumbOrWeitereAnzeigen]
+          COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+          COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+          COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+          COMPOSED_OF C-008 "Breadcrumb trail" diagrams=DG-002
+          NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+          NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+          NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+          NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+          COMPOSED_OF C-020 "More-on-this-topic sidebar" diagrams=DG-002
+          COMPOSED_OF C-019 "Article body and metadata" diagrams=DG-002
+          COMPOSED_OF C-017 "Follow control" diagrams=DG-002
+          COMPOSED_OF C-021 "Article helpfulness and support" diagrams=DG-002
+          COMPOSED_OF C-022 "Related articles" diagrams=DG-002
+          COMPOSED_OF C-023 "Article comments" diagrams=DG-002
+        END
+      END
+    END
+    + Place P-360005345198 "Export Controls"
+      description="Section landing page grouping guidance on export-control checks and embargo handling, with the currently published tips subsection. Its real child sections are modeled below it."
+      surface="web"
+      route_or_key="/hc/de/sections/360005345198-Export-Controls"
+      source_url="https://service.aeb.com/hc/de/sections/360005345198-Export-Controls"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360005345198"
+      zendesk_kind="section"
+      category_id="360003451898"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      CONTAINS P-360005674538 "Tipps & Tricks" diagrams=DG-001
+      NAVIGATES_TO P-360005674538 "Tipps & Tricks" [OpenLinkedPage]
+
+      + Place P-360005674538 "Tipps & Tricks"
+        description="Article-list section for practical tips for using Export Controls. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/360005674538-Tipps-Tricks"
+        source_url="https://service.aeb.com/hc/de/sections/360005674538-Tipps-Tricks"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="360005674538"
+        zendesk_kind="section"
+        category_id="360003451898"
+        parent_section_id="360005345198"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+    END
+    + Place P-360005332998 "Fachliche Änderungen & Updates"
+      description="Article-list section for regulatory and product changes affecting Trade Compliance Management. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360005332998-Fachliche-%C3%84nderungen-Updates"
+      source_url="https://service.aeb.com/hc/de/sections/360005332998-Fachliche-%C3%84nderungen-Updates"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360005332998"
+      zendesk_kind="section"
+      category_id="360003451898"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002044857 "Fachwissen"
+      description="Article-list section for subject knowledge for sanctions screening, export controls and trade-compliance risk. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002044857-Fachwissen"
+      source_url="https://service.aeb.com/hc/de/sections/360002044857-Fachwissen"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002044857"
+      zendesk_kind="section"
+      category_id="360003451898"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360005673978 "Trade Compliance Management konfigurieren"
+      description="Article-list section for configuration of Trade Compliance Management applications. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360005673978-Trade-Compliance-Management-konfigurieren"
+      source_url="https://service.aeb.com/hc/de/sections/360005673978-Trade-Compliance-Management-konfigurieren"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360005673978"
+      zendesk_kind="section"
+      category_id="360003451898"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-34222273157777 "Trade Compliance Management On-Premises"
+      description="Article-list section for operating Trade Compliance Management in an on-premises environment. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/34222273157777-Trade-Compliance-Management-On-Premises"
+      source_url="https://service.aeb.com/hc/de/sections/34222273157777-Trade-Compliance-Management-On-Premises"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="34222273157777"
+      zendesk_kind="section"
+      category_id="360003451898"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+  END
+  + Place P-360003451838 "Customs Management"
+    description="Customs product-category landing page. Routes to Export Filing, Import Filing, EMCS and Origin & Preferences, alongside regulatory changes, customs notices and release-migration information."
+    surface="web"
+    route_or_key="/hc/de/categories/360003451838-Customs-Management"
+    source_url="https://service.aeb.com/hc/de/categories/360003451838-Customs-Management"
+    diagrams="DG-001"
+    access="public"
+    zendesk_id="360003451838"
+    zendesk_kind="category"
+    evidence="Public API identity and parentage; category page inspected in browser."
+    CONTAINS P-360005279098 "Export Filing: ATLAS" diagrams=DG-001
+    NAVIGATES_TO P-360005279098 "Export Filing: ATLAS" [OpenLinkedPage]
+    CONTAINS P-360005253657 "Import Filing: ATLAS" diagrams=DG-001
+    NAVIGATES_TO P-360005253657 "Import Filing: ATLAS" [OpenLinkedPage]
+    CONTAINS P-13789721073425 "EMCS Filing" diagrams=DG-001
+    NAVIGATES_TO P-13789721073425 "EMCS Filing" [OpenLinkedPage]
+    CONTAINS P-27079894874257 "Origin & Preferences" diagrams=DG-001
+    NAVIGATES_TO P-27079894874257 "Origin & Preferences" [OpenLinkedPage]
+    CONTAINS P-360005333058 "Fachliche Änderungen & Releaseplanung" diagrams=DG-001
+    NAVIGATES_TO P-360005333058 "Fachliche Änderungen & Releaseplanung" [OpenLinkedPage]
+    CONTAINS P-360001965137 "Fachwissen" diagrams=DG-001
+    NAVIGATES_TO P-360001965137 "Fachwissen" [OpenLinkedPage]
+    CONTAINS P-360002362818 "Teilnehmer-Informationen" diagrams=DG-001
+    NAVIGATES_TO P-360002362818 "Teilnehmer-Informationen" [OpenLinkedPage]
+    CONTAINS P-4433084390161 "ATLAS und EMCS Releasewechsel" diagrams=DG-001
+    NAVIGATES_TO P-4433084390161 "ATLAS und EMCS Releasewechsel" [OpenLinkedPage]
+    CONTAINS P-5011264988561 "Wechsel von e-dec auf Passar" diagrams=DG-001
+    NAVIGATES_TO P-5011264988561 "Wechsel von e-dec auf Passar" [OpenLinkedPage]
+    COMPOSED_OF C-001 "AEB header"
+    COMPOSED_OF C-004 "Footer and back-to-top"
+    COMPOSED_OF C-031 "Privacy consent dialog"
+    COMPOSED_OF C-008 "Breadcrumb trail"
+    COMPOSED_OF C-005 "Search and help banner"
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-012 "Product and topic links"
+
+    + Place P-360005279098 "Export Filing: ATLAS"
+      description="Section landing page grouping guidance on Export Filing: ATLAS, grouped into getting started, daily use, special procedures, troubleshooting, configuration and interfaces. Its real child sections are modeled below it."
+      surface="web"
+      route_or_key="/hc/de/sections/360005279098-Export-Filing-ATLAS"
+      source_url="https://service.aeb.com/hc/de/sections/360005279098-Export-Filing-ATLAS"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360005279098"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      CONTAINS P-360003827878 "Erste Schritte" diagrams=DG-001
+      NAVIGATES_TO P-360003827878 "Erste Schritte" [OpenLinkedPage]
+      CONTAINS P-360001965117 "Export Filing: ATLAS verwenden" diagrams=DG-001
+      NAVIGATES_TO P-360001965117 "Export Filing: ATLAS verwenden" [OpenLinkedPage]
+      CONTAINS P-14888653897489 "Besondere Verfahren abwickeln" diagrams=DG-001
+      NAVIGATES_TO P-14888653897489 "Besondere Verfahren abwickeln" [OpenLinkedPage]
+      CONTAINS P-360002060538 "Tipps & Fehlerbehebung" diagrams=DG-001
+      NAVIGATES_TO P-360002060538 "Tipps & Fehlerbehebung" [OpenLinkedPage]
+      CONTAINS P-360001984898 "Betrieb & Konfiguration" diagrams=DG-001
+      NAVIGATES_TO P-360001984898 "Betrieb & Konfiguration" [OpenLinkedPage]
+      CONTAINS P-14888723535633 "Mit einer Schnittstelle arbeiten" diagrams=DG-001
+      NAVIGATES_TO P-14888723535633 "Mit einer Schnittstelle arbeiten" [OpenLinkedPage]
+
+      + Place P-360003827878 "Erste Schritte"
+        description="Article-list section for getting started with Export Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/360003827878-Erste-Schritte"
+        source_url="https://service.aeb.com/hc/de/sections/360003827878-Erste-Schritte"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="360003827878"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005279098"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-360001965117 "Export Filing: ATLAS verwenden"
+        description="Article-list section for day-to-day export declarations in Export Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/360001965117-Export-Filing-ATLAS-verwenden"
+        source_url="https://service.aeb.com/hc/de/sections/360001965117-Export-Filing-ATLAS-verwenden"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="360001965117"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005279098"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-14888653897489 "Besondere Verfahren abwickeln"
+        description="Article-list section for handling special customs procedures in Export Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/14888653897489-Besondere-Verfahren-abwickeln"
+        source_url="https://service.aeb.com/hc/de/sections/14888653897489-Besondere-Verfahren-abwickeln"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="14888653897489"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005279098"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-360002060538 "Tipps & Fehlerbehebung"
+        description="Article-list section for practical tips and troubleshooting for Export Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/360002060538-Tipps-Fehlerbehebung"
+        source_url="https://service.aeb.com/hc/de/sections/360002060538-Tipps-Fehlerbehebung"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="360002060538"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005279098"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-360001984898 "Betrieb & Konfiguration"
+        description="Article-list section for operation and configuration of Export Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/360001984898-Betrieb-Konfiguration"
+        source_url="https://service.aeb.com/hc/de/sections/360001984898-Betrieb-Konfiguration"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="360001984898"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005279098"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-14888723535633 "Mit einer Schnittstelle arbeiten"
+        description="Article-list section for working with interfaces to Export Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/14888723535633-Mit-einer-Schnittstelle-arbeiten"
+        source_url="https://service.aeb.com/hc/de/sections/14888723535633-Mit-einer-Schnittstelle-arbeiten"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="14888723535633"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005279098"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+    END
+    + Place P-360005253657 "Import Filing: ATLAS"
+      description="Section landing page grouping guidance on Import Filing: ATLAS, grouped into master data, import processing, NCTS and configuration. Its real child sections are modeled below it."
+      surface="web"
+      route_or_key="/hc/de/sections/360005253657-Import-Filing-ATLAS"
+      source_url="https://service.aeb.com/hc/de/sections/360005253657-Import-Filing-ATLAS"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360005253657"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      CONTAINS P-360005256757 "Stammdaten für Importe" diagrams=DG-001
+      NAVIGATES_TO P-360005256757 "Stammdaten für Importe" [OpenLinkedPage]
+      CONTAINS P-4420262676625 "Import Filing: ATLAS verwenden" diagrams=DG-001
+      NAVIGATES_TO P-4420262676625 "Import Filing: ATLAS verwenden" [OpenLinkedPage]
+      CONTAINS P-4420262426641 "NCTS-Versandverfahren (DE)" diagrams=DG-001
+      NAVIGATES_TO P-4420262426641 "NCTS-Versandverfahren (DE)" [OpenLinkedPage]
+      CONTAINS P-4420277777937 "Import Filing: ATLAS konfigurieren" diagrams=DG-001
+      NAVIGATES_TO P-4420277777937 "Import Filing: ATLAS konfigurieren" [OpenLinkedPage]
+
+      + Place P-360005256757 "Stammdaten für Importe"
+        description="Article-list section for master-data setup for import declarations. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/360005256757-Stammdaten-f%C3%BCr-Importe"
+        source_url="https://service.aeb.com/hc/de/sections/360005256757-Stammdaten-f%C3%BCr-Importe"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="360005256757"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005253657"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-4420262676625 "Import Filing: ATLAS verwenden"
+        description="Article-list section for day-to-day import declarations in Import Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/4420262676625-Import-Filing-ATLAS-verwenden"
+        source_url="https://service.aeb.com/hc/de/sections/4420262676625-Import-Filing-ATLAS-verwenden"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="4420262676625"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005253657"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-4420262426641 "NCTS-Versandverfahren (DE)"
+        description="Article-list section for German NCTS transit procedures within Import Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/4420262426641-NCTS-Versandverfahren-DE"
+        source_url="https://service.aeb.com/hc/de/sections/4420262426641-NCTS-Versandverfahren-DE"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="4420262426641"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005253657"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-4420277777937 "Import Filing: ATLAS konfigurieren"
+        description="Article-list section for configuration of Import Filing: ATLAS. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/4420277777937-Import-Filing-ATLAS-konfigurieren"
+        source_url="https://service.aeb.com/hc/de/sections/4420277777937-Import-Filing-ATLAS-konfigurieren"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="4420277777937"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="360005253657"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+    END
+    + Place P-13789721073425 "EMCS Filing"
+      description="Section landing page grouping guidance on EMCS Filing, with separate master-data and operational-use subsections. Its real child sections are modeled below it."
+      surface="web"
+      route_or_key="/hc/de/sections/13789721073425-EMCS-Filing"
+      source_url="https://service.aeb.com/hc/de/sections/13789721073425-EMCS-Filing"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="13789721073425"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      CONTAINS P-13789746828817 "Stammdaten für EMCS Filing" diagrams=DG-001
+      NAVIGATES_TO P-13789746828817 "Stammdaten für EMCS Filing" [OpenLinkedPage]
+      CONTAINS P-13789900257681 "EMCS Filing verwenden" diagrams=DG-001
+      NAVIGATES_TO P-13789900257681 "EMCS Filing verwenden" [OpenLinkedPage]
+
+      + Place P-13789746828817 "Stammdaten für EMCS Filing"
+        description="Article-list section for master data needed to prepare EMCS movements. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/13789746828817-Stammdaten-f%C3%BCr-EMCS-Filing"
+        source_url="https://service.aeb.com/hc/de/sections/13789746828817-Stammdaten-f%C3%BCr-EMCS-Filing"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="13789746828817"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="13789721073425"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-13789900257681 "EMCS Filing verwenden"
+        description="Article-list section for day-to-day movement processing with EMCS Filing. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/13789900257681-EMCS-Filing-verwenden"
+        source_url="https://service.aeb.com/hc/de/sections/13789900257681-EMCS-Filing-verwenden"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="13789900257681"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="13789721073425"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+    END
+    + Place P-27079894874257 "Origin & Preferences"
+      description="Section landing page grouping guidance on origin and preference management, including the PEM origin-rule transition. Its real child sections are modeled below it."
+      surface="web"
+      route_or_key="/hc/de/sections/27079894874257-Origin-Preferences"
+      source_url="https://service.aeb.com/hc/de/sections/27079894874257-Origin-Preferences"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="27079894874257"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      CONTAINS P-27082238965265 "Wechsel der PEM-Ursprungsregeln 2026" diagrams=DG-001
+      NAVIGATES_TO P-27082238965265 "Wechsel der PEM-Ursprungsregeln 2026" [OpenLinkedPage]
+
+      + Place P-27082238965265 "Wechsel der PEM-Ursprungsregeln 2026"
+        description="Article-list section for the 2026 change to PEM preferential-origin rules within Origin & Preferences. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/27082238965265-Wechsel-der-PEM-Ursprungsregeln-2026"
+        source_url="https://service.aeb.com/hc/de/sections/27082238965265-Wechsel-der-PEM-Ursprungsregeln-2026"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="27082238965265"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="27079894874257"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+    END
+    + Place P-360005333058 "Fachliche Änderungen & Releaseplanung"
+      description="Article-list section for regulatory changes and release planning for customs products; product-label filters update the article list without leaving this page. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360005333058-Fachliche-%C3%84nderungen-Releaseplanung"
+      source_url="https://service.aeb.com/hc/de/sections/360005333058-Fachliche-%C3%84nderungen-Releaseplanung"
+      diagrams="DG-001,DG-002"
+      access="public"
+      zendesk_id="360005333058"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage; page inspected in browser."
+      COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+      COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+      COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+      COMPOSED_OF C-008 "Breadcrumb trail" diagrams=DG-002
+      COMPOSED_OF C-005 "Search and help banner" diagrams=DG-002
+      NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+      NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+      NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+      NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+      COMPOSED_OF C-015 "Section article list" diagrams=DG-002
+      COMPOSED_OF C-018 "Customs article filters" diagrams=DG-002
+      COMPOSED_OF C-016 "Pagination links" diagrams=DG-002
+      CONTAINS VS-001 "No product filters" diagrams=DG-002
+      CONTAINS VS-002 "Product-filtered articles" diagrams=DG-002
+
+      + ViewState VS-001 "No product filters"
+        description="Release-planning section with no product labels selected. The article list shows the unfiltered section collection. URL and owning Place are unchanged when filters are applied."
+        place_id="P-360005333058"
+        diagrams="DG-002"
+        TRANSITIONS_TO VS-002 "Product-filtered articles" [SelectProductLabel] {selectedLabels is not empty} diagrams=DG-002
+      END
+      + ViewState VS-002 "Product-filtered articles"
+        description="Same section page after one or more product labels are selected. An asynchronous public API response replaces the article list; the observed document time origin and URL remain unchanged."
+        place_id="P-360005333058"
+        diagrams="DG-002"
+        TRANSITIONS_TO VS-001 "No product filters" [ClearAllOrDeselectLastLabel] {selectedLabels is empty} diagrams=DG-002
+        TRANSITIONS_TO VS-002 "Product-filtered articles" [ChangeProductLabels] {selectedLabels remains nonempty}
+      END
+    END
+    + Place P-360001965137 "Fachwissen"
+      description="Article-list section for customs subject knowledge supporting declaration and clearance processes. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360001965137-Fachwissen"
+      source_url="https://service.aeb.com/hc/de/sections/360001965137-Fachwissen"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360001965137"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002362818 "Teilnehmer-Informationen"
+      description="Article-list section for ATLAS and EMCS participant notices from German customs, with product-label filtering defined by the delivered page script. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002362818-Teilnehmer-Informationen"
+      source_url="https://service.aeb.com/hc/de/sections/360002362818-Teilnehmer-Informationen"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002362818"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-4433084390161 "ATLAS und EMCS Releasewechsel"
+      description="Section landing page grouping guidance on ATLAS, NCTS and EMCS release changes, including the published EMCS 2.7 subsection. Its real child sections are modeled below it."
+      surface="web"
+      route_or_key="/hc/de/sections/4433084390161-ATLAS-und-EMCS-Releasewechsel"
+      source_url="https://service.aeb.com/hc/de/sections/4433084390161-ATLAS-und-EMCS-Releasewechsel"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="4433084390161"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      CONTAINS P-12273097506961 "EMCS 2.7" diagrams=DG-001
+      NAVIGATES_TO P-12273097506961 "EMCS 2.7" [OpenLinkedPage]
+
+      + Place P-12273097506961 "EMCS 2.7"
+        description="Article-list section for the EMCS 2.7 release change within the customs release-migration collection. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/12273097506961-EMCS-2-7"
+        source_url="https://service.aeb.com/hc/de/sections/12273097506961-EMCS-2-7"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="12273097506961"
+        zendesk_kind="section"
+        category_id="360003451838"
+        parent_section_id="4433084390161"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+    END
+    + Place P-5011264988561 "Wechsel von e-dec auf Passar"
+      description="Article-list section for the Swiss change from e-dec Export and NCTS to Passar 1.0. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/5011264988561-Wechsel-von-e-dec-auf-Passar"
+      source_url="https://service.aeb.com/hc/de/sections/5011264988561-Wechsel-von-e-dec-auf-Passar"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="5011264988561"
+      zendesk_kind="section"
+      category_id="360003451838"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+  END
+  + Place P-360003454218 "Intralogistics & Supply Chain Collaboration"
+    description="Logistics category landing page. The current public content links to Carrier Connect and a separate changes-and-updates section for shipping and transport processes."
+    surface="web"
+    route_or_key="/hc/de/categories/360003454218-Intralogistics-Supply-Chain-Collaboration"
+    source_url="https://service.aeb.com/hc/de/categories/360003454218-Intralogistics-Supply-Chain-Collaboration"
+    diagrams="DG-001"
+    access="public"
+    zendesk_id="360003454218"
+    zendesk_kind="category"
+    evidence="Public API identity and parentage; category page inspected in browser."
+    CONTAINS P-360005283978 "Carrier Connect" diagrams=DG-001
+    NAVIGATES_TO P-360005283978 "Carrier Connect" [OpenLinkedPage]
+    CONTAINS P-360005438978 "Fachliche Änderungen & Updates" diagrams=DG-001
+    NAVIGATES_TO P-360005438978 "Fachliche Änderungen & Updates" [OpenLinkedPage]
+    COMPOSED_OF C-001 "AEB header"
+    COMPOSED_OF C-004 "Footer and back-to-top"
+    COMPOSED_OF C-031 "Privacy consent dialog"
+    COMPOSED_OF C-008 "Breadcrumb trail"
+    COMPOSED_OF C-005 "Search and help banner"
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-012 "Product and topic links"
+
+    + Place P-360005283978 "Carrier Connect"
+      description="Section landing page grouping guidance on Carrier Connect configuration, shipment processing, practical tips and carrier-specific requirements. Its real child sections are modeled below it."
+      surface="web"
+      route_or_key="/hc/de/sections/360005283978-Carrier-Connect"
+      source_url="https://service.aeb.com/hc/de/sections/360005283978-Carrier-Connect"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360005283978"
+      zendesk_kind="section"
+      category_id="360003454218"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      CONTAINS P-4406103702801 "Carrier Connect konfigurieren & Stammdaten pflegen" diagrams=DG-001
+      NAVIGATES_TO P-4406103702801 "Carrier Connect konfigurieren & Stammdaten pflegen" [OpenLinkedPage]
+      CONTAINS P-4406103630225 "Versandaufträge abwickeln" diagrams=DG-001
+      NAVIGATES_TO P-4406103630225 "Versandaufträge abwickeln" [OpenLinkedPage]
+      CONTAINS P-4406111337745 "Tipps & Tricks" diagrams=DG-001
+      NAVIGATES_TO P-4406111337745 "Tipps & Tricks" [OpenLinkedPage]
+      CONTAINS P-9947170302481 "Dienstleisterspezifische Besonderheiten" diagrams=DG-001
+      NAVIGATES_TO P-9947170302481 "Dienstleisterspezifische Besonderheiten" [OpenLinkedPage]
+
+      + Place P-4406103702801 "Carrier Connect konfigurieren & Stammdaten pflegen"
+        description="Article-list section for Carrier Connect configuration and shipping master-data maintenance. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/4406103702801-Carrier-Connect-konfigurieren-Stammdaten-pflegen"
+        source_url="https://service.aeb.com/hc/de/sections/4406103702801-Carrier-Connect-konfigurieren-Stammdaten-pflegen"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="4406103702801"
+        zendesk_kind="section"
+        category_id="360003454218"
+        parent_section_id="360005283978"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-4406103630225 "Versandaufträge abwickeln"
+        description="Article-list section for processing shipping orders in Carrier Connect. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/4406103630225-Versandauftr%C3%A4ge-abwickeln"
+        source_url="https://service.aeb.com/hc/de/sections/4406103630225-Versandauftr%C3%A4ge-abwickeln"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="4406103630225"
+        zendesk_kind="section"
+        category_id="360003454218"
+        parent_section_id="360005283978"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-4406111337745 "Tipps & Tricks"
+        description="Article-list section for practical Carrier Connect usage tips. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/4406111337745-Tipps-Tricks"
+        source_url="https://service.aeb.com/hc/de/sections/4406111337745-Tipps-Tricks"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="4406111337745"
+        zendesk_kind="section"
+        category_id="360003454218"
+        parent_section_id="360005283978"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+      + Place P-9947170302481 "Dienstleisterspezifische Besonderheiten"
+        description="Article-list section for carrier-specific shipping requirements and behavior in Carrier Connect. Individual articles are intentionally not enumerated."
+        surface="web"
+        route_or_key="/hc/de/sections/9947170302481-Dienstleisterspezifische-Besonderheiten"
+        source_url="https://service.aeb.com/hc/de/sections/9947170302481-Dienstleisterspezifische-Besonderheiten"
+        diagrams="DG-001"
+        access="public"
+        zendesk_id="9947170302481"
+        zendesk_kind="section"
+        category_id="360003454218"
+        parent_section_id="360005283978"
+        evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+      END
+    END
+    + Place P-360005438978 "Fachliche Änderungen & Updates"
+      description="Article-list section for changes affecting logistics products and carrier integrations. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360005438978-Fachliche-%C3%84nderungen-Updates"
+      source_url="https://service.aeb.com/hc/de/sections/360005438978-Fachliche-%C3%84nderungen-Updates"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360005438978"
+      zendesk_kind="section"
+      category_id="360003454218"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+  END
+  + Place P-4571272827281 "Add-ons für SAP®-Systeme"
+    description="SAP add-on category. Presents article previews for cross-product add-on guidance, Trade Compliance add-ons and Customs Management add-ons."
+    surface="web"
+    route_or_key="/hc/de/categories/4571272827281-Add-ons-f%C3%BCr-SAP-Systeme"
+    source_url="https://service.aeb.com/hc/de/categories/4571272827281-Add-ons-f%C3%BCr-SAP-Systeme"
+    diagrams="DG-001"
+    access="public"
+    zendesk_id="4571272827281"
+    zendesk_kind="category"
+    evidence="Public API identity and parentage; category page inspected in browser."
+    CONTAINS P-4571362579729 "Produktübergreifendes zu Add-ons für  SAP®" diagrams=DG-001
+    NAVIGATES_TO P-4571362579729 "Produktübergreifendes zu Add-ons für  SAP®" [OpenLinkedPage]
+    CONTAINS P-6745186830097 "Trade Compliance Management Add-ons für SAP®" diagrams=DG-001
+    NAVIGATES_TO P-6745186830097 "Trade Compliance Management Add-ons für SAP®" [OpenLinkedPage]
+    CONTAINS P-9064764529425 "Customs Management Add-ons für SAP®" diagrams=DG-001
+    NAVIGATES_TO P-9064764529425 "Customs Management Add-ons für SAP®" [OpenLinkedPage]
+    COMPOSED_OF C-001 "AEB header"
+    COMPOSED_OF C-004 "Footer and back-to-top"
+    COMPOSED_OF C-031 "Privacy consent dialog"
+    COMPOSED_OF C-008 "Breadcrumb trail"
+    COMPOSED_OF C-005 "Search and help banner"
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-013 "Section preview groups"
+
+    + Place P-4571362579729 "Produktübergreifendes zu Add-ons für  SAP®"
+      description="Article-list section for installation, service packs and cross-product operation of AEB add-ons for SAP. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/4571362579729-Produkt%C3%BCbergreifendes-zu-Add-ons-f%C3%BCr-SAP"
+      source_url="https://service.aeb.com/hc/de/sections/4571362579729-Produkt%C3%BCbergreifendes-zu-Add-ons-f%C3%BCr-SAP"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="4571362579729"
+      zendesk_kind="section"
+      category_id="4571272827281"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-6745186830097 "Trade Compliance Management Add-ons für SAP®"
+      description="Article-list section for using and troubleshooting the SAP add-ons for sanctions screening and export controls. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/6745186830097-Trade-Compliance-Management-Add-ons-f%C3%BCr-SAP"
+      source_url="https://service.aeb.com/hc/de/sections/6745186830097-Trade-Compliance-Management-Add-ons-f%C3%BCr-SAP"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="6745186830097"
+      zendesk_kind="section"
+      category_id="4571272827281"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-9064764529425 "Customs Management Add-ons für SAP®"
+      description="Article-list section for SAP add-ons that integrate customs declaration processes. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/9064764529425-Customs-Management-Add-ons-f%C3%BCr-SAP"
+      source_url="https://service.aeb.com/hc/de/sections/9064764529425-Customs-Management-Add-ons-f%C3%BCr-SAP"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="9064764529425"
+      zendesk_kind="section"
+      category_id="4571272827281"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+  END
+  + Place P-360000406318 "Betriebsrelevante Informationen"
+    description="Operational information category. Groups maintenance and availability, product changes, IT requirements and ASSIST4 transformation guidance into section previews with article links."
+    surface="web"
+    route_or_key="/hc/de/categories/360000406318-Betriebsrelevante-Informationen"
+    source_url="https://service.aeb.com/hc/de/categories/360000406318-Betriebsrelevante-Informationen"
+    diagrams="DG-001"
+    access="public"
+    zendesk_id="360000406318"
+    zendesk_kind="category"
+    evidence="Public API identity and parentage; category page inspected in browser."
+    CONTAINS P-360000868178 "Betriebsrelevante Informationen" diagrams=DG-001
+    NAVIGATES_TO P-360000868178 "Betriebsrelevante Informationen" [OpenLinkedPage]
+    CONTAINS P-9866446465809 "Changes & Updates" diagrams=DG-001
+    NAVIGATES_TO P-9866446465809 "Changes & Updates" [OpenLinkedPage]
+    CONTAINS P-360002530057 "IT & Software" diagrams=DG-001
+    NAVIGATES_TO P-360002530057 "IT & Software" [OpenLinkedPage]
+    CONTAINS P-10171852908433 "Transformation" diagrams=DG-001
+    NAVIGATES_TO P-10171852908433 "Transformation" [OpenLinkedPage]
+    COMPOSED_OF C-001 "AEB header"
+    COMPOSED_OF C-004 "Footer and back-to-top"
+    COMPOSED_OF C-031 "Privacy consent dialog"
+    COMPOSED_OF C-008 "Breadcrumb trail"
+    COMPOSED_OF C-005 "Search and help banner"
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-013 "Section preview groups"
+
+    + Place P-360000868178 "Betriebsrelevante Informationen"
+      description="Article-list section for maintenance, system availability, data-center connectivity and shared operational notices. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360000868178-Betriebsrelevante-Informationen"
+      source_url="https://service.aeb.com/hc/de/sections/360000868178-Betriebsrelevante-Informationen"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360000868178"
+      zendesk_kind="section"
+      category_id="360000406318"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-9866446465809 "Changes & Updates"
+      description="Article-list section for product release notes, planned changes and technical update notices. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/9866446465809-Changes-Updates"
+      source_url="https://service.aeb.com/hc/de/sections/9866446465809-Changes-Updates"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="9866446465809"
+      zendesk_kind="section"
+      category_id="360000406318"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002530057 "IT & Software"
+      description="Article-list section for technical requirements and shared IT or software administration topics. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002530057-IT-Software"
+      source_url="https://service.aeb.com/hc/de/sections/360002530057-IT-Software"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002530057"
+      zendesk_kind="section"
+      category_id="360000406318"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-10171852908433 "Transformation"
+      description="Article-list section for the transformation of ASSIST4 and related migration information. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/10171852908433-Transformation"
+      source_url="https://service.aeb.com/hc/de/sections/10171852908433-Transformation"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="10171852908433"
+      zendesk_kind="section"
+      category_id="360000406318"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+  END
+  + Place P-360003388477 "Grundlegende Bedienung"
+    description="Cross-product usage category. Groups sign-in and passwords, access administration, AEB accounts, basic usage, tips and single sign-on; each group links to its section and selected articles."
+    surface="web"
+    route_or_key="/hc/de/categories/360003388477-Grundlegende-Bedienung"
+    source_url="https://service.aeb.com/hc/de/categories/360003388477-Grundlegende-Bedienung"
+    diagrams="DG-001"
+    access="public"
+    zendesk_id="360003388477"
+    zendesk_kind="category"
+    evidence="Public API identity and parentage; category page inspected in browser."
+    CONTAINS P-360005157798 "Anmelden und Passwort" diagrams=DG-001
+    NAVIGATES_TO P-360005157798 "Anmelden und Passwort" [OpenLinkedPage]
+    CONTAINS P-20107165360273 "Zugänge verwalten" diagrams=DG-001
+    NAVIGATES_TO P-20107165360273 "Zugänge verwalten" [OpenLinkedPage]
+    CONTAINS P-20107185360401 "AEB-Konto" diagrams=DG-001
+    NAVIGATES_TO P-20107185360401 "AEB-Konto" [OpenLinkedPage]
+    CONTAINS P-11143491531665 "Basiswissen" diagrams=DG-001
+    NAVIGATES_TO P-11143491531665 "Basiswissen" [OpenLinkedPage]
+    CONTAINS P-11144263882257 "Tipps & Tricks" diagrams=DG-001
+    NAVIGATES_TO P-11144263882257 "Tipps & Tricks" [OpenLinkedPage]
+    CONTAINS P-20558387734673 "Single Sign-on (SSO)" diagrams=DG-001
+    NAVIGATES_TO P-20558387734673 "Single Sign-on (SSO)" [OpenLinkedPage]
+    COMPOSED_OF C-001 "AEB header"
+    COMPOSED_OF C-004 "Footer and back-to-top"
+    COMPOSED_OF C-031 "Privacy consent dialog"
+    COMPOSED_OF C-008 "Breadcrumb trail"
+    COMPOSED_OF C-005 "Search and help banner"
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-013 "Section preview groups"
+
+    + Place P-360005157798 "Anmelden und Passwort"
+      description="Article-list section for sign-in, password resets, locked users and access troubleshooting. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360005157798-Anmelden-und-Passwort"
+      source_url="https://service.aeb.com/hc/de/sections/360005157798-Anmelden-und-Passwort"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360005157798"
+      zendesk_kind="section"
+      category_id="360003388477"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-20107165360273 "Zugänge verwalten"
+      description="Article-list section for creating, administering and assigning access to AEB user and API accounts. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/20107165360273-Zug%C3%A4nge-verwalten"
+      source_url="https://service.aeb.com/hc/de/sections/20107165360273-Zug%C3%A4nge-verwalten"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="20107165360273"
+      zendesk_kind="section"
+      category_id="360003388477"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-20107185360401 "AEB-Konto"
+      description="Article-list section for activating, using and maintaining an AEB account and its personal information. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/20107185360401-AEB-Konto"
+      source_url="https://service.aeb.com/hc/de/sections/20107185360401-AEB-Konto"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="20107185360401"
+      zendesk_kind="section"
+      category_id="360003388477"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-11143491531665 "Basiswissen"
+      description="Article-list section for basic concepts and common operating tasks in AEB applications. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/11143491531665-Basiswissen"
+      source_url="https://service.aeb.com/hc/de/sections/11143491531665-Basiswissen"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="11143491531665"
+      zendesk_kind="section"
+      category_id="360003388477"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-11144263882257 "Tipps & Tricks"
+      description="Article-list section for cross-product productivity tips and practical usage advice. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/11144263882257-Tipps-Tricks"
+      source_url="https://service.aeb.com/hc/de/sections/11144263882257-Tipps-Tricks"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="11144263882257"
+      zendesk_kind="section"
+      category_id="360003388477"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-20558387734673 "Single Sign-on (SSO)"
+      description="Article-list section for single sign-on setup and use with AEB applications. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/20558387734673-Single-Sign-on-SSO"
+      source_url="https://service.aeb.com/hc/de/sections/20558387734673-Single-Sign-on-SSO"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="20558387734673"
+      zendesk_kind="section"
+      category_id="360003388477"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+  END
+  + Place P-360001444317 "AEB-Lexikon"
+    description="Glossary category page organized into 22 published letter sections. Each letter previews its terms and links to a real section page; missing alphabet letters are not invented as destinations."
+    surface="web"
+    route_or_key="/hc/de/categories/360001444317-AEB-Lexikon"
+    source_url="https://service.aeb.com/hc/de/categories/360001444317-AEB-Lexikon"
+    diagrams="DG-001,DG-002"
+    access="public"
+    zendesk_id="360001444317"
+    zendesk_kind="category"
+    evidence="Public API identity and parentage; category page inspected in browser."
+    CONTAINS P-360002287698 "A" diagrams=DG-001
+    NAVIGATES_TO P-360002287698 "A" [OpenLinkedPage]
+    CONTAINS P-360002299237 "B" diagrams=DG-001
+    NAVIGATES_TO P-360002299237 "B" [OpenLinkedPage]
+    CONTAINS P-360002319558 "C" diagrams=DG-001
+    NAVIGATES_TO P-360002319558 "C" [OpenLinkedPage]
+    CONTAINS P-360002319578 "D" diagrams=DG-001
+    NAVIGATES_TO P-360002319578 "D" [OpenLinkedPage]
+    CONTAINS P-360002299257 "E" diagrams=DG-001
+    NAVIGATES_TO P-360002299257 "E" [OpenLinkedPage]
+    CONTAINS P-360002303757 "F" diagrams=DG-001
+    NAVIGATES_TO P-360002303757 "F" [OpenLinkedPage]
+    CONTAINS P-360002401337 "G" diagrams=DG-001
+    NAVIGATES_TO P-360002401337 "G" [OpenLinkedPage]
+    CONTAINS P-360002421238 "H" diagrams=DG-001
+    NAVIGATES_TO P-360002421238 "H" [OpenLinkedPage]
+    CONTAINS P-360002401397 "I" diagrams=DG-001
+    NAVIGATES_TO P-360002401397 "I" [OpenLinkedPage]
+    CONTAINS P-360002421258 "J" diagrams=DG-001
+    NAVIGATES_TO P-360002421258 "J" [OpenLinkedPage]
+    CONTAINS P-360002401457 "K" diagrams=DG-001
+    NAVIGATES_TO P-360002401457 "K" [OpenLinkedPage]
+    CONTAINS P-360002421278 "L" diagrams=DG-001
+    NAVIGATES_TO P-360002421278 "L" [OpenLinkedPage]
+    CONTAINS P-360002421298 "M" diagrams=DG-001
+    NAVIGATES_TO P-360002421298 "M" [OpenLinkedPage]
+    CONTAINS P-360002401477 "N" diagrams=DG-001
+    NAVIGATES_TO P-360002401477 "N" [OpenLinkedPage]
+    CONTAINS P-360002421318 "P" diagrams=DG-001
+    NAVIGATES_TO P-360002421318 "P" [OpenLinkedPage]
+    CONTAINS P-360002401537 "R" diagrams=DG-001
+    NAVIGATES_TO P-360002401537 "R" [OpenLinkedPage]
+    CONTAINS P-360002421438 "S" diagrams=DG-001
+    NAVIGATES_TO P-360002421438 "S" [OpenLinkedPage]
+    CONTAINS P-360002421458 "T" diagrams=DG-001
+    NAVIGATES_TO P-360002421458 "T" [OpenLinkedPage]
+    CONTAINS P-360002421478 "U" diagrams=DG-001
+    NAVIGATES_TO P-360002421478 "U" [OpenLinkedPage]
+    CONTAINS P-360002421498 "V" diagrams=DG-001
+    NAVIGATES_TO P-360002421498 "V" [OpenLinkedPage]
+    CONTAINS P-360002401557 "W" diagrams=DG-001
+    NAVIGATES_TO P-360002401557 "W" [OpenLinkedPage]
+    CONTAINS P-360002401597 "Z" diagrams=DG-001
+    NAVIGATES_TO P-360002401597 "Z" [OpenLinkedPage]
+    COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+    COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+    COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+    COMPOSED_OF C-008 "Breadcrumb trail" diagrams=DG-002
+    COMPOSED_OF C-005 "Search and help banner" diagrams=DG-002
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-013 "Section preview groups" diagrams=DG-002
+
+    + Place P-360002287698 "A"
+      description="Article-list section for glossary terms beginning with A. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002287698-A"
+      source_url="https://service.aeb.com/hc/de/sections/360002287698-A"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002287698"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage; page inspected in browser."
+      COMPOSED_OF C-001 "AEB header"
+      COMPOSED_OF C-004 "Footer and back-to-top"
+      COMPOSED_OF C-031 "Privacy consent dialog"
+      COMPOSED_OF C-008 "Breadcrumb trail"
+      COMPOSED_OF C-005 "Search and help banner"
+      NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+      NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+      NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+      NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+      COMPOSED_OF C-015 "Section article list"
+    END
+    + Place P-360002299237 "B"
+      description="Article-list section for glossary terms beginning with B. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002299237-B"
+      source_url="https://service.aeb.com/hc/de/sections/360002299237-B"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002299237"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002319558 "C"
+      description="Article-list section for glossary terms beginning with C. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002319558-C"
+      source_url="https://service.aeb.com/hc/de/sections/360002319558-C"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002319558"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002319578 "D"
+      description="Article-list section for glossary terms beginning with D. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002319578-D"
+      source_url="https://service.aeb.com/hc/de/sections/360002319578-D"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002319578"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002299257 "E"
+      description="Article-list section for glossary terms beginning with E. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002299257-E"
+      source_url="https://service.aeb.com/hc/de/sections/360002299257-E"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002299257"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002303757 "F"
+      description="Article-list section for glossary terms beginning with F. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002303757-F"
+      source_url="https://service.aeb.com/hc/de/sections/360002303757-F"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002303757"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002401337 "G"
+      description="Article-list section for glossary terms beginning with G. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002401337-G"
+      source_url="https://service.aeb.com/hc/de/sections/360002401337-G"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002401337"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421238 "H"
+      description="Article-list section for glossary terms beginning with H. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421238-H"
+      source_url="https://service.aeb.com/hc/de/sections/360002421238-H"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421238"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002401397 "I"
+      description="Article-list section for glossary terms beginning with I. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002401397-I"
+      source_url="https://service.aeb.com/hc/de/sections/360002401397-I"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002401397"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421258 "J"
+      description="Article-list section for glossary terms beginning with J. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421258-J"
+      source_url="https://service.aeb.com/hc/de/sections/360002421258-J"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421258"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002401457 "K"
+      description="Article-list section for glossary terms beginning with K. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002401457-K"
+      source_url="https://service.aeb.com/hc/de/sections/360002401457-K"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002401457"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421278 "L"
+      description="Article-list section for glossary terms beginning with L. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421278-L"
+      source_url="https://service.aeb.com/hc/de/sections/360002421278-L"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421278"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421298 "M"
+      description="Article-list section for glossary terms beginning with M. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421298-M"
+      source_url="https://service.aeb.com/hc/de/sections/360002421298-M"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421298"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002401477 "N"
+      description="Article-list section for glossary terms beginning with N. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002401477-N"
+      source_url="https://service.aeb.com/hc/de/sections/360002401477-N"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002401477"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421318 "P"
+      description="Article-list section for glossary terms beginning with P. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421318-P"
+      source_url="https://service.aeb.com/hc/de/sections/360002421318-P"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421318"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002401537 "R"
+      description="Article-list section for glossary terms beginning with R. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002401537-R"
+      source_url="https://service.aeb.com/hc/de/sections/360002401537-R"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002401537"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421438 "S"
+      description="Article-list section for glossary terms beginning with S. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421438-S"
+      source_url="https://service.aeb.com/hc/de/sections/360002421438-S"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421438"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421458 "T"
+      description="Article-list section for glossary terms beginning with T. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421458-T"
+      source_url="https://service.aeb.com/hc/de/sections/360002421458-T"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421458"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421478 "U"
+      description="Article-list section for glossary terms beginning with U. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421478-U"
+      source_url="https://service.aeb.com/hc/de/sections/360002421478-U"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421478"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002421498 "V"
+      description="Article-list section for glossary terms beginning with V. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002421498-V"
+      source_url="https://service.aeb.com/hc/de/sections/360002421498-V"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002421498"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002401557 "W"
+      description="Article-list section for glossary terms beginning with W. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002401557-W"
+      source_url="https://service.aeb.com/hc/de/sections/360002401557-W"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002401557"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+    + Place P-360002401597 "Z"
+      description="Article-list section for glossary terms beginning with Z. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002401597-Z"
+      source_url="https://service.aeb.com/hc/de/sections/360002401597-Z"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002401597"
+      zendesk_kind="section"
+      category_id="360001444317"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+  END
+  + Place P-360003384237 "Leistungen & Konditionen"
+    description="Services-and-terms category page. Previews the single published section on support services, remote maintenance, invoices, transactions and service availability."
+    surface="web"
+    route_or_key="/hc/de/categories/360003384237-Leistungen-Konditionen"
+    source_url="https://service.aeb.com/hc/de/categories/360003384237-Leistungen-Konditionen"
+    diagrams="DG-001"
+    access="public"
+    zendesk_id="360003384237"
+    zendesk_kind="category"
+    evidence="Public API identity and parentage; category page inspected in browser."
+    CONTAINS P-360002572618 "Leistungen & Konditionen" diagrams=DG-001
+    NAVIGATES_TO P-360002572618 "Leistungen & Konditionen" [OpenLinkedPage]
+    COMPOSED_OF C-001 "AEB header"
+    COMPOSED_OF C-004 "Footer and back-to-top"
+    COMPOSED_OF C-031 "Privacy consent dialog"
+    COMPOSED_OF C-008 "Breadcrumb trail"
+    COMPOSED_OF C-005 "Search and help banner"
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-013 "Section preview groups"
+
+    + Place P-360002572618 "Leistungen & Konditionen"
+      description="Article-list section for service and support terms, remote maintenance, invoices, transaction billing and availability. Individual articles are intentionally not enumerated."
+      surface="web"
+      route_or_key="/hc/de/sections/360002572618-Leistungen-Konditionen"
+      source_url="https://service.aeb.com/hc/de/sections/360002572618-Leistungen-Konditionen"
+      diagrams="DG-001"
+      access="public"
+      zendesk_id="360002572618"
+      zendesk_kind="section"
+      category_id="360003384237"
+      evidence="Public API identity and parentage. Page-specific UI was not individually inspected."
+    END
+  END
+END
+
+Place P-002 "Suchergebnisse"
+  description="Search page for German help articles and community posts. Query, content-type filtering and pagination are URL-driven. Result cards carry title, excerpt, location, author and discussion metadata; their tracked links navigate to content pages."
+  surface="web"
+  route_or_key="/hc/de/search"
+  source_url="https://service.aeb.com/hc/de/search"
+  diagrams="DG-001,DG-002"
+  access="public"
+  query_parameters="query, filter_by, page, utf8"
+  evidence="Inspected with query=Compliance; real facet and pagination hrefs captured."
+  NAVIGATES_TO P-002 "Suchergebnisse" [ChangeSearchTypeOrResultPage]
+  COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+  COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+  COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+  COMPOSED_OF C-008 "Breadcrumb trail" diagrams=DG-002
+  COMPOSED_OF C-006 "Search input" diagrams=DG-002
+  COMPOSED_OF C-007 "Support and documentation links" diagrams=DG-002
+  NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+  NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+  NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+  NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+  COMPOSED_OF C-025 "Search type facets" diagrams=DG-002
+  COMPOSED_OF C-024 "Search result list" diagrams=DG-002
+  COMPOSED_OF C-016 "Pagination links" diagrams=DG-002
+END
+
+Place P-003 "AEB Community"
+  description="Community entry page with a public news forum, a sign-in entry for discussion, recent activity, new-post link and a newsletter call to action. Newsletter registration opens an overlay on this same page."
+  surface="web"
+  route_or_key="/hc/de/community/topics"
+  source_url="https://service.aeb.com/hc/de/community/topics"
+  diagrams="DG-001,DG-002"
+  access="public"
+  primary_nav="true"
+  evidence="Rendered page and newsletter-open click inspected."
+  CONTAINS P-6348376033553 "Meldungen aus Zoll und Exportkontrolle" diagrams=DG-001
+  NAVIGATES_TO P-6348376033553 "Meldungen aus Zoll und Exportkontrolle" [OpenLinkedPage]
+  NAVIGATES_TO P-007 "Neuer Community-Post" [NeuerPost]
+  NAVIGATES_TO P-005 "Anmelden / AEB Identity" [OpenDiscussionForumWhileSignedOut]
+  NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [HelpCenterMenuItem]
+  COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+  COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+  COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+  COMPOSED_OF C-005 "Search and help banner" diagrams=DG-002
+  NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+  NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+  NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+  NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+  COMPOSED_OF C-026 "Community forum cards" diagrams=DG-002
+  COMPOSED_OF C-027 "Community activity feed" diagrams=DG-002
+  COMPOSED_OF C-028 "Newsletter invitation" diagrams=DG-002
+  CONTAINS VS-003 "Community browsing" diagrams=DG-002
+  CONTAINS VS-004 "Newsletter dialog open" diagrams=DG-002
+
+  + Place P-6348376033553 "Meldungen aus Zoll und Exportkontrolle"
+    description="Public news topic listing customs and export-control posts with excerpts, author metadata, votes, comments, pagination and follow affordance. Posts are intentionally not enumerated."
+    surface="web"
+    route_or_key="/hc/de/community/topics/6348376033553-Meldungen-aus-Zoll-und-Exportkontrolle"
+    source_url="https://service.aeb.com/hc/de/community/topics/6348376033553-Meldungen-aus-Zoll-und-Exportkontrolle"
+    diagrams="DG-001,DG-002"
+    access="public"
+    zendesk_id="6348376033553"
+    zendesk_kind="community_topic"
+    evidence="Public topic API and browser-rendered topic page."
+    NAVIGATES_TO P-003 "AEB Community" [CommunityBreadcrumb]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [NeuerPostWhileSignedOut]
+    NAVIGATES_TO P-6348376033553 "Meldungen aus Zoll und Exportkontrolle" [FollowPaginationLink]
+    COMPOSED_OF C-001 "AEB header" diagrams=DG-002
+    COMPOSED_OF C-004 "Footer and back-to-top" diagrams=DG-002
+    COMPOSED_OF C-031 "Privacy consent dialog" diagrams=DG-002
+    COMPOSED_OF C-008 "Breadcrumb trail" diagrams=DG-002
+    COMPOSED_OF C-006 "Search input" diagrams=DG-002
+    COMPOSED_OF C-007 "Support and documentation links" diagrams=DG-002
+    NAVIGATES_TO P-001 "AEB Help Center (Deutsch)" [AEBLogoOrHelpCenterBreadcrumb]
+    NAVIGATES_TO P-004 "Anfrage einreichen" [AnfrageEinreichen]
+    NAVIGATES_TO P-005 "Anmelden / AEB Identity" [Anmelden]
+    NAVIGATES_TO P-002 "Suchergebnisse" [SubmitSearch]
+    COMPOSED_OF C-030 "Topic post list" diagrams=DG-002
+    COMPOSED_OF C-016 "Pagination links" diagrams=DG-002
+    COMPOSED_OF C-017 "Follow control" diagrams=DG-002
+  END
+  + ViewState VS-003 "Community browsing"
+    description="Community home with the newsletter overlay closed. Forum cards and recent activity remain the underlying page."
+    place_id="P-003"
+    diagrams="DG-002"
+    TRANSITIONS_TO VS-004 "Newsletter dialog open" [JetztAbonnieren] diagrams=DG-002
+  END
+  + ViewState VS-004 "Newsletter dialog open"
+    description="Community home with the newsletter registration overlay open. This is a genuine local UI mode of the same Place, not navigation to a registration page."
+    place_id="P-003"
+    diagrams="DG-002"
+    TRANSITIONS_TO VS-003 "Community browsing" [CloseNewsletterDialog] diagrams=DG-002
+    COMPOSED_OF C-029 "Newsletter registration dialog" diagrams=DG-002
+  END
+END
+
+Place P-004 "Anfrage einreichen"
+  description="Support-request entry linked from the header, search banner and article support prompt. The review browser received a Cloudflare verification page, so actual form fields, required authentication and submission states are not asserted."
+  surface="web"
+  route_or_key="/hc/de/requests/new"
+  source_url="https://service.aeb.com/hc/de/requests/new"
+  diagrams="DG-001"
+  verification="Route confirmed; form content unverified because of security challenge."
+END
+
+Place P-005 "Anmelden / AEB Identity"
+  description="Authentication entry that redirects through Zendesk access to the AEB identity provider. The observed destination presents an email-first login screen. A return_to parameter preserves the originating help-center page; no authenticated screens were inspected."
+  surface="web"
+  route_or_key="/hc/de/signin"
+  source_url="https://service.aeb.com/hc/de/signin"
+  diagrams="DG-001"
+  access="public"
+  redirect_destination="https://idp.aeb.com/auth/realms/aeb/protocol/saml/"
+  zendesk_brand_id="360000493678"
+  query_parameters="return_to"
+  verification="Browser click and redirect observed. Transient SAML request values are intentionally not retained."
+END
+
+Place P-006 "Help Center (English)"
+  description="English-language entry linked by the locale switcher. The switcher normally requests the equivalent translated page using change_language/en-us and return_to; the English content tree is outside this German-site inventory."
+  surface="web"
+  route_or_key="/hc/en-us"
+  source_url="https://service.aeb.com/hc/en-us"
+  diagrams="DG-001"
+  access="public"
+  scope="Locale boundary only; not recursively inspected."
+END
+
+Place P-007 "Neuer Community-Post"
+  description="Community post-creation destination exposed on the community home. Its topic preselection is captured from the actual link; the editor and the restricted discussion forum behind this topic were not inspected."
+  surface="web"
+  route_or_key="/hc/de/community/posts/new?community_post%5Btopic_id%5D=6348340965009"
+  source_url="https://service.aeb.com/hc/de/community/posts/new?community_post%5Btopic_id%5D=6348340965009"
+  prefilled_topic_id="6348340965009"
+  scope="Link boundary only; no unpublished topic Place or editor fields inferred."
+END
+
+Place P-010 "Dokumentation & Downloads"
+  description="Separate AEB documentation and download portal linked from the global menu and help banner. Destination internals are outside the review scope."
+  surface="web"
+  route_or_key="https://service.aeb.de/"
+  source_url="https://service.aeb.de/"
+  diagrams="DG-001"
+  scope="External navigation boundary; href verified in the help-center menu."
+END
+
+Place P-011 "Cloud Status"
+  description="Separate cloud-status site linked from global navigation. Destination internals are outside the review scope."
+  surface="web"
+  route_or_key="https://status.aeb.com/"
+  source_url="https://status.aeb.com/"
+  diagrams="DG-001"
+  scope="External navigation boundary; href verified in the help-center menu."
+END
+
+Place P-012 "API Logistik"
+  description="External developer-documentation entry for transport and freight management. Destination internals are outside the review scope."
+  surface="web"
+  route_or_key="https://transport-freight-management.docs.developers.aeb.com/"
+  source_url="https://transport-freight-management.docs.developers.aeb.com/"
+  diagrams="DG-001"
+  scope="External navigation boundary; href verified in the help-center menu."
+END
+
+Place P-013 "API Customs"
+  description="External developer-documentation entry for Customs Management. Destination internals are outside the review scope."
+  surface="web"
+  route_or_key="https://customsmanagement.docs.developers.aeb.com/"
+  source_url="https://customsmanagement.docs.developers.aeb.com/"
+  diagrams="DG-001"
+  scope="External navigation boundary; href verified in the help-center menu."
+END
+
+Place P-014 "API Trade Compliance"
+  description="External developer-documentation entry for Trade Compliance Management. Destination internals are outside the review scope."
+  surface="web"
+  route_or_key="https://trade-compliance.docs.developers.aeb.com/"
+  source_url="https://trade-compliance.docs.developers.aeb.com/"
+  diagrams="DG-001"
+  scope="External navigation boundary; href verified in the help-center menu."
+END
+
+Place P-015 "API Add-ons für SAP"
+  description="External developer-documentation entry for SAP add-ons. Destination internals are outside the review scope."
+  surface="web"
+  route_or_key="https://sap-plugins.docs.developers.aeb.com/"
+  source_url="https://sap-plugins.docs.developers.aeb.com/"
+  diagrams="DG-001"
+  scope="External navigation boundary; href verified in the help-center menu."
+END
+
+Component C-001 "AEB header"
+  description="Shared page header with the AEB logo/home link, expandable navigation and language/account links. The logo destination is context-sensitive between Help Center and Community."
+  responsibility="Shared page header with the AEB logo/home link, expandable navigation and language/account links. The logo destination is context-sensitive between Help Center and Community."
+  inputs="Current help-center or community context; locale; anonymous user"
+  outputs="Home navigation, menu disclosure, locale navigation or sign-in"
+  diagrams="DG-002"
+  CONTAINS C-002 "Navigation menu" diagrams=DG-002
+  CONTAINS C-003 "Language and sign-in links" diagrams=DG-002
+
+  + Component C-002 "Navigation menu"
+    description="Expandable global menu with Cloud Status, Community or Help Center, documentation, API-documentation submenu, request and aeb.com links. Opening the menu is local UI disclosure; selecting a destination navigates."
+    responsibility="Expandable global menu with Cloud Status, Community or Help Center, documentation, API-documentation submenu, request and aeb.com links. Opening the menu is local UI disclosure; selecting a destination navigates."
+    inputs="Current page context; expanded flag; destination hrefs"
+    outputs="Menu visibility or document navigation to selected href"
+    diagrams="DG-002"
+  END
+  + Component C-003 "Language and sign-in links"
+    description="Header controls for the available translation and sign-in. Sign-in leaves the current document for AEB Identity; the language link carries a translated return path."
+    responsibility="Header controls for the available translation and sign-in. Sign-in leaves the current document for AEB Identity; the language link carries a translated return path."
+    inputs="Locale; translation availability; current return URL"
+    outputs="change_language/en-us navigation or authentication redirect"
+    diagrams="DG-002"
+  END
+END
+
+Component C-004 "Footer and back-to-top"
+  description="Shared footer with LinkedIn and YouTube exits, AEB copyright/home, imprint and privacy links. Back-to-top scrolls within the current document."
+  responsibility="Shared footer with LinkedIn and YouTube exits, AEB copyright/home, imprint and privacy links. Back-to-top scrolls within the current document."
+  inputs="Current page; legal and social hrefs"
+  outputs="External-link navigation or same-document scroll"
+  diagrams="DG-002"
+END
+
+Component C-005 "Search and help banner"
+  description="Search region used on home, category, section and community entry pages, with context-specific artwork/headline and support exits. Article pages have a different content layout, not this banner."
+  responsibility="Search region used on home, category, section and community entry pages, with context-specific artwork/headline and support exits. Article pages have a different content layout, not this banner."
+  inputs="Page heading and context; search query"
+  outputs="Search navigation or support/documentation navigation"
+  diagrams="DG-002"
+  CONTAINS C-006 "Search input" diagrams=DG-002
+  CONTAINS C-007 "Support and documentation links" diagrams=DG-002
+
+  + Component C-006 "Search input"
+    description="Search field labeled Wie können wir helfen? with instant-search enabled in delivered markup. Explicit submission uses the form GET action; suggestion interaction was not tested."
+    responsibility="Search field labeled Wie können wir helfen? with instant-search enabled in delivered markup. Explicit submission uses the form GET action; suggestion interaction was not tested."
+    inputs="query text; locale; optional topic constraint"
+    outputs="GET /hc/de/search with query and any topic parameter"
+    diagrams="DG-002"
+  END
+  + Component C-007 "Support and documentation links"
+    description="Adjacent entry links for submitting a request and opening the separate documentation/download portal. Topic/search variants may show only the support link."
+    responsibility="Adjacent entry links for submitting a request and opening the separate documentation/download portal. Topic/search variants may show only the support link."
+    inputs="Context-specific link visibility; request and documentation hrefs"
+    outputs="Document navigation to /hc/de/requests/new or https://service.aeb.de/"
+    diagrams="DG-002"
+  END
+END
+
+Component C-008 "Breadcrumb trail"
+  description="Ordered links back through real category, section or community ancestors. These are document links, not in-place ViewState transitions."
+  responsibility="Ordered links back through real category, section or community ancestors. These are document links, not in-place ViewState transitions."
+  inputs="Ancestor labels and hrefs; current page label"
+  outputs="Navigation to selected ancestor page"
+  diagrams="DG-002"
+END
+
+Component C-009 "Home category navigation"
+  description="Four product-family entry links followed by four information cards for operations, basic usage, glossary and services. All eight destinations are real categories with preserved Zendesk IDs."
+  responsibility="Four product-family entry links followed by four information cards for operations, basic usage, glossary and services. All eight destinations are real categories with preserved Zendesk IDs."
+  inputs="Eight category names, descriptions and hrefs"
+  outputs="Navigate to selected category"
+  diagrams="DG-002"
+END
+
+Component C-010 "Recommended articles"
+  description="Home-page list of promoted operational articles, including maintenance, IP subnets, certificates and cloud system requirements. Article membership remains live content."
+  responsibility="Home-page list of promoted operational articles, including maintenance, IP subnets, certificates and cloud system requirements. Article membership remains live content."
+  inputs="Promoted article titles and hrefs"
+  outputs="Navigate to selected article"
+  diagrams="DG-002"
+END
+
+Component C-011 "Community preview"
+  description="Home-page preview populated with recent public community posts. Entries link to real post URLs; posts are not individual nodes in this model."
+  responsibility="Home-page preview populated with recent public community posts. Entries link to real post URLs; posts are not individual nodes in this model."
+  inputs="Recent post title and href collection"
+  outputs="Navigate to selected community post"
+  diagrams="DG-002"
+END
+
+Component C-012 "Product and topic links"
+  description="Product-category body with prominent product-section shortcuts and separate informational section cards. Observed in Trade Compliance, Customs and Logistics categories."
+  responsibility="Product-category body with prominent product-section shortcuts and separate informational section cards. Observed in Trade Compliance, Customs and Logistics categories."
+  inputs="Product section links; informational section labels, descriptions and hrefs"
+  outputs="Navigate to a concrete section"
+  diagrams="DG-002"
+END
+
+Component C-013 "Section preview groups"
+  description="Repeated blocks headed by a linked section name, followed by a limited article preview and an Alle ... Beiträge anzeigen link when needed. Used by parent sections, general categories and glossary letters."
+  responsibility="Repeated blocks headed by a linked section name, followed by a limited article preview and an Alle ... Beiträge anzeigen link when needed. Used by parent sections, general categories and glossary letters."
+  inputs="Child section title, id, href and preview article collection"
+  outputs="Navigate to section or directly to an article"
+  diagrams="DG-002"
+END
+
+Component C-015 "Section article list"
+  description="Article-title links owned by the current section. In the observed filterable section, the list is replaced after the label-filter request returns; article clicks open separate documents."
+  responsibility="Article-title links owned by the current section. In the observed filterable section, the list is replaced after the label-filter request returns; article clicks open separate documents."
+  inputs="Current section id; article title and html_url collection"
+  outputs="Navigation to article href; rendered replacement list on filter response"
+  diagrams="DG-002"
+END
+
+Component C-016 "Pagination links"
+  description="Server-provided next/last-page links on paginated collections. Search uses page; the public community topic uses after/before cursors. Links load another document at the same logical collection Place."
+  responsibility="Server-provided next/last-page links on paginated collections. Search uses page; the public community topic uses after/before cursors. Links load another document at the same logical collection Place."
+  inputs="Current collection URL; query or topic; next/last hrefs"
+  outputs="Navigation preserving collection parameters"
+  diagrams="DG-002"
+END
+
+Component C-017 "Follow control"
+  description="Follow or subscribe affordance with context-specific labels and follower information, observed on the article and public community topic. No follow action was submitted and authenticated persistence is not asserted."
+  responsibility="Follow or subscribe affordance with context-specific labels and follower information, observed on the article and public community topic. No follow action was submitted and authenticated persistence is not asserted."
+  inputs="Current content identity; visible follower state; authentication context"
+  outputs="User request to follow; sign-in requirement or resulting persistence untested"
+  diagrams="DG-002"
+END
+
+Component C-018 "Customs article filters"
+  description="Product-label toggles for Import Filing, Export Filing, EMCS Filing and Sonstige, plus clear-all. Clicking Import Filing was verified to fetch the section articles API with label_names and replace links without a document change. Delivered script also enables this control for section 360002362818."
+  responsibility="Product-label toggles for Import Filing, Export Filing, EMCS Filing and Sonstige, plus clear-all. Clicking Import Filing was verified to fetch the section articles API with label_names and replace links without a document change. Delivered script also enables this control for section 360002362818."
+  inputs="sectionId; selectedLabels; four product labels"
+  outputs="GET /api/v2/help_center/de/sections/{sectionId}/articles.json?label_names=...; updated list, selected-label styling and count"
+  diagrams="DG-002"
+END
+
+Component C-019 "Article body and metadata"
+  description="Actual article heading, author link, updated date, rich-text guidance and illustrations. The guidance describes AEB software; its embedded screenshots and instructions are not Help Center controls."
+  responsibility="Actual article heading, author link, updated date, rich-text guidance and illustrations. The guidance describes AEB software; its embedded screenshots and instructions are not Help Center controls."
+  inputs="Article title, author/profile href, update timestamp and body HTML"
+  outputs="Readable guidance and outbound body links"
+  diagrams="DG-002"
+END
+
+Component C-020 "More-on-this-topic sidebar"
+  description="Sidebar listing sibling articles and a Weitere anzeigen link to their owning section. Responsive disclosure changes visibility within this article page."
+  responsibility="Sidebar listing sibling articles and a Weitere anzeigen link to their owning section. Responsive disclosure changes visibility within this article page."
+  inputs="Sibling article titles and hrefs; section href; expanded flag"
+  outputs="Sibling/section navigation or sidebar disclosure"
+  diagrams="DG-002"
+END
+
+Component C-021 "Article helpfulness and support"
+  description="Ja/Nein helpfulness controls, current helpful-vote summary and a support-request prompt beneath the article. Voting was not exercised."
+  responsibility="Ja/Nein helpfulness controls, current helpful-vote summary and a support-request prompt beneath the article. Voting was not exercised."
+  inputs="Current article identity; vote summary"
+  outputs="Helpfulness choice or navigation to request page; vote persistence unverified"
+  diagrams="DG-002"
+END
+
+Component C-022 "Related articles"
+  description="Recommendations beneath article content. Tracked related/click URLs resolve to real articles; no hypothetical related-article Place is introduced."
+  responsibility="Recommendations beneath article content. Tracked related/click URLs resolve to real articles; no hypothetical related-article Place is introduced."
+  inputs="Recommended titles and tracked hrefs"
+  outputs="Document navigation to selected recommendation"
+  diagrams="DG-002"
+END
+
+Component C-023 "Article comments"
+  description="Comment region showing an explicit sign-in requirement to anonymous readers on the inspected article. No authenticated editor or submission states are assumed."
+  responsibility="Comment region showing an explicit sign-in requirement to anonymous readers on the inspected article. No authenticated editor or submission states are assumed."
+  inputs="Visible comments; authentication context; return URL"
+  outputs="Sign-in navigation to comment"
+  diagrams="DG-002"
+END
+
+Component C-024 "Search result list"
+  description="Result count and mixed article/community cards with title, date, excerpt, content ancestry, author, votes and comment counts. Search/click tracking links lead to content pages."
+  responsibility="Result count and mixed article/community cards with title, date, excerpt, content ancestry, author, votes and comment counts. Search/click tracking links lead to content pages."
+  inputs="query; filter_by; result count and result collection"
+  outputs="Tracked result navigation and collection pagination"
+  diagrams="DG-002"
+END
+
+Component C-025 "Search type facets"
+  description="Links for all types, Help Center and Community, each showing a count. Selection changes filter_by in the URL; it is not modeled as an in-place transition."
+  responsibility="Links for all types, Help Center and Community, each showing a count. Selection changes filter_by in the URL; it is not modeled as an in-place transition."
+  inputs="Query and per-type counts; selected filter_by"
+  outputs="GET navigation to /hc/de/search preserving query"
+  diagrams="DG-002"
+END
+
+Component C-026 "Community forum cards"
+  description="Community entry cards for public news and signed-in discussion. The anonymous discussion card links to sign-in, not to a visible invented forum page."
+  responsibility="Community entry cards for public news and signed-in discussion. The anonymous discussion card links to sign-in, not to a visible invented forum page."
+  inputs="Forum labels, descriptions and actual hrefs; anonymous context"
+  outputs="Public topic navigation or authentication entry"
+  diagrams="DG-002"
+END
+
+Component C-027 "Community activity feed"
+  description="Recent public activity cards containing post title, excerpt, author and response metadata, with links to the relevant topic/post."
+  responsibility="Recent public activity cards containing post title, excerpt, author and response metadata, with links to the relevant topic/post."
+  inputs="Recent community post collection"
+  outputs="Navigation to actual topic, post or author profile"
+  diagrams="DG-002"
+END
+
+Component C-028 "Newsletter invitation"
+  description="Jetzt abonnieren button in the community home sidebar. It opens the newsletter dialog over the current page."
+  responsibility="Jetzt abonnieren button in the community home sidebar. It opens the newsletter dialog over the current page."
+  inputs="Dialog visibility"
+  outputs="Local open-dialog interaction"
+  diagrams="DG-002"
+END
+
+Component C-029 "Newsletter registration dialog"
+  description="Overlay with close button, first name, last name, email, privacy acknowledgement and Abonnieren submission. Opening was observed; no personal data was entered and subscription submission was not tested."
+  responsibility="Overlay with close button, first name, last name, email, privacy acknowledgement and Abonnieren submission. Opening was observed; no personal data was entered and subscription submission was not tested."
+  inputs="firstname; lastname; email; data-privacy acknowledgement; dialog visibility"
+  outputs="Local close interaction or newsletter form submission; success/error outcome unverified"
+  diagrams="DG-002"
+END
+
+Component C-030 "Topic post list"
+  description="Chronological public news cards with excerpts, author links, vote/comment metadata, pagination and a new-post affordance. Individual posts remain unexpanded."
+  responsibility="Chronological public news cards with excerpts, author links, vote/comment metadata, pagination and a new-post affordance. Individual posts remain unexpanded."
+  inputs="topic id; post summaries; after/before cursors; anonymous context"
+  outputs="Post/profile navigation; collection pagination; sign-in for new post"
+  diagrams="DG-002"
+END
+
+Component C-031 "Privacy consent dialog"
+  description="Piwik PRO consent overlay encountered during browsing. Offers optional analytics/marketing purposes and accept, decline-all or save controls. Decline-all was used for inspection. This is a component overlay, not a separate navigable Place."
+  responsibility="Piwik PRO consent overlay encountered during browsing. Offers optional analytics/marketing purposes and accept, decline-all or save controls. Decline-all was used for inspection. This is a component overlay, not a separate navigable Place."
+  inputs="Consent choice and purpose toggles"
+  outputs="Persist consent choice and dismiss overlay"
+  diagrams="DG-002"
+END

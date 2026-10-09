@@ -188,3 +188,76 @@ These are documented exceptions under plan §§7–9, not a claim that the repos
 Stages 0–7 and H1–H10 are accepted for this program. Outcome, Service and Scenario now distinguish assignment feasibility, reconstructed geometry acceptance, actual production adoption, and independent visual/geometry proof. Complete-context hard validation remains mandatory after repair and expansion; failed search never exposes an accepted route map or public preview artifact.
 
 Search is intentionally finite and does not prove all geometrically feasible diagrams will render. Four/eight expansion passes are retained operational limits required by the supplied plan, not constants derived from the reproduction. Absolute per-run locks remain absolute during expansion; a future movable locked-resource contract needs explicit typed geometry references. Continuity marks are accepted for declared geometry and invalidated by generic route repair; Journey retains its specialized mark owner. No broader renderer/layout or label-system redesign was undertaken.
+
+## Shared scenario overlap recovery — 2026-10-07
+
+Implementation follows [the saved overlap-recovery plan](plan_shared_connector_overlap_recovery_for_scenario_flows.md). The production change is confined to the shared final-routing lifecycle: a private generator offers existing port-derived corridor shapes for overlap/spacing conflicts after assignment/turn alternatives do not resolve the current state. Complete validation, ownership restrictions, deterministic scoring, atomic blocking recovery, expansion ownership, and the existing global search ceilings are retained. No bundle, projection, semantic adapter, legacy output, public API, or golden change is involved.
+
+### Proof and targeted verification
+
+The checked-in `tests/fixtures/render/scenario_overlap_reconvergence.sdd` contains seven ScenarioSteps and nine named-diagram PRECEDES edges. The source compiles, validates with the v0.2 bundle's `simple` profile, and projects DG-001. Before the production edit, all eight staged SVG configurations plus PNG failed on connector overlap; the new shared suite had 12 expected repair failures and four passing budget/ownership protections. The existing shared baseline passed 42/42 tests.
+
+After the edit, 58/58 shared tests pass (16 new cases plus the existing 42), and 9/9 scenario integration tests pass. Tests check the actual emitted routes with both complete acceptance and the independent parallel-conflict oracle, preserving node geometry, endpoints, blockers, bounds, and input data. New cases cover spaced parallel runs, two independent conflicts composed through the queue, clearance, transformations, input-order determinism, unrelated routes, scoped blockers, global crossing-mark invalidation, separate run/shared-track guards, budgets, and the valid-input fast path. The scenario matrix also checks label-label/node/header collisions, other-route crossings through labels, and root containment using the existing visual harness.
+
+Every proof configuration has the same actual final trace:
+
+| Detail | Decorators | Validations | Candidates | Repair revisions | Expansion passes | Repeated states |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| compact | none, type, id, type/id (each) | 154 | 154 | 1 | 0 | 14 |
+| detailed | none, type, id, type/id (each) | 154 | 154 | 1 | 0 | 14 |
+
+The planned compatibility gate passes **85/85 tests in nine files** (116.69s), including existing Scenario/Outcome/Service production acceptance and failure-publication checks, measured-marker expansion, UI routing optimization, staged Scenario snapshots, shared visual acceptance, and named-diagram CLI/projection tests. TypeScript builds successfully. Independent read-only review found no correctness issues in the production change or regressions.
+
+### Evidence and visual assessment
+
+Temporary evidence is in `/tmp/sdd-scenario-overlap-recovery`: eight SVGs and initial/final geometry/trace JSON files, the detailed type/id PNG, and an eight-mode contact sheet. Reproduce accepted evidence with:
+
+```bash
+SDD_SCENARIO_OVERLAP_EVIDENCE_DIR=/tmp/sdd-scenario-overlap-recovery TMPDIR=/tmp pnpm exec vitest run tests/scenarioFlowOverlap.spec.ts --maxWorkers=2 --minWorkers=1
+```
+
+The repaired SVG/PNG matrix has distinct cross-link routes, correctly attached arrowheads, and no clipping. Diagnostic-only renders retaining the unrepaired preparation were also captured for visual comparison; these invalid route sets are not acceptance artifacts. Cross-link option labels were already detached outside the node rows before repair. One of these labels reflows to another collision-free position under the existing label-placement policy after repair. That association/readability limitation remains visible; this change does not redesign label placement. Visual acceptance is for the incremental routing change and collision/clipping checks, not a claim that detached labels provide ideal association.
+
+### Full-suite result and completion
+
+`TMPDIR=/tmp pnpm test --maxWorkers=2 --minWorkers=1` builds TypeScript successfully and completes **153 test files: 151 passed, 2 failed; 1,675 tests passed, 2 failed** (586.55s). Log: `/tmp/sdd-overlap-full-suite.log`. All new regressions and the required shared/adopter/compatibility gates pass. The repository suite is not green because of two independently reproduced pre-existing input failures:
+
+| Failure | Evidence and disposition |
+| --- | --- |
+| `tests/diagramTypeNodeEdgeReference.spec.ts` reads missing `docs/doc_site/diagram_types/node_edge_reference.md`. | `git cat-file -e HEAD:docs/doc_site/diagram_types/node_edge_reference.md` confirms the input is absent from HEAD. The test and its documentation inputs are untouched. The isolated rerun reproduces ENOENT; log `/tmp/sdd-overlap-unrelated-doc-failure.log`. |
+| `tests/scenarioFlowBottomExit.spec.ts` forces the v0.1 bundle/header onto the already migrated planning document `docs/sdd_app_planning/whiteboarding_diagrams/tmp.sdd`. | The source uses `ScenarioStep` at line 158, which the v0.1 parser rejects; the test fails its compilation assertion before invoking the renderer. The test, planning source, parser/compiler, and v0.1 bundle are unchanged from HEAD. The isolated rerun reproduces the parse errors; log `/tmp/sdd-overlap-bottom-exit-failure.log`. |
+
+No snapshots or goldens were refreshed to normalize these failures. `git diff --check` passes. Routing acceptance is satisfied: complete/independent emitted-geometry checks, immutable endpoints/layout, no proof expansion, preserved marker/blocker/ownership policy, unchanged valid-input behavior, bounded deterministic recovery, atomic blocking recovery, and failure-without-publication. Incremental SVG/PNG visual acceptance is satisfied with the existing detached-label limitation described above. Independent reviews found no correctness issue in the implementation or regressions.
+
+The planned routing implementation is complete; the unrelated repository test inputs remain visible follow-up work. The original incident source remains unavailable, so the evidence establishes the reproduced failure class rather than that document's exact cause. Bounded recovery still does not guarantee a solution for every feasible diagram.
+
+
+## Shared label capacity and Scenario correction — 2026-10-07
+
+The seven-node `scenario_overlap_reconvergence.sdd` proof now has no detached displayed labels, collisions, clipping, omissions, fallback diagnostics or unresolved-label warnings in the eight detail/decorator configurations. Compact detail continues to suppress branch labels through bundle-owned display policy. Detailed cross-link labels remain beside their own connectors inside the endpoint-row envelope. The exact SVG/PNG and eight-mode contact sheet were visually inspected. Artifacts, independent geometry evidence, per-call and aggregate traces are under `/tmp/sdd-label-proof`.
+
+The red run recorded eight failures before production changes (`/tmp/sdd-label-red.log`). Shared `connectorLabelLayout.ts` now supplies independent association/collision assessment, opt-in associated placement and measured interval-packed corridor demand. Scenario owns the cumulative layout application and correction loop. All accepted/emitted routes still pass `validateFinalRouteSet`; fixed-geometry overlap recovery remains separately covered. This work introduces no bundle convention, parser/compiler/projector behavior, CLI option, semantic port permission or legacy output change.
+
+Proof traces: compact configurations consume two preparation expansions, no label/routing expansions, 154 routing candidates and one repair revision. Detailed configurations consume one preparation expansion plus one label correction, no routing expansions, 314 aggregate candidates and two repair revisions; revision 1 is selected. All have zero unresolved label IDs. The detailed measured final gutter state is columns `{1: 48, 2: 272}` and rows `{0: 96}`. Expansion is deliberately allowed for label capacity; the previous fixed-node/bounds guarantee remains a shared routing-core guarantee rather than a full-renderer guarantee.
+
+The user chose warning-only degraded publication. Tests exercise both SVG and PNG warnings, unmovable/missing capacity, persistent corrections reaching the shared eight-expansion ceiling, carried candidate/revision budgets, complete-scene rollback after later routing failure, preserved inherited measurement diagnostics, wrapped labels, unequal node heights, vertical/reversed segments, interval reuse, duplicate request merging and input immutability. Existing Scenario stage snapshots pass without refreshing any goldens. The focused six-file compatibility run passed 68 tests; it covered Scenario, Outcome, Service and visual acceptance. Subsequent Scenario owner/snapshot checks passed 39 tests. Other renderer adoption is intentionally deferred.
+
+Two previously reported unrelated failures were independently reproduced against the unmodified HEAD tree extracted into `/tmp/sdd-label-baseline` (`/tmp/sdd-label-baseline-failures.log`): the missing `docs/doc_site/diagram_types/node_edge_reference.md`, and the v0.1 optional-bottom-exit test compiling v0.2 declarations from the planning source.
+
+`TMPDIR=/tmp pnpm test --maxWorkers=2 --minWorkers=1` completed 155 files: **152 passed, three failed; 1,698 tests passed, three failed** (623.11s; `/tmp/sdd-label-full.log`). In addition to the two baseline failures, it detected the B5 immutable source-hash guard for the authorized opt-in extension of `connectorLabelPlacement.ts`. That file is now listed with the existing intentionally extended sources in the guard, with its reason documented; the historical hash manifest and accepted geometry artifacts remain unchanged. The targeted B5 replay, existing placement and UI repair rerun passes **33/33 tests** (`/tmp/sdd-label-b5.log`). No whole-suite green result is claimed. IA, Journey, Outcome, Service, existing Scenario snapshots and legacy compatibility passed in the full run.
+
+The final new shared-label, Scenario orchestration and eight-configuration proof run passes **34/34 tests** (`/tmp/sdd-label-complete-focused.log`), including preservation of inherited measurement warnings. TypeScript builds successfully (`/tmp/sdd-label-final-build.log`), and `git diff --check` passes. Neither test timeouts nor search/expansion budgets were increased. Regenerate proof SVGs, detailed type/id PNG and trace JSON with:
+
+```bash
+SDD_SCENARIO_OVERLAP_EVIDENCE_DIR=/tmp/sdd-label-proof TMPDIR=/tmp pnpm exec vitest run tests/scenarioFlowOverlap.spec.ts --maxWorkers=2 --minWorkers=1
+```
+
+Acceptance assessment: proof association, clearance, full routing acceptance, determinism, bounded correction, warning fallback and existing renderer compatibility are satisfied. Capacity packing and routing are bounded heuristics, not completeness claims for arbitrary diagrams; an unmappable or insufficient corridor remains visible through warnings, while initial invalid routing still prevents preview publication. No snapshots or corpus artifacts were refreshed. Unrelated workspace edits are preserved.
+
+## Preserve a single turn after Scenario layout correction — 2026-10-08
+
+The proof's S-002 → S-004 connector now retains two segments and one turn after label-driven layout rebuilds. The south-to-west preparation template previously added a 16px downward overshoot unconditionally; the already-selected south port then bypassed optional-port reconsideration. Preparation now offers the single turn when both existing terminal stubs fit. Backward destinations keep the detour template, and blocked proposals still pass through obstacle refinement and complete routing acceptance. This is a seven-line Scenario geometry change under existing port permissions; the shared routing lifecycle's unchanged-valid-input contract is preserved.
+
+The new emitted-route assertion initially failed in all four detailed configurations, with the other five proof tests passing (`/tmp/sdd-single-turn-red.log`). After the fix, all eight configurations plus PNG and the label-correction suite pass: **19/19 tests** (`/tmp/sdd-single-turn-proof.log`). Two additional stable regressions pass for a backward south exit and a reserved corridor blocking the proposed single turn; the latter uses real routing recovery and independently audits final label association (`/tmp/scenario-single-turn-tests.log`). Scenario routing, final acceptance, staged snapshots, visual acceptance, shared corridor recovery and overlap recovery pass **52/52 tests** (`/tmp/sdd-single-turn-compat.log`). Total focused verification: **73 passing tests**. TypeScript builds and `git diff --check` pass. No snapshots were updated; this follow-up did not rerun the whole repository suite.
+
+The eight SVGs, detailed type/id PNG and contact sheet in `/tmp/sdd-single-turn-proof` were visually reviewed. The corrected detailed connector is 32px shorter; all displayed labels remain associated and all proof configurations have no unresolved-label warnings. Aggregate proof budgets remain unchanged: compact uses 154 candidates and one repair revision, detailed uses 314 candidates and two repair revisions with one label-driven expansion. No acceptance invariant remains violated in this follow-up.

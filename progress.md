@@ -5,7 +5,6 @@
 -ia_place_map multi-edge issue
 -v0.1.1 release doc
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
--Journey map needs a title per journey ("lane"?)... scenario flow too
 -Journey map is not integrated with outcome opportunity map
 -Need a way to connect a flow to a component
 
@@ -29,7 +28,25 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-## Mon 10-4
+## Fri 10-9
+
+- Small progress edit
+- AGENTS.md edit
+
+## Thu 10-8
+
+- South-to-west connector routing fix for scenario_flow
+
+## Wed 10-7
+
+- Explored renderer QA agent options
+- Updated tmp.sdd to use step differentiation
+- Updated scenario_flow variations of tmp.sdd to match
+- Added Step-deprecated error messaging to CLI
+- Shared connector-overlap recovery for scenario_flow
+- Shared label-space reservation and bounded correction for scenario_flow
+
+## Mon 10-5
 
 - Moved syntax pages into new syntax/ doc site folder
 - Footer nav cleanup

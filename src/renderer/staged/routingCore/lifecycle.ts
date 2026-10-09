@@ -54,6 +54,8 @@ export interface FinalRoutingOptions {
   expand?: (context: FinalRoutingContext, violations: readonly RoutingViolation[], absolutePass: number) => FinalRoutingContext | undefined;
 }
 
+export const DEFAULT_FINAL_ROUTING_LIMITS = Object.freeze({ maxCandidates: 4096, maxRepairRevisions: 128 });
+
 function issue(kind: RoutingViolation["kind"], message: string, id: string, index?: number): RoutingViolation {
   return { kind, message, connectorIds: [id], segmentIds: [], routeSegmentIndexes: index === undefined ? undefined : [index] };
 }
@@ -189,6 +191,31 @@ function buildCorridorRecovery(
       ? { ...c, markedCrossings: undefined, route: { ...c.route, points: points.map(p => ({ ...p })) } }
       : { ...c, markedCrossings: undefined };
   });
+}
+
+/** Overlap repair may need extra bends even when every route is individually legal.
+ * Replace one implicated route at a time so traversable conflicts can compose in the
+ * existing queue. Hard-invalid route sets still require atomic corridor recovery. */
+function* buildOverlapCorridorAlternatives(
+  context: FinalRoutingContext,
+  violations: readonly RoutingViolation[]
+): Generator<readonly FinalRoutingConnector[]> {
+  if (hasBlockingViolation(violations)) return;
+  const implicated = new Set(violations
+    .filter(v => v.kind === "collinear_overlap" || v.kind === "track_separation")
+    .flatMap(v => v.connectorIds));
+  const ordered = context.connectors.filter(c => implicated.has(c.id))
+    .sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id));
+  for (const connector of ordered) {
+    // The shared generator owns eligibility for topology-bound constraints/sharing.
+    for (const points of buildPortCorridorCandidates(connector, context)) {
+      // Crossing marks describe the previous geometry revision, including marks on
+      // unchanged connectors whose intersections with this connector may have moved.
+      yield context.connectors.map(c => c.id === connector.id
+        ? { ...c, markedCrossings: undefined, route: { ...c.route, points: points.map(p => ({ ...p })) } }
+        : { ...c, markedCrossings: undefined });
+    }
+  }
 }
 
 /** Complete geometry acceptance for this API; intentionally has no interaction-exclusion switch. */
@@ -332,7 +359,7 @@ function compareStates(a: RouteSetState, b: RouteSetState): number {
 /** One final-acceptance coordinator. Every geometry revision is rebuilt and checked globally. */
 export function runRoutingLifecycle(initial: FinalRoutingContext, options: FinalRoutingOptions = {}): FinalRoutingResult {
   const trace: FinalRoutingTrace = { validations: 0, candidates: 0, repairRevisions: 0, expansionPasses: 0, repeatedStates: 0 };
-  const maxCandidates = Math.max(1, options.maxCandidates ?? 4096), maxRevisions = Math.max(0, options.maxRepairRevisions ?? 128);
+  const maxCandidates = Math.max(1, options.maxCandidates ?? DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates), maxRevisions = Math.max(0, options.maxRepairRevisions ?? DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions);
   if (!Number.isSafeInteger(maxCandidates) || !Number.isSafeInteger(maxRevisions)) {
     return { status: "failed", reason: "invalid_context", violations: [issue("assignment_exhausted", "Final routing requires finite integer search budgets.", "")], debugConnectors: initial.connectors, trace };
   }
@@ -403,23 +430,36 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
       queue.sort(compareStates);
       const current = queue.shift()!;
       trace.repairRevisions++;
-      let valid: RouteSetState | undefined = assignmentCandidate;
+      const evaluateAlternatives = (
+        alternatives: Iterable<readonly FinalRoutingConnector[]>,
+        existingValid?: RouteSetState
+      ): RouteSetState | undefined => {
+        let valid = existingValid;
+        for (const connectors of alternatives) {
+          if (trace.candidates >= maxCandidates) break;
+          const next = { ...current.context, connectors }, key = canonical(next);
+          if (seen.has(key)) { trace.repeatedStates++; continue; }
+          seen.add(key); trace.candidates++;
+          const violations = validateFinalRouteSet(next); trace.validations++;
+          const state = { context: next, violations, key, score: score(next, initial, violations, initialImplicated) };
+          if (compareStates(state, best) < 0) best = state;
+          if (!violations.length) { if (!valid || compareStates(state, valid) < 0) valid = state; continue; }
+          // Candidate changes may expose another route/component. Its violations drive the next revision.
+          // Irreversible endpoint/resource violations cannot be fixed by unrelated later turn changes.
+          if (hasBlockingViolation(violations)) continue;
+          queue.push(state);
+        }
+        return valid;
+      };
+      let valid = evaluateAlternatives(buildTerminalTurnAlternatives(current.context, current.violations), assignmentCandidate);
       assignmentCandidate = undefined;
-      for (const connectors of buildTerminalTurnAlternatives(current.context, current.violations)) {
-        if (trace.candidates >= maxCandidates) break;
-        const next = { ...current.context, connectors }, key = canonical(next);
-        if (seen.has(key)) { trace.repeatedStates++; continue; }
-        seen.add(key); trace.candidates++;
-        const violations = validateFinalRouteSet(next); trace.validations++;
-        const state = { context: next, violations, key, score: score(next, initial, violations, initialImplicated) };
-        if (compareStates(state, best) < 0) best = state;
-        if (!violations.length) { if (!valid || compareStates(state, valid) < 0) valid = state; continue; }
-        // Candidate changes may expose another route/component. Its violations drive the next revision.
-        // Irreversible endpoint/resource violations cannot be fixed by unrelated later turn changes.
-        if (hasBlockingViolation(violations)) continue;
-        queue.push(state);
-      }
       if (valid) return accepted(valid.context, trace);
+      // Preserve existing assignment/turn successes before considering a new topology.
+      // This pass shares the current revision and the same global candidate budget.
+      if (trace.candidates < maxCandidates) {
+        valid = evaluateAlternatives(buildOverlapCorridorAlternatives(current.context, current.violations));
+        if (valid) return accepted(valid.context, trace);
+      }
     }
     const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
     if (!options.expand || trace.expansionPasses >= policy.maxExpansionPasses || trace.candidates >= maxCandidates || trace.repairRevisions >= maxRevisions) break;

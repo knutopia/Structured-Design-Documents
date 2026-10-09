@@ -4,6 +4,8 @@ v0.2 has three authorable Step types: `JourneyStep` for meaningful episodes of c
 
 The [vocabulary](../../bundle/v0.2/core/vocab.yaml) and [compiled schema](../../bundle/v0.2/core/schema.json) remove the v0.2 `Step` token. `BluePrintStep` is not an alias. v0.1 retains `Step` through its own bundle.
 
+The [syntax contract](../../bundle/v0.2/core/syntax.yaml) declares `Step` as a deprecated node token. Top-level and nested `Step` headers produce the error `parse.deprecated_node_type`: "Node type 'Step' is deprecated after v0.1. Use JourneyStep, BlueprintStep, or ScenarioStep as appropriate." This diagnostic does not make `Step` valid in v0.2.
+
 ## Relationships and Obligations
 
 The [contracts](../../bundle/v0.2/core/contracts.yaml) govern these endpoint pairs:

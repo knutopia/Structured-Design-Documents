@@ -1,7 +1,8 @@
-import type { SyntaxLineClassifierClause, SyntaxLineKindDefinition } from "../bundle/types.js";
+import type { SyntaxLineClassifierClause, SyntaxLineKindDefinition, SyntaxTokenDeprecation } from "../bundle/types.js";
 import type { SourceSpan } from "../types.js";
 import {
   findTokenSourceCaseMismatch,
+  findTokenSourceDeprecation,
   getPattern,
   getStatement,
   resolveTokenSourceToken,
@@ -24,6 +25,7 @@ export interface ClassifiedLine {
   content: string;
   span: SourceSpan;
   commentText?: string;
+  tokenDeprecation?: SyntaxTokenDeprecation;
   tokenCaseMismatch?: {
     actual: string;
     canonical: string;
@@ -127,9 +129,14 @@ function leadingIdentifierBeforeEquals(text: string, identifierPattern: RegExp):
   return identifierPattern.test(left);
 }
 
-function classifierMatches(clause: SyntaxLineClassifierClause, text: string, runtime: ParserSyntaxRuntime): boolean {
+function classifierMatches(
+  clause: SyntaxLineClassifierClause,
+  text: string,
+  runtime: ParserSyntaxRuntime,
+  tokenMatches = (source: string, token: string) => resolveTokenSourceToken(runtime, source, token) !== undefined
+): boolean {
   if ("any_of" in clause) {
-    return clause.any_of.some((candidate) => classifierMatches(candidate, text, runtime));
+    return clause.any_of.some((candidate) => classifierMatches(candidate, text, runtime, tokenMatches));
   }
 
   let matched = false;
@@ -150,7 +157,7 @@ function classifierMatches(clause: SyntaxLineClassifierClause, text: string, run
   if ("first_token_source" in clause) {
     matched = true;
     const token = firstToken(text);
-    matches &&= token !== undefined && resolveTokenSourceToken(runtime, clause.first_token_source, token) !== undefined;
+    matches &&= token !== undefined && tokenMatches(clause.first_token_source, token);
   }
 
   if ("next_token_source" in clause) {
@@ -160,7 +167,7 @@ function classifierMatches(clause: SyntaxLineClassifierClause, text: string, run
         ? clause.first_non_whitespace
         : undefined;
     const token = nextTokenAfterPrefix(text, runtime, prefix);
-    matches &&= token !== undefined && resolveTokenSourceToken(runtime, clause.next_token_source, token) !== undefined;
+    matches &&= token !== undefined && tokenMatches(clause.next_token_source, token);
   }
 
   if ("leading_identifier_before_equals" in clause) {
@@ -171,6 +178,27 @@ function classifierMatches(clause: SyntaxLineClassifierClause, text: string, run
   }
 
   return matched && matches;
+}
+
+function classifierTokenDeprecation(
+  clause: SyntaxLineClassifierClause,
+  text: string,
+  runtime: ParserSyntaxRuntime
+): SyntaxTokenDeprecation | undefined {
+  if ("any_of" in clause) {
+    for (const candidate of clause.any_of) {
+      const diagnostic = classifierTokenDeprecation(candidate, text, runtime);
+      if (diagnostic) return diagnostic;
+    }
+    return undefined;
+  }
+  let diagnostic: SyntaxTokenDeprecation | undefined;
+  const matched = classifierMatches(clause, text, runtime, (source, token) => {
+    const deprecated = findTokenSourceDeprecation(runtime, source, token);
+    if (deprecated) diagnostic = deprecated;
+    return deprecated !== undefined || resolveTokenSourceToken(runtime, source, token) !== undefined;
+  });
+  return matched ? diagnostic : undefined;
 }
 
 function classifierTokenCaseMismatch(
@@ -396,6 +424,16 @@ export function classifyLine(record: LineRecord, runtime: ParserSyntaxRuntime): 
   }
 
   for (const lineKind of runtime.lineKindsInPrecedenceOrder) {
+    const tokenDeprecation = classifierTokenDeprecation(lineKind.classifier, record.raw, runtime);
+    if (tokenDeprecation) {
+      return {
+        kind: "unknown",
+        lineKindKind: "unknown",
+        content: record.raw.trimEnd(),
+        span,
+        tokenDeprecation
+      };
+    }
     const tokenCaseMismatch = classifierTokenCaseMismatch(lineKind.classifier, record.raw, runtime);
     if (tokenCaseMismatch) {
       return {

@@ -134,6 +134,8 @@ export interface ConnectorLabelPlacementOptions {
   preferHorizontalAnchors?: boolean;
   preferEarlierHorizontalAnchors?: boolean;
   maxVerticalLabelAnchorDistance?: number;
+  /** Opt-in final geometry predicate; legacy callers retain their search unchanged. */
+  isCandidateAcceptable?: (box: LabelBox, segment: RouteSegmentDetail) => boolean;
 }
 
 function roundMetric(value: number): number {
@@ -944,7 +946,8 @@ function resolveVerticalLabelPlacementOnSide(
   scene: PositionedScene,
   connectorBlockMode: "vertical_only" | "all_segments",
   separatorBlockMode: "vertical_stem" | "box",
-  maxAnchorDistance?: number
+  maxAnchorDistance?: number,
+  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"]
 ): ConnectorLabelPlacementResult {
   const candidates = buildVerticalLabelSearchCandidates(
     segment.coordinate,
@@ -959,6 +962,7 @@ function resolveVerticalLabelPlacementOnSide(
   );
 
   for (const candidate of candidates) {
+    if (isCandidateAcceptable && !isCandidateAcceptable(candidate.box, segment)) continue;
     if (maxAnchorDistance !== undefined && candidate.distanceFromAnchor > maxAnchorDistance + 0.001) {
       continue;
     }
@@ -1026,7 +1030,8 @@ function resolveVerticalLabelPlacement(
   scene: PositionedScene,
   connectorBlockMode: "vertical_only" | "all_segments",
   separatorBlockMode: "vertical_stem" | "box",
-  maxAnchorDistance?: number
+  maxAnchorDistance?: number,
+  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"]
 ): ConnectorLabelPlacementResult {
   const rightCandidate = buildVerticalLabelBox(
     segment.coordinate,
@@ -1066,7 +1071,8 @@ function resolveVerticalLabelPlacement(
     scene,
     connectorBlockMode,
     separatorBlockMode,
-    maxAnchorDistance
+    maxAnchorDistance,
+    isCandidateAcceptable
   );
 
   if (!preferredPlacement.fallback) {
@@ -1085,7 +1091,8 @@ function resolveVerticalLabelPlacement(
     scene,
     connectorBlockMode,
     separatorBlockMode,
-    maxAnchorDistance
+    maxAnchorDistance,
+    isCandidateAcceptable
   );
 
   if (!alternatePlacement.fallback) {
@@ -1106,7 +1113,8 @@ function resolveServiceHorizontalLabelPlacement(
   separatorSegments: readonly HorizontalLineSegment[],
   scene: PositionedScene,
   connectorBlockMode: "vertical_only" | "all_segments",
-  separatorBlockMode: "vertical_stem" | "box"
+  separatorBlockMode: "vertical_stem" | "box",
+  isCandidateAcceptable?: (box: LabelBox) => boolean
 ): ConnectorLabelPlacementResult {
   const initialCandidate = buildHorizontalLabelBox(anchorPoint, measuredLabel);
   let candidate = initialCandidate;
@@ -1122,7 +1130,7 @@ function resolveServiceHorizontalLabelPlacement(
       scene,
       connectorBlockMode,
       separatorBlockMode
-    )) {
+    ) && (!isCandidateAcceptable || isCandidateAcceptable(candidate))) {
       return {
         label: buildPositionedEdgeLabelFromBox(measuredLabel, candidate),
         box: candidate,
@@ -1290,7 +1298,8 @@ function resolveScenarioHorizontalLabelPlacement(
   nearbyHorizontalLabelPreference?: NearbyHorizontalLabelPreference,
   labelLanePreference?: HorizontalLabelLanePreference,
   associationPolicy?: HorizontalLabelAssociationPolicy,
-  preferSidePlacement = false
+  preferSidePlacement = false,
+  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"]
 ): ConnectorLabelPlacementResult {
   const candidates = buildScenarioHorizontalLabelSearchCandidates(
     measuredLabel,
@@ -1304,6 +1313,7 @@ function resolveScenarioHorizontalLabelPlacement(
   );
 
   for (const candidate of candidates) {
+    if (isCandidateAcceptable && !isCandidateAcceptable(candidate.box, segment)) continue;
     if (associationPolicy !== undefined && !candidate.horizontalAssociationEligible) {
       continue;
     }
@@ -1480,7 +1490,8 @@ export function positionConnectorLabel(
           scene,
           connectorBlockMode,
           separatorBlockMode,
-          options.maxVerticalLabelAnchorDistance
+          options.maxVerticalLabelAnchorDistance,
+          options.isCandidateAcceptable
         )
       : horizontalPlacementMode === "scenario_side_offsets"
         ? resolveScenarioHorizontalLabelPlacement(
@@ -1498,7 +1509,8 @@ export function positionConnectorLabel(
             options.nearbyHorizontalLabelPreference,
             options.horizontalLabelLanePreference,
             options.horizontalLabelAssociationPolicy,
-            options.preferHorizontalSidePlacement
+            options.preferHorizontalSidePlacement,
+            options.isCandidateAcceptable
           )
         : resolveServiceHorizontalLabelPlacement(
             connectorId,
@@ -1509,7 +1521,8 @@ export function positionConnectorLabel(
             separatorSegments,
             scene,
             connectorBlockMode,
-            separatorBlockMode
+            separatorBlockMode,
+            options.isCandidateAcceptable ? box => options.isCandidateAcceptable!(box, anchor.segment) : undefined
           );
 
     return {

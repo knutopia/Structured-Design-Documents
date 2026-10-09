@@ -1,0 +1,37 @@
+SDD-TEXT 0.2
+ScenarioStep S-001 "Choose an option"
+  PRECEDES S-002 {option 1} diagrams=DG-001
+END
+
+ScenarioStep S-002 "Action 002"
+  kind=decision
+  PRECEDES S-003 {option 1} diagrams=DG-001
+  PRECEDES S-004 {option 2} diagrams=DG-001
+END
+
+ScenarioStep S-003 "Action 003"
+  kind=decision
+  PRECEDES S-005 {option 1} diagrams=DG-001
+  PRECEDES S-006 {option 2} diagrams=DG-001
+END
+
+ScenarioStep S-004 "Action 004"
+  kind=decision
+  PRECEDES S-005 {option 1} diagrams=DG-001
+  PRECEDES S-006 {option 2} diagrams=DG-001
+END
+
+ScenarioStep S-005 "Action 005"
+  PRECEDES S-099 {option 1} diagrams=DG-001
+END
+
+ScenarioStep S-006 "Action 006"
+  PRECEDES S-099 {option 1} diagrams=DG-001
+END
+
+ScenarioStep S-099 "Action 099"
+END
+
+Diagram DG-001 "Probe"
+  diagram_type=scenario_flow
+END

@@ -13,6 +13,10 @@ token_sources:
     path: core/vocab.yaml
     key: node_types
     token_field: token
+    deprecated_tokens:
+      Step:
+        code: parse.deprecated_node_type
+        message: "Node type 'Step' is deprecated after v0.1. Use JourneyStep, BlueprintStep, or ScenarioStep as appropriate."
   relationship_types:
     path: core/vocab.yaml
     key: relationship_types

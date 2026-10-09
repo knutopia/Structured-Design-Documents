@@ -21,9 +21,15 @@ describe("B5 immutable acceptance baseline", () => {
     // The v0.2 diagram-separation plan authorizes source occurrence checks,
     // bundle-driven identity and exact selection. Historical hashes remain
     // evidence; unchanged v0.1 compilation/projection snapshots and B5 replay
-    // below independently guard behavior. Parser and layout sources remain
-    // protected.
+    // below independently guard behavior. The deprecated-token diagnostic
+    // extension changes parser sources while v0.1 parser regression tests and
+    // bundle-mutation proofs guard syntax behavior. Unlisted sources remain protected.
     const intentionallyExtendedSources = new Set([
+      // Bundle-owned deprecation errors; accepted syntax and recovery stay unchanged.
+      "src/parser/classifyLine.ts",
+      "src/parser/parseBlock.ts",
+      "src/parser/parseSource.ts",
+      "src/parser/syntaxRuntime.ts",
       // docs/v0.2_syntax_extension/diagram_separation_v0_2_implementation_plan.md
       "src/compiler/buildGraph.ts",
       "src/compiler/canonicalize.ts",
@@ -46,6 +52,10 @@ describe("B5 immutable acceptance baseline", () => {
       "src/renderer/staged/pipeline.ts",
       // Final UI-only output audit is intentionally added to the shared SVG entrypoint.
       "src/renderer/staged/svgBackend.ts",
+      // The shared-label-space Scenario plan authorizes an opt-in placement
+      // predicate. Preserve the historical hash; unchanged default placement
+      // tests, B5 replay, and final UI label audits guard existing behavior.
+      "src/renderer/staged/connectorLabelPlacement.ts",
       // These renderer-core files already differ from the historical B5
       // manifest; the replay and geometry assertions below remain active.
       "src/renderer/staged/routingCore/candidates.ts",

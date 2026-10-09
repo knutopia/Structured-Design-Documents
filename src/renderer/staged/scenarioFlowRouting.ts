@@ -31,13 +31,20 @@ import {
   buildRoutingSegments,
   measureRoutingCorridorDeficits,
   compareRouteCosts,
+  DEFAULT_FINAL_ROUTING_LIMITS,
   resolveHorizontalSharedY,
   routeCost,
   type FinalRoutingContext,
   type FinalRoutingConnector,
   type FinalRoutingTrace,
+  type FinalRoutingResult,
   type RoutingViolation
 } from "./routingCore/index.js";
+import {
+  assessConnectorLabels, auditConnectorLabels, connectorLabelCapacityClaims, measureConnectorLabelCapacity,
+  type ConnectorLabelAssessment, type ConnectorLabelCorridor, type ConnectorLabelCapacityRequest,
+  type ConnectorLabelLayoutInput
+} from "./connectorLabelLayout.js";
 import { buildScenarioFlowLaneDecorations, decorateScenarioFlowPositionedScene } from "./scenarioFlowDecorations.js";
 import type {
   ScenarioFlowEdgeChannel,
@@ -213,6 +220,15 @@ export interface ScenarioFlowConnectorPlan {
 
 export interface ScenarioFlowRoutingStages {
   finalResolutionTrace: FinalRoutingTrace;
+  labelLayoutTrace: {
+    preparationExpansionPasses: number;
+    routingExpansionPasses: number;
+    labelExpansionPasses: number;
+    routingTotals: FinalRoutingTrace;
+    selectedRevision: number;
+    terminationReason: "resolved" | "routing_failed" | "expansion_exhausted" | "search_exhausted" | "no_capacity" | "repeated_state";
+    unresolvedLabelIds: string[];
+  };
   connectorPlans: ScenarioFlowConnectorPlan[];
   nodeEdgeBuckets: ScenarioFlowNodeEdgeBuckets[];
   nodeGutters: ScenarioFlowNodeGutter[];
@@ -1017,6 +1033,13 @@ function buildTemplateRoute(
   // A south exit must first clear its own node. The west arrival then approaches
   // from the left, including when the destination lies behind the source.
   if (plan.sourceSide === "south" && plan.targetSide === "west") {
+    // Prefer the single turn when both terminal legs have room. Layout rebuilds
+    // must not reintroduce a detour after the optional south port was selected.
+    // Obstacle refinement and complete route-set acceptance still apply below.
+    if (targetStub.y >= sourceStub.y && targetStub.x >= sourceStub.x) {
+      points.push({ x: sourceStub.x, y: targetStub.y }, targetStub, targetPoint);
+      return applySegmentCoordinates(buildRoute(points), plan.id, segmentCoordinateByKey, plan, index);
+    }
     const returnY = roundMetric(Math.max(sourceStub.y, targetStub.y + FIXED_SEPARATION_DISTANCE));
     points.push(
       { x: sourceStub.x, y: returnY },
@@ -3154,6 +3177,13 @@ function hasNonZeroExpansion(expansions: Record<number, number>): boolean {
   return Object.values(expansions).some((value) => value > 0);
 }
 
+/** Independent deficits describe the same current gap, so combine by maximum. */
+function mergeExpansionRequirements(existing: Record<number, number>, additional: Record<number, number>): Record<number, number> {
+  const merged = { ...existing };
+  for (const [key, value] of Object.entries(additional)) if (value > 0) merged[Number(key)] = Math.max(merged[Number(key)] ?? 0, value);
+  return merged;
+}
+
 function accumulateExpansions(
   existing: Record<number, number>,
   additional: Record<number, number>
@@ -3609,6 +3639,53 @@ function buildPositionedEdges(
   });
 }
 
+function scenarioLabelInput(plans: readonly ScenarioFlowConnectorPlan[], scene: PositionedScene,
+  middleLayer: Pick<ScenarioFlowMiddleLayerModel, "laneGuides">): ConnectorLabelLayoutInput {
+  const nodes = new Map(flattenItems(scene.root).filter(isPositionedNode).map(node => [node.id, node]));
+  const scopes = new Map<string, BlockingBox>();
+  for (const plan of plans) {
+    const source = nodes.get(plan.from), target = nodes.get(plan.to);
+    if (!source || !target || Math.abs(source.y - target.y) <= EPSILON) continue;
+    // A cross-row label belongs inside the envelope of its endpoint rows. This
+    // geometric restriction prevents empty canvas margins becoming label lanes.
+    const y = Math.min(source.y, target.y);
+    scopes.set(plan.id, { x: scene.root.x, y, width: scene.root.width,
+      height: Math.max(source.y + source.height, target.y + target.height) - y });
+  }
+  return { scene, expectedLabels: new Map(plans.flatMap(plan => plan.label ? [[plan.id, plan.label] as const] : [])),
+    scopeByConnectorId: scopes, separators: collectScenarioFlowSeparatorSegments(scene, middleLayer) };
+}
+
+function scenarioLabelCorridors(plans: readonly ScenarioFlowConnectorPlan[], index: ScenarioFlowPositionedIndex,
+  scene: PositionedScene): ConnectorLabelCorridor[] {
+  const corridors: ConnectorLabelCorridor[] = [];
+  for (const axis of ["x", "y"] as const) {
+    const orderKey = axis === "x" ? "columnOrder" : "rowOrder";
+    const extent = axis === "x" ? "width" : "height";
+    const orders = [...new Set([...index.cellById.values()].map(cell => cell[orderKey]))].sort((a, b) => a - b);
+    for (let i = 1; i < orders.length; i++) {
+      const before = orders[i - 1]!, after = orders[i]!;
+      const beforeNodes = [...index.nodeById.values()].filter(node => node.cell?.[orderKey] === before);
+      const afterNodes = [...index.nodeById.values()].filter(node => node.cell?.[orderKey] === after);
+      if (!beforeNodes.length || !afterNodes.length) continue;
+      const low = Math.max(...beforeNodes.map(node => node.node[axis] + node.node[extent]));
+      const high = Math.min(...afterNodes.map(node => node.node[axis]));
+      if (high <= low) continue;
+      const ids = plans.filter(plan => {
+        return plan.finalRoute.points.slice(1).some((end, segmentIndex) => {
+          const start = plan.finalRoute.points[segmentIndex]!;
+          return Math.max(start[axis], end[axis]) > low + EPSILON
+            && Math.min(start[axis], end[axis]) < high - EPSILON;
+        });
+      }).map(plan => plan.id);
+      corridors.push({ owner: `${axis}:${before}`, axis, margin: FIXED_SEPARATION_DISTANCE, connectorIds: ids,
+        bounds: axis === "x" ? { x: low, y: scene.root.y, width: high - low, height: scene.root.height }
+          : { x: scene.root.x, y: low, width: scene.root.width, height: high - low } });
+    }
+  }
+  return corridors;
+}
+
 function collectPositionedEdgeExtents(edges: readonly PositionedEdge[]): {
   maxRight: number;
   maxBottom: number;
@@ -3891,10 +3968,10 @@ export function buildScenarioFlowRoutingStages(
       nominalPrepared.occupancy,
       workingIndex
     );
-    const columnExpansions = accumulateExpansions(
-      accumulateExpansions(
-        accumulateExpansions(
-          accumulateExpansions(endpointGapExpansions.columnExpansions, labelColumnExpansions),
+    const columnExpansions = mergeExpansionRequirements(
+      mergeExpansionRequirements(
+        mergeExpansionRequirements(
+          mergeExpansionRequirements(endpointGapExpansions.columnExpansions, labelColumnExpansions),
           nominalPrepared.requiredColumnExpansions
         ),
         localSeparationExpansions.columnExpansions
@@ -3905,9 +3982,9 @@ export function buildScenarioFlowRoutingStages(
         segmentCoordinates
       )
     );
-    const laneExpansions = accumulateExpansions(
-      accumulateExpansions(
-        accumulateExpansions(endpointGapExpansions.laneExpansions, nominalPrepared.requiredLaneExpansions),
+    const laneExpansions = mergeExpansionRequirements(
+      mergeExpansionRequirements(
+        mergeExpansionRequirements(endpointGapExpansions.laneExpansions, nominalPrepared.requiredLaneExpansions),
         localSeparationExpansions.laneExpansions
       ),
       resolveRequiredLaneExpansions(
@@ -3933,6 +4010,13 @@ export function buildScenarioFlowRoutingStages(
       } else if (deficit.axis === "horizontal" && before.rowOrder < after.rowOrder) {
         recordRequiredExpansion(laneExpansions, before.rowOrder, deficit.requiredSize - deficit.availableSize);
       }
+    }
+
+    // A boundary after the last occupied cell cannot move any node. Such
+    // requests are not effective expansions and must not consume the ceiling.
+    for (const [record, axis] of [[columnExpansions, "columnOrder"], [laneExpansions, "rowOrder"]] as const) {
+      const orders = [...workingIndex.nodeById.values()].flatMap(node => node.cell ? [node.cell[axis]] : []);
+      for (const key of Object.keys(record)) if (!orders.some(order => order > Number(key))) delete record[Number(key)];
     }
 
     if (!hasNonZeroExpansion(columnExpansions) && !hasNonZeroExpansion(laneExpansions)) {
@@ -4023,47 +4107,132 @@ export function buildScenarioFlowRoutingStages(
     };
     return finalContext;
   };
-  const initialContext = prepareFinalContext();
-  const selectedBottomExits = selectOptionalBottomExits(
-    connectorPlans, initialContext, finalPrepared, workingScene, workingIndex, workingGlobalGutterState
-  );
-  finalPrepared = selectedBottomExits.prepared;
-  const finalDiagnostics: RendererDiagnostic[] = [...diagnostics];
-  const finalResolution = runRoutingLifecycle(selectedBottomExits.context, {
-    expand: (context, violations, pass) => {
-      if (preparationExpansionPasses + pass > MAX_FINAL_ROUTING_ATTEMPTS) return undefined;
-      const implicated = new Set(violations.flatMap(violation => violation.connectorIds));
-      const columns: Record<number, number> = {};
-      const lanes: Record<number, number> = {};
-      // Only measured capacity deficits are requests to the existing cell-shift owner.
-      for (const connector of context.connectors) {
-        if (!implicated.has(connector.id)) continue;
-        const source = workingIndex.nodeById.get(connector.source.nodeId)!, target = workingIndex.nodeById.get(connector.target.nodeId)!;
-        if (!source.cell || !target.cell) continue;
-        for (const [axis, positive, negative, record] of [["x", "east", "west", columns], ["y", "south", "north", lanes]] as const) {
-          const sourceOrder = axis === "x" ? source.cell.columnOrder : source.cell.rowOrder;
-          const targetOrder = axis === "x" ? target.cell.columnOrder : target.cell.rowOrder;
-          const forward = connector.source.side === positive && connector.target.side === negative && sourceOrder < targetOrder;
-          const backward = connector.source.side === negative && connector.target.side === positive && targetOrder < sourceOrder;
-          if (!forward && !backward) continue;
-          const transverse = axis === "x" ? "y" : "x";
-          const sourceLeg = Math.max(1, connector.source.minLeg), targetLeg = Math.max(1, connector.target.minLeg);
-          const required = Math.abs(connector.source.point[transverse] - connector.target.point[transverse]) <= EPSILON
-            ? Math.max(sourceLeg, targetLeg) : sourceLeg + targetLeg;
-          const deficit = required - Math.abs(connector.source.point[axis] - connector.target.point[axis]);
-          const order = Math.min(sourceOrder, targetOrder);
-          record[order] = Math.max(record[order] ?? 0, roundUpToSeparationDistance(deficit));
+  let routingExpansionPasses = 0;
+  let labelExpansionPasses = 0;
+  const routingTotals: FinalRoutingTrace = { validations: 0, candidates: 0, repairRevisions: 0, expansionPasses: 0, repeatedStates: 0 };
+  const seenLabelStates = new Set<string>();
+  let terminationReason: ScenarioFlowRoutingStages["labelLayoutTrace"]["terminationReason"] = "resolved";
+  let selectedRevision = 0;
+  let lastRequests: ConnectorLabelCapacityRequest[] = [];
+  let finalResolution!: FinalRoutingResult;
+  let selectedBottomExits!: ReturnType<typeof selectOptionalBottomExits>;
+  let labelAssessment!: ConnectorLabelAssessment;
+  let labelsByPlanId = new Map<string, PositionedEdgeLabel>();
+  let best: {
+    scene: PositionedScene; prepared: PreparedScenarioFlowRoutes; gutterState: ScenarioFlowGlobalGutterState;
+    resolution: Extract<FinalRoutingResult, { status: "resolved" }>; exits: ReturnType<typeof selectOptionalBottomExits>;
+    assessment: ConnectorLabelAssessment; revision: number;
+  } | undefined;
+  for (let revision = 0; ; revision++) {
+    const remainingCandidates = DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates - routingTotals.candidates;
+    const remainingRevisions = DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions - routingTotals.repairRevisions;
+    if (remainingCandidates <= 0 || (revision > 0 && remainingRevisions <= 0)) { terminationReason = "search_exhausted"; break; }
+    const initialContext = prepareFinalContext();
+    initialContext.policy = { ...initialContext.policy,
+      maxExpansionPasses: MAX_FINAL_ROUTING_ATTEMPTS - preparationExpansionPasses - routingExpansionPasses - labelExpansionPasses };
+    selectedBottomExits = selectOptionalBottomExits(
+      connectorPlans, initialContext, finalPrepared, workingScene, workingIndex, workingGlobalGutterState
+    );
+    finalPrepared = selectedBottomExits.prepared;
+    finalResolution = runRoutingLifecycle(selectedBottomExits.context, {
+      maxCandidates: remainingCandidates, maxRepairRevisions: remainingRevisions,
+      expand: (context, violations, pass) => {
+        if (preparationExpansionPasses + routingExpansionPasses + labelExpansionPasses + pass > MAX_FINAL_ROUTING_ATTEMPTS) return undefined;
+        const implicated = new Set(violations.flatMap(violation => violation.connectorIds));
+        const columns: Record<number, number> = {};
+        const lanes: Record<number, number> = {};
+        // Only measured capacity deficits are requests to the existing cell-shift owner.
+        for (const connector of context.connectors) {
+          if (!implicated.has(connector.id)) continue;
+          const source = workingIndex.nodeById.get(connector.source.nodeId)!, target = workingIndex.nodeById.get(connector.target.nodeId)!;
+          if (!source.cell || !target.cell) continue;
+          for (const [axis, positive, negative, record] of [["x", "east", "west", columns], ["y", "south", "north", lanes]] as const) {
+            const sourceOrder = axis === "x" ? source.cell.columnOrder : source.cell.rowOrder;
+            const targetOrder = axis === "x" ? target.cell.columnOrder : target.cell.rowOrder;
+            const forward = connector.source.side === positive && connector.target.side === negative && sourceOrder < targetOrder;
+            const backward = connector.source.side === negative && connector.target.side === positive && targetOrder < sourceOrder;
+            if (!forward && !backward) continue;
+            const transverse = axis === "x" ? "y" : "x";
+            const sourceLeg = Math.max(1, connector.source.minLeg), targetLeg = Math.max(1, connector.target.minLeg);
+            const required = Math.abs(connector.source.point[transverse] - connector.target.point[transverse]) <= EPSILON
+              ? Math.max(sourceLeg, targetLeg) : sourceLeg + targetLeg;
+            const deficit = required - Math.abs(connector.source.point[axis] - connector.target.point[axis]);
+            const order = Math.min(sourceOrder, targetOrder);
+            record[order] = Math.max(record[order] ?? 0, roundUpToSeparationDistance(deficit));
+          }
         }
+        if (!hasNonZeroExpansion(columns) && !hasNonZeroExpansion(lanes)) return undefined;
+        workingGlobalGutterState = buildGlobalGutterState(
+          accumulateExpansions(workingGlobalGutterState.columnExpansions, columns),
+          accumulateExpansions(workingGlobalGutterState.laneExpansions, lanes));
+        workingScene = applyGlobalGutterExpansions(positionedScene, middleLayer,
+          workingGlobalGutterState.columnExpansions, workingGlobalGutterState.laneExpansions);
+        return prepareFinalContext();
       }
-      if (!hasNonZeroExpansion(columns) && !hasNonZeroExpansion(lanes)) return undefined;
-      workingGlobalGutterState = buildGlobalGutterState(
-        accumulateExpansions(workingGlobalGutterState.columnExpansions, columns),
-        accumulateExpansions(workingGlobalGutterState.laneExpansions, lanes));
-      workingScene = applyGlobalGutterExpansions(positionedScene, middleLayer,
-        workingGlobalGutterState.columnExpansions, workingGlobalGutterState.laneExpansions);
-      return prepareFinalContext();
+    });
+    for (const key of Object.keys(routingTotals) as (keyof FinalRoutingTrace)[]) routingTotals[key] += finalResolution.trace[key];
+    routingExpansionPasses += finalResolution.trace.expansionPasses;
+    if (finalResolution.status === "failed") { terminationReason = "routing_failed"; break; }
+    const acceptedRoutes = finalResolution.routeByConnectorId;
+    finalPrepared = { ...finalPrepared, connectorPlans: finalPrepared.connectorPlans.map(plan => ({ ...plan,
+      finalRoute: acceptedRoutes.get(plan.id)!
+    })) };
+    const initialLabels = placeLabels(finalPrepared.connectorPlans, workingScene, middleLayer, []);
+    if (best) for (const [id, label] of best.assessment.labels) initialLabels.set(id, label);
+    const labelScene = withEdgesAndDiagnostics(workingScene,
+      buildPositionedEdges(finalPrepared.connectorPlans, plan => plan.finalRoute, initialLabels), [], middleLayer);
+    labelAssessment = assessConnectorLabels(scenarioLabelInput(finalPrepared.connectorPlans, labelScene, middleLayer));
+    const candidate = { scene: clonePositionedScene(workingScene), prepared: finalPrepared,
+      gutterState: structuredClone(workingGlobalGutterState), resolution: finalResolution,
+      exits: selectedBottomExits, assessment: labelAssessment, revision };
+    const compare = (left: readonly number[], right: readonly number[]) => {
+      for (let i = 0; i < left.length; i++) if (left[i] !== right[i]) return left[i]! - right[i]!;
+      return 0;
+    };
+    if (!best || compare(labelAssessment.comparisonKey, best.assessment.comparisonKey) < 0) best = candidate;
+    if (!labelAssessment.problems.length) { terminationReason = "resolved"; break; }
+    const key = JSON.stringify({ gutters: workingGlobalGutterState,
+      routes: finalPrepared.connectorPlans.map(plan => [plan.id, plan.finalRoute.points]), labels: [...labelAssessment.labels] });
+    if (seenLabelStates.has(key)) { terminationReason = "repeated_state"; break; }
+    seenLabelStates.add(key);
+    if (preparationExpansionPasses + routingExpansionPasses + labelExpansionPasses >= MAX_FINAL_ROUTING_ATTEMPTS) {
+      terminationReason = "expansion_exhausted"; break;
     }
-  });
+    if (routingTotals.candidates >= DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates
+      || routingTotals.repairRevisions >= DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions) {
+      terminationReason = "search_exhausted"; break;
+    }
+    const input = scenarioLabelInput(finalPrepared.connectorPlans, labelScene, middleLayer);
+    const corridors = scenarioLabelCorridors(finalPrepared.connectorPlans, workingIndex, labelScene);
+    lastRequests = measureConnectorLabelCapacity(corridors,
+      connectorLabelCapacityClaims(input, labelAssessment, corridors), FIXED_SEPARATION_DISTANCE);
+    const columns: Record<number, number> = {}, lanes: Record<number, number> = {};
+    for (const request of lastRequests) {
+      const order = Number(request.owner.split(":")[1]);
+      const orders = [...workingIndex.cellById.values()].map(cell => request.axis === "x" ? cell.columnOrder : cell.rowOrder);
+      if (!Number.isFinite(order) || !orders.some(candidate => candidate > order)) continue;
+      recordRequiredExpansion(request.axis === "x" ? columns : lanes, order, request.requiredSize - request.availableSize);
+    }
+    if (!hasNonZeroExpansion(columns) && !hasNonZeroExpansion(lanes)) { terminationReason = "no_capacity"; break; }
+    workingGlobalGutterState = buildGlobalGutterState(
+      accumulateExpansions(workingGlobalGutterState.columnExpansions, columns),
+      accumulateExpansions(workingGlobalGutterState.laneExpansions, lanes));
+    const expanded = applyGlobalGutterExpansions(positionedScene, middleLayer,
+      workingGlobalGutterState.columnExpansions, workingGlobalGutterState.laneExpansions);
+    const nodeGeometry = (scene: PositionedScene) => JSON.stringify(flattenItems(scene.root)
+      .filter(isPositionedNode).map(node => [node.id, node.x, node.y, node.width, node.height]));
+    if (nodeGeometry(expanded) === nodeGeometry(workingScene)) { terminationReason = "repeated_state"; break; }
+    workingScene = expanded;
+    workingIndex = buildIndex(workingScene, middleLayer);
+    labelExpansionPasses++;
+  }
+  if (best) {
+    workingScene = best.scene; workingIndex = buildIndex(workingScene, middleLayer);
+    finalPrepared = best.prepared; workingGlobalGutterState = best.gutterState;
+    finalResolution = best.resolution; selectedBottomExits = best.exits;
+    labelAssessment = best.assessment; labelsByPlanId = new Map(best.assessment.labels); selectedRevision = best.revision;
+  }
+  const finalDiagnostics: RendererDiagnostic[] = [...diagnostics];
   if (finalResolution.status === "failed") {
     for (const violation of finalResolution.violations) finalDiagnostics.push(createRoutingDiagnostic(
       `renderer.routing.scenario_flow_${violation.kind}`,
@@ -4076,7 +4245,7 @@ export function buildScenarioFlowRoutingStages(
     })) };
   }
   emitFinalIntersectionDiagnostics(finalPrepared.connectorPlans, workingIndex.nodeBoxes, finalDiagnostics);
-  const labelsByPlanId = placeLabels(finalPrepared.connectorPlans, workingScene, middleLayer, finalDiagnostics);
+  if (!best) labelsByPlanId = placeLabels(finalPrepared.connectorPlans, workingScene, middleLayer, finalDiagnostics);
   let finalPositionedScene = withEdgesAndDiagnostics(
     workingScene,
     buildPositionedEdges(finalPrepared.connectorPlans, (plan) => plan.finalRoute, labelsByPlanId),
@@ -4100,6 +4269,17 @@ export function buildScenarioFlowRoutingStages(
       diagnostics: sortRendererDiagnostics([...finalPositionedScene.diagnostics, ...sharedDiagnostics])
     };
   }
+  const finalLabelAudit = auditConnectorLabels(scenarioLabelInput(finalPrepared.connectorPlans, finalPositionedScene, middleLayer));
+  const unresolvedLabelIds = [...new Set(finalLabelAudit.problems.map(problem => problem.connectorId))];
+  const labelDiagnostics = unresolvedLabelIds.map(id => createRoutingDiagnostic(
+    "renderer.routing.scenario_flow_edge_label_unresolved",
+    `Label for "${id}" remains unresolved after bounded layout correction (${terminationReason}).`, id, "warn",
+    JSON.stringify({ problems: finalLabelAudit.problems.filter(problem => problem.connectorId === id),
+      terminationReason, selectedRevision, capacityRequests: lastRequests })
+  ));
+  finalDiagnostics.push(...labelDiagnostics);
+  finalPositionedScene = { ...finalPositionedScene,
+    diagnostics: sortRendererDiagnostics([...finalPositionedScene.diagnostics, ...labelDiagnostics]) };
   finalPrepared = refreshOptionalExitOccupancy(
     finalPrepared, selectedBottomExits.changedConnectorIds,
     workingScene, workingIndex, workingGlobalGutterState
@@ -4108,6 +4288,8 @@ export function buildScenarioFlowRoutingStages(
 
   return {
     finalResolutionTrace: finalResolution.trace,
+    labelLayoutTrace: { preparationExpansionPasses, routingExpansionPasses, labelExpansionPasses,
+      routingTotals, selectedRevision, terminationReason, unresolvedLabelIds },
     connectorPlans: finalPrepared.connectorPlans,
     nodeEdgeBuckets: [...finalBucketsByNodeId.values()].sort((left, right) => left.nodeId.localeCompare(right.nodeId)),
     nodeGutters: buildNodeGutters(workingIndex),
