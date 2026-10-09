@@ -32,6 +32,11 @@ z
 
 - Small progress edit
 - AGENTS.md edit
+- Routing hardening docs cleanup
+- Fixed --view --diagram option logic
+- Fixed unreadable related documentation
+- Added documentation directive to AGENTS.md
+- Created separate page about view and diagram
 
 ## Thu 10-8
 

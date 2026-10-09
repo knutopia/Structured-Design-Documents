@@ -91,7 +91,7 @@ At the review, `Cancel` performs no verification and writes nothing. `Save` veri
 Examples:
 
 ```bash
-pnpm sdd show real_world_exploration/billSage_example/billSage_structure.sdd --view ia_place_map --detail compact --out ./compact_example.svg
+pnpm sdd show real_world_exploration/billSage_example/billSage_structure.sdd --view ia_place_map
 pnpm sdd show real_world_exploration/billSage_example/billSage_structure.sdd --view ia_place_map --detail detailed --out ./detailed_example.svg
 pnpm sdd show bundle/v0.1/examples/service_blueprint_slice.sdd --view service_blueprint --out ./blueprint.svg
 pnpm sdd show bundle/v0.1/examples/scenario_branching.sdd --view scenario_flow --profile simple --out ./scenario.svg
@@ -99,35 +99,23 @@ pnpm sdd show bundle/v0.1/examples/branching_journey.sdd --view journey_map --pr
 pnpm sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./outcome.svg
 ```
 
-- Purpose: compile, validate, and generate preview artifacts for one chosen view or every applicable view.
+- Purpose: compile and validate an SDD source, and generate diagrams from it.
 - Use when: you want a visible result, want to share diagrams, or want to check how a document renders at a given detail level.
 - Invocation: `pnpm sdd show <input> --view <view>`
-- Key inputs: an input `.sdd` file and either `--view` or `--diagram`; use `--view all` for applicable combined views and `--diagram all` for declared named diagrams (v0.2)
+- Key inputs: an input `.sdd` file and a target selector (`--view`, `--diagram`), as explained below.
 - Common options: `--profile`, `--detail`, `--decorators`, `--format`, and `--out`.
 - Output: SVG by default, or PNG when `--format png` is provided.
 
-When `--profile`, `--detail`, or `--decorators` is omitted, `sdd show` resolves that setting from your user default and then the bundle fallback. The shipped v0.1 fallbacks are `simple`, `compact`, and `none`; an explicit option overrides the saved preference for one invocation. Profile controls validation, detail controls rendering content, and decorators add orientation information independently.
+When `--profile`, `--detail`, or `--decorators` is omitted, `sdd show` resolves that setting from your user default and then the bundle fallback. The shipped v0.2 fallbacks are `simple`, `compact`, and `none`; an explicit option overrides the saved preference for one invocation. Profile controls validation, detail controls rendering content, and decorators add orientation information independently.
 
-With `--view all`, `sdd show` generates only views that retain visible semantic content after the selected detail policy. Finding no applicable views is successful and writes no files. If a renderer fails, the remaining applicable renderers still run and successful outputs are saved. The command exits with code 1 if any renderer fails. An explicit backend must support every available view, and `--dot-out` cannot be combined with `--view all`.
+If you omit `--out`, `sdd show` writes output beside the input file, composing the filename: `<source>.<view>.[diagram-id].<detail>[.decorators-<mode>][.<backend>].<format>`.
 
-If you omit `--out`, `sdd show` writes output beside the input file using `<source>.<view>.<detail>[.decorators-<mode>][.<backend>].<format>`. The decorator segment is omitted for `none`. With `--view all --out ./diagram.svg`, the output template becomes files such as `diagram.ia_place_map.svg` and `diagram.journey_map.svg`.
+### Choosing Views & Named Diagrams
 
-In v0.2, `--diagram DG-001` selects a named diagram and infers its type. Supplying
-`--view` as well asserts that the type matches. `--diagram all` renders declared
-named diagrams in ID order and keeps combined views separate. `sdd diagrams
-<input> --json --details` lists semantic membership counts, exact edge references,
-and node inclusion reasons. See [Named diagrams](../syntax/named_diagrams.md)
-for declaration and assignment syntax.
+`--view` selects a **diagram type**, such as `scenario_flow` or `journey_map`.  
+`--diagram` selects a **named diagram by its ID**, such as `DG-001`.  
 
-Named default paths add `.diagram-<ID>` after the view and before detail. For a
-single target, `--out` remains the requested path; named batches insert both view
-and Diagram ID before the extension. Batch selectors cannot be combined with
-another selector or `--dot-out`. Empty/non-visible named targets are skipped with
-warnings during a batch; a batch with no artifacts fails. A single non-visible
-named target fails without an artifact. Invalid membership blocks rendering,
-including force paths; selection never falls back to combined content.
-
-The final `--view all` summary shows the output directory once as `Path: <directory>`, followed by each generated filename on its own line. Files with renderer warning or info diagnostics include a postfix such as `(2 warning(s), 1 info)`. Failed renderers are each listed on a separate line.
+See how the two options [work together](../syntax/view_diagram_options/index.md) in detail.
 
 ### Detail Choice
 

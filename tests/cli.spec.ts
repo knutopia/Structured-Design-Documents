@@ -2218,7 +2218,16 @@ describe("CLI wrappers", () => {
     expect(showHelp).toContain("--decorators <mode>");
     expect(showHelp).toContain("node decorator mode override; omission uses the");
     expect(showHelp).toContain("resolved user/bundle default");
+    expect(showHelp).toContain("a type filter with --diagram all");
+    expect(showHelp).toContain("add --view <view> to render only that type");
     expect(showHelp).toContain("[.decorators-<mode>]");
+  });
+
+  it("show help includes an example for rendering named diagrams of one type", () => {
+    const { deps, stdout } = createDeps();
+    const program = createProgram(deps);
+    program.commands.find(command => command.name() === "show")!.outputHelp();
+    expect(stdout.join("")).toContain("sdd show bundle/v0.2/examples/scenario_separation.sdd --diagram all --view scenario_flow --bundle bundle/v0.2/manifest.yaml");
   });
 
   it("render help labels DOT and Mermaid output as internal/debug artifacts", () => {

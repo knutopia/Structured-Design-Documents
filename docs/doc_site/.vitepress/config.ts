@@ -73,6 +73,7 @@ export default defineConfig({
           { text: 'Syntax Topics', link: '/syntax/' },
           { text: '&ensp; Step Differentiation', link: '/syntax/step_differentiation/' },
           { text: '&ensp; Named Diagrams', link: '/syntax/named_diagrams/' },
+          { text: '&ensp; View and Diagram Options', link: '/syntax/view_diagram_options/' },
           { text: '&ensp; Node- and Edge Reference', link: '/syntax/node_and_edge_reference/' },
           { text: '&ensp; Hidden Edge Reference', link: '/syntax/hidden_edge_reference/' }
         ]

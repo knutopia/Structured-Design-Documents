@@ -4,8 +4,8 @@ prev:
   link: ../step_differentiation
 
 next:
-  text: Diagram Node- and Edge Reference
-  link: ../node_edge_reference
+  text: View and Diagram Options for Sdd-Show
+  link: ../view_diagram_options
 ---
 
 # Named Diagrams
@@ -70,31 +70,21 @@ pnpm sdd show flows.sdd --diagram DG-001
 # Declared named diagrams, sorted by ID
 pnpm sdd show flows.sdd --diagram all
 
+# Render all named scenario-flow diagrams, but not oher types
+pnpm sdd show flows.sdd --diagram all --view scenario_flow
+
 # Inspect inventories and inclusion reasons
 pnpm sdd diagrams flows.sdd --json --details
 ```
 
 `--view all` enumerates applicable combined views. `--diagram all` enumerates
 declared named diagrams. For one target, supplying both selectors asserts that
-the named diagram has the requested type; a mismatch fails. Batch selectors
-cannot be combined with another selector or `--dot-out`.
+the named diagram has the requested type; a mismatch fails. With `--diagram all`,
+add a specific `--view` to render only named diagrams of that type. See how the two options [work together](../syntax/view_diagram_options/index.md) in detail.
 
-Default named paths include the ID, for example
-`flows.scenario_flow.diagram-DG-001.compact.svg`. Names need not be unique and
-are never used to distinguish files. A single `--out` writes exactly the
-requested path. Named batches insert the view and ID before its extension.
-SVG titles use the diagram name without adding a visible title band.
+Default named paths include the ID, for example `flows.scenario_flow.diagram-DG-001.compact.svg`. Names need not be unique and are never used to distinguish files. A single `--out` writes exactly the requested path. Named batches insert the view and ID before its extension. 
 
-An empty diagram is a legal draft. Rendering it alone fails without producing
-an artifact; a named batch skips it with a warning. The batch fails if no
-artifact is produced or any diagram has an error. Invalid membership does not
-fall back to a combined view, including with `--force`.
+An empty diagram is a legal draft. Rendering it alone fails without producing an artifact; a named batch skips it with a warning. The batch fails if no artifact is produced or any diagram has an error. Invalid membership does not fall back to a combined view, including with `--force`.
 
-The staged IA preview currently rejects a named diagram containing several
-navigation occurrences with the same directed endpoints, with an explicit
-diagnostic and no artifact. Use `--backend legacy_graphviz_preview` to render
-that selection. Separate diagrams selecting one occurrence each are supported.
 
-The [SDD helper](../sdd-helper/index.md) supports declaration and membership
-editing, discovery, projection, preview, and undo. Guided addition's diagram
-type filters keep their existing meaning and do not assign membership.
+The [SDD helper](../sdd-helper/index.md) supports declaration and membership editing, discovery, projection, preview, and undo. Guided addition's diagram type filters keep their existing meaning and do not assign membership.

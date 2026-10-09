@@ -71,7 +71,11 @@ LLM use of SDD (this repo/project) is supported by a (Codex-) Skill and a helper
 
 ## Documentation Website
 
-Much project documentation exists in the documentation website of the project at https://knutopia.github.io/Structured-Design-Documents/, and it README files in sub-folders of the repo.
+Much project documentation exists in the documentation website of the project at https://knutopia.github.io/Structured-Design-Documents/. The source of this website is the [doc_site](docs/doc_site) folder. Technical details live in README files in sub-folders of the repo.
+
+### Generating Documentation
+
+When updating documentation, treat the website as user-facing amd human-readable. Restrict technical detail to what is necessary to understand a feature. Resist the temptation to dump contract- and state details in the website. Technical structure belongs into README files and topic-specific documentation folders outside the website.
 
 ## CLI Defaults
 

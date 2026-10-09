@@ -1,4 +1,4 @@
-# Routing Hardening Implementation Plan
+# [Done] Routing Hardening Implementation Plan
 
 **Status:** Implemented; stages 0–7 accepted on 2026-09-14. See [execution evidence and unrelated full-suite issues](implementation_status.md).  
 **Date:** 2026-09-12  

@@ -1,4 +1,4 @@
-# Routing hardening execution evidence
+# [Done] Routing hardening execution evidence
 
 Started 2026-09-12. Baseline checkout: `9a3c966eba3db788f4770f27093c6c21fb260c56`.
 Initial dirty state: only untracked `docs/routing_hardening/` (the supplied plan).

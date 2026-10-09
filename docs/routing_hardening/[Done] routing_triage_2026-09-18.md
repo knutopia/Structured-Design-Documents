@@ -1,4 +1,4 @@
-# Routing Triage — 2026-09-18
+# [Done] Routing Triage — 2026-09-18
 
 Three items, in the order they should be worked.
 

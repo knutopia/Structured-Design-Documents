@@ -1,4 +1,4 @@
-# Shared label-space reservation and bounded correction for Scenario flows
+# [Done] Shared label-space reservation and bounded correction for Scenario flows
 
 ## Implementation progress — 2026-10-07
 

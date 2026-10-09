@@ -1,4 +1,4 @@
-# Routing hardening: independent contract review
+# [Done] Routing hardening: independent contract review
 
 **2026-09-12 — Proposed Stage 1 decisions; no implementation gate accepted.** This review reads the current core and three adopter finalization paths. It does not reproduce or accept the captured geometry, implement the API below, or substitute for Stage 0 evidence or executable Stage 1 tests.
 
