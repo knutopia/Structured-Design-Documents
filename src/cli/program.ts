@@ -700,6 +700,7 @@ async function runShowAllCommand(
   input: SourceInput,
   options: {
     named?: boolean;
+    viewFilter?: string;
     profileId: string;
     detailId: string;
     nodeDecoratorModeId: string;
@@ -713,6 +714,10 @@ async function runShowAllCommand(
   if (options.named && !bundle.contracts.diagram_membership) {
     deps.stderr(appendLine("The loaded bundle does not support named diagrams."));
     return 1;
+  }
+  if (options.viewFilter !== undefined && !getViewSpec(bundle, options.viewFilter)) {
+    deps.stderr(appendLine(`Unknown view '${options.viewFilter}'. Available bundle views: ${formatList(bundle.views.views.map((view) => view.id))}.`));
+    return 2;
   }
   const namedCompile = options.named ? deps.compileSource(input, bundle) : undefined;
   if (namedCompile && (!namedCompile.graph || hasErrors(namedCompile.diagnostics))) {
@@ -729,11 +734,18 @@ async function runShowAllCommand(
     }
   }
   const targets = options.named
-    ? listDiagrams(namedCompile!.graph!, bundle).map((diagram) => ({
-      view: bundle.views.views.find((view) => view.id === diagram.viewId),
-      diagramId: diagram.diagramId
-    }))
+    ? listDiagrams(namedCompile!.graph!, bundle)
+      .filter((diagram) => options.viewFilter === undefined || diagram.viewId === options.viewFilter)
+      .map((diagram) => ({
+        view: bundle.views.views.find((view) => view.id === diagram.viewId),
+        diagramId: diagram.diagramId
+      }))
     : bundle.views.views.map((view) => ({ view, diagramId: undefined }));
+  if (options.viewFilter !== undefined && targets.length === 0) {
+    writeDiagnostics(deps, namedSourceDiagnostics, normalizeDiagnosticsFormat(options.diagnostics));
+    deps.stderr(appendLine(`No named diagrams have type '${options.viewFilter}'.`));
+    return 1;
+  }
   const candidates: ShowAllCandidate[] = targets.flatMap(({ view, diagramId }) => {
     if (!view || view.status !== "operational") return [];
     const capability = getViewRenderCapability(view.id);
@@ -788,7 +800,9 @@ async function runShowAllCommand(
   if (candidates.length === 0) {
     writeDiagnostics(deps, [...sourceDiagnostics, ...backendDiagnostics], normalizeDiagnosticsFormat(options.diagnostics));
     deps.stderr(appendLine(options.named
-      ? "No declared named diagrams can produce the requested artifact."
+      ? options.viewFilter !== undefined
+        ? `No named diagrams of type '${options.viewFilter}' can produce the requested artifact.`
+        : "No declared named diagrams can produce the requested artifact."
       : `No operational renderable views support preview format '${options.format}'.`));
     return options.named ? 1 : 2;
   }
@@ -956,8 +970,8 @@ async function runShowCommand(
       deps.stderr(appendLine("Select a target with --view <view> or --diagram <id>."));
       return 2;
     }
-    if ((options.view === "all" && options.diagram !== undefined) || (options.diagram === "all" && options.view !== undefined)) {
-      deps.stderr(appendLine("A batch selector cannot be combined with another selector."));
+    if (options.view === "all" && options.diagram !== undefined) {
+      deps.stderr(appendLine("--view all cannot be combined with --diagram. Use --diagram all alone or with a specific --view."));
       return 2;
     }
     const requestedPreviewFormat = (options.format || getViewRenderCapability(options.view ?? "")?.defaultPreviewFormat || "svg") as PreviewFormat;
@@ -989,6 +1003,7 @@ async function runShowCommand(
     if (options.view === "all" || options.diagram === "all") {
       return runShowAllCommand(deps, bundle, input, {
         ...(options.diagram === "all" ? { named: true } : {}),
+        ...(options.diagram === "all" && options.view !== undefined ? { viewFilter: options.view } : {}),
         profileId,
         detailId,
         nodeDecoratorModeId,
@@ -1527,8 +1542,8 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
     .summary("Compile, validate, and produce preview artifacts for one or all applicable views")
     .description("Preferred preview command for renderable views. Use `--view all` to generate every operational view with visible content after applying render detail. SVG is the default output. `ia_place_map`, `journey_map`, `outcome_opportunity_map`, `service_blueprint`, `scenario_flow`, and `ui_contracts` select staged preview backends by default. Legacy Graphviz preview remains available with `--backend legacy_graphviz_preview`.")
     .argument("<input>", "source .sdd file")
-    .option("--view <view>", "combined view id, or all for every applicable combined view")
-    .option("--diagram <id>", "named Diagram ID, or all for declared named diagrams")
+    .option("--view <view>", "combined view id, all for every applicable combined view, or a type filter with --diagram all")
+    .option("--diagram <id>", "named Diagram ID, or all for declared named diagrams; add --view <view> to render only that type")
     .option("--bundle <manifest>", BUNDLE_OPTION_DESCRIPTION)
     .option("--profile <profile>", "profile id override; omission uses the resolved user/bundle default")
     .option("--detail <detail>", "render detail id override; omission uses the resolved user/bundle default")
@@ -1544,6 +1559,7 @@ export function createProgram(overrides: Partial<CliDeps> = {}): Command {
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --decorators type,id --bundle bundle/v0.1/manifest.yaml",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --bundle bundle/v0.1/manifest.yaml",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view all --out ./outcome.svg --bundle bundle/v0.1/manifest.yaml",
+      "sdd show bundle/v0.2/examples/scenario_separation.sdd --diagram all --view scenario_flow --bundle bundle/v0.2/manifest.yaml",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view ia_place_map --backend legacy_graphviz_preview --out ./outcome-legacy.svg --bundle bundle/v0.1/manifest.yaml",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --out ./outcome-opportunity.svg --bundle bundle/v0.1/manifest.yaml",
       "sdd show bundle/v0.1/examples/outcome_to_ia_trace.sdd --view outcome_opportunity_map --backend legacy_graphviz_preview --out ./outcome-opportunity-legacy.svg --bundle bundle/v0.1/manifest.yaml",

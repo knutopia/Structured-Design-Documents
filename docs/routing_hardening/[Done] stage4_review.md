@@ -1,4 +1,4 @@
-# Independent Stage 3/4 review
+# [Done] Independent Stage 3/4 review
 
 2026-09-13. Reviewed the working-tree lifecycle, Outcome integration, marker helper, assignment changes and `tests/routingHardening*.ts`. This records the implementation **before the orchestrator's follow-up corrections** to crossing policy and Outcome expansion ownership. No production code was edited by this reviewer.
 

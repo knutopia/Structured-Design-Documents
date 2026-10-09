@@ -1,7 +1,7 @@
 ---
 prev:
-  text: Named Diagrams
-  link: ../named_diagrams
+  text: View and Diagram Options for Sdd-Show
+  link: ../view_diagram_options
 
 next:
   text: Hidden Edge Reference
