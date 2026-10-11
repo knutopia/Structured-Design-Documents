@@ -1,4 +1,4 @@
-# Containment Hierarchy in UI Contracts Diagrams
+# [Done] Containment Hierarchy in UI Contracts Diagrams
 
 **kg:**
 Our current ui_contracts diagrams do not visualize containment relationships between components.

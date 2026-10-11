@@ -19,7 +19,10 @@ beforeAll(async () => { bundle = await loadBundle(manifest); });
 afterAll(async () => { await Promise.all(temporaryDirectories.map((dir) => rm(dir, { recursive: true, force: true }))); });
 
 function compile(text: string, selected = bundle) {
-  const result = compileSource({ path: "/tmp/step-differentiation.sdd", text: `SDD-TEXT ${selected.manifest.language_version}\n${text}` }, selected);
+  return compileDocument(`SDD-TEXT ${selected.manifest.language_version}\n${text}`, selected);
+}
+function compileDocument(text: string, selected = bundle) {
+  const result = compileSource({ path: "/tmp/step-differentiation.sdd", text }, selected);
   expect(result.diagnostics).toEqual([]);
   expect(result.graph).toBeDefined();
   return result.graph!;
@@ -180,14 +183,14 @@ describe("v0.2 Step differentiation", () => {
         const replace = (value: any): any => typeof value === "string" ? value === type ? renamed : value : Array.isArray(value) ? value.map(replace) : value && typeof value === "object" ? Object.fromEntries(Object.entries(value).map(([key, value]) => [key === type ? renamed : key, replace(value)])) : value;
         for (const key of Object.keys(data)) data[key] = replace(data[key]);
       });
-      const text = (await readFile("bundle/v0.2/examples/step_differentiation.sdd", "utf8")).replace(/^SDD-TEXT 0.2\n/, "").replaceAll(type, renamed);
-      const graph = compile(text, selected);
+      const text = (await readFile("bundle/v0.2/examples/step_differentiation.sdd", "utf8")).replaceAll(type, renamed);
+      const graph = compileDocument(text, selected);
       expect(getNodeAuthoringForm(selected, renamed)).toBeDefined();
       expect(listAllowedEndpointTriples(selected).some(t => t.from === renamed || t.to === renamed)).toBe(true);
       const projected = projectView(graph, selected, views[i]);
       expect(projected.diagnostics).toEqual([]);
       expect(projected.projection!.nodes.some(n => n.type === renamed)).toBe(true);
-      const result = await renderSourcePreview({ path: "renamed.sdd", text: `SDD-TEXT 0.2\n${text}` }, selected, { viewId: views[i], format: "svg", detailId: "detailed", profileId: "strict", nodeDecoratorModeId: "type,id" });
+      const result = await renderSourcePreview({ path: "renamed.sdd", text }, selected, { viewId: views[i], format: "svg", detailId: "detailed", profileId: "strict", nodeDecoratorModeId: "type,id" });
       expect(result.diagnostics.filter(d => d.severity === "error")).toEqual([]);
       expect(result.artifact?.format).toBe("svg");
       if (result.artifact?.format === "svg") expect(result.artifact.text).toContain(renamed);

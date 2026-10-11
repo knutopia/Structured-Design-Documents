@@ -102,7 +102,7 @@ describe("public staged UI contracts B5 renderer", () => {
   });
 
   it("packs referenced targets across the widest positioned section in source order", async () => {
-    const { graph, projection, view, rendererScene, rendered } = await artifacts("docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd");
+    const { graph, projection, view, rendererScene, rendered } = await artifacts("bundle/v0.1/examples/departure_desk.sdd");
     const root = rendered.positionedScene.root;
     const register = root.children.find(child => child.id === "target-register")!;
     if (register.kind !== "container") throw new Error("Missing target register");
@@ -161,7 +161,7 @@ describe("public staged UI contracts B5 renderer", () => {
   });
 
   for (const detailId of ["compact", "detailed"]) for (const nodeDecoratorModeId of ["none", "type", "id", "type,id"]) it(`public preview ${detailId} / ${nodeDecoratorModeId}`, async () => {
-    const input = { path: "docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd", text: await readFile("docs/Done/[Done] hierarchical_ui_contracts/departure_desk.sdd", "utf8") };
+    const input = { path: "bundle/v0.1/examples/departure_desk.sdd", text: await readFile("bundle/v0.1/examples/departure_desk.sdd", "utf8") };
     const result = await renderSourcePreview(input, bundle, { viewId: "ui_contracts", format: "svg", profileId: "simple", detailId, nodeDecoratorModeId });
     // The unchanged fixture deliberately reuses C-430 under two parents; the
     // existing validator reports that recommendation independently of rendering.

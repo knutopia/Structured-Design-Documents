@@ -11,12 +11,10 @@ function routeLength(points: readonly { x: number; y: number }[]): number {
 }
 
 describe("Scenario Flow optional bottom exits", () => {
-  it("shortens the backward View State transition in tmp.sdd without routing regressions", async () => {
+  it("shortens the backward View State transition in the frozen fixture without routing regressions", async () => {
     const bundle = await loadBundle("bundle/v0.1/manifest.yaml");
-    const path = "docs/sdd_app_planning/whiteboarding_diagrams/tmp.sdd";
-    // This routing proof uses the historical Step topology. The planning source
-    // carries a v0.2 header, so select v0.1 in memory without migrating the source.
-    const text = (await readFile(path, "utf8")).replace(/^SDD-TEXT 0\.2\b/u, "SDD-TEXT 0.1");
+    const path = "tests/fixtures/render/scenario_transition_clearance.sdd";
+    const text = await readFile(path, "utf8");
     const compiled = compileSource({ path, text }, bundle);
     expect(compiled.diagnostics.filter(diagnostic => diagnostic.severity === "error")).toEqual([]);
     const graph = compiled.graph!;

@@ -1,5 +1,17 @@
 SDD-TEXT 0.2
 
+Diagram DG-001 "Add relationship"
+  diagram_type=scenario_flow
+END
+
+Diagram DG-002 "Node pivot"
+  diagram_type=scenario_flow
+END
+
+Diagram DG-003 "Create new view"
+  diagram_type=scenario_flow
+END
+
 ScenarioStep SS-001 "Choose an editing action"
   kind=decision
   PRECEDES SS-002 {add relationship} diagrams=DG-001
@@ -41,16 +53,4 @@ ScenarioStep SS-010 "Name the new view"
 END
 
 ScenarioStep SS-011 "Review the empty view"
-END
-
-Diagram DG-001 "Add relationship"
-  diagram_type=scenario_flow
-END
-
-Diagram DG-002 "Node pivot"
-  diagram_type=scenario_flow
-END
-
-Diagram DG-003 "Create new view"
-  diagram_type=scenario_flow
 END

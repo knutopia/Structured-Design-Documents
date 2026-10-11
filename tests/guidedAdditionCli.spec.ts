@@ -11,7 +11,10 @@ import { runCli, type CliDeps } from "../src/cli/program.js";
 import { guidedBack, type GuidedBack, type GuidedPromptAdapter, type GuidedPromptChoice } from "../src/cli/guidedAddition.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const acceptanceFixture = path.join(repoRoot, "tests/fixtures/guided_addition_acceptance.sdd");
+const acceptanceFixtures = {
+  "0.1": path.join(repoRoot, "tests/fixtures/guided_addition_acceptance.sdd"),
+  "0.2": path.join(repoRoot, "tests/fixtures/guided_addition_acceptance_v0_2.sdd")
+} as const;
 const manifests = {
   "0.1": path.join(repoRoot, "bundle/v0.1/manifest.yaml"),
   "0.2": path.join(repoRoot, "bundle/v0.2/manifest.yaml")
@@ -91,8 +94,8 @@ class TranscriptPrompt implements GuidedPromptAdapter {
   close(): void {}
 }
 
-function fixture(name: string): { relative: string; absolute: string; original: string } {
-  const original = fs.readFileSync(acceptanceFixture, "utf8");
+function fixture(name: string, version: keyof typeof acceptanceFixtures = "0.1"): { relative: string; absolute: string; original: string } {
+  const original = fs.readFileSync(acceptanceFixtures[version], "utf8");
   const absolute = path.join(fixtureDir, `${name}.sdd`);
   fs.writeFileSync(absolute, original, "utf8");
   return { relative: path.relative(repoRoot, absolute).split(path.sep).join("/"), absolute, original };
@@ -490,11 +493,12 @@ describe("sdd add bundle selection", () => {
     });
 
     it(`edits a matching ${version} document and rejects a mismatched bundle before persistence`, async () => {
-      const target = fixture(`bundle-${version}-edit`);
-      if (version === "0.2") {
-        fs.writeFileSync(target.absolute, target.original.replace("SDD-TEXT 0.1", "SDD-TEXT 0.2"));
-      }
+      const target = fixture(`bundle-${version}-edit`, version);
       const original = fs.readFileSync(target.absolute, "utf8");
+      const bundle = await loadBundle(manifests[version]);
+      const compiled = compileSource({ path: target.absolute, text: original }, bundle);
+      expect(compiled.diagnostics).toEqual([]);
+      expect(compiled.graph?.version).toBe(version);
       const mismatch = version === "0.1" ? "0.2" : "0.1";
       const rejected = await run(target, new TranscriptPrompt([]), ["--bundle", manifests[mismatch]]);
       expect(rejected.exitCode).toBe(1);

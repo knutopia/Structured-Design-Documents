@@ -5,7 +5,7 @@ import type { PositionedScene, RendererScene } from "../src/renderer/staged/cont
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import { assessUiContractsGeometry } from "./uiContractsB5Acceptance.js";
 
-const directory = "docs/Done/[Done] hierarchical_ui_contracts/";
+const directory = "tests/goldens/ui-contracts-b5/";
 const evidence = JSON.parse(readFileSync(`${directory}b5_pipeline_evidence.json`, "utf8")) as {
   proofs: Array<{ file: string; rendererScene: RendererScene; positionedScene: PositionedScene }>;
 };
@@ -13,6 +13,7 @@ const baseline = JSON.parse(readFileSync(`${directory}b5_implementation_baseline
 
 describe("B5 immutable acceptance baseline", () => {
   it("preserves protected source and accepted design references", () => {
+    expect(createHash("sha256").update(readFileSync(baseline.fixture)).digest("hex")).toBe(baseline.fixtureSha256);
     // The checked-in historical manifest predates the current renderer layout and
     // routing-core sources. Keep those historical hashes as evidence while the
     // replay and geometry assertions below remain the behavioral guard. The

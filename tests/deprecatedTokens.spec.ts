@@ -33,8 +33,9 @@ describe("bundle-owned deprecated tokens", () => {
 
   it("preserves valid types, v0.1 compatibility, and ordinary unknown-token errors", async () => {
     const old = await loadBundle("bundle/v0.1/manifest.yaml");
-    expect(parse(source.replace("0.2", "0.1"), old).diagnostics).toEqual([]);
-    expect(compileSource({ path: file, text: source.replace("0.2", "0.1") }, old).graph?.nodes[0].type).toBe("Step");
+    const legacySource = 'SDD-TEXT 0.1\nStep J-001 "Old"\nEND\n';
+    expect(parse(legacySource, old).diagnostics).toEqual([]);
+    expect(compileSource({ path: file, text: legacySource }, old).graph?.nodes[0].type).toBe("Step");
     for (const type of ["JourneyStep", "BlueprintStep", "ScenarioStep"]) {
       expect(parse(source.replace("Step", type)).diagnostics).toEqual([]);
     }

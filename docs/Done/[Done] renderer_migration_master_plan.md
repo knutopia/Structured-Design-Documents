@@ -1,4 +1,4 @@
-# Renderer Migration Master Plan
+# [Done] Renderer Migration Master Plan
 
 This is DONE except for step 12. We have reasonably-working ia_place_map, ui_contracts and service_blueprint renderers.
 

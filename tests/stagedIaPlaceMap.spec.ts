@@ -408,8 +408,7 @@ describe("staged ia_place_map", () => {
   });
 
   it("matches the reference-style hub and follower geometry for billSage_structure", async () => {
-    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_example/billSage_structure.sdd");
-    // This proof source declares v0.2 after the step-differentiation migration.
+    const examplePath = path.join(repoRoot, "tests/fixtures/render/billSage_structure.sdd");
     const { rendererScene, rendered } = await buildIaArtifacts(examplePath, "strict", path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
 
     expect(rendered.diagnostics.filter((diagnostic) => diagnostic.severity === "error")).toEqual([]);

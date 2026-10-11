@@ -109,8 +109,9 @@ describe("staged visual acceptance", () => {
   it("keeps target ia_place_map artifacts free of fallback diagnostics, node-crossing routes, and weak target approaches", async () => {
     const cases = [
       {
-        sourcePath: path.join(repoRoot, "real_world_exploration/billSage_example/billSage_structure.sdd"),
+        sourcePath: path.join(repoRoot, "tests/fixtures/render/billSage_structure.sdd"),
         bundleManifest: path.join(repoRoot, "bundle/v0.2/manifest.yaml"),
+        // Historical illustration only; the test does not read or write this path.
         outputArtifactPath: path.join(
           repoRoot,
           "real_world_exploration/billSage_example/reference/billSage_structure.ia_place_map.strict.bottomToLeft_connectors.reference.png"

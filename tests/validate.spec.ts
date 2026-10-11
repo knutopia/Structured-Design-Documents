@@ -53,7 +53,7 @@ describe("validateGraph", () => {
 
   it("accepts the BillSage draft example under simple", async () => {
     const bundle = await loadBundle(path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
-    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_example/billSage_simple_structure.sdd");
+    const examplePath = path.join(repoRoot, "tests/fixtures/validation/billSage_simple_structure.sdd");
     const input = {
       path: examplePath,
       text: await readFile(examplePath, "utf8")
@@ -69,7 +69,7 @@ describe("validateGraph", () => {
 
   it("flags the BillSage draft example under strict for missing governance metadata", async () => {
     const bundle = await loadBundle(path.join(repoRoot, "bundle/v0.2/manifest.yaml"));
-    const examplePath = path.join(repoRoot, "real_world_exploration/billSage_example/billSage_simple_structure.sdd");
+    const examplePath = path.join(repoRoot, "tests/fixtures/validation/billSage_simple_structure.sdd");
     const input = {
       path: examplePath,
       text: await readFile(examplePath, "utf8")

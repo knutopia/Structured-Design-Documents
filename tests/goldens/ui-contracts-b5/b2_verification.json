@@ -1,0 +1,3558 @@
+{
+  "source": "rev_fec1fc5b356be868944b67eb2d6134bd6d70f0ca2f290fc515662f061f45fbff",
+  "policy": {
+    "compact": {
+      "show_place_route_or_key": false,
+      "show_place_access": false,
+      "show_place_entry_points": false,
+      "show_place_primary_nav": true,
+      "show_view_state_data_required": false,
+      "show_secondary_state_groups_when_primary_view_state": false,
+      "show_supporting_contract_lane_when_primary_view_state": false,
+      "omit_empty_place_containers": true
+    },
+    "detailed": {
+      "show_place_route_or_key": true,
+      "show_place_access": true,
+      "show_place_entry_points": true,
+      "show_place_primary_nav": true,
+      "show_view_state_data_required": true,
+      "show_secondary_state_groups_when_primary_view_state": true,
+      "show_supporting_contract_lane_when_primary_view_state": true,
+      "omit_empty_place_containers": false
+    }
+  },
+  "proofs": [
+    {
+      "file": "b2_overview",
+      "detail": "compact",
+      "decorators": "type,id",
+      "width": 460,
+      "height": 1058.3,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "C-410",
+        "C-420",
+        "C-430",
+        "C-431",
+        "C-440",
+        "C-450",
+        "C-470",
+        "C-460"
+      ],
+      "representedEdges": [
+        "CONTAINS:C-410:C-420:",
+        "CONTAINS:C-420:C-430:",
+        "CONTAINS:C-430:C-431:",
+        "CONTAINS:C-410:C-440:",
+        "CONTAINS:C-410:C-450:",
+        "CONTAINS:C-410:C-470:",
+        "CONTAINS:C-470:C-430:"
+      ],
+      "nodes": [
+        {
+          "id": "C-410",
+          "x": 40,
+          "y": 142.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 56,
+          "y": 229.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 335.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 88,
+          "y": 422.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-440",
+          "x": 40,
+          "y": 541.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-450",
+          "x": 40,
+          "y": 612.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 56,
+          "y": 699.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 805.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 40,
+          "y": 965.3,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [],
+      "sections": [],
+      "containers": [
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 72,
+          "y": 406.3,
+          "w": 256,
+          "h": 85
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · Repeated hierarchy",
+          "x": 56,
+          "y": 300.3,
+          "w": 288,
+          "h": 207
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 213.3,
+          "w": 320,
+          "h": 309.99999999999994
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · See Cargo Sheet",
+          "x": 56,
+          "y": 770.3,
+          "w": 256,
+          "h": 104
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 683.3,
+          "w": 288,
+          "h": 207
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Load Workbench",
+          "x": 24,
+          "y": 107.3,
+          "w": 352,
+          "h": 799
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Crew Note",
+          "x": 24,
+          "y": 930.3,
+          "w": 256,
+          "h": 104
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_overview.decorators-none",
+      "detail": "compact",
+      "decorators": "none",
+      "width": 460,
+      "height": 1013.3,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "C-410",
+        "C-420",
+        "C-430",
+        "C-431",
+        "C-440",
+        "C-450",
+        "C-470",
+        "C-460"
+      ],
+      "representedEdges": [
+        "CONTAINS:C-410:C-420:",
+        "CONTAINS:C-420:C-430:",
+        "CONTAINS:C-430:C-431:",
+        "CONTAINS:C-410:C-440:",
+        "CONTAINS:C-410:C-450:",
+        "CONTAINS:C-410:C-470:",
+        "CONTAINS:C-470:C-430:"
+      ],
+      "nodes": [
+        {
+          "id": "C-410",
+          "x": 40,
+          "y": 142.3,
+          "w": 224,
+          "h": 48
+        },
+        {
+          "id": "C-420",
+          "x": 56,
+          "y": 224.3,
+          "w": 224,
+          "h": 48
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 325.3,
+          "w": 224,
+          "h": 48
+        },
+        {
+          "id": "C-431",
+          "x": 88,
+          "y": 407.3,
+          "w": 224,
+          "h": 48
+        },
+        {
+          "id": "C-440",
+          "x": 40,
+          "y": 521.3,
+          "w": 224,
+          "h": 48
+        },
+        {
+          "id": "C-450",
+          "x": 40,
+          "y": 587.3,
+          "w": 224,
+          "h": 48
+        },
+        {
+          "id": "C-470",
+          "x": 56,
+          "y": 669.3,
+          "w": 224,
+          "h": 48
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 770.3,
+          "w": 224,
+          "h": 48
+        },
+        {
+          "id": "C-460",
+          "x": 40,
+          "y": 925.3,
+          "w": 224,
+          "h": 48
+        }
+      ],
+      "geometry": [],
+      "sections": [],
+      "containers": [
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 72,
+          "y": 391.3,
+          "w": 256,
+          "h": 80
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · Repeated hierarchy",
+          "x": 56,
+          "y": 290.3,
+          "w": 288,
+          "h": 197
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 208.3,
+          "w": 320,
+          "h": 295
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · See Cargo Sheet",
+          "x": 56,
+          "y": 735.3,
+          "w": 256,
+          "h": 99
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 653.3,
+          "w": 288,
+          "h": 197
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Load Workbench",
+          "x": 24,
+          "y": 107.3,
+          "w": 352,
+          "h": 759
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Crew Note",
+          "x": 24,
+          "y": 890.3,
+          "w": 256,
+          "h": 99
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_overview.context",
+      "detail": "compact",
+      "decorators": "type,id",
+      "width": 940,
+      "height": 1058.3,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "C-410",
+        "C-420",
+        "C-430",
+        "C-431",
+        "C-440",
+        "C-450",
+        "C-470",
+        "C-460"
+      ],
+      "representedEdges": [
+        "CONTAINS:C-410:C-420:",
+        "CONTAINS:C-420:C-430:",
+        "CONTAINS:C-430:C-431:",
+        "CONTAINS:C-410:C-440:",
+        "CONTAINS:C-410:C-450:",
+        "CONTAINS:C-410:C-470:",
+        "CONTAINS:C-470:C-430:"
+      ],
+      "nodes": [
+        {
+          "id": "C-410",
+          "x": 40,
+          "y": 142.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 56,
+          "y": 229.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 335.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 88,
+          "y": 422.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-440",
+          "x": 40,
+          "y": 541.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-450",
+          "x": 40,
+          "y": 612.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 56,
+          "y": 699.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 805.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 40,
+          "y": 965.3,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [],
+      "sections": [],
+      "containers": [
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 72,
+          "y": 406.3,
+          "w": 256,
+          "h": 85
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · Repeated hierarchy",
+          "x": 56,
+          "y": 300.3,
+          "w": 288,
+          "h": 207
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 213.3,
+          "w": 320,
+          "h": 309.99999999999994
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · See Cargo Sheet",
+          "x": 56,
+          "y": 770.3,
+          "w": 256,
+          "h": 104
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 683.3,
+          "w": 288,
+          "h": 207
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Load Workbench",
+          "x": 24,
+          "y": 107.3,
+          "w": 352,
+          "h": 799
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Crew Note",
+          "x": 24,
+          "y": 930.3,
+          "w": 256,
+          "h": 104
+        },
+        {
+          "role": "editorial",
+          "title": "",
+          "x": 430,
+          "y": 187.3,
+          "w": 486,
+          "h": 92
+        },
+        {
+          "role": "editorial",
+          "title": "",
+          "x": 430,
+          "y": 387.3,
+          "w": 486,
+          "h": 92
+        },
+        {
+          "role": "editorial",
+          "title": "",
+          "x": 430,
+          "y": 597.3,
+          "w": 486,
+          "h": 109.54999999999995
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_component.compact",
+      "detail": "compact",
+      "decorators": "type,id",
+      "width": 760,
+      "height": 654.8,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "C-420",
+        "C-470",
+        "C-430",
+        "C-431"
+      ],
+      "representedEdges": [
+        "CONTAINS:C-420:C-430:",
+        "CONTAINS:C-470:C-430:",
+        "CONTAINS:C-430:C-431:"
+      ],
+      "nodes": [
+        {
+          "id": "C-420",
+          "x": 48,
+          "y": 187.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 396,
+          "y": 187.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 362.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 220,
+          "y": 549.8,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [],
+      "sections": [
+        {
+          "kind": "component",
+          "id": "C-430",
+          "x": 24,
+          "y": 107.3,
+          "w": 712,
+          "h": 517.5
+        }
+      ],
+      "containers": [
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Check",
+          "x": 24,
+          "y": 107.3,
+          "w": 712,
+          "h": 517.5
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_place.compact",
+      "detail": "compact",
+      "decorators": "type,id",
+      "width": 2096,
+      "height": 993.05,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "P-410",
+        "C-410",
+        "VS-410a",
+        "VS-410b",
+        "VS-410c",
+        "VS-410d",
+        "VS-410e",
+        "VS-415a",
+        "VS-415b",
+        "VS-415c",
+        "C-460"
+      ],
+      "representedEdges": [
+        "COMPOSED_OF:P-410:C-410:",
+        "CONTAINS:P-410:VS-410a:",
+        "CONTAINS:P-410:VS-410b:",
+        "CONTAINS:P-410:VS-410c:",
+        "CONTAINS:P-410:VS-410d:",
+        "CONTAINS:P-410:VS-410e:",
+        "CONTAINS:P-410:VS-415a:",
+        "CONTAINS:P-410:VS-415b:",
+        "CONTAINS:P-410:VS-415c:",
+        "TRANSITIONS_TO:VS-410a:VS-410b:E-440",
+        "TRANSITIONS_TO:VS-410b:VS-410c:E-470",
+        "TRANSITIONS_TO:VS-410c:VS-410d:E-520",
+        "TRANSITIONS_TO:VS-410d:VS-410e:E-530",
+        "TRANSITIONS_TO:VS-415a:VS-415b:E-480",
+        "TRANSITIONS_TO:VS-415b:VS-415c:E-490",
+        "COMPOSED_OF:VS-410a:C-460:",
+        "COMPOSED_OF:VS-410b:C-460:"
+      ],
+      "nodes": [
+        {
+          "id": "P-410",
+          "x": 48,
+          "y": 169.3,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "C-410",
+          "x": 384,
+          "y": 169.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 402.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410b",
+          "x": 492,
+          "y": 402.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410c",
+          "x": 936,
+          "y": 402.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410d",
+          "x": 1380,
+          "y": 402.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410e",
+          "x": 1824,
+          "y": 402.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-415a",
+          "x": 48,
+          "y": 595.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-415b",
+          "x": 492,
+          "y": 595.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-415c",
+          "x": 936,
+          "y": 595.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 759.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 384,
+          "y": 759.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410b",
+          "x": 48,
+          "y": 872.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 384,
+          "y": 872.05,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [
+        {
+          "kind": "composition",
+          "from": "P-410",
+          "to": "C-410",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "VS-410a",
+          "to": "C-460",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "VS-410b",
+          "to": "C-460",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        }
+      ],
+      "sections": [
+        {
+          "kind": "place",
+          "x": 24,
+          "y": 107.3,
+          "w": 2048,
+          "h": 857.75
+        }
+      ],
+      "containers": [
+        {
+          "role": "scope",
+          "title": "Place scope · Departure Desk",
+          "x": 24,
+          "y": 107.3,
+          "w": 2048,
+          "h": 857.75
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_complete.compact",
+      "detail": "compact",
+      "decorators": "type,id",
+      "width": 2096,
+      "height": 5379.55,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "C-410",
+        "C-420",
+        "C-430",
+        "C-431",
+        "C-440",
+        "C-450",
+        "C-470",
+        "C-460",
+        "P-410",
+        "VS-410a",
+        "VS-410b",
+        "VS-410c",
+        "VS-410d",
+        "VS-410e",
+        "VS-415a",
+        "VS-415b",
+        "VS-415c"
+      ],
+      "representedEdges": [
+        "CONTAINS:C-410:C-420:",
+        "CONTAINS:C-420:C-430:",
+        "CONTAINS:C-430:C-431:",
+        "CONTAINS:C-410:C-440:",
+        "CONTAINS:C-410:C-450:",
+        "CONTAINS:C-410:C-470:",
+        "CONTAINS:C-470:C-430:",
+        "COMPOSED_OF:P-410:C-410:",
+        "CONTAINS:P-410:VS-410a:",
+        "CONTAINS:P-410:VS-410b:",
+        "CONTAINS:P-410:VS-410c:",
+        "CONTAINS:P-410:VS-410d:",
+        "CONTAINS:P-410:VS-410e:",
+        "CONTAINS:P-410:VS-415a:",
+        "CONTAINS:P-410:VS-415b:",
+        "CONTAINS:P-410:VS-415c:",
+        "TRANSITIONS_TO:VS-410a:VS-410b:E-440",
+        "TRANSITIONS_TO:VS-410b:VS-410c:E-470",
+        "TRANSITIONS_TO:VS-410c:VS-410d:E-520",
+        "TRANSITIONS_TO:VS-410d:VS-410e:E-530",
+        "TRANSITIONS_TO:VS-415a:VS-415b:E-480",
+        "TRANSITIONS_TO:VS-415b:VS-415c:E-490",
+        "COMPOSED_OF:VS-410a:C-460:",
+        "COMPOSED_OF:VS-410b:C-460:"
+      ],
+      "nodes": [
+        {
+          "id": "C-410",
+          "x": 40,
+          "y": 142.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 56,
+          "y": 229.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 335.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 88,
+          "y": 422.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-440",
+          "x": 40,
+          "y": 541.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-450",
+          "x": 40,
+          "y": 612.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 56,
+          "y": 699.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 805.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 40,
+          "y": 965.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "P-410",
+          "x": 48,
+          "y": 1120.3,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "C-410",
+          "x": 384,
+          "y": 1120.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 1353.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410b",
+          "x": 492,
+          "y": 1353.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410c",
+          "x": 936,
+          "y": 1353.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410d",
+          "x": 1380,
+          "y": 1353.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410e",
+          "x": 1824,
+          "y": 1353.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-415a",
+          "x": 48,
+          "y": 1546.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-415b",
+          "x": 492,
+          "y": 1546.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-415c",
+          "x": 936,
+          "y": 1546.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 1710.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 384,
+          "y": 1710.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410b",
+          "x": 48,
+          "y": 1823.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 384,
+          "y": 1823.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 1986.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 396,
+          "y": 2173.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-440",
+          "x": 396,
+          "y": 2250.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-450",
+          "x": 396,
+          "y": 2327.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 396,
+          "y": 2404.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 2589.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 220,
+          "y": 2764.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 2951.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 48,
+          "y": 3137.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 396,
+          "y": 3137.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 3312.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 220,
+          "y": 3499.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 3684.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 220,
+          "y": 3859.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 4044.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-440",
+          "x": 220,
+          "y": 4219.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 4405.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-450",
+          "x": 220,
+          "y": 4580.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 4765.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 220,
+          "y": 4940.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 5127.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 220,
+          "y": 5274.55,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [
+        {
+          "kind": "composition",
+          "from": "P-410",
+          "to": "C-410",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "VS-410a",
+          "to": "C-460",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "VS-410b",
+          "to": "C-460",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        }
+      ],
+      "sections": [
+        {
+          "kind": "place",
+          "x": 24,
+          "y": 1058.3,
+          "w": 2048,
+          "h": 857.75
+        },
+        {
+          "kind": "component",
+          "id": "C-410",
+          "x": 24,
+          "y": 1944.05,
+          "w": 712,
+          "h": 535.2500000000002
+        },
+        {
+          "kind": "component",
+          "id": "C-420",
+          "x": 24,
+          "y": 2509.3,
+          "w": 712,
+          "h": 517.5
+        },
+        {
+          "kind": "component",
+          "id": "C-430",
+          "x": 24,
+          "y": 3056.8,
+          "w": 712,
+          "h": 517.5
+        },
+        {
+          "kind": "component",
+          "id": "C-431",
+          "x": 24,
+          "y": 3604.3,
+          "w": 712,
+          "h": 330.25
+        },
+        {
+          "kind": "component",
+          "id": "C-440",
+          "x": 24,
+          "y": 3964.55,
+          "w": 712,
+          "h": 330.25
+        },
+        {
+          "kind": "component",
+          "id": "C-450",
+          "x": 24,
+          "y": 4324.8,
+          "w": 712,
+          "h": 330.25
+        },
+        {
+          "kind": "component",
+          "id": "C-470",
+          "x": 24,
+          "y": 4685.05,
+          "w": 712,
+          "h": 517.5
+        },
+        {
+          "kind": "component",
+          "id": "C-460",
+          "x": 24,
+          "y": 5232.55,
+          "w": 712,
+          "h": 117
+        }
+      ],
+      "containers": [
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 72,
+          "y": 406.3,
+          "w": 256,
+          "h": 85
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · Repeated hierarchy",
+          "x": 56,
+          "y": 300.3,
+          "w": 288,
+          "h": 207
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 213.3,
+          "w": 320,
+          "h": 309.99999999999994
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · See Cargo Sheet",
+          "x": 56,
+          "y": 770.3,
+          "w": 256,
+          "h": 104
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 683.3,
+          "w": 288,
+          "h": 207
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Load Workbench",
+          "x": 24,
+          "y": 107.3,
+          "w": 352,
+          "h": 799
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Crew Note",
+          "x": 24,
+          "y": 930.3,
+          "w": 256,
+          "h": 104
+        },
+        {
+          "role": "scope",
+          "title": "Place scope · Departure Desk",
+          "x": 24,
+          "y": 1058.3,
+          "w": 2048,
+          "h": 857.75
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Load Workbench",
+          "x": 24,
+          "y": 1944.05,
+          "w": 712,
+          "h": 535.2500000000002
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Cargo Sheet",
+          "x": 24,
+          "y": 2509.3,
+          "w": 712,
+          "h": 517.5
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Check",
+          "x": 24,
+          "y": 3056.8,
+          "w": 712,
+          "h": 517.5
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Code Input",
+          "x": 24,
+          "y": 3604.3,
+          "w": 712,
+          "h": 330.25
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Release Lever",
+          "x": 24,
+          "y": 3964.55,
+          "w": 712,
+          "h": 330.25
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Trail Lens",
+          "x": 24,
+          "y": 4324.8,
+          "w": 712,
+          "h": 330.25
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Arrival Review",
+          "x": 24,
+          "y": 4685.05,
+          "w": 712,
+          "h": 517.5
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Crew Note",
+          "x": 24,
+          "y": 5232.55,
+          "w": 712,
+          "h": 117
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_component.detailed",
+      "detail": "detailed",
+      "decorators": "type,id",
+      "width": 2096,
+      "height": 1365.3,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "C-420",
+        "C-470",
+        "C-430",
+        "C-431",
+        "E-430",
+        "SA-430",
+        "D-410",
+        "ST-430a",
+        "ST-430b",
+        "ST-430c",
+        "ST-430d",
+        "ST-430e"
+      ],
+      "representedEdges": [
+        "CONTAINS:C-420:C-430:",
+        "CONTAINS:C-470:C-430:",
+        "CONTAINS:C-430:C-431:",
+        "EMITS:C-430:E-430:",
+        "DEPENDS_ON:C-430:SA-430:",
+        "BINDS_TO:C-430:D-410:",
+        "TRANSITIONS_TO:ST-430a:ST-430b:E-430",
+        "TRANSITIONS_TO:ST-430b:ST-430c:E-540",
+        "TRANSITIONS_TO:ST-430c:ST-430d:E-550",
+        "TRANSITIONS_TO:ST-430d:ST-430e:E-560"
+      ],
+      "nodes": [
+        {
+          "id": "C-420",
+          "x": 48,
+          "y": 187.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 396,
+          "y": 187.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 362.55,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-431",
+          "x": 220,
+          "y": 659.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 48,
+          "y": 813.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-430",
+          "x": 464,
+          "y": 813.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-430",
+          "x": 464,
+          "y": 921.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "D-410",
+          "x": 464,
+          "y": 1029.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430a",
+          "x": 48,
+          "y": 1228.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430b",
+          "x": 492,
+          "y": 1228.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430c",
+          "x": 936,
+          "y": 1228.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430d",
+          "x": 1380,
+          "y": 1228.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430e",
+          "x": 1824,
+          "y": 1228.3,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "E-430",
+          "type": "EMITS",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "SA-430",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "D-410",
+          "type": "BINDS_TO",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        }
+      ],
+      "sections": [
+        {
+          "kind": "component",
+          "id": "C-430",
+          "x": 24,
+          "y": 107.3,
+          "w": 2048,
+          "h": 1228
+        }
+      ],
+      "containers": [
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Check",
+          "x": 24,
+          "y": 107.3,
+          "w": 2048,
+          "h": 1228
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_place.detailed",
+      "detail": "detailed",
+      "decorators": "type,id",
+      "width": 2096,
+      "height": 1207.45,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "P-410",
+        "C-410",
+        "VS-410a",
+        "VS-410b",
+        "VS-410c",
+        "VS-410d",
+        "VS-410e",
+        "VS-415a",
+        "VS-415b",
+        "VS-415c",
+        "C-460"
+      ],
+      "representedEdges": [
+        "COMPOSED_OF:P-410:C-410:",
+        "CONTAINS:P-410:VS-410a:",
+        "CONTAINS:P-410:VS-410b:",
+        "CONTAINS:P-410:VS-410c:",
+        "CONTAINS:P-410:VS-410d:",
+        "CONTAINS:P-410:VS-410e:",
+        "CONTAINS:P-410:VS-415a:",
+        "CONTAINS:P-410:VS-415b:",
+        "CONTAINS:P-410:VS-415c:",
+        "TRANSITIONS_TO:VS-410a:VS-410b:E-440",
+        "TRANSITIONS_TO:VS-410b:VS-410c:E-470",
+        "TRANSITIONS_TO:VS-410c:VS-410d:E-520",
+        "TRANSITIONS_TO:VS-410d:VS-410e:E-530",
+        "TRANSITIONS_TO:VS-415a:VS-415b:E-480",
+        "TRANSITIONS_TO:VS-415b:VS-415c:E-490",
+        "COMPOSED_OF:VS-410a:C-460:",
+        "COMPOSED_OF:VS-410b:C-460:"
+      ],
+      "nodes": [
+        {
+          "id": "P-410",
+          "x": 48,
+          "y": 169.3,
+          "w": 224,
+          "h": 181
+        },
+        {
+          "id": "C-410",
+          "x": 384,
+          "y": 169.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 552.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410b",
+          "x": 492,
+          "y": 552.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410c",
+          "x": 936,
+          "y": 552.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410d",
+          "x": 1380,
+          "y": 552.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410e",
+          "x": 1824,
+          "y": 552.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-415a",
+          "x": 48,
+          "y": 778.2,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-415b",
+          "x": 492,
+          "y": 778.2,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-415c",
+          "x": 936,
+          "y": 778.2,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 973.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 384,
+          "y": 973.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410b",
+          "x": 48,
+          "y": 1086.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 384,
+          "y": 1086.45,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [
+        {
+          "kind": "composition",
+          "from": "P-410",
+          "to": "C-410",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "VS-410a",
+          "to": "C-460",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "VS-410b",
+          "to": "C-460",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        }
+      ],
+      "sections": [
+        {
+          "kind": "place",
+          "x": 24,
+          "y": 107.3,
+          "w": 2048,
+          "h": 1072.15
+        }
+      ],
+      "containers": [
+        {
+          "role": "scope",
+          "title": "Place scope · Departure Desk",
+          "x": 24,
+          "y": 107.3,
+          "w": 2048,
+          "h": 1072.15
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_complete.detailed",
+      "detail": "detailed",
+      "decorators": "type,id",
+      "width": 2096,
+      "height": 9104.95,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "C-410",
+        "C-420",
+        "C-430",
+        "C-431",
+        "C-440",
+        "C-450",
+        "C-470",
+        "C-460",
+        "P-410",
+        "VS-410a",
+        "VS-410b",
+        "VS-410c",
+        "VS-410d",
+        "VS-410e",
+        "VS-415a",
+        "VS-415b",
+        "VS-415c",
+        "ST-410a",
+        "ST-410c",
+        "ST-410b",
+        "ST-410d",
+        "ST-410e",
+        "ST-415a",
+        "ST-415b",
+        "ST-415c",
+        "D-410",
+        "E-420",
+        "SA-410",
+        "ST-420a",
+        "ST-420b",
+        "E-430",
+        "SA-430",
+        "ST-430a",
+        "ST-430b",
+        "ST-430c",
+        "ST-430d",
+        "ST-430e",
+        "E-440",
+        "SA-440",
+        "E-450",
+        "E-460",
+        "E-470",
+        "E-480",
+        "E-490",
+        "E-500",
+        "E-510",
+        "E-520",
+        "E-530",
+        "E-540",
+        "E-550",
+        "E-560"
+      ],
+      "representedEdges": [
+        "CONTAINS:C-410:C-420:",
+        "CONTAINS:C-420:C-430:",
+        "CONTAINS:C-430:C-431:",
+        "CONTAINS:C-410:C-440:",
+        "CONTAINS:C-410:C-450:",
+        "CONTAINS:C-410:C-470:",
+        "CONTAINS:C-470:C-430:",
+        "COMPOSED_OF:P-410:C-410:",
+        "CONTAINS:P-410:VS-410a:",
+        "CONTAINS:P-410:VS-410b:",
+        "CONTAINS:P-410:VS-410c:",
+        "CONTAINS:P-410:VS-410d:",
+        "CONTAINS:P-410:VS-410e:",
+        "CONTAINS:P-410:VS-415a:",
+        "CONTAINS:P-410:VS-415b:",
+        "CONTAINS:P-410:VS-415c:",
+        "TRANSITIONS_TO:VS-410a:VS-410b:E-440",
+        "TRANSITIONS_TO:VS-410b:VS-410c:E-470",
+        "TRANSITIONS_TO:VS-410c:VS-410d:E-520",
+        "TRANSITIONS_TO:VS-410d:VS-410e:E-530",
+        "TRANSITIONS_TO:VS-415a:VS-415b:E-480",
+        "TRANSITIONS_TO:VS-415b:VS-415c:E-490",
+        "COMPOSED_OF:VS-410a:C-460:",
+        "COMPOSED_OF:VS-410b:C-460:",
+        "TRANSITIONS_TO:ST-410a:ST-410c:E-420",
+        "TRANSITIONS_TO:ST-410c:ST-410b:E-430",
+        "TRANSITIONS_TO:ST-410b:ST-410d:E-500",
+        "TRANSITIONS_TO:ST-410d:ST-410e:E-510",
+        "TRANSITIONS_TO:ST-415a:ST-415b:E-450",
+        "TRANSITIONS_TO:ST-415b:ST-415c:E-460",
+        "BINDS_TO:C-420:D-410:",
+        "EMITS:C-420:E-420:",
+        "DEPENDS_ON:C-420:SA-410:",
+        "TRANSITIONS_TO:ST-420a:ST-420b:E-420",
+        "EMITS:C-430:E-430:",
+        "DEPENDS_ON:C-430:SA-430:",
+        "BINDS_TO:C-430:D-410:",
+        "TRANSITIONS_TO:ST-430a:ST-430b:E-430",
+        "TRANSITIONS_TO:ST-430b:ST-430c:E-540",
+        "TRANSITIONS_TO:ST-430c:ST-430d:E-550",
+        "TRANSITIONS_TO:ST-430d:ST-430e:E-560",
+        "EMITS:C-440:E-440:",
+        "DEPENDS_ON:C-440:SA-440:",
+        "BINDS_TO:C-450:D-410:",
+        "DEPENDS_ON:C-450:SA-410:"
+      ],
+      "nodes": [
+        {
+          "id": "C-410",
+          "x": 40,
+          "y": 142.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 56,
+          "y": 229.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 335.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 88,
+          "y": 422.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-440",
+          "x": 40,
+          "y": 541.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-450",
+          "x": 40,
+          "y": 612.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 56,
+          "y": 699.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 72,
+          "y": 805.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 40,
+          "y": 965.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "P-410",
+          "x": 48,
+          "y": 1120.3,
+          "w": 224,
+          "h": 181
+        },
+        {
+          "id": "C-410",
+          "x": 384,
+          "y": 1120.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 1503.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410b",
+          "x": 492,
+          "y": 1503.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410c",
+          "x": 936,
+          "y": 1503.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410d",
+          "x": 1380,
+          "y": 1503.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410e",
+          "x": 1824,
+          "y": 1503.95,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-415a",
+          "x": 48,
+          "y": 1729.2,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-415b",
+          "x": 492,
+          "y": 1729.2,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-415c",
+          "x": 936,
+          "y": 1729.2,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 1924.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 384,
+          "y": 1924.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410b",
+          "x": 48,
+          "y": 2037.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 384,
+          "y": 2037.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 2200.45,
+          "w": 224,
+          "h": 177
+        },
+        {
+          "id": "C-420",
+          "x": 396,
+          "y": 2511.7,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-440",
+          "x": 396,
+          "y": 2588.7,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-450",
+          "x": 396,
+          "y": 2665.7,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 396,
+          "y": 2742.7,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-410a",
+          "x": 48,
+          "y": 2941.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-410c",
+          "x": 492,
+          "y": 2941.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-410b",
+          "x": 936,
+          "y": 2941.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-410d",
+          "x": 1380,
+          "y": 2941.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-410e",
+          "x": 1824,
+          "y": 2941.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-415a",
+          "x": 48,
+          "y": 3135.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-415b",
+          "x": 492,
+          "y": 3135.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-415c",
+          "x": 936,
+          "y": 3135.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 3352.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 220,
+          "y": 3527.45,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 3824.7,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 48,
+          "y": 3977.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "D-410",
+          "x": 464,
+          "y": 3977.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-420",
+          "x": 464,
+          "y": 4085.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-410",
+          "x": 464,
+          "y": 4193.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-420a",
+          "x": 48,
+          "y": 4393.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-420b",
+          "x": 492,
+          "y": 4393.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 48,
+          "y": 4610.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 396,
+          "y": 4610.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 4785.45,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-431",
+          "x": 220,
+          "y": 5082.7,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 48,
+          "y": 5235.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-430",
+          "x": 464,
+          "y": 5235.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-430",
+          "x": 464,
+          "y": 5343.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "D-410",
+          "x": 464,
+          "y": 5451.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430a",
+          "x": 48,
+          "y": 5651.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430b",
+          "x": 492,
+          "y": 5651.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430c",
+          "x": 936,
+          "y": 5651.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430d",
+          "x": 1380,
+          "y": 5651.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430e",
+          "x": 1824,
+          "y": 5651.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 5868.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 220,
+          "y": 6043.45,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 6338.7,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-440",
+          "x": 220,
+          "y": 6513.7,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-440",
+          "x": 48,
+          "y": 6776.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-440",
+          "x": 464,
+          "y": 6776.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-440",
+          "x": 464,
+          "y": 6884.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 7070.2,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-450",
+          "x": 220,
+          "y": 7245.2,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-450",
+          "x": 48,
+          "y": 7508.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "D-410",
+          "x": 464,
+          "y": 7508.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-410",
+          "x": 464,
+          "y": 7616.45,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-410",
+          "x": 220,
+          "y": 7801.7,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 220,
+          "y": 7976.7,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 8273.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-460",
+          "x": 220,
+          "y": 8420.95,
+          "w": 224,
+          "h": 177
+        },
+        {
+          "id": "E-450",
+          "x": 48,
+          "y": 8689.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-460",
+          "x": 328,
+          "y": 8689.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-420",
+          "x": 608,
+          "y": 8689.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-430",
+          "x": 888,
+          "y": 8689.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-440",
+          "x": 48,
+          "y": 8766.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-470",
+          "x": 328,
+          "y": 8766.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-480",
+          "x": 608,
+          "y": 8766.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-490",
+          "x": 888,
+          "y": 8766.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-500",
+          "x": 48,
+          "y": 8843.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-510",
+          "x": 328,
+          "y": 8843.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-520",
+          "x": 608,
+          "y": 8843.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-530",
+          "x": 888,
+          "y": 8843.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-540",
+          "x": 48,
+          "y": 8920.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-550",
+          "x": 328,
+          "y": 8920.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-560",
+          "x": 608,
+          "y": 8920.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-410",
+          "x": 888,
+          "y": 8920.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-430",
+          "x": 48,
+          "y": 8997.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-440",
+          "x": 328,
+          "y": 8997.95,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "D-410",
+          "x": 608,
+          "y": 8997.95,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [
+        {
+          "kind": "composition",
+          "from": "P-410",
+          "to": "C-410",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "VS-410a",
+          "to": "C-460",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "VS-410b",
+          "to": "C-460",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "contract",
+          "from": "C-420",
+          "to": "D-410",
+          "type": "BINDS_TO",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-420",
+          "to": "E-420",
+          "type": "EMITS",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-420",
+          "to": "SA-410",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "E-430",
+          "type": "EMITS",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "SA-430",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "D-410",
+          "type": "BINDS_TO",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-440",
+          "to": "E-440",
+          "type": "EMITS",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-440",
+          "to": "SA-440",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-450",
+          "to": "D-410",
+          "type": "BINDS_TO",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-450",
+          "to": "SA-410",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        }
+      ],
+      "sections": [
+        {
+          "kind": "place",
+          "x": 24,
+          "y": 1058.3,
+          "w": 2048,
+          "h": 1072.1499999999999
+        },
+        {
+          "kind": "component",
+          "id": "C-410",
+          "x": 24,
+          "y": 2158.45,
+          "w": 2048,
+          "h": 1083.75
+        },
+        {
+          "kind": "component",
+          "id": "C-420",
+          "x": 24,
+          "y": 3272.2,
+          "w": 716,
+          "h": 1228
+        },
+        {
+          "kind": "component",
+          "id": "C-430",
+          "x": 24,
+          "y": 4530.2,
+          "w": 2048,
+          "h": 1228
+        },
+        {
+          "kind": "component",
+          "id": "C-431",
+          "x": 24,
+          "y": 5788.2,
+          "w": 712,
+          "h": 440.25
+        },
+        {
+          "kind": "component",
+          "id": "C-440",
+          "x": 24,
+          "y": 6258.45,
+          "w": 712,
+          "h": 701.5
+        },
+        {
+          "kind": "component",
+          "id": "C-450",
+          "x": 24,
+          "y": 6989.95,
+          "w": 712,
+          "h": 701.5
+        },
+        {
+          "kind": "component",
+          "id": "C-470",
+          "x": 24,
+          "y": 7721.45,
+          "w": 712,
+          "h": 627.5000000000009
+        },
+        {
+          "kind": "component",
+          "id": "C-460",
+          "x": 24,
+          "y": 8378.95,
+          "w": 712,
+          "h": 241
+        }
+      ],
+      "containers": [
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 72,
+          "y": 406.3,
+          "w": 256,
+          "h": 85
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · Repeated hierarchy",
+          "x": 56,
+          "y": 300.3,
+          "w": 288,
+          "h": 207
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 213.3,
+          "w": 320,
+          "h": 309.99999999999994
+        },
+        {
+          "role": "hierarchy",
+          "title": "H1 · See Cargo Sheet",
+          "x": 56,
+          "y": 770.3,
+          "w": 256,
+          "h": 104
+        },
+        {
+          "role": "hierarchy",
+          "title": "",
+          "x": 40,
+          "y": 683.3,
+          "w": 288,
+          "h": 207
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Load Workbench",
+          "x": 24,
+          "y": 107.3,
+          "w": 352,
+          "h": 799
+        },
+        {
+          "role": "hierarchy",
+          "title": "Component hierarchy · Crew Note",
+          "x": 24,
+          "y": 930.3,
+          "w": 256,
+          "h": 104
+        },
+        {
+          "role": "scope",
+          "title": "Place scope · Departure Desk",
+          "x": 24,
+          "y": 1058.3,
+          "w": 2048,
+          "h": 1072.1499999999999
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Load Workbench",
+          "x": 24,
+          "y": 2158.45,
+          "w": 2048,
+          "h": 1083.75
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Cargo Sheet",
+          "x": 24,
+          "y": 3272.2,
+          "w": 716,
+          "h": 1228
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Check",
+          "x": 24,
+          "y": 4530.2,
+          "w": 2048,
+          "h": 1228
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Code Input",
+          "x": 24,
+          "y": 5788.2,
+          "w": 712,
+          "h": 440.25
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Release Lever",
+          "x": 24,
+          "y": 6258.45,
+          "w": 712,
+          "h": 701.5
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Trail Lens",
+          "x": 24,
+          "y": 6989.95,
+          "w": 712,
+          "h": 701.5
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Arrival Review",
+          "x": 24,
+          "y": 7721.45,
+          "w": 712,
+          "h": 627.5000000000009
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Crew Note",
+          "x": 24,
+          "y": 8378.95,
+          "w": 712,
+          "h": 241
+        },
+        {
+          "role": "scope",
+          "title": "Referenced targets",
+          "x": 24,
+          "y": 8649.95,
+          "w": 1120,
+          "h": 425
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_detail.context",
+      "detail": "detailed",
+      "decorators": "type,id",
+      "width": 2096,
+      "height": 2144.8,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "C-420",
+        "C-470",
+        "C-430",
+        "C-431",
+        "E-430",
+        "SA-430",
+        "D-410",
+        "ST-430a",
+        "ST-430b",
+        "ST-430c",
+        "ST-430d",
+        "ST-430e"
+      ],
+      "representedEdges": [
+        "CONTAINS:C-420:C-430:",
+        "CONTAINS:C-470:C-430:",
+        "CONTAINS:C-430:C-431:",
+        "EMITS:C-430:E-430:",
+        "DEPENDS_ON:C-430:SA-430:",
+        "BINDS_TO:C-430:D-410:",
+        "TRANSITIONS_TO:ST-430a:ST-430b:E-430",
+        "TRANSITIONS_TO:ST-430b:ST-430c:E-540",
+        "TRANSITIONS_TO:ST-430c:ST-430d:E-550",
+        "TRANSITIONS_TO:ST-430d:ST-430e:E-560"
+      ],
+      "nodes": [
+        {
+          "id": "C-420",
+          "x": 48,
+          "y": 303.54999999999995,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 396,
+          "y": 303.54999999999995,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 478.54999999999995,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-431",
+          "x": 220,
+          "y": 665.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-420",
+          "x": 48,
+          "y": 967.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-470",
+          "x": 396,
+          "y": 967.05,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 220,
+          "y": 1142.05,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-431",
+          "x": 220,
+          "y": 1439.3,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 48,
+          "y": 1592.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-430",
+          "x": 464,
+          "y": 1592.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-430",
+          "x": 464,
+          "y": 1700.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "D-410",
+          "x": 464,
+          "y": 1808.55,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430a",
+          "x": 48,
+          "y": 2007.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430b",
+          "x": 492,
+          "y": 2007.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430c",
+          "x": 936,
+          "y": 2007.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430d",
+          "x": 1380,
+          "y": 2007.8,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430e",
+          "x": 1824,
+          "y": 2007.8,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "E-430",
+          "type": "EMITS",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "SA-430",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "D-410",
+          "type": "BINDS_TO",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        }
+      ],
+      "sections": [
+        {
+          "kind": "component",
+          "id": "C-430",
+          "x": 24,
+          "y": 223.29999999999998,
+          "w": 712,
+          "h": 517.5
+        },
+        {
+          "kind": "component",
+          "id": "C-430",
+          "x": 24,
+          "y": 886.8,
+          "w": 2048,
+          "h": 1228.0000000000002
+        }
+      ],
+      "containers": [
+        {
+          "role": "editorial",
+          "title": "",
+          "x": 24,
+          "y": 107.3,
+          "w": 1040,
+          "h": 91.99999999999999
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Check",
+          "x": 24,
+          "y": 223.29999999999998,
+          "w": 712,
+          "h": 517.5
+        },
+        {
+          "role": "editorial",
+          "title": "",
+          "x": 24,
+          "y": 770.8,
+          "w": 1040,
+          "h": 92
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Check",
+          "x": 24,
+          "y": 886.8,
+          "w": 2048,
+          "h": 1228.0000000000002
+        }
+      ],
+      "collisions": 0
+    },
+    {
+      "file": "b2_horizontal_growth.context",
+      "detail": "detailed",
+      "decorators": "type,id",
+      "width": 2096,
+      "height": 3404.6,
+      "nodeWidth": 224,
+      "nodeIds": [
+        "P-410",
+        "C-410",
+        "VS-410a",
+        "VS-410b",
+        "VS-410c",
+        "VS-410d",
+        "VS-410e",
+        "C-430",
+        "E-430",
+        "SA-430",
+        "D-410",
+        "ST-430a",
+        "ST-430b",
+        "ST-430c",
+        "ST-430d",
+        "ST-430e"
+      ],
+      "representedEdges": [
+        "COMPOSED_OF:P-410:C-410:",
+        "CONTAINS:P-410:VS-410a:",
+        "CONTAINS:P-410:VS-410b:",
+        "CONTAINS:P-410:VS-410c:",
+        "CONTAINS:P-410:VS-410d:",
+        "CONTAINS:P-410:VS-410e:",
+        "CONTAINS:P-410:VS-415a:",
+        "CONTAINS:P-410:VS-415b:",
+        "CONTAINS:P-410:VS-415c:",
+        "TRANSITIONS_TO:VS-410a:VS-410b:E-440",
+        "TRANSITIONS_TO:VS-410b:VS-410c:E-470",
+        "TRANSITIONS_TO:VS-410c:VS-410d:E-520",
+        "TRANSITIONS_TO:VS-410d:VS-410e:E-530",
+        "EMITS:C-430:E-430:",
+        "DEPENDS_ON:C-430:SA-430:",
+        "BINDS_TO:C-430:D-410:",
+        "TRANSITIONS_TO:ST-430a:ST-430b:E-430",
+        "TRANSITIONS_TO:ST-430b:ST-430c:E-540",
+        "TRANSITIONS_TO:ST-430c:ST-430d:E-550",
+        "TRANSITIONS_TO:ST-430d:ST-430e:E-560"
+      ],
+      "nodes": [
+        {
+          "id": "P-410",
+          "x": 48,
+          "y": 327.54999999999995,
+          "w": 224,
+          "h": 181
+        },
+        {
+          "id": "C-410",
+          "x": 384,
+          "y": 327.54999999999995,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 711.1999999999999,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410b",
+          "x": 492,
+          "y": 711.1999999999999,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "P-410",
+          "x": 48,
+          "y": 962.4499999999999,
+          "w": 224,
+          "h": 181
+        },
+        {
+          "id": "C-410",
+          "x": 384,
+          "y": 962.4499999999999,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "VS-410a",
+          "x": 48,
+          "y": 1346.1,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410b",
+          "x": 492,
+          "y": 1346.1,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410c",
+          "x": 936,
+          "y": 1346.1,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410d",
+          "x": 1380,
+          "y": 1346.1,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "VS-410e",
+          "x": 1824,
+          "y": 1346.1,
+          "w": 224,
+          "h": 85
+        },
+        {
+          "id": "C-430",
+          "x": 48,
+          "y": 1577.35,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-430",
+          "x": 48,
+          "y": 1840.6,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-430",
+          "x": 464,
+          "y": 1840.6,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-430",
+          "x": 464,
+          "y": 1948.6,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "D-410",
+          "x": 464,
+          "y": 2056.6,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430a",
+          "x": 48,
+          "y": 2255.85,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430b",
+          "x": 492,
+          "y": 2255.85,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "C-430",
+          "x": 48,
+          "y": 2473.1,
+          "w": 224,
+          "h": 163
+        },
+        {
+          "id": "C-430",
+          "x": 48,
+          "y": 2736.35,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "E-430",
+          "x": 464,
+          "y": 2736.35,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "SA-430",
+          "x": 464,
+          "y": 2844.35,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "D-410",
+          "x": 464,
+          "y": 2952.35,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430a",
+          "x": 48,
+          "y": 3151.6,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430b",
+          "x": 492,
+          "y": 3151.6,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430c",
+          "x": 936,
+          "y": 3151.6,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430d",
+          "x": 1380,
+          "y": 3151.6,
+          "w": 224,
+          "h": 53
+        },
+        {
+          "id": "ST-430e",
+          "x": 1824,
+          "y": 3151.6,
+          "w": 224,
+          "h": 53
+        }
+      ],
+      "geometry": [
+        {
+          "kind": "composition",
+          "from": "P-410",
+          "to": "C-410",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "composition",
+          "from": "P-410",
+          "to": "C-410",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "E-430",
+          "type": "EMITS",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "SA-430",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "D-410",
+          "type": "BINDS_TO",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "E-430",
+          "type": "EMITS",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "SA-430",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "D-410",
+          "type": "BINDS_TO",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        }
+      ],
+      "sections": [
+        {
+          "kind": "place",
+          "x": 24,
+          "y": 265.54999999999995,
+          "w": 716,
+          "h": 568.65
+        },
+        {
+          "kind": "place",
+          "x": 24,
+          "y": 900.4499999999999,
+          "w": 2048,
+          "h": 568.65
+        },
+        {
+          "kind": "component",
+          "id": "C-430",
+          "x": 24,
+          "y": 1535.35,
+          "w": 716,
+          "h": 827.5
+        },
+        {
+          "kind": "component",
+          "id": "C-430",
+          "x": 24,
+          "y": 2431.1,
+          "w": 2048,
+          "h": 827.5
+        }
+      ],
+      "containers": [
+        {
+          "role": "editorial",
+          "title": "",
+          "x": 24,
+          "y": 107.3,
+          "w": 1200,
+          "h": 91.99999999999999
+        },
+        {
+          "role": "scope",
+          "title": "Place scope · Departure Desk",
+          "x": 24,
+          "y": 265.54999999999995,
+          "w": 716,
+          "h": 568.65
+        },
+        {
+          "role": "scope",
+          "title": "Place scope · Departure Desk",
+          "x": 24,
+          "y": 900.4499999999999,
+          "w": 2048,
+          "h": 568.65
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Check",
+          "x": 24,
+          "y": 1535.35,
+          "w": 716,
+          "h": 827.5
+        },
+        {
+          "role": "scope",
+          "title": "Component scope · Seal Check",
+          "x": 24,
+          "y": 2431.1,
+          "w": 2048,
+          "h": 827.5
+        },
+        {
+          "role": "editorial",
+          "title": "",
+          "x": 24,
+          "y": 3288.6,
+          "w": 1200,
+          "h": 92
+        }
+      ],
+      "collisions": 0
+    }
+  ],
+  "growth": [
+    {
+      "type": "ViewState",
+      "shortWidth": 716,
+      "longWidth": 2048,
+      "unchangedLocalGeometry": [
+        {
+          "kind": "composition",
+          "from": "P-410",
+          "to": "C-410",
+          "sourceX": 48,
+          "targetX": 384,
+          "gap": 112,
+          "descriptionWidth": 224
+        }
+      ]
+    },
+    {
+      "type": "State",
+      "shortWidth": 716,
+      "longWidth": 2048,
+      "unchangedLocalGeometry": [
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "E-430",
+          "type": "EMITS",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "SA-430",
+          "type": "DEPENDS_ON",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        },
+        {
+          "kind": "contract",
+          "from": "C-430",
+          "to": "D-410",
+          "type": "BINDS_TO",
+          "sourceX": 48,
+          "targetX": 464,
+          "gap": 192,
+          "labelX": 322
+        }
+      ]
+    }
+  ],
+  "checks": {
+    "allDetailedNodes": 51,
+    "allDetailedEdges": 45,
+    "compactSemanticNodes": 17,
+    "compactVisibleRelationships": 24,
+    "fullSourceGraphUnchangedByDetail": true,
+    "overviewSameOccurrenceCountsAcrossDecorators": true,
+    "allNativeNodesWidth224": true,
+    "cleanProofsHaveNoEditorial": true
+  }
+}

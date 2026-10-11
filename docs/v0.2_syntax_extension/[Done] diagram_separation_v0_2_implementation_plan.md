@@ -1,4 +1,4 @@
-# Diagram Separation for SDD v0.2
+# [Done] Diagram Separation for SDD v0.2
 
 ## 1. Purpose, authority, and implementation discipline
 

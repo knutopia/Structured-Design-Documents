@@ -94,7 +94,7 @@ describe('diagram type node-and-edge reference', () => {
     const [bundle, markdown, diagramTypesIndex] = await Promise.all([
       loadBundle('bundle/v0.2/manifest.yaml'),
       readFile(
-        'docs/doc_site/diagram_types/node_edge_reference.md',
+        'docs/doc_site/syntax/node_edge_reference/index.md',
         'utf8'
       ),
       readFile('docs/doc_site/diagram_types/index.md', 'utf8')

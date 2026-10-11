@@ -28,6 +28,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sat 10-10
+
+- Cleaned failing tests, removed unstable references
+
 ## Fri 10-9
 
 - Small progress edit
@@ -37,6 +41,7 @@ z
 - Fixed unreadable related documentation
 - Added documentation directive to AGENTS.md
 - Created separate page about view and diagram
+- Cleaned out deferred items
 
 ## Thu 10-8
 

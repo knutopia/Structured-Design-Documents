@@ -1,6 +1,6 @@
-# Journey Map Renderer Coverage Gap
+# [Done] Journey Map Renderer Coverage Gap
 
-Status: Deferred  
+Status: Done (was: Deferred)  
 Recorded: 2026-07-28
 
 ## Summary
