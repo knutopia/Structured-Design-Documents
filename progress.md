@@ -32,6 +32,7 @@ z
 ## Mon 10-12
 
 - Initial ia_place_map hardening with routing failures
+- Failures documented
 
 ## Sun 10-11
 

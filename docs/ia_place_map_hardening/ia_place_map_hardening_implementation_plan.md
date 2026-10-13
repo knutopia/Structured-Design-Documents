@@ -1,6 +1,9 @@
 # ia_place_map Hardening Implementation Plan
 
-Status: implemented and verified 2026-10-12. See
+**ACTUAL STATUS: REJECTED AFTER MANUAL REVIEW.**
+See [routing failures](manual_review_routing_failures.md)
+
+Status:implemented and verified 2026-10-12. See
 [implementation evidence and accepted visual proofs](implementation_evidence.md).
 The sequence below records the reviewed implementation plan.
 Inspected 2026-10-12 at Git HEAD `b15b348a7accc4e56a09405317ee1c9bfbd995e3`.
