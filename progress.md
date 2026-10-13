@@ -32,7 +32,7 @@ z
 ## Tue 10-13
 
 - Routing quality improvements
-
+- Feedback captured
 
 ## Mon 10-12
 
