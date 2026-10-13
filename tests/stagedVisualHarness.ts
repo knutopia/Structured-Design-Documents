@@ -11,7 +11,7 @@ import type {
   PositionedItem,
   PositionedRoute
 } from "../src/renderer/staged/contracts.js";
-import { buildIaPlaceMapRendererScene } from "../src/renderer/staged/iaPlaceMap.js";
+import { renderIaPlaceMapStagedSvg } from "../src/renderer/staged/iaPlaceMap.js";
 import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import { renderScenarioFlowStagedSvg } from "../src/renderer/staged/scenarioFlow.js";
 import { renderServiceBlueprintStagedSvg } from "../src/renderer/staged/serviceBlueprint.js";
@@ -109,9 +109,11 @@ export async function renderStagedArtifacts(
     };
   }
 
-  const rendererScene = viewId === "ia_place_map"
-    ? buildIaPlaceMapRendererScene(projected.projection!, compiled.graph!, view, { detailId })
-    : buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, { detailId });
+  if (viewId === "ia_place_map") {
+    const rendered = await renderIaPlaceMapStagedSvg(projected.projection!, compiled.graph!, view, { detailId }, bundle);
+    return { rendererScene: rendered.rendererScene, measuredScene: rendered.measuredScene, positionedScene: rendered.positionedScene };
+  }
+  const rendererScene = buildUiContractsRendererScene(projected.projection!, compiled.graph!, view, { detailId });
 
   return runStagedRendererPipeline(rendererScene);
 }

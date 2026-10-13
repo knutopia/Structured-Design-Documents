@@ -9,7 +9,7 @@ import {
   renderServiceBlueprintDot,
   renderUiContractsDot
 } from "./dot.js";
-import { buildIaPlaceMapRenderModel } from "./iaPlaceMapRenderModel.js";
+import { buildIaPlaceMapRenderModel, resolveIaPlaceMapRelationshipRuntime } from "./iaPlaceMapRenderModel.js";
 import { buildJourneyMapRenderModel } from "./journeyMapRenderModel.js";
 import {
   renderIaPlaceMapMermaid,
@@ -200,7 +200,16 @@ const iaPlaceMapRenderer: ViewTextRenderer = {
   },
   render: (projection, graph, bundle, view, format, detailId) => {
     const displayPolicy = resolveDetailDisplayPolicy(view, detailId);
-    const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
+    const iaPlaceMapConfig = view.conventions.renderer_defaults?.ia_place_map;
+    const model = buildIaPlaceMapRenderModel(
+      projection,
+      graph,
+      view.projection.hierarchy_edges ?? [],
+      displayPolicy,
+      iaPlaceMapConfig,
+      detailId,
+      iaPlaceMapConfig ? resolveIaPlaceMapRelationshipRuntime(bundle, iaPlaceMapConfig) : undefined
+    );
     if (format === "dot") {
       return {
         text: renderIaPlaceMapDot(model, resolveLegacyDotPreviewStyle(bundle, view)),

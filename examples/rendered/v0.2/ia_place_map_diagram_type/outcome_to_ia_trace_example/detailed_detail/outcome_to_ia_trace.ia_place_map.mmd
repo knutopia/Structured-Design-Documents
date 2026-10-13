@@ -3,4 +3,4 @@ flowchart LR
     n_P_001["Billing<br/>/checkout/billing<br/>[auth]"]
     n_P_002["Review<br/>/checkout/review<br/>[auth]"]
   end
-  n_P_001 --> n_P_002
+  n_P_001 -->|[Payment Submitted] {billingComplete}| n_P_002

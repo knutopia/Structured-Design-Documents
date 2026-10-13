@@ -226,7 +226,7 @@ export function renderIaPlaceMapMermaid(model: IaPlaceMapRenderModel): string {
   renderIaItems(model.rootItems, "  ", lines);
 
   for (const edge of model.edges) {
-    pushEdge(lines, registry, edge.from, edge.to);
+    pushEdge(lines, registry, edge.from, edge.to, edge.label);
   }
 
   pushLinkStyles(lines, registry);

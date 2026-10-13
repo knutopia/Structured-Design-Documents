@@ -109,6 +109,7 @@ function roundMetric(value: number): number {
 function cloneLayoutIntent(layout: LayoutIntent): LayoutIntent {
   return {
     ...layout,
+    ...(layout.gapAfter ? { gapAfter: { ...layout.gapAfter } } : {}),
     ...(layout.pack ? { pack: { ...layout.pack, eligibleItemIds: [...layout.pack.eligibleItemIds] } } : {}),
     ...(layout.slots ? { slots: { ...layout.slots } } : {}),
     ...(layout.grid
@@ -416,7 +417,7 @@ function layoutLinearContainer(
   let mainOffset = 0;
   let maxResolvedCross = 0;
 
-  for (const child of children) {
+  for (const [index, child] of children.entries()) {
     if (stretchContainers && child.kind === "container") {
       resizeContainerCrossAxis(child, direction, maxCross, context);
     }
@@ -435,11 +436,12 @@ function layoutLinearContainer(
       child.y = roundMetric(mainOffset);
     }
 
-    mainOffset += (container.resolvedSlotHeight ?? childMain) + gap;
+    mainOffset += (container.resolvedSlotHeight ?? childMain)
+      + (index < children.length - 1 ? container.layout.gapAfter?.[child.id] ?? gap : 0);
     maxResolvedCross = Math.max(maxResolvedCross, childCross);
   }
 
-  const mainSize = roundMetric(mainOffset - gap);
+  const mainSize = roundMetric(mainOffset);
   const crossSize = roundMetric(maxResolvedCross);
 
   return direction === "horizontal"
@@ -1534,32 +1536,51 @@ export async function positionMeasuredSceneBeforeRouting(
 
 export async function positionMeasuredScene(measuredScene: MeasuredScene): Promise<PositionedScene> {
   const laidOut = await layoutMeasuredSceneRoot(measuredScene);
-  const root = laidOut.root;
+  return positionMeasuredEdgesAgainstRoot(measuredScene, {
+    viewId: measuredScene.viewId,
+    detailId: measuredScene.detailId,
+    themeId: measuredScene.themeId,
+    root: laidOut.root,
+    edges: [],
+    decorations: [],
+    diagnostics: laidOut.diagnostics,
+    paintOrder: [...PAINT_ORDER]
+  }, laidOut.routeHints, laidOut.ownerContainerByEdgeId);
+}
+
+/** Shared route seeds against already positioned geometry, without repeating layout. */
+export function positionMeasuredEdgesAgainstRoot(
+  measuredScene: MeasuredScene,
+  scene: PositionedScene,
+  routeHints: ReadonlyMap<string, Point[]> = new Map(),
+  ownerContainerByEdgeId?: ReadonlyMap<string, string>
+): PositionedScene {
+  const root = scene.root;
+  const diagnostics = [...scene.diagnostics];
+  if (!ownerContainerByEdgeId) {
+    const measuredItemIndex = new Map<string, MeasuredItemIndexEntry>();
+    buildMeasuredItemIndex(measuredScene.root, undefined, [], measuredItemIndex);
+    ownerContainerByEdgeId = buildOwnedEdgesByContainer(measuredScene.edges, measuredItemIndex, root.id).ownerContainerByEdgeId;
+  }
   const index = buildPositionedIndex(root);
-  const routeHints = new Map(laidOut.routeHints);
   const sharedRouteOffsets = buildSharedRouteOffsets(measuredScene.edges);
-  const contractLabelLanes = buildContractLabelLaneAssignments(measuredScene.edges, index, laidOut.diagnostics);
+  const contractLabelLanes = buildContractLabelLaneAssignments(measuredScene.edges, index, diagnostics);
   const edges = measuredScene.edges.map((edge) =>
     positionMeasuredEdge(
       edge,
       root,
       index,
-      laidOut.ownerContainerByEdgeId,
+      ownerContainerByEdgeId,
       routeHints,
       sharedRouteOffsets,
       contractLabelLanes,
-      laidOut.diagnostics
+      diagnostics
     )
   );
 
   return {
-    viewId: measuredScene.viewId,
-    detailId: measuredScene.detailId,
-    themeId: measuredScene.themeId,
-    root,
+    ...scene,
     edges,
-    decorations: [],
-    diagnostics: sortRendererDiagnostics(laidOut.diagnostics),
-    paintOrder: [...PAINT_ORDER]
+    diagnostics: sortRendererDiagnostics(diagnostics)
   };
 }

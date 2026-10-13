@@ -897,7 +897,8 @@ function resolveHeaderWidth(headerContent: MeasuredContentBlock[], chrome: Chrom
 function estimateLinearContentSize(
   children: readonly MeasuredItem[],
   direction: "horizontal" | "vertical",
-  gap: number
+  gap: number,
+  gapAfter?: Readonly<Record<string, number>>
 ): MeasuredSize {
   if (children.length === 0) {
     return {
@@ -908,7 +909,7 @@ function estimateLinearContentSize(
 
   const main = roundMetric(
     children.reduce((sum, child) => sum + getMeasuredMainSize(child, direction), 0)
-    + gap * Math.max(children.length - 1, 0)
+    + children.slice(0, -1).reduce((sum, child) => sum + (gapAfter?.[child.id] ?? gap), 0)
   );
   const cross = roundMetric(
     children.reduce((largest, child) => Math.max(largest, getMeasuredCrossSize(child, direction)), 0)
@@ -970,6 +971,7 @@ function estimateContainerContentSize(container: MeasuredContainer): MeasuredSiz
       return estimateGridContentSize(container.children, container.layout, gap);
     case "stack":
     case "lanes":
+      return estimateLinearContentSize(container.children, container.layout.direction ?? "vertical", gap, container.layout.gapAfter);
     case "layered":
       return estimateLinearContentSize(container.children, container.layout.direction ?? "vertical", gap);
     case "manual":
@@ -1061,6 +1063,17 @@ function recomputeMeasuredContainerSizes(
   item.height = roundMetric(Math.max(item.height, resolvedSize.height));
 }
 
+/** Rebuild container measurements after layout intent changes without rewrapping node text. */
+export function reflowMeasuredSceneContainers(scene: MeasuredScene): MeasuredScene {
+  const rebuild = (container: MeasuredContainer): MeasuredContainer => {
+    const next = { ...container, children: container.children.map(child => child.kind === "container" ? rebuild(child) : child) };
+    const size = resolveMeasuredContainerSize(next);
+    return { ...next, width: next.layout.sizing === "intrinsic" ? size.width : Math.max(next.width, size.width),
+      height: next.layout.sizing === "intrinsic" ? size.height : Math.max(next.height, size.height) };
+  };
+  return { ...scene, root: rebuild(scene.root) };
+}
+
 function normalizeMeasuredSceneSharedSizes(
   scene: MeasuredScene,
   context: MeasureContext
@@ -1145,6 +1158,7 @@ function measureContainer(container: SceneContainer, context: MeasureContext): M
     viewMetadata: cloneViewMetadata(container.viewMetadata),
     layout: {
       ...container.layout,
+      ...(container.layout.gapAfter ? { gapAfter: { ...container.layout.gapAfter } } : {}),
       ...(container.layout.pack ? { pack: { ...container.layout.pack, eligibleItemIds: [...container.layout.pack.eligibleItemIds] } } : {}),
       ...(container.layout.slots ? { slots: { ...container.layout.slots } } : {}),
       ...(container.layout.grid

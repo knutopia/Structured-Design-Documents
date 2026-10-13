@@ -44,12 +44,12 @@ All corpus inputs are validated with the bundle-derived `simple` profile before 
 `ia_place_map` visual review checklist:
 
 - top-level items read left-to-right with clean vertical alignment
-- no headers, labels, or routed edges sit visually above the top-level nodes
+- Area headers, navigation labels, and arrowheads remain clear of node bodies and fit the exported bounds
 - mixed top-level `Place` and `Area` ordering follows source order
 - same-scope follower places align at one indent level under the earliest preceding hub that navigates to them
 - single-child contained places stay directly below the owner; branched child or follower scopes reserve a left connector trunk
 - `compact_detail` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations
-- only forward local structure connectors are drawn, using direct-vertical or shared-trunk routes
+- every selected navigation occurrence has a distinct readable connection, including parallel, cross-Area, and return routes; event/guard labels remain visible in both details
 
 `ui_contracts` visual review checklist:
 

@@ -63,8 +63,9 @@ The following relationships are visible in both details:
 - `Place CONTAINS Place`
 - `Place NAVIGATES_TO Place`
 
-IA Place Map has no detailed-only relationship annotations or edge labels.
-Its detail policy changes Place metadata, such as route and access information.
+Navigation event and guard labels appear in both details, for example
+`[Submit] {payment_valid}`. Each selected parallel navigation keeps its label.
+The detail policy changes Place metadata, such as route and access information.
 
 == UI Contracts
 

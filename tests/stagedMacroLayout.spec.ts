@@ -9,7 +9,7 @@ import type {
   SceneEdge,
   SceneNode
 } from "../src/renderer/staged/contracts.js";
-import { positionMeasuredScene } from "../src/renderer/staged/macroLayout.js";
+import { positionMeasuredScene, positionMeasuredEdgesAgainstRoot } from "../src/renderer/staged/macroLayout.js";
 import {
   measureScene,
   positionSceneBeforeRouting,
@@ -17,6 +17,23 @@ import {
 } from "../src/renderer/staged/pipeline.js";
 import { expectRendererStageSnapshot } from "./rendererStageSnapshotHarness.js";
 import { buildFixtureScene } from "./stagedRendererFixtures.js";
+import { reflowMeasuredSceneContainers } from "../src/renderer/staged/microLayout.js";
+
+it("reflows an owned adjacent gap without widening the next sibling gap or rewrapping nodes", async () => {
+  const source = buildRootScene({ strategy: "stack", direction: "horizontal", gap: 20, sizing: "intrinsic" },
+    [buildCardNode("a", "narrow"), buildCardNode("b", "narrow"), buildCardNode("c", "narrow")]);
+  const baseline = measureScene(source);
+  const before = await positionSceneBeforeRouting(baseline);
+  const revised = reflowMeasuredSceneContainers({ ...baseline, root: { ...baseline.root,
+    layout: { ...baseline.root.layout, gapAfter: { a: 70 } } } });
+  const after = await positionSceneBeforeRouting(revised);
+  expect(after.root.children[1]!.x - before.root.children[1]!.x).toBe(50);
+  expect(after.root.children[2]!.x - before.root.children[2]!.x).toBe(50);
+  expect(after.root.width - before.root.width).toBe(50);
+  expect(revised.root.width).toBe(after.root.width);
+  expect(revised.root.children).toEqual(baseline.root.children);
+  expect(baseline.root.layout.gapAfter).toBeUndefined();
+});
 
 function buildRootScene(
   layout: SceneContainer["layout"],
@@ -256,6 +273,25 @@ function getTerminalSegment(edge: { route: { points: Point[] } }): { dx: number;
 }
 
 describe("staged macro-layout", () => {
+  it("seeds routes against reflowed stack geometry without laying it out again", async () => {
+    const measured = measureScene(buildRootScene({ strategy: "stack", direction: "horizontal", gap: 32 },
+      [buildCardNode("a", "narrow", "Start", [{ id: "east", role: "out", side: "east" }]),
+        buildCardNode("b", "narrow", "End", [{ id: "west", role: "in", side: "west" }])],
+      [{ id: "connection", role: "navigation", classes: [],
+        from: { itemId: "a", portId: "east" }, to: { itemId: "b", portId: "west" },
+        routing: { style: "orthogonal", preferAxis: "horizontal" } }]));
+    const initial = await positionMeasuredScene(measured);
+    const base = await positionSceneBeforeRouting(measured);
+    expect(positionMeasuredEdgesAgainstRoot(measured, base)).toEqual(initial);
+    const target = base.root.children[1]!;
+    target.x += 72;
+    base.root.width += 72;
+    const reflowed = positionMeasuredEdgesAgainstRoot(measured, base);
+    expect(reflowed.root).toBe(base.root);
+    expect(reflowed.edges[0]!.to.x).toBe(initial.edges[0]!.to.x + 72);
+    expect(reflowed.edges[0]!.from).toEqual(initial.edges[0]!.from);
+    expect(base.edges).toEqual([]);
+  });
   it("places stack containers with chrome, resolved ports, and segment-aware edge labels", async () => {
     const result = await runStagedRendererPipeline(buildFixtureScene());
     const area = findPositionedItem(result.positionedScene.root, "area-A-001");

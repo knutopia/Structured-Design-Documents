@@ -96,13 +96,16 @@ function buildReadmeContent(
   lines.push("");
   lines.push("`ia_place_map` visual review checklist:");
   lines.push("");
+  const completeIa = bundle.views.views.find(view => view.id === "ia_place_map")?.conventions.renderer_defaults?.ia_place_map;
   lines.push("- top-level items read left-to-right with clean vertical alignment");
-  lines.push("- no headers, labels, or routed edges sit visually above the top-level nodes");
+  lines.push(completeIa ? "- Area headers, navigation labels, and arrowheads remain clear of node bodies and fit the exported bounds"
+    : "- no headers, labels, or routed edges sit visually above the top-level nodes");
   lines.push("- mixed top-level `Place` and `Area` ordering follows source order");
   lines.push("- same-scope follower places align at one indent level under the earliest preceding hub that navigates to them");
   lines.push("- single-child contained places stay directly below the owner; branched child or follower scopes reserve a left connector trunk");
   lines.push("- `compact_detail` suppresses route/access/entry-point overlays while preserving allowed `primary_nav` annotations");
-  lines.push("- only forward local structure connectors are drawn, using direct-vertical or shared-trunk routes");
+  lines.push(completeIa ? "- every selected navigation occurrence has a distinct readable connection, including parallel, cross-Area, and return routes; event/guard labels remain visible in both details"
+    : "- only forward local structure connectors are drawn, using direct-vertical or shared-trunk routes");
   lines.push("");
   lines.push("`ui_contracts` visual review checklist:");
   lines.push("");

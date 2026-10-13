@@ -179,6 +179,9 @@ relationships:
 
   - type: NAVIGATES_TO
     meaning: Navigation from one place to another.
+    presentation_annotation_references:
+      event:
+        node_type: Event
     authoring:
       graph_role: behavioral
       source_representation: edge_line

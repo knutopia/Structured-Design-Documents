@@ -2266,10 +2266,10 @@ views:
             display_by_profile:
               simple:
                 - presence: connector
-                  label: hidden
+                  label: visible
               strict:
                 - presence: connector
-                  label: hidden
+                  label: visible
           - from: Outcome
             type: MEASURED_BY
             to: Metric
@@ -2752,6 +2752,22 @@ views:
         batch_applicability:
           kind: visible_semantic_node_count
           minimum: 1
+        ia_place_map:
+          projection_edge_references: exact_source_occurrences
+          navigation:
+            relationship: NAVIGATES_TO
+            occurrence_coverage: each_selected_occurrence_once
+            presentation:
+              separator: " "
+              parts:
+                - { field: event, template: '[{value}]', resolve_node_name: true }
+                - { field: guard, template: '{{value}}', resolve_node_name: false }
+              detail_display:
+                compact: true
+                detailed: true
+            containment_fusion:
+              relationship: CONTAINS
+              rule: single_unannotated_navigation_occurrence
         node_annotations:
           subtitle_prop: route_or_key
           badge_prop: access

@@ -247,7 +247,9 @@ generated files. `git diff --check` and narrow v0.1 audit passed. Unrelated init
 working-tree document renames remain preserved. The temporary wrapper directory
 left by the initial timed-out run was removed after all checks finished.
 
-One permitted backend limitation remains: multiple directed IA navigation
+Historical limitation (superseded by the 2026-10-12 IA hardening work described in
+[implementation evidence](../ia_place_map_hardening/implementation_evidence.md)):
+multiple directed IA navigation
 occurrences with identical endpoints selected together in a staged diagram return
 `renderer.scene.unsupported_parallel_occurrences` and no artifact. LEGACY Graphviz
 supports that selection. Separate named diagrams selecting individual occurrences

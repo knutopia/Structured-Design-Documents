@@ -1,5 +1,6 @@
 import { arrowMarkerReferenceX } from "./markerGeometry.js";
 import { auditUiContractsFinalScene } from "./uiContractsLabels.js";
+import { auditIaPlaceMapFinalScene } from "./iaPlaceMapRouting.js";
 import type {
   MeasuredContentBlock,
   PaintGroup,
@@ -18,6 +19,7 @@ import { paintUiContractsContainer } from "./uiContractsContainer.js";
 import { paintUiContractsArrowheads } from "./uiContractsArrowheads.js";
 import {
   createBackendDiagnostic,
+  RendererArtifactError,
   sortRendererDiagnostics,
   type RendererDiagnostic
 } from "./diagnostics.js";
@@ -922,13 +924,18 @@ async function buildDefs(scene: PositionedScene, theme: RendererTheme): Promise<
 export async function renderPositionedSceneToSvg(scene: PositionedScene): Promise<StagedSvgArtifact> {
   const resolvedTheme = resolveRendererTheme(scene.themeId, "backend");
   const theme = resolvedTheme.theme;
-  const finalAudit = scene.viewId === "ui_contracts" ? auditUiContractsFinalScene(scene) : [];
+  const finalAudit = scene.root.viewMetadata?.iaPlaceMap
+    ? auditIaPlaceMapFinalScene(scene)
+    : scene.viewId === "ui_contracts" ? auditUiContractsFinalScene(scene) : [];
   const diagnostics: RendererDiagnostic[] = [...scene.diagnostics, ...resolvedTheme.diagnostics];
   for (const finding of finalAudit) {
     if (!diagnostics.some((existing) => existing.code === finding.code
       && existing.targetId === finding.targetId && existing.message === finding.message)) {
       diagnostics.push(finding);
     }
+  }
+  if (scene.root.viewMetadata?.iaPlaceMap && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
+    throw new RendererArtifactError(sortRendererDiagnostics(diagnostics));
   }
   const groups = buildPaintElementMap();
   const measurement = createTextMeasurementService(theme.fontFaces);
@@ -993,6 +1000,10 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
   }
 
   lines.push("</svg>");
+
+  if (scene.root.viewMetadata?.iaPlaceMap && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
+    throw new RendererArtifactError(sortRendererDiagnostics(diagnostics));
+  }
 
   return {
     svg: lines.join("\n"),

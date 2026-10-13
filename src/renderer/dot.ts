@@ -157,7 +157,9 @@ export function renderIaPlaceMapDot(model: IaPlaceMapRenderModel, style?: Legacy
   renderInvisibleOrderChains(model.siblingOrderChains, lines);
 
   for (const edge of model.edges) {
-    lines.push(`  ${quoteId(edge.from)} -> ${quoteId(edge.to)};`);
+    lines.push(`  ${quoteId(edge.from)} -> ${quoteId(edge.to)}${formatAttributes({
+      label: edge.label ? formatMultilineLabel([edge.label]) : undefined
+    })};`);
   }
 
   lines.push("}");

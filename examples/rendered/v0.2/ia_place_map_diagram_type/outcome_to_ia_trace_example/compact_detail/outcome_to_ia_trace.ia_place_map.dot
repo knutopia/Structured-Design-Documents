@@ -9,5 +9,5 @@ digraph ia_place_map {
     "P-002" [label="Review"];
   }
   "P-001" -> "P-002" [style=invis, weight=100];
-  "P-001" -> "P-002";
+  "P-001" -> "P-002" [label="[Payment Submitted] {billingComplete}"];
 }

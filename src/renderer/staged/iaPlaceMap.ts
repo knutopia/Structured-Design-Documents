@@ -1,9 +1,15 @@
 import { applyDiagramMetadata, completeExactSceneConnections } from "./sceneBuilders.js";
-import type { ViewSpec } from "../../bundle/types.js";
+import type { Bundle, ViewSpec } from "../../bundle/types.js";
 import type { CompiledGraph } from "../../compiler/types.js";
 import type { Projection } from "../../projector/types.js";
 import { resolveDetailDisplayPolicy } from "../detailDisplay.js";
-import { buildIaPlaceMapRenderModel, type IaRenderArea, type IaRenderItem, type IaRenderPlace } from "../iaPlaceMapRenderModel.js";
+import {
+  buildIaPlaceMapRenderModel,
+  resolveIaPlaceMapRelationshipRuntime,
+  type IaRenderArea,
+  type IaRenderItem,
+  type IaRenderPlace
+} from "../iaPlaceMapRenderModel.js";
 import type {
   LocalRoutePattern,
   NodeDecoratorMode,
@@ -14,8 +20,10 @@ import type {
   SceneNode,
   StagedRenderSettings
 } from "./contracts.js";
+import type { RendererDiagnostic } from "./diagnostics.js";
 import { IA_LOCAL_ROUTE_PATTERNS } from "./contracts.js";
-import { runStagedRendererPipeline, type StagedRendererPipelineResult } from "./pipeline.js";
+import type { StagedRendererPipelineResult } from "./pipeline.js";
+import { runIaPlaceMapRendererPipeline } from "./iaPlaceMapRouting.js";
 import {
   buildIaPlaceMapPorts,
   buildDiagramRootContainer,
@@ -67,6 +75,9 @@ interface SceneBuildContext {
   navigationTargetsBySourceId: ReadonlyMap<string, ReadonlySet<string>>;
   placeOrderById: ReadonlyMap<string, number>;
   edges: SceneEdge[];
+  occurrencePolicyEnabled: boolean;
+  containmentFusionRelationship?: string;
+  structuralSourceIdsByTriple?: ReadonlyMap<string, string[]>;
   sourceIds?: ReadonlyMap<string, string[]>;
 }
 
@@ -289,7 +300,7 @@ function planOwnedScopeEdgePlans(
       targetId: entry.place.id,
       relation: "contains",
       localPattern: containsLocalPattern,
-      mergedNavigation: hasForwardNavigation(ownerPlaceId, entry.place.id, context)
+      mergedNavigation: !context.occurrencePolicyEnabled && hasForwardNavigation(ownerPlaceId, entry.place.id, context)
     });
   }
 
@@ -321,17 +332,26 @@ function planOwnedScope(
   };
 }
 
-function createLocalStructureEdge(sourceId: string, edgePlan: PlannedLocalStructureEdge, context: SceneBuildContext): SceneEdge {
+function createLocalStructureEdge(sourceId: string, edgePlan: PlannedLocalStructureEdge, context: SceneBuildContext): SceneEdge | undefined {
+  if (context.occurrencePolicyEnabled && edgePlan.relation === "follower") {
+    return undefined;
+  }
   const isDirectVertical = edgePlan.localPattern === IA_LOCAL_ROUTE_PATTERNS.directVertical;
-  const edgeId = edgePlan.relation === "contains" && !edgePlan.mergedNavigation
-    ? `${sourceId}__contains__${edgePlan.targetId}`
-    : `${sourceId}__nav__${edgePlan.targetId}`;
+  const structuralSourceIds = context.occurrencePolicyEnabled && edgePlan.relation === "contains" && context.containmentFusionRelationship
+    ? context.structuralSourceIdsByTriple?.get(JSON.stringify([sourceId, context.containmentFusionRelationship, edgePlan.targetId])) ?? []
+    : [];
+  const edgeId = context.occurrencePolicyEnabled
+    ? `${sourceId}__contains__${edgePlan.targetId}${structuralSourceIds.length ? `__${structuralSourceIds.join("__")}` : ""}`
+    : edgePlan.relation === "contains" && !edgePlan.mergedNavigation
+      ? `${sourceId}__contains__${edgePlan.targetId}`
+      : `${sourceId}__nav__${edgePlan.targetId}`;
+  const sourceEdgeIds = context.occurrencePolicyEnabled
+    ? structuralSourceIds
+    : context.sourceIds?.get(`${sourceId}->${edgePlan.targetId}`) ?? [];
 
   return {
-    id: context.sourceIds?.get(`${sourceId}->${edgePlan.targetId}`)?.length
-      ? `${edgeId}__${context.sourceIds.get(`${sourceId}->${edgePlan.targetId}`)!.join("__")}` : edgeId,
-    ...(context.sourceIds?.get(`${sourceId}->${edgePlan.targetId}`)?.length
-      ? { viewMetadata: { sourceEdgeIds: [...context.sourceIds.get(`${sourceId}->${edgePlan.targetId}`)!] } } : {}),
+    id: !context.occurrencePolicyEnabled && sourceEdgeIds.length ? `${edgeId}__${sourceEdgeIds.join("__")}` : edgeId,
+    ...(sourceEdgeIds.length ? { viewMetadata: { sourceEdgeIds: [...sourceEdgeIds] } } : {}),
     role: edgePlan.relation === "contains"
       ? (edgePlan.mergedNavigation ? "contains_navigation" : "contains_place")
       : "navigation",
@@ -386,7 +406,10 @@ function buildPlaceGroup(
     buildPlaceGroup(follower, [], `${scopeId}/${place.id}__followers`, depth + 1, context)
   );
   const ownedChildren = [...explicitChildren, ...followerChildren];
-  context.edges.push(...ownedScope.edgePlans.map((edgePlan) => createLocalStructureEdge(place.id, edgePlan, context)));
+  for (const edgePlan of ownedScope.edgePlans) {
+    const edge = createLocalStructureEdge(place.id, edgePlan, context);
+    if (edge) context.edges.push(edge);
+  }
 
   const children: SceneItem[] = [buildPlaceNode(place, depth, context)];
   if (ownedScope.kind) {
@@ -451,12 +474,50 @@ export function buildIaPlaceMapRendererScene(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: StagedRenderSettings
+  settings: StagedRenderSettings,
+  bundle?: Bundle
 ): RendererScene {
   const displayPolicy = resolveDetailDisplayPolicy(view, settings.detailId);
-  const model = buildIaPlaceMapRenderModel(projection, graph, view.projection.hierarchy_edges ?? [], displayPolicy);
+  const rendererConfig = view.conventions.renderer_defaults?.ia_place_map;
+  const relationshipRuntime = rendererConfig && bundle
+    ? resolveIaPlaceMapRelationshipRuntime(bundle, rendererConfig)
+    : undefined;
+  if (rendererConfig && !bundle) {
+    throw new Error("IA occurrence-complete rendering requires the loaded bundle in the staged renderer.");
+  }
+  if (rendererConfig?.navigation.presentation.parts.some((part) => part.resolve_node_name)) {
+    if (!bundle) {
+      throw new Error("IA name-resolved relationship labels require the loaded bundle in the staged renderer.");
+    }
+    const missingReferenceDescriptor = rendererConfig.navigation.presentation.parts.some((part) =>
+      part.resolve_node_name && !relationshipRuntime?.annotationReferenceTypes[part.field]
+    );
+    if (missingReferenceDescriptor) {
+      throw new Error(`IA label policy for '${rendererConfig.navigation.relationship}' has no presentation reference descriptor.`);
+    }
+  }
+  const model = buildIaPlaceMapRenderModel(
+    projection,
+    graph,
+    view.projection.hierarchy_edges ?? [],
+    displayPolicy,
+    rendererConfig,
+    settings.detailId,
+    relationshipRuntime
+  );
   const placeOrderById = new Map<string, number>();
   buildPlaceOrderIndex(model.rootItems, placeOrderById, { next: 0 });
+
+  const structuralSourceIdsByTriple = new Map<string, string[]>();
+  if (rendererConfig) {
+    for (const edge of model.structuralEdges) {
+      if (!edge.source_edge_id) continue;
+      const key = JSON.stringify([edge.from, edge.type, edge.to]);
+      const ids = structuralSourceIdsByTriple.get(key) ?? [];
+      ids.push(edge.source_edge_id);
+      structuralSourceIdsByTriple.set(key, ids);
+    }
+  }
 
   const context: SceneBuildContext = {
     nodeDecoratorMode: settings.nodeDecoratorMode ?? {
@@ -470,13 +531,69 @@ export function buildIaPlaceMapRendererScene(
     })) } : {}),
     navigationTargetsBySourceId: buildNavigationTargetsBySourceId(model.edges),
     placeOrderById,
-    edges: []
+    edges: [],
+    occurrencePolicyEnabled: model.occurrencePolicyEnabled,
+    ...(rendererConfig ? {
+      containmentFusionRelationship: rendererConfig.navigation.containment_fusion.relationship,
+      structuralSourceIdsByTriple
+    } : {})
   };
   const rootChildren = buildScopeSceneItems(model.rootItems, "root", 0, context);
-  const exactConnectionDiagnostics = completeExactSceneConnections(context.edges,
-    model.edges.map(edge => ({ ...edge, role: "navigation" })));
+  const exactConnectionDiagnostics: RendererDiagnostic[] = model.occurrencePolicyEnabled
+    ? []
+    : completeExactSceneConnections(context.edges,
+      model.edges.map(edge => ({ ...edge, role: "navigation" })));
+  const connectorIdByNavigationSourceId = new Map<string, string>();
 
-  return applyDiagramMetadata({
+  if (rendererConfig) {
+    const fusedNavigationIds = new Set<string>();
+    for (const structuralEdge of context.edges.filter((edge) => edge.role === "contains_place")) {
+      const sourceId = structuralEdge.from.itemId;
+      const targetId = structuralEdge.to.itemId;
+      const containmentOccurrences = model.structuralEdges.filter((edge) =>
+        edge.from === sourceId
+        && edge.to === targetId
+        && edge.type === rendererConfig.navigation.containment_fusion.relationship
+      );
+      const navigationOccurrences = model.edges.filter((edge) => edge.from === sourceId && edge.to === targetId);
+      if (containmentOccurrences.length !== 1 || navigationOccurrences.length !== 1) continue;
+      const containmentId = containmentOccurrences[0]?.source_edge_id;
+      const navigation = navigationOccurrences[0];
+      if (!containmentId || !navigation?.source_edge_id || navigation.annotated) continue;
+      structuralEdge.role = "contains_navigation";
+      structuralEdge.classes = [...structuralEdge.classes, "merged_navigation"];
+      structuralEdge.viewMetadata = { sourceEdgeIds: [containmentId, navigation.source_edge_id] };
+      fusedNavigationIds.add(navigation.source_edge_id);
+      connectorIdByNavigationSourceId.set(navigation.source_edge_id, structuralEdge.id);
+    }
+
+    for (const edge of model.edges) {
+      if (!edge.source_edge_id) {
+        exactConnectionDiagnostics.push({
+          phase: "scene",
+          code: "renderer.scene.ia_missing_navigation_occurrence_id",
+          severity: "error",
+          message: `IA navigation occurrence ${edge.from} ${rendererConfig.navigation.relationship} ${edge.to} has no exact source ID.`
+        });
+        continue;
+      }
+      if (fusedNavigationIds.has(edge.source_edge_id)) continue;
+      context.edges.push({
+        id: edge.id,
+        role: "navigation",
+        classes: ["ia_navigation", "navigation_occurrence"],
+        from: { itemId: edge.from, portId: "east" },
+        to: { itemId: edge.to, portId: "west" },
+        routing: { style: "orthogonal", preferAxis: "horizontal" },
+        ...(edge.label ? { label: { text: edge.label, textStyleRole: "edge_label" } } : {}),
+        markers: { end: "arrow" },
+        viewMetadata: { sourceEdgeIds: [edge.source_edge_id] }
+      });
+      connectorIdByNavigationSourceId.set(edge.source_edge_id, edge.id);
+    }
+  }
+
+  const scene: RendererScene = {
     viewId: "ia_place_map",
     detailId: settings.detailId,
     themeId: settings.themeId ?? "default",
@@ -502,17 +619,49 @@ export function buildIaPlaceMapRendererScene(
     }),
     edges: context.edges,
     diagnostics: exactConnectionDiagnostics
-  }, projection);
+  };
+  if (rendererConfig) {
+    scene.root.viewMetadata = {
+      ...scene.root.viewMetadata,
+      iaPlaceMap: {
+        expectedNavigationOccurrences: model.edges.flatMap((edge) => edge.source_edge_id ? [{
+          id: edge.id,
+          sourceEdgeId: edge.source_edge_id,
+          connectorId: connectorIdByNavigationSourceId.get(edge.source_edge_id) ?? edge.id,
+          from: edge.from,
+          to: edge.to,
+          ...(edge.label ? { label: edge.label } : {}),
+          markers: { ...context.edges.find(candidate => candidate.id === connectorIdByNavigationSourceId.get(edge.source_edge_id!))?.markers },
+          sourceOrder: edge.sourceOrder,
+          fromAncestryIds: [...edge.fromAncestryIds],
+          toAncestryIds: [...edge.toAncestryIds]
+        }] : []),
+        expectedStructuralEdges: context.edges.flatMap((edge) => {
+          if (edge.role !== "contains_place" && edge.role !== "contains_navigation") return [];
+          return [{
+            id: edge.id,
+            sourceEdgeIds: [...(edge.viewMetadata?.sourceEdgeIds ?? [])],
+            from: edge.from.itemId,
+            to: edge.to.itemId,
+            role: edge.role,
+            markers: { ...edge.markers }
+          }];
+        })
+      }
+    };
+  }
+  return applyDiagramMetadata(scene, projection);
 }
 
 export async function renderIaPlaceMapStagedSvg(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: StagedRenderSettings
+  settings: StagedRenderSettings,
+  bundle?: Bundle
 ): Promise<IaPlaceMapStagedSvgResult> {
-  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, settings);
-  const pipeline = await runStagedRendererPipeline(rendererScene);
+  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, settings, bundle);
+  const pipeline = await runIaPlaceMapRendererPipeline(rendererScene);
   const rendered = await renderPositionedSceneToSvg(pipeline.positionedScene);
 
   return {
@@ -525,10 +674,11 @@ export async function renderIaPlaceMapStagedPng(
   projection: Projection,
   graph: CompiledGraph,
   view: ViewSpec,
-  settings: StagedRenderSettings
+  settings: StagedRenderSettings,
+  bundle?: Bundle
 ): Promise<IaPlaceMapStagedPngResult> {
-  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, settings);
-  const pipeline = await runStagedRendererPipeline(rendererScene);
+  const rendererScene = buildIaPlaceMapRendererScene(projection, graph, view, settings, bundle);
+  const pipeline = await runIaPlaceMapRendererPipeline(rendererScene);
   const rendered = await renderPositionedSceneToPng(pipeline.positionedScene);
 
   return {

@@ -24,17 +24,20 @@
     {
       "from": "A-001",
       "type": "CONTAINS",
-      "to": "P-001"
+      "to": "P-001",
+      "source_edge_id": "source-edge-662d803a9733729e059a392f2068f669647708af0f5432f75bbb65afe6d64f9b-0"
     },
     {
       "from": "A-001",
       "type": "CONTAINS",
-      "to": "P-002"
+      "to": "P-002",
+      "source_edge_id": "source-edge-10385367c63b2cb1d3d96ea0280cb4b2c9480724690b744ab3bf3e456fb75945-0"
     },
     {
       "from": "P-001",
       "type": "NAVIGATES_TO",
-      "to": "P-002"
+      "to": "P-002",
+      "source_edge_id": "source-edge-7242b4f6645a3e364f153d4cb78cefb59aa73534e0e985cbc453306fbc598e7d-0"
     }
   ],
   "derived": {

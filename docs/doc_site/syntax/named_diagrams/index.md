@@ -60,6 +60,18 @@ scope; they do not create independent semantic worlds or change shared
 properties. Discovery counts show raw membership; compact render detail can
 hide some eligible members.
 
+IA place maps preserve each selected navigation, including parallel connections,
+returns, and connections between Areas. Event and guard annotations appear in
+both compact and detailed output, for example `[Accept invitation] {invitation
+valid}`. Separate named diagrams keep their selected annotation; the combined
+view shows all occurrences. Event names can appear in labels without adding Event
+nodes to the map. Identical declarations remain separate connections and retain
+their duplicate warning.
+
+If routing or required labels cannot fit, rendering reports an error and produces
+no artifact, including with `--force`. SVG and PNG use the same accepted layout;
+the legacy Graphviz backend uses its own layout.
+
 ```bash
 # Existing combined scenario view
 pnpm sdd show flows.sdd --view scenario_flow

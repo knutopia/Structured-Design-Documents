@@ -77,22 +77,18 @@ describe("shared named selection across all remaining views", () => {
       expect(legacy.diagnostics.filter(d => d.severity === "error")).toEqual([]);
     });
   }
-  it("completes exact cross-scope navigation and rejects unsupported parallel navigation", async () => {
+  it("completes exact cross-scope navigation and preserves parallel navigation occurrences", async () => {
     const viewId = "ia_place_map";
     for (const parallel of [false, true]) {
       const text = `SDD-TEXT 0.2\nDiagram DG-399 "Unsupported navigation"\n  diagram_type=ia_place_map\nEND\nArea A-399 "Area"\n  CONTAINS P-398 diagrams=DG-399\nEND\nPlace P-398 "Inside area"\n  NAVIGATES_TO P-399 diagrams=DG-399\n${parallel ? "  NAVIGATES_TO P-399 diagrams=DG-399\n" : ""}END\nPlace P-399 "Outside area"\nEND\n`;
       const result = await renderSourcePreview({ path: "unsupported-ia.sdd", text }, bundle, { viewId, diagramId: "DG-399", format: "svg", profileId: "simple", force: true });
-      if (parallel) {
-        expect(result.artifact).toBeUndefined();
-        expect(result.diagnostics.some(d => d.code === "renderer.scene.unsupported_parallel_occurrences" && d.severity === "error")).toBe(true);
-      } else {
-        expect(result.artifact).toBeDefined();
-        expect(result.diagnostics.filter(d => d.severity === "error")).toEqual([]);
-        if (process.env.SDD_RECORD_DIAGRAM_EVIDENCE === "1") {
-          await writeFile("docs/v0.2_syntax_extension/evidence/diagram-separation/DG-399.cross-scope.svg", result.artifact!.text!);
-          const png = await renderSourcePreview({ path: "unsupported-ia.sdd", text }, bundle, { viewId, diagramId: "DG-399", format: "png", profileId: "simple" });
-          await writeFile("docs/v0.2_syntax_extension/evidence/diagram-separation/DG-399.cross-scope.png", png.artifact!.bytes!);
-        }
+      expect(result.artifact).toBeDefined();
+      expect(result.diagnostics.filter(d => d.severity === "error")).toEqual([]);
+      expect((result.artifact!.text!.match(/data-role="navigation"/g) ?? []).length).toBe(parallel ? 2 : 1);
+      if (!parallel && process.env.SDD_RECORD_DIAGRAM_EVIDENCE === "1") {
+        await writeFile("docs/v0.2_syntax_extension/evidence/diagram-separation/DG-399.cross-scope.svg", result.artifact!.text!);
+        const png = await renderSourcePreview({ path: "unsupported-ia.sdd", text }, bundle, { viewId, diagramId: "DG-399", format: "png", profileId: "simple" });
+        await writeFile("docs/v0.2_syntax_extension/evidence/diagram-separation/DG-399.cross-scope.png", png.artifact!.bytes!);
       }
       const legacy = await renderSourcePreview({ path: "unsupported-ia.sdd", text }, bundle, { viewId, diagramId: "DG-399", format: "svg", profileId: "simple", backendId: "legacy_graphviz_preview" });
       expect(legacy.artifact).toBeDefined();

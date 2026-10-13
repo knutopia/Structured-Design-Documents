@@ -212,6 +212,29 @@ export type JourneyMapItemMetadata =
 
 export interface ViewMetadata {
   diagram?: { id: string; name: string };
+  iaPlaceMap?: {
+    expectedNavigationOccurrences: Array<{
+      id: string;
+      sourceEdgeId: string;
+      connectorId: string;
+      from: string;
+      to: string;
+      label?: string;
+      markers?: EdgeMarkers;
+      sourceOrder: number;
+      fromAncestryIds: string[];
+      toAncestryIds: string[];
+    }>;
+    expectedStructuralEdges: Array<{
+      id: string;
+      sourceEdgeIds: string[];
+      from: string;
+      to: string;
+      role: "contains_place" | "contains_navigation";
+      markers?: EdgeMarkers;
+      ownerContainerId?: string;
+    }>;
+  };
   uiContracts?: { kind: "enclosure" | "sheet"; title?: string; tone?: "inset" | "hierarchy" };
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
@@ -226,6 +249,23 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
 
   return {
     ...(viewMetadata.diagram ? { diagram: { ...viewMetadata.diagram } } : {}),
+    ...(viewMetadata.iaPlaceMap
+      ? {
+        iaPlaceMap: {
+          expectedNavigationOccurrences: viewMetadata.iaPlaceMap.expectedNavigationOccurrences.map((occurrence) => ({
+            ...occurrence,
+            ...(occurrence.markers ? { markers: { ...occurrence.markers } } : {}),
+            fromAncestryIds: [...occurrence.fromAncestryIds],
+            toAncestryIds: [...occurrence.toAncestryIds]
+          })),
+          expectedStructuralEdges: viewMetadata.iaPlaceMap.expectedStructuralEdges.map((edge) => ({
+            ...edge,
+            ...(edge.markers ? { markers: { ...edge.markers } } : {}),
+            sourceEdgeIds: [...edge.sourceEdgeIds]
+          }))
+        }
+      }
+      : {}),
     ...(viewMetadata.uiContracts ? { uiContracts: { ...viewMetadata.uiContracts } } : {}),
     ...(viewMetadata.serviceBlueprint
       ? {
@@ -343,6 +383,8 @@ export interface LayoutIntent {
   strategy: LayoutStrategy;
   direction?: LayoutDirection;
   gap?: number;
+  /** Per-adjacent-child spacing overrides for linear containers, keyed by the preceding child. */
+  gapAfter?: Record<string, number>;
   crossAlignment?: CrossAlignment;
   /** Intrinsic containers derive final bounds from the layout result instead of retaining provisional estimates. */
   sizing?: "minimum" | "intrinsic";

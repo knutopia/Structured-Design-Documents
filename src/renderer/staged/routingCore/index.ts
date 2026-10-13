@@ -10,3 +10,4 @@ export * from "./sceneValidation.js";
 export * from "./solver.js";
 export * from "./validation.js";
 export * from "./optimization.js";
+export * from "./portCapacity.js";

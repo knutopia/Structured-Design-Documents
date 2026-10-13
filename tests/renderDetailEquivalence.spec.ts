@@ -53,7 +53,7 @@ async function renderStaged(
 
   switch (view.id) {
     case "ia_place_map":
-      return renderIaPlaceMapStagedPng(projected.projection!, compiled.graph!, view, settings);
+      return renderIaPlaceMapStagedPng(projected.projection!, compiled.graph!, view, settings, loadedBundle);
     case "journey_map":
       return renderJourneyMapStagedPng(projected.projection!, compiled.graph!, loadedBundle, view, settings);
     case "outcome_opportunity_map":

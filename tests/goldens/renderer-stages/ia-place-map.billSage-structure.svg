@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1888" height="863" viewBox="0 0 1888 863" class="staged-svg view-ia_place_map detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="ia_place_map" data-detail-id="detailed" data-theme-id="default">
+<svg xmlns="http://www.w3.org/2000/svg" width="1888" height="887" viewBox="0 0 1888 887" class="staged-svg view-ia_place_map detail-detailed theme-default theme-revision-public-sans-v0-2" data-view-id="ia_place_map" data-detail-id="detailed" data-theme-id="default">
   <defs>
     <style><![CDATA[
     @font-face {
@@ -62,10 +62,10 @@
   </defs>
   <g class="paint-layer paint-chrome" data-paint-group="chrome">
     <g id="scene-container-root" class="scene-container primitive-root role-diagram_root paint-chrome diagram ia_place_map" data-item-id="root" data-role="diagram_root">
-      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="1886.5" height="861.5" rx="17.25" ry="17.25"/>
+      <rect class="scene-container__chrome scene-container__chrome--canvas" x="0.75" y="0.75" width="1886.5" height="885.5" rx="17.25" ry="17.25"/>
     </g>
     <g id="scene-container-a-200" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-200" data-role="area">
-      <rect class="scene-container__chrome" x="296" y="24" width="352" height="815" rx="16" ry="16"/>
+      <rect class="scene-container__chrome" x="296" y="24" width="352" height="839" rx="16" ry="16"/>
       <rect class="scene-container__header-band" x="296" y="24" width="352" height="40" rx="16" ry="16"/>
     </g>
     <g id="scene-container-a-300" class="scene-container primitive-cluster role-area paint-chrome area" data-item-id="A-300" data-role="area">
@@ -103,16 +103,16 @@
       <rect class="shared-node__outline" x="360.75" y="274.75" width="222.5" height="96.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-p-221" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-2 shared-node shared-node-dense" data-item-id="P-221" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="408.75" y="404.75" width="222.5" height="129.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="408.75" y="404.75" width="222.5" height="129.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="408.75" y="428.75" width="222.5" height="129.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="408.75" y="428.75" width="222.5" height="129.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-p-222" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-2 shared-node shared-node-dense" data-item-id="P-222" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="408.75" y="567.75" width="222.5" height="110.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="408.75" y="567.75" width="222.5" height="110.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="408.75" y="591.75" width="222.5" height="110.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="408.75" y="591.75" width="222.5" height="110.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-p-230" class="scene-node primitive-card role-place paint-nodes semantic_node place nested_place depth-1 shared-node shared-node-dense" data-item-id="P-230" data-role="place" data-node-density="dense">
-      <rect class="shared-node__chrome" x="360.75" y="711.75" width="222.5" height="110.5" rx="13.25" ry="13.25"/>
-      <rect class="shared-node__outline" x="360.75" y="711.75" width="222.5" height="110.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__chrome" x="360.75" y="735.75" width="222.5" height="110.5" rx="13.25" ry="13.25"/>
+      <rect class="shared-node__outline" x="360.75" y="735.75" width="222.5" height="110.5" rx="13.25" ry="13.25"/>
     </g>
     <g id="scene-node-p-310" class="scene-node primitive-card role-place paint-nodes semantic_node place root_place depth-0 shared-node shared-node-dense" data-item-id="P-310" data-role="place" data-node-density="dense">
       <rect class="shared-node__chrome" x="712.75" y="80.75" width="222.5" height="160.5" rx="13.25" ry="13.25"/>
@@ -272,26 +272,26 @@
     <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-2 shared-node shared-node-dense shared-node__labels" data-item-id="P-221" data-role="place">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="423.5" y="426.8">
-              <tspan x="423.5" y="426.8">Fee Schedule Scenario</tspan>
-              <tspan x="423.5" y="445.8">Details</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="423.5" y="450.8">
+              <tspan x="423.5" y="450.8">Fee Schedule Scenario</tspan>
+              <tspan x="423.5" y="469.8">Details</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="route_or_key">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="423.5" y="463.125">
-              <tspan x="423.5" y="463.125">Route or Key</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="423.5" y="487.125">
+              <tspan x="423.5" y="487.125">Route or Key</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="423.5" y="478.85">
-              <tspan x="423.5" y="478.85">/projections/projection/fee-sched</tspan>
-              <tspan x="423.5" y="492.85">ule-scenario-details</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="423.5" y="502.85">
+              <tspan x="423.5" y="502.85">/projections/projection/fee-sched</tspan>
+              <tspan x="423.5" y="516.85">ule-scenario-details</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="access">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="423.5" y="509.125">
-              <tspan x="423.5" y="509.125">Access</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="423.5" y="533.125">
+              <tspan x="423.5" y="533.125">Access</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="423.5" y="524.85">
-              <tspan x="423.5" y="524.85">auth</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="423.5" y="548.85">
+              <tspan x="423.5" y="548.85">auth</tspan>
             </text>
         </g>
       </g>
@@ -299,25 +299,25 @@
     <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-2 shared-node shared-node-dense shared-node__labels" data-item-id="P-222" data-role="place">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="423.5" y="589.8">
-              <tspan x="423.5" y="589.8">Funding Scenario Details</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="423.5" y="613.8">
+              <tspan x="423.5" y="613.8">Funding Scenario Details</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="route_or_key">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="423.5" y="607.125">
-              <tspan x="423.5" y="607.125">Route or Key</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="423.5" y="631.125">
+              <tspan x="423.5" y="631.125">Route or Key</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="423.5" y="622.85">
-              <tspan x="423.5" y="622.85">/projections/projection/funding-sc</tspan>
-              <tspan x="423.5" y="636.85">enario-details</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="423.5" y="646.85">
+              <tspan x="423.5" y="646.85">/projections/projection/funding-sc</tspan>
+              <tspan x="423.5" y="660.85">enario-details</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="access">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="423.5" y="653.125">
-              <tspan x="423.5" y="653.125">Access</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="423.5" y="677.125">
+              <tspan x="423.5" y="677.125">Access</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="423.5" y="668.85">
-              <tspan x="423.5" y="668.85">auth</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="423.5" y="692.85">
+              <tspan x="423.5" y="692.85">auth</tspan>
             </text>
         </g>
       </g>
@@ -325,25 +325,25 @@
     <g class="scene-node primitive-card role-place paint-labels semantic_node place nested_place depth-1 shared-node shared-node-dense shared-node__labels" data-item-id="P-230" data-role="place">
       <g class="shared-node__body">
         <g class="shared-node__title">
-          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="375.5" y="733.8">
-              <tspan x="375.5" y="733.8">Create New Projection</tspan>
+          <text class="scene-text text-role-shared_node_title block-kind-text block-region-primary shared-node__title-text" x="375.5" y="757.8">
+              <tspan x="375.5" y="757.8">Create New Projection</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="route_or_key">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="375.5" y="751.125">
-              <tspan x="375.5" y="751.125">Route or Key</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="375.5" y="775.125">
+              <tspan x="375.5" y="775.125">Route or Key</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="375.5" y="766.85">
-              <tspan x="375.5" y="766.85">/projections/create-new-projectio</tspan>
-              <tspan x="375.5" y="780.85">n</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="375.5" y="790.85">
+              <tspan x="375.5" y="790.85">/projections/create-new-projectio</tspan>
+              <tspan x="375.5" y="804.85">n</tspan>
             </text>
         </g>
         <g class="shared-node__attribute-group" data-attribute-group="access">
-          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="375.5" y="797.125">
-              <tspan x="375.5" y="797.125">Access</tspan>
+          <text class="scene-text text-role-shared_node_attribute_label block-kind-text block-region-primary shared-node__attribute-label" x="375.5" y="821.125">
+              <tspan x="375.5" y="821.125">Access</tspan>
             </text>
-          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="375.5" y="812.85">
-              <tspan x="375.5" y="812.85">auth</tspan>
+          <text class="scene-text text-role-shared_node_attribute_value block-kind-text block-region-primary shared-node__attribute-value" x="375.5" y="836.85">
+              <tspan x="375.5" y="836.85">auth</tspan>
             </text>
         </g>
       </g>
@@ -534,20 +534,29 @@
     </g>
   </g>
   <g class="paint-layer paint-edges" data-paint-group="edges">
-    <g id="scene-edge-p-100__nav__p-110" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge merged_navigation direct_vertical" data-edge-id="P-100__nav__P-110" data-role="contains_navigation">
+    <g id="scene-edge-p-100__contains__p-110__source-edge-ab5588ab1956df4d89ce800278eeb7465dada639faa6b19afcbd7ae53e76e119-0" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge structural_only direct_vertical merged_navigation" data-edge-id="P-100__contains__P-110__source-edge-ab5588ab1956df4d89ce800278eeb7465dada639faa6b19afcbd7ae53e76e119-0" data-role="contains_navigation">
       <path class="scene-edge__path" d="M 48 186 L 48 218" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-p-220__nav__p-221" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge merged_navigation shared_trunk" data-edge-id="P-220__nav__P-221" data-role="contains_navigation">
-      <path class="scene-edge__path" d="M 384 372 L 384 469.5 L 408 469.5" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-p-220__contains__p-221__source-edge-1a4b74752f522d2bb8dc201b058b1224b58520f998f06fdcecf1fd9f55c3d249-0" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge structural_only shared_trunk merged_navigation" data-edge-id="P-220__contains__P-221__source-edge-1a4b74752f522d2bb8dc201b058b1224b58520f998f06fdcecf1fd9f55c3d249-0" data-role="contains_navigation">
+      <path class="scene-edge__path" d="M 384 372 L 384 493.5 L 408 493.5" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-p-220__nav__p-222" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge merged_navigation shared_trunk" data-edge-id="P-220__nav__P-222" data-role="contains_navigation">
-      <path class="scene-edge__path" d="M 384 372 L 384 623 L 408 623" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-p-220__contains__p-222__source-edge-028d7ca5cdfce89e3d30d846a54c7e56ae61268f502f7c005097ff89c69e6dd9-0" class="scene-edge role-contains_navigation route-orthogonal paint-edges ia_local_structure contains_edge structural_only shared_trunk merged_navigation" data-edge-id="P-220__contains__P-222__source-edge-028d7ca5cdfce89e3d30d846a54c7e56ae61268f502f7c005097ff89c69e6dd9-0" data-role="contains_navigation">
+      <path class="scene-edge__path" d="M 384 372 L 384 647 L 408 647" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-p-210__nav__p-220" class="scene-edge role-navigation route-orthogonal paint-edges ia_local_structure follower_edge merged_navigation shared_trunk" data-edge-id="P-210__nav__P-220" data-role="navigation">
-      <path class="scene-edge__path" d="M 336 242 L 336 323 L 360 323" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-navigation-source-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0" class="scene-edge role-navigation route-orthogonal paint-edges ia_navigation navigation_occurrence" data-edge-id="navigation:source-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0" data-role="navigation">
+      <path class="scene-edge__path" d="M 420 242 L 420 266 L 436 266 L 436 262 L 468 262 L 468 274" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
-    <g id="scene-edge-p-210__nav__p-230" class="scene-edge role-navigation route-orthogonal paint-edges ia_local_structure follower_edge merged_navigation shared_trunk" data-edge-id="P-210__nav__P-230" data-role="navigation">
-      <path class="scene-edge__path" d="M 336 242 L 336 767 L 360 767" marker-end="url(#scene-marker-arrow-end)"/>
+    <g id="scene-edge-navigation-source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0" class="scene-edge role-navigation route-orthogonal paint-edges ia_navigation navigation_occurrence" data-edge-id="navigation:source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0" data-role="navigation">
+      <path class="scene-edge__path" d="M 436 242 L 436 250 L 358.5 250 L 358.5 723 L 468 723 L 468 735" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-navigation-source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0" class="scene-edge role-navigation route-orthogonal paint-edges ia_navigation navigation_occurrence" data-edge-id="navigation:source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0" data-role="navigation">
+      <path class="scene-edge__path" d="M 516 428 L 516 400 L 452 400 L 452 372" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-navigation-source-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0" class="scene-edge role-navigation route-orthogonal paint-edges ia_navigation navigation_occurrence" data-edge-id="navigation:source-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0" data-role="navigation">
+      <path class="scene-edge__path" d="M 516 591 L 516 583 L 633.5 583 L 633.5 384 L 468 384 L 468 372" marker-end="url(#scene-marker-arrow-end)"/>
+    </g>
+    <g id="scene-edge-navigation-source-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0" class="scene-edge role-navigation route-orthogonal paint-edges ia_navigation navigation_occurrence" data-edge-id="navigation:source-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0" data-role="navigation">
+      <path class="scene-edge__path" d="M 484 735 L 484 727 L 649.5 727 L 649.5 426.5 L 484 426.5 L 484 372" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
   </g>
   <g class="paint-layer paint-edge_labels" data-paint-group="edge_labels">

@@ -2,7 +2,11 @@ import type { Bundle } from "../bundle/types.js";
 import { getGraphSourcePath, type CompiledGraph } from "../compiler/types.js";
 import { hasErrors, sortDiagnostics } from "../diagnostics/types.js";
 import { resolveDiagramSelection } from "../diagrams/resolveDiagrams.js";
-import { attachProjectionSourceEdgeIndex, copySelectedGraphContext } from "./edgeOccurrences.js";
+import {
+  attachProjectionSourceEdgeIndex,
+  copySelectedGraphContext,
+  requiresExactProjectionEdgeReferences
+} from "./edgeOccurrences.js";
 import type { ProjectionResult } from "./types.js";
 import { getViewProjector } from "./viewProjectors.js";
 
@@ -52,6 +56,9 @@ function projectResolvedSelection(graph: CompiledGraph, bundle: Bundle, selectio
   attachProjectionSourceEdgeIndex(graph, selection.sourceEdgeIndex);
   const structuralGraph = selection.diagramId ? { ...graph, nodes: selection.nodes, edges: selection.edges } : graph;
   if (structuralGraph !== graph) copySelectedGraphContext(graph, structuralGraph, selection.sourceEdgeIndex);
+  if (requiresExactProjectionEdgeReferences(bundle, view.id)) {
+    attachProjectionSourceEdgeIndex(structuralGraph, selection.sourceEdgeIndex);
+  }
   const projected = projector(structuralGraph, bundle, view, {
     primaryNodes: selection.nodes, primaryEdges: selection.edges,
     documentGraph: graph, sourceEdgeIndex: selection.sourceEdgeIndex,

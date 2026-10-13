@@ -11,6 +11,208 @@
       "diagram",
       "ia_place_map"
     ],
+    "viewMetadata": {
+      "iaPlaceMap": {
+        "expectedNavigationOccurrences": [
+          {
+            "id": "navigation:source-edge-cfebcdb1f763c5f82ef500494abc390cd4f223678510483e8a1946b2dce3107b-0",
+            "sourceEdgeId": "source-edge-cfebcdb1f763c5f82ef500494abc390cd4f223678510483e8a1946b2dce3107b-0",
+            "connectorId": "P-100__contains__P-110__source-edge-ab5588ab1956df4d89ce800278eeb7465dada639faa6b19afcbd7ae53e76e119-0",
+            "from": "P-100",
+            "to": "P-110",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 0,
+            "fromAncestryIds": [
+              "P-100"
+            ],
+            "toAncestryIds": [
+              "P-100",
+              "P-110"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0",
+            "sourceEdgeId": "source-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0",
+            "connectorId": "navigation:source-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0",
+            "from": "P-210",
+            "to": "P-220",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 1,
+            "fromAncestryIds": [
+              "A-200",
+              "P-210"
+            ],
+            "toAncestryIds": [
+              "A-200",
+              "P-220"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0",
+            "sourceEdgeId": "source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0",
+            "connectorId": "navigation:source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0",
+            "from": "P-210",
+            "to": "P-230",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 2,
+            "fromAncestryIds": [
+              "A-200",
+              "P-210"
+            ],
+            "toAncestryIds": [
+              "A-200",
+              "P-230"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-cef72a4b0ceb0a377c9e8d8168868dbc81a25b0d3773fd3ccf58255f74982aae-0",
+            "sourceEdgeId": "source-edge-cef72a4b0ceb0a377c9e8d8168868dbc81a25b0d3773fd3ccf58255f74982aae-0",
+            "connectorId": "P-220__contains__P-221__source-edge-1a4b74752f522d2bb8dc201b058b1224b58520f998f06fdcecf1fd9f55c3d249-0",
+            "from": "P-220",
+            "to": "P-221",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 3,
+            "fromAncestryIds": [
+              "A-200",
+              "P-220"
+            ],
+            "toAncestryIds": [
+              "A-200",
+              "P-220",
+              "P-221"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-29273ec38508b2751ca4f4ed5de6829aea07e540910a9d72c934681c1d6a36e7-0",
+            "sourceEdgeId": "source-edge-29273ec38508b2751ca4f4ed5de6829aea07e540910a9d72c934681c1d6a36e7-0",
+            "connectorId": "P-220__contains__P-222__source-edge-028d7ca5cdfce89e3d30d846a54c7e56ae61268f502f7c005097ff89c69e6dd9-0",
+            "from": "P-220",
+            "to": "P-222",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 4,
+            "fromAncestryIds": [
+              "A-200",
+              "P-220"
+            ],
+            "toAncestryIds": [
+              "A-200",
+              "P-220",
+              "P-222"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0",
+            "sourceEdgeId": "source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0",
+            "connectorId": "navigation:source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0",
+            "from": "P-221",
+            "to": "P-220",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 5,
+            "fromAncestryIds": [
+              "A-200",
+              "P-220",
+              "P-221"
+            ],
+            "toAncestryIds": [
+              "A-200",
+              "P-220"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0",
+            "sourceEdgeId": "source-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0",
+            "connectorId": "navigation:source-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0",
+            "from": "P-222",
+            "to": "P-220",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 6,
+            "fromAncestryIds": [
+              "A-200",
+              "P-220",
+              "P-222"
+            ],
+            "toAncestryIds": [
+              "A-200",
+              "P-220"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0",
+            "sourceEdgeId": "source-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0",
+            "connectorId": "navigation:source-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0",
+            "from": "P-230",
+            "to": "P-220",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 7,
+            "fromAncestryIds": [
+              "A-200",
+              "P-230"
+            ],
+            "toAncestryIds": [
+              "A-200",
+              "P-220"
+            ]
+          }
+        ],
+        "expectedStructuralEdges": [
+          {
+            "id": "P-100__contains__P-110__source-edge-ab5588ab1956df4d89ce800278eeb7465dada639faa6b19afcbd7ae53e76e119-0",
+            "sourceEdgeIds": [
+              "source-edge-ab5588ab1956df4d89ce800278eeb7465dada639faa6b19afcbd7ae53e76e119-0",
+              "source-edge-cfebcdb1f763c5f82ef500494abc390cd4f223678510483e8a1946b2dce3107b-0"
+            ],
+            "from": "P-100",
+            "to": "P-110",
+            "role": "contains_navigation",
+            "markers": {
+              "end": "arrow"
+            }
+          },
+          {
+            "id": "P-220__contains__P-221__source-edge-1a4b74752f522d2bb8dc201b058b1224b58520f998f06fdcecf1fd9f55c3d249-0",
+            "sourceEdgeIds": [
+              "source-edge-1a4b74752f522d2bb8dc201b058b1224b58520f998f06fdcecf1fd9f55c3d249-0",
+              "source-edge-cef72a4b0ceb0a377c9e8d8168868dbc81a25b0d3773fd3ccf58255f74982aae-0"
+            ],
+            "from": "P-220",
+            "to": "P-221",
+            "role": "contains_navigation",
+            "markers": {
+              "end": "arrow"
+            }
+          },
+          {
+            "id": "P-220__contains__P-222__source-edge-028d7ca5cdfce89e3d30d846a54c7e56ae61268f502f7c005097ff89c69e6dd9-0",
+            "sourceEdgeIds": [
+              "source-edge-028d7ca5cdfce89e3d30d846a54c7e56ae61268f502f7c005097ff89c69e6dd9-0",
+              "source-edge-29273ec38508b2751ca4f4ed5de6829aea07e540910a9d72c934681c1d6a36e7-0"
+            ],
+            "from": "P-220",
+            "to": "P-222",
+            "role": "contains_navigation",
+            "markers": {
+              "end": "arrow"
+            }
+          }
+        ]
+      }
+    },
     "layout": {
       "strategy": "stack",
       "direction": "horizontal",
@@ -1145,6 +1347,22 @@
                     "side": "west",
                     "x": 0,
                     "y": 81
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:source:P-210",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:source:P-210",
+                    "side": "south",
+                    "offset": 108,
+                    "x": 108,
+                    "y": 162
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:source:P-210",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:source:P-210",
+                    "side": "south",
+                    "offset": 124,
+                    "x": 124,
+                    "y": 162
                   }
                 ],
                 "overflow": {
@@ -1194,7 +1412,10 @@
                       "strategy": "stack",
                       "direction": "vertical",
                       "gap": 32,
-                      "crossAlignment": "start"
+                      "crossAlignment": "start",
+                      "gapAfter": {
+                        "P-220": 56
+                      }
                     },
                     "chrome": {
                       "padding": {
@@ -1432,6 +1653,38 @@
                             "side": "west",
                             "x": 0,
                             "y": 49
+                          },
+                          {
+                            "id": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:target:P-220",
+                            "role": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:target:P-220",
+                            "side": "north",
+                            "offset": 108,
+                            "x": 108,
+                            "y": 0
+                          },
+                          {
+                            "id": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:target:P-220",
+                            "role": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:target:P-220",
+                            "side": "south",
+                            "offset": 92,
+                            "x": 92,
+                            "y": 98
+                          },
+                          {
+                            "id": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:target:P-220",
+                            "role": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:target:P-220",
+                            "side": "south",
+                            "offset": 108,
+                            "x": 108,
+                            "y": 98
+                          },
+                          {
+                            "id": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:target:P-220",
+                            "role": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:target:P-220",
+                            "side": "south",
+                            "offset": 124,
+                            "x": 124,
+                            "y": 98
                           }
                         ],
                         "overflow": {
@@ -1723,6 +1976,14 @@
                                     "side": "west",
                                     "x": 0,
                                     "y": 65.5
+                                  },
+                                  {
+                                    "id": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:source:P-221",
+                                    "role": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:source:P-221",
+                                    "side": "north",
+                                    "offset": 108,
+                                    "x": 108,
+                                    "y": 0
                                   }
                                 ],
                                 "overflow": {
@@ -1990,6 +2251,14 @@
                                     "side": "west",
                                     "x": 0,
                                     "y": 56
+                                  },
+                                  {
+                                    "id": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:source:P-222",
+                                    "role": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:source:P-222",
+                                    "side": "north",
+                                    "offset": 108,
+                                    "x": 108,
+                                    "y": 0
                                   }
                                 ],
                                 "overflow": {
@@ -2011,7 +2280,7 @@
                     ],
                     "ports": [],
                     "width": 272,
-                    "height": 405
+                    "height": 429
                   },
                   {
                     "kind": "container",
@@ -2267,6 +2536,22 @@
                             "side": "west",
                             "x": 0,
                             "y": 56
+                          },
+                          {
+                            "id": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:target:P-230",
+                            "role": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:target:P-230",
+                            "side": "north",
+                            "offset": 108,
+                            "x": 108,
+                            "y": 0
+                          },
+                          {
+                            "id": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:source:P-230",
+                            "role": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:source:P-230",
+                            "side": "north",
+                            "offset": 124,
+                            "x": 124,
+                            "y": 0
                           }
                         ],
                         "overflow": {
@@ -2283,17 +2568,17 @@
                 ],
                 "ports": [],
                 "width": 320,
-                "height": 549
+                "height": 573
               }
             ],
             "ports": [],
             "width": 320,
-            "height": 743
+            "height": 767
           }
         ],
         "ports": [],
         "width": 352,
-        "height": 815
+        "height": 839
       },
       {
         "kind": "container",
@@ -4066,17 +4351,18 @@
     ],
     "ports": [],
     "width": 1888,
-    "height": 863
+    "height": 887
   },
   "edges": [
     {
-      "id": "P-100__nav__P-110",
+      "id": "P-100__contains__P-110__source-edge-ab5588ab1956df4d89ce800278eeb7465dada639faa6b19afcbd7ae53e76e119-0",
       "role": "contains_navigation",
       "classes": [
         "ia_local_structure",
         "contains_edge",
-        "merged_navigation",
-        "direct_vertical"
+        "structural_only",
+        "direct_vertical",
+        "merged_navigation"
       ],
       "from": {
         "itemId": "P-100",
@@ -4097,16 +4383,23 @@
       },
       "markers": {
         "end": "arrow"
+      },
+      "viewMetadata": {
+        "sourceEdgeIds": [
+          "source-edge-ab5588ab1956df4d89ce800278eeb7465dada639faa6b19afcbd7ae53e76e119-0",
+          "source-edge-cfebcdb1f763c5f82ef500494abc390cd4f223678510483e8a1946b2dce3107b-0"
+        ]
       }
     },
     {
-      "id": "P-220__nav__P-221",
+      "id": "P-220__contains__P-221__source-edge-1a4b74752f522d2bb8dc201b058b1224b58520f998f06fdcecf1fd9f55c3d249-0",
       "role": "contains_navigation",
       "classes": [
         "ia_local_structure",
         "contains_edge",
-        "merged_navigation",
-        "shared_trunk"
+        "structural_only",
+        "shared_trunk",
+        "merged_navigation"
       ],
       "from": {
         "itemId": "P-220",
@@ -4127,16 +4420,23 @@
       },
       "markers": {
         "end": "arrow"
+      },
+      "viewMetadata": {
+        "sourceEdgeIds": [
+          "source-edge-1a4b74752f522d2bb8dc201b058b1224b58520f998f06fdcecf1fd9f55c3d249-0",
+          "source-edge-cef72a4b0ceb0a377c9e8d8168868dbc81a25b0d3773fd3ccf58255f74982aae-0"
+        ]
       }
     },
     {
-      "id": "P-220__nav__P-222",
+      "id": "P-220__contains__P-222__source-edge-028d7ca5cdfce89e3d30d846a54c7e56ae61268f502f7c005097ff89c69e6dd9-0",
       "role": "contains_navigation",
       "classes": [
         "ia_local_structure",
         "contains_edge",
-        "merged_navigation",
-        "shared_trunk"
+        "structural_only",
+        "shared_trunk",
+        "merged_navigation"
       ],
       "from": {
         "itemId": "P-220",
@@ -4157,66 +4457,172 @@
       },
       "markers": {
         "end": "arrow"
+      },
+      "viewMetadata": {
+        "sourceEdgeIds": [
+          "source-edge-028d7ca5cdfce89e3d30d846a54c7e56ae61268f502f7c005097ff89c69e6dd9-0",
+          "source-edge-29273ec38508b2751ca4f4ed5de6829aea07e540910a9d72c934681c1d6a36e7-0"
+        ]
       }
     },
     {
-      "id": "P-210__nav__P-220",
+      "id": "navigation:source-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0",
       "role": "navigation",
       "classes": [
-        "ia_local_structure",
-        "follower_edge",
-        "merged_navigation",
-        "shared_trunk"
+        "ia_navigation",
+        "navigation_occurrence"
       ],
       "from": {
         "itemId": "P-210",
-        "portId": "south_chain",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:source:P-210",
         "x": 0,
         "y": 0
       },
       "to": {
         "itemId": "P-220",
-        "portId": "west",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:target:P-220",
         "x": 0,
         "y": 0
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "localPattern": "ia_shared_trunk"
+        "preferAxis": "horizontal"
       },
       "markers": {
         "end": "arrow"
+      },
+      "viewMetadata": {
+        "sourceEdgeIds": [
+          "source-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0"
+        ]
       }
     },
     {
-      "id": "P-210__nav__P-230",
+      "id": "navigation:source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0",
       "role": "navigation",
       "classes": [
-        "ia_local_structure",
-        "follower_edge",
-        "merged_navigation",
-        "shared_trunk"
+        "ia_navigation",
+        "navigation_occurrence"
       ],
       "from": {
         "itemId": "P-210",
-        "portId": "south_chain",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:source:P-210",
         "x": 0,
         "y": 0
       },
       "to": {
         "itemId": "P-230",
-        "portId": "west",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:target:P-230",
         "x": 0,
         "y": 0
       },
       "routing": {
         "style": "orthogonal",
-        "preferAxis": "horizontal",
-        "localPattern": "ia_shared_trunk"
+        "preferAxis": "horizontal"
       },
       "markers": {
         "end": "arrow"
+      },
+      "viewMetadata": {
+        "sourceEdgeIds": [
+          "source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0"
+        ]
+      }
+    },
+    {
+      "id": "navigation:source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0",
+      "role": "navigation",
+      "classes": [
+        "ia_navigation",
+        "navigation_occurrence"
+      ],
+      "from": {
+        "itemId": "P-221",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:source:P-221",
+        "x": 0,
+        "y": 0
+      },
+      "to": {
+        "itemId": "P-220",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:target:P-220",
+        "x": 0,
+        "y": 0
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "viewMetadata": {
+        "sourceEdgeIds": [
+          "source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0"
+        ]
+      }
+    },
+    {
+      "id": "navigation:source-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0",
+      "role": "navigation",
+      "classes": [
+        "ia_navigation",
+        "navigation_occurrence"
+      ],
+      "from": {
+        "itemId": "P-222",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:source:P-222",
+        "x": 0,
+        "y": 0
+      },
+      "to": {
+        "itemId": "P-220",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:target:P-220",
+        "x": 0,
+        "y": 0
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "viewMetadata": {
+        "sourceEdgeIds": [
+          "source-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0"
+        ]
+      }
+    },
+    {
+      "id": "navigation:source-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0",
+      "role": "navigation",
+      "classes": [
+        "ia_navigation",
+        "navigation_occurrence"
+      ],
+      "from": {
+        "itemId": "P-230",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:source:P-230",
+        "x": 0,
+        "y": 0
+      },
+      "to": {
+        "itemId": "P-220",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:target:P-220",
+        "x": 0,
+        "y": 0
+      },
+      "routing": {
+        "style": "orthogonal",
+        "preferAxis": "horizontal"
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "viewMetadata": {
+        "sourceEdgeIds": [
+          "source-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0"
+        ]
       }
     }
   ],

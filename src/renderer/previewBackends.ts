@@ -1,4 +1,7 @@
-import { ensureProjectionSourceEdgeIndex, projectionOccurrenceDiagnostics } from "../projector/edgeOccurrences.js";
+import {
+  projectionOccurrenceDiagnostics,
+  requiresExactProjectionEdgeReferences
+} from "../projector/edgeOccurrences.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import type { CompiledGraph } from "../compiler/types.js";
 import type { Projection } from "../projector/types.js";
@@ -17,6 +20,7 @@ import type {
 } from "./renderArtifacts.js";
 import { resolveStagedPreviewStyle } from "./previewStyle.js";
 import type { RendererDiagnostic } from "./staged/diagnostics.js";
+import { RendererArtifactError } from "./staged/diagnostics.js";
 import {
   renderIaPlaceMapStagedPng,
   renderIaPlaceMapStagedSvg
@@ -247,8 +251,10 @@ const previewBackends: Record<PreviewRendererBackendId, PreviewBackendDescriptor
   [STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
     id: STAGED_IA_PLACE_MAP_PREVIEW_BACKEND_ID,
     viewId: "ia_place_map",
-    renderSvg: renderIaPlaceMapStagedSvg,
-    renderPng: renderIaPlaceMapStagedPng
+    renderSvg: (projection, graph, view, settings, bundle) =>
+      renderIaPlaceMapStagedSvg(projection, graph, view, settings, bundle),
+    renderPng: (projection, graph, view, settings, bundle) =>
+      renderIaPlaceMapStagedPng(projection, graph, view, settings, bundle)
   }),
   [STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID]: createStagedProjectionPreviewBackend({
     id: STAGED_JOURNEY_MAP_PREVIEW_BACKEND_ID,
@@ -300,16 +306,28 @@ export class PreviewArtifactRenderingError extends Error {
 }
 
 export async function renderPreviewArtifact(request: RenderPreviewArtifactRequest): Promise<PreviewArtifactResult> {
-  if (request.source.kind === "projection" && request.source.projection.diagram_id) {
-    ensureProjectionSourceEdgeIndex(request.source.graph, request.bundle);
-    const diagnostics = projectionOccurrenceDiagnostics(request.source.projection, request.source.graph, request.bundle);
+  if (request.source.kind === "projection") {
+    const diagnostics = projectionOccurrenceDiagnostics(
+      request.source.projection,
+      request.source.graph,
+      request.bundle,
+      undefined,
+      request.view.id
+    );
     if (diagnostics.length) throw new PreviewArtifactRenderingError(diagnostics.map(diagnostic => ({
       phase: "scene", code: diagnostic.code, severity: diagnostic.severity, message: diagnostic.message
     })));
   }
   const backend = getPreviewBackend(request.backendId);
-  const rendered = await backend.render(request);
-  if (request.source.kind === "projection" && request.source.projection.diagram_id
+  let rendered: PreviewArtifactResult;
+  try {
+    rendered = await backend.render(request);
+  } catch (error) {
+    if (error instanceof RendererArtifactError) throw new PreviewArtifactRenderingError(error.diagnostics);
+    throw error;
+  }
+  if ((request.source.kind === "projection" && request.source.projection.diagram_id
+    || requiresExactProjectionEdgeReferences(request.bundle, request.view.id))
     && rendered.diagnostics?.some(diagnostic => diagnostic.severity === "error")) {
     throw new PreviewArtifactRenderingError(rendered.diagnostics);
   }

@@ -11,7 +11,20 @@ import { createTextMeasurementService } from "./textMeasurement.js";
 
 const EPSILON = 0.5;
 const metric = (value: number): number => Math.round(value * 1000) / 1000;
-export type ConnectorLabelProblemKind = "missing" | "detached" | "node" | "header" | "separator" | "label" | "connector" | "marker" | "bounds";
+
+/** Wrapping may split a word; only source whitespace at a line boundary may disappear. */
+export function wrappedLabelPreservesText(lines: readonly string[], sourceText: string): boolean {
+  const expected = sourceText.replace(/\s+/g, " ").trim();
+  let cursor = 0;
+  for (const [index, rawLine] of lines.entries()) {
+    const line = rawLine.replace(/\s+/g, " ").trim();
+    if (!expected.startsWith(line, cursor)) return false;
+    cursor += line.length;
+    if (index < lines.length - 1 && expected[cursor] === " ") cursor++;
+  }
+  return cursor === expected.length;
+}
+export type ConnectorLabelProblemKind = "missing" | "detached" | "ambiguous" | "node" | "header" | "separator" | "label" | "connector" | "marker" | "bounds";
 export interface ConnectorLabelProblem { connectorId: string; kind: ConnectorLabelProblemKind; obstacleId?: string }
 export interface ConnectorLabelObstacle extends BlockingBox { kind: "node" | "header" | "marker"; id: string }
 export interface ConnectorLabelLayoutInput {
@@ -20,6 +33,9 @@ export interface ConnectorLabelLayoutInput {
   /** Adapter-owned geometric envelopes, never semantic identifiers. */
   scopeByConnectorId?: ReadonlyMap<string, LabelBox>;
   separators?: readonly HorizontalLineSegment[];
+  /** Reject a label that associates at least as closely with a competing route. */
+  rejectAmbiguousAssociation?: boolean;
+  eventBasedHorizontalSearch?: boolean;
 }
 export interface ConnectorLabelAssessment {
   labels: ReadonlyMap<string, PositionedEdgeLabel>;
@@ -93,7 +109,15 @@ function buildAudit(input: ConnectorLabelLayoutInput) {
     const problems: ConnectorLabelProblem[] = [];
     const add = (kind: ConnectorLabelProblemKind, obstacleId?: string) => problems.push({ connectorId: id, kind, obstacleId });
     if (!contains(input.scene.root, box) || !contains(input.scopeByConnectorId?.get(id) ?? input.scene.root, box)) add("bounds");
-    if (!(segments.get(id) ?? []).some(segment => labelAssociatedWithSegment(box, segment))) add("detached");
+    const ownAnchors = (segments.get(id) ?? []).filter(segment => labelAssociatedWithSegment(box, segment));
+    if (!ownAnchors.length) add("detached");
+    if (input.rejectAmbiguousAssociation && ownAnchors.length) {
+      const ownDistance = Math.min(...ownAnchors.map(segment => labelBoxDistanceToSegment(box, segment)));
+      for (const [otherId, details] of segments) {
+        if (otherId !== id && details.some(segment => labelAssociatedWithSegment(box, segment)
+          && labelBoxDistanceToSegment(box, segment) <= ownDistance + EPSILON)) add("ambiguous", otherId);
+      }
+    }
     for (const obstacle of obstacles) if (labelBoxesOverlap(box, obstacle)) add(obstacle.kind, obstacle.id);
     for (const [otherId, other] of labels) if (otherId !== id && labelBoxesOverlap(box, inflate(other, FIXED_LABEL_DISTANCE))) add("label", otherId);
     for (const [otherId, details] of segments) if (otherId !== id && details.some(segment => labelBoxIntersectsSegment(box, segment))) add("connector", otherId);
@@ -155,6 +179,7 @@ export function assessConnectorLabels(input: ConnectorLabelLayoutInput): Connect
         separatorSegments: input.separators ?? [], scene: input.scene, diagnostics: [],
         connectorBlockMode: "all_segments", separatorBlockMode: "box", horizontalPlacementMode: "scenario_side_offsets",
         horizontalSideLabelDistance: FIXED_LABEL_DISTANCE, includeAdjacentHorizontalLabelAnchors: true,
+        eventBasedHorizontalSearch: input.eventBasedHorizontalSearch,
         horizontalLabelAssociationPolicy: { maxDetachedDistance: FIXED_LABEL_DISTANCE,
           minStrongOverlap: FIXED_LABEL_CLEARANCE, maxStrongDetachedDistance: FIXED_LABEL_DISTANCE },
         isCandidateAcceptable: box => labelAssociatedWithSegment(box, segment)
@@ -223,9 +248,9 @@ export function measureConnectorLabelCapacity(corridors: readonly ConnectorLabel
   return [...requests.values()].sort((a, b) => a.axis.localeCompare(b.axis) || a.owner.localeCompare(b.owner));
 }
 
-/** One chosen anchor per label. The supporting route and label share one claim. */
-export function connectorLabelCapacityClaims(input: ConnectorLabelLayoutInput,
-  assessment: ConnectorLabelAssessment, corridors: readonly ConnectorLabelCorridor[]): ConnectorLabelCapacityClaim[] {
+/** Failed placements use a prospective route anchor rather than their detached fallback position. */
+export function connectorLabelCapacityAnchors(input: ConnectorLabelLayoutInput,
+  assessment: ConnectorLabelAssessment): ReadonlyMap<string, RouteSegmentDetail> {
   const unresolved = new Set(assessment.problems.map(problem => problem.connectorId));
   // Choose one prospective anchor once, before projecting demand into either axis.
   const anchorById = new Map(assessment.anchorByConnectorId);
@@ -236,6 +261,14 @@ export function connectorLabelCapacityClaims(input: ConnectorLabelLayoutInput,
     details.sort((a, b) => length(b) - length(a) || a.routeSegmentIndex - b.routeSegmentIndex);
     if (details[0]) anchorById.set(edge.id, details[0]);
   }
+  return anchorById;
+}
+
+/** One chosen anchor per label. The supporting route and label share one claim. */
+export function connectorLabelCapacityClaims(input: ConnectorLabelLayoutInput,
+  assessment: ConnectorLabelAssessment, corridors: readonly ConnectorLabelCorridor[]): ConnectorLabelCapacityClaim[] {
+  const unresolved = new Set(assessment.problems.map(problem => problem.connectorId));
+  const anchorById = connectorLabelCapacityAnchors(input, assessment);
   const claims: ConnectorLabelCapacityClaim[] = [];
   for (const corridor of corridors) {
     if (!corridor.connectorIds.some(id => unresolved.has(id))) continue;

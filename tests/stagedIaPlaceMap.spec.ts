@@ -137,8 +137,8 @@ async function buildIaArtifacts(examplePath: string, profileId: string, bundleMa
     throw new Error(`Could not project ${examplePath} to ia_place_map.`);
   }
 
-  const rendererScene = buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" });
-  const rendered = await renderIaPlaceMapStagedSvg(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" });
+  const rendererScene = buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" }, bundle);
+  const rendered = await renderIaPlaceMapStagedSvg(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" }, bundle);
 
   return {
     rendererScene,
@@ -167,7 +167,7 @@ async function buildIaRendererSceneFromSource(sourceText: string, profileId = "s
     throw new Error("Could not project inline ia_place_map source.");
   }
 
-  return buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" });
+  return buildIaPlaceMapRendererScene(projected.projection, compiled.graph, view, { detailId: profileId === "simple" ? "compact" : "detailed" }, bundle);
 }
 
 describe("staged ia_place_map", () => {
@@ -442,26 +442,24 @@ describe("staged ia_place_map", () => {
     expect(funding.y).toBeGreaterThan(feeSchedule.y);
     expect(createProjection.y).toBeGreaterThan(funding.y);
 
-    expect(rendered.positionedScene.edges.map((edge) => edge.id)).toEqual([
-      "P-100__nav__P-110",
-      "P-220__nav__P-221",
-      "P-220__nav__P-222",
-      "P-210__nav__P-220",
-      "P-210__nav__P-230"
+    expect(rendered.diagnostics).toEqual([]);
+    expect(rendered.positionedScene.edges.map(edge => `${edge.from.itemId}->${edge.to.itemId}`).sort()).toEqual([
+      "P-100->P-110", "P-210->P-220", "P-210->P-230", "P-220->P-221", "P-220->P-222",
+      "P-221->P-220", "P-222->P-220", "P-230->P-220"
     ]);
-    expect(rendered.positionedScene.edges.some((edge) => edge.id === "P-221__nav__P-220")).toBe(false);
-    expect(rendered.positionedScene.edges.some((edge) => edge.id === "P-222__nav__P-220")).toBe(false);
-    expect(rendered.positionedScene.edges.some((edge) => edge.id === "P-230__nav__P-220")).toBe(false);
 
-    const directVertical = rendered.positionedScene.edges.find((edge) => edge.id === "P-100__nav__P-110");
+    const directVertical = rendered.positionedScene.edges.find(edge => edge.from.itemId === "P-100" && edge.to.itemId === "P-110");
     if (!directVertical) {
       throw new Error("Expected the direct Dashboard -> Report View connector.");
     }
     expectDirectVerticalRoute(directVertical);
 
     rendered.positionedScene.edges
-      .filter((edge) => edge.id !== "P-100__nav__P-110")
+      .filter((edge) => edge.classes.includes("shared_trunk"))
       .forEach((edge) => expectSharedTrunkRoute(edge));
+    for (const edge of rendered.positionedScene.edges) {
+      expect(getTerminalSegmentLength(edge)).toBeGreaterThanOrEqual(12);
+    }
 
     await expectRendererStageSnapshot("ia-place-map.billSage-structure.renderer-scene.json", rendererScene);
     await expectRendererStageSnapshot("ia-place-map.billSage-structure.measured-scene.json", rendered.measuredScene);

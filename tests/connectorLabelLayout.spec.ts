@@ -4,6 +4,7 @@ import {
   assessConnectorLabels, auditConnectorLabels, labelAssociatedWithSegment, measureConnectorLabelCapacity,
   type ConnectorLabelCapacityClaim, type ConnectorLabelCorridor
 } from "../src/renderer/staged/connectorLabelLayout.js";
+import { wrappedLabelPreservesText } from "../src/renderer/staged/connectorLabelLayout.js";
 import { buildRouteSegmentDetails } from "../src/renderer/staged/connectorLabelPlacement.js";
 
 const measured = { lines: ["label"], width: 40, height: 20, lineHeight: 20, textStyleRole: "edge_label" };
@@ -23,6 +24,13 @@ function scene(edges = [edge()]): PositionedScene {
 const input = (s: PositionedScene) => ({ scene: s, expectedLabels: new Map([["a", measured]]) });
 
 describe("shared connector label audit and placement", () => {
+  it("audits source text across word and token wrapping without hiding changed characters", () => {
+    expect(wrappedLabelPreservesText(["[Open", "workspace]", "{workspace", "selected}"], "[Open workspace] {workspace selected}")).toBe(true);
+    expect(wrappedLabelPreservesText(["[LongToken", "WithoutSpaces]"], "[LongTokenWithoutSpaces]")).toBe(true);
+    expect(wrappedLabelPreservesText(["[LongToken", "WrongSpaces]"], "[LongTokenWithoutSpaces]")).toBe(false);
+    expect(wrappedLabelPreservesText(["{workspaceselected}"], "{workspace selected}")).toBe(false);
+    expect(wrappedLabelPreservesText(["[Open…]"], "[Open workspace]")).toBe(false);
+  });
   it.each(["horizontal", "vertical"] as const)("requires distance and projected overlap on a %s segment", orientation => {
     const points = orientation === "horizontal" ? [{ x: 0, y: 100 }, { x: 100, y: 100 }]
       : [{ x: 100, y: 0 }, { x: 100, y: 100 }];
@@ -52,11 +60,39 @@ describe("shared connector label audit and placement", () => {
     expect(assessment.problems).toEqual([]);
     expect(assessment.anchorByConnectorId.get("a")!.orientation).toBe("horizontal");
   });
+  it("uses exact segment events when a short self-loop has a narrow legal label interval", () => {
+    const label = { ...measured, width: 155.676, height: 36 };
+    const s = scene([edge("a", [{ x: 32, y: 188 }, { x: 52, y: 188 }], { ...label, x: -25.838, y: 194 })]);
+    const options = { scene: s, expectedLabels: new Map([["a", label]]),
+      scopeByConnectorId: new Map([["a", { x: 24, y: 24, width: 256, height: 260 }]]) };
+    const accepted = assessConnectorLabels({ ...options, eventBasedHorizontalSearch: true });
+    expect(accepted.problems).toEqual([]);
+    expect(accepted.labels.get("a")!.x).toBe(32);
+    expect(auditConnectorLabels({ ...options, scene: { ...s, edges: [{ ...s.edges[0]!, label: accepted.labels.get("a") }] } }).problems).toEqual([]);
+  });
   it("audits missing labels without silently omitting measured text", () => {
     const s = scene([edge("a", undefined, undefined)]);
     s.edges[0]!.label = undefined;
     expect(auditConnectorLabels(input(s)).problems.map(p => p.kind)).toContain("missing");
     expect(assessConnectorLabels(input(s)).labels.get("a")!.lines).toEqual(measured.lines);
+  });
+  it("rejects equal or closer competing associations even when neither route intersects the label", () => {
+    const label = { ...measured, x: 80, y: 108 };
+    const s = scene([edge("a", [{ x: 20, y: 100 }, { x: 220, y: 100 }], label),
+      edge("b", [{ x: 20, y: 136 }, { x: 220, y: 136 }])]);
+    s.edges[1]!.label = undefined;
+    const strict = { ...input(s), rejectAmbiguousAssociation: true };
+    expect(auditConnectorLabels(input(s)).problems).toEqual([]);
+    expect(auditConnectorLabels(strict).problems).toContainEqual({ connectorId: "a", kind: "ambiguous", obstacleId: "b" });
+    expect(assessConnectorLabels(strict).problems).toEqual([]);
+    expect(assessConnectorLabels(strict).labels.get("a")).not.toEqual(label);
+  });
+  it("accepts a uniquely closer route and ignores nearby routes without projected overlap", () => {
+    const s = scene([edge("a", [{ x: 20, y: 100 }, { x: 220, y: 100 }], { ...measured, x: 80, y: 104 }),
+      edge("b", [{ x: 20, y: 136 }, { x: 220, y: 136 }]),
+      edge("c", [{ x: 200, y: 102 }, { x: 220, y: 102 }])]);
+    s.edges[1]!.label = undefined; s.edges[2]!.label = undefined;
+    expect(auditConnectorLabels({ ...input(s), rejectAmbiguousAssociation: true }).problems).toEqual([]);
   });
   it("audits other connectors and markers, while allowing the label's own route", () => {
     expect(auditConnectorLabels(input(scene())).problems).toEqual([]);

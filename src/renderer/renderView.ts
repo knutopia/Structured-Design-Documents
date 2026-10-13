@@ -1,4 +1,4 @@
-import { ensureProjectionSourceEdgeIndex, projectionOccurrenceDiagnostics } from "../projector/edgeOccurrences.js";
+import { projectionOccurrenceDiagnostics } from "../projector/edgeOccurrences.js";
 import type { Bundle, ViewSpec } from "../bundle/types.js";
 import {
   getBundleRenderDetailFallback,
@@ -23,8 +23,7 @@ export function renderPreparedProjectionText(
   projection: Projection,
   options: ResolvedRenderOptions
 ): RenderResult {
-  if (projection.diagram_id) ensureProjectionSourceEdgeIndex(graph, bundle);
-  const occurrenceDiagnostics = projectionOccurrenceDiagnostics(projection, graph, bundle);
+  const occurrenceDiagnostics = projectionOccurrenceDiagnostics(projection, graph, bundle, undefined, view.id);
   if (occurrenceDiagnostics.length) return { format: options.format, viewId: options.viewId, profileId: options.profileId,
     detailId: options.detailId, notes: [], diagnostics: occurrenceDiagnostics };
   const renderer = getViewTextRenderer(options.viewId);

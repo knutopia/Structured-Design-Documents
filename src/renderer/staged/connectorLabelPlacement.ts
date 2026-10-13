@@ -126,6 +126,8 @@ export interface ConnectorLabelPlacementOptions {
   separatorBlockMode?: "vertical_stem" | "box";
   horizontalPlacementMode?: "service_shift_right" | "scenario_side_offsets";
   horizontalSideLabelDistance?: number;
+  /** Include segment/obstacle boundary events in narrow label channels. */
+  eventBasedHorizontalSearch?: boolean;
   includeAdjacentHorizontalLabelAnchors?: boolean;
   nearbyHorizontalLabelPreference?: NearbyHorizontalLabelPreference;
   horizontalLabelAssociationPolicy?: HorizontalLabelAssociationPolicy;
@@ -1170,7 +1172,8 @@ function buildScenarioHorizontalLabelSearchCandidates(
   sideLabelDistance = FIXED_LABEL_CLEARANCE,
   labelLanePreference?: HorizontalLabelLanePreference,
   associationPolicy?: HorizontalLabelAssociationPolicy,
-  preferSidePlacement = false
+  preferSidePlacement = false,
+  eventBasedSearch = false
 ): HorizontalLabelPlacementCandidate[] {
   const xBase = anchorPoint.x - measuredLabel.width / 2;
   const xOffsets: number[] = [];
@@ -1181,6 +1184,12 @@ function buildScenarioHorizontalLabelSearchCandidates(
   for (let attempt = 1; attempt <= 12; attempt += 1) {
     xOffsets.push(attempt * FIXED_LABEL_CLEARANCE);
     xOffsets.push(-attempt * FIXED_LABEL_CLEARANCE);
+  }
+  if (eventBasedSearch) {
+    const left = Math.min(segment.start.x, segment.end.x), right = Math.max(segment.start.x, segment.end.x);
+    for (const x of [left, right - measuredLabel.width,
+      ...blockedBoxes.flatMap(box => [box.x, box.x + box.width, box.x - measuredLabel.width,
+        box.x + box.width - measuredLabel.width])]) xOffsets.push(roundMetric(x - xBase));
   }
 
   const yCandidates: Array<{ y: number; tierRank: number }> = [];
@@ -1299,7 +1308,8 @@ function resolveScenarioHorizontalLabelPlacement(
   labelLanePreference?: HorizontalLabelLanePreference,
   associationPolicy?: HorizontalLabelAssociationPolicy,
   preferSidePlacement = false,
-  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"]
+  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"],
+  eventBasedSearch = false
 ): ConnectorLabelPlacementResult {
   const candidates = buildScenarioHorizontalLabelSearchCandidates(
     measuredLabel,
@@ -1309,7 +1319,8 @@ function resolveScenarioHorizontalLabelPlacement(
     horizontalSideLabelDistance,
     labelLanePreference,
     associationPolicy,
-    preferSidePlacement
+    preferSidePlacement,
+    eventBasedSearch
   );
 
   for (const candidate of candidates) {
@@ -1510,7 +1521,8 @@ export function positionConnectorLabel(
             options.horizontalLabelLanePreference,
             options.horizontalLabelAssociationPolicy,
             options.preferHorizontalSidePlacement,
-            options.isCandidateAcceptable
+            options.isCandidateAcceptable,
+            options.eventBasedHorizontalSearch
           )
         : resolveServiceHorizontalLabelPlacement(
             connectorId,

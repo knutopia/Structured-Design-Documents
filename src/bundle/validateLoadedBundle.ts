@@ -10,6 +10,7 @@ import type {
   Bundle,
   GuidedDisplayRule,
   ProfileRule,
+  RelationshipContract,
   RuleLogic
 } from "./types.js";
 
@@ -52,6 +53,42 @@ function duplicateValues(values: string[]): string[] {
     seen.add(value);
   }
   return [...duplicates].sort();
+}
+
+function supportedAnnotationFields(relationship: RelationshipContract): Set<string> {
+  const supported = new Set<string>();
+  for (const rule of relationship.constraints) {
+    const logic = record(rule.rule_logic);
+    if (logic?.kind === "edge_field_support") {
+      for (const field of strings(logic.annotations) ?? []) supported.add(field);
+    }
+  }
+  return supported;
+}
+
+function validatePresentationAnnotationReferences(
+  relationship: RelationshipContract,
+  nodeTypes: Set<string>,
+  add: (code: string, message: string) => void
+): void {
+  if (relationship.presentation_annotation_references === undefined) return;
+  const references = record(relationship.presentation_annotation_references);
+  if (!references) {
+    add("bundle.contracts.presentation_annotation_references_shape", `Relationship '${relationship.type}' presentation_annotation_references must be an object`);
+    return;
+  }
+  const supported = supportedAnnotationFields(relationship);
+  for (const [field, rawDescriptor] of Object.entries(references)) {
+    const descriptor = record(rawDescriptor);
+    if (!supported.has(field)) {
+      add("bundle.contracts.presentation_annotation_reference_field", `Relationship '${relationship.type}' presentation reference field '${field}' is not a supported annotation`);
+    }
+    if (!descriptor || !sameStringSet(Object.keys(descriptor), ["node_type"]) || typeof descriptor.node_type !== "string") {
+      add("bundle.contracts.presentation_annotation_reference_shape", `Relationship '${relationship.type}' presentation reference '${field}' must declare exactly node_type`);
+    } else if (!nodeTypes.has(descriptor.node_type)) {
+      add("bundle.contracts.presentation_annotation_reference_node_type", `Relationship '${relationship.type}' presentation reference '${field}' uses unknown node type '${descriptor.node_type}'`);
+    }
+  }
 }
 
 function caseInsensitiveTokenCollisions(bundle: Bundle): Array<{ source: string; tokens: string[] }> {
@@ -265,6 +302,121 @@ function validateBundleReferences(bundle: Bundle, add: (code: string, message: s
   }
 }
 
+function validateIaPlaceMapPolicy(
+  bundle: Bundle,
+  view: Bundle["views"]["views"][number],
+  value: unknown,
+  detailIds: string[],
+  nodeTypes: Set<string>,
+  relationshipTypes: Set<string>,
+  add: (code: string, message: string) => void
+): void {
+  if (value === undefined) return;
+  const label = `View '${view.id}' renderer_defaults.ia_place_map`;
+  const fail = (suffix: string, message: string): void => add(`bundle.renderer.ia_place_map_${suffix}`, `${label}: ${message}`);
+  const includedNodeTypes = strings(view.projection?.include_node_types) ?? [];
+  const includedEdgeTypes = strings(view.projection?.include_edge_types) ?? [];
+  const hierarchyEdges = strings(view.projection?.hierarchy_edges) ?? [];
+  const policy = record(value);
+  if (!policy || !sameStringSet(Object.keys(policy), ["projection_edge_references", "navigation"])) {
+    fail("policy_shape", "must declare exactly projection_edge_references and navigation");
+    return;
+  }
+  if (policy.projection_edge_references !== "exact_source_occurrences") {
+    fail("projection_references", "projection_edge_references must be exact_source_occurrences");
+  }
+  const navigation = record(policy.navigation);
+  if (!navigation || !sameStringSet(Object.keys(navigation), ["relationship", "occurrence_coverage", "presentation", "containment_fusion"])) {
+    fail("navigation_shape", "navigation must declare relationship, occurrence_coverage, presentation, and containment_fusion");
+    return;
+  }
+  const navigationType = navigation.relationship;
+  const navigationContract = typeof navigationType === "string"
+    ? bundle.contracts.relationships.find((relationship) => relationship.type === navigationType)
+    : undefined;
+  if (typeof navigationType !== "string" || !relationshipTypes.has(navigationType) || !navigationContract) {
+    fail("navigation_relationship", "navigation.relationship must reference a loaded relationship contract");
+  } else {
+    if (!includedEdgeTypes.includes(navigationType)) {
+      fail("navigation_relationship", `relationship '${navigationType}' must be included by the view projection`);
+    }
+    if (!navigationContract.allowed_endpoints.some((pair) =>
+      includedNodeTypes.includes(pair.from) && includedNodeTypes.includes(pair.to))) {
+      fail("navigation_relationship_endpoints", `relationship '${navigationType}' has no allowed endpoints among the included node types`);
+    }
+  }
+  if (navigation.occurrence_coverage !== "each_selected_occurrence_once") {
+    fail("occurrence_coverage", "occurrence_coverage must be each_selected_occurrence_once");
+  }
+
+  const presentation = record(navigation.presentation);
+  if (!presentation || !sameStringSet(Object.keys(presentation), ["separator", "parts", "detail_display"])
+    || typeof presentation.separator !== "string") {
+    fail("presentation_shape", "presentation must declare separator, parts, and detail_display");
+  } else {
+    const detailDisplay = record(presentation.detail_display);
+    if (!detailDisplay || !sameStringSet(Object.keys(detailDisplay), detailIds)
+      || Object.values(detailDisplay).some((visible) => typeof visible !== "boolean")) {
+      fail("detail_display", "presentation.detail_display must declare one boolean for every manifest render detail");
+    }
+
+    const parts = Array.isArray(presentation.parts) ? presentation.parts : undefined;
+    if (!parts || parts.length === 0) {
+      fail("label_parts", "presentation.parts must contain at least one annotation template");
+    } else {
+      const supportedAnnotations = navigationContract
+        ? supportedAnnotationFields(navigationContract)
+        : new Set<string>();
+      const fields = new Set<string>();
+      for (const [index, rawPart] of parts.entries()) {
+        const part = record(rawPart);
+        if (!part || !sameStringSet(Object.keys(part), ["field", "template", "resolve_node_name"])
+          || typeof part.field !== "string" || !part.field.trim()
+          || !Object.prototype.hasOwnProperty.call(COMPILED_EDGE_FIELD_REGISTRY, part.field)
+          || typeof part.template !== "string" || !part.template.includes("{value}")
+          || part.template.split("{value}").length !== 2
+          || /\{[^{}]+\}/.test(part.template.replace("{value}", ""))
+          || typeof part.resolve_node_name !== "boolean") {
+          fail("label_part_shape", `presentation.parts[${index}] must declare a supported field, one {value} template token, and resolve_node_name`);
+          continue;
+        }
+        if (!supportedAnnotations.has(part.field)) {
+          fail("label_part_field", `presentation.parts[${index}].field '${part.field}' is not supported by relationship '${String(navigationType)}'`);
+        }
+        if (fields.has(part.field)) fail("label_part_duplicate", `presentation.parts repeats field '${part.field}'`);
+        fields.add(part.field);
+        if (part.resolve_node_name === true) {
+          const reference = record(navigationContract?.presentation_annotation_references?.[part.field]);
+          if (!reference || typeof reference.node_type !== "string" || !nodeTypes.has(reference.node_type)) {
+            fail("label_part_reference", `presentation.parts[${index}] requests node-name resolution without a loaded contract reference for '${part.field}'`);
+          }
+        }
+      }
+    }
+  }
+
+  const fusion = record(navigation.containment_fusion);
+  if (!fusion || !sameStringSet(Object.keys(fusion), ["relationship", "rule"])) {
+    fail("containment_fusion_shape", "containment_fusion must declare relationship and rule");
+  } else {
+    const containmentType = fusion.relationship;
+    const containmentContract = typeof containmentType === "string"
+      ? bundle.contracts.relationships.find((relationship) => relationship.type === containmentType)
+      : undefined;
+    if (typeof containmentType !== "string" || !relationshipTypes.has(containmentType) || !containmentContract
+      || !includedEdgeTypes.includes(containmentType)
+      || !hierarchyEdges.includes(containmentType)) {
+      fail("containment_fusion_relationship", "containment_fusion.relationship must reference an included hierarchy relationship contract");
+    }
+    if (containmentType === navigationType) {
+      fail("containment_fusion_relationship", "containment and navigation relationships must be distinct");
+    }
+    if (fusion.rule !== "single_unannotated_navigation_occurrence") {
+      fail("containment_fusion_rule", "containment_fusion.rule must be single_unannotated_navigation_occurrence");
+    }
+  }
+}
+
 function validateDisplayRules(
   bundle: Bundle,
   viewId: string,
@@ -390,6 +542,7 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
 
   const triples: string[] = [];
   for (const relationship of bundle.contracts.relationships) {
+    validatePresentationAnnotationReferences(relationship, nodeTypes, add);
     if (relationship.semantics !== undefined) {
       const semantics = record(relationship.semantics);
       const fields = semantics?.identity_fields;
@@ -607,6 +760,15 @@ export function collectBundleDiagnostics(bundle: Bundle): Diagnostic[] {
     }
     const detailDisplay = record(rendererDefaults?.detail_display);
     const batchApplicability = record(rendererDefaults?.batch_applicability);
+    validateIaPlaceMapPolicy(
+      bundle,
+      view,
+      rendererDefaults?.ia_place_map,
+      declaredRenderDetailIds,
+      nodeTypes,
+      relationshipTypes,
+      add
+    );
     if (!rendererDefaults || !detailDisplay) {
       add(
         "bundle.render_details.policy_shape",

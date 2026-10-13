@@ -482,6 +482,7 @@ export interface RendererJourneyMapLayoutConfig {
 export interface RendererDefaultsConfig {
   relationship_references?: RendererRelationshipReferenceConfig[];
   ui_contracts_presentation?: UiContractsPresentationConfig;
+  ia_place_map?: RendererIaPlaceMapConfig;
   preview?: PreviewDefaultsConfig;
   semantic_columns?: RendererSemanticColumnsConfig;
   node_chrome?: Record<string, RendererNodeChromeConfig>;
@@ -491,6 +492,28 @@ export interface RendererDefaultsConfig {
   scenario_flow_layout?: RendererScenarioFlowLayoutConfig;
   cell_sizing?: RendererCellSizingConfig;
   [key: string]: unknown;
+}
+
+/** Opt-in occurrence and presentation contract for IA navigation rendering. */
+export interface RendererIaPlaceMapConfig {
+  projection_edge_references: "exact_source_occurrences";
+  navigation: {
+    relationship: string;
+    occurrence_coverage: "each_selected_occurrence_once";
+    presentation: {
+      separator: string;
+      parts: Array<{
+        field: string;
+        template: string;
+        resolve_node_name: boolean;
+      }>;
+      detail_display: Record<string, boolean>;
+    };
+    containment_fusion: {
+      relationship: string;
+      rule: "single_unannotated_navigation_occurrence";
+    };
+  };
 }
 
 export interface RendererRelationshipReferenceConfig {
@@ -555,6 +578,7 @@ export interface RelationshipContract {
   semantics?: RelationshipSemanticDescriptor;
   meaning?: string;
   authoring?: RelationshipAuthoringConfig;
+  presentation_annotation_references?: Record<string, { node_type: string }>;
   allowed_endpoints: Array<{
     from: string;
     to: string;

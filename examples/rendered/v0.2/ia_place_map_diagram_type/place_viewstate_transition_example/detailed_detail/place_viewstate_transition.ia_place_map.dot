@@ -6,5 +6,5 @@ digraph ia_place_map {
   "P-010" [label="Billing\n/billing\n[auth]\nentry_points: link:/billing,notification:payment_failed\nprimary_nav: true"];
   "P-011" [label="Confirmation\n/confirmation\n[role:billing_agent]"];
   "P-010" -> "P-011" [style=invis, weight=100];
-  "P-010" -> "P-011";
+  "P-010" -> "P-011" [label="[Submit] {payment_valid}"];
 }

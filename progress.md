@@ -2,6 +2,7 @@
 
 ## Open Issues
 
+-installer script permission
 -ia_place_map multi-edge issue
 -v0.1.1 release doc
 -Narrow the diagram-content-present criteria for view --all (false service blueprint)
@@ -27,6 +28,14 @@ z
 -"render all" CLI ?
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
+
+## Mon 10-12
+
+- Initial ia_place_map hardening with routing failures
+
+## Sun 10-11
+
+- UX knowledge base exploration
 
 ## Sat 10-10
 

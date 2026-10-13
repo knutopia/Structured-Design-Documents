@@ -76,5 +76,17 @@ Named projections carry `diagram_id`, `diagram_name`, and exact
 `source_edge_id` references on primary edges and their annotations. These
 occurrence references are scoped to the supplied compiled graph, separate from
 durable IDs and authoring edge handles. The renderer uses the name as the SVG
-accessible title and the ID in artifact identity. Combined serialization and
-artifact names retain their existing shape.
+accessible title and the ID in artifact identity. Combined artifact names retain
+their existing shape. Views whose loaded renderer policy requires exact source
+occurrences also carry `source_edge_id` on combined primary edges. The v0.2 IA
+place map enables this policy; other combined projections retain their existing
+serialization.
+
+The IA policy in `bundle/v0.2/core/views.yaml` selects navigation relationships,
+complete occurrence coverage, annotation templates and detail visibility, and
+the permitted containment/navigation fusion. Presentation reference descriptors
+in `core/contracts.yaml` permit Event name lookup without changing validation or
+including Events as primary nodes. Exact occurrence references are checked
+against the supplied compiled graph at public rendering boundaries, including
+after serialization. Missing, substituted, omitted, or duplicated selected
+references are errors in combined and named IA preparation.

@@ -36,6 +36,8 @@ export interface FinalRoutingContext {
   blockers?: readonly RoutingBox[];
   bounds: { minX: number; minY: number; maxX: number; maxY: number };
   policy?: Partial<RoutingValidationPolicy>;
+  /** Opt into obstacle-filtered, two-axis corridor topologies within the same candidate budget. */
+  corridorSearch?: "obstacle_aware";
 }
 export interface FinalRoutingTrace {
   validations: number;

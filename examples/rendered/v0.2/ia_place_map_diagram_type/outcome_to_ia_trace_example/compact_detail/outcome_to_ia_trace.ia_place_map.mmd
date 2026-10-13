@@ -3,4 +3,4 @@ flowchart LR
     n_P_001["Billing"]
     n_P_002["Review"]
   end
-  n_P_001 --> n_P_002
+  n_P_001 -->|[Payment Submitted] {billingComplete}| n_P_002

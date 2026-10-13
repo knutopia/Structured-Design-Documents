@@ -1,6 +1,6 @@
 import path from "node:path";
-import { projectionOccurrenceDiagnostics } from "./edgeOccurrences.js";
-import type { SourceEdgeIndex } from "../relationships/edgeIdentity.js";
+import { projectionOccurrenceDiagnostics, requiresExactProjectionEdgeReferences } from "./edgeOccurrences.js";
+import { createSourceEdgeIndex, type SourceEdgeIndex } from "../relationships/edgeIdentity.js";
 import { buildRelationshipReferences } from "./relationshipReferences.js";
 import type { ErrorObject } from "ajv";
 import Ajv2020Import from "ajv/dist/2020.js";
@@ -32,7 +32,8 @@ export interface ProjectionBuilderContext {
   sourceExample: string;
   graph: CompiledGraph;
   documentGraph: CompiledGraph;
-  sourceEdgeIndex?: SourceEdgeIndex;
+  sourceEdgeIndex: SourceEdgeIndex;
+  selectedEdges: CompiledEdge[];
   diagramId?: string;
   diagramName?: string;
   bundle: Bundle;
@@ -99,6 +100,7 @@ export function createProjectionBuilderContext(
 ): ProjectionBuilderContext {
   const includedNodeTypes = new Set(view.projection.include_node_types);
   const includedEdgeTypes = new Set(view.projection.include_edge_types);
+  const sourceEdgeIndex = options?.sourceEdgeIndex ?? createSourceEdgeIndex(options?.documentGraph ?? graph, bundle);
   const projectedNodes = (options?.primaryNodes ?? graph.nodes.filter((node) => includedNodeTypes.has(node.type)))
     .map<ProjectionNode>((node) => ({
       id: node.id,
@@ -107,13 +109,16 @@ export function createProjectionBuilderContext(
     }))
     .sort((left, right) => left.id.localeCompare(right.id));
   const projectedNodeIds = new Set(projectedNodes.map((node) => node.id));
+  const selectedEdges = options?.primaryEdges ?? graph.edges.filter((edge) =>
+    includedEdgeTypes.has(edge.type) && projectedNodeIds.has(edge.from) && projectedNodeIds.has(edge.to));
   const projectedEdges = sortProjectionEdges(
-    (options?.primaryEdges ?? graph.edges.filter((edge) => includedEdgeTypes.has(edge.type) && projectedNodeIds.has(edge.from) && projectedNodeIds.has(edge.to)))
-      .map((edge) => ({
+    selectedEdges.map((edge) => ({
         from: edge.from,
         type: edge.type,
         to: edge.to,
-        ...(options?.diagramId ? { source_edge_id: options.sourceEdgeIndex.idFor(edge)! } : {})
+        ...(options?.diagramId || requiresExactProjectionEdgeReferences(bundle, view.id)
+          ? { source_edge_id: sourceEdgeIndex.idFor(edge)! }
+          : {})
       }))
   );
 
@@ -122,7 +127,8 @@ export function createProjectionBuilderContext(
     sourceExample: sourceExampleName(graph),
     graph,
     documentGraph: options?.documentGraph ?? graph,
-    sourceEdgeIndex: options?.sourceEdgeIndex,
+    sourceEdgeIndex,
+    selectedEdges,
     diagramId: options?.diagramId,
     diagramName: options?.diagramName,
     bundle,
@@ -297,8 +303,11 @@ export function buildProjectionResult(
     notes: [...(output.notes ?? [])]
   };
 
-  const occurrenceDiagnostics = projectionOccurrenceDiagnostics(projection, context.documentGraph, context.bundle,
-    context.diagramId ? new Set(context.graph.edges.map(edge => context.sourceEdgeIndex!.idFor(edge)!)) : undefined);
+  const exactReferencesRequired = requiresExactProjectionEdgeReferences(context.bundle, context.view.id);
+  const trustedSelectedEdgeIds = context.diagramId || exactReferencesRequired
+    ? new Set(context.selectedEdges.map(edge => context.sourceEdgeIndex.idFor(edge)!))
+    : undefined;
+  const occurrenceDiagnostics = projectionOccurrenceDiagnostics(projection, context.documentGraph, context.bundle, trustedSelectedEdgeIds);
   if (occurrenceDiagnostics.length) return { diagnostics: sortDiagnostics(occurrenceDiagnostics) };
   return validateProjection(context.bundle, projection, context.file);
 }

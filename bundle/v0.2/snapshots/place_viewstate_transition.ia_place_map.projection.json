@@ -19,7 +19,8 @@
     {
       "from": "P-010",
       "type": "NAVIGATES_TO",
-      "to": "P-011"
+      "to": "P-011",
+      "source_edge_id": "source-edge-d7b92e0ab84673fe50705e19524ae1f6a514e053e408163787b72e60888f1242-0"
     }
   ],
   "derived": {

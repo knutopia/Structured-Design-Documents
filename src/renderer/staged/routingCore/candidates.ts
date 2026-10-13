@@ -8,7 +8,7 @@ import {
   type RoutingViolationKind
 } from "./contracts.js";
 import { validateRouting } from "./validation.js";
-import { collapseRoutePoints, roundRoutingMetric, routingObstacleEnvelope } from "./geometry.js";
+import { collapseRoutePoints, roundRoutingMetric, routingObstacleEnvelope, segmentIntersectsBoxInterior } from "./geometry.js";
 
 export interface OrderedRouteCandidate {
   id: string;
@@ -260,12 +260,29 @@ export function* buildPortCorridorCandidates(
   // dropped here rather than yielded for the coordinator to reject.
   const departsOutward = (points: readonly Point[]): boolean => points.length >= 2
     && departsOutwardFromPort(connector.source.side, points[0]!, points[1]!, epsilon)
-    && departsOutwardFromPort(connector.target.side, points.at(-1)!, points.at(-2)!, epsilon);
+    && departsOutwardFromPort(connector.target.side, points.at(-1)!, points.at(-2)!, epsilon)
+    // Collapsing a collinear turn can shorten the surviving terminal section.
+    // Recovery must not freeze a candidate that violates its endpoint contract.
+    && (context.corridorSearch !== "obstacle_aware" || (
+      Math.hypot(points[1]!.x - points[0]!.x, points[1]!.y - points[0]!.y) >= connector.source.minLeg - epsilon
+      && Math.hypot(points.at(-2)!.x - points.at(-1)!.x, points.at(-2)!.y - points.at(-1)!.y) >= connector.target.minLeg - epsilon));
 
   const seen = new Set<string>();
   const queue: Point[][] = [];
   const push = (points: Point[]): void => {
+    if (queue.length >= MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR) return;
     if (!departsOutward(points)) return;
+    if (context.corridorSearch === "obstacle_aware" && points.slice(1).some((point, index) => Math.abs(point.x - points[index]!.x) > epsilon
+      && Math.abs(point.y - points[index]!.y) > epsilon)) return;
+    // Reject solid intersections before consuming the bounded candidate set.
+    // Only the incident leg may cross its own node's attachment envelope.
+    if (context.corridorSearch === "obstacle_aware") for (let index = 0; index < points.length - 1; index++) for (const box of boxes) {
+      if (index === 0 && box.id === connector.source.nodeId
+        || index === points.length - 2 && box.id === connector.target.nodeId) continue;
+      const axis = Math.abs(points[index]!.x - points[index + 1]!.x) <= epsilon ? "vertical" : "horizontal";
+      if (box.blocksAxis && box.blocksAxis !== axis) continue;
+      if (segmentIntersectsBoxInterior(points[index]!, points[index + 1]!, box, epsilon)) return;
+    }
     const key = JSON.stringify(points);
     if (seen.has(key)) return;
     seen.add(key);
@@ -280,6 +297,15 @@ export function* buildPortCorridorCandidates(
   push(wrap([{ x: sourceStub.x, y: targetStub.y }]));
   for (const c of orderedXs) push(wrap([{ x: c, y: sourceStub.y }, { x: c, y: targetStub.y }]));
   for (const c of orderedYs) push(wrap([{ x: sourceStub.x, y: c }, { x: targetStub.x, y: c }]));
+
+  // A channel can require leaving both endpoint rows: e.g. a north-to-south
+  // return beside a self-loop, with a marker blocking its nearest horizontal
+  // run. Two independent event coordinates reach that exterior corridor.
+  if (context.corridorSearch === "obstacle_aware") for (const x of orderedXs) for (const y of orderedYs) {
+    if (queue.length >= MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR) break;
+    push(wrap([{ x: sourceStub.x, y }, { x, y }, { x, y: targetStub.y }]));
+    push(wrap([{ x, y: sourceStub.y }, { x, y }, { x: targetStub.x, y }]));
+  }
 
   for (const points of queue.slice(0, MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR)) {
     yield points;

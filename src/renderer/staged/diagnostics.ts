@@ -10,6 +10,14 @@ export interface RendererDiagnostic {
   details?: string;
 }
 
+/** A required final scene invariant failed; no artifact may be serialized. */
+export class RendererArtifactError extends Error {
+  constructor(public readonly diagnostics: RendererDiagnostic[]) {
+    super(diagnostics.map(diagnostic => diagnostic.message).join("\n"));
+    this.name = "RendererArtifactError";
+  }
+}
+
 interface RendererDiagnosticOptions {
   targetId?: string;
   details?: string;
