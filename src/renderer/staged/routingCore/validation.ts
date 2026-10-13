@@ -151,6 +151,7 @@ function validateSingleEdge(
     for (const box of boxes) {
       if (box.appliesToConnectorIds && !box.appliesToConnectorIds.includes(edge.id)) continue;
       if (box.blocksAxis && box.blocksAxis !== segment.axis) continue;
+      if (segment.sharedTrackGroupId && box.exemptSharedTrackGroupIds?.includes(segment.sharedTrackGroupId)) continue;
       const endpointBox = box.id === edge.sourceItemId || box.id === edge.targetItemId;
       if (!endpointBox && segmentIntersectsBoxInterior(segment.start, segment.end, box, policy.epsilon)) {
         violations.push(violationForSegment(

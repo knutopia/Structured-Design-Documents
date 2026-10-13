@@ -48,6 +48,67 @@ describe("shared painted marker acceptance", () => {
     s.root.width = 100;
     expect(auditPositionedSceneMarkers(s).map(d => d.code)).toContain("renderer.routing.marker_bounds");
   });
+  it("rejects a nonintersecting competing segment 10px from the painted footprint", () => {
+    const s = scene([arrow(), edge("b", [{ x: 60, y: 116 }, { x: 110, y: 116 }])]);
+    // With a 10px arrow and 2px stroke, the footprint reaches y=106; the rival is 10px away.
+    expect(auditPositionedSceneMarkers(s)).toEqual([]);
+    expect(auditPositionedSceneMarkers(s, { unrelatedRouteClearance: 16 }).map(d => d.code))
+      .toContain("renderer.routing.marker_connector");
+    s.edges[1]!.route.points = [{ x: 60, y: 122 }, { x: 110, y: 122 }];
+    expect(auditPositionedSceneMarkers(s, { unrelatedRouteClearance: 16 })).toEqual([]);
+  });
+  it("keeps marker-pair clearance independently opt-in", () => {
+    const s = scene([arrow(), edge("b", [{ x: 20, y: 123 }, { x: 100, y: 123 }], true)]);
+    expect(auditPositionedSceneMarkers(s, { unrelatedRouteClearance: 16 })).toEqual([]);
+    expect(auditPositionedSceneMarkers(s, { unrelatedRouteClearance: 16, markerPairClearance: 16 }).map(d => d.code))
+      .toContain("renderer.routing.marker_marker");
+  });
+  it("checks obstacle stand-off while preserving actual endpoint attachment", () => {
+    const a = arrow(), s = scene([a]);
+    const node = { id: "nearby", kind: "node" as const, role: "place", primitive: "card", classes: [],
+      x: 110, y: 80, width: 100, height: 40, widthBand: "standard",
+      widthPolicy: { preferred: "standard", allowed: ["standard"] },
+      overflowPolicy: { kind: "grow_height" as const }, overflow: { status: "fits" as const }, content: [], ports: [] };
+    s.root.children.push(node);
+    expect(auditPositionedSceneMarkers(s)).toEqual([]);
+    expect(auditPositionedSceneMarkers(s, { obstacleClearance: 16 }).map(d => d.code))
+      .toContain("renderer.routing.marker_obstacle");
+    node.id = a.to.itemId;
+    expect(auditPositionedSceneMarkers(s, { obstacleClearance: 16 })).toEqual([]);
+  });
+  it("checks the whole painted footprint against an owner envelope", () => {
+    const s = scene([arrow()]);
+    expect(auditPositionedSceneMarkers(s)).toEqual([]);
+    const scope = new Map([["a", { x: 0, y: 95, width: 300, height: 205 }]]);
+    expect(auditPositionedSceneMarkers(s, { scopeByConnectorId: scope }).map(d => d.code))
+      .toContain("renderer.routing.marker_bounds");
+    expect(auditPositionedSceneMarkers(s, { scopeByConnectorId: new Map([["a", s.root]]) })).toEqual([]);
+  });
+  it("exempts only declared matching shared segments and marker terminals", () => {
+    const s = scene([arrow(), edge("b", [{ x: 20, y: 100 }, { x: 100, y: 100 }], true)]);
+    const options = { unrelatedRouteClearance: 16, markerPairClearance: 16, sharedTrackGroupBySegmentIndexByConnectorId: new Map([
+      ["a", new Map([[0, "trunk"]])], ["b", new Map([[0, "trunk"]])]
+    ]) };
+    expect(auditPositionedSceneMarkers(s, options)).toEqual([]);
+    options.sharedTrackGroupBySegmentIndexByConnectorId.set("b", new Map([[0, "other-trunk"]]));
+    expect(auditPositionedSceneMarkers(s, options).map(d => d.code))
+      .toEqual(expect.arrayContaining(["renderer.routing.marker_connector", "renderer.routing.marker_marker"]));
+    s.edges[1]!.route.points.push({ x: 100, y: 110 });
+    options.sharedTrackGroupBySegmentIndexByConnectorId.set("b", new Map([[0, "trunk"]]));
+    // Its new terminal is not declared shared even though segment zero still is.
+    expect(auditPositionedSceneMarkers(s, options).map(d => d.code)).toContain("renderer.routing.marker_connector");
+  });
+  it("links a structural marker to a nearby declared shared trunk, never a distant one", () => {
+    const a = edge("a", [{ x: 20, y: 100 }, { x: 90, y: 100 }, { x: 100, y: 100 }], true);
+    const b = edge("b", [{ x: 20, y: 100 }, { x: 90, y: 100 }]);
+    const s = scene([a, b]);
+    const options = { unrelatedRouteClearance: 16, markerSharingGroupByConnectorId: new Map([["a", "trunk"]]),
+      sharedTrackGroupBySegmentIndexByConnectorId: new Map([["a", new Map([[0, "trunk"]])], ["b", new Map([[0, "trunk"]])]]) };
+    expect(auditPositionedSceneMarkers(s, options)).toEqual([]);
+    a.route.points = [{ x: 20, y: 100 }, { x: 50, y: 100 }, { x: 50, y: 200 }, { x: 100, y: 200 }];
+    b.route.points = [{ x: 20, y: 200 }, { x: 95, y: 200 }];
+    expect(auditPositionedSceneMarkers(s, options).map(d => d.code)).toContain("renderer.routing.marker_connector");
+  });
   it("allows attachment to the owned endpoint but audits a later route section", () => {
     const a = arrow();
     const s = scene([a]);

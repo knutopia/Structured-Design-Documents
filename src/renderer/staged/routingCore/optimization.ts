@@ -156,3 +156,20 @@ export function compareRouteCosts(left: readonly number[], right: readonly numbe
   }
   return 0;
 }
+
+export interface FacingSideCoordinateInput {
+  sourceSpan: { min: number; max: number };
+  targetSpan: { min: number; max: number };
+  sourceCenter: number;
+  targetCenter: number;
+}
+/** Axis-independent least-squared-displacement coordinate in both legal spans. */
+export function resolveFacingSideSharedCoordinate(input: FacingSideCoordinateInput): number | undefined {
+  if (![input.sourceSpan.min, input.sourceSpan.max, input.targetSpan.min, input.targetSpan.max,
+    input.sourceCenter, input.targetCenter].every(Number.isFinite)
+    || input.sourceSpan.min > input.sourceSpan.max || input.targetSpan.min > input.targetSpan.max) return undefined;
+  const min = Math.max(input.sourceSpan.min, input.targetSpan.min);
+  const max = Math.min(input.sourceSpan.max, input.targetSpan.max);
+  if (min > max) return undefined;
+  return Math.max(min, Math.min(max, (input.sourceCenter + input.targetCenter) / 2));
+}

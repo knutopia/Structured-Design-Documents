@@ -1,3 +1,4 @@
+import { effectiveRoutingBounds } from "./bounds.js";
 import type { PositionedRoute } from "../contracts.js";
 import type { Point } from "../contracts.js";
 import {
@@ -157,6 +158,31 @@ function corridorStub(endpoint: FinalRoutingEndpoint, clearance = 0): Point {
   }
 }
 
+/** Deterministic outward U seed for distinct ports on the same side.
+ * This supplies geometry only: owner bounds and blockers still require full validation.
+ * Straight rendering intent and coincident cross-axis attachments are not rebuilt. */
+export function buildPortCorridorSeed(connector: FinalRoutingConnector, outwardClearance: number): PositionedRoute | undefined {
+  if (!Number.isFinite(outwardClearance) || outwardClearance < 0
+    || ![connector.source, connector.target].every(endpoint =>
+      [endpoint.point.x, endpoint.point.y, endpoint.minLeg].every(Number.isFinite) && endpoint.minLeg >= 0)) {
+    throw new RangeError("Port corridor seeds require finite endpoints and nonnegative clearance.");
+  }
+  if (connector.route.style !== "orthogonal" || connector.source.side !== connector.target.side) return undefined;
+  const side = connector.source.side;
+  const vertical = side === "north" || side === "south";
+  const source = connector.source.point, target = connector.target.point;
+  if (Math.abs(vertical ? source.x - target.x : source.y - target.y) <= DEFAULT_ROUTING_POLICY.epsilon) return undefined;
+  const sourceStub = corridorStub(connector.source, outwardClearance);
+  const targetStub = corridorStub(connector.target, outwardClearance);
+  const coordinate = side === "north" ? Math.min(sourceStub.y, targetStub.y)
+    : side === "south" ? Math.max(sourceStub.y, targetStub.y)
+    : side === "west" ? Math.min(sourceStub.x, targetStub.x) : Math.max(sourceStub.x, targetStub.x);
+  const points = collapseRoutePoints([source,
+    vertical ? { x: source.x, y: coordinate } : { x: coordinate, y: source.y },
+    vertical ? { x: target.x, y: coordinate } : { x: coordinate, y: target.y }, target], DEFAULT_ROUTING_POLICY.epsilon);
+  return { style: "orthogonal", points };
+}
+
 /**
  * Port-to-port corridor candidates for one connector, minimal-change first.
  *
@@ -183,7 +209,8 @@ function corridorStub(endpoint: FinalRoutingEndpoint, clearance = 0): Point {
  */
 export function* buildPortCorridorCandidates(
   connector: FinalRoutingConnector,
-  context: FinalRoutingContext
+  context: FinalRoutingContext,
+  options: { topologyOrder?: "balanced" } = {}
 ): Generator<Point[]> {
   // A `straight` route's geometry IS its contract: the adapter asked for a direct line
   // between two ports. Rebuilding it as a multi-bend corridor is not repair, it is
@@ -205,6 +232,7 @@ export function* buildPortCorridorCandidates(
   const policy: RoutingPolicy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
   const separation = policy.minSeparation;
   const epsilon = policy.epsilon;
+  const bounds = effectiveRoutingBounds(connector, context);
   const sourceStub = corridorStub(connector.source, context.boxes.find(box => box.id === connector.source.nodeId)?.clearance);
   const targetStub = corridorStub(connector.target, context.boxes.find(box => box.id === connector.target.nodeId)?.clearance);
   const boxes = [...context.boxes, ...(context.blockers ?? [])]
@@ -220,13 +248,13 @@ export function* buildPortCorridorCandidates(
   const addX = (n: number): void => {
     for (const value of [n, n - separation, n + separation]) {
       const rounded = roundRoutingMetric(value);
-      if (rounded >= context.bounds.minX && rounded <= context.bounds.maxX) xs.add(rounded);
+      if (rounded >= bounds.minX && rounded <= bounds.maxX) xs.add(rounded);
     }
   };
   const addY = (n: number): void => {
     for (const value of [n, n - separation, n + separation]) {
       const rounded = roundRoutingMetric(value);
-      if (rounded >= context.bounds.minY && rounded <= context.bounds.maxY) ys.add(rounded);
+      if (rounded >= bounds.minY && rounded <= bounds.maxY) ys.add(rounded);
     }
   };
   for (const box of boxes) {
@@ -248,9 +276,22 @@ export function* buildPortCorridorCandidates(
   const byPreference = (preferred: number) => (a: number, b: number): number =>
     Math.abs(a - preferred) - Math.abs(b - preferred) || a - b;
   // Split the budget across both axes so a dense scene cannot spend it all on one.
-  const perAxis = Math.max(1, Math.floor((MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR - 3) / 2));
-  const orderedXs = [...xs].sort(byPreference(preferredX)).slice(0, perAxis);
-  const orderedYs = [...ys].sort(byPreference(preferredY)).slice(0, perAxis);
+  const perAxis = Math.max(1, Math.floor((MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR - 3) / (options.topologyOrder === "balanced" ? 4 : 2)));
+  const orderedEvents = (values: Set<number>, preferred: number, spanMin: number, spanMax: number): number[] => {
+    const ordered = [...values].sort(byPreference(preferred));
+    if (options.topologyOrder !== "balanced") return ordered.slice(0, perAxis);
+    const midpoint = (spanMin + spanMax) / 2;
+    const flanks = [ordered.filter(value => value < spanMin), ordered.filter(value => value > spanMax),
+      ordered.filter(value => value >= spanMin && value <= midpoint).sort(byPreference(spanMin)),
+      ordered.filter(value => value > midpoint && value <= spanMax).sort(byPreference(spanMax))];
+    const balanced: number[] = [];
+    for (let index = 0; flanks.some(flank => index < flank.length); index++) {
+      for (const flank of flanks) if (flank[index] !== undefined) balanced.push(flank[index]!);
+    }
+    return balanced.slice(0, perAxis);
+  };
+  const orderedXs = orderedEvents(xs, preferredX, Math.min(sourceStub.x, targetStub.x), Math.max(sourceStub.x, targetStub.x));
+  const orderedYs = orderedEvents(ys, preferredY, Math.min(sourceStub.y, targetStub.y), Math.max(sourceStub.y, targetStub.y));
 
   const wrap = (middle: readonly Point[]): Point[] => collapseRoutePoints(
     [connector.source.point, sourceStub, ...middle, targetStub, connector.target.point],
@@ -269,6 +310,10 @@ export function* buildPortCorridorCandidates(
 
   const seen = new Set<string>();
   const queue: Point[][] = [];
+  let family = "direct";
+  const familyByRoute = new Map<Point[], string>();
+  let familyCoordinate: number | undefined;
+  const coordinateByRoute = new Map<Point[], number>();
   const push = (points: Point[]): void => {
     if (queue.length >= MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR) return;
     if (!departsOutward(points)) return;
@@ -287,6 +332,8 @@ export function* buildPortCorridorCandidates(
     if (seen.has(key)) return;
     seen.add(key);
     queue.push(points);
+    familyByRoute.set(points, family);
+    if (familyCoordinate !== undefined) coordinateByRoute.set(points, familyCoordinate);
   };
 
   // Straight stub-to-stub, then the two one-corner L shapes, then two-corner Z shapes
@@ -295,18 +342,57 @@ export function* buildPortCorridorCandidates(
   push(wrap([]));
   push(wrap([{ x: targetStub.x, y: sourceStub.y }]));
   push(wrap([{ x: sourceStub.x, y: targetStub.y }]));
-  for (const c of orderedXs) push(wrap([{ x: c, y: sourceStub.y }, { x: c, y: targetStub.y }]));
-  for (const c of orderedYs) push(wrap([{ x: sourceStub.x, y: c }, { x: targetStub.x, y: c }]));
+  const pushX = (c: number) => { family = "x"; familyCoordinate = c; push(wrap([{ x: c, y: sourceStub.y }, { x: c, y: targetStub.y }])); };
+  const pushY = (c: number) => { family = "y"; familyCoordinate = c; push(wrap([{ x: sourceStub.x, y: c }, { x: targetStub.x, y: c }])); };
+  if (options.topologyOrder === "balanced") {
+    for (let index = 0; index < Math.max(orderedXs.length, orderedYs.length); index++) {
+      if (orderedXs[index] !== undefined) pushX(orderedXs[index]!);
+      if (orderedYs[index] !== undefined) pushY(orderedYs[index]!);
+    }
+  } else {
+    orderedXs.forEach(pushX); orderedYs.forEach(pushY);
+  }
 
   // A channel can require leaving both endpoint rows: e.g. a north-to-south
   // return beside a self-loop, with a marker blocking its nearest horizontal
   // run. Two independent event coordinates reach that exterior corridor.
+  family = "exterior"; familyCoordinate = undefined;
   if (context.corridorSearch === "obstacle_aware") for (const x of orderedXs) for (const y of orderedYs) {
     if (queue.length >= MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR) break;
     push(wrap([{ x: sourceStub.x, y }, { x, y }, { x, y: targetStub.y }]));
     push(wrap([{ x, y: sourceStub.y }, { x, y }, { x: targetStub.x, y }]));
   }
 
+  if (options.topologyOrder === "balanced") {
+    // Reserve exposure for each topology family: an axis with many events cannot
+    // consume every early trial before a different axis or exterior turn appears.
+    const families = ["direct", "x", "y", "exterior"].map(name => {
+      const routes = queue.filter(route => familyByRoute.get(route) === name);
+      if (name !== "x" && name !== "y") return routes.sort((a, b) => a.length - b.length);
+      const spanMin = name === "x" ? Math.min(sourceStub.x, targetStub.x) : Math.min(sourceStub.y, targetStub.y);
+      const spanMax = name === "x" ? Math.max(sourceStub.x, targetStub.x) : Math.max(sourceStub.y, targetStub.y);
+      const preferred = name === "x" ? preferredX : preferredY;
+      const midpoint = (spanMin + spanMax) / 2;
+      const flanks = [
+        { routes: routes.filter(route => coordinateByRoute.get(route)! < spanMin), preferred },
+        { routes: routes.filter(route => coordinateByRoute.get(route)! > spanMax), preferred },
+        { routes: routes.filter(route => coordinateByRoute.get(route)! >= spanMin && coordinateByRoute.get(route)! <= midpoint), preferred: spanMin },
+        { routes: routes.filter(route => coordinateByRoute.get(route)! > midpoint && coordinateByRoute.get(route)! <= spanMax), preferred: spanMax }
+      ].map(flank => flank.routes.sort((a, b) => a.length - b.length
+        || Math.abs(coordinateByRoute.get(a)! - flank.preferred) - Math.abs(coordinateByRoute.get(b)! - flank.preferred)
+        || coordinateByRoute.get(a)! - coordinateByRoute.get(b)!));
+      const alternated: Point[][] = [];
+      for (let index = 0; flanks.some(flank => index < flank.length); index++) {
+        for (const flank of flanks) if (flank[index]) alternated.push(flank[index]!);
+      }
+      return alternated;
+    });
+    const balanced: Point[][] = [];
+    for (let index = 0; families.some(routes => index < routes.length); index++) {
+      for (const routes of families) if (routes[index]) balanced.push(routes[index]!);
+    }
+    queue.splice(0, queue.length, ...balanced);
+  }
   for (const points of queue.slice(0, MAX_CORRIDOR_CANDIDATES_PER_CONNECTOR)) {
     yield points;
   }
@@ -341,11 +427,12 @@ export function* buildTerminalTurnAlternatives(
       if (index === 0 || index === c.route.points.length - 2 || !implicated.has(segment.logicalRunId)) continue;
       const constraint = c.runConstraints?.get(segment.logicalRunId);
       if (constraint?.lockedCoordinate !== undefined) continue;
+      const bounds = effectiveRoutingBounds(c, context);
       const horizontal = segment.axis === "horizontal";
       const transverse = (p: Point): number => horizontal ? p.y : p.x;
       const events = new Set<number>();
-      const min = Math.max(horizontal ? context.bounds.minY : context.bounds.minX, constraint?.allowedRange?.min ?? -Infinity);
-      const max = Math.min(horizontal ? context.bounds.maxY : context.bounds.maxX, constraint?.allowedRange?.max ?? Infinity);
+      const min = Math.max(horizontal ? bounds.minY : bounds.minX, constraint?.allowedRange?.min ?? -Infinity);
+      const max = Math.min(horizontal ? bounds.maxY : bounds.maxX, constraint?.allowedRange?.max ?? Infinity);
       const add = (n: number): void => { const value = roundRoutingMetric(n); if (value >= min && value <= max) events.add(value); };
       add(min); add(max);
       for (const other of ordered) for (const p of other.route.points) {

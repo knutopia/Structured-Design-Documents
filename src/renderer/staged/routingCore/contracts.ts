@@ -20,6 +20,8 @@ export interface RoutingBox {
   blocksAxis?: RoutingAxis;
   /** When present, the obstacle applies only to these routes. */
   appliesToConnectorIds?: readonly string[];
+  /** Exempt only segments explicitly declaring one of these shared groups. */
+  exemptSharedTrackGroupIds?: readonly string[];
 }
 
 export interface RoutingSegment {

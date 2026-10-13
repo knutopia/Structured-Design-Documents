@@ -470,6 +470,17 @@ function buildScopeSceneItems(
   );
 }
 
+function resolveRoutingScopeContainerIds(root: SceneContainer, projection: Projection, nodeTypes: readonly string[]): string[] {
+  const selected = new Set(projection.nodes.filter((node) => nodeTypes.includes(node.type)).map((node) => node.id));
+  const ids: string[] = [];
+  const visit = (container: SceneContainer): void => {
+    if (selected.has(container.id)) ids.push(container.id);
+    for (const item of container.children) if (item.kind === "container") visit(item);
+  };
+  visit(root);
+  return ids;
+}
+
 export function buildIaPlaceMapRendererScene(
   projection: Projection,
   graph: CompiledGraph,
@@ -624,6 +635,11 @@ export function buildIaPlaceMapRendererScene(
     scene.root.viewMetadata = {
       ...scene.root.viewMetadata,
       iaPlaceMap: {
+        ...(rendererConfig.routing_scope ? { routingScope: {
+          containerIds: resolveRoutingScopeContainerIds(scene.root, projection, rendererConfig.routing_scope.container_node_types),
+          internalRoutes: rendererConfig.routing_scope.internal_routes,
+          crossOwnerRoutes: rendererConfig.routing_scope.cross_owner_routes
+        } } : {}),
         expectedNavigationOccurrences: model.edges.flatMap((edge) => edge.source_edge_id ? [{
           id: edge.id,
           sourceEdgeId: edge.source_edge_id,

@@ -1,0 +1,4 @@
+909de6955130c75a242ce802d53b8c8e1fb11218668e8632d8b7b934e652e2d4  tests/goldens/renderer-stages/ia-place-map.billSage-structure.measured-scene.json
+164736f68a0a41a267c3194260db62c11d53d580edf6ba05d02e02e6faa57e60  tests/goldens/renderer-stages/ia-place-map.billSage-structure.positioned-scene.json
+d29b3542c59c61375e12833fb444f7daa9f1ea0eccf54d20569f5045d47ea27f  tests/goldens/renderer-stages/ia-place-map.billSage-structure.renderer-scene.json
+ba268805d947d1f07f04ff6554a546de6a78cf811bc3646c651e2412280320a3  tests/goldens/renderer-stages/ia-place-map.billSage-structure.svg

@@ -1437,6 +1437,17 @@
     "ports": [],
     "viewMetadata": {
       "iaPlaceMap": {
+        "routingScope": {
+          "containerIds": [
+            "A-200",
+            "A-300",
+            "A-400",
+            "A-500",
+            "A-600"
+          ],
+          "internalRoutes": "within_common_owner",
+          "crossOwnerRoutes": "through_common_ancestor"
+        },
         "expectedNavigationOccurrences": [
           {
             "id": "navigation:source-edge-cfebcdb1f763c5f82ef500494abc390cd4f223678510483e8a1946b2dce3107b-0",

@@ -496,6 +496,11 @@ export interface RendererDefaultsConfig {
 
 /** Opt-in occurrence and presentation contract for IA navigation rendering. */
 export interface RendererIaPlaceMapConfig {
+  routing_scope?: {
+    container_node_types: string[];
+    internal_routes: "within_common_owner";
+    cross_owner_routes: "through_common_ancestor";
+  };
   projection_edge_references: "exact_source_occurrences";
   navigation: {
     relationship: string;

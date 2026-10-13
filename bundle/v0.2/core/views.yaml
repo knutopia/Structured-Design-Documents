@@ -2754,6 +2754,10 @@ views:
           minimum: 1
         ia_place_map:
           projection_edge_references: exact_source_occurrences
+          routing_scope:
+            container_node_types: [ Area ]
+            internal_routes: within_common_owner
+            cross_owner_routes: through_common_ancestor
           navigation:
             relationship: NAVIGATES_TO
             occurrence_coverage: each_selected_occurrence_once

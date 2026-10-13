@@ -14,6 +14,9 @@ import { projectDiagram, projectView } from "../src/projector/projectView.js";
 import { resolveDiagramSelection } from "../src/diagrams/resolveDiagrams.js";
 import { renderPreviewArtifact } from "../src/renderer/previewBackends.js";
 import { renderPreparedProjectionText, renderSource } from "../src/renderer/renderView.js";
+import { buildIaPlaceMapRendererScene } from "../src/renderer/staged/iaPlaceMap.js";
+import { auditIaPlaceMapFinalScene, runIaPlaceMapRendererPipeline } from "../src/renderer/staged/iaPlaceMapRouting.js";
+import { cloneViewMetadata } from "../src/renderer/staged/contracts.js";
 import type { Projection } from "../src/projector/types.js";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -95,6 +98,73 @@ describe("IA place map bundle occurrence policy", () => {
         relationship: "CONTAINS",
         rule: "single_unannotated_navigation_occurrence"
       }
+    });
+  });
+
+  it("loads routing scope, resolves selected container IDs, and clones ownership policy", () => {
+    const graph = compiled();
+    const view = bundle.views.views.find((candidate) => candidate.id === "ia_place_map")!;
+    const projection = projectView(graph, bundle, view.id).projection!;
+    const scene = buildIaPlaceMapRendererScene(projection, graph, view, { detailId: "compact" }, bundle);
+    const scope = scene.root.viewMetadata!.iaPlaceMap!.routingScope!;
+    expect(view.conventions.renderer_defaults!.ia_place_map!.routing_scope).toEqual({
+      container_node_types: ["Area"], internal_routes: "within_common_owner", cross_owner_routes: "through_common_ancestor"
+    });
+    expect(scope.containerIds).toEqual(projection.nodes.filter((node) => node.type === "Area").map((node) => node.id));
+    expect(scope.containerIds.length).toBeGreaterThan(0);
+    const cloned = cloneViewMetadata(scene.root.viewMetadata)!;
+    expect(cloned).toEqual(scene.root.viewMetadata);
+    expect(cloned.iaPlaceMap!.routingScope!.containerIds).not.toBe(scope.containerIds);
+    cloned.iaPlaceMap!.routingScope!.containerIds.length = 0;
+    expect(scope.containerIds.length).toBeGreaterThan(0);
+  });
+
+  it("real-loader removal or selector mutation changes scope without changing projection", async () => {
+    const original = projectView(compiled(), bundle, "ia_place_map").projection!;
+    for (const remove of [false, true]) {
+      await withLoadedViewMutation((_views, policy) => {
+        if (remove) delete policy.routing_scope;
+        else (policy.routing_scope as Record<string, unknown>).container_node_types = [];
+      }, (loaded) => {
+        const graph = compiled(loaded);
+        const view = loaded.views.views.find((candidate) => candidate.id === "ia_place_map")!;
+        const projection = projectView(graph, loaded, view.id).projection!;
+        expect(projection).toEqual(original);
+        const scene = buildIaPlaceMapRendererScene(projection, graph, view, { detailId: "detailed" }, loaded);
+        if (remove) expect(scene.root.viewMetadata!.iaPlaceMap!.routingScope).toBeUndefined();
+        else expect(scene.root.viewMetadata!.iaPlaceMap!.routingScope!.containerIds).toEqual([]);
+        expect(computeBundleFingerprint(loaded)).not.toBe(computeBundleFingerprint(bundle));
+      });
+    }
+  });
+
+  it("real-loaded owner selection controls actual final routing bounds for unchanged projection", async () => {
+    const graph = compiled();
+    const view = bundle.views.views.find((candidate) => candidate.id === "ia_place_map")!;
+    const projection = projectView(graph, bundle, view.id).projection!;
+    const final = structuredClone((await runIaPlaceMapRendererPipeline(buildIaPlaceMapRendererScene(projection, graph, view, { detailId: "compact" }, bundle))).positionedScene);
+    const edge = final.edges.find(edge => edge.from.itemId === "P-002" && edge.to.itemId === "P-003")!;
+    const start = edge.route.points[0]!, end = edge.route.points.at(-1)!;
+    const owner = final.root.children.find(item => item.id === "A-002")!;
+    const outsideY = owner.y + owner.height + 24;
+    edge.route.points = [start, { x: start.x, y: outsideY }, { x: end.x, y: outsideY }, end];
+    // Keep the probe in export bounds to isolate local ownership from root bounds.
+    final.root.height = Math.max(final.root.height, outsideY + 48 - final.root.y);
+    const boundFailures = (scene: typeof final) => auditIaPlaceMapFinalScene(scene).filter(diagnostic =>
+      diagnostic.targetId === edge.id && diagnostic.message.includes("finite routing bounds"));
+    expect(boundFailures(final)).not.toEqual([]);
+    for (const remove of [false, true]) await withLoadedViewMutation((_views, policy) => {
+      if (remove) delete policy.routing_scope;
+      else (policy.routing_scope as Record<string, unknown>).container_node_types = [];
+    }, loaded => {
+      const changedGraph = compiled(loaded);
+      const changedView = loaded.views.views.find(candidate => candidate.id === "ia_place_map")!;
+      const changedProjection = projectView(changedGraph, loaded, changedView.id).projection!;
+      expect(changedProjection).toEqual(projection);
+      const changedScene = buildIaPlaceMapRendererScene(changedProjection, changedGraph, changedView, { detailId: "compact" }, loaded);
+      const probe = structuredClone(final);
+      probe.root.viewMetadata!.iaPlaceMap!.routingScope = changedScene.root.viewMetadata!.iaPlaceMap!.routingScope;
+      expect(boundFailures(probe)).toEqual([]);
     });
   });
 
@@ -269,6 +339,15 @@ describe("IA place map bundle occurrence policy", () => {
       code: string;
       mutate: (policy: Record<string, unknown>) => void;
     }> = [
+      { code: "bundle.renderer.ia_place_map_routing_scope_shape", mutate: (policy) => { policy.routing_scope = {}; } },
+      ...["Missing", "Place", "Event"].map((selector) => ({
+        code: "bundle.renderer.ia_place_map_routing_scope_selectors",
+        mutate: (policy: Record<string, unknown>) => { (policy.routing_scope as Record<string, unknown>).container_node_types = [selector]; }
+      })),
+      { code: "bundle.renderer.ia_place_map_routing_scope_selectors", mutate: (policy) => { (policy.routing_scope as Record<string, unknown>).container_node_types = ["Area", "Area"]; } },
+      { code: "bundle.renderer.ia_place_map_routing_scope_internal_routes", mutate: (policy) => { (policy.routing_scope as Record<string, unknown>).internal_routes = "anywhere"; } },
+      { code: "bundle.renderer.ia_place_map_routing_scope_cross_owner_routes", mutate: (policy) => { (policy.routing_scope as Record<string, unknown>).cross_owner_routes = "anywhere"; } },
+
       {
         code: "bundle.renderer.ia_place_map_detail_display",
         mutate: (policy) => {

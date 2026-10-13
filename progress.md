@@ -29,6 +29,11 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Tue 10-13
+
+- Routing quality improvements
+
+
 ## Mon 10-12
 
 - Initial ia_place_map hardening with routing failures

@@ -3,7 +3,7 @@ import type { FinalRoutingConnector, RoutingBox } from "./routingCore/index.js";
 import { DEFAULT_ROUTING_POLICY } from "./routingCore/index.js";
 import { arrowMarkerFootprintBox } from "./markerGeometry.js";
 import { buildRouteSegmentDetails, type LabelBox } from "./connectorLabelPlacement.js";
-import { labelBoxIntersectsSegment, labelBoxesOverlap } from "./labelCollisionGeometry.js";
+import { labelBoxDistanceToSegment, labelBoxIntersectsSegment, labelBoxesOverlap } from "./labelCollisionGeometry.js";
 import { createRoutingDiagnostic, sortRendererDiagnostics, type RendererDiagnostic } from "./diagnostics.js";
 import { getRendererTheme } from "./theme.js";
 
@@ -27,8 +27,24 @@ export function buildEndpointMarkerRoutingBlockers(
   }));
 }
 
+export interface MarkerAuditOptions {
+  unrelatedRouteClearance?: number;
+  obstacleClearance?: number;
+  markerPairClearance?: number;
+  /** Declared marker membership in a structural junction sharing group. */
+  markerSharingGroupByConnectorId?: ReadonlyMap<string, string>;
+  scopeByConnectorId?: ReadonlyMap<string, LabelBox>;
+  /** Only corresponding declared segments may share painted marker space. */
+  sharedTrackGroupBySegmentIndexByConnectorId?: ReadonlyMap<string, ReadonlyMap<number, string>>;
+}
+
+function boxDistance(left: LabelBox, right: LabelBox): number {
+  return Math.hypot(Math.max(right.x - left.x - left.width, left.x - right.x - right.width, 0),
+    Math.max(right.y - left.y - left.height, left.y - right.y - right.height, 0));
+}
+
 /** Audit painted marker footprints independently of route centreline acceptance. */
-export function auditPositionedSceneMarkers(scene: PositionedScene): RendererDiagnostic[] {
+export function auditPositionedSceneMarkers(scene: PositionedScene, options: MarkerAuditOptions = {}): RendererDiagnostic[] {
   const theme = getRendererTheme(scene.themeId, "routing");
   const obstacles: Array<LabelBox & { id: string }> = [];
   const visit = (item: PositionedItem): void => {
@@ -56,23 +72,47 @@ export function auditPositionedSceneMarkers(scene: PositionedScene): RendererDia
   ));
   const root = scene.root;
   const epsilon = DEFAULT_ROUTING_POLICY.epsilon;
+  const group = (edgeId: string, index: number) => options.sharedTrackGroupBySegmentIndexByConnectorId?.get(edgeId)?.get(index);
+  const markerGroup = (marker: typeof markers[number]): string | undefined => {
+    const terminal = group(marker.edgeId, marker.terminalIndex);
+    if (terminal !== undefined) return terminal;
+    const declared = options.markerSharingGroupByConnectorId?.get(marker.edgeId);
+    const edge = scene.edges.find(candidate => candidate.id === marker.edgeId);
+    return declared !== undefined && edge && buildRouteSegmentDetails(edge.route).some(segment =>
+      group(edge.id, segment.routeSegmentIndex) === declared && labelBoxDistanceToSegment(marker, segment)
+        <= (options.unrelatedRouteClearance ?? DEFAULT_ROUTING_POLICY.minSeparation) + epsilon) ? declared : undefined;
+  };
+  const sameGroup = (marker: typeof markers[number], edgeId: string, index: number): boolean => {
+    const own = markerGroup(marker);
+    return own !== undefined && own === group(edgeId, index);
+  };
   for (const marker of markers) {
-    if (marker.x < root.x - epsilon || marker.y < root.y - epsilon
-      || marker.x + marker.width > root.x + root.width + epsilon
-      || marker.y + marker.height > root.y + root.height + epsilon) fail(marker, "bounds", root.id);
+    for (const bounds of [root, options.scopeByConnectorId?.get(marker.edgeId)].filter((box): box is LabelBox => !!box)) {
+      if (marker.x < bounds.x - epsilon || marker.y < bounds.y - epsilon
+        || marker.x + marker.width > bounds.x + bounds.width + epsilon
+        || marker.y + marker.height > bounds.y + bounds.height + epsilon) fail(marker, "bounds", bounds === root ? root.id : `${marker.edgeId}:scope`);
+    }
     // The arrow tip is attached to its own endpoint's boundary. Every other
     // node/header remains solid; container interiors remain routable.
-    for (const box of obstacles) if (box.id !== marker.attachedItemId && labelBoxesOverlap(marker, box)) fail(marker, "obstacle", box.id);
+    for (const box of obstacles) if (box.id !== marker.attachedItemId && (labelBoxesOverlap(marker, box)
+      || (options.obstacleClearance !== undefined && boxDistance(marker, box) < options.obstacleClearance - epsilon))) fail(marker, "obstacle", box.id);
     for (const edge of scene.edges) {
       for (const segment of buildRouteSegmentDetails(edge.route)) {
         if (edge.id === marker.edgeId && segment.routeSegmentIndex === marker.terminalIndex) continue;
-        if (labelBoxIntersectsSegment(marker, segment)) fail(marker, "connector", edge.id);
+        if (sameGroup(marker, edge.id, segment.routeSegmentIndex)) continue;
+        if (labelBoxIntersectsSegment(marker, segment) || (options.unrelatedRouteClearance !== undefined
+          && edge.id !== marker.edgeId && labelBoxDistanceToSegment(marker, segment) < options.unrelatedRouteClearance - epsilon)) fail(marker, "connector", edge.id);
       }
       if (edge.label && labelBoxesOverlap(marker, edge.label)) fail(marker, "label", edge.id);
     }
   }
   for (let left = 0; left < markers.length; left++) for (let right = left + 1; right < markers.length; right++) {
-    if (labelBoxesOverlap(markers[left]!, markers[right]!)) fail(markers[left]!, "marker", markers[right]!.id);
+    const first = markers[left]!, second = markers[right]!;
+    const firstGroup = markerGroup(first);
+    const secondGroup = markerGroup(second);
+    if (firstGroup !== undefined && firstGroup === secondGroup) continue;
+    if (labelBoxesOverlap(first, second) || (options.markerPairClearance !== undefined
+      && boxDistance(first, second) < options.markerPairClearance - epsilon)) fail(first, "marker", second.id);
   }
   return sortRendererDiagnostics(diagnostics);
 }

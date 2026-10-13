@@ -9,14 +9,14 @@ export interface PortOffsetAllocationInput {
 }
 
 export type PortOffsetAllocation =
-  | { status: "allocated"; offsets: ReadonlyMap<string, number>; availableSlots: number }
+  | { status: "allocated"; offsets: ReadonlyMap<string, number>; availableSlots: number; displacementFromCenter: number }
   | { status: "capacity_exhausted"; requested: number; availableSlots: number; sideLength: number };
 
 /**
  * Allocate deterministic, side-bounded port offsets without moving existing ports.
- * Candidate locations use the shared minimum separation as their pitch; among legal
- * locations, the allocator chooses the set closest to the side centre, then assigns
- * those locations in the caller's stable request order.
+ * Groups use the shared minimum separation as their pitch and centre on the side.
+ * Reservations translate the whole group to the nearest feasible position, then
+ * locations are assigned in the caller's stable request order.
  */
 export function allocatePortOffsets(input: PortOffsetAllocationInput): PortOffsetAllocation {
   const { sideLength, minInset, minSeparation } = input;
@@ -32,19 +32,38 @@ export function allocatePortOffsets(input: PortOffsetAllocationInput): PortOffse
   if (usable < -1e-6) {
     return { status: "capacity_exhausted", requested: input.requestIds.length, availableSlots: 0, sideLength };
   }
-  const slotCount = Math.floor((Math.max(0, usable) + 1e-6) / minSeparation) + 1;
-  const reserved = input.reservedOffsets ?? [];
-  const legal = Array.from({ length: slotCount }, (_unused, index) => minInset + index * minSeparation)
-    .filter(offset => offset <= sideLength - minInset + 1e-6
-      && reserved.every(existing => Math.abs(existing - offset) >= minSeparation - 1e-6));
-  const availableSlots = legal.length;
-  if (availableSlots < input.requestIds.length) {
-    return { status: "capacity_exhausted", requested: input.requestIds.length, availableSlots, sideLength };
+  const reserved = [...(input.reservedOffsets ?? [])].sort((a, b) => a - b);
+  if (reserved.some(offset => !Number.isFinite(offset))) {
+    return { status: "capacity_exhausted", requested: input.requestIds.length, availableSlots: 0, sideLength };
   }
-
+  // Continuous side capacity, including free intervals split by fixed reservations.
+  let availableSlots = 0;
+  let next = minInset;
+  for (const offset of reserved) {
+    const end = Math.min(sideLength - minInset, offset - minSeparation);
+    if (end >= next - 1e-6) availableSlots += Math.floor((end - next + 1e-6) / minSeparation) + 1;
+    next = Math.max(next, offset + minSeparation);
+  }
+  if (next <= sideLength - minInset + 1e-6) {
+    availableSlots += Math.floor((sideLength - minInset - next + 1e-6) / minSeparation) + 1;
+  }
+  const count = input.requestIds.length;
   const center = sideLength / 2;
-  const selected = [...legal].sort((a, b) => Math.abs(a - center) - Math.abs(b - center) || a - b)
-    .slice(0, input.requestIds.length).sort((a, b) => a - b);
+  const nominal = Array.from({ length: count }, (_unused, index) => center + (index - (count - 1) / 2) * minSeparation);
+  const minShift = count ? minInset - nominal[0]! : 0;
+  const maxShift = count ? sideLength - minInset - nominal.at(-1)! : 0;
+  // A feasible translation starts at the centre or at an interval boundary. Test
+  // both sides of every reservation; negative displacement wins an exact tie.
+  const shifts = [0, minShift, maxShift, ...nominal.flatMap(port => reserved.flatMap(offset =>
+    [offset - minSeparation - port, offset + minSeparation - port]))]
+    .filter(shift => shift >= minShift - 1e-6 && shift <= maxShift + 1e-6)
+    .sort((a, b) => Math.abs(a) - Math.abs(b) || a - b);
+  const displacementFromCenter = shifts.find(shift => nominal.every(port => reserved.every(offset =>
+    Math.abs(port + shift - offset) >= minSeparation - 1e-6)));
+  if (displacementFromCenter === undefined) {
+    return { status: "capacity_exhausted", requested: count, availableSlots, sideLength };
+  }
+  const selected = nominal.map(port => port + displacementFromCenter);
   const offsets = new Map(input.requestIds.map((id, index) => [id, selected[index]!] as const));
-  return { status: "allocated", offsets, availableSlots };
+  return { status: "allocated", offsets, availableSlots, displacementFromCenter };
 }

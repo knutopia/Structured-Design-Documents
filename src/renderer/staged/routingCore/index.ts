@@ -11,3 +11,6 @@ export * from "./solver.js";
 export * from "./validation.js";
 export * from "./optimization.js";
 export * from "./portCapacity.js";
+export * from "./bounds.js";
+export * from "./qualitySelection.js";
+export * from "./exteriorCapacity.js";

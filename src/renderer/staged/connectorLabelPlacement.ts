@@ -128,6 +128,10 @@ export interface ConnectorLabelPlacementOptions {
   horizontalSideLabelDistance?: number;
   /** Include segment/obstacle boundary events in narrow label channels. */
   eventBasedHorizontalSearch?: boolean;
+  /** Include competing vertical segment endpoints in along-stem search. */
+  eventBasedVerticalSearch?: boolean;
+  /** Include the scene envelope boundaries in event search for scoped labels. */
+  includeScopeBoundaryEvents?: boolean;
   includeAdjacentHorizontalLabelAnchors?: boolean;
   nearbyHorizontalLabelPreference?: NearbyHorizontalLabelPreference;
   horizontalLabelAssociationPolicy?: HorizontalLabelAssociationPolicy;
@@ -138,6 +142,15 @@ export interface ConnectorLabelPlacementOptions {
   maxVerticalLabelAnchorDistance?: number;
   /** Opt-in final geometry predicate; legacy callers retain their search unchanged. */
   isCandidateAcceptable?: (box: LabelBox, segment: RouteSegmentDetail) => boolean;
+  /** Mutable aggregate allowance shared across route and label retries. */
+  searchBudget?: { candidates: number };
+}
+
+function consumeSearchCandidate(budget?: { candidates: number }): boolean {
+  if (!budget) return true;
+  if (budget.candidates <= 0) return false;
+  budget.candidates--;
+  return true;
 }
 
 function roundMetric(value: number): number {
@@ -884,10 +897,28 @@ function buildVerticalLabelSearchCandidates(
   connectorSegmentsById: ReadonlyMap<string, readonly ConnectorRouteSegmentDetail[]>,
   separatorSegments: readonly HorizontalLineSegment[],
   blockedBoxes: readonly BlockingBox[],
-  scene: PositionedScene
+  scene: PositionedScene,
+  eventBasedSearch = false
 ): VerticalLabelPlacementCandidate[] {
   const initialTopY = roundMetric(anchorY - measuredLabel.height / 2);
+  const eventCandidates: VerticalLabelPlacementCandidate[] = [];
+  if (eventBasedSearch) {
+    const topYs = new Set<number>([scene.root.y, scene.root.y + scene.root.height - measuredLabel.height]);
+    for (const [otherId, segments] of connectorSegmentsById) if (otherId !== connectorId) {
+      for (const segment of segments) if (segment.orientation === "vertical") {
+        topYs.add(Math.max(segment.start.y, segment.end.y) + FIXED_LABEL_CLEARANCE);
+        topYs.add(Math.min(segment.start.y, segment.end.y) - FIXED_LABEL_CLEARANCE - measuredLabel.height);
+      }
+    }
+    for (const y of topYs) {
+      const box = buildVerticalLabelBox(stemX, y, measuredLabel, side);
+      if (!isLabelBoxWithinScene(scene, box)) continue;
+      eventCandidates.push({ box, distanceFromAnchor: Math.abs(y - initialTopY), tierRank: 0,
+        clearanceImbalance: 0, minimumCorridorClearance: 0 });
+    }
+  }
   return [
+    ...eventCandidates,
     ...buildVerticalLabelPreferredCandidates(
       stemX,
       anchorY,
@@ -949,7 +980,9 @@ function resolveVerticalLabelPlacementOnSide(
   connectorBlockMode: "vertical_only" | "all_segments",
   separatorBlockMode: "vertical_stem" | "box",
   maxAnchorDistance?: number,
-  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"]
+  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"],
+  searchBudget?: ConnectorLabelPlacementOptions["searchBudget"],
+  eventBasedSearch = false
 ): ConnectorLabelPlacementResult {
   const candidates = buildVerticalLabelSearchCandidates(
     segment.coordinate,
@@ -960,10 +993,12 @@ function resolveVerticalLabelPlacementOnSide(
     connectorSegmentsById,
     separatorSegments,
     blockedBoxes,
-    scene
+    scene,
+    eventBasedSearch
   );
 
   for (const candidate of candidates) {
+    if (!consumeSearchCandidate(searchBudget)) break;
     if (isCandidateAcceptable && !isCandidateAcceptable(candidate.box, segment)) continue;
     if (maxAnchorDistance !== undefined && candidate.distanceFromAnchor > maxAnchorDistance + 0.001) {
       continue;
@@ -1033,7 +1068,9 @@ function resolveVerticalLabelPlacement(
   connectorBlockMode: "vertical_only" | "all_segments",
   separatorBlockMode: "vertical_stem" | "box",
   maxAnchorDistance?: number,
-  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"]
+  isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"],
+  searchBudget?: ConnectorLabelPlacementOptions["searchBudget"],
+  eventBasedSearch = false
 ): ConnectorLabelPlacementResult {
   const rightCandidate = buildVerticalLabelBox(
     segment.coordinate,
@@ -1074,13 +1111,16 @@ function resolveVerticalLabelPlacement(
     connectorBlockMode,
     separatorBlockMode,
     maxAnchorDistance,
-    isCandidateAcceptable
+    isCandidateAcceptable,
+    searchBudget,
+    eventBasedSearch
   );
 
   if (!preferredPlacement.fallback) {
     return preferredPlacement;
   }
 
+  if (searchBudget && searchBudget.candidates <= 0) return preferredPlacement;
   const alternatePlacement = resolveVerticalLabelPlacementOnSide(
     connectorId,
     measuredLabel,
@@ -1094,7 +1134,9 @@ function resolveVerticalLabelPlacement(
     connectorBlockMode,
     separatorBlockMode,
     maxAnchorDistance,
-    isCandidateAcceptable
+    isCandidateAcceptable,
+    searchBudget,
+    eventBasedSearch
   );
 
   if (!alternatePlacement.fallback) {
@@ -1116,13 +1158,15 @@ function resolveServiceHorizontalLabelPlacement(
   scene: PositionedScene,
   connectorBlockMode: "vertical_only" | "all_segments",
   separatorBlockMode: "vertical_stem" | "box",
-  isCandidateAcceptable?: (box: LabelBox) => boolean
+  isCandidateAcceptable?: (box: LabelBox) => boolean,
+  searchBudget?: ConnectorLabelPlacementOptions["searchBudget"]
 ): ConnectorLabelPlacementResult {
   const initialCandidate = buildHorizontalLabelBox(anchorPoint, measuredLabel);
   let candidate = initialCandidate;
   let lastInBounds = initialCandidate;
 
   for (let attempt = 0; attempt < 16; attempt += 1) {
+    if (!consumeSearchCandidate(searchBudget)) break;
     if (!isHorizontalLabelBlocked(
       candidate,
       connectorId,
@@ -1173,7 +1217,8 @@ function buildScenarioHorizontalLabelSearchCandidates(
   labelLanePreference?: HorizontalLabelLanePreference,
   associationPolicy?: HorizontalLabelAssociationPolicy,
   preferSidePlacement = false,
-  eventBasedSearch = false
+  eventBasedSearch = false,
+  searchBounds?: LabelBox
 ): HorizontalLabelPlacementCandidate[] {
   const xBase = anchorPoint.x - measuredLabel.width / 2;
   const xOffsets: number[] = [];
@@ -1188,6 +1233,7 @@ function buildScenarioHorizontalLabelSearchCandidates(
   if (eventBasedSearch) {
     const left = Math.min(segment.start.x, segment.end.x), right = Math.max(segment.start.x, segment.end.x);
     for (const x of [left, right - measuredLabel.width,
+      ...(searchBounds ? [searchBounds.x, searchBounds.x + searchBounds.width - measuredLabel.width] : []),
       ...blockedBoxes.flatMap(box => [box.x, box.x + box.width, box.x - measuredLabel.width,
         box.x + box.width - measuredLabel.width])]) xOffsets.push(roundMetric(x - xBase));
   }
@@ -1309,7 +1355,9 @@ function resolveScenarioHorizontalLabelPlacement(
   associationPolicy?: HorizontalLabelAssociationPolicy,
   preferSidePlacement = false,
   isCandidateAcceptable?: ConnectorLabelPlacementOptions["isCandidateAcceptable"],
-  eventBasedSearch = false
+  eventBasedSearch = false,
+  includeScopeBoundaryEvents = false,
+  searchBudget?: ConnectorLabelPlacementOptions["searchBudget"]
 ): ConnectorLabelPlacementResult {
   const candidates = buildScenarioHorizontalLabelSearchCandidates(
     measuredLabel,
@@ -1320,14 +1368,17 @@ function resolveScenarioHorizontalLabelPlacement(
     labelLanePreference,
     associationPolicy,
     preferSidePlacement,
-    eventBasedSearch
+    eventBasedSearch,
+    includeScopeBoundaryEvents ? scene.root : undefined
   );
 
   for (const candidate of candidates) {
+    // Eligibility and scoped envelope bounds are known without running the
+    // adapter's geometric audit. Impossible grid offsets are not search trials.
+    if (associationPolicy !== undefined && !candidate.horizontalAssociationEligible) continue;
+    if (includeScopeBoundaryEvents && !isLabelBoxWithinScene(scene, candidate.box)) continue;
+    if (!consumeSearchCandidate(searchBudget)) break;
     if (isCandidateAcceptable && !isCandidateAcceptable(candidate.box, segment)) continue;
-    if (associationPolicy !== undefined && !candidate.horizontalAssociationEligible) {
-      continue;
-    }
     if (!isHorizontalLabelBlocked(
       candidate.box,
       connectorId,
@@ -1475,6 +1526,7 @@ export function positionConnectorLabel(
   const horizontalSideLabelDistance = options.horizontalSideLabelDistance ?? FIXED_LABEL_CLEARANCE;
   const diagnosticSeverity = diagnosticsPolicy.severity ?? "info";
 
+  if (options.searchBudget && options.searchBudget.candidates <= 0) return undefined;
   const anchorCandidates = buildConnectorLabelAnchorCandidates(route, options.includeAdjacentHorizontalLabelAnchors);
   if (!anchorCandidates || anchorCandidates.length === 0) {
     diagnostics.push(
@@ -1488,7 +1540,10 @@ export function positionConnectorLabel(
     return undefined;
   }
 
-  const scoredCandidates = anchorCandidates.map((anchor) => {
+  const scoredCandidates: Array<{ anchor: ConnectorLabelAnchorCandidate;
+    placement: ConnectorLabelPlacementResult; minimumBlockerClearance: number }> = [];
+  for (const anchor of anchorCandidates) {
+    if (options.searchBudget && options.searchBudget.candidates <= 0) break;
     const placement = anchor.segment.orientation === "vertical"
       ? resolveVerticalLabelPlacement(
           connectorId,
@@ -1502,7 +1557,9 @@ export function positionConnectorLabel(
           connectorBlockMode,
           separatorBlockMode,
           options.maxVerticalLabelAnchorDistance,
-          options.isCandidateAcceptable
+          options.isCandidateAcceptable,
+          options.searchBudget,
+          options.eventBasedVerticalSearch
         )
       : horizontalPlacementMode === "scenario_side_offsets"
         ? resolveScenarioHorizontalLabelPlacement(
@@ -1522,7 +1579,9 @@ export function positionConnectorLabel(
             options.horizontalLabelAssociationPolicy,
             options.preferHorizontalSidePlacement,
             options.isCandidateAcceptable,
-            options.eventBasedHorizontalSearch
+            options.eventBasedHorizontalSearch,
+            options.includeScopeBoundaryEvents,
+            options.searchBudget
           )
         : resolveServiceHorizontalLabelPlacement(
             connectorId,
@@ -1534,15 +1593,17 @@ export function positionConnectorLabel(
             scene,
             connectorBlockMode,
             separatorBlockMode,
-            options.isCandidateAcceptable ? box => options.isCandidateAcceptable!(box, anchor.segment) : undefined
+            options.isCandidateAcceptable ? box => options.isCandidateAcceptable!(box, anchor.segment) : undefined,
+            options.searchBudget
           );
 
-    return {
+    scoredCandidates.push({
       anchor,
       placement,
       minimumBlockerClearance: measureMinimumBoxClearance(placement.box, blockedBoxes)
-    };
-  }).sort((left, right) =>
+    });
+  }
+  scoredCandidates.sort((left, right) =>
     compareAnchorPlacementCandidates(
       left,
       right,
@@ -1564,6 +1625,7 @@ export function positionConnectorLabel(
     return undefined;
   }
 
+  if (chosen.placement.fallback && options.searchBudget) return undefined;
   if (chosen.placement.fallback) {
     diagnostics.push(
       createRoutingDiagnostic(

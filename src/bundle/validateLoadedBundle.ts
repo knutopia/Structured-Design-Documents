@@ -318,12 +318,32 @@ function validateIaPlaceMapPolicy(
   const includedEdgeTypes = strings(view.projection?.include_edge_types) ?? [];
   const hierarchyEdges = strings(view.projection?.hierarchy_edges) ?? [];
   const policy = record(value);
-  if (!policy || !sameStringSet(Object.keys(policy), ["projection_edge_references", "navigation"])) {
-    fail("policy_shape", "must declare exactly projection_edge_references and navigation");
+  if (!policy || !sameStringSet(Object.keys(policy).filter((key) => key !== "routing_scope"), ["projection_edge_references", "navigation"])) {
+    fail("policy_shape", "must declare projection_edge_references and navigation, with optional routing_scope");
     return;
   }
   if (policy.projection_edge_references !== "exact_source_occurrences") {
     fail("projection_references", "projection_edge_references must be exact_source_occurrences");
+  }
+  if (policy.routing_scope !== undefined) {
+    const scope = record(policy.routing_scope);
+    if (!scope || !sameStringSet(Object.keys(scope), ["container_node_types", "internal_routes", "cross_owner_routes"])) {
+      fail("routing_scope_shape", "routing_scope must declare container_node_types, internal_routes, and cross_owner_routes");
+    } else {
+      const selectors = strings(scope.container_node_types);
+      // The IA scene adapter owns the semantic-node to scene-primitive mapping:
+      // Area is an identified container; Place is an identified node (its scopes are anonymous).
+      if (!selectors || new Set(selectors).size !== selectors.length
+        || selectors.some((type) => !nodeTypes.has(type) || !includedNodeTypes.includes(type) || type !== "Area")) {
+        fail("routing_scope_selectors", "container_node_types must select distinct included node types represented as identified IA scene containers");
+      }
+      if (scope.internal_routes !== "within_common_owner") {
+        fail("routing_scope_internal_routes", "internal_routes must be within_common_owner");
+      }
+      if (scope.cross_owner_routes !== "through_common_ancestor") {
+        fail("routing_scope_cross_owner_routes", "cross_owner_routes must be through_common_ancestor");
+      }
+    }
   }
   const navigation = record(policy.navigation);
   if (!navigation || !sameStringSet(Object.keys(navigation), ["relationship", "occurrence_coverage", "presentation", "containment_fusion"])) {

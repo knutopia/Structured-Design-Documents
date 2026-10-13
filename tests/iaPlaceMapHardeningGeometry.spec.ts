@@ -11,6 +11,7 @@ import { renderSvgToPng } from "../src/renderer/svgArtifacts.js";
 import { RendererArtifactError } from "../src/renderer/staged/diagnostics.js";
 import { resolveRendererTheme } from "../src/renderer/staged/theme.js";
 import { wrappedLabelPreservesText } from "../src/renderer/staged/connectorLabelLayout.js";
+import type { Point, PositionedEdgeLabel } from "../src/renderer/staged/contracts.js";
 
 let bundle: Bundle, view: ViewSpec, original: string;
 const fixture = "tests/fixtures/render/ia_parallel_navigation_v02.sdd";
@@ -41,6 +42,15 @@ const variants = [
   { name: "multiple incoming and child return", change: (s: string) => s.replace("    route_or_key=/workspace/settings", '    NAVIGATES_TO P-002 [E-001] {settings saved} diagrams=DG-001\n    route_or_key=/workspace/settings'), count: 5, label: "[Open current workspace] {settings saved}" }
 ];
 
+/** Independent box-to-painted-axis geometry, without calling renderer audits. */
+function labelSegmentDistance(box: PositionedEdgeLabel, a: Point, b: Point): number {
+  expect([box.x, box.y, box.width, box.height, a.x, a.y, b.x, b.y].every(Number.isFinite)).toBe(true);
+  expect(Math.min(Math.abs(a.x - b.x), Math.abs(a.y - b.y))).toBeLessThanOrEqual(0.5);
+  const dx = Math.max(box.x - Math.max(a.x, b.x), Math.min(a.x, b.x) - box.x - box.width, 0);
+  const dy = Math.max(box.y - Math.max(a.y, b.y), Math.min(a.y, b.y) - box.y - box.height, 0);
+  return Math.hypot(dx, dy);
+}
+
 describe.each(["compact", "detailed"])("IA hardening final geometry in %s", detailId => {
   it.each(variants)("accepts $name with complete paths and original text", async variant => {
     const { scene } = build(variant.change(original), detailId);
@@ -57,6 +67,13 @@ describe.each(["compact", "detailed"])("IA hardening final geometry in %s", deta
       expect(connector.from.itemId).toBe(occurrence.from);
       expect(connector.to.itemId).toBe(occurrence.to);
       if (occurrence.label) expect(wrappedLabelPreservesText(connector.label!.lines, occurrence.label)).toBe(true);
+      if (connector.label) {
+        const distanceTo = (edge: typeof connector) => Math.min(...edge.route.points.slice(1)
+          .map((b, index) => labelSegmentDistance(connector.label!, edge.route.points[index]!, b)));
+        expect(distanceTo(connector), `${variant.name}: own annotation distance`).toBeCloseTo(12, 0);
+        for (const other of final.edges.filter(edge => edge.id !== connector.id))
+          expect(distanceTo(other), `${variant.name}: annotation ${connector.id} to ${other.id}`).toBeGreaterThanOrEqual(23.5);
+      }
     }
     if (variant.label) expect(occurrences.map(o => o.label)).toContain(variant.label);
     if (variant.name === "identical duplicates") {

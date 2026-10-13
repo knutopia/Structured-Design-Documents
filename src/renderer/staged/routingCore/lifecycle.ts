@@ -1,3 +1,4 @@
+import { effectiveRoutingBounds, validRoutingBounds, type ConnectorRoutingBounds } from "./bounds.js";
 import type { Point, PositionedRoute, PortSide } from "../contracts.js";
 import { DEFAULT_ROUTING_POLICY, type RoutingBox, type RoutingCoordinateRange, type RoutingSegment, type RoutingValidationPolicy, type RoutingViolation } from "./contracts.js";
 import { buildRoutingSegments, segmentLength, perpendicularSegmentsCross, departsOutwardFromPort } from "./geometry.js";
@@ -24,6 +25,7 @@ export interface FinalRoutingConnector {
   source: FinalRoutingEndpoint;
   target: FinalRoutingEndpoint;
   priority: number;
+  routingBounds?: ConnectorRoutingBounds;
   /** Keys are logical run IDs within this topology, never stale array offsets. */
   runConstraints?: ReadonlyMap<string, FinalRoutingRunConstraint>;
   sharedTrackGroupBySegmentIndex?: ReadonlyMap<number, string>;
@@ -130,7 +132,6 @@ function buildCorridorRecovery(
   if (!implicated.length) return undefined;
   const boxes = [...context.boxes, ...(context.blockers ?? [])];
   const byId = new Map(context.connectors.map(c => [c.id, c]));
-  const bounds = context.bounds;
   const replacements = new Map<string, Point[]>();
   // When an adapter supplies obstacle envelopes, recovery must find room for
   // their tracks as well as their nodes. Keep already settled routes present:
@@ -142,6 +143,7 @@ function buildCorridorRecovery(
     const connector = byId.get(id);
     if (!connector) continue;
     pending.delete(id);
+    const bounds = effectiveRoutingBounds(connector, context);
     let bestPoints: Point[] | undefined;
     let bestConflictCount = Infinity;
     for (const points of buildPortCorridorCandidates(connector, context)) {
@@ -266,7 +268,8 @@ export function validateFinalRouteSet(context: FinalRoutingContext): RoutingViol
         violations.push(issue("empty_coordinate_range", `Run ${s.logicalRunId} violates its declared resource or lock.`, c.id, s.routeSegmentIndex));
       }
     }
-    if (points.some(p => p.x < b.minX - epsilon || p.x > b.maxX + epsilon || p.y < b.minY - epsilon || p.y > b.maxY + epsilon)) {
+    const localBounds = effectiveRoutingBounds(c, context);
+    if (c.routingBounds && (typeof c.routingBounds.ownerId !== "string" || !c.routingBounds.ownerId || !validRoutingBounds(c.routingBounds)) || !validRoutingBounds(localBounds) || points.some(p => p.x < localBounds.minX - epsilon || p.x > localBounds.maxX + epsilon || p.y < localBounds.minY - epsilon || p.y > localBounds.maxY + epsilon)) {
       violations.push(issue("empty_coordinate_range", "Route leaves the adapter's finite routing bounds.", c.id));
     }
   }
@@ -297,10 +300,13 @@ function accepted(context: FinalRoutingContext, trace: FinalRoutingTrace): Final
 function copyForExpansion(context: FinalRoutingContext): FinalRoutingContext {
   return { ...context, bounds: { ...context.bounds }, policy: { ...context.policy },
     boxes: context.boxes.map(box => ({ ...box,
+      exemptSharedTrackGroupIds: box.exemptSharedTrackGroupIds && [...box.exemptSharedTrackGroupIds],
       appliesToConnectorIds: box.appliesToConnectorIds && [...box.appliesToConnectorIds] })),
     blockers: context.blockers?.map(box => ({ ...box,
+      exemptSharedTrackGroupIds: box.exemptSharedTrackGroupIds && [...box.exemptSharedTrackGroupIds],
       appliesToConnectorIds: box.appliesToConnectorIds && [...box.appliesToConnectorIds] })),
     connectors: context.connectors.map(connector => ({ ...connector,
+      routingBounds: connector.routingBounds && { ...connector.routingBounds },
       source: { ...connector.source, point: { ...connector.source.point } },
       target: { ...connector.target, point: { ...connector.target.point } },
       route: { ...connector.route, points: connector.route.points.map(point => ({ ...point })) },
@@ -313,7 +319,7 @@ function copyForExpansion(context: FinalRoutingContext): FinalRoutingContext {
 
 function canonical(context: FinalRoutingContext): string {
   return JSON.stringify([context.bounds, context.boxes, context.blockers, [...context.connectors].sort((a, b) => a.id.localeCompare(b.id))
-    .map(c => [c.id, c.source, c.target, c.route.points])]);
+    .map(c => [c.id, c.source, c.target, c.routingBounds, c.route.points])]);
 }
 interface RouteSetState { context: FinalRoutingContext; violations: RoutingViolation[]; score: number[]; key: string }
 function score(context: FinalRoutingContext, baseline: FinalRoutingContext, violations: readonly RoutingViolation[], initialImplicated: ReadonlySet<string>): number[] {
@@ -474,6 +480,7 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
     if (expanded.connectors.length !== initial.connectors.length || initial.connectors.some(c => {
       const next = byId.get(c.id);
       return !next || next.source.nodeId !== c.source.nodeId || next.target.nodeId !== c.target.nodeId
+        || (c.routingBounds && (!next.routingBounds || next.routingBounds.ownerId !== c.routingBounds.ownerId))
         || next.priority !== c.priority || next.source.side !== c.source.side || next.target.side !== c.target.side
         || next.source.minLeg < c.source.minLeg || next.target.minLeg < c.target.minLeg
         || [...(c.runConstraints ?? [])].some(([id, constraint]) => {
@@ -487,10 +494,12 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
     }) || initial.boxes.some(box => !boxes.has(box.id)
       || expanded.boxes.find(next => next.id === box.id)?.blocksAxis !== box.blocksAxis
       || JSON.stringify(expanded.boxes.find(next => next.id === box.id)?.appliesToConnectorIds) !== JSON.stringify(box.appliesToConnectorIds)
+      || JSON.stringify(expanded.boxes.find(next => next.id === box.id)?.exemptSharedTrackGroupIds) !== JSON.stringify(box.exemptSharedTrackGroupIds)
       || (expanded.boxes.find(next => next.id === box.id)?.clearance ?? 0) < (box.clearance ?? 0))
       || initial.blockers?.some(box => !blockers.has(box.id)
         || expanded.blockers?.find(next => next.id === box.id)?.blocksAxis !== box.blocksAxis
         || JSON.stringify(expanded.blockers?.find(next => next.id === box.id)?.appliesToConnectorIds) !== JSON.stringify(box.appliesToConnectorIds)
+        || JSON.stringify(expanded.blockers?.find(next => next.id === box.id)?.exemptSharedTrackGroupIds) !== JSON.stringify(box.exemptSharedTrackGroupIds)
         || (expanded.blockers?.find(next => next.id === box.id)?.clearance ?? 0) < (box.clearance ?? 0))) {
       return { status: "failed", reason: "invalid_context", violations: [issue("endpoint_mismatch", "Expansion dropped required routing context or weakened endpoint, resource, or sharing constraints.", "")], debugConnectors: context.connectors, trace };
     }

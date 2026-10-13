@@ -93,6 +93,33 @@ function placeLabel(
 }
 
 describe("connector label placement", () => {
+  it.each(["horizontal", "vertical"] as const)("shares a finite candidate allowance across %s placement retries", orientation => {
+    const route: PositionedRoute = { style: "orthogonal", points: orientation === "horizontal"
+      ? [{ x: 0, y: 100 }, { x: 200, y: 100 }] : [{ x: 100, y: 0 }, { x: 100, y: 200 }] };
+    const searchBudget = { candidates: 3 };
+    let attempts = 0;
+    const options = { searchBudget, isCandidateAcceptable: () => { attempts++; return false; } };
+    expect(placeLabel(route, options).label).toBeUndefined();
+    expect(searchBudget.candidates).toBe(0);
+    expect(attempts).toBe(3);
+    expect(placeLabel(route, options).label).toBeUndefined();
+    expect(attempts).toBe(3);
+  });
+  it("counts blocked service candidates before geometry checks", () => {
+    const route: PositionedRoute = { style: "orthogonal", points: [{ x: 0, y: 100 }, { x: 200, y: 100 }] };
+    const searchBudget = { candidates: 2 };
+    expect(placeLabel(route, { searchBudget, horizontalPlacementMode: "service_shift_right",
+      blockedBoxes: [{ x: -200, y: -200, width: 800, height: 800 }] }).label).toBeUndefined();
+    expect(searchBudget.candidates).toBe(0);
+  });
+  it("does no placement work when the aggregate allowance is zero", () => {
+    const route: PositionedRoute = { style: "orthogonal", points: [{ x: 0, y: 100 }, { x: 200, y: 100 }] };
+    let attempts = 0;
+    expect(placeLabel(route, { searchBudget: { candidates: 0 },
+      isCandidateAcceptable: () => { attempts++; return true; } }).label).toBeUndefined();
+    expect(attempts).toBe(0);
+  });
+
   it("prefers adjacent horizontal anchors over a long vertical midpoint anchor", () => {
     const route: PositionedRoute = {
       style: "orthogonal",

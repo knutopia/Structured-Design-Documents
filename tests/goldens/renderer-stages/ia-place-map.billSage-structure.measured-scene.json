@@ -13,6 +13,17 @@
     ],
     "viewMetadata": {
       "iaPlaceMap": {
+        "routingScope": {
+          "containerIds": [
+            "A-200",
+            "A-300",
+            "A-400",
+            "A-500",
+            "A-600"
+          ],
+          "internalRoutes": "within_common_owner",
+          "crossOwnerRoutes": "through_common_ancestor"
+        },
         "expectedNavigationOccurrences": [
           {
             "id": "navigation:source-edge-cfebcdb1f763c5f82ef500494abc390cd4f223678510483e8a1946b2dce3107b-0",
@@ -940,9 +951,9 @@
         "chrome": {
           "padding": {
             "top": 16,
-            "right": 16,
+            "right": 66,
             "bottom": 16,
-            "left": 16
+            "left": 18
           },
           "gutter": 20,
           "headerBandHeight": 40
@@ -979,7 +990,10 @@
               "strategy": "stack",
               "direction": "vertical",
               "gap": 32,
-              "crossAlignment": "start"
+              "crossAlignment": "start",
+              "gapAfter": {
+                "P-210": 34
+              }
             },
             "chrome": {
               "padding": {
@@ -1352,17 +1366,17 @@
                     "id": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:source:P-210",
                     "role": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:source:P-210",
                     "side": "south",
-                    "offset": 108,
-                    "x": 108,
+                    "offset": 136,
+                    "x": 136,
                     "y": 162
                   },
                   {
                     "id": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:source:P-210",
                     "role": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:source:P-210",
-                    "side": "south",
-                    "offset": 124,
-                    "x": 124,
-                    "y": 162
+                    "side": "east",
+                    "offset": 81,
+                    "x": 224,
+                    "y": 81
                   }
                 ],
                 "overflow": {
@@ -1384,7 +1398,10 @@
                   "strategy": "stack",
                   "direction": "vertical",
                   "gap": 32,
-                  "crossAlignment": "start"
+                  "crossAlignment": "start",
+                  "gapAfter": {
+                    "P-220__group": 34
+                  }
                 },
                 "chrome": {
                   "padding": {
@@ -1414,7 +1431,7 @@
                       "gap": 32,
                       "crossAlignment": "start",
                       "gapAfter": {
-                        "P-220": 56
+                        "P-220": 50
                       }
                     },
                     "chrome": {
@@ -1658,32 +1675,32 @@
                             "id": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:target:P-220",
                             "role": "ia_occurrence_port:navigation%3Asource-edge-5f04c8713310389450d1e94f077c41cc77852469de1989eb5e867d579213221c-0:target:P-220",
                             "side": "north",
-                            "offset": 108,
-                            "x": 108,
+                            "offset": 88,
+                            "x": 88,
                             "y": 0
                           },
                           {
                             "id": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:target:P-220",
                             "role": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:target:P-220",
                             "side": "south",
-                            "offset": 92,
-                            "x": 92,
+                            "offset": 89,
+                            "x": 89,
                             "y": 98
                           },
                           {
                             "id": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:target:P-220",
                             "role": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:target:P-220",
                             "side": "south",
-                            "offset": 108,
-                            "x": 108,
+                            "offset": 112,
+                            "x": 112,
                             "y": 98
                           },
                           {
                             "id": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:target:P-220",
                             "role": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:target:P-220",
                             "side": "south",
-                            "offset": 124,
-                            "x": 124,
+                            "offset": 135,
+                            "x": 135,
                             "y": 98
                           }
                         ],
@@ -1706,7 +1723,10 @@
                           "strategy": "stack",
                           "direction": "vertical",
                           "gap": 32,
-                          "crossAlignment": "start"
+                          "crossAlignment": "start",
+                          "gapAfter": {
+                            "P-221__group": 34
+                          }
                         },
                         "chrome": {
                           "padding": {
@@ -1981,8 +2001,8 @@
                                     "id": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:source:P-221",
                                     "role": "ia_occurrence_port:navigation%3Asource-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0:source:P-221",
                                     "side": "north",
-                                    "offset": 108,
-                                    "x": 108,
+                                    "offset": 41,
+                                    "x": 41,
                                     "y": 0
                                   }
                                 ],
@@ -2256,8 +2276,8 @@
                                     "id": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:source:P-222",
                                     "role": "ia_occurrence_port:navigation%3Asource-edge-90e6a7c9bd6b601aae36440684a666f7ed86162be43debbf4db83413bccf5ec5-0:source:P-222",
                                     "side": "north",
-                                    "offset": 108,
-                                    "x": 108,
+                                    "offset": 64,
+                                    "x": 64,
                                     "y": 0
                                   }
                                 ],
@@ -2275,12 +2295,12 @@
                         ],
                         "ports": [],
                         "width": 272,
-                        "height": 275
+                        "height": 277
                       }
                     ],
                     "ports": [],
                     "width": 272,
-                    "height": 429
+                    "height": 425
                   },
                   {
                     "kind": "container",
@@ -2540,17 +2560,17 @@
                           {
                             "id": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:target:P-230",
                             "role": "ia_occurrence_port:navigation%3Asource-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0:target:P-230",
-                            "side": "north",
-                            "offset": 108,
-                            "x": 108,
-                            "y": 0
+                            "side": "east",
+                            "offset": 56,
+                            "x": 224,
+                            "y": 56
                           },
                           {
                             "id": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:source:P-230",
                             "role": "ia_occurrence_port:navigation%3Asource-edge-b09a7ed8a62b206217a95920e2aede1e4320558a6a11e69dca19ab5868443f2f-0:source:P-230",
                             "side": "north",
-                            "offset": 124,
-                            "x": 124,
+                            "offset": 135,
+                            "x": 135,
                             "y": 0
                           }
                         ],
@@ -2568,7 +2588,7 @@
                 ],
                 "ports": [],
                 "width": 320,
-                "height": 573
+                "height": 571
               }
             ],
             "ports": [],
@@ -2577,7 +2597,7 @@
           }
         ],
         "ports": [],
-        "width": 352,
+        "width": 404,
         "height": 839
       },
       {
@@ -4350,7 +4370,7 @@
       }
     ],
     "ports": [],
-    "width": 1888,
+    "width": 1940,
     "height": 887
   },
   "edges": [

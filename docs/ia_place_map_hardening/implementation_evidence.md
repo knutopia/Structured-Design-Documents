@@ -229,3 +229,23 @@ SHA-256 of final proof inputs and governing policies:
 | `bundle/v0.2/core/contracts.yaml` | `a53bfddfbe18aebb107710b8476035078ee977a9e1ff4476a76edb64b1a19eb0` |
 
 Preserved accepted artifacts have a per-file SHA-256 inventory in `evidence/sha256.txt`.
+
+## 2026-10-13 correction: routing recovery
+
+The historical acceptance claim above was rejected by
+[manual visual review](manual_review_routing_failures.md). Its original proof images
+and hashes remain preserved; they must not establish current routing quality.
+The [recovery execution](routing_quality_execution.md) records the observed
+failures, subsequent fixes and independent numerical/visual acceptance. New
+[SVG-only proofs](routing_quality_evidence/README.md) capture the corrected output,
+measured expansion decisions, rejected alternatives and current source hashes.
+The user's instruction supersedes the recovery plan's PNG proof commands.
+
+Independent acceptance now passes 154/154 checks and normal-scale SVG review is
+acceptable in both details, named/decorated selections and the loop/incoming
+variants. Exactly four affected BillSage v0.2 renderer-stage goldens changed after
+those gates; their suite passes 9/9. Projection snapshots, v0.1, LEGACY and the
+historical evidence/corpus are preserved. Full-suite closure is recorded in the
+recovery execution report: **174 files / 1,932 tests passed**, including the build,
+in 578.64 seconds. All cited recovery invariants pass; the corrected work is accepted.
+Final acceptance must use the recovery report and its new SVG proofs.

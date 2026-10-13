@@ -213,6 +213,11 @@ export type JourneyMapItemMetadata =
 export interface ViewMetadata {
   diagram?: { id: string; name: string };
   iaPlaceMap?: {
+    routingScope?: {
+      containerIds: string[];
+      internalRoutes: "within_common_owner";
+      crossOwnerRoutes: "through_common_ancestor";
+    };
     expectedNavigationOccurrences: Array<{
       id: string;
       sourceEdgeId: string;
@@ -252,6 +257,10 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
     ...(viewMetadata.iaPlaceMap
       ? {
         iaPlaceMap: {
+          ...(viewMetadata.iaPlaceMap.routingScope ? { routingScope: {
+            ...viewMetadata.iaPlaceMap.routingScope,
+            containerIds: [...viewMetadata.iaPlaceMap.routingScope.containerIds]
+          } } : {}),
           expectedNavigationOccurrences: viewMetadata.iaPlaceMap.expectedNavigationOccurrences.map((occurrence) => ({
             ...occurrence,
             ...(occurrence.markers ? { markers: { ...occurrence.markers } } : {}),
@@ -804,6 +813,36 @@ export interface PositionedTextDecoration {
 
 export type PositionedDecoration = PositionedLineDecoration | PositionedTextDecoration;
 
+export interface RendererRoutingPortGroupEvidence {
+  nodeId: string;
+  side: PortSide;
+  requestIds: string[];
+  offsets: number[];
+  reservedOffsets: number[];
+  displacementFromCenter: number;
+}
+
+/** Solver evidence belongs to positioned revisions, never semantic scene input. */
+export interface RendererRoutingRevisionEvidence {
+  pass: number;
+  costs?: Array<[string, readonly number[]]>;
+  rejected?: readonly { id: string; reason: string }[];
+  ports?: Array<{ id: string; groups: RendererRoutingPortGroupEvidence[] }>;
+  proposalCount?: number;
+  remainingCandidates?: number;
+  remainingRepairs?: number;
+  expansion?: { gaps: Array<[string, number]>; padding: Array<[string, number]> };
+  rejectedRevision?: string;
+  violations?: string[];
+  labels?: readonly { connectorId: string; kind: string; obstacleId?: string }[];
+}
+
+export interface RendererRoutingEvidence {
+  candidates: number;
+  repairs: number;
+  revisions: RendererRoutingRevisionEvidence[];
+}
+
 export interface PositionedScene {
   viewId: string;
   detailId: string;
@@ -813,4 +852,5 @@ export interface PositionedScene {
   decorations: PositionedDecoration[];
   diagnostics: RendererDiagnostic[];
   paintOrder: PaintGroup[];
+  routingEvidence?: RendererRoutingEvidence;
 }
