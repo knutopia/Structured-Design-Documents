@@ -1,3 +1,4 @@
+import type { RendererIaRoutingPreferences } from "../../bundle/types.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
 
 export interface StagedRenderSettings {
@@ -213,6 +214,8 @@ export type JourneyMapItemMetadata =
 export interface ViewMetadata {
   diagram?: { id: string; name: string };
   iaPlaceMap?: {
+    exportClearance?: "readable_gap";
+    routingPreferences?: RendererIaRoutingPreferences;
     routingScope?: {
       containerIds: string[];
       internalRoutes: "within_common_owner";
@@ -257,6 +260,8 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
     ...(viewMetadata.iaPlaceMap
       ? {
         iaPlaceMap: {
+          ...(viewMetadata.iaPlaceMap.exportClearance ? { exportClearance: viewMetadata.iaPlaceMap.exportClearance } : {}),
+          ...(viewMetadata.iaPlaceMap.routingPreferences ? { routingPreferences: structuredClone(viewMetadata.iaPlaceMap.routingPreferences) } : {}),
           ...(viewMetadata.iaPlaceMap.routingScope ? { routingScope: {
             ...viewMetadata.iaPlaceMap.routingScope,
             containerIds: [...viewMetadata.iaPlaceMap.routingScope.containerIds]
@@ -489,8 +494,14 @@ export interface RoutingIntent {
 }
 
 export interface EdgeLabelSpec {
+  /** Character offsets of bundle-prepared part boundaries; never final line breaks. */
+  preferredBreaks?: number[];
   text: string;
   textStyleRole: string;
+}
+
+export function cloneEdgeLabelSpec(label?: EdgeLabelSpec): EdgeLabelSpec | undefined {
+  return label ? { ...label, ...(label.preferredBreaks ? { preferredBreaks: [...label.preferredBreaks] } : {}) } : undefined;
 }
 
 export interface EdgeMarkers {
@@ -840,10 +851,29 @@ export interface RendererRoutingRevisionEvidence {
 export interface RendererRoutingEvidence {
   candidates: number;
   repairs: number;
+  expansionPasses?: number;
+  remainingCandidates?: number;
+  remainingRepairs?: number;
+  remainingExpansionPasses?: number;
   revisions: RendererRoutingRevisionEvidence[];
 }
 
+export interface RendererForwardRoutingWitness {
+  attachments?: Array<{
+    connectorId: string;
+    targetSide: PortSide;
+    intervals: Array<readonly [number, number]>;
+    midpoint: number;
+    coordinate: number;
+    displacement: number;
+  }>;
+  baseline: Omit<PositionedScene, "routingEvidence" | "forwardRoutingWitness">;
+  shortcutIds: string[];
+}
+
 export interface PositionedScene {
+  forwardRoutingWitness?: RendererForwardRoutingWitness;
+  iaAcceptancePolicy?: NonNullable<ViewMetadata["iaPlaceMap"]>;
   viewId: string;
   detailId: string;
   themeId: string;

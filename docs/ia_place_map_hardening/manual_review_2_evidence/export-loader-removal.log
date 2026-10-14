@@ -1,0 +1,26 @@
+
+ RUN  v2.1.9 /home/knut/projects/sdd
+
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: compact > audits complete paint and convergence for parallel 3305ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: compact > audits complete paint and convergence for self-loop 12782ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: compact > audits complete paint and convergence for multiple-incoming 4617ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: compact > audits complete paint and convergence for DG-001 1393ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: compact > audits complete paint and convergence for DG-002 687ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: compact > audits complete paint and convergence for DG-003 324ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: compact > observably follows export policy removal 889ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: compact > withholds SVG and derived PNG for lost policy or painted margin corruption
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: detailed > audits complete paint and convergence for parallel 5241ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: detailed > audits complete paint and convergence for self-loop 3972ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: detailed > audits complete paint and convergence for multiple-incoming 6644ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: detailed > audits complete paint and convergence for DG-001 4317ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: detailed > audits complete paint and convergence for DG-002 838ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: detailed > audits complete paint and convergence for DG-003 523ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: detailed > observably follows export policy removal 5059ms
+ ✓ tests/iaReview2ExportClearance.spec.ts > review 2 export clearance: detailed > withholds SVG and derived PNG for lost policy or painted margin corruption
+ ✓ tests/iaReview2ExportClearance.spec.ts > includes label strokes and larger marker/stroke footprints in deficits
+
+ Test Files  1 passed (1)
+      Tests  17 passed (17)
+   Start at  01:35:23
+   Duration  65.24s (transform 5.06s, setup 0ms, collect 7.60s, tests 55.43s, environment 1ms, prepare 390ms)
+

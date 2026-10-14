@@ -1,0 +1,656 @@
+{
+  "candidates": 1674,
+  "repairs": 7,
+  "expansionPasses": 2,
+  "remainingCandidates": 2422,
+  "remainingRepairs": 121,
+  "remainingExpansionPasses": 2,
+  "revisions": [
+    {
+      "pass": 0,
+      "expansion": {
+        "gaps": [
+          [
+            "root\u0000A-001\u0000A-002",
+            131.676
+          ]
+        ],
+        "padding": []
+      },
+      "remainingCandidates": 4096,
+      "remainingRepairs": 128
+    },
+    {
+      "pass": 1,
+      "costs": [],
+      "rejected": [
+        {
+          "id": "facing:proposal-0",
+          "reason": "scene_rejected"
+        },
+        {
+          "id": "facing:seed",
+          "reason": "scene_rejected"
+        },
+        {
+          "id": "north:seed",
+          "reason": "candidate_exhausted"
+        },
+        {
+          "id": "east:seed",
+          "reason": "candidate_exhausted"
+        },
+        {
+          "id": "west:seed",
+          "reason": "candidate_exhausted"
+        },
+        {
+          "id": "south:seed",
+          "reason": "candidate_exhausted"
+        }
+      ],
+      "ports": [
+        {
+          "id": "facing",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                35.5,
+                58.5,
+                81.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                35.5,
+                58.5,
+                81.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        },
+        {
+          "id": "north",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "north",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                112
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-001",
+              "side": "north",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                112
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        },
+        {
+          "id": "south",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "south",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                112
+              ],
+              "reservedOffsets": [
+                24
+              ],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-001",
+              "side": "south",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                112
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        },
+        {
+          "id": "east",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                35.5,
+                58.5,
+                81.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                58.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        },
+        {
+          "id": "west",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                35.5,
+                58.5,
+                81.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-001",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                58.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        }
+      ],
+      "proposalCount": 6,
+      "remainingCandidates": 3237,
+      "remainingRepairs": 124
+    },
+    {
+      "pass": 1,
+      "expansion": {
+        "gaps": [
+          [
+            "P-002__group\u0000P-002\u0000P-002__contains_scope_single",
+            2
+          ]
+        ],
+        "padding": [
+          [
+            "root\u0000bottom",
+            10
+          ],
+          [
+            "root\u0000right",
+            9.999999999999886
+          ]
+        ]
+      },
+      "rejectedRevision": "south",
+      "violations": [
+        "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 0 intersects non-endpoint box \"P-003\".",
+        "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 1 intersects non-endpoint box \"P-003\"."
+      ],
+      "labels": []
+    },
+    {
+      "pass": 2,
+      "costs": [
+        [
+          "south:accepted-probe-0",
+          [
+            0,
+            4,
+            153.67599999999987,
+            0,
+            1551.028
+          ]
+        ],
+        [
+          "south:proposal-0",
+          [
+            0,
+            4,
+            153.67599999999987,
+            0,
+            1551.028
+          ]
+        ]
+      ],
+      "rejected": [
+        {
+          "id": "facing:proposal-0",
+          "reason": "scene_rejected"
+        },
+        {
+          "id": "facing:seed",
+          "reason": "scene_rejected"
+        },
+        {
+          "id": "north:seed",
+          "reason": "candidate_exhausted"
+        },
+        {
+          "id": "east:seed",
+          "reason": "candidate_exhausted"
+        },
+        {
+          "id": "west:seed",
+          "reason": "candidate_exhausted"
+        }
+      ],
+      "ports": [
+        {
+          "id": "facing",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                35.5,
+                58.5,
+                81.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                35.5,
+                58.5,
+                81.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        },
+        {
+          "id": "north",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "north",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                112
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-001",
+              "side": "north",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                112
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        },
+        {
+          "id": "south",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "south",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                112
+              ],
+              "reservedOffsets": [
+                24
+              ],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-001",
+              "side": "south",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                112
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        },
+        {
+          "id": "east",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                35.5,
+                58.5,
+                81.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                58.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        },
+        {
+          "id": "west",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+              ],
+              "offsets": [
+                47,
+                70
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002",
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+              ],
+              "offsets": [
+                35.5,
+                58.5,
+                81.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-001",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+              ],
+              "offsets": [
+                58.5
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        }
+      ],
+      "proposalCount": 6,
+      "remainingCandidates": 2422,
+      "remainingRepairs": 121
+    },
+    {
+      "pass": 0,
+      "costs": [
+        [
+          "forward-baseline",
+          [
+            0,
+            4,
+            1551.028
+          ]
+        ],
+        [
+          "forward-selected",
+          [
+            0,
+            4,
+            1551.028
+          ]
+        ]
+      ],
+      "rejected": [],
+      "remainingCandidates": 2422,
+      "remainingRepairs": 121
+    }
+  ]
+}

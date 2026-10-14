@@ -1,0 +1,118 @@
+{
+  "candidates": 21,
+  "repairs": 0,
+  "expansionPasses": 1,
+  "remainingCandidates": 4075,
+  "remainingRepairs": 128,
+  "remainingExpansionPasses": 3,
+  "revisions": [
+    {
+      "pass": 0,
+      "expansion": {
+        "gaps": [
+          [
+            "root\u0000A-001\u0000A-002",
+            88.992
+          ]
+        ],
+        "padding": []
+      },
+      "remainingCandidates": 4096,
+      "remainingRepairs": 128
+    },
+    {
+      "pass": 1,
+      "costs": [
+        [
+          "facing:accepted-probe-0",
+          [
+            0,
+            0,
+            88.992,
+            0,
+            168.99200000000002
+          ]
+        ],
+        [
+          "facing:proposal-0",
+          [
+            0,
+            0,
+            88.992,
+            0,
+            168.99200000000002
+          ]
+        ],
+        [
+          "facing:seed",
+          [
+            0,
+            0,
+            88.992,
+            0,
+            168.99200000000002
+          ]
+        ]
+      ],
+      "rejected": [],
+      "ports": [
+        {
+          "id": "facing",
+          "groups": [
+            {
+              "nodeId": "P-001",
+              "side": "east",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+              ],
+              "offsets": [
+                49
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            },
+            {
+              "nodeId": "P-002",
+              "side": "west",
+              "requestIds": [
+                "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+              ],
+              "offsets": [
+                49
+              ],
+              "reservedOffsets": [],
+              "displacementFromCenter": 0
+            }
+          ]
+        }
+      ],
+      "proposalCount": 2,
+      "remainingCandidates": 4075,
+      "remainingRepairs": 128
+    },
+    {
+      "pass": 0,
+      "costs": [
+        [
+          "forward-baseline",
+          [
+            0,
+            0,
+            168.99200000000002
+          ]
+        ],
+        [
+          "forward-selected",
+          [
+            0,
+            0,
+            168.99200000000002
+          ]
+        ]
+      ],
+      "rejected": [],
+      "remainingCandidates": 4075,
+      "remainingRepairs": 128
+    }
+  ]
+}

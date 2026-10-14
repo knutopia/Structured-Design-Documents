@@ -185,17 +185,48 @@ function adjacentRowsBlockedAcrossBounds(input: ConnectorLabelLayoutInput, conne
   const horizontal = anchor.orientation === "horizontal";
   const axis = horizontal ? "x" : "y";
   const low = bounds[axis], high = low + (horizontal ? bounds.width : bounds.height);
-  const rivals = input.scene.edges.filter(other => other.id !== connectorId).flatMap(other =>
-    buildRouteSegmentDetails(other.route).filter(segment => segment.orientation === anchor.orientation
-      && Math.min(segment.start[axis], segment.end[axis]) <= low + EPSILON
-      && Math.max(segment.start[axis], segment.end[axis]) >= high - EPSILON));
-  const blocked = (side: number): boolean => {
-    const adjacentStart = anchor.coordinate + (side < 0 ? -FIXED_LABEL_DISTANCE
+  const alongExtent = horizontal ? label.width : label.height;
+  const rivals = input.scene.edges.filter(other => other.id !== connectorId)
+    .flatMap(other => buildRouteSegmentDetails(other.route));
+  const spanning = rivals.filter(segment => segment.orientation === anchor.orientation
+    && Math.min(segment.start[axis], segment.end[axis]) <= low + EPSILON
+    && Math.max(segment.start[axis], segment.end[axis]) >= high - EPSILON);
+  const spansRow = (side: number) => {
+    const adjacent = anchor.coordinate + (side < 0 ? -FIXED_LABEL_DISTANCE
       - (horizontal ? label.height : label.width) : FIXED_LABEL_DISTANCE);
-    const row: LabelBox = horizontal
-      ? { x: low, y: adjacentStart, width: high - low, height: label.height }
-      : { x: adjacentStart, y: low, width: label.width, height: high - low };
-    return rivals.some(segment => labelBoxDistanceToSegment(row, segment) < clearance - EPSILON);
+    const row = horizontal ? { x: low, y: adjacent, width: high-low, height: label.height }
+      : { x: adjacent, y: low, width: label.width, height: high-low };
+    return spanning.some(segment => labelBoxDistanceToSegment(row, segment) < clearance - EPSILON);
+  };
+  if (spansRow(-1) && spansRow(1)) return true;
+  // A narrow owner can grow around partial runs. Once the label fits its current
+  // width, also detect the absence of a label-sized opening between such runs.
+  if (high - low < alongExtent - EPSILON) return false;
+  const blocked = (side: number): boolean => {
+    const normalExtent = horizontal ? label.height : label.width;
+    const adjacentStart = anchor.coordinate + (side < 0 ? -FIXED_LABEL_DISTANCE - normalExtent : FIXED_LABEL_DISTANCE);
+    const adjacentEnd = adjacentStart + normalExtent;
+    const overlap = Math.min(FIXED_LABEL_CLEARANCE, alongExtent,
+      Math.abs(anchor.end[axis] - anchor.start[axis]));
+    const domainLow = Math.max(low, Math.min(anchor.start[axis], anchor.end[axis]) + overlap - alongExtent);
+    const domainHigh = Math.min(high - alongExtent, Math.max(anchor.start[axis], anchor.end[axis]) - overlap);
+    if (domainHigh < domainLow - EPSILON) return true;
+    const normalAxis = horizontal ? "y" : "x";
+    const forbidden = rivals.flatMap(segment => {
+      const normalLow = Math.min(segment.start[normalAxis], segment.end[normalAxis]);
+      const normalHigh = Math.max(segment.start[normalAxis], segment.end[normalAxis]);
+      const distance = Math.max(normalLow - adjacentEnd, adjacentStart - normalHigh, 0);
+      const required = clearance - EPSILON;
+      if (distance >= required) return [];
+      const reach = Math.sqrt(required * required - distance * distance);
+      return [[Math.min(segment.start[axis], segment.end[axis]) - reach - alongExtent,
+        Math.max(segment.start[axis], segment.end[axis]) + reach] as const];
+    });
+    const events = [domainLow, domainHigh, ...forbidden.flatMap(interval => [...interval])]
+      .filter(value => value >= domainLow && value <= domainHigh).sort((a,b) => a-b);
+    const legal = (offset: number) => forbidden.every(([a,b]) => offset <= a || offset >= b);
+    return !events.some((event,index) => legal(event)
+      || index > 0 && legal((events[index-1]! + event)/2));
   };
   return blocked(-1) && blocked(1);
 }

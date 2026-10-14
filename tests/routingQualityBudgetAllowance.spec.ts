@@ -1,5 +1,5 @@
 import {expect,it} from "vitest";
-import {withRoutingQualityBudgetAllowance} from "../src/renderer/staged/routingCore/index.js";
+import {withRoutingQualityBudgetAllowance, selectRoutingQuality} from "../src/renderer/staged/routingCore/index.js";
 
 it("shares the original object across nested allowances with exact global deductions",()=>{
   const budget={candidates:100,repairs:12};let innerSeen=0;
@@ -32,4 +32,17 @@ it("never enters work with malformed or depleted allowances",()=>{
   for(const allowance of [-1,NaN,Infinity,1.5,0])expect(()=>withRoutingQualityBudgetAllowance({candidates:10,repairs:1},allowance,()=>{called=true;})).toThrow(RangeError);
   expect(()=>withRoutingQualityBudgetAllowance({candidates:0,repairs:1},10,()=>{called=true;})).toThrow(RangeError);
   expect(called).toBe(false);
+});
+
+it("does not cache baseline admission across geometry-equivalent candidates", () => {
+  const context = {bounds: {minX: 0, minY: 0, maxX: 100, maxY: 100}, boxes: [], connectors: []};
+  const visited: string[] = [];
+  const budget = {candidates: 2, repairs: 0};
+  const selection = selectRoutingQuality([{id: "rejected", context}, {id: "accepted", context}], {
+    budget, admit: candidate => { visited.push(candidate.id); return candidate.id === "accepted"; }
+  });
+  expect(visited).toEqual(["rejected", "accepted"]);
+  expect(selection.selected?.id).toBe("accepted");
+  expect(selection.rejected).toEqual([{id: "rejected", reason: "baseline_admission_rejected"}]);
+  expect(budget.candidates).toBe(0);
 });

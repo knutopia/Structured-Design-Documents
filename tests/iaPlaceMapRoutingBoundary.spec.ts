@@ -35,6 +35,7 @@ beforeAll(async () => {
 });
 
 const corruptions: Array<{ name: string; finding: RegExp; change: (scene: PositionedScene) => void }> = [
+  { name: "lost prepared loaded policy", finding: /policy/i, change: scene => { delete scene.root.viewMetadata!.iaPlaceMap; } },
   { name: "internal owner escape", finding: /bounds|scope/i, change: scene => {
     const edge = scene.edges.find(edge => edge.from.itemId === "P-002" && edge.to.itemId === "P-003")!;
     const owner = flatten(scene.root).find(item => item.id === "A-002")!;

@@ -47,6 +47,9 @@ export interface RoutingQualityOptions {
   maxCandidatesPerTrial?: number;
   /** Complete-scene labels and painted markers may reject otherwise valid routes. */
   accept?: (context: FinalRoutingContext) => boolean;
+  /** Optional policy admission against a retained accepted baseline. Evaluated
+   * per candidate after repair and scene acceptance; never cached by geometry. */
+  admit?: (candidate: RoutingQualityCandidate) => boolean;
   onRejected?: (candidate: RoutingQualityCandidate, reason: string, violations: readonly RoutingViolation[]) => void;
 }
 export interface RoutingQualitySelection {
@@ -184,6 +187,10 @@ export function selectRoutingQuality(candidates: Iterable<RoutingQualityCandidat
         rejected.push({ id: candidate.id, reason: "scene_rejected" });
         options.onRejected?.({ ...candidate, context }, "scene_rejected", []); continue;
       }
+    }
+    if (options.admit && !options.admit({ ...candidate, context })) {
+      rejected.push({ id: candidate.id, reason: "baseline_admission_rejected" });
+      options.onRejected?.({ ...candidate, context }, "baseline_admission_rejected", []); continue;
     }
     const [crossings, bends, length] = routeCost(context.connectors);
     const cost = [crossings, bends, candidate.requiredExpansion ?? 0, candidate.portDisplacement ?? 0, length];

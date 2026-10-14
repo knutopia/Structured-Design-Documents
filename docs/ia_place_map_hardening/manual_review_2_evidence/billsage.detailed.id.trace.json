@@ -1,0 +1,34 @@
+{
+  "candidates": 3611,
+  "repairs": 16,
+  "expansionPasses": 2,
+  "remainingCandidates": 485,
+  "remainingRepairs": 112,
+  "remainingExpansionPasses": 2,
+  "revisions": [
+    {
+      "pass": 0,
+      "costs": [
+        [
+          "forward-baseline",
+          [
+            0,
+            12,
+            2863.5
+          ]
+        ],
+        [
+          "forward-selected",
+          [
+            0,
+            11,
+            2548
+          ]
+        ]
+      ],
+      "rejected": [],
+      "remainingCandidates": 485,
+      "remainingRepairs": 112
+    }
+  ]
+}

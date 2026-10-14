@@ -1,0 +1,10 @@
+
+ RUN  v2.1.9 /home/knut/projects/sdd
+
+ ✓ tests/iaReview2ForwardShortcut.spec.ts > SVG and derived PNG repeat acceptance withhold corrupt or deleted witnesses 27653ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 9 skipped (10)
+   Start at  01:36:53
+   Duration  42.26s (transform 5.55s, setup 0ms, collect 8.05s, tests 32.07s, environment 1ms, prepare 519ms)
+

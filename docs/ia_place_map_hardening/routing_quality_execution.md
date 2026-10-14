@@ -1,5 +1,8 @@
 # IA routing quality execution checkpoint
 
+**Actual Status: Good, but rejected after manual review, pending small corrections**:
+[manual_review_2_routing_quality.md](manual_review_2_routing_quality.md)
+
 Status: **implemented and accepted; all verification gates closed**. Initial checkpoint recorded 2026-10-12
 (local workspace date; test process timestamps use UTC). Original checkout HEAD:
 `276d28b239028c0a71a8aec4ba091e5147282af5`. The initial workspace was clean.

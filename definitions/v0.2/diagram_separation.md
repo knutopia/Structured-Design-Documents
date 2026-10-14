@@ -90,3 +90,33 @@ including Events as primary nodes. Exact occurrence references are checked
 against the supplied compiled graph at public rendering boundaries, including
 after serialization. Missing, substituted, omitted, or duplicated selected
 references are errors in combined and named IA preparation.
+
+IA navigation presentation also selects `wrapping: prefer_part_boundaries` in
+`core/views.yaml`. The shared formatter retains the canonical flattened label
+and prepares preferred offsets between its ordered template parts. Staged text
+measurement keeps the whole label on one line when it fits; otherwise it prefers
+those boundaries before splitting a part that fits independently. Oversized
+parts still use shared word/grapheme wrapping. Only existing boundary whitespace
+is consumed by a break; authored non-whitespace characters and part order remain
+intact. Actual measured width and height feed downstream routing and label
+capacity. DOT and Mermaid retain the canonical flattened string.
+
+Optional IA routing intent is expressed through `routing_scope.export_clearance`
+and `navigation.routing_preferences` in the loaded view contract. The latter
+requires routing ownership and validates forward progression/perpendicular side
+pairs and self-loop traversal/tangent side trials. These fields carry policy
+intent into scene metadata; geometry, intervals and final paths remain downstream.
+Supported schema does not by itself enable a policy in the canonical bundle or
+establish routing acceptance.
+
+The canonical v0.2 IA view enables readable export clearance, negative horizontal
+self-loop traversal with independent south/north trials, and a same-owner
+positive-vertical forward shortcut from south to west. Export clearance covers
+routed strokes, label-box strokes, and markers. Missing capacity changes owned
+padding and rebuilds the scene. Loop direction is a validity condition; an audited
+upper loop may remain when the bounded bottom comparison fails association or
+capacity. Forward sources may move only when a complete accepted comparison on
+the same measured layout reduces bends without adding crossings or expansion.
+A retained baseline witness is re-audited at SVG serialization. Omitted options
+retain their previous staged behavior; these options do not change v0.1 or LEGACY
+flattened text output.

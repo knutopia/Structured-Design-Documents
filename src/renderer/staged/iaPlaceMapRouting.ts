@@ -59,10 +59,14 @@ import {
   type ConnectorLabelProblem
 } from "./connectorLabelLayout.js";
 import { FIXED_LABEL_DISTANCE, FIXED_LABEL_CLEARANCE, buildRouteSegmentDetails } from "./connectorLabelPlacement.js";
+import { measureEndpointBypassPadding } from "./routingCore/endpointBypassCapacity.js";
+import { auditPaintedExportClearance, measurePaintedExportDeficits } from "./exportPaint.js";
 import { markerRoutingClearance } from "./markerGeometry.js";
 import { auditPositionedSceneMarkers, buildEndpointMarkerRoutingBlockers } from "./markerAudit.js";
 import { getRendererTheme } from "./theme.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
+import { allocateOrderedPortPair, orderedPortPairHasTraversal } from "./routingCore/orderedPortPair.js";
+import { finalizeIaForwardShortcuts, auditIaForwardShortcutScene, type IaForwardShortcutCallbacks } from "./iaPlaceMapForwardRouting.js";
 
 type IaPlaceMapInventory = NonNullable<NonNullable<RendererScene["root"]["viewMetadata"]>["iaPlaceMap"]>;
 type GapKey = string;
@@ -238,7 +242,9 @@ function allocateOccurrencePorts(
   reverseReturnPorts = false,
   forwardFlank?: PortSide,
   loopSide?: PortSide,
-  parallelSide?: PortSide
+  parallelSide?: PortSide,
+  forcedPairs?: ReadonlyMap<string, readonly [PortSide, PortSide]>,
+  movableSourceIds: ReadonlySet<string> = new Set(forcedPairs?.keys())
 ): { measured: MeasuredScene; diagnostics: RendererDiagnostic[]; portGroups?: RendererRoutingPortGroupEvidence[]; portDisplacement?: number } {
   const nodes = indexMeasuredNodes(measured.root);
   const positioned = indexPositionedItems(seedScene.root);
@@ -255,6 +261,9 @@ function allocateOccurrencePorts(
     }
   }
   const occurrences = sortBySourceOrder(inventory).filter(occurrence => !structuralIds.has(occurrence.connectorId));
+  const loopPolicy = inventory.routingPreferences?.self_loop;
+  // Ordinary arrivals reserve their balanced slots before a loop pair is placed.
+  if (loopPolicy) occurrences.sort((a, b) => Number(a.from === a.to) - Number(b.from === b.to) || a.sourceOrder - b.sourceOrder);
   const groups = new Map<string, PortGroup>();
   const ordinaryIndexByEndpointPair = new Map<string, number>();
   const assignments = new Map<string, PortRequest>();
@@ -264,8 +273,12 @@ function allocateOccurrencePorts(
     const primitive = getNodePrimitiveTheme(theme, node.primitive);
     // Labels reserve corridor space independently of attachment capacity.
     const separation = readablePortPitch(theme.paint.arrowSize, theme.paint.edgeStrokeWidth);
-    return allocatePortOffsets({ sideLength: sideLength(node, side), minInset: primitive.portInset,
-      minSeparation: separation, reservedOffsets: reserveForSide(node, side, usedStructuralPorts.get(node.id) ?? new Set()), requestIds });
+    const fixedRequestIds = requestIds.filter(id => ![...movableSourceIds].some(edgeId =>
+      id === sidePortRequest(node.id, occurrences.find(occurrence => occurrence.connectorId === edgeId)!.id, "source")));
+    const allocation = allocatePortOffsets({ sideLength: sideLength(node, side), minInset: primitive.portInset,
+      minSeparation: separation, reservedOffsets: reserveForSide(node, side, usedStructuralPorts.get(node.id) ?? new Set()), requestIds: fixedRequestIds });
+    return allocation.status === "allocated" ? { ...allocation, offsets: new Map([...allocation.offsets,
+      ...requestIds.filter(id => !fixedRequestIds.includes(id)).map(id => [id, sideLength(node, side) / 2] as const)]) } : allocation;
   };
 
   for (const occurrence of occurrences) {
@@ -307,7 +320,8 @@ function allocateOccurrencePorts(
     // a bounded external loop. Reuse the complete-scene side trials; shared
     // corridor generation remains responsible for the loop geometry.
     const selectedLoopSide = loopSide ?? returnSide;
-    const loopSides: PortSide[] = selectedLoopSide ? [selectedLoopSide] : ["north", "south", "west", "east"];
+    const loopSides: PortSide[] = selectedLoopSide ? [selectedLoopSide]
+      : loopPolicy ? loopPolicy.side_trials.map(trial => trial.side) : ["north", "south", "west", "east"];
     const seedEdge = seedScene.edges.find(candidate => candidate.id === occurrence.connectorId);
     const owner = seedEdge && inventory.routingScope ? commonLabelOwner(seedScene, seedEdge) : undefined;
     const labelledVerticalReturn = !!edge.label && backwards && Math.abs(delta.y) > Math.abs(delta.x)
@@ -325,7 +339,8 @@ function allocateOccurrencePorts(
         : Math.min(sourcePosition.x, targetPosition.x) - owner.x;
       perpendicularSides.sort((a, b) => Math.max(0, required - available(a)) - Math.max(0, required - available(b)));
     }
-    const pairs = inventory.routingScope && occurrence.from === occurrence.to
+    const pairs = forcedPairs?.has(occurrence.connectorId) ? [forcedPairs.get(occurrence.connectorId)!]
+      : inventory.routingScope && occurrence.from === occurrence.to
       ? loopSides.map(side => [side, side] as [PortSide, PortSide])
       : alternateParallel ? [[parallelSide!, parallelSide!] as [PortSide, PortSide]]
       : labelledVerticalReturn && returnSide !== "east" && returnSide !== "west"
@@ -400,9 +415,47 @@ function allocateOccurrencePorts(
     if (allocation.status === "allocated") group.offsets = allocation.offsets;
   }
 
+  const allocatedLoopPorts = new Map<string, Map<string, number>>();
+  if (loopPolicy) for (const occurrence of occurrences.filter(record => record.from === record.to)) {
+    const sourceId = sidePortRequest(occurrence.from, occurrence.id, "source");
+    const targetId = sidePortRequest(occurrence.to, occurrence.id, "target");
+    const source = assignments.get(sourceId), target = assignments.get(targetId);
+    if (!source || !target) continue;
+    const group = groups.get(`${source.nodeId}\0${source.side}`)!;
+    const trial = loopPolicy.side_trials.find(candidate => candidate.side === source.side);
+    const ordinaryIds = group.requestIds.filter(id => {
+      const request = assignments.get(id)!;
+      const edge = edgeById.get(request.edgeId)!;
+      return edge.from.itemId !== edge.to.itemId;
+    });
+    const groupKey = `${source.nodeId}\0${source.side}`;
+    const priorPairs = allocatedLoopPorts.get(groupKey) ?? new Map<string, number>();
+    const ordinaryAllocation = allocationFor(group.node, group.side, ordinaryIds);
+    if (!trial || ordinaryAllocation.status !== "allocated") {
+      diagnostics.push(issue("renderer.routing.ia_loop_port_capacity", "Loaded loop side has no legal ordinary reservation allocation.", occurrence.connectorId));
+      continue;
+    }
+    const pair = allocateOrderedPortPair({ sideLength: sideLength(group.node, group.side),
+      minInset: getNodePrimitiveTheme(theme, group.node.primitive).portInset,
+      minSeparation: readablePortPitch(theme.paint.arrowSize, theme.paint.edgeStrokeWidth),
+      direction: loopPolicy.traversal.direction, placement: trial.pair_placement,
+      occupiedOffsets: [...ordinaryAllocation.offsets.values(), ...priorPairs.values(), ...reserveForSide(group.node, group.side, usedStructuralPorts.get(group.node.id) ?? new Set())],
+      otherArrivalOffsets: ordinaryIds.filter(id => assignments.get(id)?.endpoint === "target").map(id => ordinaryAllocation.offsets.get(id)!) });
+    if (!pair) {
+      diagnostics.push(issue("renderer.routing.ia_loop_port_capacity", "Loaded ordered loop pair does not fit the reserved side interval.", occurrence.connectorId));
+      continue;
+    }
+    priorPairs.set(sourceId, pair.departure);
+    priorPairs.set(targetId, pair.arrival);
+    allocatedLoopPorts.set(groupKey, priorPairs);
+    group.offsets = new Map([...ordinaryAllocation.offsets, ...priorPairs]);
+  }
+  if (diagnostics.length) return { measured, diagnostics };
+
   // Reconcile facing attachments against both legal spans before introducing bends.
   // A group retains its symmetric pitch; only unreserved singleton pairs may move.
   for (const occurrence of occurrences) {
+    if (forcedPairs?.has(occurrence.connectorId)) continue;
     const sourceId = sidePortRequest(occurrence.from, occurrence.id, "source");
     const targetId = sidePortRequest(occurrence.to, occurrence.id, "target");
     const source = assignments.get(sourceId), target = assignments.get(targetId);
@@ -454,7 +507,7 @@ function allocateOccurrencePorts(
     ...container,
     children: container.children.map(child => child.kind === "container"
       ? rewriteItems(child)
-      : { ...child, ports: [...child.ports, ...(portsByNode.get(child.id) ?? [])] })
+      : { ...child, ports: [...child.ports.filter(port => !(portsByNode.get(child.id) ?? []).some(replacement => replacement.id === port.id)), ...(portsByNode.get(child.id) ?? [])] })
   });
   const rewrittenEdges = measured.edges.map(edge => {
     const source = [...assignments.values()].find(request => request.edgeId === edge.id && request.endpoint === "source");
@@ -600,6 +653,7 @@ function buildFinalRoutingContext(scene: PositionedScene, inventory: IaPlaceMapI
         blocksAxis: "horizontal" });
     }
   }
+  const exportInset = inventory.exportClearance === "readable_gap" ? clearance : theme.paint.edgeStrokeWidth / 2;
   return { context: {
     connectors, boxes, corridorSearch: "obstacle_aware", blockers: [...blockers, ...buildEndpointMarkerRoutingBlockers(connectors,
       new Map(scene.edges.map(edge => [edge.id, edge.markers])), theme.paint.arrowSize, theme.paint.edgeStrokeWidth)
@@ -610,9 +664,9 @@ function buildFinalRoutingContext(scene: PositionedScene, inventory: IaPlaceMapI
         return { ...blocker, clearance: Math.max(blocker.clearance ?? 0, clearance),
           ...(shared ? { exemptSharedTrackGroupIds: [shared] } : {}) };
       })],
-    bounds: { minX: scene.root.x + theme.paint.edgeStrokeWidth / 2, minY: scene.root.y + theme.paint.edgeStrokeWidth / 2,
-      maxX: scene.root.x + scene.root.width - theme.paint.edgeStrokeWidth / 2,
-      maxY: scene.root.y + scene.root.height - theme.paint.edgeStrokeWidth / 2 }
+    bounds: { minX: scene.root.x + exportInset, minY: scene.root.y + exportInset,
+      maxX: scene.root.x + scene.root.width - exportInset,
+      maxY: scene.root.y + scene.root.height - exportInset }
   }, diagnostics };
 }
 
@@ -1099,7 +1153,8 @@ function routeOwnerPaddingDemands(scene: PositionedScene, context: FinalRoutingC
   const clearance = readableRoutingClearance(getRendererTheme(scene.themeId, "routing").paint.edgeStrokeWidth);
   const groups = new Map<string, FinalRoutingConnector[]>();
   for (const connector of context.connectors) {
-    if (!connector.routingBounds) continue;
+    if (!connector.routingBounds && inventoryFromScene(scene)?.exportClearance !== "readable_gap") continue;
+    const routingOwnerId = connector.routingBounds?.ownerId ?? scene.root.id;
     let side = connector.source.side;
     if (connector.source.side !== connector.target.side) {
       const source = indexed.get(connector.source.nodeId)!, target = indexed.get(connector.target.nodeId)!;
@@ -1110,10 +1165,10 @@ function routeOwnerPaddingDemands(scene: PositionedScene, context: FinalRoutingC
         && source.x + source.width / 2 >= box.x - READABLE_ROUTING_GEOMETRY.clearance
         && source.x + source.width / 2 <= box.x + box.width + READABLE_ROUTING_GEOMETRY.clearance);
       if (!verticalReturn || !blockingNodes.length) continue;
-      const owner = indexed.get(connector.routingBounds.ownerId)!;
+      const owner = indexed.get(routingOwnerId)!;
       side = source.x + source.width / 2 >= owner.x + owner.width / 2 ? "east" : "west";
     }
-    const key = `${connector.routingBounds.ownerId}\0${side}`;
+    const key = `${routingOwnerId}\0${side}`;
     groups.set(key, [...(groups.get(key) ?? []), connector]);
   }
   for (const [key, connectors] of groups) {
@@ -1122,8 +1177,8 @@ function routeOwnerPaddingDemands(scene: PositionedScene, context: FinalRoutingC
     if (owner?.kind !== "container") continue;
     const side = portSide === "east" ? "right" : portSide === "west" ? "left" : portSide === "north" ? "top" : "bottom";
     const horizontal = side === "left" || side === "right";
-    const nodes = [...indexed.values()].filter(item => item.kind === "node"
-      && ownerLineages(scene.root, [item.id]).get(item.id)?.some(entry => entry.container.id === owner.id));
+    const nodes = [...indexed.values()].filter(item => (item.kind === "node")
+      && (owner.id === scene.root.id || ownerLineages(scene.root, [item.id]).get(item.id)?.some(entry => entry.container.id === owner.id)));
     const claims = connectors.map(connector => {
       const coordinate = (endpoint: FinalRoutingConnector["source"]): number => {
         const vector = sideVector(endpoint.side);
@@ -1136,9 +1191,19 @@ function routeOwnerPaddingDemands(scene: PositionedScene, context: FinalRoutingC
     const deficit = measureExteriorRoutingCorridorDeficit({
       bounds: { minX: owner.x, minY: owner.y + (owner.chrome.headerBandHeight ?? 0),
         maxX: owner.x + owner.width, maxY: owner.y + owner.height },
-      side: portSide as PortSide, boxes: nodes, claims, clearance, separation: DEFAULT_ROUTING_POLICY.minSeparation
+      side: portSide as PortSide, boxes: nodes, claims, clearance, separation: DEFAULT_ROUTING_POLICY.minSeparation,
+      ...(owner.id === scene.root.id ? { parallelBorders: context.blockers?.filter(box => box.blocksAxis === (horizontal ? "vertical" : "horizontal")) } : {})
     });
     if (deficit > GEOMETRY_EPSILON) demands.set(`${owner.id}\0${side}`, deficit);
+  }
+  if (inventoryFromScene(scene)?.exportClearance === "readable_gap") {
+    const exteriorObstacles = [...indexed.values()].filter(item => item.kind === "node");
+    for (const [side, amount] of measureEndpointBypassPadding({ context, boundary: scene.root,
+      exteriorObstacles, clearance, separation: DEFAULT_ROUTING_POLICY.minSeparation })) {
+      const paddingSide = side === "east" ? "right" : side === "west" ? "left" : side === "north" ? "top" : "bottom";
+      const key = `${scene.root.id}\0${paddingSide}`;
+      demands.set(key, Math.max(demands.get(key) ?? 0, amount));
+    }
   }
   return demands;
 }
@@ -1155,9 +1220,11 @@ function buildLabelInput(scene: PositionedScene, labels: ConnectorLabelLayoutInp
       const corridor = siblingGapCorridors(scene).find(c => c.axis === "x" && c.connectorIds.includes(edge.id)
         && c.containerId === owner.id);
       const margin = inventoryFromScene(scene)?.routingScope ? READABLE_ROUTING_GEOMETRY.clearance : 0;
-      return [edge.id, corridor?.bounds ?? { x: owner.x + margin,
-        y: owner.y + (owner.chrome.headerBandHeight ?? 0) + margin, width: owner.width - 2 * margin,
-        height: owner.height - (owner.chrome.headerBandHeight ?? 0) - 2 * margin }];
+      const paintedMargin = owner.id === scene.root.id && inventoryFromScene(scene)?.exportClearance === "readable_gap"
+        ? margin + getRendererTheme(scene.themeId, "routing").paint.strokeWidth / 2 : margin;
+      return [edge.id, corridor?.bounds ?? { x: owner.x + paintedMargin,
+        y: owner.y + (owner.chrome.headerBandHeight ?? 0) + paintedMargin, width: owner.width - 2 * paintedMargin,
+        height: owner.height - (owner.chrome.headerBandHeight ?? 0) - 2 * paintedMargin }];
     })) };
 }
 
@@ -1205,8 +1272,44 @@ function auditPortAttachments(scene: PositionedScene): RendererDiagnostic[] {
 /** Independent final-scene acceptance for the exact positioned IA scene handed to SVG. */
 export function auditIaPlaceMapFinalScene(scene: PositionedScene): RendererDiagnostic[] {
   const inventory = inventoryFromScene(scene);
+  if (scene.iaAcceptancePolicy && JSON.stringify(scene.iaAcceptancePolicy) !== JSON.stringify(inventory))
+    return [issue("renderer.routing.ia_loaded_policy_lost", "Final IA scene lost or altered its prepared loaded acceptance policy.", scene.root.id)];
   if (!inventory) return [];
   const diagnostics = auditPortAttachments(scene);
+  for (const reason of auditIaForwardShortcutScene(scene, {
+    buildContext: positioned => { const expected = inventoryFromScene(positioned); return expected ? buildFinalRoutingContext(positioned, expected).context : undefined; },
+    ownerId: forwardOwnerId,
+    auditOrdinary: positioned => auditIaPlaceMapFinalScene(positioned)
+  })) diagnostics.push(issue("renderer.routing.ia_forward_admission", "Final IA shortcut failed independent baseline and attachment acceptance.", scene.root.id, reason));
+  if (inventory.exportClearance === "readable_gap") diagnostics.push(...auditPaintedExportClearance(scene));
+  const loopPolicy = inventory.routingPreferences?.self_loop;
+  if (loopPolicy) for (const occurrence of inventory.expectedNavigationOccurrences.filter(record => record.from === record.to)) {
+    const edge = scene.edges.find(candidate => candidate.id === occurrence.connectorId);
+    const source = edge && portByEndpoint(scene, edge.from.itemId, edge.from.portId);
+    const target = edge && portByEndpoint(scene, edge.to.itemId, edge.to.portId);
+    const axis = loopPolicy.traversal.axis;
+    if (!source || !target || source.port.side !== target.port.side
+      || !loopPolicy.side_trials.some(trial => trial.side === source.port.side)
+      || !orderedPortPairHasTraversal(source.port[axis], target.port[axis], loopPolicy.traversal.direction, GEOMETRY_EPSILON)) {
+      diagnostics.push(issue("renderer.routing.ia_loop_traversal", "Final self-loop violates its loaded side and ordered traversal policy.", occurrence.connectorId));
+      continue;
+    }
+    const sideTrial = loopPolicy.side_trials.find(trial => trial.side === source.port.side)!;
+    if (sideTrial.pair_placement === "before_other_arrivals") {
+      const pitch = readablePortPitch(getRendererTheme(scene.themeId, "routing").paint.arrowSize,
+        getRendererTheme(scene.themeId, "routing").paint.edgeStrokeWidth);
+      const arrivalOffsets = scene.edges.filter(candidate => candidate.id !== edge!.id && candidate.to.itemId === occurrence.to)
+        .map(candidate => portByEndpoint(scene, candidate.to.itemId, candidate.to.portId))
+        .filter(candidate => candidate?.port.side === source.port.side).map(candidate => candidate!.port[axis]);
+      if (arrivalOffsets.some(offset => offset - Math.max(source.port[axis], target.port[axis]) < pitch - GEOMETRY_EPSILON))
+        diagnostics.push(issue("renderer.routing.ia_loop_arrival_reservation", "Final loop pair violates the loaded ordinary-arrival reservation interval.", occurrence.connectorId));
+    }
+    const tangentRuns = edge!.route.points.slice(1).map((point, index) => ({
+      from: edge!.route.points[index]!, to: point
+    })).filter(run => Math.abs(run.to[axis] - run.from[axis]) > GEOMETRY_EPSILON);
+    if (!tangentRuns.length || tangentRuns.some(run => !orderedPortPairHasTraversal(run.from[axis], run.to[axis], loopPolicy.traversal.direction, GEOMETRY_EPSILON)))
+      diagnostics.push(issue("renderer.routing.ia_loop_rail_traversal", "Final self-loop exterior rail reverses its loaded traversal direction.", occurrence.connectorId));
+  }
   const expectedIds = expectedConnectorIds(inventory);
   const actualIds = scene.edges.map(edge => edge.id);
   const seenIds = new Set<string>();
@@ -1298,7 +1401,167 @@ function labelProblemsToDiagnostics(problems: readonly ConnectorLabelProblem[]):
  * geometry. Every reflow is rebuilt from the measured baseline plus absolute sibling-gap
  * demands; the shared lifecycle remains the sole route repair engine.
  */
+type IaSolveAllowance = { candidates: number; repairs: number; expansions: number };
+
+function forwardOwnerId(scene: PositionedScene, nodeId: string): string | undefined {
+  const selected = inventoryFromScene(scene)?.routingScope?.containerIds;
+  return [...(ownerLineages(scene.root, [nodeId]).get(nodeId) ?? [])].reverse()
+    .find(entry => selected?.includes(entry.container.id))?.container.id;
+}
+
+function measureIaPortDisplacement(scene: PositionedScene, movableSourceIds: ReadonlySet<string> = new Set()): number {
+  const inventory = inventoryFromScene(scene);
+  if (!inventory) return 0;
+  const nodeIndex = indexPositionedItems(scene.root);
+  const structuralIds = new Set(inventory.expectedStructuralEdges.map(edge => edge.id));
+  const groups = new Map<string, { offsets: number[]; length: number }>();
+  let individual = 0;
+  for (const edge of scene.edges) {
+    if (structuralIds.has(edge.id)) continue;
+    for (const [role, endpoint] of [["source", edge.from], ["target", edge.to]] as const) {
+      const node = nodeIndex.get(endpoint.itemId), port = node?.ports.find(port => port.id === endpoint.portId);
+      if (node?.kind !== "node" || !port) continue;
+      const length = sideLength(node, port.side), offset = endpointOffset(port);
+      if (role === "source" && movableSourceIds.has(edge.id)) { individual += Math.abs(offset - length / 2); continue; }
+      const key = `${node.id}\0${port.side}`, group = groups.get(key) ?? { offsets: [], length };
+      group.offsets.push(offset); groups.set(key, group);
+    }
+  }
+  return individual + [...groups.values()].reduce((sum, group) => sum
+    + Math.abs((Math.min(...group.offsets) + Math.max(...group.offsets)) / 2 - group.length / 2), 0);
+}
+
+function forwardCallbacks(): IaForwardShortcutCallbacks {
+  return {
+    buildContext: positioned => { const inventory = inventoryFromScene(positioned); return inventory ? buildFinalRoutingContext(positioned, inventory).context : undefined; },
+    audit: auditIaPlaceMapFinalScene,
+    ownerId: forwardOwnerId,
+    portDisplacement: measureIaPortDisplacement,
+    assessLabels: (positioned, budget) => {
+      const inventory = inventoryFromScene(positioned);
+      if (!inventory) return undefined;
+      const expected = expectedLabelMapFromFinalScene(positioned, inventory);
+      const assessment = assessConnectorLabels({ ...buildLabelInput(positioned, expected), searchBudget: budget });
+      if (assessment.problems.length) return undefined;
+      return { ...positioned, edges: positioned.edges.map(edge => ({ ...edge, label: assessment.labels.get(edge.id) ?? edge.label })) };
+    },
+    prepareTrial: async (result, pairs, budget) => {
+      const inventory = inventoryFromScene(result.positionedScene);
+      if (!inventory) return undefined;
+      const retainedPairs = new Map(result.positionedScene.edges.flatMap(edge => {
+        const source = portByEndpoint(result.positionedScene, edge.from.itemId, edge.from.portId);
+        const target = portByEndpoint(result.positionedScene, edge.to.itemId, edge.to.portId);
+        return source && target ? [[edge.id, [source.port.side, target.port.side] as const] as const] : [];
+      }));
+      for (const [id, pair] of pairs) retainedPairs.set(id, pair);
+      const allocation = allocateOccurrencePorts(result.measuredScene, result.positionedScene, inventory,
+        undefined, budget, false, undefined, undefined, undefined, retainedPairs, new Set(pairs.keys()));
+      if (allocation.diagnostics.length) return undefined;
+      // Groups whose ordinary membership is unchanged retain the accepted
+      // baseline reservations and facing reconciliation. Newly affected groups
+      // use the ordinary allocator; movable sources are excluded from both.
+      const movablePorts = new Set(result.positionedScene.edges.filter(edge => pairs.has(edge.id)).map(edge => edge.from.portId));
+      const oldItems = indexPositionedItems(result.positionedScene.root);
+      for (const [id, node] of indexMeasuredNodes(allocation.measured.root)) {
+        const old = oldItems.get(id);
+        if (old?.kind !== "node") continue;
+        for (const side of ["north", "east", "south", "west"] as const) {
+          const oldPorts = old.ports.filter(port => port.side === side && !movablePorts.has(port.id));
+          const newPorts = node.ports.filter(port => port.side === side && !movablePorts.has(port.id));
+          if (JSON.stringify(oldPorts.map(port => port.id).sort()) !== JSON.stringify(newPorts.map(port => port.id).sort())) continue;
+          for (const port of newPorts) Object.assign(port, oldPorts.find(previous => previous.id === port.id)!);
+        }
+      }
+      const positioned = positionMeasuredEdgesAgainstRoot(allocation.measured, await positionSceneBeforeRouting(allocation.measured));
+      return { ...positioned, iaAcceptancePolicy: result.positionedScene.iaAcceptancePolicy,
+        edges: positioned.edges.map(edge => {
+          const old = result.positionedScene.edges.find(candidate => candidate.id === edge.id)!;
+          return !pairs.has(edge.id) && Math.abs(edge.from.x - old.from.x) < GEOMETRY_EPSILON
+            && Math.abs(edge.from.y - old.from.y) < GEOMETRY_EPSILON && Math.abs(edge.to.x - old.to.x) < GEOMETRY_EPSILON
+            && Math.abs(edge.to.y - old.to.y) < GEOMETRY_EPSILON ? { ...edge, route: old.route, label: old.label } : edge;
+        }) };
+    }
+  };
+}
+
 export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promise<StagedRendererPipelineResult> {
+  const inventory = inventoryFromScene(scene);
+  if (!inventory) return runStagedRendererPipeline(scene);
+  const policy = inventory.routingPreferences?.self_loop;
+  const allowance: IaSolveAllowance = { candidates: DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates,
+    repairs: DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions, expansions: DEFAULT_ROUTING_POLICY.maxExpansionPasses };
+  const forwardPolicy = inventory.routingPreferences?.forward_shortcut;
+  let hasForwardGeometry = false;
+  if (forwardPolicy) {
+    const preliminary = await positionSceneBeforeRouting(measureScene(scene));
+    const items = indexPositionedItems(preliminary.root);
+    const structural = new Set(inventory.expectedStructuralEdges.map(edge => edge.id));
+    hasForwardGeometry = inventory.expectedNavigationOccurrences.some(occurrence => {
+      if (occurrence.from === occurrence.to || structural.has(occurrence.connectorId)
+        || forwardOwnerId(preliminary, occurrence.from) !== forwardOwnerId(preliminary, occurrence.to)) return false;
+      const source = items.get(occurrence.from), target = items.get(occurrence.to);
+      if (!source || !target) return false;
+      const axis = forwardPolicy.progression.axis, size = axis === "x" ? "width" : "height";
+      return forwardPolicy.progression.direction === "positive"
+        ? target[axis] + target[size] / 2 > source[axis] + source[size] / 2
+        : target[axis] + target[size] / 2 < source[axis] + source[size] / 2;
+    });
+  }
+  const forwardReserve = hasForwardGeometry ? 512 : 0;
+  allowance.candidates -= forwardReserve;
+  const finishForward = async (result: StagedRendererPipelineResult): Promise<StagedRendererPipelineResult> => {
+    allowance.candidates += forwardReserve;
+    const optimized = await finalizeIaForwardShortcuts(result, allowance, forwardCallbacks());
+    return { ...optimized, positionedScene: { ...optimized.positionedScene, routingEvidence: {
+      candidates: DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates - allowance.candidates,
+      repairs: DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions - allowance.repairs,
+      expansionPasses: DEFAULT_ROUTING_POLICY.maxExpansionPasses - allowance.expansions,
+      remainingCandidates: allowance.candidates, remainingRepairs: allowance.repairs,
+      remainingExpansionPasses: allowance.expansions,
+      revisions: optimized.positionedScene.routingEvidence?.revisions ?? [] } } };
+  };
+  if (!policy || !inventory!.expectedNavigationOccurrences.some(record => record.from === record.to))
+    return finishForward(await runIaPlaceMapRendererTrial(scene, allowance));
+  const trials = [...policy.side_trials].sort((a, b) => Number(a.pair_placement === "before_other_arrivals")
+    - Number(b.pair_placement === "before_other_arrivals") || a.side.localeCompare(b.side));
+  const results: Array<{ result: StagedRendererPipelineResult; side: PortSide; cost: readonly number[]; reasons: RendererDiagnostic[] }> = [];
+  const evidence: RendererRoutingRevisionEvidence[] = [];
+  for (let index = 0; index < trials.length; index++) {
+    const trial = trials[index]!;
+    const remainingTrials = trials.length - index;
+    const reservedCandidates = Math.min(1024 * (remainingTrials - 1),
+      Math.floor(allowance.candidates * (remainingTrials - 1) / remainingTrials));
+    const reservedExpansions = Math.min(remainingTrials - 1, allowance.expansions);
+    allowance.candidates -= reservedCandidates;
+    allowance.expansions -= reservedExpansions;
+    let result: StagedRendererPipelineResult;
+    try { result = await runIaPlaceMapRendererTrial(scene, allowance, trial.side); }
+    finally { allowance.candidates += reservedCandidates; allowance.expansions += reservedExpansions; }
+    const reasons = auditIaPlaceMapFinalScene(result.positionedScene);
+    const routeContext = buildFinalRoutingContext(result.positionedScene, inventory).context;
+    const [crossings, bends, length] = routeContext ? routeCost(routeContext.connectors) : [Infinity, Infinity, Infinity];
+    const base = measureScene(scene);
+    const expansion = Math.max(0, result.measuredScene.root.width - base.root.width)
+      + Math.max(0, result.measuredScene.root.height - base.root.height);
+    const displacement = measureIaPortDisplacement(result.positionedScene);
+    const cost = [crossings, bends, expansion, displacement, length];
+    results.push({ result, side: trial.side, cost, reasons });
+    evidence.push(...(result.positionedScene.routingEvidence?.revisions ?? []), { pass: index,
+      costs: [[`independent-loop-${trial.side}`, cost]],
+      rejected: reasons.map(reason => ({ id: `independent-loop-${trial.side}`, reason: reason.message })),
+      remainingCandidates: allowance.candidates, remainingRepairs: allowance.repairs });
+  }
+  const accepted = results.filter(record => !record.reasons.length
+    && !record.result.positionedScene.diagnostics.some(diagnostic => diagnostic.severity === "error"));
+  accepted.sort((a, b) => compareRouteCosts(a.cost, b.cost) || a.side.localeCompare(b.side));
+  const chosen = accepted[0] ?? results[0]!;
+  return finishForward({ ...chosen.result, positionedScene: { ...chosen.result.positionedScene, routingEvidence: {
+    candidates: DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates - allowance.candidates,
+    repairs: DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions - allowance.repairs, revisions: evidence } } });
+}
+
+async function runIaPlaceMapRendererTrial(scene: RendererScene, sharedAllowance?: IaSolveAllowance,
+  selectedLoopSide?: PortSide): Promise<StagedRendererPipelineResult> {
   const inventory = inventoryFromScene(scene);
   if (!inventory) return runStagedRendererPipeline(scene);
   const measuredBaseline = measureScene(scene);
@@ -1313,13 +1576,15 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
   const absolutePaddingIncrements = new Map<string, number>();
   const seenRevisions = new Set<string>();
   const expectedLabels = expectedLabelMap(measuredBaseline, inventory);
-  const budget = { candidates: DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates, repairs: DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions };
+  const budget = sharedAllowance ?? { candidates: DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates, repairs: DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions,
+    expansions: DEFAULT_ROUTING_POLICY.maxExpansionPasses };
+  const maximumExpansionPasses = budget.expansions;
   const evidence: RendererRoutingRevisionEvidence[] = [];
   let bestAccepted: { positioned: PositionedScene; measured: MeasuredScene; cost: readonly number[] } | undefined;
   let finalMeasured = measuredBaseline;
   let finalPositioned = positionMeasuredEdgesAgainstRoot(measuredBaseline, await positionSceneBeforeRouting(measuredBaseline));
   const finish = (positioned: PositionedScene, measured: MeasuredScene): StagedRendererPipelineResult => ({
-    rendererScene: scene, measuredScene: measured, positionedScene: { ...positioned, routingEvidence: {
+    rendererScene: scene, measuredScene: measured, positionedScene: { ...positioned, iaAcceptancePolicy: structuredClone(inventory), routingEvidence: {
       candidates: DEFAULT_FINAL_ROUTING_LIMITS.maxCandidates - budget.candidates,
       repairs: DEFAULT_FINAL_ROUTING_LIMITS.maxRepairRevisions - budget.repairs, revisions: evidence
     } }
@@ -1330,7 +1595,7 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
     comparisonLimited ? [createRoutingDiagnostic("renderer.routing.ia_quality_comparison_limited",
       "IA routing passed geometry and label acceptance; comparison of further alternatives reached its aggregate limit.", scene.root.id)] : []),
     bestAccepted!.measured);
-  for (let pass = 0; pass <= DEFAULT_ROUTING_POLICY.maxExpansionPasses; pass++) {
+  for (let pass = 0; pass <= maximumExpansionPasses; pass++) {
     const revisionKey = JSON.stringify([[...absoluteGapIncrements].sort(), [...absolutePaddingIncrements].sort()]);
     if (seenRevisions.has(revisionKey) || budget.candidates <= 0) {
       if (bestAccepted) return finishAccepted(true);
@@ -1362,13 +1627,14 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
           && corridor.connectorIds.includes(request.connectorId));
         if (corridor) minimumGapDemands.set(corridor.key, Math.max(minimumGapDemands.get(corridor.key) ?? 0, request.deficit));
       }
-      if (minimumGapDemands.size && pass < DEFAULT_ROUTING_POLICY.maxExpansionPasses) {
+      if (minimumGapDemands.size && pass < maximumExpansionPasses) {
         // Preflight the same inner envelope reserved by shared corridor capacity.
         // Reflow its real gutter first; disjoint labels reuse the maximum width.
         // Anchor-specific track and row demands are assessed after routing.
         evidence.push({ pass, expansion: { gaps: [...minimumGapDemands], padding: [] },
           remainingCandidates: budget.candidates, remainingRepairs: budget.repairs });
         mergeDemands(absoluteGapIncrements, minimumGapDemands);
+        budget.expansions--;
         continue;
       }
     }
@@ -1379,9 +1645,10 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
     // a fair share for each remaining owned-spacing revision and for final
     // selection within this revision; every slice still deducts from one budget.
     const frameAllowance = expectedLabels.size && inventory.routingScope
-      ? Math.max(1, Math.floor(budget.candidates / (DEFAULT_ROUTING_POLICY.maxExpansionPasses - pass + 1))) : budget.candidates;
-    const expansionReserve = budget.candidates - frameAllowance;
+      ? Math.max(1, Math.floor(budget.candidates / (maximumExpansionPasses - pass + 1))) : budget.candidates;
+    let expansionReserve = budget.candidates - frameAllowance;
     const selectionReserve = expectedLabels.size && inventory.routingScope ? Math.floor(frameAllowance / 2) : 0;
+    const candidatesBeforePortStrategies = budget.candidates;
     const candidates: Array<{ id: string; context: FinalRoutingContext; requiredExpansion: number; portDisplacement: number }> = [];
     const sceneKey = (context: FinalRoutingContext) => JSON.stringify(context.connectors.map(c => [c.id, c.route.points]).sort(([a], [b]) => String(a).localeCompare(String(b))));
     const labelAssessments = new Map<string, ReturnType<typeof assessConnectorLabels>>();
@@ -1410,7 +1677,7 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
     const portStates = new Set<string>();
     for (const { side, flank, loopSide, parallelSide, reverse } of strategies.flatMap(strategy => [{ ...strategy, reverse: false }, { ...strategy, reverse: true }])) {
       if (budget.candidates <= expansionReserve + selectionReserve) break;
-      const allocation = allocateOccurrencePorts(measuredRevision, seed, inventory, side, budget, reverse, flank, loopSide, parallelSide);
+      const allocation = allocateOccurrencePorts(measuredRevision, seed, inventory, side, budget, reverse, flank, selectedLoopSide ?? loopSide, parallelSide);
       allocationDiagnostics.push(...allocation.diagnostics);
       if (allocation.diagnostics.length) continue;
       let positioned = positionMeasuredEdgesAgainstRoot(allocation.measured, await positionSceneBeforeRouting(allocation.measured));
@@ -1438,11 +1705,18 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
         id: `${side ?? "facing"}${flank ? `-flank-${flank}` : ""}${loopSide ? `-loop-${loopSide}` : ""}${parallelSide ? `-parallel-${parallelSide}` : ""}${reverse ? "-reverse" : ""}`,
         portGroups: allocation.portGroups ?? [], portDisplacement: allocation.portDisplacement ?? 0 };
       revisions.push(revision);
+    }
+    // Materialize every ordinary attachment strategy before label searches can
+    // consume a frame. Direct seeds remain eligible even when a route beam ends.
+    expansionReserve = Math.max(0, expansionReserve - (candidatesBeforePortStrategies - budget.candidates));
+    for (const [revisionIndex, revision] of revisions.entries()) {
+      const positioned = revision.positioned;
+      const built = { context: revision.context };
       // The generator's route limit and its label probes consume the same
       // aggregate allowance. Shared stage reservations keep assessment from
       // consuming the remaining connectors' fair share.
       const proposalBudget = budget;
-      const proposalAllowance = Math.min(128, budget.candidates);
+      const proposalAllowance = Math.min(128, Math.max(0, budget.candidates - expansionReserve - selectionReserve));
       const scoreLabels = (context: FinalRoutingContext): readonly number[] => {
         const key = sceneKey(context);
         let labels = labelProbes.get(key);
@@ -1493,7 +1767,6 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
         ? [{ id: "seed", context: built.context }] : [];
       for (const proposal of [...proposed.candidates, ...seedCandidates]) candidates.push({
         id: `${revision.id}:${proposal.id}`, context: proposal.context, requiredExpansion: expansion, portDisplacement: revision.portDisplacement });
-      if (bestAccepted?.cost[0] === 0) break;
     }
     const portsKey = (context: FinalRoutingContext) => JSON.stringify(context.connectors.map(c => [c.id, c.source, c.target]));
     const revisionFor = (context: FinalRoutingContext) => revisions.find(revision => portsKey(revision.context) === portsKey(context))!;
@@ -1574,6 +1847,16 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
       if (!best.violations.length) for (const [key, amount] of labelScopeGapDemands(best.positioned, expectedLabels, best.labels))
         routeDemand.demands.set(key, Math.max(routeDemand.demands.get(key) ?? 0, amount));
       const paddingDemands = routeOwnerPaddingDemands(best.positioned, best.context);
+      // A label escaping its selected owner must grow that owner, which also
+      // grows the coherent root. Charging its same overflow to root padding
+      // would reserve the space twice. Root-owned paint alone supplies root
+      // demand; the final export audit still checks every painted envelope.
+      const rootOwnedEdges = best.positioned.edges.filter(edge => !best.context.connectors.find(connector => connector.id === edge.id)?.routingBounds);
+      if (inventory.exportClearance === "readable_gap") for (const [side, amount] of measurePaintedExportDeficits({ ...best.positioned, edges: rootOwnedEdges })) {
+        const paddingSide = side === "west" ? "left" : side === "east" ? "right" : side === "north" ? "top" : "bottom";
+        const key = `${best.positioned.root.id}\0${paddingSide}`;
+        paddingDemands.set(key, Math.max(paddingDemands.get(key) ?? 0, amount));
+      }
       const headerIds = new Set(failedIds);
       if (!best.violations.length) for (const problem of best.labels.problems) {
         if ((problem.kind === "header" || problem.kind === "bounds")
@@ -1612,11 +1895,12 @@ export async function runIaPlaceMapRendererPipeline(scene: RendererScene): Promi
       rejectedRevision: best.revision.id, violations: best.violations.map(v => v.message), labels: best.labels.problems });
     const gapChanged = mergeDemands(absoluteGapIncrements, routeDemand.demands);
     const paddingChanged = mergeDemands(absolutePaddingIncrements, paddingDemands);
-    if ((!gapChanged && !paddingChanged) || pass === DEFAULT_ROUTING_POLICY.maxExpansionPasses) {
-      if (bestAccepted) return finishAccepted(pass === DEFAULT_ROUTING_POLICY.maxExpansionPasses);
+    if ((!gapChanged && !paddingChanged) || pass === maximumExpansionPasses) {
+      if (bestAccepted) return finishAccepted(pass === maximumExpansionPasses);
       return finish(appendDiagnostics(finalPositioned, [...best.reasons,
         issue("renderer.routing.ia_joint_capacity_exhausted", "IA joint route and label selection could not satisfy final acceptance within owned spacing and aggregate limits.", scene.root.id)]), finalMeasured);
     }
+    budget.expansions--;
   }
   return finish(appendDiagnostics(finalPositioned, [issue("renderer.routing.ia_joint_budget_exhausted",
     "IA joint routing exhausted its aggregate search budget.", scene.root.id)]), finalMeasured);

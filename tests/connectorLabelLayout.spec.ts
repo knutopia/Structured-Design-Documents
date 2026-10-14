@@ -527,3 +527,30 @@ describe("shared measured label capacity", () => {
     expect(measureConnectorLabelCapacity([corridor], claims, 16)).toEqual(measureConnectorLabelCapacity([corridor], [...claims].reverse(), 16));
   });
 });
+
+it("audits every rival segment accepted by the router's axial tolerance", () => {
+  const s = scene([
+    edge("a", [{x:20,y:100},{x:220,y:100}], {...measured,x:80,y:112}),
+    edge("rival", [{x:20,y:120},{x:220,y:120.5}], undefined)
+  ]);
+  const audit = auditConnectorLabels({...input(s),requireAdjacentLabels:true,unrelatedRouteClearance:24,rejectAmbiguousAssociation:true});
+  expect(audit.problems).toEqual(expect.arrayContaining([
+    {connectorId:"a",kind:"connector",obstacleId:"rival"},
+    {connectorId:"a",kind:"ambiguous",obstacleId:"rival"}
+  ]));
+});
+
+it("recognizes a row with no label-sized opening between partial rival runs", () => {
+  const label = {...measured,width:180};
+  const s = scene([
+    edge("a",[{x:20,y:100},{x:220,y:100}],{...label,x:20,y:68}),
+    edge("upper",[{x:20,y:74},{x:120,y:74}],undefined),
+    edge("lower",[{x:150,y:125},{x:220,y:125}],undefined)
+  ]);
+  const options = {...input(s),expectedLabels:new Map([["a",label]]),requireAdjacentLabels:true,unrelatedRouteClearance:24,
+    scopeByConnectorId:new Map([["a",{x:20,y:0,width:200,height:200}]])};
+  const claims=connectorLabelCapacityClaims(options,auditConnectorLabels(options),[
+    {owner:"gap",axis:"x",bounds:{x:20,y:0,width:200,height:200},connectorIds:["a","upper","lower"],margin:16}
+  ]);
+  expect(claims.find(claim=>claim.connectorId==="a")!.thickness).toBe(0);
+});

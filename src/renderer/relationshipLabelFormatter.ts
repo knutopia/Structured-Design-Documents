@@ -1,5 +1,6 @@
 /** Bundle-shaped presentation contract used by relationship label formatters. */
 export interface RelationshipLabelPresentation {
+  wrapping?: "prefer_part_boundaries";
   separator: string;
   parts: Array<{
     field: string;
@@ -16,13 +17,13 @@ export type RelationshipLabelSource = object;
  * resolution uses the supplied complete node inventory; it does not add graph
  * topology. Duplicate display names are qualified with their source IDs.
  */
-export function formatRelationshipLabels<T extends RelationshipLabelSource>(
+export function prepareRelationshipLabels<T extends RelationshipLabelSource>(
   relationships: readonly T[],
   nodeNamesById: ReadonlyMap<string, string>,
   presentation: RelationshipLabelPresentation,
   detailId: string,
   ambiguityRelationships: readonly T[] = relationships
-): Array<string | undefined> {
+): Array<{ text: string; preferredBreaks?: number[] } | undefined> {
   if (typeof presentation.detail_display[detailId] !== "boolean") {
     throw new Error(`Relationship label presentation does not define detail '${detailId}'.`);
   }
@@ -62,6 +63,24 @@ export function formatRelationshipLabels<T extends RelationshipLabelSource>(
       return [part.template.replace("{value}", value)];
     });
     const label = parts.join(presentation.separator).trim();
-    return label || undefined;
+    if (!label) return undefined;
+    const preferredBreaks: number[] = [];
+    let offset = -parts.join(presentation.separator).indexOf(label);
+    for (let index = 0; index < parts.length - 1; index++) {
+      offset += parts[index]!.length;
+      if (offset > 0 && offset < label.length) preferredBreaks.push(offset);
+      offset += presentation.separator.length;
+    }
+    return { text: label, ...(presentation.wrapping === "prefer_part_boundaries" ? { preferredBreaks } : {}) };
   });
+}
+
+/** Canonical flattened labels retained for LEGACY callers. */
+export function formatRelationshipLabels<T extends RelationshipLabelSource>(
+  relationships: readonly T[], nodeNamesById: ReadonlyMap<string, string>,
+  presentation: RelationshipLabelPresentation, detailId: string,
+  ambiguityRelationships: readonly T[] = relationships
+): Array<string | undefined> {
+  return prepareRelationshipLabels(relationships, nodeNamesById, presentation, detailId, ambiguityRelationships)
+    .map(label => label?.text);
 }

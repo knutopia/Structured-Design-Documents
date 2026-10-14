@@ -1,3 +1,4 @@
+import { createEdgeLabelMeasurementService } from "../src/renderer/staged/microLayout.js";
 import { cp, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -108,7 +109,7 @@ describe("IA place map bundle occurrence policy", () => {
     const scene = buildIaPlaceMapRendererScene(projection, graph, view, { detailId: "compact" }, bundle);
     const scope = scene.root.viewMetadata!.iaPlaceMap!.routingScope!;
     expect(view.conventions.renderer_defaults!.ia_place_map!.routing_scope).toEqual({
-      container_node_types: ["Area"], internal_routes: "within_common_owner", cross_owner_routes: "through_common_ancestor"
+      export_clearance: "readable_gap", container_node_types: ["Area"], internal_routes: "within_common_owner", cross_owner_routes: "through_common_ancestor"
     });
     expect(scope.containerIds).toEqual(projection.nodes.filter((node) => node.type === "Area").map((node) => node.id));
     expect(scope.containerIds.length).toBeGreaterThan(0);
@@ -123,7 +124,7 @@ describe("IA place map bundle occurrence policy", () => {
     const original = projectView(compiled(), bundle, "ia_place_map").projection!;
     for (const remove of [false, true]) {
       await withLoadedViewMutation((_views, policy) => {
-        if (remove) delete policy.routing_scope;
+        if (remove) { delete policy.routing_scope; delete (policy.navigation as Record<string, unknown>).routing_preferences; }
         else (policy.routing_scope as Record<string, unknown>).container_node_types = [];
       }, (loaded) => {
         const graph = compiled(loaded);
@@ -154,7 +155,7 @@ describe("IA place map bundle occurrence policy", () => {
       diagnostic.targetId === edge.id && diagnostic.message.includes("finite routing bounds"));
     expect(boundFailures(final)).not.toEqual([]);
     for (const remove of [false, true]) await withLoadedViewMutation((_views, policy) => {
-      if (remove) delete policy.routing_scope;
+      if (remove) { delete policy.routing_scope; delete (policy.navigation as Record<string, unknown>).routing_preferences; }
       else (policy.routing_scope as Record<string, unknown>).container_node_types = [];
     }, loaded => {
       const changedGraph = compiled(loaded);
@@ -163,7 +164,8 @@ describe("IA place map bundle occurrence policy", () => {
       expect(changedProjection).toEqual(projection);
       const changedScene = buildIaPlaceMapRendererScene(changedProjection, changedGraph, changedView, { detailId: "compact" }, loaded);
       const probe = structuredClone(final);
-      probe.root.viewMetadata!.iaPlaceMap!.routingScope = changedScene.root.viewMetadata!.iaPlaceMap!.routingScope;
+      probe.root.viewMetadata!.iaPlaceMap = structuredClone(changedScene.root.viewMetadata!.iaPlaceMap);
+      probe.iaAcceptancePolicy = structuredClone(changedScene.root.viewMetadata!.iaPlaceMap);
       expect(boundFailures(probe)).toEqual([]);
     });
   });
@@ -417,4 +419,95 @@ describe("IA place map bundle occurrence policy", () => {
     }
   });
 
+});
+
+describe("review 2 loaded presentation and policy intent", () => {
+  it("prepares preferred breaks only from loaded wrapping and retains canonical legacy labels", async () => {
+    const measure = createEdgeLabelMeasurementService("default", []);
+    let preferred: ReturnType<typeof measure> | undefined;
+    let canonical: string | undefined;
+    await withLoadedViewMutation((_views, policy) => {
+      ((policy.navigation as Record<string, unknown>).presentation as Record<string, unknown>).wrapping = "prefer_part_boundaries";
+    }, loaded => {
+      const graph = compiled(loaded);
+      const view = loaded.views.views.find(view => view.id === "ia_place_map")!;
+      const scene = buildIaPlaceMapRendererScene(projectView(graph, loaded, view.id).projection!, graph, view, { detailId: "compact" }, loaded);
+      const label = scene.edges.find(edge => edge.label?.text.includes("Accept invitation"))!.label!;
+      canonical = label.text;
+      expect(label.preferredBreaks?.length).toBeGreaterThan(0);
+      preferred = measure(label, "proof");
+      expect(preferred.lines).toEqual(["[Accept invitation]", "{invitation valid}"]);
+      expect(preferred.lines.join("").replace(/\s/g, "")).toBe(label.text.replace(/\s/g, ""));
+      expect(preferred.width).toBeLessThan(measure({ text: label.text, textStyleRole: label.textStyleRole }, "ordinary").width);
+      const first = measure({ text: preferred.lines[0]!, textStyleRole: label.textStyleRole }, "first");
+      const second = measure({ text: preferred.lines[1]!, textStyleRole: label.textStyleRole }, "second");
+      expect(preferred.width).toBe(Math.max(first.width, second.width));
+      expect(preferred.height).toBe(first.height + first.lineHeight);
+    });
+    await withLoadedViewMutation((_views, policy) => {
+      delete ((policy.navigation as Record<string, unknown>).presentation as Record<string, unknown>).wrapping;
+    }, loaded => {
+      const graph = compiled(loaded);
+      const view = loaded.views.views.find(view => view.id === "ia_place_map")!;
+      const scene = buildIaPlaceMapRendererScene(projectView(graph, loaded, view.id).projection!, graph, view, { detailId: "compact" }, loaded);
+      const label = scene.edges.find(edge => edge.label?.text.includes("Accept invitation"))!.label!;
+      expect(label.text).toBe(canonical);
+      expect(label.preferredBreaks).toBeUndefined();
+      expect(measure(label, "ordinary").lines).not.toEqual(preferred!.lines);
+    });
+  });
+
+  it("copies loaded routing intent without sharing mutable policy arrays", async () => {
+    await withLoadedViewMutation((_views, policy) => {
+      (policy.routing_scope as Record<string, unknown>).export_clearance = "readable_gap";
+      (policy.navigation as Record<string, unknown>).routing_preferences = {
+        forward_shortcut: { scope: "same_owner", progression: { axis: "y", direction: "positive" }, side_pairs: [{ source: "south", target: "west" }], source_offset: "nearest_feasible", admission: "fewer_scene_bends_without_extra_crossings_or_expansion" },
+        self_loop: { traversal: { axis: "x", direction: "negative" }, side_trials: [{ side: "north", pair_placement: "nearest_feasible" }] }
+      };
+    }, loaded => {
+      const graph = compiled(loaded);
+      const view = loaded.views.views.find(view => view.id === "ia_place_map")!;
+      const scene = buildIaPlaceMapRendererScene(projectView(graph, loaded, view.id).projection!, graph, view, { detailId: "compact" }, loaded);
+      const copy = cloneViewMetadata(scene.root.viewMetadata)!;
+      expect(copy.iaPlaceMap!.exportClearance).toBe("readable_gap");
+      copy.iaPlaceMap!.routingPreferences!.self_loop!.side_trials[0]!.side = "south";
+      expect(scene.root.viewMetadata!.iaPlaceMap!.routingPreferences!.self_loop!.side_trials[0]!.side).toBe("north");
+      copy.iaPlaceMap!.routingPreferences!.forward_shortcut!.side_pairs[0]!.source = "north";
+      expect(view.conventions.renderer_defaults!.ia_place_map!.navigation.routing_preferences!.forward_shortcut!.side_pairs[0]!.source).toBe("south");
+    });
+  });
+
+  it.each([
+    { wrapping: "unsupported" },
+    { routing_preferences: {} },
+    { routing_preferences: { self_loop: { traversal: { axis: "y", direction: "negative" }, side_trials: [{ side: "north", pair_placement: "nearest_feasible" }] } } },
+    { routing_preferences: { self_loop: { traversal: { axis: "x", direction: "negative" }, side_trials: [] } } }
+  ])("rejects unsupported loaded intent %j", async invalid => {
+    await expect(withLoadedViewMutation((_views, policy) => {
+      const navigation = policy.navigation as Record<string, unknown>;
+      if ("wrapping" in invalid) (navigation.presentation as Record<string, unknown>).wrapping = invalid.wrapping;
+      else navigation.routing_preferences = invalid.routing_preferences;
+    }, () => undefined)).rejects.toThrow();
+  });
+
+  it.each([
+    [{ source: "south", target: "north" }],
+    [{ source: "north", target: "west" }],
+    [{ source: "south", target: "west" }, { source: "south", target: "west" }],
+    []
+  ])("rejects invalid forward side pairs %j", async (...pairs) => {
+    await expect(withLoadedViewMutation((_views, policy) => {
+      (policy.navigation as Record<string, unknown>).routing_preferences = { forward_shortcut: {
+        scope: "same_owner", progression: { axis: "y", direction: "positive" }, side_pairs: pairs,
+        source_offset: "nearest_feasible", admission: "fewer_scene_bends_without_extra_crossings_or_expansion"
+      } };
+    }, () => undefined)).rejects.toThrow();
+  });
+
+  it("rejects routing preferences without ownership", async () => {
+    await expect(withLoadedViewMutation((_views, policy) => {
+      delete policy.routing_scope;
+      (policy.navigation as Record<string, unknown>).routing_preferences = { self_loop: { traversal: { axis: "x", direction: "negative" }, side_trials: [{ side: "north", pair_placement: "nearest_feasible" }] } };
+    }, () => undefined)).rejects.toThrow();
+  });
 });

@@ -11,6 +11,8 @@ import {
   type RendererDiagnosticSeverity
 } from "./diagnostics.js";
 
+import { DEFAULT_ROUTING_POLICY } from "./routingCore/contracts.js";
+
 export const FIXED_LABEL_DISTANCE = 12;
 export const FIXED_LABEL_CLEARANCE = FIXED_LABEL_DISTANCE * 2;
 
@@ -167,7 +169,7 @@ export function buildRouteSegmentDetails(route: PositionedRoute): RouteSegmentDe
   for (let index = 1; index < route.points.length; index += 1) {
     const start = route.points[index - 1]!;
     const end = route.points[index]!;
-    if (start.x === end.x) {
+    if (Math.abs(start.x - end.x) <= DEFAULT_ROUTING_POLICY.epsilon) {
       details.push({
         routeSegmentIndex: index - 1,
         orientation: "vertical",
@@ -177,7 +179,7 @@ export function buildRouteSegmentDetails(route: PositionedRoute): RouteSegmentDe
       });
       continue;
     }
-    if (start.y === end.y) {
+    if (Math.abs(start.y - end.y) <= DEFAULT_ROUTING_POLICY.epsilon) {
       details.push({
         routeSegmentIndex: index - 1,
         orientation: "horizontal",

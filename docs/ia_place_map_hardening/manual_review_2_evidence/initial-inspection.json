@@ -1,0 +1,12 @@
+{
+  "provenance": "Initial git-status inspection recorded in this task, before delegation. baseline/status.txt is the later capture status and includes early contract scaffolding.",
+  "head": "c1cd5d476370ebad496eece78c57517f53ea5f45",
+  "modified": [
+    "docs/ia_place_map_hardening/manual_review_2_routing_quality.md",
+    "docs/ia_place_map_hardening/routing_quality_execution.md"
+  ],
+  "untracked": [
+    "docs/ia_place_map_hardening/forward_routing_port_policy.md",
+    "docs/ia_place_map_hardening/manual_review_2_followup_plan.md"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "policies": [],
+  "canonicalBundleFingerprint": "bnd_ce42c2e9b38faefc21e09403f41d221d2007740e07d3e2ebe2c84ebda25b5342",
+  "loadedBundleFingerprint": "bnd_ce42c2e9b38faefc21e09403f41d221d2007740e07d3e2ebe2c84ebda25b5342",
+  "policy": {
+    "projection_edge_references": "exact_source_occurrences",
+    "routing_scope": {
+      "export_clearance": "readable_gap",
+      "container_node_types": [
+        "Area"
+      ],
+      "internal_routes": "within_common_owner",
+      "cross_owner_routes": "through_common_ancestor"
+    },
+    "navigation": {
+      "relationship": "NAVIGATES_TO",
+      "routing_preferences": {
+        "forward_shortcut": {
+          "scope": "same_owner",
+          "progression": {
+            "axis": "y",
+            "direction": "positive"
+          },
+          "side_pairs": [
+            {
+              "source": "south",
+              "target": "west"
+            }
+          ],
+          "source_offset": "nearest_feasible",
+          "admission": "fewer_scene_bends_without_extra_crossings_or_expansion"
+        },
+        "self_loop": {
+          "traversal": {
+            "axis": "x",
+            "direction": "negative"
+          },
+          "side_trials": [
+            {
+              "side": "south",
+              "pair_placement": "before_other_arrivals"
+            },
+            {
+              "side": "north",
+              "pair_placement": "nearest_feasible"
+            }
+          ]
+        }
+      },
+      "occurrence_coverage": "each_selected_occurrence_once",
+      "presentation": {
+        "wrapping": "prefer_part_boundaries",
+        "separator": " ",
+        "parts": [
+          {
+            "field": "event",
+            "template": "[{value}]",
+            "resolve_node_name": true
+          },
+          {
+            "field": "guard",
+            "template": "{{value}}",
+            "resolve_node_name": false
+          }
+        ],
+        "detail_display": {
+          "compact": true,
+          "detailed": true
+        }
+      },
+      "containment_fusion": {
+        "relationship": "CONTAINS",
+        "rule": "single_unannotated_navigation_occurrence"
+      }
+    }
+  },
+  "canonicalViewsSha256": "cf6fba7acf9a9683cda3c8bc71d85d7c80b12d98c9ea3a03615511bcb3eb243f",
+  "loadedViewsSha256": "cf6fba7acf9a9683cda3c8bc71d85d7c80b12d98c9ea3a03615511bcb3eb243f"
+}

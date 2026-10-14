@@ -596,7 +596,7 @@ export function buildIaPlaceMapRendererScene(
         from: { itemId: edge.from, portId: "east" },
         to: { itemId: edge.to, portId: "west" },
         routing: { style: "orthogonal", preferAxis: "horizontal" },
-        ...(edge.label ? { label: { text: edge.label, textStyleRole: "edge_label" } } : {}),
+        ...(edge.label ? { label: { text: edge.label, textStyleRole: "edge_label", ...(edge.preferredBreaks ? { preferredBreaks: [...edge.preferredBreaks] } : {}) } } : {}),
         markers: { end: "arrow" },
         viewMetadata: { sourceEdgeIds: [edge.source_edge_id] }
       });
@@ -635,6 +635,8 @@ export function buildIaPlaceMapRendererScene(
     scene.root.viewMetadata = {
       ...scene.root.viewMetadata,
       iaPlaceMap: {
+        ...(rendererConfig.routing_scope?.export_clearance ? { exportClearance: rendererConfig.routing_scope.export_clearance } : {}),
+        ...(rendererConfig.navigation.routing_preferences ? { routingPreferences: structuredClone(rendererConfig.navigation.routing_preferences) } : {}),
         ...(rendererConfig.routing_scope ? { routingScope: {
           containerIds: resolveRoutingScopeContainerIds(scene.root, projection, rendererConfig.routing_scope.container_node_types),
           internalRoutes: rendererConfig.routing_scope.internal_routes,

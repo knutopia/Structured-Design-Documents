@@ -924,7 +924,8 @@ async function buildDefs(scene: PositionedScene, theme: RendererTheme): Promise<
 export async function renderPositionedSceneToSvg(scene: PositionedScene): Promise<StagedSvgArtifact> {
   const resolvedTheme = resolveRendererTheme(scene.themeId, "backend");
   const theme = resolvedTheme.theme;
-  const finalAudit = scene.root.viewMetadata?.iaPlaceMap
+  const requiresIaAcceptance = !!(scene.iaAcceptancePolicy || scene.root.viewMetadata?.iaPlaceMap);
+  const finalAudit = requiresIaAcceptance
     ? auditIaPlaceMapFinalScene(scene)
     : scene.viewId === "ui_contracts" ? auditUiContractsFinalScene(scene) : [];
   const diagnostics: RendererDiagnostic[] = [...scene.diagnostics, ...resolvedTheme.diagnostics];
@@ -934,7 +935,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
       diagnostics.push(finding);
     }
   }
-  if (scene.root.viewMetadata?.iaPlaceMap && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
+  if (requiresIaAcceptance && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
     throw new RendererArtifactError(sortRendererDiagnostics(diagnostics));
   }
   const groups = buildPaintElementMap();
@@ -1001,7 +1002,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
 
   lines.push("</svg>");
 
-  if (scene.root.viewMetadata?.iaPlaceMap && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
+  if (requiresIaAcceptance && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
     throw new RendererArtifactError(sortRendererDiagnostics(diagnostics));
   }
 

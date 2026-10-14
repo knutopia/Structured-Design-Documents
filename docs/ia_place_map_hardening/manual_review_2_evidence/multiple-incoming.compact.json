@@ -1,0 +1,2324 @@
+{
+  "viewId": "ia_place_map",
+  "detailId": "compact",
+  "themeId": "default",
+  "root": {
+    "kind": "container",
+    "id": "root",
+    "role": "diagram_root",
+    "primitive": "root",
+    "classes": [
+      "diagram",
+      "ia_place_map"
+    ],
+    "viewMetadata": {
+      "iaPlaceMap": {
+        "exportClearance": "readable_gap",
+        "routingPreferences": {
+          "forward_shortcut": {
+            "scope": "same_owner",
+            "progression": {
+              "axis": "y",
+              "direction": "positive"
+            },
+            "side_pairs": [
+              {
+                "source": "south",
+                "target": "west"
+              }
+            ],
+            "source_offset": "nearest_feasible",
+            "admission": "fewer_scene_bends_without_extra_crossings_or_expansion"
+          },
+          "self_loop": {
+            "traversal": {
+              "axis": "x",
+              "direction": "negative"
+            },
+            "side_trials": [
+              {
+                "side": "south",
+                "pair_placement": "before_other_arrivals"
+              },
+              {
+                "side": "north",
+                "pair_placement": "nearest_feasible"
+              }
+            ]
+          }
+        },
+        "routingScope": {
+          "containerIds": [
+            "A-001",
+            "A-002"
+          ],
+          "internalRoutes": "within_common_owner",
+          "crossOwnerRoutes": "through_common_ancestor"
+        },
+        "expectedNavigationOccurrences": [
+          {
+            "id": "navigation:source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+            "sourceEdgeId": "source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+            "connectorId": "navigation:source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+            "from": "P-001",
+            "to": "P-002",
+            "label": "[Open current workspace] {workspace selected}",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 0,
+            "fromAncestryIds": [
+              "A-001",
+              "P-001"
+            ],
+            "toAncestryIds": [
+              "A-002",
+              "P-002"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+            "sourceEdgeId": "source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+            "connectorId": "navigation:source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+            "from": "P-001",
+            "to": "P-002",
+            "label": "[Accept invitation] {invitation valid}",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 1,
+            "fromAncestryIds": [
+              "A-001",
+              "P-001"
+            ],
+            "toAncestryIds": [
+              "A-002",
+              "P-002"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-a2a137dc93416d7eda8134f19003a56fb60a22e4069fbfadae5a3a9dd129290f-0",
+            "sourceEdgeId": "source-edge-a2a137dc93416d7eda8134f19003a56fb60a22e4069fbfadae5a3a9dd129290f-0",
+            "connectorId": "P-002__contains__P-003__source-edge-1f8db5d5f8d95f599ca2c955802b8d7239b0b5bd927abb4029118224e933aee4-0",
+            "from": "P-002",
+            "to": "P-003",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 2,
+            "fromAncestryIds": [
+              "A-002",
+              "P-002"
+            ],
+            "toAncestryIds": [
+              "A-002",
+              "P-002",
+              "P-003"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0",
+            "sourceEdgeId": "source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0",
+            "connectorId": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0",
+            "from": "P-002",
+            "to": "P-001",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 3,
+            "fromAncestryIds": [
+              "A-002",
+              "P-002"
+            ],
+            "toAncestryIds": [
+              "A-001",
+              "P-001"
+            ]
+          },
+          {
+            "id": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+            "sourceEdgeId": "source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+            "connectorId": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+            "from": "P-003",
+            "to": "P-002",
+            "label": "[Open current workspace] {settings saved}",
+            "markers": {
+              "end": "arrow"
+            },
+            "sourceOrder": 4,
+            "fromAncestryIds": [
+              "A-002",
+              "P-002",
+              "P-003"
+            ],
+            "toAncestryIds": [
+              "A-002",
+              "P-002"
+            ]
+          }
+        ],
+        "expectedStructuralEdges": [
+          {
+            "id": "P-002__contains__P-003__source-edge-1f8db5d5f8d95f599ca2c955802b8d7239b0b5bd927abb4029118224e933aee4-0",
+            "sourceEdgeIds": [
+              "source-edge-1f8db5d5f8d95f599ca2c955802b8d7239b0b5bd927abb4029118224e933aee4-0",
+              "source-edge-a2a137dc93416d7eda8134f19003a56fb60a22e4069fbfadae5a3a9dd129290f-0"
+            ],
+            "from": "P-002",
+            "to": "P-003",
+            "role": "contains_navigation",
+            "markers": {
+              "end": "arrow"
+            }
+          }
+        ]
+      }
+    },
+    "layout": {
+      "strategy": "stack",
+      "direction": "horizontal",
+      "gap": 48,
+      "crossAlignment": "start",
+      "gapAfter": {
+        "A-001": 179.676
+      }
+    },
+    "chrome": {
+      "padding": {
+        "top": 24,
+        "right": 33.999999999999886,
+        "bottom": 34,
+        "left": 24
+      },
+      "gutter": 48,
+      "headerBandHeight": 0
+    },
+    "headerContent": [],
+    "children": [
+      {
+        "kind": "container",
+        "id": "A-001",
+        "role": "area",
+        "primitive": "cluster",
+        "classes": [
+          "area"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 20,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 20,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "A-001__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Account"
+            ],
+            "x": 16,
+            "y": 10,
+            "width": 62.736,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "P-001__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start"
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-001",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "place",
+                  "root_place",
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-plain"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "P-001__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Dashboard"
+                    ],
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 78.976,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "P-001__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Dashboard"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 78.976,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                    "side": "east",
+                    "offset": 12.5,
+                    "x": 224,
+                    "y": 12.5
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001",
+                    "side": "east",
+                    "offset": 35.5,
+                    "x": 224,
+                    "y": 35.5
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001",
+                    "side": "south",
+                    "offset": 112,
+                    "x": 112,
+                    "y": 48
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 40,
+                "y": 80,
+                "width": 224,
+                "height": 48
+              }
+            ],
+            "ports": [],
+            "x": 40,
+            "y": 80,
+            "width": 224,
+            "height": 48
+          }
+        ],
+        "ports": [],
+        "x": 24,
+        "y": 24,
+        "width": 256,
+        "height": 120
+      },
+      {
+        "kind": "container",
+        "id": "A-002",
+        "role": "area",
+        "primitive": "cluster",
+        "classes": [
+          "area"
+        ],
+        "layout": {
+          "strategy": "stack",
+          "direction": "vertical",
+          "gap": 20,
+          "crossAlignment": "start"
+        },
+        "chrome": {
+          "padding": {
+            "top": 16,
+            "right": 216.676,
+            "bottom": 16,
+            "left": 16
+          },
+          "gutter": 20,
+          "headerBandHeight": 40
+        },
+        "headerContent": [
+          {
+            "id": "A-002__header",
+            "kind": "text",
+            "textStyleRole": "title",
+            "lines": [
+              "Workspace"
+            ],
+            "x": 16,
+            "y": 10,
+            "width": 83.68,
+            "height": 20,
+            "lineHeight": 20,
+            "region": "primary",
+            "priority": "primary"
+          }
+        ],
+        "children": [
+          {
+            "kind": "container",
+            "id": "P-002__group",
+            "role": "place_group",
+            "primitive": "stack",
+            "classes": [
+              "place_group",
+              "group_root",
+              "depth-0"
+            ],
+            "layout": {
+              "strategy": "stack",
+              "direction": "vertical",
+              "gap": 32,
+              "crossAlignment": "start",
+              "gapAfter": {
+                "P-002": 34
+              }
+            },
+            "chrome": {
+              "padding": {
+                "top": 0,
+                "right": 0,
+                "bottom": 0,
+                "left": 0
+              },
+              "gutter": 32,
+              "headerBandHeight": 0
+            },
+            "headerContent": [],
+            "children": [
+              {
+                "kind": "node",
+                "id": "P-002",
+                "role": "place",
+                "primitive": "card",
+                "classes": [
+                  "semantic_node",
+                  "place",
+                  "root_place",
+                  "depth-0",
+                  "shared-node",
+                  "shared-node-plain"
+                ],
+                "widthPolicy": {
+                  "preferred": "standard",
+                  "allowed": [
+                    "standard"
+                  ]
+                },
+                "widthBand": "standard",
+                "overflowPolicy": {
+                  "kind": "grow_height"
+                },
+                "content": [
+                  {
+                    "id": "P-002__title",
+                    "kind": "text",
+                    "textStyleRole": "shared_node_title",
+                    "lines": [
+                      "Workspace home"
+                    ],
+                    "x": 15.5,
+                    "y": 14.5,
+                    "width": 124.936,
+                    "height": 19,
+                    "lineHeight": 19,
+                    "region": "primary"
+                  }
+                ],
+                "sharedNode": {
+                  "density": "plain",
+                  "body": {
+                    "x": 1.5,
+                    "y": 1.5,
+                    "width": 221,
+                    "height": 45,
+                    "title": {
+                      "id": "P-002__title",
+                      "kind": "text",
+                      "textStyleRole": "shared_node_title",
+                      "lines": [
+                        "Workspace home"
+                      ],
+                      "x": 15.5,
+                      "y": 14.5,
+                      "width": 124.936,
+                      "height": 19,
+                      "lineHeight": 19,
+                      "region": "primary"
+                    },
+                    "attributeGroups": []
+                  }
+                },
+                "ports": [
+                  {
+                    "id": "north_chain",
+                    "role": "north_chain",
+                    "side": "north",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 0
+                  },
+                  {
+                    "id": "south_chain",
+                    "role": "south_chain",
+                    "side": "south",
+                    "offset": 24,
+                    "x": 24,
+                    "y": 48
+                  },
+                  {
+                    "id": "east",
+                    "role": "east",
+                    "side": "east",
+                    "x": 224,
+                    "y": 24
+                  },
+                  {
+                    "id": "west",
+                    "role": "west",
+                    "side": "west",
+                    "x": 0,
+                    "y": 24
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                    "side": "west",
+                    "offset": 12.5,
+                    "x": 0,
+                    "y": 12.5
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002",
+                    "side": "west",
+                    "offset": 35.5,
+                    "x": 0,
+                    "y": 35.5
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002",
+                    "side": "south",
+                    "offset": 112,
+                    "x": 112,
+                    "y": 48
+                  },
+                  {
+                    "id": "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002",
+                    "role": "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002",
+                    "side": "east",
+                    "offset": 24,
+                    "x": 224,
+                    "y": 24
+                  }
+                ],
+                "overflow": {
+                  "status": "fits"
+                },
+                "x": 475.676,
+                "y": 80,
+                "width": 224,
+                "height": 48
+              },
+              {
+                "kind": "container",
+                "id": "P-002__contains_scope_single",
+                "role": "contains_scope_single",
+                "primitive": "stack",
+                "classes": [
+                  "owned_scope",
+                  "contains_scope_single"
+                ],
+                "layout": {
+                  "strategy": "stack",
+                  "direction": "vertical",
+                  "gap": 32,
+                  "crossAlignment": "start"
+                },
+                "chrome": {
+                  "padding": {
+                    "top": 0,
+                    "right": 0,
+                    "bottom": 0,
+                    "left": 0
+                  },
+                  "gutter": 32,
+                  "headerBandHeight": 0
+                },
+                "headerContent": [],
+                "children": [
+                  {
+                    "kind": "container",
+                    "id": "P-003__group",
+                    "role": "place_group",
+                    "primitive": "stack",
+                    "classes": [
+                      "place_group",
+                      "group_nested",
+                      "depth-1"
+                    ],
+                    "layout": {
+                      "strategy": "stack",
+                      "direction": "vertical",
+                      "gap": 32,
+                      "crossAlignment": "start"
+                    },
+                    "chrome": {
+                      "padding": {
+                        "top": 0,
+                        "right": 0,
+                        "bottom": 0,
+                        "left": 0
+                      },
+                      "gutter": 32,
+                      "headerBandHeight": 0
+                    },
+                    "headerContent": [],
+                    "children": [
+                      {
+                        "kind": "node",
+                        "id": "P-003",
+                        "role": "place",
+                        "primitive": "card",
+                        "classes": [
+                          "semantic_node",
+                          "place",
+                          "nested_place",
+                          "depth-1",
+                          "shared-node",
+                          "shared-node-plain"
+                        ],
+                        "widthPolicy": {
+                          "preferred": "standard",
+                          "allowed": [
+                            "standard"
+                          ]
+                        },
+                        "widthBand": "standard",
+                        "overflowPolicy": {
+                          "kind": "grow_height"
+                        },
+                        "content": [
+                          {
+                            "id": "P-003__title",
+                            "kind": "text",
+                            "textStyleRole": "shared_node_title",
+                            "lines": [
+                              "Workspace settings"
+                            ],
+                            "x": 15.5,
+                            "y": 14.5,
+                            "width": 142.928,
+                            "height": 19,
+                            "lineHeight": 19,
+                            "region": "primary"
+                          }
+                        ],
+                        "sharedNode": {
+                          "density": "plain",
+                          "body": {
+                            "x": 1.5,
+                            "y": 1.5,
+                            "width": 221,
+                            "height": 45,
+                            "title": {
+                              "id": "P-003__title",
+                              "kind": "text",
+                              "textStyleRole": "shared_node_title",
+                              "lines": [
+                                "Workspace settings"
+                              ],
+                              "x": 15.5,
+                              "y": 14.5,
+                              "width": 142.928,
+                              "height": 19,
+                              "lineHeight": 19,
+                              "region": "primary"
+                            },
+                            "attributeGroups": []
+                          }
+                        },
+                        "ports": [
+                          {
+                            "id": "north_chain",
+                            "role": "north_chain",
+                            "side": "north",
+                            "offset": 24,
+                            "x": 24,
+                            "y": 0
+                          },
+                          {
+                            "id": "south_chain",
+                            "role": "south_chain",
+                            "side": "south",
+                            "offset": 24,
+                            "x": 24,
+                            "y": 48
+                          },
+                          {
+                            "id": "east",
+                            "role": "east",
+                            "side": "east",
+                            "x": 224,
+                            "y": 24
+                          },
+                          {
+                            "id": "west",
+                            "role": "west",
+                            "side": "west",
+                            "x": 0,
+                            "y": 24
+                          },
+                          {
+                            "id": "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003",
+                            "role": "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003",
+                            "side": "east",
+                            "offset": 24,
+                            "x": 224,
+                            "y": 24
+                          }
+                        ],
+                        "overflow": {
+                          "status": "fits"
+                        },
+                        "x": 475.676,
+                        "y": 162,
+                        "width": 224,
+                        "height": 48
+                      }
+                    ],
+                    "ports": [],
+                    "x": 475.676,
+                    "y": 162,
+                    "width": 224,
+                    "height": 48
+                  }
+                ],
+                "ports": [],
+                "x": 475.676,
+                "y": 162,
+                "width": 224,
+                "height": 48
+              }
+            ],
+            "ports": [],
+            "x": 475.676,
+            "y": 80,
+            "width": 224,
+            "height": 130
+          }
+        ],
+        "ports": [],
+        "x": 459.676,
+        "y": 24,
+        "width": 456.676,
+        "height": 202
+      }
+    ],
+    "ports": [],
+    "x": 0,
+    "y": 0,
+    "width": 950.352,
+    "height": 260
+  },
+  "edges": [
+    {
+      "id": "P-002__contains__P-003__source-edge-1f8db5d5f8d95f599ca2c955802b8d7239b0b5bd927abb4029118224e933aee4-0",
+      "role": "contains_navigation",
+      "classes": [
+        "ia_local_structure",
+        "contains_edge",
+        "structural_only",
+        "direct_vertical",
+        "merged_navigation"
+      ],
+      "from": {
+        "itemId": "P-002",
+        "portId": "south_chain",
+        "x": 499.676,
+        "y": 128
+      },
+      "to": {
+        "itemId": "P-003",
+        "portId": "north_chain",
+        "x": 499.676,
+        "y": 162
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 499.676,
+            "y": 128
+          },
+          {
+            "x": 499.676,
+            "y": 162
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "navigation:source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+      "role": "navigation",
+      "classes": [
+        "ia_navigation",
+        "navigation_occurrence"
+      ],
+      "from": {
+        "itemId": "P-001",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+        "x": 264,
+        "y": 92.5
+      },
+      "to": {
+        "itemId": "P-002",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+        "x": 475.676,
+        "y": 92.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 264,
+            "y": 92.5
+          },
+          {
+            "x": 475.676,
+            "y": 92.5
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "[Open current workspace]",
+          "{workspace selected}"
+        ],
+        "width": 155.676,
+        "height": 36,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 292,
+        "y": 44.5
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "navigation:source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+      "role": "navigation",
+      "classes": [
+        "ia_navigation",
+        "navigation_occurrence"
+      ],
+      "from": {
+        "itemId": "P-001",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001",
+        "x": 264,
+        "y": 115.5
+      },
+      "to": {
+        "itemId": "P-002",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002",
+        "x": 475.676,
+        "y": 115.5
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 264,
+            "y": 115.5
+          },
+          {
+            "x": 475.676,
+            "y": 115.5
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "[Accept invitation]",
+          "{invitation valid}"
+        ],
+        "width": 112.992,
+        "height": 36,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 313.342,
+        "y": 127.5
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0",
+      "role": "navigation",
+      "classes": [
+        "ia_navigation",
+        "navigation_occurrence"
+      ],
+      "from": {
+        "itemId": "P-002",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002",
+        "x": 587.676,
+        "y": 128
+      },
+      "to": {
+        "itemId": "P-001",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001",
+        "x": 152,
+        "y": 128
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 587.676,
+            "y": 128
+          },
+          {
+            "x": 587.676,
+            "y": 145
+          },
+          {
+            "x": 716.676,
+            "y": 145
+          },
+          {
+            "x": 716.676,
+            "y": 243
+          },
+          {
+            "x": 152,
+            "y": 243
+          },
+          {
+            "x": 152,
+            "y": 128
+          }
+        ]
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    },
+    {
+      "id": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+      "role": "navigation",
+      "classes": [
+        "ia_navigation",
+        "navigation_occurrence"
+      ],
+      "from": {
+        "itemId": "P-003",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003",
+        "x": 699.676,
+        "y": 186
+      },
+      "to": {
+        "itemId": "P-002",
+        "portId": "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002",
+        "x": 699.676,
+        "y": 104
+      },
+      "route": {
+        "style": "orthogonal",
+        "points": [
+          {
+            "x": 699.676,
+            "y": 186
+          },
+          {
+            "x": 732.676,
+            "y": 186
+          },
+          {
+            "x": 732.676,
+            "y": 104
+          },
+          {
+            "x": 699.676,
+            "y": 104
+          }
+        ]
+      },
+      "label": {
+        "lines": [
+          "[Open current workspace]",
+          "{settings saved}"
+        ],
+        "width": 155.676,
+        "height": 36,
+        "lineHeight": 14,
+        "textStyleRole": "edge_label",
+        "x": 744.676,
+        "y": 127
+      },
+      "markers": {
+        "end": "arrow"
+      },
+      "paintGroup": "edges"
+    }
+  ],
+  "decorations": [],
+  "diagnostics": [],
+  "paintOrder": [
+    "chrome",
+    "nodes",
+    "labels",
+    "edges",
+    "edge_labels"
+  ],
+  "iaAcceptancePolicy": {
+    "exportClearance": "readable_gap",
+    "routingPreferences": {
+      "forward_shortcut": {
+        "scope": "same_owner",
+        "progression": {
+          "axis": "y",
+          "direction": "positive"
+        },
+        "side_pairs": [
+          {
+            "source": "south",
+            "target": "west"
+          }
+        ],
+        "source_offset": "nearest_feasible",
+        "admission": "fewer_scene_bends_without_extra_crossings_or_expansion"
+      },
+      "self_loop": {
+        "traversal": {
+          "axis": "x",
+          "direction": "negative"
+        },
+        "side_trials": [
+          {
+            "side": "south",
+            "pair_placement": "before_other_arrivals"
+          },
+          {
+            "side": "north",
+            "pair_placement": "nearest_feasible"
+          }
+        ]
+      }
+    },
+    "routingScope": {
+      "containerIds": [
+        "A-001",
+        "A-002"
+      ],
+      "internalRoutes": "within_common_owner",
+      "crossOwnerRoutes": "through_common_ancestor"
+    },
+    "expectedNavigationOccurrences": [
+      {
+        "id": "navigation:source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+        "sourceEdgeId": "source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+        "connectorId": "navigation:source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+        "from": "P-001",
+        "to": "P-002",
+        "label": "[Open current workspace] {workspace selected}",
+        "markers": {
+          "end": "arrow"
+        },
+        "sourceOrder": 0,
+        "fromAncestryIds": [
+          "A-001",
+          "P-001"
+        ],
+        "toAncestryIds": [
+          "A-002",
+          "P-002"
+        ]
+      },
+      {
+        "id": "navigation:source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+        "sourceEdgeId": "source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+        "connectorId": "navigation:source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+        "from": "P-001",
+        "to": "P-002",
+        "label": "[Accept invitation] {invitation valid}",
+        "markers": {
+          "end": "arrow"
+        },
+        "sourceOrder": 1,
+        "fromAncestryIds": [
+          "A-001",
+          "P-001"
+        ],
+        "toAncestryIds": [
+          "A-002",
+          "P-002"
+        ]
+      },
+      {
+        "id": "navigation:source-edge-a2a137dc93416d7eda8134f19003a56fb60a22e4069fbfadae5a3a9dd129290f-0",
+        "sourceEdgeId": "source-edge-a2a137dc93416d7eda8134f19003a56fb60a22e4069fbfadae5a3a9dd129290f-0",
+        "connectorId": "P-002__contains__P-003__source-edge-1f8db5d5f8d95f599ca2c955802b8d7239b0b5bd927abb4029118224e933aee4-0",
+        "from": "P-002",
+        "to": "P-003",
+        "markers": {
+          "end": "arrow"
+        },
+        "sourceOrder": 2,
+        "fromAncestryIds": [
+          "A-002",
+          "P-002"
+        ],
+        "toAncestryIds": [
+          "A-002",
+          "P-002",
+          "P-003"
+        ]
+      },
+      {
+        "id": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0",
+        "sourceEdgeId": "source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0",
+        "connectorId": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0",
+        "from": "P-002",
+        "to": "P-001",
+        "markers": {
+          "end": "arrow"
+        },
+        "sourceOrder": 3,
+        "fromAncestryIds": [
+          "A-002",
+          "P-002"
+        ],
+        "toAncestryIds": [
+          "A-001",
+          "P-001"
+        ]
+      },
+      {
+        "id": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+        "sourceEdgeId": "source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+        "connectorId": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+        "from": "P-003",
+        "to": "P-002",
+        "label": "[Open current workspace] {settings saved}",
+        "markers": {
+          "end": "arrow"
+        },
+        "sourceOrder": 4,
+        "fromAncestryIds": [
+          "A-002",
+          "P-002",
+          "P-003"
+        ],
+        "toAncestryIds": [
+          "A-002",
+          "P-002"
+        ]
+      }
+    ],
+    "expectedStructuralEdges": [
+      {
+        "id": "P-002__contains__P-003__source-edge-1f8db5d5f8d95f599ca2c955802b8d7239b0b5bd927abb4029118224e933aee4-0",
+        "sourceEdgeIds": [
+          "source-edge-1f8db5d5f8d95f599ca2c955802b8d7239b0b5bd927abb4029118224e933aee4-0",
+          "source-edge-a2a137dc93416d7eda8134f19003a56fb60a22e4069fbfadae5a3a9dd129290f-0"
+        ],
+        "from": "P-002",
+        "to": "P-003",
+        "role": "contains_navigation",
+        "markers": {
+          "end": "arrow"
+        }
+      }
+    ]
+  },
+  "routingEvidence": {
+    "candidates": 2169,
+    "repairs": 2,
+    "expansionPasses": 4,
+    "remainingCandidates": 1927,
+    "remainingRepairs": 126,
+    "remainingExpansionPasses": 0,
+    "revisions": [
+      {
+        "pass": 0,
+        "expansion": {
+          "gaps": [
+            [
+              "root\u0000A-001\u0000A-002",
+              131.676
+            ]
+          ],
+          "padding": []
+        },
+        "remainingCandidates": 4096,
+        "remainingRepairs": 128
+      },
+      {
+        "pass": 1,
+        "costs": [],
+        "rejected": [
+          {
+            "id": "facing:seed",
+            "reason": "endpoint_envelope_exhausted"
+          },
+          {
+            "id": "south:seed",
+            "reason": "endpoint_envelope_exhausted"
+          }
+        ],
+        "ports": [
+          {
+            "id": "facing",
+            "groups": [
+              {
+                "nodeId": "P-001",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "west",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "north",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-001",
+                "side": "north",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-003",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              }
+            ]
+          },
+          {
+            "id": "south",
+            "groups": [
+              {
+                "nodeId": "P-001",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "west",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "south",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [
+                  24
+                ],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-001",
+                "side": "south",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-003",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              }
+            ]
+          }
+        ],
+        "proposalCount": 2,
+        "remainingCandidates": 3940,
+        "remainingRepairs": 128
+      },
+      {
+        "pass": 1,
+        "expansion": {
+          "gaps": [
+            [
+              "P-002__group\u0000P-002\u0000P-002__contains_scope_single",
+              2
+            ]
+          ],
+          "padding": [
+            [
+              "root\u0000bottom",
+              10
+            ],
+            [
+              "A-002\u0000right",
+              18
+            ],
+            [
+              "root\u0000right",
+              9.999999999999886
+            ]
+          ]
+        },
+        "rejectedRevision": "south",
+        "violations": [
+          "Route leaves the adapter's finite routing bounds.",
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 0 violates the 17px clearance of node \"P-003\".",
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 1 violates the 17px clearance of node \"A-001:border-y:144\".",
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 1 violates the 17px clearance of node \"P-002__contains__P-003__source-edge-1f8db5d5f8d95f599ca2c955802b8d7239b0b5bd927abb4029118224e933aee4-0:end:marker\".",
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 1 violates the 17px clearance of node \"P-003\".",
+          "Connector \"navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0\" segment 1 violates the 17px clearance of node \"A-002:border-x:715.6759999999999\"."
+        ],
+        "labels": [
+          {
+            "connectorId": "navigation:source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+            "kind": "ambiguous",
+            "obstacleId": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0"
+          },
+          {
+            "connectorId": "navigation:source-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0",
+            "kind": "connector",
+            "obstacleId": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0"
+          },
+          {
+            "connectorId": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+            "kind": "bounds"
+          }
+        ]
+      },
+      {
+        "pass": 2,
+        "costs": [],
+        "rejected": [
+          {
+            "id": "south:proposal-0",
+            "reason": "scene_rejected"
+          },
+          {
+            "id": "facing:seed",
+            "reason": "candidate_exhausted"
+          }
+        ],
+        "ports": [
+          {
+            "id": "facing",
+            "groups": [
+              {
+                "nodeId": "P-001",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "west",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "north",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-001",
+                "side": "north",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-003",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              }
+            ]
+          },
+          {
+            "id": "south",
+            "groups": [
+              {
+                "nodeId": "P-001",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "west",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "south",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [
+                  24
+                ],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-001",
+                "side": "south",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-003",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              }
+            ]
+          }
+        ],
+        "proposalCount": 2,
+        "remainingCandidates": 3681,
+        "remainingRepairs": 127
+      },
+      {
+        "pass": 2,
+        "expansion": {
+          "gaps": [],
+          "padding": [
+            [
+              "A-002\u0000right",
+              182.676
+            ]
+          ]
+        },
+        "rejectedRevision": "south",
+        "violations": [],
+        "labels": [
+          {
+            "connectorId": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+            "kind": "bounds"
+          },
+          {
+            "connectorId": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+            "kind": "ambiguous",
+            "obstacleId": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0"
+          },
+          {
+            "connectorId": "navigation:source-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0",
+            "kind": "connector",
+            "obstacleId": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0"
+          }
+        ]
+      },
+      {
+        "pass": 3,
+        "costs": [
+          [
+            "south:accepted-probe-0",
+            [
+              1,
+              6,
+              354.35199999999986,
+              0,
+              1529.028
+            ]
+          ],
+          [
+            "south:accepted-probe-1",
+            [
+              1,
+              8,
+              354.35199999999986,
+              0,
+              1538.028
+            ]
+          ],
+          [
+            "south:accepted-probe-2",
+            [
+              1,
+              8,
+              354.35199999999986,
+              0,
+              1543.028
+            ]
+          ],
+          [
+            "south:accepted-probe-3",
+            [
+              1,
+              8,
+              354.35199999999986,
+              0,
+              1529.028
+            ]
+          ],
+          [
+            "south:accepted-probe-4",
+            [
+              1,
+              8,
+              354.35199999999986,
+              0,
+              1583.028
+            ]
+          ],
+          [
+            "south:proposal-0",
+            [
+              1,
+              6,
+              354.35199999999986,
+              0,
+              1529.028
+            ]
+          ],
+          [
+            "south:proposal-1",
+            [
+              1,
+              8,
+              354.35199999999986,
+              0,
+              1529.028
+            ]
+          ],
+          [
+            "south:proposal-2",
+            [
+              1,
+              8,
+              354.35199999999986,
+              0,
+              1538.028
+            ]
+          ],
+          [
+            "south:proposal-3",
+            [
+              1,
+              8,
+              354.35199999999986,
+              0,
+              1543.028
+            ]
+          ]
+        ],
+        "rejected": [
+          {
+            "id": "facing:seed",
+            "reason": "candidate_exhausted"
+          }
+        ],
+        "ports": [
+          {
+            "id": "facing",
+            "groups": [
+              {
+                "nodeId": "P-001",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "west",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "north",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-001",
+                "side": "north",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-003",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              }
+            ]
+          },
+          {
+            "id": "south",
+            "groups": [
+              {
+                "nodeId": "P-001",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "west",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "south",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [
+                  24
+                ],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-001",
+                "side": "south",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-003",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              }
+            ]
+          }
+        ],
+        "proposalCount": 5,
+        "remainingCandidates": 2961,
+        "remainingRepairs": 126
+      },
+      {
+        "pass": 3,
+        "expansion": {
+          "gaps": [],
+          "padding": [
+            [
+              "A-002\u0000top",
+              18
+            ],
+            [
+              "A-001\u0000top",
+              18
+            ]
+          ]
+        },
+        "rejectedRevision": "facing",
+        "violations": [
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 1 violates the 17px clearance of node \"A-002__header\".",
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 0 intersects non-endpoint box \"A-002:header-band\".",
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 1 intersects non-endpoint box \"A-001:header-band\".",
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 1 intersects non-endpoint box \"A-002:header-band\".",
+          "Connector \"navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0\" segment 2 intersects non-endpoint box \"A-001:header-band\"."
+        ],
+        "labels": [
+          {
+            "connectorId": "navigation:source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+            "kind": "ambiguous",
+            "obstacleId": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0"
+          },
+          {
+            "connectorId": "navigation:source-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0",
+            "kind": "connector",
+            "obstacleId": "navigation:source-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0"
+          }
+        ]
+      },
+      {
+        "pass": 4,
+        "costs": [
+          [
+            "south:accepted-probe-0",
+            [
+              1,
+              6,
+              390.35199999999986,
+              0,
+              1529.028
+            ]
+          ],
+          [
+            "south:accepted-probe-1",
+            [
+              1,
+              8,
+              390.35199999999986,
+              0,
+              1538.028
+            ]
+          ],
+          [
+            "south:accepted-probe-2",
+            [
+              1,
+              8,
+              390.35199999999986,
+              0,
+              1551.028
+            ]
+          ],
+          [
+            "south:accepted-probe-3",
+            [
+              1,
+              8,
+              390.35199999999986,
+              0,
+              1529.028
+            ]
+          ],
+          [
+            "south:accepted-probe-4",
+            [
+              1,
+              8,
+              390.35199999999986,
+              0,
+              1591.028
+            ]
+          ],
+          [
+            "south:proposal-0",
+            [
+              1,
+              6,
+              390.35199999999986,
+              0,
+              1529.028
+            ]
+          ],
+          [
+            "south:proposal-1",
+            [
+              1,
+              8,
+              390.35199999999986,
+              0,
+              1529.028
+            ]
+          ],
+          [
+            "south:proposal-2",
+            [
+              1,
+              8,
+              390.35199999999986,
+              0,
+              1538.028
+            ]
+          ],
+          [
+            "south:proposal-3",
+            [
+              1,
+              8,
+              390.35199999999986,
+              0,
+              1551.028
+            ]
+          ]
+        ],
+        "rejected": [
+          {
+            "id": "facing:proposal-0",
+            "reason": "scene_rejected"
+          },
+          {
+            "id": "facing:seed",
+            "reason": "scene_rejected"
+          },
+          {
+            "id": "facing:proposal-1",
+            "reason": "scene_rejected"
+          },
+          {
+            "id": "facing:proposal-2",
+            "reason": "scene_rejected"
+          },
+          {
+            "id": "facing:proposal-3",
+            "reason": "scene_rejected"
+          }
+        ],
+        "ports": [
+          {
+            "id": "facing",
+            "groups": [
+              {
+                "nodeId": "P-001",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "west",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "north",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-001",
+                "side": "north",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-003",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              }
+            ]
+          },
+          {
+            "id": "south",
+            "groups": [
+              {
+                "nodeId": "P-001",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:source:P-001",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:source:P-001"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "west",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-46ab91f74cc36a4c2d69338b70cbf82cc0a12f166fa6434956487396a408a041-0:target:P-002",
+                  "ia_occurrence_port:navigation%3Asource-edge-9f1a76814241a1fff97051c5256c169812fb4700e576605d7d0f22c5539249f1-0:target:P-002"
+                ],
+                "offsets": [
+                  12.5,
+                  35.5
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "south",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:source:P-002"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [
+                  24
+                ],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-001",
+                "side": "south",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-05974ce447dc29b910cca7d40a4ffcb30087970c9a7a67d178cb6353adf9c82e-0:target:P-001"
+                ],
+                "offsets": [
+                  112
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-003",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:source:P-003"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              },
+              {
+                "nodeId": "P-002",
+                "side": "east",
+                "requestIds": [
+                  "ia_occurrence_port:navigation%3Asource-edge-471ad453128831b4b4f84d5194a662327235306c6d3a52cc9d8ae6249d0953bf-0:target:P-002"
+                ],
+                "offsets": [
+                  24
+                ],
+                "reservedOffsets": [],
+                "displacementFromCenter": 0
+              }
+            ]
+          }
+        ],
+        "proposalCount": 9,
+        "remainingCandidates": 1927,
+        "remainingRepairs": 126
+      },
+      {
+        "pass": 0,
+        "costs": [
+          [
+            "forward-baseline",
+            [
+              1,
+              6,
+              1529.028
+            ]
+          ],
+          [
+            "forward-selected",
+            [
+              1,
+              6,
+              1529.028
+            ]
+          ]
+        ],
+        "rejected": [],
+        "remainingCandidates": 1927,
+        "remainingRepairs": 126
+      }
+    ]
+  }
+}

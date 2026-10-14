@@ -1,0 +1,13 @@
+ M docs/ia_place_map_hardening/manual_review_2_routing_quality.md
+ M docs/ia_place_map_hardening/routing_quality_execution.md
+ M src/bundle/types.ts
+ M src/bundle/validateLoadedBundle.ts
+ M src/renderer/iaPlaceMapRenderModel.ts
+ M src/renderer/relationshipLabelFormatter.ts
+ M src/renderer/staged/contracts.ts
+ M src/renderer/staged/iaPlaceMap.ts
+ M src/renderer/staged/microLayout.ts
+?? docs/ia_place_map_hardening/forward_routing_port_policy.md
+?? docs/ia_place_map_hardening/manual_review_2_followup_plan.md
+?? src/renderer/staged/routingCore/movablePorts.ts
+?? src/renderer/staged/routingCore/orderedPortPair.ts

@@ -327,9 +327,10 @@ function validateIaPlaceMapPolicy(
   }
   if (policy.routing_scope !== undefined) {
     const scope = record(policy.routing_scope);
-    if (!scope || !sameStringSet(Object.keys(scope), ["container_node_types", "internal_routes", "cross_owner_routes"])) {
+    if (!scope || !sameStringSet(Object.keys(scope).filter(key => key !== "export_clearance"), ["container_node_types", "internal_routes", "cross_owner_routes"])) {
       fail("routing_scope_shape", "routing_scope must declare container_node_types, internal_routes, and cross_owner_routes");
     } else {
+      if (scope.export_clearance !== undefined && scope.export_clearance !== "readable_gap") fail("export_clearance", "export_clearance must be readable_gap");
       const selectors = strings(scope.container_node_types);
       // The IA scene adapter owns the semantic-node to scene-primitive mapping:
       // Area is an identified container; Place is an identified node (its scopes are anonymous).
@@ -346,7 +347,7 @@ function validateIaPlaceMapPolicy(
     }
   }
   const navigation = record(policy.navigation);
-  if (!navigation || !sameStringSet(Object.keys(navigation), ["relationship", "occurrence_coverage", "presentation", "containment_fusion"])) {
+  if (!navigation || !sameStringSet(Object.keys(navigation).filter(key => key !== "routing_preferences"), ["relationship", "occurrence_coverage", "presentation", "containment_fusion"])) {
     fail("navigation_shape", "navigation must declare relationship, occurrence_coverage, presentation, and containment_fusion");
     return;
   }
@@ -369,11 +370,65 @@ function validateIaPlaceMapPolicy(
     fail("occurrence_coverage", "occurrence_coverage must be each_selected_occurrence_once");
   }
 
+  if (navigation.routing_preferences !== undefined) {
+    const preferences = record(navigation.routing_preferences);
+    const sideAxis: Record<string, string> = { north: "y", south: "y", east: "x", west: "x" };
+    const sideDirection: Record<string, string> = { north: "negative", south: "positive", east: "positive", west: "negative" };
+    const vectorValid = (vector: Record<string, unknown> | undefined): boolean => !!vector
+      && sameStringSet(Object.keys(vector), ["axis", "direction"])
+      && (vector.axis === "x" || vector.axis === "y") && (vector.direction === "positive" || vector.direction === "negative");
+    if (!policy.routing_scope) fail("routing_preferences_scope", "routing preferences require routing_scope");
+    if (!preferences || !Object.keys(preferences).length || Object.keys(preferences).some(key => !["forward_shortcut", "self_loop"].includes(key))) {
+      fail("routing_preferences_shape", "routing_preferences must declare forward_shortcut and/or self_loop");
+    } else {
+      if (preferences.forward_shortcut !== undefined) {
+        const forward = record(preferences.forward_shortcut);
+        const progression = record(forward?.progression);
+        const pairs = forward && Array.isArray(forward.side_pairs) ? forward.side_pairs : [];
+        const seen = new Set<string>();
+        if (!forward || !sameStringSet(Object.keys(forward), ["scope", "progression", "side_pairs", "source_offset", "admission"])
+          || forward.scope !== "same_owner" || forward.source_offset !== "nearest_feasible"
+          || forward.admission !== "fewer_scene_bends_without_extra_crossings_or_expansion" || !vectorValid(progression) || !pairs.length) {
+          fail("forward_shortcut_shape", "forward_shortcut must declare supported scope, progression, side_pairs, source_offset and admission");
+        }
+        for (const value of pairs) {
+          const pair = record(value);
+          const key = JSON.stringify(pair);
+          if (!pair || !sameStringSet(Object.keys(pair), ["source", "target"])
+            || typeof pair.source !== "string" || typeof pair.target !== "string" || !sideAxis[pair.source] || !sideAxis[pair.target]
+            || sideAxis[pair.source] === sideAxis[pair.target] || sideAxis[pair.source] !== progression?.axis
+            || sideDirection[pair.source] !== progression?.direction || seen.has(`${pair.source}:${pair.target}`)) {
+            fail("forward_shortcut_side_pairs", "side_pairs must be unique perpendicular supported sides compatible with progression");
+          }
+          seen.add(pair ? `${pair.source}:${pair.target}` : key);
+        }
+      }
+      if (preferences.self_loop !== undefined) {
+        const loop = record(preferences.self_loop);
+        const traversal = record(loop?.traversal);
+        const trials = loop && Array.isArray(loop.side_trials) ? loop.side_trials : [];
+        const seen = new Set<string>();
+        if (!loop || !sameStringSet(Object.keys(loop), ["traversal", "side_trials"]) || !vectorValid(traversal) || !trials.length) {
+          fail("self_loop_shape", "self_loop must declare supported traversal and nonempty side_trials");
+        }
+        for (const value of trials) {
+          const trial = record(value);
+          if (!trial || !sameStringSet(Object.keys(trial), ["side", "pair_placement"]) || typeof trial.side !== "string"
+            || !sideAxis[trial.side] || sideAxis[trial.side] === traversal?.axis || seen.has(trial.side)
+            || !["before_other_arrivals", "nearest_feasible"].includes(String(trial.pair_placement))) {
+            fail("self_loop_side_trials", "side_trials must be unique supported tangent sides and pair placements");
+          }
+          if (trial && typeof trial.side === "string") seen.add(trial.side);
+        }
+      }
+    }
+  }
   const presentation = record(navigation.presentation);
-  if (!presentation || !sameStringSet(Object.keys(presentation), ["separator", "parts", "detail_display"])
+  if (!presentation || !sameStringSet(Object.keys(presentation).filter(key => key !== "wrapping"), ["separator", "parts", "detail_display"])
     || typeof presentation.separator !== "string") {
     fail("presentation_shape", "presentation must declare separator, parts, and detail_display");
   } else {
+    if (presentation.wrapping !== undefined && presentation.wrapping !== "prefer_part_boundaries") fail("wrapping", "wrapping must be prefer_part_boundaries");
     const detailDisplay = record(presentation.detail_display);
     if (!detailDisplay || !sameStringSet(Object.keys(detailDisplay), detailIds)
       || Object.values(detailDisplay).some((visible) => typeof visible !== "boolean")) {

@@ -4,6 +4,8 @@ export interface PortOffsetAllocationInput {
   minSeparation: number;
   /** Existing ports keep their positions and reserve the same clearance as allocated ports. */
   reservedOffsets?: readonly number[];
+  /** Optional upper bound of a reserved subinterval; the preferred centre stays on the full side. */
+  maximumOffset?: number;
   /** Stable caller order is retained when the selected slots are assigned. */
   requestIds: readonly string[];
 }
@@ -20,7 +22,8 @@ export type PortOffsetAllocation =
  */
 export function allocatePortOffsets(input: PortOffsetAllocationInput): PortOffsetAllocation {
   const { sideLength, minInset, minSeparation } = input;
-  if (![sideLength, minInset, minSeparation].every(Number.isFinite)
+  const maximumOffset = Math.min(sideLength - minInset, input.maximumOffset ?? sideLength - minInset);
+  if (![sideLength, minInset, minSeparation, maximumOffset].every(Number.isFinite)
     || sideLength < 0 || minInset < 0 || minSeparation <= 0) {
     return { status: "capacity_exhausted", requested: input.requestIds.length, availableSlots: 0, sideLength };
   }
@@ -28,7 +31,7 @@ export function allocatePortOffsets(input: PortOffsetAllocationInput): PortOffse
     return { status: "capacity_exhausted", requested: input.requestIds.length, availableSlots: 0, sideLength };
   }
 
-  const usable = sideLength - 2 * minInset;
+  const usable = maximumOffset - minInset;
   if (usable < -1e-6) {
     return { status: "capacity_exhausted", requested: input.requestIds.length, availableSlots: 0, sideLength };
   }
@@ -40,18 +43,18 @@ export function allocatePortOffsets(input: PortOffsetAllocationInput): PortOffse
   let availableSlots = 0;
   let next = minInset;
   for (const offset of reserved) {
-    const end = Math.min(sideLength - minInset, offset - minSeparation);
+    const end = Math.min(maximumOffset, offset - minSeparation);
     if (end >= next - 1e-6) availableSlots += Math.floor((end - next + 1e-6) / minSeparation) + 1;
     next = Math.max(next, offset + minSeparation);
   }
-  if (next <= sideLength - minInset + 1e-6) {
-    availableSlots += Math.floor((sideLength - minInset - next + 1e-6) / minSeparation) + 1;
+  if (next <= maximumOffset + 1e-6) {
+    availableSlots += Math.floor((maximumOffset - next + 1e-6) / minSeparation) + 1;
   }
   const count = input.requestIds.length;
   const center = sideLength / 2;
   const nominal = Array.from({ length: count }, (_unused, index) => center + (index - (count - 1) / 2) * minSeparation);
   const minShift = count ? minInset - nominal[0]! : 0;
-  const maxShift = count ? sideLength - minInset - nominal.at(-1)! : 0;
+  const maxShift = count ? maximumOffset - nominal.at(-1)! : 0;
   // A feasible translation starts at the centre or at an interval boundary. Test
   // both sides of every reservation; negative displacement wins an exact tie.
   const shifts = [0, minShift, maxShift, ...nominal.flatMap(port => reserved.flatMap(offset =>

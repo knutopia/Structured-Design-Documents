@@ -27,6 +27,15 @@ include IDs, and unresolved names retain the authored reference. Bundle template
 and detail switches control presentation. DOT, Mermaid, and staged outputs consume
 the same label payload, with their own escaping and layout.
 
+The loaded `presentation.wrapping: prefer_part_boundaries` preference prepares
+character offsets between ordered template parts beside the canonical label.
+Shared `measureEdgeLabel` keeps a fitting label intact and otherwise prefers
+these offsets before splitting an independently fitting part. Oversized parts
+retain ordinary word/grapheme wrapping. Final lines belong to `MeasuredScene`;
+`RendererScene` carries only text and preferred offsets. Measured dimensions
+therefore drive corridor capacity and port trials. Flattened LEGACY text is
+unchanged, and omitting the preference retains ordinary wrapping.
+
 ## Staged pipeline
 
 ```mermaid
@@ -95,6 +104,30 @@ Independent final checks
 compare the original occurrence/label/marker inventory with the emitted scene,
 validate attachment sides and insets, and check route separation, body/header
 collisions, label association and ambiguity, painted arrowheads, and export bounds.
+The loaded `export_clearance: readable_gap` policy requires that complete routed
+paint retain 16px from every logical export edge, including label-box strokes and
+marker footprints. Shared corridor capacity distinguishes solid node bodies from
+parallel container borders; it does not reserve an entire container interior as
+an obstacle. Root-owned deficits reflow the affected sides without a viewBox-only
+extension. A prepared copy of loaded policy survives independently of scene
+metadata, so losing that metadata cannot disable acceptance.
+
+The canonical navigation routing preferences order self-loop ports for negative
+horizontal traversal. Upper and bottom trials start from independent demand
+states and share one 4,096-candidate, 128-repair, four-expansion allowance. The
+upper fallback is valid only after an assessed bottom trial; its rejection reason
+is retained in routing evidence. Bottom placement does not inherit the forward
+exception.
+
+The optional same-owner south/west forward shortcut changes only its source
+attachment. Unaffected ordinary groups retain the baseline's structural and
+facing reservations. The target uses ordinary allocation. Exact interval events
+propose the closest feasible source attachment; admission requires fewer scene
+bends, protects straight/one-bend companions, and forbids extra crossings or
+expansion. An immutable finite baseline witness binds policy, layout, labels,
+markers, and occurrence inventory. Final acceptance recomputes both scenes' costs
+and rejects stale or missing witnesses for movable sources.
+
 The SVG backend repeats acceptance immediately before serialization. Failed enabled
 IA artifacts are withheld in combined and named public paths, including `force`.
 PNG rasterizes that same accepted SVG.

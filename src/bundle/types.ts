@@ -494,9 +494,26 @@ export interface RendererDefaultsConfig {
   [key: string]: unknown;
 }
 
+/** Cardinal renderer attachment policy sides. */
+export type RendererRoutingSide = "north" | "east" | "south" | "west";
+export interface RendererIaRoutingPreferences {
+  forward_shortcut?: {
+    scope: "same_owner";
+    progression: { axis: "x" | "y"; direction: "positive" | "negative" };
+    side_pairs: Array<{ source: RendererRoutingSide; target: RendererRoutingSide }>;
+    source_offset: "nearest_feasible";
+    admission: "fewer_scene_bends_without_extra_crossings_or_expansion";
+  };
+  self_loop?: {
+    traversal: { axis: "x" | "y"; direction: "positive" | "negative" };
+    side_trials: Array<{ side: RendererRoutingSide; pair_placement: "before_other_arrivals" | "nearest_feasible" }>;
+  };
+}
+
 /** Opt-in occurrence and presentation contract for IA navigation rendering. */
 export interface RendererIaPlaceMapConfig {
   routing_scope?: {
+    export_clearance?: "readable_gap";
     container_node_types: string[];
     internal_routes: "within_common_owner";
     cross_owner_routes: "through_common_ancestor";
@@ -504,8 +521,10 @@ export interface RendererIaPlaceMapConfig {
   projection_edge_references: "exact_source_occurrences";
   navigation: {
     relationship: string;
+    routing_preferences?: RendererIaRoutingPreferences;
     occurrence_coverage: "each_selected_occurrence_once";
     presentation: {
+      wrapping?: "prefer_part_boundaries";
       separator: string;
       parts: Array<{
         field: string;

@@ -1437,6 +1437,40 @@
     "ports": [],
     "viewMetadata": {
       "iaPlaceMap": {
+        "exportClearance": "readable_gap",
+        "routingPreferences": {
+          "forward_shortcut": {
+            "scope": "same_owner",
+            "progression": {
+              "axis": "y",
+              "direction": "positive"
+            },
+            "side_pairs": [
+              {
+                "source": "south",
+                "target": "west"
+              }
+            ],
+            "source_offset": "nearest_feasible",
+            "admission": "fewer_scene_bends_without_extra_crossings_or_expansion"
+          },
+          "self_loop": {
+            "traversal": {
+              "axis": "x",
+              "direction": "negative"
+            },
+            "side_trials": [
+              {
+                "side": "south",
+                "pair_placement": "before_other_arrivals"
+              },
+              {
+                "side": "north",
+                "pair_placement": "nearest_feasible"
+              }
+            ]
+          }
+        },
         "routingScope": {
           "containerIds": [
             "A-200",

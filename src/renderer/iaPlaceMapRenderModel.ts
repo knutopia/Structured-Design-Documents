@@ -7,7 +7,7 @@ import type { Bundle, RendererIaPlaceMapConfig } from "../bundle/types.js";
 import { resolvePlaceLabelDisplayOptions } from "./placeLabelLines.js";
 import type { ResolvedDetailDisplayPolicy } from "./detailDisplay.js";
 import type { SharedNodeAttribute } from "./staged/contracts.js";
-import { formatRelationshipLabels } from "./relationshipLabelFormatter.js";
+import { prepareRelationshipLabels } from "./relationshipLabelFormatter.js";
 
 export interface IaRenderArea {
   kind: "area";
@@ -34,6 +34,7 @@ export interface IaRenderEdge {
   from: string;
   to: string;
   label?: string;
+  preferredBreaks?: number[];
   annotated: boolean;
   sourceOrder: number;
   fromAncestryIds: string[];
@@ -280,7 +281,7 @@ export function buildIaPlaceMapRenderModel(
   }
   const orderedCompiledNavigationEdges = orderedNavigationEdges.map(({ compiledEdge }) => compiledEdge);
   const labels = rendererConfig
-    ? formatRelationshipLabels(
+    ? prepareRelationshipLabels(
       orderedCompiledNavigationEdges,
       new Map(documentGraph.nodes
         .filter((node) => rendererConfig.navigation.presentation.parts.some((part) =>
@@ -300,7 +301,8 @@ export function buildIaPlaceMapRenderModel(
     const ordinal = sourceOccurrences.get(triple) ?? 0;
     sourceOccurrences.set(triple, ordinal + 1);
     const sourceId = edge.source_edge_id;
-    const label = labels[index];
+    const preparedLabel = labels[index];
+    const label = preparedLabel?.text;
     return {
       id: sourceId ? `navigation:${sourceId}` : `navigation:${encodeURIComponent(triple)}:${ordinal}`,
       from: edge.from,
@@ -313,7 +315,7 @@ export function buildIaPlaceMapRenderModel(
       fromAncestryIds: [...(ancestryByPlaceId.get(edge.from) ?? [])],
       toAncestryIds: [...(ancestryByPlaceId.get(edge.to) ?? [])],
       ...(sourceId ? { source_edge_id: sourceId } : {}),
-      ...(label ? { label } : {})
+      ...(label ? { label, ...(preparedLabel?.preferredBreaks ? { preferredBreaks: [...preparedLabel.preferredBreaks] } : {}) } : {})
     };
   });
   if (!occurrencePolicyEnabled) {

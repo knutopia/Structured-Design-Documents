@@ -14,6 +14,8 @@ export interface ExteriorRoutingCorridorInput {
   claims: readonly ExteriorRoutingCorridorClaim[];
   clearance: number;
   separation: number;
+  /** Axis-parallel zero-width border reservations; their interiors remain routable. */
+  parallelBorders?: readonly { x: number; y: number; width: number; height: number }[];
 }
 /** Measure the largest actual exterior-space deficit across cross-axis intervals.
  * Disjoint track spans reuse corridor space rather than accumulating global demand. */
@@ -22,6 +24,7 @@ export function measureExteriorRoutingCorridorDeficit(input: ExteriorRoutingCorr
   if (!validRoutingBounds(bounds) || !["west", "east", "north", "south"].includes(side)
     || ![clearance, separation].every(Number.isFinite) || clearance < 0 || separation <= 0
     || input.boxes.some(box => ![box.x, box.y, box.width, box.height].every(Number.isFinite) || box.width < 0 || box.height < 0)
+    || input.parallelBorders?.some(box => ![box.x, box.y, box.width, box.height].every(Number.isFinite) || box.width < 0 || box.height < 0)
     || input.claims.some(claim => ![claim.spanStart, claim.spanEnd].every(Number.isFinite))) {
     throw new RangeError("Exterior routing capacity requires finite ordered geometry and nonnegative clearance with positive separation.");
   }
@@ -33,7 +36,7 @@ export function measureExteriorRoutingCorridorDeficit(input: ExteriorRoutingCorr
   const events = new Set([min, max]);
   const add = (value: number) => { if (value >= min && value <= max) events.add(value); };
   for (const claim of input.claims) { add(claim.spanStart); add(claim.spanEnd); }
-  for (const box of input.boxes) { const [start,end] = span(box); add(start); add(end); }
+  for (const box of [...input.boxes, ...(input.parallelBorders ?? [])]) { const [start,end] = span(box); add(start); add(end); }
   const ordered = [...events].sort((a,b) => a-b);
   let deficit = 0;
   for (let index = 1; index < ordered.length; index++) {
@@ -46,7 +49,20 @@ export function measureExteriorRoutingCorridorDeficit(input: ExteriorRoutingCorr
       : side === "east" ? bounds.maxX - Math.max(bounds.minX,...boxes.map(box=>box.x+box.width))
       : side === "north" ? Math.min(bounds.maxY,...boxes.map(box=>box.y)) - bounds.minY
       : bounds.maxY - Math.max(bounds.minY,...boxes.map(box=>box.y+box.height));
-    deficit = Math.max(deficit, 2*clearance + (active-1)*separation - available);
+    let required = 2*clearance + (active-1)*separation;
+    if (input.parallelBorders?.length) {
+      const outwardPositive = side === "east" || side === "south";
+      const outer = vertical ? outwardPositive ? bounds.maxX : bounds.minX : outwardPositive ? bounds.maxY : bounds.minY;
+      let rail = outer + (outwardPositive ? 1 : -1) * (clearance - available);
+      const borderCoordinates = input.parallelBorders.filter(box => {
+        const [a,b] = span(box); return a < end && b > start;
+      }).map(box => vertical ? box.x : box.y).sort((a,b) => outwardPositive ? a-b : b-a);
+      const original = rail;
+      for (const coordinate of borderCoordinates) if (Math.abs(rail-coordinate) < clearance)
+        rail = coordinate + (outwardPositive ? clearance : -clearance);
+      required += Math.abs(rail-original);
+    }
+    deficit = Math.max(deficit, required - available);
   }
   return deficit;
 }

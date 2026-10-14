@@ -14,3 +14,5 @@ export * from "./portCapacity.js";
 export * from "./bounds.js";
 export * from "./qualitySelection.js";
 export * from "./exteriorCapacity.js";
+export * from "./movablePorts.js";
+export * from "./forwardWitness.js";

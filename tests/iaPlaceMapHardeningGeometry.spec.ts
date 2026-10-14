@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadBundle } from "../src/bundle/loadBundle.js";
 import type { Bundle, ViewSpec } from "../src/bundle/types.js";
@@ -56,6 +56,7 @@ describe.each(["compact", "detailed"])("IA hardening final geometry in %s", deta
     const { scene } = build(variant.change(original), detailId);
     const result = await runIaPlaceMapRendererPipeline(scene);
     const final = result.positionedScene;
+    if (variant.name === "long token" || final.diagnostics.some(d => d.severity === "error")) await writeFile(`/tmp/ia-review2-failure.${detailId}.${variant.name.replaceAll(" ", "-")}.json`, JSON.stringify(final, null, 2));
     expect(final.diagnostics.filter(d => d.severity === "error")).toEqual([]);
     expect(auditIaPlaceMapFinalScene(final)).toEqual([]);
     const occurrences = final.root.viewMetadata!.iaPlaceMap!.expectedNavigationOccurrences;

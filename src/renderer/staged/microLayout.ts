@@ -248,10 +248,29 @@ function wrapTextBlock(
   text: string,
   maxWidth: number,
   style: TextStyleToken,
-  measurement: TextMeasurementService
+  measurement: TextMeasurementService,
+  preferredBreaks?: readonly number[]
 ): WrappedTextResult {
   const paragraphs = text.replace(/\r\n/g, "\n").split("\n");
-  const lines = paragraphs.flatMap((paragraph) => wrapParagraph(paragraph, maxWidth, style, measurement));
+  let lines: string[];
+  if (preferredBreaks?.length && measurement.measureText(text, style) > maxWidth && paragraphs.length === 1) {
+    const offsets = preferredBreaks.filter((offset, index) => Number.isInteger(offset) && offset > 0 && offset < text.length
+      && (index === 0 || offset > preferredBreaks[index - 1]!));
+    const parts = [0, ...offsets].map((start, index, starts) => text.slice(start, starts[index + 1] ?? text.length));
+    lines = [];
+    let current = "";
+    for (const part of parts) {
+      const candidate = current + part;
+      if (measurement.measureText(candidate.trim(), style) <= maxWidth) { current = candidate; continue; }
+      if (current.trim()) lines.push(current.trim());
+      const wrapped = wrapParagraph(part.trim(), maxWidth, style, measurement);
+      lines.push(...wrapped.slice(0, -1));
+      current = wrapped.at(-1) ?? "";
+    }
+    if (current.trim()) lines.push(current.trim());
+  } else {
+    lines = paragraphs.flatMap((paragraph) => wrapParagraph(paragraph, maxWidth, style, measurement));
+  }
   const lineWidths = lines.map((line) => roundMetric(measurement.measureText(line, style)));
   const width = lineWidths.length > 0 ? Math.max(...lineWidths) : 0;
 
@@ -1190,7 +1209,7 @@ function measureEdgeLabel(
 ): MeasuredEdgeLabel {
   const resolvedRole = resolveTextRoleForBlock("edge_label", label.textStyleRole);
   const style = getTextStyle(context, targetId, resolvedRole);
-  const wrapped = wrapTextBlock(label.text, context.theme.edgeLabelMaxWidth, style, context.measureText);
+  const wrapped = wrapTextBlock(label.text, context.theme.edgeLabelMaxWidth, style, context.measureText, label.preferredBreaks);
   const primitiveTheme = getNodePrimitiveTheme(context.theme, "edge_label");
 
   return {

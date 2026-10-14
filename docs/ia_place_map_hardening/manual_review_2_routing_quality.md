@@ -1,8 +1,10 @@
 # Manual Review of Routing Quality Improvements
 
+In response to [routing_quality_execution.md](routing_quality_execution.md), [routing_quality_recovery_plan.md](routing_quality_recovery_plan.md)
+
 - See inline comments.
 
-- The `type-id`, `id` and `type` decorator variations are (or should be) identical, so the `id` and `type` version is removed from this list for clarity. After all, the decorator variations are identical in their use of node space. One wonders why the model missed that. Not smart.
+- The `type-id`, `id` and `type` decorator variations are identical in routing, as the decorator variations are identical in their use of node space. Thus, for clarity the `id` and `type` version proofs are removed from the list in this document.
 
 ## billsage.compact
 [billsage.compact](routing_quality_evidence/billsage.compact.svg)  
@@ -23,7 +25,6 @@
 [multiple-incoming.detailed](routing_quality_evidence/multiple-incoming.detailed.svg)  
 
 - Good overall
-- Questionable stacking within `Workspace` ???
 
 ## parallel.compact.*
 [parallel.compact.DG-001](routing_quality_evidence/parallel.compact.DG-001.svg)  

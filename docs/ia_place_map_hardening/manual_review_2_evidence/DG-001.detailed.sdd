@@ -1,0 +1,43 @@
+SDD-TEXT 0.2
+
+Diagram DG-001 "Workspace navigation"
+  diagram_type=ia_place_map
+END
+Diagram DG-002 "Open current workspace"
+  diagram_type=ia_place_map
+END
+Diagram DG-003 "Accept workspace invitation"
+  diagram_type=ia_place_map
+END
+
+Area A-001 "Account"
+  diagrams="DG-001,DG-002,DG-003"
+  CONTAINS P-001 diagrams="DG-001,DG-002,DG-003"
+  + Place P-001 "Dashboard"
+    route_or_key=/dashboard
+    access=auth
+    NAVIGATES_TO P-002 [E-001] {workspace selected} diagrams="DG-001,DG-002"
+    NAVIGATES_TO P-002 [E-002] {invitation valid} diagrams="DG-001,DG-003"
+  END
+END
+
+Area A-002 "Workspace"
+  diagrams="DG-001,DG-002,DG-003"
+  CONTAINS P-002 diagrams="DG-001,DG-002,DG-003"
+  + Place P-002 "Workspace home"
+    route_or_key=/workspace
+    access=auth
+    CONTAINS P-003 diagrams=DG-001
+    NAVIGATES_TO P-003 diagrams=DG-001
+    NAVIGATES_TO P-001 diagrams=DG-001
+    + Place P-003 "Workspace settings"
+      route_or_key=/workspace/settings
+      access=auth
+    END
+  END
+END
+
+Event E-001 "Open current workspace"
+END
+Event E-002 "Accept invitation"
+END

@@ -547,7 +547,7 @@
       <path class="scene-edge__path" d="M 450 242 L 450 276" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-navigation-source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0" class="scene-edge role-navigation route-orthogonal paint-edges ia_navigation navigation_occurrence" data-edge-id="navigation:source-edge-05a50583f4d9a685a06cd396e2a3a7c6bed3edf7c620573328f44d1d2567bca8-0" data-role="navigation">
-      <path class="scene-edge__path" d="M 538 161 L 683 161 L 683 791 L 586 791" marker-end="url(#scene-marker-arrow-end)"/>
+      <path class="scene-edge__path" d="M 345 242 L 345 791 L 362 791" marker-end="url(#scene-marker-arrow-end)"/>
     </g>
     <g id="scene-edge-navigation-source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0" class="scene-edge role-navigation route-orthogonal paint-edges ia_navigation navigation_occurrence" data-edge-id="navigation:source-edge-32a66d8e2e035f1aff526563a25d2c6df923d71f1b98b93a7acd8c5d2225fa45-0" data-role="navigation">
       <path class="scene-edge__path" d="M 451 424 L 451 374" marker-end="url(#scene-marker-arrow-end)"/>

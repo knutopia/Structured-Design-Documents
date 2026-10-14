@@ -419,3 +419,31 @@ on the same coordinate. The adapter maps the measured result to real owned space
 - [routingCore/reconstruction.ts](../../src/renderer/staged/routingCore/reconstruction.ts)
 - [routingCore/validation.ts](../../src/renderer/staged/routingCore/validation.ts)
 - [routingCore/sceneValidation.ts](../../src/renderer/staged/routingCore/sceneValidation.ts)
+
+## Bundle-controlled export paint and constrained attachments
+
+The IA `routing_scope.export_clearance: readable_gap` option applies the shared
+16px gap to routed paint at the logical export rectangle. `exportPaint.ts`
+measures route strokes, label-box strokes, and complete arrow footprints.
+Routing centreline bounds include half the edge stroke; root label scopes include
+half the label stroke. Missing space becomes padding on the affected root sides,
+followed by coherent measurement/layout/routing. Root chrome and titles keep their
+existing containment rules. The SVG boundary repeats the painted audit; expanding
+only the serialized viewBox cannot satisfy this policy.
+
+`orderedPortPair.ts` allocates distinct same-side loop attachments together,
+interpreting a configured tangent axis and direction. Occupied structural and
+ordinary ports reserve capacity before the pair. `before_other_arrivals` places
+both loop ports before the lowest incoming coordinate at the shared paint-aware
+pitch; without other arrivals it uses the nearest feasible pair. Independent
+loop-side trials start from the original measured scene and consume the same
+live candidate, repair, and expansion allowance.
+
+`movablePorts.ts` proposes perpendicular two-segment routes through geometric
+interval events. The optional forward shortcut leaves target allocation ordinary
+and moves only the source. A fully accepted ordinary scene on the same measured
+layout supplies the baseline. Admission protects existing straight/one-bend
+connectors, requires fewer complete-scene bends, and forbids extra crossings or
+expansion. `forwardWitness.ts` retains one finite baseline without routing history,
+recomputes admission from its geometry, and binds it to policy, labels, and layout.
+Loaded attachment preferences do not authorize shared navigation trunks.
