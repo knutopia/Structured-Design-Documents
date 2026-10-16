@@ -101,9 +101,9 @@
     <g class="ui-contracts-container" data-item-id="target-register">
       <style>g[data-item-id="target-register"] .text-role-shared_node_decorator { font-family: 'Public Sans'; font-size: 10px; font-weight: 600; letter-spacing: 0px; }</style>
       <style>.view-ui_contracts .role-ui_contracts_description .scene-node__chrome { fill: none; stroke: none; }</style>
-      <rect class="ui-contracts-container__body" x="16" y="1021" width="681.18" height="163" rx="14" fill="#f4f7fb" stroke="none"/>
-      <path class="ui-contracts-container__title-band" d="M 17.5 1040 L 17.5 1035 Q 17.5 1022.5 30 1022.5 L 683.18 1022.5 Q 695.68 1022.5 695.68 1035 L 695.68 1040 Z" fill="#dbe4f0" stroke="none"/>
-      <rect class="ui-contracts-container__outline" x="16.75" y="1021.75" width="679.68" height="161.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
+      <rect class="ui-contracts-container__body" x="16" y="1021" width="496" height="163" rx="14" fill="#f4f7fb" stroke="none"/>
+      <path class="ui-contracts-container__title-band" d="M 17.5 1040 L 17.5 1035 Q 17.5 1022.5 30 1022.5 L 498 1022.5 Q 510.5 1022.5 510.5 1035 L 510.5 1040 Z" fill="#dbe4f0" stroke="none"/>
+      <rect class="ui-contracts-container__outline" x="16.75" y="1021.75" width="494.5" height="161.5" rx="13.25" fill="none" stroke="#aebdce" stroke-width="1.5"/>
     </g>
   </g>
   <g class="paint-layer paint-nodes" data-paint-group="nodes">

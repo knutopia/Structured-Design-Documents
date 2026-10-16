@@ -55,7 +55,16 @@
           "direction": "vertical",
           "gap": 16,
           "crossAlignment": "start",
-          "sizing": "intrinsic"
+          "sizing": "intrinsic",
+          "pack": {
+            "eligibleItemIds": [
+              "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-010%22%5D",
+              "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-011%22%5D"
+            ],
+            "gap": 16,
+            "widthSource": "widest_sibling",
+            "fitContent": true
+          }
         },
         "chrome": {
           "padding": {
@@ -275,8 +284,8 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 32,
-            "y": 115,
+            "x": 272,
+            "y": 51,
             "width": 224,
             "height": 48
           }
@@ -286,35 +295,35 @@
             "id": "north",
             "role": "north",
             "side": "north",
-            "x": 128,
+            "x": 248,
             "y": 0
           },
           {
             "id": "south",
             "role": "south",
             "side": "south",
-            "x": 128,
-            "y": 163
+            "x": 248,
+            "y": 99
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
-            "x": 256,
-            "y": 81.5
+            "x": 496,
+            "y": 49.5
           },
           {
             "id": "west",
             "role": "west",
             "side": "west",
             "x": 0,
-            "y": 81.5
+            "y": 49.5
           }
         ],
         "x": 16,
         "y": 16,
-        "width": 256,
-        "height": 163
+        "width": 496,
+        "height": 99
       },
       {
         "kind": "container",
@@ -747,7 +756,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 252,
+                "y": 188,
                 "width": 224,
                 "height": 177
               },
@@ -846,7 +855,7 @@
                   "status": "fits"
                 },
                 "x": 363.622,
-                "y": 252,
+                "y": 188,
                 "width": 224,
                 "height": 48
               }
@@ -882,7 +891,7 @@
               }
             ],
             "x": 32,
-            "y": 242,
+            "y": 178,
             "width": 555.622,
             "height": 187
           },
@@ -923,7 +932,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 445,
+            "y": 381,
             "width": 224,
             "height": 16
           },
@@ -1112,7 +1121,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 508,
+                "y": 444,
                 "width": 224,
                 "height": 66
               },
@@ -1276,7 +1285,7 @@
                   "status": "fits"
                 },
                 "x": 438.424,
-                "y": 508,
+                "y": 444,
                 "width": 224,
                 "height": 66
               }
@@ -1312,7 +1321,7 @@
               }
             ],
             "x": 32,
-            "y": 477,
+            "y": 413,
             "width": 630.424,
             "height": 97
           },
@@ -1436,7 +1445,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 600,
+                "y": 536,
                 "width": 224,
                 "height": 48
               },
@@ -1535,7 +1544,7 @@
                   "status": "fits"
                 },
                 "x": 363.622,
-                "y": 600,
+                "y": 536,
                 "width": 224,
                 "height": 48
               }
@@ -1571,7 +1580,7 @@
               }
             ],
             "x": 32,
-            "y": 590,
+            "y": 526,
             "width": 555.622,
             "height": 58
           }
@@ -1607,7 +1616,7 @@
           }
         ],
         "x": 16,
-        "y": 207,
+        "y": 143,
         "width": 662.424,
         "height": 457
       },
@@ -1884,7 +1893,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 727,
+            "y": 663,
             "width": 224,
             "height": 99
           },
@@ -1925,7 +1934,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 842,
+            "y": 778,
             "width": 224,
             "height": 16
           }
@@ -1961,7 +1970,7 @@
           }
         ],
         "x": 16,
-        "y": 692,
+        "y": 628,
         "width": 256,
         "height": 182
       },
@@ -2328,7 +2337,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 937,
+                "y": 873,
                 "width": 224,
                 "height": 131
               }
@@ -2364,7 +2373,7 @@
               }
             ],
             "x": 32,
-            "y": 937,
+            "y": 873,
             "width": 224,
             "height": 131
           },
@@ -2487,7 +2496,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 1124,
+                "y": 1060,
                 "width": 224,
                 "height": 48
               },
@@ -2585,7 +2594,7 @@
                   "status": "fits"
                 },
                 "x": 438.424,
-                "y": 1124,
+                "y": 1060,
                 "width": 224,
                 "height": 48
               }
@@ -2621,7 +2630,7 @@
               }
             ],
             "x": 32,
-            "y": 1084,
+            "y": 1020,
             "width": 630.424,
             "height": 88
           },
@@ -2757,7 +2766,7 @@
                       "status": "fits"
                     },
                     "x": 32,
-                    "y": 1198,
+                    "y": 1134,
                     "width": 224,
                     "height": 48
                   },
@@ -2835,14 +2844,14 @@
                       "status": "fits"
                     },
                     "x": 387.748,
-                    "y": 1198,
+                    "y": 1134,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 1188,
+                "y": 1124,
                 "width": 579.748,
                 "height": 58
               },
@@ -2915,7 +2924,7 @@
                       }
                     ],
                     "x": 232,
-                    "y": 1304,
+                    "y": 1240,
                     "width": 0,
                     "height": 0
                   },
@@ -2993,21 +3002,21 @@
                       "status": "fits"
                     },
                     "x": 387.748,
-                    "y": 1280,
+                    "y": 1216,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 1270,
+                "y": 1206,
                 "width": 579.748,
                 "height": 58
               }
             ],
             "ports": [],
             "x": 32,
-            "y": 1188,
+            "y": 1124,
             "width": 579.748,
             "height": 140
           }
@@ -3043,7 +3052,7 @@
           }
         ],
         "x": 16,
-        "y": 902,
+        "y": 838,
         "width": 662.424,
         "height": 442
       },
@@ -3410,7 +3419,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 1407,
+                "y": 1343,
                 "width": 224,
                 "height": 131
               }
@@ -3446,7 +3455,7 @@
               }
             ],
             "x": 32,
-            "y": 1407,
+            "y": 1343,
             "width": 224,
             "height": 131
           },
@@ -3574,7 +3583,7 @@
                       "status": "fits"
                     },
                     "x": 32,
-                    "y": 1564,
+                    "y": 1500,
                     "width": 224,
                     "height": 48
                   },
@@ -3652,21 +3661,21 @@
                       "status": "fits"
                     },
                     "x": 322.87,
-                    "y": 1564,
+                    "y": 1500,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 1554,
+                "y": 1490,
                 "width": 514.87,
                 "height": 58
               }
             ],
             "ports": [],
             "x": 32,
-            "y": 1554,
+            "y": 1490,
             "width": 514.87,
             "height": 58
           }
@@ -3702,7 +3711,7 @@
           }
         ],
         "x": 16,
-        "y": 1372,
+        "y": 1308,
         "width": 546.87,
         "height": 256
       },
@@ -3731,7 +3740,8 @@
               "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-010%22%5D"
             ],
             "gap": 16,
-            "widthSource": "widest_sibling"
+            "widthSource": "widest_sibling",
+            "fitContent": true
           }
         },
         "chrome": {
@@ -3855,7 +3865,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1691,
+            "y": 1627,
             "width": 224,
             "height": 48
           },
@@ -3953,7 +3963,7 @@
               "status": "fits"
             },
             "x": 272,
-            "y": 1691,
+            "y": 1627,
             "width": 224,
             "height": 48
           },
@@ -4051,7 +4061,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1755,
+            "y": 1691,
             "width": 224,
             "height": 48
           }
@@ -4061,21 +4071,21 @@
             "id": "north",
             "role": "north",
             "side": "north",
-            "x": 331.212,
+            "x": 248,
             "y": 0
           },
           {
             "id": "south",
             "role": "south",
             "side": "south",
-            "x": 331.212,
+            "x": 248,
             "y": 163
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
-            "x": 662.424,
+            "x": 496,
             "y": 81.5
           },
           {
@@ -4087,8 +4097,8 @@
           }
         ],
         "x": 16,
-        "y": 1656,
-        "width": 662.424,
+        "y": 1592,
+        "width": 496,
         "height": 163
       }
     ],
@@ -4105,27 +4115,27 @@
         "role": "south",
         "side": "south",
         "x": 347.212,
-        "y": 1835
+        "y": 1771
       },
       {
         "id": "east",
         "role": "east",
         "side": "east",
         "x": 694.424,
-        "y": 917.5
+        "y": 885.5
       },
       {
         "id": "west",
         "role": "west",
         "side": "west",
         "x": 0,
-        "y": 917.5
+        "y": 885.5
       }
     ],
     "x": 0,
     "y": 0,
     "width": 694.424,
-    "height": 1835
+    "height": 1771
   },
   "edges": [
     {
@@ -4136,24 +4146,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22focal%22%2C%22P-010%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 276
+        "y": 212
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AP-010%22%2C%22relationship%3A%255B%2522P-010%2522%252C%2522COMPOSED_OF%2522%252C%2522C-010%2522%255D%3A0%22%2C%22C-010%22%5D",
         "portId": "west",
         "x": 363.622,
-        "y": 276
+        "y": 212
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 276
+            "y": 212
           },
           {
             "x": 363.622,
-            "y": 276
+            "y": 212
           }
         ]
       },
@@ -4166,7 +4176,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 242
+        "y": 178
       },
       "markers": {
         "end": "arrow"
@@ -4181,24 +4191,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010a%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 541
+        "y": 477
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22sequence%22%2C%22scope%3AP-010%3Asequence%3Aprimary%22%2C%22VS-010b%22%5D",
         "portId": "west",
         "x": 438.424,
-        "y": 541
+        "y": 477
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 541
+            "y": 477
           },
           {
             "x": 438.424,
-            "y": 541
+            "y": 477
           }
         ]
       },
@@ -4212,7 +4222,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 493
+        "y": 429
       },
       "markers": {
         "end": "arrow"
@@ -4227,24 +4237,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_source%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22VS-010a%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 624
+        "y": 560
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-010%22%2C%22composition_target%22%2C%22scope%3AP-010%3Acomposition%3AVS-010a%22%2C%22relationship%3A%255B%2522VS-010a%2522%252C%2522COMPOSED_OF%2522%252C%2522C-011%2522%255D%3A0%22%2C%22C-011%22%5D",
         "portId": "west",
         "x": 363.622,
-        "y": 624
+        "y": 560
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 624
+            "y": 560
           },
           {
             "x": 363.622,
-            "y": 624
+            "y": 560
           }
         ]
       },
@@ -4257,7 +4267,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 590
+        "y": 526
       },
       "markers": {
         "end": "arrow"
@@ -4274,24 +4284,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010a%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 1148
+        "y": 1084
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22sequence%22%2C%22scope%3AC-010%3Asequence%3Asecondary%22%2C%22ST-010b%22%5D",
         "portId": "west",
         "x": 438.424,
-        "y": 1148
+        "y": 1084
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 1148
+            "y": 1084
           },
           {
             "x": 438.424,
-            "y": 1148
+            "y": 1084
           }
         ]
       },
@@ -4305,7 +4315,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 1100
+        "y": 1036
       },
       "markers": {
         "end": "arrow"
@@ -4320,24 +4330,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D",
         "portId": "contract-out:1",
         "x": 232,
-        "y": 1246
+        "y": 1182
       },
       "to": {
         "itemId": "scope:C-010:contract:C-010:anchor:1",
         "portId": "in",
         "x": 232,
-        "y": 1304
+        "y": 1240
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 232,
-            "y": 1246
+            "y": 1182
           },
           {
             "x": 232,
-            "y": 1304
+            "y": 1240
           }
         ]
       },
@@ -4354,24 +4364,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_source%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22C-010%22%5D",
         "portId": "contract-out:0",
         "x": 256,
-        "y": 1222
+        "y": 1158
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522BINDS_TO%2522%252C%2522D-010%2522%255D%3A0%22%2C%22D-010%22%5D",
         "portId": "contract-in",
         "x": 387.748,
-        "y": 1222
+        "y": 1158
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 1222
+            "y": 1158
           },
           {
             "x": 387.748,
-            "y": 1222
+            "y": 1158
           }
         ]
       },
@@ -4384,7 +4394,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 1188
+        "y": 1124
       },
       "markers": {
         "end": "arrow"
@@ -4399,24 +4409,24 @@
         "itemId": "scope:C-010:contract:C-010:anchor:1",
         "portId": "out",
         "x": 232,
-        "y": 1304
+        "y": 1240
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-010%22%2C%22contract_target%22%2C%22scope%3AC-010%3Acontract%3AC-010%22%2C%22relationship%3A%255B%2522C-010%2522%252C%2522DEPENDS_ON%2522%252C%2522SA-010%2522%255D%3A0%22%2C%22SA-010%22%5D",
         "portId": "contract-in",
         "x": 387.748,
-        "y": 1304
+        "y": 1240
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 232,
-            "y": 1304
+            "y": 1240
           },
           {
             "x": 387.748,
-            "y": 1304
+            "y": 1240
           }
         ]
       },
@@ -4429,7 +4439,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 271.633,
-        "y": 1270
+        "y": 1206
       },
       "markers": {
         "end": "arrow"
@@ -4446,24 +4456,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_source%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22C-011%22%5D",
         "portId": "contract-out:0",
         "x": 256,
-        "y": 1588
+        "y": 1524
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-011%22%2C%22contract_target%22%2C%22scope%3AC-011%3Acontract%3AC-011%22%2C%22relationship%3A%255B%2522C-011%2522%252C%2522EMITS%2522%252C%2522E-010%2522%255D%3A0%22%2C%22E-010%22%5D",
         "portId": "contract-in",
         "x": 322.87,
-        "y": 1588
+        "y": 1524
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 1588
+            "y": 1524
           },
           {
             "x": 322.87,
-            "y": 1588
+            "y": 1524
           }
         ]
       },
@@ -4476,7 +4486,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 1554
+        "y": 1490
       },
       "markers": {
         "end": "arrow"

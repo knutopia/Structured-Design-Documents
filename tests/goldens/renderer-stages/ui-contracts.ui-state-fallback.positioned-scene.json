@@ -2260,7 +2260,8 @@
               "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-060%22%5D"
             ],
             "gap": 16,
-            "widthSource": "widest_sibling"
+            "widthSource": "widest_sibling",
+            "fitContent": true
           }
         },
         "chrome": {
@@ -2590,21 +2591,21 @@
             "id": "north",
             "role": "north",
             "side": "north",
-            "x": 340.59,
+            "x": 248,
             "y": 0
           },
           {
             "id": "south",
             "role": "south",
             "side": "south",
-            "x": 340.59,
+            "x": 248,
             "y": 163
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
-            "x": 681.18,
+            "x": 496,
             "y": 81.5
           },
           {
@@ -2617,7 +2618,7 @@
         ],
         "x": 16,
         "y": 1021,
-        "width": 681.18,
+        "width": 496,
         "height": 163
       }
     ],

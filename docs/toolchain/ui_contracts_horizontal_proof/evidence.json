@@ -1,0 +1,542 @@
+[
+  {
+    "name": "compact",
+    "detailId": "compact",
+    "ordinaryWidth": 605.778,
+    "width": 637.778,
+    "height": 1811,
+    "diagnostics": [],
+    "groups": [
+      {
+        "id": "components-without-containment",
+        "width": 496,
+        "height": 483,
+        "titleMinimum": 174.425,
+        "rows": [
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-800%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-801%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-802%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-803%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-804%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-805%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-806%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-807%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-808%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-809%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-810%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-811%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-812%22%5D"
+          ]
+        ],
+        "cards": [
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-800%22%5D",
+            "x": 32,
+            "y": 338,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-801%22%5D",
+            "x": 272,
+            "y": 338,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-802%22%5D",
+            "x": 32,
+            "y": 402,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-803%22%5D",
+            "x": 272,
+            "y": 402,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-804%22%5D",
+            "x": 32,
+            "y": 466,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-805%22%5D",
+            "x": 272,
+            "y": 466,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-806%22%5D",
+            "x": 32,
+            "y": 530,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-807%22%5D",
+            "x": 272,
+            "y": 530,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-808%22%5D",
+            "x": 32,
+            "y": 594,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-809%22%5D",
+            "x": 272,
+            "y": 594,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-810%22%5D",
+            "x": 32,
+            "y": 658,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-811%22%5D",
+            "x": 272,
+            "y": 658,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-812%22%5D",
+            "x": 32,
+            "y": 722,
+            "width": 224,
+            "height": 48
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "detailed",
+    "detailId": "detailed",
+    "ordinaryWidth": 611.748,
+    "width": 643.748,
+    "height": 4149,
+    "diagnostics": [],
+    "groups": [
+      {
+        "id": "components-without-containment",
+        "width": 496,
+        "height": 483,
+        "titleMinimum": 174.425,
+        "rows": [
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-800%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-801%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-802%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-803%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-804%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-805%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-806%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-807%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-808%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-809%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-810%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-811%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-812%22%5D"
+          ]
+        ],
+        "cards": [
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-800%22%5D",
+            "x": 32,
+            "y": 338,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-801%22%5D",
+            "x": 272,
+            "y": 338,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-802%22%5D",
+            "x": 32,
+            "y": 402,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-803%22%5D",
+            "x": 272,
+            "y": 402,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-804%22%5D",
+            "x": 32,
+            "y": 466,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-805%22%5D",
+            "x": 272,
+            "y": 466,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-806%22%5D",
+            "x": 32,
+            "y": 530,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-807%22%5D",
+            "x": 272,
+            "y": 530,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-808%22%5D",
+            "x": 32,
+            "y": 594,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-809%22%5D",
+            "x": 272,
+            "y": 594,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-810%22%5D",
+            "x": 32,
+            "y": 658,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-811%22%5D",
+            "x": 272,
+            "y": 658,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-812%22%5D",
+            "x": 32,
+            "y": 722,
+            "width": 224,
+            "height": 48
+          }
+        ]
+      },
+      {
+        "id": "target-register",
+        "width": 496,
+        "height": 227,
+        "titleMinimum": 121.31,
+        "rows": [
+          [
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D",
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D"
+          ],
+          [
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-800%22%5D",
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-800%22%5D"
+          ],
+          [
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-800%22%5D",
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-801%22%5D"
+          ]
+        ],
+        "cards": [
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D",
+            "x": 32,
+            "y": 3941,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D",
+            "x": 272,
+            "y": 3941,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-800%22%5D",
+            "x": 32,
+            "y": 4005,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-800%22%5D",
+            "x": 272,
+            "y": 4005,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-800%22%5D",
+            "x": 32,
+            "y": 4069,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-801%22%5D",
+            "x": 272,
+            "y": 4069,
+            "width": 224,
+            "height": 48
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "wide-title",
+    "detailId": "detailed",
+    "ordinaryWidth": 611.748,
+    "width": 1051.945,
+    "height": 3637,
+    "diagnostics": [],
+    "groups": [
+      {
+        "id": "components-without-containment",
+        "width": 496,
+        "height": 483,
+        "titleMinimum": 174.425,
+        "rows": [
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-800%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-801%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-802%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-803%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-804%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-805%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-806%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-807%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-808%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-809%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-810%22%5D",
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-811%22%5D"
+          ],
+          [
+            "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-812%22%5D"
+          ]
+        ],
+        "cards": [
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-800%22%5D",
+            "x": 32,
+            "y": 338,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-801%22%5D",
+            "x": 272,
+            "y": 338,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-802%22%5D",
+            "x": 32,
+            "y": 402,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-803%22%5D",
+            "x": 272,
+            "y": 402,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-804%22%5D",
+            "x": 32,
+            "y": 466,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-805%22%5D",
+            "x": 272,
+            "y": 466,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-806%22%5D",
+            "x": 32,
+            "y": 530,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-807%22%5D",
+            "x": 272,
+            "y": 530,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-808%22%5D",
+            "x": 32,
+            "y": 594,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-809%22%5D",
+            "x": 272,
+            "y": 594,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-810%22%5D",
+            "x": 32,
+            "y": 658,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-811%22%5D",
+            "x": 272,
+            "y": 658,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-812%22%5D",
+            "x": 32,
+            "y": 722,
+            "width": 224,
+            "height": 48
+          }
+        ]
+      },
+      {
+        "id": "target-register",
+        "width": 1019.945,
+        "height": 163,
+        "titleMinimum": 1019.945,
+        "rows": [
+          [
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D",
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D",
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-800%22%5D",
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-800%22%5D"
+          ],
+          [
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-800%22%5D",
+            "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-801%22%5D"
+          ]
+        ],
+        "cards": [
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-700%22%5D",
+            "x": 32,
+            "y": 3493,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D",
+            "x": 272,
+            "y": 3493,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-800%22%5D",
+            "x": 512,
+            "y": 3493,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-800%22%5D",
+            "x": 752,
+            "y": 3493,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22SA-800%22%5D",
+            "x": 32,
+            "y": 3557,
+            "width": 224,
+            "height": 48
+          },
+          {
+            "id": "occurrence:%5B%22target-register%22%2C%22register%22%2C%22E-801%22%5D",
+            "x": 272,
+            "y": 3557,
+            "width": 224,
+            "height": 48
+          }
+        ]
+      }
+    ]
+  }
+]

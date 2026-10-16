@@ -469,6 +469,9 @@ async function layoutStackContainer(
       const budget = Math.max(
         ...children.filter(child => !eligible.has(child.id)).map(child => child.width),
         ...packedChildren.map(child => child.width),
+        ...(container.layout.pack.fitContent
+          ? [resolveContainerHeaderWidth(container.headerContent, container.chrome) - container.chrome.padding.left - container.chrome.padding.right]
+          : []),
         ...(siblingWidthBudget === undefined ? [] : [siblingWidthBudget - container.chrome.padding.left - container.chrome.padding.right])
       );
       const gap = Math.max(0, container.layout.pack.gap);
@@ -493,6 +496,7 @@ async function layoutStackContainer(
       }
       flush();
       let y = 0;
+      let occupiedWidth = 0;
       rows.forEach((row, rowIndex) => {
         let x = 0;
         const rowHeight = Math.max(...row.map(child => child.height));
@@ -501,9 +505,13 @@ async function layoutStackContainer(
           child.y = roundMetric(y);
           x += child.width + (childIndex < row.length - 1 ? gap : 0);
         });
+        occupiedWidth = Math.max(occupiedWidth, x);
         y += rowHeight + (rowIndex < rows.length - 1 ? gap : 0);
       });
-      return { contentWidth: roundMetric(budget), contentHeight: roundMetric(Math.max(0, y)) };
+      return {
+        contentWidth: roundMetric(container.layout.pack.fitContent ? occupiedWidth : budget),
+        contentHeight: roundMetric(Math.max(0, y))
+      };
     }
   }
   return layoutLinearContainer(container, children, context, {

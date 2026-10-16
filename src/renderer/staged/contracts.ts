@@ -406,8 +406,10 @@ export interface LayoutIntent {
   pack?: {
     eligibleItemIds: string[];
     gap: number;
-    /** Use the final width of the widest other child of the parent container. */
+    /** Use the final width of the widest non-wrapping sibling of this container. */
     widthSource?: "widest_sibling";
+    /** Include the header minimum when packing, then fit bounds to occupied rows. */
+    fitContent?: boolean;
   };
   columns?: number;
   /** Reserve equal-height slots without resizing their children. Vertical stacks only. */

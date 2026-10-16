@@ -269,12 +269,20 @@ export class UiContractsSceneBuilder {
     this.scene.root.children = [...model.overview.map(item => this.hierarchy(item)),
       ...(model.isolatedComponents.nodes.length ? [uiContractsEnclosure(model.isolatedComponents.id,
         model.isolatedComponents.nodes.map(node => this.node(node)), model.isolatedComponents.title)] : []), ...model.scopes.map(scope => this.scope(scope, true))];
+    const components = this.scene.root.children.find(child => child.id === model.isolatedComponents.id);
+    if (components?.kind === "container" && components.children.length >= 2) components.layout.pack = {
+      eligibleItemIds: components.children.map(node => node.id),
+      gap: UI_CONTRACTS_SPACING.localGap,
+      widthSource: "widest_sibling",
+      fitContent: true
+    };
     if (model.register.nodes.length) {
       const register = uiContractsEnclosure(model.register.id, model.register.nodes.map(node => this.node(node)), model.register.title);
       if (model.register.layout.mode === "rows_widest_other_section") register.layout.pack = {
         eligibleItemIds: register.children.map(node => node.id),
         gap: UI_CONTRACTS_SPACING.localGap,
-        widthSource: "widest_sibling"
+        widthSource: "widest_sibling",
+        fitContent: true
       };
       this.scene.root.children.push(register);
     }

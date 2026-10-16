@@ -2,7 +2,9 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { beforeAll, describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
-import { buildUiContractsRendererScene, renderUiContractsStagedSvg } from "../src/renderer/staged/uiContracts.js";
+import { buildUiContractsRendererScene, renderUiContractsStagedSvg, renderUiContractsStagedPng } from "../src/renderer/staged/uiContracts.js";
+import type { PositionedContainer, PositionedItem } from "../src/renderer/staged/contracts.js";
+import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
 import { prepareCompiledGraphPreview, renderSourcePreview } from "../src/renderer/previewWorkflow.js";
 import { isBatchApplicable } from "../src/renderer/prepareProjectionForRender.js";
 import { assessUiContractsGeometry } from "./uiContractsB5Acceptance.js";
@@ -10,19 +12,166 @@ import { expectRendererStageSnapshot, expectRendererStageTextSnapshot } from "./
 
 let bundle: Awaited<ReturnType<typeof loadBundle>>;
 beforeAll(async () => { bundle = await loadBundle("bundle/v0.1/manifest.yaml"); });
-async function artifacts(path: string, detailId = "detailed") {
+async function artifacts(path: string, detailId = "detailed", activeBundle = bundle) {
   const input = { path, text: await readFile(path, "utf8") };
-  const compiled = compileSource(input, bundle);
+  const compiled = compileSource(input, activeBundle);
   expect(compiled.diagnostics).toEqual([]);
-  const graph = compiled.graph!, view = bundle.views.views.find(view => view.id === "ui_contracts")!;
-  const projection = projectView(graph, bundle, view.id).projection!;
+  const graph = compiled.graph!, view = activeBundle.views.views.find(view => view.id === "ui_contracts")!;
+  const projection = projectView(graph, activeBundle, view.id).projection!;
   const rendererScene = buildUiContractsRendererScene(projection, graph, view, { detailId });
   const rendered = await renderUiContractsStagedSvg(projection, graph, view, { detailId });
   expect(assessUiContractsGeometry(rendered.positionedScene)).toEqual([]);
   return { input, graph, projection, view, rendererScene, rendered };
 }
 
+function section(children: PositionedItem[], id: string): PositionedContainer {
+  const group = children.find(child => child.id === id);
+  if (group?.kind !== "container") throw new Error(`Missing section ${id}`);
+  return group;
+}
+
+function rows(group: PositionedContainer) {
+  return [...new Set(group.children.map(child => child.y))].map(y => group.children.filter(child => child.y === y));
+}
+
+function expectFitted(group: PositionedContainer) {
+  const titleMinimum = Math.max(0, ...group.headerContent.map(block => block.x + block.width + group.chrome.padding.right));
+  const contentMinimum = Math.max(...group.children.map(card => card.x + card.width)) - group.x + group.chrome.padding.right;
+  expect(group.width).toBeCloseTo(Math.max(titleMinimum, contentMinimum), 3);
+}
+
 describe("public staged UI contracts B5 renderer", () => {
+  for (const detailId of ["compact", "detailed"]) it(`packs thirteen components without hierarchy in source-ordered natural-size rows / ${detailId}`, async () => {
+    const currentBundle = await loadBundle("bundle/v0.2/manifest.yaml");
+    const { rendered, rendererScene } = await artifacts("tests/fixtures/render/ui_contracts_horizontal.sdd", detailId, currentBundle);
+    const group = section(rendered.positionedScene.root.children, "components-without-containment");
+    expect(group.children).toHaveLength(13);
+    expect(rows(group).map(row => row.length)).toEqual([2, 2, 2, 2, 2, 2, 1]);
+    const measured = rendered.measuredScene.root.children.find(child => child.id === group.id);
+    if (measured?.kind !== "container") throw new Error("Missing measured components");
+    expect(group.children.map(({ id, width, height }) => ({ id, width, height })))
+      .toEqual(measured.children.map(({ id, width, height }) => ({ id, width, height })));
+    expectFitted(group);
+    const beforeFitScene = structuredClone(rendererScene);
+    for (const child of beforeFitScene.root.children) if (child.kind === "container" && child.layout.pack?.fitContent) {
+      child.layout.pack.fitContent = false;
+    }
+    const beforeFit = await runStagedRendererPipeline(beforeFitScene);
+    for (const child of rendered.positionedScene.root.children) if (child.kind === "container" && child.layout.pack?.fitContent) {
+      const previous = section(beforeFit.positionedScene.root.children, child.id);
+      expect(child.children).toEqual(previous.children);
+      expect(child.height).toBe(previous.height);
+      expect(child.width).toBeLessThan(previous.width);
+      expectFitted(child);
+    }
+    if (detailId === "detailed") expect(rows(section(rendered.positionedScene.root.children, "target-register")).map(row => row.length)).toEqual([2, 2, 2]);
+    else expect(rendered.positionedScene.root.children.some(child => child.id === "target-register")).toBe(false);
+  });
+
+  it("uses a wide target title before wrapping without widening the components section", async () => {
+    const currentBundle = await loadBundle("bundle/v0.2/manifest.yaml");
+    const { graph, projection, view, rendered } = await artifacts("tests/fixtures/render/ui_contracts_horizontal.sdd", "detailed", currentBundle);
+    const wideView = structuredClone(view);
+    wideView.conventions.renderer_defaults!.ui_contracts_presentation!.labels.target_register =
+      "Referenced targets · Help Center search, article delivery, feedback collection, and external service contracts used across all supported regions, including follow-up notifications and asynchronous search indexing";
+    const wide = await renderUiContractsStagedSvg(projection, graph, wideView, { detailId: "detailed" });
+    expect(assessUiContractsGeometry(wide.positionedScene)).toEqual([]);
+    expect(section(wide.positionedScene.root.children, "components-without-containment"))
+      .toEqual(section(rendered.positionedScene.root.children, "components-without-containment"));
+    const targets = section(wide.positionedScene.root.children, "target-register");
+    expect(rows(targets).map(row => row.length)).toEqual([4, 2]);
+    expectFitted(targets);
+    const repeated = await renderUiContractsStagedSvg(projection, graph, wideView, { detailId: "detailed" });
+    expect(repeated.svg).toBe(wide.svg);
+    expect(repeated.positionedScene).toEqual(wide.positionedScene);
+  });
+
+  for (const version of ["v0.1", "v0.2"]) for (const detailId of ["compact", "detailed"]) {
+    for (const count of [0, 1, 2]) it(`preserves cardinality, detail visibility and projection / ${version} / ${detailId} / ${count}`, async () => {
+      const activeBundle = await loadBundle(`bundle/${version}/manifest.yaml`);
+      const fixture = await readFile("tests/fixtures/render/ui_contracts_horizontal.sdd", "utf8");
+      let seen = 0;
+      const text = fixture.replace("SDD-TEXT 0.2", `SDD-TEXT ${version.slice(1)}`)
+        .replace(/^Component C-8\d\d[^]*?^END\n/gm, block => seen++ < count ? block : "");
+      const graph = compileSource({ path: "/tmp/horizontal-cardinality.sdd", text }, activeBundle).graph!;
+      const view = activeBundle.views.views.find(candidate => candidate.id === "ui_contracts")!;
+      const projection = projectView(graph, activeBundle, view.id).projection!;
+      const beforeProjection = structuredClone(projection);
+      const rendered = await renderUiContractsStagedSvg(projection, graph, view, { detailId });
+      expect(assessUiContractsGeometry(rendered.positionedScene)).toEqual([]);
+      expect(projection).toEqual(beforeProjection);
+      const group = rendered.positionedScene.root.children.find(child => child.id === "components-without-containment");
+      if (count === 0) expect(group).toBeUndefined();
+      else {
+        if (group?.kind !== "container") throw new Error("Missing components without hierarchy");
+        expect(rows(group).map(row => row.length)).toEqual([count]);
+        if (count === 1) {
+          expect(group.layout.pack).toBeUndefined();
+          const measured = rendered.measuredScene.root.children.find(child => child.id === group.id)!;
+          expect([group.width, group.height]).toEqual([measured.width, measured.height]);
+        } else expectFitted(group);
+      }
+      const target = rendered.positionedScene.root.children.find(child => child.id === "target-register");
+      if (detailId === "compact") expect(target).toBeUndefined();
+      else {
+        if (target?.kind !== "container") throw new Error("Missing targets");
+        expect(target.layout.pack?.fitContent).toBe(true);
+        expectFitted(target);
+      }
+    });
+  }
+
+  for (const detailId of ["compact", "detailed"]) it(`uses own minima in a synthetic scene with ordinary scopes omitted / ${detailId}`, async () => {
+    const currentBundle = await loadBundle("bundle/v0.2/manifest.yaml");
+    const fixture = await readFile("tests/fixtures/render/ui_contracts_horizontal.sdd", "utf8");
+    const components = fixture.match(/^Component C-8\d\d[^]*?^END\n/gm)!.slice(0, 6).join("\n");
+    const view = currentBundle.views.views.find(candidate => candidate.id === "ui_contracts")!;
+    for (const withTargets of [false, true]) {
+      const text = `SDD-TEXT 0.2\n${components}\n${withTargets ? 'Event E-800 "Search requested"\nEND\n' : ""}`;
+      const graph = compileSource({ path: "/tmp/horizontal-only.sdd", text }, currentBundle).graph!;
+      const projection = projectView(graph, currentBundle, view.id).projection!;
+      const normal = buildUiContractsRendererScene(projection, graph, view, { detailId });
+      expect(normal.root.children.some(child => child.id.startsWith("scope:"))).toBe(detailId === "detailed");
+      const synthetic = structuredClone(normal);
+      // Only this explicit fixture lens removes ordinary scopes; production visibility stays intact.
+      synthetic.root.children = synthetic.root.children.filter(child => !child.id.startsWith("scope:"));
+      synthetic.root.layout.pack = undefined;
+      const baseline = await runStagedRendererPipeline(synthetic);
+      expect(assessUiContractsGeometry(baseline.positionedScene)).toEqual([]);
+      const group = section(baseline.positionedScene.root.children, "components-without-containment");
+      expect(rows(group).map(row => row.length)).toEqual([1, 1, 1, 1, 1, 1]);
+      expectFitted(group);
+      const componentScene = synthetic.root.children.find(child => child.id === group.id)!;
+      componentScene.viewMetadata!.uiContracts!.title =
+        "Components without hierarchy · Help Center search, article delivery, feedback collection, and external service contracts used across all supported regions, including follow-up notifications and asynchronous search indexing";
+      const wide = await runStagedRendererPipeline(synthetic);
+      expect(assessUiContractsGeometry(wide.positionedScene)).toEqual([]);
+      const widened = section(wide.positionedScene.root.children, group.id);
+      expect(rows(widened)[0].length).toBeGreaterThan(1);
+      expectFitted(widened);
+      if (withTargets && detailId === "detailed") {
+        const beforeTarget = section(baseline.positionedScene.root.children, "target-register");
+        const afterTarget = section(wide.positionedScene.root.children, "target-register");
+        expect(afterTarget.width).toBe(beforeTarget.width);
+        expect(afterTarget.children.map(child => [child.id, child.x - afterTarget.x, child.y - afterTarget.y, child.width, child.height]))
+          .toEqual(beforeTarget.children.map(child => [child.id, child.x - beforeTarget.x, child.y - beforeTarget.y, child.width, child.height]));
+      }
+    }
+  });
+
+  for (const detailId of ["compact", "detailed"]) it(`exports deterministic SVG and its derived PNG with matching bounds / ${detailId}`, async () => {
+    const currentBundle = await loadBundle("bundle/v0.2/manifest.yaml");
+    const { graph, projection, view, rendered } = await artifacts("tests/fixtures/render/ui_contracts_horizontal.sdd", detailId, currentBundle);
+    const png = await renderUiContractsStagedPng(projection, graph, view, { detailId });
+    expect(png.svg).toBe(rendered.svg);
+    expect(png.positionedScene).toEqual(rendered.positionedScene);
+    expect(png.diagnostics).toEqual([]);
+    const bytes = Buffer.from(png.png);
+    expect([...bytes.subarray(0, 8)]).toEqual([137, 80, 78, 71, 13, 10, 26, 10]);
+    const [width, height] = [bytes.readUInt32BE(16), bytes.readUInt32BE(20)];
+    expect(Math.abs(width - rendered.positionedScene.root.width)).toBeLessThan(1);
+    expect(Math.abs(height - rendered.positionedScene.root.height)).toBeLessThan(1);
+  });
   for (const [fixture, name] of [
     ["bundle/v0.1/examples/place_viewstate_transition.sdd", "place-viewstate-transition"],
     ["bundle/v0.1/examples/ui_state_fallback.sdd", "ui-state-fallback"],
@@ -110,7 +259,8 @@ describe("public staged UI contracts B5 renderer", () => {
     if (!expectedOrder || expectedOrder.kind !== "container") throw new Error("Missing register scene");
     expect(register.children.map(child => child.id)).toEqual(expectedOrder.children.map(child => child.id));
     expect(register.children).toHaveLength(19);
-    expect(register.width).toBeCloseTo(Math.max(...root.children.filter(child => child.id !== register.id).map(child => child.width)), 3);
+    expectFitted(register);
+    expect(register.width).toBeLessThan(Math.max(...root.children.filter(child => child.id !== register.id).map(child => child.width)));
     expect(new Set(register.children.map(child => child.y)).size).toBeGreaterThan(1);
     expect(register.children.some((child, index) => index > 0 && child.y === register.children[index - 1].y)).toBe(true);
     for (const [index, child] of register.children.entries()) {

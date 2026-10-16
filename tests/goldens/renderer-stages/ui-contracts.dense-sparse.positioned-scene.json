@@ -56,7 +56,16 @@
           "direction": "vertical",
           "gap": 16,
           "crossAlignment": "start",
-          "sizing": "intrinsic"
+          "sizing": "intrinsic",
+          "pack": {
+            "eligibleItemIds": [
+              "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-700%22%5D",
+              "occurrence:%5B%22components-without-containment%22%2C%22overview%22%2C%22C-702%22%5D"
+            ],
+            "gap": 16,
+            "widthSource": "widest_sibling",
+            "fitContent": true
+          }
         },
         "chrome": {
           "padding": {
@@ -276,8 +285,8 @@
             "overflow": {
               "status": "fits"
             },
-            "x": 32,
-            "y": 115,
+            "x": 272,
+            "y": 51,
             "width": 224,
             "height": 48
           }
@@ -287,35 +296,35 @@
             "id": "north",
             "role": "north",
             "side": "north",
-            "x": 128,
+            "x": 248,
             "y": 0
           },
           {
             "id": "south",
             "role": "south",
             "side": "south",
-            "x": 128,
-            "y": 163
+            "x": 248,
+            "y": 99
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
-            "x": 256,
-            "y": 81.5
+            "x": 496,
+            "y": 49.5
           },
           {
             "id": "west",
             "role": "west",
             "side": "west",
             "x": 0,
-            "y": 81.5
+            "y": 49.5
           }
         ],
         "x": 16,
         "y": 16,
-        "width": 256,
-        "height": 163
+        "width": 496,
+        "height": 99
       },
       {
         "kind": "container",
@@ -616,7 +625,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 252,
+                "y": 188,
                 "width": 224,
                 "height": 99
               },
@@ -715,7 +724,7 @@
                   "status": "fits"
                 },
                 "x": 363.622,
-                "y": 252,
+                "y": 188,
                 "width": 224,
                 "height": 48
               }
@@ -751,7 +760,7 @@
               }
             ],
             "x": 32,
-            "y": 242,
+            "y": 178,
             "width": 555.622,
             "height": 109
           },
@@ -940,7 +949,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 384,
+                "y": 320,
                 "width": 224,
                 "height": 66
               },
@@ -1104,7 +1113,7 @@
                   "status": "fits"
                 },
                 "x": 381.778,
-                "y": 384,
+                "y": 320,
                 "width": 224,
                 "height": 66
               }
@@ -1140,7 +1149,7 @@
               }
             ],
             "x": 32,
-            "y": 367,
+            "y": 303,
             "width": 573.778,
             "height": 83
           }
@@ -1176,7 +1185,7 @@
           }
         ],
         "x": 16,
-        "y": 207,
+        "y": 143,
         "width": 605.778,
         "height": 259
       },
@@ -1453,7 +1462,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 529,
+            "y": 465,
             "width": 224,
             "height": 99
           }
@@ -1489,7 +1498,7 @@
           }
         ],
         "x": 16,
-        "y": 494,
+        "y": 430,
         "width": 256,
         "height": 150
       },
@@ -1792,7 +1801,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 717,
+                "y": 653,
                 "width": 224,
                 "height": 99
               },
@@ -1891,7 +1900,7 @@
                   "status": "fits"
                 },
                 "x": 363.622,
-                "y": 717,
+                "y": 653,
                 "width": 224,
                 "height": 48
               }
@@ -1927,7 +1936,7 @@
               }
             ],
             "x": 32,
-            "y": 707,
+            "y": 643,
             "width": 555.622,
             "height": 109
           }
@@ -1963,7 +1972,7 @@
           }
         ],
         "x": 16,
-        "y": 672,
+        "y": 608,
         "width": 587.622,
         "height": 160
       },
@@ -2134,7 +2143,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 895,
+                "y": 831,
                 "width": 224,
                 "height": 48
               }
@@ -2170,7 +2179,7 @@
               }
             ],
             "x": 32,
-            "y": 895,
+            "y": 831,
             "width": 224,
             "height": 48
           },
@@ -2306,7 +2315,7 @@
                       "status": "fits"
                     },
                     "x": 32,
-                    "y": 969,
+                    "y": 905,
                     "width": 224,
                     "height": 48
                   },
@@ -2384,14 +2393,14 @@
                       "status": "fits"
                     },
                     "x": 387.748,
-                    "y": 969,
+                    "y": 905,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 959,
+                "y": 895,
                 "width": 579.748,
                 "height": 58
               },
@@ -2464,7 +2473,7 @@
                       }
                     ],
                     "x": 232,
-                    "y": 1075,
+                    "y": 1011,
                     "width": 0,
                     "height": 0
                   },
@@ -2542,21 +2551,21 @@
                       "status": "fits"
                     },
                     "x": 387.748,
-                    "y": 1051,
+                    "y": 987,
                     "width": 224,
                     "height": 48
                   }
                 ],
                 "ports": [],
                 "x": 32,
-                "y": 1041,
+                "y": 977,
                 "width": 579.748,
                 "height": 58
               }
             ],
             "ports": [],
             "x": 32,
-            "y": 959,
+            "y": 895,
             "width": 579.748,
             "height": 140
           }
@@ -2592,7 +2601,7 @@
           }
         ],
         "x": 16,
-        "y": 860,
+        "y": 796,
         "width": 611.748,
         "height": 255
       },
@@ -2763,7 +2772,7 @@
                   "status": "fits"
                 },
                 "x": 32,
-                "y": 1178,
+                "y": 1114,
                 "width": 224,
                 "height": 48
               }
@@ -2799,7 +2808,7 @@
               }
             ],
             "x": 32,
-            "y": 1178,
+            "y": 1114,
             "width": 224,
             "height": 48
           }
@@ -2835,7 +2844,7 @@
           }
         ],
         "x": 16,
-        "y": 1143,
+        "y": 1079,
         "width": 256,
         "height": 99
       },
@@ -2863,7 +2872,8 @@
               "occurrence:%5B%22target-register%22%2C%22register%22%2C%22D-700%22%5D"
             ],
             "gap": 16,
-            "widthSource": "widest_sibling"
+            "widthSource": "widest_sibling",
+            "fitContent": true
           }
         },
         "chrome": {
@@ -2987,7 +2997,7 @@
               "status": "fits"
             },
             "x": 32,
-            "y": 1305,
+            "y": 1241,
             "width": 224,
             "height": 48
           },
@@ -3085,7 +3095,7 @@
               "status": "fits"
             },
             "x": 272,
-            "y": 1305,
+            "y": 1241,
             "width": 224,
             "height": 48
           }
@@ -3095,21 +3105,21 @@
             "id": "north",
             "role": "north",
             "side": "north",
-            "x": 305.874,
+            "x": 248,
             "y": 0
           },
           {
             "id": "south",
             "role": "south",
             "side": "south",
-            "x": 305.874,
+            "x": 248,
             "y": 99
           },
           {
             "id": "east",
             "role": "east",
             "side": "east",
-            "x": 611.748,
+            "x": 496,
             "y": 49.5
           },
           {
@@ -3121,8 +3131,8 @@
           }
         ],
         "x": 16,
-        "y": 1270,
-        "width": 611.748,
+        "y": 1206,
+        "width": 496,
         "height": 99
       }
     ],
@@ -3139,27 +3149,27 @@
         "role": "south",
         "side": "south",
         "x": 321.874,
-        "y": 1385
+        "y": 1321
       },
       {
         "id": "east",
         "role": "east",
         "side": "east",
         "x": 643.748,
-        "y": 692.5
+        "y": 660.5
       },
       {
         "id": "west",
         "role": "west",
         "side": "west",
         "x": 0,
-        "y": 692.5
+        "y": 660.5
       }
     ],
     "x": 0,
     "y": 0,
     "width": 643.748,
-    "height": 1385
+    "height": 1321
   },
   "edges": [
     {
@@ -3170,24 +3180,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22focal%22%2C%22P-700%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 276
+        "y": 212
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22composition_target%22%2C%22scope%3AP-700%3Acomposition%3AP-700%22%2C%22relationship%3A%255B%2522P-700%2522%252C%2522COMPOSED_OF%2522%252C%2522C-700%2522%255D%3A0%22%2C%22C-700%22%5D",
         "portId": "west",
         "x": 363.622,
-        "y": 276
+        "y": 212
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 276
+            "y": 212
           },
           {
             "x": 363.622,
-            "y": 276
+            "y": 212
           }
         ]
       },
@@ -3200,7 +3210,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 242
+        "y": 178
       },
       "markers": {
         "end": "arrow"
@@ -3215,24 +3225,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700a%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 417
+        "y": 353
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-700%22%2C%22sequence%22%2C%22scope%3AP-700%3Asequence%3Aprimary%22%2C%22VS-700b%22%5D",
         "portId": "west",
         "x": 381.778,
-        "y": 417
+        "y": 353
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 417
+            "y": 353
           },
           {
             "x": 381.778,
-            "y": 417
+            "y": 353
           }
         ]
       },
@@ -3245,7 +3255,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 383
+        "y": 319
       },
       "markers": {
         "end": "arrow"
@@ -3260,24 +3270,24 @@
         "itemId": "occurrence:%5B%22scope%3AP-702%22%2C%22focal%22%2C%22P-702%22%5D",
         "portId": "east",
         "x": 256,
-        "y": 741
+        "y": 677
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AP-702%22%2C%22composition_target%22%2C%22scope%3AP-702%3Acomposition%3AP-702%22%2C%22relationship%3A%255B%2522P-702%2522%252C%2522COMPOSED_OF%2522%252C%2522C-702%2522%255D%3A0%22%2C%22C-702%22%5D",
         "portId": "west",
         "x": 363.622,
-        "y": 741
+        "y": 677
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 741
+            "y": 677
           },
           {
             "x": 363.622,
-            "y": 741
+            "y": 677
           }
         ]
       },
@@ -3290,7 +3300,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 707
+        "y": 643
       },
       "markers": {
         "end": "arrow"
@@ -3307,24 +3317,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_source%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22C-700%22%5D",
         "portId": "contract-out:1",
         "x": 232,
-        "y": 1017
+        "y": 953
       },
       "to": {
         "itemId": "scope:C-700:contract:C-700:anchor:1",
         "portId": "in",
         "x": 232,
-        "y": 1075
+        "y": 1011
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 232,
-            "y": 1017
+            "y": 953
           },
           {
             "x": 232,
-            "y": 1075
+            "y": 1011
           }
         ]
       },
@@ -3341,24 +3351,24 @@
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_source%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22C-700%22%5D",
         "portId": "contract-out:0",
         "x": 256,
-        "y": 993
+        "y": 929
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522BINDS_TO%2522%252C%2522D-700%2522%255D%3A0%22%2C%22D-700%22%5D",
         "portId": "contract-in",
         "x": 387.748,
-        "y": 993
+        "y": 929
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 256,
-            "y": 993
+            "y": 929
           },
           {
             "x": 387.748,
-            "y": 993
+            "y": 929
           }
         ]
       },
@@ -3371,7 +3381,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 268,
-        "y": 959
+        "y": 895
       },
       "markers": {
         "end": "arrow"
@@ -3388,24 +3398,24 @@
         "itemId": "scope:C-700:contract:C-700:anchor:1",
         "portId": "out",
         "x": 232,
-        "y": 1075
+        "y": 1011
       },
       "to": {
         "itemId": "occurrence:%5B%22scope%3AC-700%22%2C%22contract_target%22%2C%22scope%3AC-700%3Acontract%3AC-700%22%2C%22relationship%3A%255B%2522C-700%2522%252C%2522EMITS%2522%252C%2522E-700%2522%255D%3A0%22%2C%22E-700%22%5D",
         "portId": "contract-in",
         "x": 387.748,
-        "y": 1075
+        "y": 1011
       },
       "route": {
         "style": "orthogonal",
         "points": [
           {
             "x": 232,
-            "y": 1075
+            "y": 1011
           },
           {
             "x": 387.748,
-            "y": 1075
+            "y": 1011
           }
         ]
       },
@@ -3418,7 +3428,7 @@
         "lineHeight": 14,
         "textStyleRole": "edge_label",
         "x": 288.439,
-        "y": 1041
+        "y": 977
       },
       "markers": {
         "end": "arrow"

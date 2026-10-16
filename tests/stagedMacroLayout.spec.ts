@@ -364,6 +364,117 @@ describe("staged macro-layout", () => {
     expect(result.positionedScene.root.width).toBe(240);
   });
 
+  it("fits packed rows without moving or resizing mixed-height cards or changing enclosure height", async () => {
+    const cards = Array.from({ length: 7 }, (_, index) => ({
+      ...buildCardNode(`card-${index}`, "chip"), fixedSize: { width: 100, height: index === 1 ? 90 : 48 }
+    }));
+    const section: SceneContainer = { ...buildRootScene({
+      strategy: "stack", direction: "vertical", sizing: "intrinsic", crossAlignment: "start",
+      pack: { eligibleItemIds: cards.map(card => card.id), gap: 16, widthSource: "widest_sibling" }
+    }, cards).root, id: "packed", ports: [{ id: "east", role: "test", side: "east", offsetPolicy: "center" }] };
+    const ordinary = { ...buildCardNode("ordinary", "standard"), fixedSize: { width: 400, height: 48 } };
+    const scene = buildRootScene({ strategy: "stack", direction: "vertical", crossAlignment: "start", sizing: "intrinsic", gap: 28 }, [section, ordinary]);
+    const before = await positionSceneBeforeRouting(measureScene(scene));
+    section.layout.pack!.fitContent = true;
+    const after = await positionSceneBeforeRouting(measureScene(scene));
+    const original = before.root.children[0], fitted = after.root.children[0];
+    if (original.kind !== "container" || fitted.kind !== "container") throw new Error("Missing packed section");
+    expect(original.width).toBe(400);
+    expect(fitted.width).toBe(364); // Three 100px cards, two 16px gutters, two 16px margins.
+    expect(fitted.children).toEqual(original.children);
+    expect(fitted.height).toBe(original.height);
+    expect(fitted.ports[0].x).toBe(fitted.width);
+    expect(fitted.children.map(card => [card.x - fitted.x, card.y - fitted.y])).toEqual([
+      [16, 16], [132, 16], [248, 16], [16, 122], [132, 122], [248, 122], [16, 186]
+    ]);
+    expect(after.diagnostics).toEqual([]);
+  });
+
+  it("uses its measured title before choosing rows without ordinary siblings", async () => {
+    const cards = Array.from({ length: 6 }, (_, index) => ({
+      ...buildCardNode(`title-card-${index}`, "chip"), fixedSize: { width: 100, height: 48 }
+    }));
+    const section: SceneContainer = { ...buildRootScene({
+      strategy: "stack", direction: "vertical", sizing: "intrinsic", crossAlignment: "start",
+      pack: { eligibleItemIds: cards.map(card => card.id), gap: 16, widthSource: "widest_sibling", fitContent: true }
+    }, cards).root, id: "title-packed", viewMetadata: { uiContracts: {
+      kind: "enclosure", title: "Referenced targets across all supported regions, including service contracts and notifications"
+    } } };
+    const scene = buildRootScene({ strategy: "stack", direction: "vertical", sizing: "intrinsic" }, [section]);
+    const measured = measureScene(scene);
+    const header = measured.root.children[0];
+    if (header.kind !== "container") throw new Error("Missing measured section");
+    const titleMinimum = Math.max(...header.headerContent.map(block => block.x + block.width + header.chrome.padding.right));
+    const result = await positionSceneBeforeRouting(measured);
+    const group = result.root.children[0];
+    if (group.kind !== "container") throw new Error("Missing packed section");
+    expect(titleMinimum).toBeGreaterThan(348); // Enough title space for at least three cards plus padding.
+    const available = group.width - 32;
+    const rowStarts = group.children.filter((card, index) => index === 0 || card.y !== group.children[index - 1].y);
+    expect(rowStarts.length).toBeLessThan(cards.length);
+    for (let index = 1; index < group.children.length; index++) {
+      const previous = group.children[index - 1], card = group.children[index];
+      if (card.y !== previous.y) expect(previous.x + previous.width - group.x - 16 + 16 + card.width).toBeGreaterThan(available);
+    }
+    expect(group.width).toBeCloseTo(titleMinimum, 3);
+    expect(result.diagnostics).toEqual([]);
+  });
+
+  it("keeps wrapping sections independent when either one's card or title minimum grows", async () => {
+    const makeSection = (id: string): SceneContainer => {
+      const cards = Array.from({ length: 4 }, (_, index) => ({
+        ...buildCardNode(`${id}-${index}`, "chip"), fixedSize: { width: 100, height: 48 }
+      }));
+      return { ...buildRootScene({ strategy: "stack", direction: "vertical", sizing: "intrinsic", crossAlignment: "start",
+        pack: { eligibleItemIds: cards.map(card => card.id), gap: 16, widthSource: "widest_sibling", fitContent: true }
+      }, cards).root, id, viewMetadata: { uiContracts: { kind: "enclosure", title: id } } };
+    };
+    const scene = buildRootScene({ strategy: "stack", direction: "vertical", sizing: "intrinsic", crossAlignment: "start", gap: 28 },
+      [makeSection("first"), makeSection("second")]);
+    const before = await positionSceneBeforeRouting(measureScene(scene));
+    const geometry = (item: PositionedItem) => {
+      if (item.kind !== "container") throw new Error("Missing section");
+      return { width: item.width, height: item.height, cards: item.children.map(card => ({
+        id: card.id, x: card.x - item.x, y: card.y - item.y, width: card.width, height: card.height
+      })) };
+    };
+    expect(before.root.children.map(item => item.width)).toEqual([132, 132]);
+    for (const changedIndex of [0, 1]) for (const minimum of ["card", "title"]) {
+      const changedScene = structuredClone(scene);
+      const changed = changedScene.root.children[changedIndex];
+      if (changed.kind !== "container") throw new Error("Missing section");
+      if (minimum === "card") {
+        const card = changed.children[0];
+        if (card.kind !== "node") throw new Error("Missing card");
+        card.fixedSize!.width = 500;
+      } else changed.viewMetadata!.uiContracts!.title = "A wide section title across supported regions and service contracts";
+      const after = await positionSceneBeforeRouting(measureScene(changedScene));
+      expect(after.root.children[changedIndex].width).toBeGreaterThan(before.root.children[changedIndex].width);
+      expect(geometry(after.root.children[1 - changedIndex])).toEqual(geometry(before.root.children[1 - changedIndex]));
+      expect(after.diagnostics).toEqual([]);
+    }
+  });
+
+  it("uses a nonpacking singleton enclosure as an ordinary width supplier", async () => {
+    const singleton: SceneContainer = { ...buildRootScene({ strategy: "stack", sizing: "intrinsic" },
+      [buildCardNode("single-component", "chip")]).root, id: "singleton",
+      viewMetadata: { uiContracts: { kind: "enclosure", title: "A singleton component with a wide section title across supported regions" } } };
+    const cards = [buildCardNode("target-a", "chip"), buildCardNode("target-b", "chip")];
+    const targets: SceneContainer = { ...buildRootScene({ strategy: "stack", sizing: "intrinsic",
+      pack: { eligibleItemIds: cards.map(card => card.id), gap: 16, widthSource: "widest_sibling", fitContent: true }
+    }, cards).root, id: "targets" };
+    const scene = buildRootScene({ strategy: "stack", direction: "vertical", sizing: "intrinsic", crossAlignment: "start" }, [singleton, targets]);
+    const result = await positionSceneBeforeRouting(measureScene(scene));
+    const group = result.root.children[1];
+    if (group.kind !== "container") throw new Error("Missing targets");
+    expect(group.children[0].y).toBe(group.children[1].y);
+    expect(group.width).toBe(240); // Two natural 96px chips plus gutter and margins.
+    const ordinary = result.root.children[0];
+    if (ordinary.kind !== "container") throw new Error("Missing singleton");
+    expect(ordinary.layout.pack).toBeUndefined();
+    expect(result.diagnostics).toEqual([]);
+  });
+
   it("lays out fixed-column grids in row-major order", async () => {
     const scene = buildRootScene(
       {
