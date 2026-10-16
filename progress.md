@@ -29,6 +29,14 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Fri 10-16
+
+- Horizontal layout detail for ui_contracts built
+
+## Thu 10-15
+
+- Planning horizontal layout detail for ui_contracts
+
 ## Wed 10-14
 
 - 2nd round improvements
