@@ -12,6 +12,7 @@
     "sdd-helper": "./dist/cli/helperMain.js"
   },
   "scripts": {
+    "prototype:routing": "pnpm run build && node src/renderer/staged/routing-prototype/capture.mjs",
     "build": "tsc -p tsconfig.json",
     "test": "pnpm run build && vitest run",
     "check": "pnpm run test",

@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UI Contracts · Routing prototype</title>
+<style>
+  :root { color-scheme: light; font-family: system-ui, sans-serif; color: #20302d; background: #f5f6f2; --accent: #216b57; --line: #dce1da; }
+  * { box-sizing: border-box; } body { margin: 0; } main { max-width: 1120px; margin: auto; padding: 34px 28px 70px; }
+  .eyebrow { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #5c6e65; font-weight: 700; }
+  h1 { font-size: clamp(26px, 3vw, 38px); letter-spacing: -.035em; font-weight: 650; margin: 9px 0 12px; }
+  h2 { font-size: 18px; margin: 0; } h3 { font-size: 14px; margin: 0 0 8px; } p { line-height: 1.6; margin: 8px 0; }
+  .intro { max-width: 840px; color: #55645d; font-size: 14px; } .small { font-size: 12px; color: #657169; }
+  button { cursor: pointer; color: inherit; background: white; border: 1px solid #ccd5cc; border-radius: 6px; padding: 8px 12px; font: inherit; font-size: 12px; }
+  button:hover { border-color: var(--accent); } button:focus-visible, summary:focus-visible, a:focus-visible { outline: 3px solid #93c2ae; outline-offset: 3px; }
+  button[aria-pressed="true"], button[aria-selected="true"] { background: #e7f1e9; border-color: var(--accent); color: #19503e; }
+  button:disabled { opacity: .4; cursor: default; } a { color: var(--accent); } .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .comparison { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 26px 0 16px; }
+  .case { text-align: left; padding: 16px; background: #fff; border-radius: 8px; }
+  .case strong { font-size: 15px; display: block; margin: 8px 0; } .case span { display: block; line-height: 1.5; }
+  .case .badge { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+  .panel { border: 1px solid var(--line); border-radius: 9px; background: white; overflow: hidden; }
+  .panel-head { display: flex; justify-content: space-between; align-items: center; gap: 15px; padding: 18px 20px; border-bottom: 1px solid var(--line); }
+  #description { max-width: 800px; font-size: 13px; color: #56685c; } .badge { color: var(--accent); } .bad { color: #a34432; }
+  .diagram { padding: 22px; min-height: 410px; overflow: auto; background: #fff; display: flex; align-items: center; }
+  .diagram > div { margin: auto; flex: none; } .diagram img, .diagram svg { display: block; max-width: none; }
+  .status { border-top: 1px solid var(--line); padding: 12px 20px; background: #f7faf6; font-size: 13px; line-height: 1.5; }
+  .status.bad { background: #fff5ef; } .numbers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line); border-top: 1px solid var(--line); }
+  .numbers div { padding: 13px 20px; background: #fafbf8; } .numbers strong { display: block; font-size: 17px; font-weight: 600; margin-top: 5px; }
+  .controls { border-top: 1px solid var(--line); padding: 16px 20px; display: grid; gap: 13px; } .control-label { width: 100px; font-size: 12px; font-weight: 600; }
+  .walkthrough { margin: 22px 0; padding: 20px; } .walk-tabs { margin: 14px 0; } .steps { display: flex; gap: 8px; flex-wrap: wrap; }
+  .step { text-align: left; min-width: 180px; flex: 1; } .step span { display: block; color: #637367; margin-bottom: 5px; font-size: 10px; letter-spacing: .08em; }
+  .note { font-size: 13px; padding: 14px 18px; border-left: 3px solid #8dac9c; background: #edf1e9; margin-top: 18px; line-height: 1.6; }
+  details { border-top: 1px solid var(--line); padding: 16px 20px; } summary { cursor: pointer; font-weight: 600; font-size: 13px; }
+  .scroll { overflow-x: auto; } table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 12px; text-align: left; }
+  th { color: #657467; font-weight: 600; } th, td { padding: 9px 10px; border-bottom: 1px solid #e5e9e2; vertical-align: top; line-height: 1.5; }
+  code { font-size: 11px; overflow-wrap: anywhere; } pre { overflow: auto; max-height: 340px; background: #f6f7f3; padding: 12px; font-size: 11px; white-space: pre-wrap; }
+  .diagnostics { font-size: 12px; line-height: 1.65; padding-left: 20px; } .full-context { overflow: auto; max-height: 680px; margin-top: 16px; background: white; }
+  footer { margin-top: 24px; font-size: 12px; color: #637367; line-height: 1.6; } .hidden { display: none !important; }
+  @media (max-width: 700px) { main { padding: 20px 14px; } .comparison { gap: 6px; } .case { padding: 10px; } .case strong { font-size: 13px; } .case .small { font-size: 11px; } .numbers { grid-template-columns: repeat(2, 1fr); } .panel-head { align-items: flex-start; } .control-label { width: 100%; } }
+</style>
+<main>
+  <div class="eyebrow">SDD renderer / throwaway experiment</div>
+  <h1>Three transitions. One routing decision.</h1>
+  <p class="intro">Can complete connectors, independently allocated attachment points, and measured routing space carry a forward transition, a return, and a self-loop together? Compare the captured failure with the real named diagram, then push the proposed routing model.</p>
+  <nav class="comparison" aria-label="Three routing cases">
+    <button class="case" data-panel="failure"><span class="badge bad">01 · Captured failure</span><strong>All three transitions</strong><span class="small">Production geometry · reduced proof region</span></button>
+    <button class="case" data-panel="diagram"><span class="badge">02 · Working comparison</span><strong>Named diagram DG-002</strong><span class="small">Actual output · the self-loop is excluded</span></button>
+    <button class="case" data-panel="candidate"><span class="badge">03 · Proposed solution</span><strong>Complete connectors</strong><span class="small">Same full inventory · live geometry validation</span></button>
+  </nav>
+  <section class="panel" aria-label="Current routing state">
+    <div class="panel-head"><div><h2 id="heading"></h2><p id="description"></p></div><div class="row"><button id="zoom">Zoom: 125%</button><button id="reset">Reset</button></div></div>
+    <div class="diagram" id="diagram" aria-label="Routing diagram"></div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+    <div class="numbers" id="numbers"></div>
+    <div class="controls" id="controls">
+      <div class="row"><span class="control-label">Transitions</span><button data-case="forward">Forward only</button><button data-case="pair">Forward + return</button><button data-case="mixed">All three</button><button data-case="forward-loop">Forward + loop</button><button data-case="loop">Loop alone</button></div>
+      <div class="row"><span class="control-label">Routing space</span><button data-capacity="measured">Measured room</button><button data-capacity="tight">Squeeze side lanes</button><button id="ports">Show attachments</button></div>
+      <div class="row"><span class="control-label">Break the model</span><button data-fault="shared-ports">Reuse attachment slots</button><button data-fault="wrong-attachment">Move only a route endpoint</button><button data-fault="none">Restore attachments</button></div>
+      <div class="small" id="state-summary"></div>
+    </div>
+    <div class="controls" id="production-controls"><div class="row"><span class="control-label">Production probes</span><button data-production="mixed">All three transitions</button><button data-production="pair">Remove the self-loop</button><button data-production="forward-loop">Remove the return</button><button data-production="loop">Isolate the self-loop</button></div><div class="small" id="production-state"></div></div>
+    <details id="inspector"><summary>Inspect relationships, attachments, geometry, and diagnostics</summary><div id="inspection"></div></details>
+    <details id="context"><summary>View the actual full DG-002 output</summary><p class="small">Full named diagram at natural scale. Pan in this area. The focused comparison above is a viewport crop of this exact output.</p><div class="row"><button id="download-diagram">Save DG-002 SVG</button></div><div class="full-context" id="full-context"></div></details>
+  </section>
+  <section class="panel walkthrough" aria-label="Guided walkthroughs">
+    <h2>Walk through the decision</h2>
+    <div class="row walk-tabs" role="tablist" aria-label="Walkthrough scenarios">
+      <button role="tab" data-tour="comparison">Compare the evidence</button><button role="tab" data-tour="compose">Add the awkward transition</button><button role="tab" data-tour="space">Run out of space</button><button role="tab" data-tour="honesty">Challenge the validator</button>
+    </div>
+    <p id="tour-description" class="small"></p><div class="steps" id="steps"></div>
+  </section>
+  <div class="note"><strong>Scope of the result.</strong> This is a proof for this two-state region and its nearby subsets. The proposed model uses the real measurements, keeps each relationship whole, and calls the shared validator without weakening its checks. It does not establish routing for arbitrary graphs, multiple loops, dense scopes, or a production migration. The current renderer is unchanged.</div>
+  <footer id="provenance"></footer>
+</main>
+<script>
+/* INLINE_MODEL */
+</script>
+<script>
+/* INLINE_EVIDENCE */
+</script>
+<script>
+const { initialState, reduce, runExperiment } = RoutingPrototype;
+let state = initialState(), zoom = 1.25, tour = 'comparison', step = -1, lastResult;
+const $ = id => document.getElementById(id);
+const escape = text => String(text ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const number = n => Math.round(n * 10) / 10;
+const coord = p => `${number(p.x)}, ${number(p.y)}`;
+const uri = svg => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+const semantic = id => DATA.seed.nodes.find(n => n.id === id)?.semanticId ?? id;
+const edgeName = id => {
+  const edge = DATA.seed.edges.find(e => id.startsWith(e.id));
+  return edge ? `${semantic(edge.from)} → ${semantic(edge.to)}` : id;
+};
+function shortMessage(message) {
+  let text = message;
+  for (const edge of DATA.seed.edges) text = text.replaceAll(edge.id, edgeName(edge.id));
+  for (const node of DATA.seed.nodes) text = text.replaceAll(node.id, node.semanticId);
+  return text;
+}
+const tours = {
+  comparison: { description: 'Start with the genuine error, inspect why DG-002 succeeds, then keep the missing transition in a new routing arrangement.',
+    steps: [['See the production failure', {type:'panel',value:'failure'}], ['See DG-002 without the loop', {type:'panel',value:'diagram'}], ['Route all three transitions', {type:'case',value:'mixed'}]] },
+  compose: { description: 'Build the same topology incrementally. The entire relationship inventory reserves ports up front, so adding the self-loop does not move the forward or return attachments.',
+    steps: [['Start with the forward edge', {type:'case',value:'forward'}], ['Add the return transition', {type:'case',value:'pair'}], ['Add the self-loop', {type:'case',value:'mixed'}]] },
+  space: { description: 'Shorten side lanes to 6px, below the marker clearance requirement. The validator must refuse that geometry. Restoring measured capacity rebuilds from the same layout baseline.',
+    steps: [['Start with all three', {type:'case',value:'mixed'}], ['Squeeze the side lanes', {type:'capacity',value:'tight'}], ['Restore measured capacity', {type:'capacity',value:'measured'}]] },
+  honesty: { description: 'Two negative controls: shared attachment slots produce overlapping segments; moving a drawn endpoint must fail against the independently resolved endpoint requirement.',
+    steps: [['Start with valid geometry', {type:'case',value:'mixed'}], ['Reuse the attachment slots', {type:'fault',value:'shared-ports'}], ['Corrupt one drawn endpoint', {type:'fault',value:'wrong-attachment'}], ['Restore valid attachments', {type:'fault',value:'none'}]] }
+};
+function candidateSvg(result) {
+  const { context, allocation, labels } = result;
+  const width = context.bounds.maxX, height = context.bounds.maxY;
+  const color = DATA.seed.edgeColor;
+  const paths = context.connectors.map(c => `<path d="${c.route.points.map((p,i) => `${i?'L':'M'}${p.x} ${p.y}`).join(' ')}" fill="none" stroke="${color}" stroke-width="${DATA.seed.strokeWidth}" stroke-linejoin="round" marker-end="url(#prototype-arrow)"/>`).join('');
+  const nodes = allocation.nodes.map(n => `<image x="${n.x}" y="${n.y}" width="${n.width}" height="${n.height}" href="${escape(uri(n.svg))}"/>`).join('');
+  const labelMarkup = labels.map(label => `<g><rect class="scene-edge-label__box" x="${label.x}" y="${label.y}" width="${label.width}" height="${label.height}" rx="${DATA.seed.labelRadius}"/><text class="scene-text text-role-edge_label block-kind-edge_label" dominant-baseline="middle">${label.lines.map((line,i) => `<tspan x="${label.x+DATA.seed.labelPadding}" y="${label.y+(label.height-label.lines.length*label.lineHeight)/2+label.lineHeight/2+i*label.lineHeight}">${escape(line)}</tspan>`).join('')}</text></g>`).join('');
+  const ports = state.ports ? context.connectors.flatMap(c => [c.source,c.target].map(e => `<circle cx="${e.point.x}" cy="${e.point.y}" r="3" fill="#fff" stroke="#216b57" stroke-width="1.5"><title>${escape(semantic(e.nodeId))} ${e.side}: ${coord(e.point)}</title></circle>`)).join('') : '';
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width*zoom}" height="${height*zoom}" viewBox="0 0 ${width} ${height}" role="img" aria-label="Proposed complete transition routes"><defs>${DATA.fontDefs}<marker id="prototype-arrow" markerWidth="${DATA.seed.arrowSize}" markerHeight="${DATA.seed.arrowSize}" refX="${DATA.seed.arrowSize-1}" refY="${DATA.seed.arrowSize/2}" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L${DATA.seed.arrowSize} ${DATA.seed.arrowSize/2} L0 ${DATA.seed.arrowSize} Z" fill="${color}"/></marker></defs>${paths}${nodes}${labelMarkup}${ports}</svg>`;
+}
+function captureImage(capture, alt) {
+  const width = Number(capture.svg.match(/<svg[^>]* width="([^"]+)"/)[1]);
+  return `<img alt="${escape(alt)}" src="${escape(uri(capture.svg))}" style="width:${width*zoom}px">`;
+}
+function render() {
+  const candidate = state.panel === 'candidate', named = state.panel === 'diagram';
+  const result = candidate ? runExperiment(DATA.seed, state) : undefined;
+  lastResult = result;
+  const capture = named ? DATA.captures.diagram : DATA.captures[state.productionTopology];
+  const relationships = candidate ? result.allocation.edges : capture.sequence.edges;
+  const diagnostics = candidate ? result.violations : capture.diagnostics;
+  const passed = candidate ? result.accepted : !diagnostics.some(d => d.severity === 'error');
+  const sceneEdges = candidate ? result.context.connectors.length : capture.sceneEdgeCount;
+  const segments = candidate ? result.segments : capture.geometry.reduce((n,e)=>n+e.route.points.length-1,0);
+  $('heading').textContent = candidate ? 'Complete transitions, allocated together' : named ? 'DG-002: a different relationship inventory' : state.productionTopology === 'mixed' ? 'The production failure, captured' : 'Production probe: change the relationship set';
+  $('description').textContent = candidate ? 'Return above the sequence; loop below its own state. Every route starts and ends on a real node. The shared validator runs after every change.' : named ? 'The named diagram includes the forward and return transitions. Its membership deliberately excludes the self-loop. This is a crop of the actual full output.' : 'The reduced region is built through the loaded bundle and current production pipeline. These are captured production routes. The CLI correctly blocks publication of the failing cases.';
+  $('diagram').innerHTML = `<div>${candidate ? candidateSvg(result) : captureImage(capture, named ? 'Actual DG-002 transition region' : 'Rejected production routing geometry')}</div>`;
+  $('status').className = `status ${passed?'':'bad'}`;
+  $('status').textContent = candidate ? (passed ? 'Accepted in this proof case · 0 route violations · 0 label collisions · complete route set certified by runRoutingLifecycle.' : `Rejected candidate · ${diagnostics.length} route violations · ${result.labelIssues.length} label issues. Geometry is shown for diagnosis; it is not certified.`) : named ? 'Clean production output · 0 renderer diagnostics. Two transitions are present; the self-loop is absent by diagram membership.' : passed ? 'Clean production probe · 0 renderer diagnostics for this reduced relationship set.' : `${diagnostics.length} production renderer diagnostics in this reduced reproduction. Diagnostic illustration only; inspect the findings below.`;
+  $('numbers').innerHTML = [['Relationships',relationships.length],['Scene edges / segments',`${sceneEdges} / ${segments}`],['Routing space',candidate ? `${result.allocation.sideRoom}px side lanes` : 'Production layout'],['Validation',passed?'Accepted':'Rejected']].map(([k,v])=>`<div><span class="small">${k}</span><strong>${v}</strong></div>`).join('');
+  $('controls').classList.toggle('hidden',!candidate);
+  $('production-controls').classList.toggle('hidden',state.panel!=='failure');
+  $('production-state').textContent = `Captured production state: ${state.productionTopology}; ${relationships.length} semantic transitions. Filtering is an in-memory probe after projection; the authored document is unchanged.`;
+  $('context').classList.toggle('hidden',!named);
+  $('state-summary').textContent = candidate ? `Current state: ${state.topology}; capacity ${state.capacity}; attachment fault ${state.fault}; attachment overlay ${state.ports?'on':'off'}. Port separation ${result.allocation.spacing}px; required terminal length ${result.allocation.terminal}px; canvas ${number(result.context.bounds.maxX)} × ${number(result.context.bounds.maxY)}px. All state is in memory.` : '';
+  document.querySelectorAll('[data-panel]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.panel===state.panel)));
+  document.querySelectorAll('[data-case]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.case===state.topology)));
+  document.querySelectorAll('[data-production]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.production===state.productionTopology)));
+  document.querySelectorAll('[data-capacity]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.capacity===state.capacity)));
+  document.querySelectorAll('[data-fault]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.fault===state.fault)));
+  $('ports').setAttribute('aria-pressed',String(state.ports));
+  $('zoom').textContent = `Zoom: ${zoom*100}%`;
+  renderInspector(relationships,diagnostics,candidate?result:capture,candidate);
+  renderTour();
+}
+function renderInspector(edges,diagnostics,result,candidate) {
+  const table = `<div class="scroll"><table><thead><tr><th>Semantic transition</th><th>Label from bundle presentation</th><th>Relationship identity</th></tr></thead><tbody>${edges.map(e=>`<tr><td>${escape(semantic(e.from))} → ${escape(semantic(e.to))}${e.from===e.to?' (self-loop)':''}</td><td>${escape(Array.isArray(e.label?.lines)?e.label.lines.join(' '):e.label)}</td><td><code>${escape(e.relationshipId)}</code></td></tr>`).join('')}</tbody></table></div>`;
+  let geometry;
+  if (candidate) geometry = `<p class="small">Attachments are allocated from node boxes and topology before candidate construction. Ports retain east departures / west arrivals. No sharing exemptions; crossings are forbidden. Label rectangles are blockers for every connector.</p><div class="scroll"><table><thead><tr><th>Connector</th><th>Required attachment → attachment</th><th>Actual route points</th></tr></thead><tbody>${result.context.connectors.map(c=>`<tr><td>${escape(edgeName(c.id))}</td><td>${c.source.side} (${coord(c.source.point)}) → ${c.target.side} (${coord(c.target.point)})</td><td><code>${c.route.points.map(coord).join(' → ')}</code></td></tr>`).join('')}</tbody></table></div><p class="small">Space allocation: ${result.allocation.sideRoom}px side lanes; ${number(result.allocation.gap)}px node gap; top track y=${result.allocation.upperTrack}; bottom track y=${result.allocation.lowerTrack}. Full-inventory slots stay fixed across subsets. ${result.trace ? `Coordinator: ${result.trace.validations} validation, ${result.trace.candidates} repair candidates, ${result.trace.expansionPasses} expansions. The prepared input is already valid.` : 'Coordinator certification withheld because the input fails validation.'}</p>`;
+  else geometry = `<p class="small">These are physical scene edges in the production output. Each return is split into five independently represented edges. Segment count also includes bends introduced during repair.</p><div class="scroll"><table><thead><tr><th>Physical scene edge</th><th>Actual route points</th></tr></thead><tbody>${result.geometry.map(e=>`<tr><td>${escape(shortMessage(e.id))}</td><td><code>${e.route.points.map(coord).join(' → ')}</code></td></tr>`).join('')}</tbody></table></div>`;
+  const list = diagnostics.length ? `<ul class="diagnostics">${diagnostics.map(d=>`<li><strong>${escape(d.kind??d.code.split('ui_contracts_').at(-1))}</strong>: ${escape(shortMessage(d.message))}</li>`).join('')}</ul>` : '<p class="small">No diagnostic findings.</p>';
+  $('inspection').innerHTML = `${table}${geometry}<h3>Diagnostics</h3>${list}<details><summary>Exact diagnostic payload</summary><pre>${escape(JSON.stringify(diagnostics,null,2))}</pre></details>`;
+}
+function renderTour() {
+  document.querySelectorAll('[data-tour]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.tour===tour)));
+  $('tour-description').textContent = tours[tour].description;
+  $('steps').innerHTML = tours[tour].steps.map(([label],i)=>`<button class="step" data-step="${i}" ${i>step+1?'disabled':''} aria-pressed="${step===i}"><span>STEP ${i+1}${i<step?' · DONE':''}</span>${escape(label)}</button>`).join('');
+}
+function dispatch(action) { state=reduce(state,action); render(); }
+document.addEventListener('click',event=>{
+  const button=event.target.closest('button'); if(!button)return;
+  if(button.dataset.panel) { step=-1; dispatch({type:'panel',value:button.dataset.panel}); }
+  else if(button.dataset.production) { step=-1; dispatch({type:'production-case',value:button.dataset.production}); }
+  else if(button.dataset.case) { step=-1; dispatch({type:'case',value:button.dataset.case}); }
+  else if(button.dataset.capacity) { step=-1; dispatch({type:'capacity',value:button.dataset.capacity}); }
+  else if(button.dataset.fault) { step=-1; dispatch({type:'fault',value:button.dataset.fault}); }
+  else if(button.dataset.tour) { tour=button.dataset.tour; step=-1; state=initialState(); render(); }
+  else if(button.dataset.step!==undefined) { step=Number(button.dataset.step); dispatch(tours[tour].steps[step][1]); }
+});
+$('reset').onclick=()=>{ step=-1; dispatch({type:'reset'}); };
+$('ports').onclick=()=>dispatch({type:'ports'});
+$('zoom').onclick=()=>{ zoom=zoom===1.25?1:zoom===1?1.5:1.25; render(); };
+$('context').addEventListener('toggle',()=>{ if($('context').open&&!$('full-context').hasChildNodes()) $('full-context').innerHTML=`<img alt="Complete DG-002 production output" src="${escape(uri(DATA.captures.diagram.fullSvg))}">`; });
+$('download-diagram').onclick=()=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([DATA.captures.diagram.fullSvg],{type:'image/svg+xml'})); a.download='DG-002-production.svg'; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),1000); };
+$('provenance').innerHTML=`Captured from <code>${escape(DATA.provenance.source)}</code> · bundle v0.2 · compact · type,id decorators.<br>Source SHA-256: <code>${DATA.provenance.sourceSha256}</code><br>Production baseline: <code>${DATA.provenance.baseCommit}</code>. Rebuild with <code>TMPDIR=/tmp pnpm prototype:routing</code>. Open this single HTML file offline; no server, account, or persistence required.`;
+render();
+</script>
+</html>
