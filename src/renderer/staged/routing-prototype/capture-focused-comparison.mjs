@@ -6,10 +6,21 @@ import { createHash } from 'node:crypto';
 import { allocateOrderedPortPair, orderedPortPairHasTraversal } from '../../../../dist/renderer/staged/routingCore/orderedPortPair.js';
 import { validateFinalRouteSet } from '../../../../dist/renderer/staged/routingCore/lifecycle.js';
 import { DEFAULT_ROUTING_POLICY } from '../../../../dist/renderer/staged/routingCore/contracts.js';
+import { readablePortPitch, readableRoutingClearance } from '../../../../dist/renderer/staged/routingCore/bounds.js';
+import { buildPortCorridorSeed } from '../../../../dist/renderer/staged/routingCore/candidates.js';
+import { compareRouteCosts, routeCost } from '../../../../dist/renderer/staged/routingCore/optimization.js';
+import { assessConnectorLabels, auditConnectorLabels } from '../../../../dist/renderer/staged/connectorLabelLayout.js';
+import { FIXED_LABEL_DISTANCE } from '../../../../dist/renderer/staged/connectorLabelPlacement.js';
+import { auditPositionedSceneMarkers, buildEndpointMarkerRoutingBlockers } from '../../../../dist/renderer/staged/markerAudit.js';
+import { auditIaPlaceMapFinalScene } from '../../../../dist/renderer/staged/iaPlaceMapRouting.js';
 import { arrowMarkerFootprintBox } from '../../../../dist/renderer/staged/markerGeometry.js';
 import { renderPositionedSceneToSvg } from '../../../../dist/renderer/staged/svgBackend.js';
 
 const dir = new URL('./', import.meta.url);
+const referencePath = 'docs/ia_place_map_hardening/manual_review_2_evidence/self-loop.compact';
+const referenceText = await readFile(new URL(`../../../../${referencePath}.json`, dir), 'utf8');
+const reference = JSON.parse(referenceText);
+const referenceSvg = await readFile(new URL(`../../../../${referencePath}.svg`, dir), 'utf8');
 const evidenceText = await readFile(new URL('evidence.json', dir), 'utf8');
 const evidence = JSON.parse(evidenceText);
 const namedSvg = await readFile(new URL('dg002.svg', dir), 'utf8');
@@ -24,36 +35,9 @@ const pairSnapshot = JSON.stringify(pairEdges);
 const loopSemantic = seed.edges.find(edge => edge.category === 'loop');
 const node = nodes.find(item => item.id === loopSemantic.from);
 const minimumLeg = Math.max(DEFAULT_ROUTING_POLICY.minTerminalLeg, seed.markerClearance);
-const gap = Math.max(DEFAULT_ROUTING_POLICY.minSeparation, seed.markerClearance);
-
-// The requested prototype constraint owns this south/negative trial. It is not
-// a new UI Contracts bundle convention. Allocate endpoints BEFORE route points.
-// Reserve label width between the legs, and marker/label clearance below the card.
-const allocation = allocateOrderedPortPair({
-  sideLength: node.width, minInset: minimumLeg,
-  minSeparation: loopSemantic.label.width + 2 * gap,
-  direction: 'negative', placement: 'nearest_feasible',
-  occupiedOffsets: [], otherArrivalOffsets: []
-});
-assert(allocation, 'The measured card cannot accommodate this local loop.');
+const pitch = readablePortPitch(seed.arrowSize, seed.strokeWidth);
+const clearance = readableRoutingClearance(seed.strokeWidth);
 const bottom = node.y + node.height;
-const source = { nodeId: node.id, side: 'south', minLeg: minimumLeg,
-  point: { x: node.x + allocation.departure, y: bottom } };
-const target = { nodeId: node.id, side: 'south', minLeg: minimumLeg,
-  point: { x: node.x + allocation.arrival, y: bottom } };
-const depth = loopSemantic.label.height + 2 * gap;
-const loop = {
-  id: loopSemantic.id, role: 'transition', classes: [], paintGroup: 'edges',
-  from: { itemId: node.id, portId: 'prototype-loop-departure', ...source.point },
-  to: { itemId: node.id, portId: 'prototype-loop-arrival', ...target.point },
-  route: { style: 'orthogonal', points: [
-    { ...source.point }, { x: source.point.x, y: bottom + depth },
-    { x: target.point.x, y: bottom + depth }, { ...target.point }
-  ] },
-  label: { ...structuredClone(loopSemantic.label),
-    x: (source.point.x + target.point.x - loopSemantic.label.width) / 2, y: bottom + gap },
-  markers: { end: 'arrow' }
-};
 
 // Join captured return fragments without changing any point. Endpoint contracts
 // come from measured node ports, independently of those route points.
@@ -73,21 +57,97 @@ function completeConnector(semantic, edges, priority) {
   return { id: semantic.id, priority, source: bind(fragments[0].from), target: bind(fragments.at(-1).to),
     route: { style: 'orthogonal', points } };
 }
-const connectors = captures.diagram.sequence.edges.map((edge, index) => completeConnector(edge, pairEdges, index));
-connectors.push({ id: loop.id, priority: connectors.length, source, target, route: loop.route });
-const labels = [...pairEdges, loop].filter(edge => edge.label).map(edge => ({ id: edge.id, ...edge.label }));
+const fixedConnectors = captures.diagram.sequence.edges.map((edge, index) => completeConnector(edge, pairEdges, index));
+const fixedEdges = fixedConnectors.map(connector => {
+  const fragments = pairEdges.filter(edge => edge.id === connector.id || edge.id.startsWith(`${connector.id}:return:`));
+  return { ...fragments[0], id: connector.id, to: fragments.at(-1).to, route: connector.route,
+    markers: fragments.at(-1).markers, label: fragments.find(edge => edge.label)?.label };
+});
 const box = ({ id, x, y, width, height }) => ({ id, x, y, width, height });
-const bounds = { minX: nodes[0].x - 34, minY: nodes[0].y - 149.5,
-  maxX: node.x + node.width + 34, maxY: bottom + depth + 24 };
-const context = { connectors, boxes: nodes.map(box),
-  blockers: labels.map(label => ({ ...box(label), id: `label:${label.id}`, clearance: seed.strokeWidth / 2 })),
-  bounds, policy: { ...DEFAULT_ROUTING_POLICY, crossingTreatment: 'forbid' } };
-const violations = validateFinalRouteSet(context);
-assert.deepEqual(violations, [], 'Stop: adding the local loop conflicts with the fixed working pair.');
+const owner = find(named.root, 'scope:P-360005333058');
+const baseBounds = { minX: owner.x, minY: nodes[0].y - 149.5,
+  maxX: owner.x + owner.width, maxY: owner.y + owner.height };
+const searchBudget = { candidates: 4096 };
+
+// These two prototype trials implement the user's requested comparison, not a
+// production UI Contracts policy. Both start from the same frozen geometry.
+// Shared pitch and clearance determine the loop; its label sits OUTSIDE it.
+function assessSide(side, preference) {
+  const occupied = fixedConnectors.flatMap(connector => [connector.source, connector.target])
+    .filter(endpoint => endpoint.nodeId === node.id && endpoint.side === side);
+  const arrivals = fixedConnectors.map(connector => connector.target)
+    .filter(endpoint => endpoint.nodeId === node.id && endpoint.side === side);
+  const allocation = allocateOrderedPortPair({ sideLength: node.width, minInset: minimumLeg,
+    minSeparation: pitch, direction: 'negative',
+    placement: side === 'south' ? 'before_other_arrivals' : 'nearest_feasible',
+    occupiedOffsets: occupied.map(endpoint => endpoint.point.x - node.x),
+    otherArrivalOffsets: arrivals.map(endpoint => endpoint.point.x - node.x) });
+  if (!allocation) return { side, accepted: false, reason: 'No reserved port capacity' };
+  const y = side === 'south' ? bottom : node.y;
+  const source = { nodeId: node.id, side, minLeg: minimumLeg,
+    point: { x: node.x + allocation.departure, y } };
+  const target = { nodeId: node.id, side, minLeg: minimumLeg,
+    point: { x: node.x + allocation.arrival, y } };
+  const connector = { id: loopSemantic.id, priority: fixedConnectors.length, source, target,
+    route: { style: 'orthogonal', points: [] } };
+  connector.route = buildPortCorridorSeed(connector, clearance);
+  assert(connector.route);
+  const rail = connector.route.points[1].y;
+  const label = { ...structuredClone(loopSemantic.label),
+    x: (source.point.x + target.point.x - loopSemantic.label.width) / 2,
+    y: side === 'south' ? rail + FIXED_LABEL_DISTANCE : rail - FIXED_LABEL_DISTANCE - loopSemantic.label.height };
+  const loop = { id: connector.id, role: 'transition', classes: [], paintGroup: 'edges',
+    from: { itemId: node.id, portId: `prototype-loop-${side}-departure`, ...source.point },
+    to: { itemId: node.id, portId: `prototype-loop-${side}-arrival`, ...target.point },
+    route: connector.route, label, markers: { end: 'arrow' } };
+  // Record the exterior capacity demand, rather than hiding it in a larger crop.
+  // Only the trial's outward side can grow; cards and fixed routes never move.
+  const bounds = { ...baseBounds,
+    minY: side === 'north' ? Math.min(baseBounds.minY, label.y - clearance) : baseBounds.minY,
+    maxY: side === 'south' ? Math.max(baseBounds.maxY, label.y + label.height + clearance) : baseBounds.maxY };
+  const scene = { ...failure, diagnostics: [], decorations: [], edges: [...fixedEdges, loop],
+    root: { ...failure.root, x: bounds.minX, y: bounds.minY,
+      width: bounds.maxX - bounds.minX, height: bounds.maxY - bounds.minY, children: nodes } };
+  const input = { scene, expectedLabels: new Map(scene.edges.filter(edge => edge.label).map(edge => [edge.id, edge.label])),
+    searchConnectorIds: new Set([loop.id]), rejectAmbiguousAssociation: true,
+    requireAdjacentLabels: true, eventBasedHorizontalSearch: true,
+    unrelatedRouteClearance: clearance, searchBudget };
+  const placement = assessConnectorLabels(input);
+  loop.label = placement.labels.get(loop.id);
+  const labelProblems = auditConnectorLabels(input).problems;
+  const connectors = [...fixedConnectors, connector];
+  const labels = scene.edges.filter(edge => edge.label).map(edge => ({ id: edge.id, ...edge.label }));
+  const context = { connectors, boxes: nodes.map(box),
+    blockers: [...labels.map(label => ({ ...box(label), id: `label:${label.id}`, clearance: seed.strokeWidth / 2 })),
+      ...buildEndpointMarkerRoutingBlockers(connectors, new Map(scene.edges.map(edge => [edge.id, edge.markers])), seed.arrowSize, seed.strokeWidth)],
+    bounds, policy: { ...DEFAULT_ROUTING_POLICY, crossingTreatment: 'forbid' } };
+  const violations = validateFinalRouteSet(context);
+  const markerProblems = auditPositionedSceneMarkers(scene, { unrelatedRouteClearance: clearance });
+  const enlargement = bounds.maxY - baseBounds.maxY + baseBounds.minY - bounds.minY;
+  const [crossings, bends, length] = routeCost(connectors);
+  return { side, allocation, source, target, loop, context, labels, bounds, enlargement,
+    violations, labelProblems, markerProblems,
+    accepted: !violations.length && !labelProblems.length && !markerProblems.length,
+    cost: [crossings, bends, enlargement, preference, length] };
+}
+const trials = ['south', 'north'].map(assessSide);
+const chosen = trials.filter(trial => trial.accepted).sort((a, b) => compareRouteCosts(a.cost, b.cost))[0];
+assert(chosen, 'Stop: neither compact side trial passes with the captured working pair fixed.');
+const { allocation, source, target, loop, context, labels, bounds, violations } = chosen;
+const { connectors } = context;
+const depth = Math.abs(loop.route.points[1].y - source.point.y);
+assert.equal(allocation.departure - allocation.arrival, pitch);
+assert.equal(depth, clearance);
+const referencePoints = reference.edges.find(edge => edge.from.itemId === edge.to.itemId).route.points;
+assert.equal(referencePoints[0].x - referencePoints.at(-1).x, pitch);
+assert.equal(Math.abs(referencePoints[0].y - referencePoints[1].y), depth);
+const referenceFindings = auditIaPlaceMapFinalScene(reference);
+assert.deepEqual(referenceFindings, []);
 assert(orderedPortPairHasTraversal(source.point.x, target.point.x, 'negative'));
 assert(orderedPortPairHasTraversal(loop.route.points[1].x, loop.route.points[2].x, 'negative'));
-assert.equal(source.point.y, bottom);
-assert.equal(target.point.y, bottom);
+assert.equal(source.side, target.side);
+assert.equal(source.point.y, chosen.side === 'south' ? bottom : node.y);
+assert.equal(target.point.y, source.point.y);
 assert(source.point.x < node.x + node.width && target.point.x > node.x);
 assert.equal(JSON.stringify(pairEdges), pairSnapshot);
 assert.equal(connectors.length, 3);
@@ -158,7 +218,7 @@ for (let index = 0; index < nodes.length; index++) {
   assert.equal(nodes[index].height, failedNodes[index].height);
 }
 const width = bounds.maxX - bounds.minX;
-const proposedHeight = bounds.maxY - bounds.minY;
+const proposedHeight = bounds.maxY - baseBounds.minY;
 const classes = namedSvg.match(/<svg[^>]* class="([^"]+)"/)[1];
 function panelSvg(id, content, defsSvg, height, translate = '') {
   const defs = defsSvg.match(/<defs>([\s\S]*?)<\/defs>/)[1];
@@ -179,8 +239,8 @@ const panels = [
     status: `Actual DG-002 output: ${captures.diagram.diagnostics.length} diagnostics.`,
     svg: panelSvg('working', pairContent, namedSvg, 227, `${dx} ${dy}`) },
   { id: 'proposed', title: 'Proposed solution — all three transitions',
-    caption: 'The self-loop leaves and returns on the same bottom edge, travelling right to left.',
-    status: `Geometry passed: ${violations.length} route violations; ${clearanceIssues.length} label/marker conflicts. Forward/back pair unchanged.`,
+    caption: `Compact backward loop on the ${chosen.side === 'south' ? 'bottom' : 'top'} edge, with its full label outside.`,
+    status: `Routes, labels and markers pass. Forward/back pair unchanged.`,
     svg: panelSvg('proposed', pairContent + '\n' + loopContent, namedSvg, proposedHeight, `${dx} ${dy}`) }
 ];
 const html = `<!doctype html>
@@ -208,18 +268,24 @@ assert.equal((html.match(/<svg\b/g) ?? []).length, 3);
 assert(!/<script\b|<button\b|<input\b/.test(html));
 const sha256 = text => createHash('sha256').update(text).digest('hex');
 const report = {
-  question: 'Can a local south-edge backward loop coexist with the actual working DG-002 pair without moving it?',
-  verdict: 'Yes for this captured two-state case; production routing and other graphs are unproven.',
+  question: 'Can the existing compact-loop construction coexist with the fixed working DG-002 pair?',
+  verdict: 'Compact loop accepted for this captured region. Full-sheet capacity/reflow and arbitrary graphs are not established.',
   sources: { captures: { path: 'evidence.json', sha256: sha256(evidenceText) },
+    visualReference: { path: `${referencePath}.svg`, sha256: sha256(referenceSvg),
+      positionedSceneSha256: sha256(referenceText), connectorCount: reference.edges.length, findings: referenceFindings },
     namedSvg: { path: 'dg002.svg', sha256: sha256(namedSvg) }, document: evidence.provenance.source,
     documentSha256: evidence.provenance.sourceSha256 },
-  allocation, depth, gap, context, labels, markerBoxes,
+  allocation, depth, pitch, clearance, selectedSide: chosen.side, enlargement: chosen.enlargement,
+  trials: trials.map(({ side, allocation, enlargement, cost, accepted, violations, labelProblems, markerProblems }) =>
+    ({ side, allocation, enlargement, cost, accepted, violations, labelProblems, markerProblems })),
+  context, labels, markerBoxes,
   validation: { completeRouteViolations: violations, labelMarkerConflicts: clearanceIssues,
-    sameSouthSide: true, negativeTraversal: true, pairUnchanged: true, cardDimensionsUnchanged: true },
+    labelAssociationProblems: chosen.labelProblems, markerProblems: chosen.markerProblems,
+    sameSide: true, negativeTraversal: true, pairUnchanged: true, cardDimensionsUnchanged: true },
   crop: { translation: { dx, dy }, width, heights: [243, 227, proposedHeight], unitsPerPixel: 1 },
   artifactSha256: sha256(html)
 };
 await writeFile(new URL('focused-comparison-prototype.html', dir), html);
 await writeFile(new URL('focused-comparison-evidence.json', dir), JSON.stringify(report, null, 2) + '\n');
 console.log(JSON.stringify({ output: 'focused-comparison-prototype.html', allocation, depth,
-  validation: report.validation, width, proposedHeight }, null, 2));
+  selectedSide: chosen.side, trials: report.trials, validation: report.validation, width, proposedHeight }, null, 2));

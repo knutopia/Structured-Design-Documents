@@ -1,10 +1,17 @@
 {
-  "question": "Can a local south-edge backward loop coexist with the actual working DG-002 pair without moving it?",
-  "verdict": "Yes for this captured two-state case; production routing and other graphs are unproven.",
+  "question": "Can the existing compact-loop construction coexist with the fixed working DG-002 pair?",
+  "verdict": "Compact loop accepted for this captured region. Full-sheet capacity/reflow and arbitrary graphs are not established.",
   "sources": {
     "captures": {
       "path": "evidence.json",
       "sha256": "2585f163e75275536713e39d25523ecb4d04711e286f0d3359c55dafba164061"
+    },
+    "visualReference": {
+      "path": "docs/ia_place_map_hardening/manual_review_2_evidence/self-loop.compact.svg",
+      "sha256": "9b6e0fab213499ae6eddb92e09c65a3fddcf7e166ed22caae2e7921bc21d2567",
+      "positionedSceneSha256": "14d5c1dd44c9c7a13af4d8fbe4c018d845da26913e006c74de251b26b67a6ea8",
+      "connectorCount": 5,
+      "findings": []
     },
     "namedSvg": {
       "path": "dg002.svg",
@@ -14,11 +21,80 @@
     "documentSha256": "2403cb8aa57b17e54af5e68fe3e908fc3a98d0a9cf84c2098396370f12ae3bf7"
   },
   "allocation": {
-    "departure": 201.872,
-    "arrival": 22.128
+    "departure": 123.5,
+    "arrival": 100.5
   },
-  "depth": 82,
-  "gap": 16,
+  "depth": 17,
+  "pitch": 23,
+  "clearance": 17,
+  "selectedSide": "south",
+  "enlargement": 80,
+  "trials": [
+    {
+      "side": "south",
+      "allocation": {
+        "departure": 123.5,
+        "arrival": 100.5
+      },
+      "enlargement": 80,
+      "cost": [
+        0,
+        6,
+        80,
+        0,
+        1138.8
+      ],
+      "accepted": true,
+      "violations": [],
+      "labelProblems": [],
+      "markerProblems": []
+    },
+    {
+      "side": "north",
+      "allocation": {
+        "departure": 123.5,
+        "arrival": 100.5
+      },
+      "enlargement": 0,
+      "cost": [
+        0,
+        6,
+        0,
+        1,
+        1138.8
+      ],
+      "accepted": false,
+      "violations": [
+        {
+          "kind": "node_intersection",
+          "message": "Connector \"scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0\" segment 2 intersects non-endpoint box \"label:scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0\".",
+          "connectorIds": [
+            "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0"
+          ],
+          "segmentIds": [
+            "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0\u0000validation\u0000run-2"
+          ],
+          "routeSegmentIndexes": [
+            2
+          ],
+          "boxId": "label:scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0"
+        }
+      ],
+      "labelProblems": [
+        {
+          "connectorId": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "kind": "ambiguous",
+          "obstacleId": "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0"
+        },
+        {
+          "connectorId": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "kind": "connector",
+          "obstacleId": "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0"
+        }
+      ],
+      "markerProblems": []
+    }
+  ],
   "context": {
     "connectors": [
       {
@@ -115,7 +191,7 @@
           "side": "south",
           "minLeg": 12,
           "point": {
-            "x": 674.7719999999999,
+            "x": 596.4,
             "y": 5853
           }
         },
@@ -124,7 +200,7 @@
           "side": "south",
           "minLeg": 12,
           "point": {
-            "x": 495.02799999999996,
+            "x": 573.4,
             "y": 5853
           }
         },
@@ -132,19 +208,19 @@
           "style": "orthogonal",
           "points": [
             {
-              "x": 674.7719999999999,
+              "x": 596.4,
               "y": 5853
             },
             {
-              "x": 674.7719999999999,
-              "y": 5935
+              "x": 596.4,
+              "y": 5870
             },
             {
-              "x": 495.02799999999996,
-              "y": 5935
+              "x": 573.4,
+              "y": 5870
             },
             {
-              "x": 495.02799999999996,
+              "x": 573.4,
               "y": 5853
             }
           ]
@@ -177,7 +253,7 @@
         "clearance": 1
       },
       {
-        "id": "label:scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0:return:2",
+        "id": "label:scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0",
         "x": 282.544,
         "y": 5696.5,
         "width": 181.812,
@@ -187,17 +263,53 @@
       {
         "id": "label:scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
         "x": 511.02799999999996,
-        "y": 5869,
+        "y": 5882,
         "width": 147.744,
         "height": 50,
         "clearance": 1
+      },
+      {
+        "x": 462.9,
+        "y": 5820.5,
+        "width": 12,
+        "height": 12,
+        "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-30a4fe25230ac73d1786ede6bc65d3773d981c9bceb4c791d267b91c6aeed023-0:end:marker",
+        "clearance": 1.5,
+        "appliesToConnectorIds": [
+          "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0",
+          "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0"
+        ]
+      },
+      {
+        "x": 40,
+        "y": 5820.5,
+        "width": 12,
+        "height": 12,
+        "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0:end:marker",
+        "clearance": 1.5,
+        "appliesToConnectorIds": [
+          "scope:P-360005333058:sequence:primary:relationship:source-edge-30a4fe25230ac73d1786ede6bc65d3773d981c9bceb4c791d267b91c6aeed023-0",
+          "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0"
+        ]
+      },
+      {
+        "x": 567.4,
+        "y": 5851,
+        "width": 12,
+        "height": 12,
+        "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0:end:marker",
+        "clearance": 1.5,
+        "appliesToConnectorIds": [
+          "scope:P-360005333058:sequence:primary:relationship:source-edge-30a4fe25230ac73d1786ede6bc65d3773d981c9bceb4c791d267b91c6aeed023-0",
+          "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0"
+        ]
       }
     ],
     "bounds": {
       "minX": 16,
       "minY": 5650.5,
       "maxX": 730.9,
-      "maxY": 5959
+      "maxY": 5949
     },
     "policy": {
       "minSeparation": 16,
@@ -222,7 +334,7 @@
       "y": 5778.5
     },
     {
-      "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0:return:2",
+      "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0",
       "lines": [
         "[ClearAllOrDeselectLastLabel]",
         "{selectedLabels is empty}"
@@ -246,7 +358,7 @@
       "lineHeight": 14,
       "textStyleRole": "edge_label",
       "x": 511.02799999999996,
-      "y": 5869
+      "y": 5882
     }
   ],
   "markerBoxes": [
@@ -266,7 +378,7 @@
     },
     {
       "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
-      "x": 489.02799999999996,
+      "x": 567.4,
       "y": 5851,
       "width": 12,
       "height": 12
@@ -275,7 +387,9 @@
   "validation": {
     "completeRouteViolations": [],
     "labelMarkerConflicts": [],
-    "sameSouthSide": true,
+    "labelAssociationProblems": [],
+    "markerProblems": [],
+    "sameSide": true,
     "negativeTraversal": true,
     "pairUnchanged": true,
     "cardDimensionsUnchanged": true
@@ -289,9 +403,9 @@
     "heights": [
       243,
       227,
-      308.5
+      298.5
     ],
     "unitsPerPixel": 1
   },
-  "artifactSha256": "62dc6e4dc73f7fd01398eef56381ddbb67ae2ecbf02e8372d67895f7f0388227"
+  "artifactSha256": "3b79c13897e4e06e1462beed96acb4d3593e3c8dbbe5c33eb0ab82bf337eeba1"
 }
