@@ -1,0 +1,297 @@
+{
+  "question": "Can a local south-edge backward loop coexist with the actual working DG-002 pair without moving it?",
+  "verdict": "Yes for this captured two-state case; production routing and other graphs are unproven.",
+  "sources": {
+    "captures": {
+      "path": "evidence.json",
+      "sha256": "2585f163e75275536713e39d25523ecb4d04711e286f0d3359c55dafba164061"
+    },
+    "namedSvg": {
+      "path": "dg002.svg",
+      "sha256": "a08efd7df26bc6d44e85c91a55e94cdd32b366c3bd8844b0a0fc12550c8da76d"
+    },
+    "document": "aeb_help_center_de_astra.sdd",
+    "documentSha256": "2403cb8aa57b17e54af5e68fe3e908fc3a98d0a9cf84c2098396370f12ae3bf7"
+  },
+  "allocation": {
+    "departure": 201.872,
+    "arrival": 22.128
+  },
+  "depth": 82,
+  "gap": 16,
+  "context": {
+    "connectors": [
+      {
+        "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-30a4fe25230ac73d1786ede6bc65d3773d981c9bceb4c791d267b91c6aeed023-0",
+        "priority": 0,
+        "source": {
+          "nodeId": "occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D",
+          "side": "east",
+          "minLeg": 12,
+          "point": {
+            "x": 274,
+            "y": 5826.5
+          }
+        },
+        "target": {
+          "nodeId": "occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D",
+          "side": "west",
+          "minLeg": 12,
+          "point": {
+            "x": 472.9,
+            "y": 5826.5
+          }
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 274,
+              "y": 5826.5
+            },
+            {
+              "x": 472.9,
+              "y": 5826.5
+            }
+          ]
+        }
+      },
+      {
+        "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0",
+        "priority": 1,
+        "source": {
+          "nodeId": "occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D",
+          "side": "east",
+          "minLeg": 12,
+          "point": {
+            "x": 696.9,
+            "y": 5826.5
+          }
+        },
+        "target": {
+          "nodeId": "occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D",
+          "side": "west",
+          "minLeg": 12,
+          "point": {
+            "x": 50,
+            "y": 5826.5
+          }
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 696.9,
+              "y": 5826.5
+            },
+            {
+              "x": 714.9,
+              "y": 5826.5
+            },
+            {
+              "x": 714.9,
+              "y": 5744.5
+            },
+            {
+              "x": 32,
+              "y": 5744.5
+            },
+            {
+              "x": 32,
+              "y": 5826.5
+            },
+            {
+              "x": 50,
+              "y": 5826.5
+            }
+          ]
+        }
+      },
+      {
+        "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+        "priority": 2,
+        "source": {
+          "nodeId": "occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D",
+          "side": "south",
+          "minLeg": 12,
+          "point": {
+            "x": 674.7719999999999,
+            "y": 5853
+          }
+        },
+        "target": {
+          "nodeId": "occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D",
+          "side": "south",
+          "minLeg": 12,
+          "point": {
+            "x": 495.02799999999996,
+            "y": 5853
+          }
+        },
+        "route": {
+          "style": "orthogonal",
+          "points": [
+            {
+              "x": 674.7719999999999,
+              "y": 5853
+            },
+            {
+              "x": 674.7719999999999,
+              "y": 5935
+            },
+            {
+              "x": 495.02799999999996,
+              "y": 5935
+            },
+            {
+              "x": 495.02799999999996,
+              "y": 5853
+            }
+          ]
+        }
+      }
+    ],
+    "boxes": [
+      {
+        "id": "occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D",
+        "x": 50,
+        "y": 5800,
+        "width": 224,
+        "height": 53
+      },
+      {
+        "id": "occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D",
+        "x": 472.9,
+        "y": 5800,
+        "width": 224,
+        "height": 53
+      }
+    ],
+    "blockers": [
+      {
+        "id": "label:scope:P-360005333058:sequence:primary:relationship:source-edge-30a4fe25230ac73d1786ede6bc65d3773d981c9bceb4c791d267b91c6aeed023-0",
+        "x": 286,
+        "y": 5778.5,
+        "width": 174.9,
+        "height": 36,
+        "clearance": 1
+      },
+      {
+        "id": "label:scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0:return:2",
+        "x": 282.544,
+        "y": 5696.5,
+        "width": 181.812,
+        "height": 36,
+        "clearance": 1
+      },
+      {
+        "id": "label:scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+        "x": 511.02799999999996,
+        "y": 5869,
+        "width": 147.744,
+        "height": 50,
+        "clearance": 1
+      }
+    ],
+    "bounds": {
+      "minX": 16,
+      "minY": 5650.5,
+      "maxX": 730.9,
+      "maxY": 5959
+    },
+    "policy": {
+      "minSeparation": 16,
+      "epsilon": 0.5,
+      "minTerminalLeg": 12,
+      "maxExpansionPasses": 4,
+      "crossingTreatment": "forbid"
+    }
+  },
+  "labels": [
+    {
+      "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-30a4fe25230ac73d1786ede6bc65d3773d981c9bceb4c791d267b91c6aeed023-0",
+      "lines": [
+        "[SelectProductLabel]",
+        "{selectedLabels is not empty}"
+      ],
+      "width": 174.9,
+      "height": 36,
+      "lineHeight": 14,
+      "textStyleRole": "edge_label",
+      "x": 286,
+      "y": 5778.5
+    },
+    {
+      "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0:return:2",
+      "lines": [
+        "[ClearAllOrDeselectLastLabel]",
+        "{selectedLabels is empty}"
+      ],
+      "width": 181.812,
+      "height": 36,
+      "lineHeight": 14,
+      "textStyleRole": "edge_label",
+      "x": 282.544,
+      "y": 5696.5
+    },
+    {
+      "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+      "lines": [
+        "[ChangeProductLabels]",
+        "{selectedLabels remains",
+        "nonempty}"
+      ],
+      "width": 147.744,
+      "height": 50,
+      "lineHeight": 14,
+      "textStyleRole": "edge_label",
+      "x": 511.02799999999996,
+      "y": 5869
+    }
+  ],
+  "markerBoxes": [
+    {
+      "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-30a4fe25230ac73d1786ede6bc65d3773d981c9bceb4c791d267b91c6aeed023-0",
+      "x": 462.9,
+      "y": 5820.5,
+      "width": 12,
+      "height": 12
+    },
+    {
+      "id": "scope:P-360005333058:sequence:primary:relationship:source-edge-db9fc94be9b3f3c02ff880eef65d6215b0193d7d7b51ee55a5c2863c17134df7-0",
+      "x": 40,
+      "y": 5820.5,
+      "width": 12,
+      "height": 12
+    },
+    {
+      "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+      "x": 489.02799999999996,
+      "y": 5851,
+      "width": 12,
+      "height": 12
+    }
+  ],
+  "validation": {
+    "completeRouteViolations": [],
+    "labelMarkerConflicts": [],
+    "sameSouthSide": true,
+    "negativeTraversal": true,
+    "pairUnchanged": true,
+    "cardDimensionsUnchanged": true
+  },
+  "crop": {
+    "translation": {
+      "dx": -16,
+      "dy": -5650.5
+    },
+    "width": 714.9,
+    "heights": [
+      243,
+      227,
+      308.5
+    ],
+    "unitsPerPixel": 1
+  },
+  "artifactSha256": "62dc6e4dc73f7fd01398eef56381ddbb67ae2ecbf02e8372d67895f7f0388227"
+}
