@@ -12,6 +12,8 @@ The geometry producer is deliberately limited: a horizontal sequence with forwar
 
 The preserved first capture is commit `f774d5bcb4213941e14d168724985b7e72a7cd68` on `codex/prototype-ui-contracts-routing`, based on production `4ae2de20621dcf0027f31414f59ca9255a54dc77`. The second capture is a later commit on that same throwaway branch. No implementation issue was identified or created.
 
+User correction after the second capture: self-loops must travel backward to the left. The experimental policy now requests negative traversal from the shared ordered-pair allocator: departure is the right attachment and arrival is the left attachment, on both lower and upper sides. The generated polylines follow those independently allocated endpoints. Earlier commits and production comparison captures remain historical evidence.
+
 ## Authority and acceptance invariants
 
 The [captured proposal and experiment brief](allocation-evidence/experiment-brief.md) is context for this experiment, not authority to implement its proposed production migration. These invariants were selected before implementation:

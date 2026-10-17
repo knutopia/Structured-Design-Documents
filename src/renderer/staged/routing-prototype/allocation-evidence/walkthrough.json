@@ -1,5 +1,5 @@
 {
-  "artifactSha256": "3b09a2bfb85edbcb8d6db0bb0811d2c16bc8d63f28194df04d5af57ebaff209f",
+  "artifactSha256": "4fec481682e9274919f02bdd559af5e1eca9d75ef921c9230b72e828ff05ffe1",
   "browser": "Local Chromium 1224 / Playwright; file:// with offline context",
   "errors": [],
   "externalRequests": [],
@@ -34,7 +34,17 @@
         "repeatedStates": 0
       },
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 671.5,
+          "arrivalX": 648.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "crowded-initial-deficit",
@@ -60,7 +70,8 @@
       "labelFindings": 12,
       "trace": null,
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": []
     },
     {
       "name": "crowded-verdict",
@@ -92,7 +103,25 @@
         "repeatedStates": 0
       },
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 657.372,
+          "arrivalX": 634.372,
+          "horizontalDeltas": [
+            -23
+          ]
+        },
+        {
+          "id": "second-loop",
+          "departureX": 799.436,
+          "arrivalX": 776.436,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "expansion-initial-deficit",
@@ -118,7 +147,17 @@
       "labelFindings": 11,
       "trace": null,
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 439.5,
+          "arrivalX": 416.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "expansion-verdict",
@@ -150,7 +189,17 @@
         "repeatedStates": 0
       },
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 634.4,
+          "arrivalX": 611.4,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "north-initial-deficit",
@@ -176,7 +225,17 @@
       "labelFindings": 1,
       "trace": null,
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 671.5,
+          "arrivalX": 648.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "north-verdict",
@@ -208,7 +267,17 @@
         "repeatedStates": 0
       },
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 671.5,
+          "arrivalX": 648.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "branch-verdict",
@@ -244,7 +313,8 @@
         "repeatedStates": 0
       },
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": []
     },
     {
       "name": "repair-verdict",
@@ -276,7 +346,17 @@
         "repeatedStates": 0
       },
       "routesChanged": true,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 671.5,
+          "arrivalX": 648.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "labels-verdict",
@@ -308,7 +388,17 @@
         "repeatedStates": 0
       },
       "routesChanged": false,
-      "labelsChanged": true
+      "labelsChanged": true,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 671.5,
+          "arrivalX": 648.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "exhaustion-verdict",
@@ -340,7 +430,25 @@
         "repeatedStates": 4817
       },
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 657.372,
+          "arrivalX": 634.372,
+          "horizontalDeltas": [
+            -23
+          ]
+        },
+        {
+          "id": "second-loop",
+          "departureX": 799.436,
+          "arrivalX": 776.436,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "repeated-initial-deficit",
@@ -366,7 +474,17 @@
       "labelFindings": 11,
       "trace": null,
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 439.5,
+          "arrivalX": 416.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "repeated-verdict",
@@ -392,7 +510,17 @@
       "labelFindings": 11,
       "trace": null,
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 439.5,
+          "arrivalX": 416.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "endpoint-verdict",
@@ -418,7 +546,17 @@
       "labelFindings": 0,
       "trace": null,
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 671.5,
+          "arrivalX": 648.5,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "shared-verdict",
@@ -444,7 +582,25 @@
       "labelFindings": 24,
       "trace": null,
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 657.372,
+          "arrivalX": 634.372,
+          "horizontalDeltas": [
+            -23
+          ]
+        },
+        {
+          "id": "second-loop",
+          "departureX": 799.436,
+          "arrivalX": 776.436,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     },
     {
       "name": "guided-expansion-with-ports",
@@ -476,7 +632,17 @@
         "repeatedStates": 0
       },
       "routesChanged": false,
-      "labelsChanged": false
+      "labelsChanged": false,
+      "selfLoops": [
+        {
+          "id": "scope:P-360005333058:sequence:primary:relationship:%5B%22VS-002%22%2C%22TRANSITIONS_TO%22%2C%22VS-002%22%5D:0",
+          "departureX": 634.4,
+          "arrivalX": 611.4,
+          "horizontalDeltas": [
+            -23
+          ]
+        }
+      ]
     }
   ]
 }

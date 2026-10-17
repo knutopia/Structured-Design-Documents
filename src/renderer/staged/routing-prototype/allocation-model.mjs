@@ -11,9 +11,9 @@ import { buildRoutingSegments } from '../../../../dist/renderer/staged/routingCo
 import { assessConnectorLabels, auditConnectorLabels, measureConnectorLabelCapacity, wrappedLabelPreservesText } from '../../../../dist/renderer/staged/connectorLabelLayout.js';
 
 export const LIMITS = Object.freeze({ expansions: 4, candidates: 4096, repairs: 128 });
-export const POLICY = Object.freeze({ name: 'EXPERIMENTAL, not a bundle convention', loopSides: ['south', 'north'], inset: 12, labelDistance: 12, margin: 24 });
+export const POLICY = Object.freeze({ name: 'EXPERIMENTAL, not a bundle convention', loopSides: ['south', 'north'], loopTraversal: 'negative', inset: 12, labelDistance: 12, margin: 24 });
 export const CASES = {
-  original: { title: 'All three transitions', description: 'Automatically reserve attachments for the original forward, return and self-loop. The return is complete; the loop prefers the lower side.' },
+  original: { title: 'All three transitions', description: 'Automatically reserve attachments for the original forward, return and self-loop. The return is complete; the loop prefers the lower side and travels backward to the left.' },
   crowded: { title: 'Competing ports', description: 'Four parallel transitions, two loops and a fixed support-port reservation exceed natural card capacity. Ask for measured minimum dimensions and rebuild.' },
   expansion: { title: 'Too little room', description: 'A genuinely narrow gap and shallow corridors cannot hold the measured text. Try both loop sides before enlarging the layout.' },
   north: { title: 'Use the upper side', description: 'The lower corridor cannot hold the loop. The upper corridor already fits, so no enlargement should occur.' },
@@ -126,8 +126,8 @@ export function allocate(seed,state,layout) {
     let laneStart=(n.width-laneExtent)/2;
     for(const e of loops) {
       const cell=cells.get(e.id),start=laneStart;laneStart+=cell+pitch;
-      const pair=allocateOrderedPortPair({sideLength:cell,minInset:(cell-pitch)/2,minSeparation:pitch,direction:'positive',placement:'nearest_feasible',occupiedOffsets:occupied.map(o=>o-start),otherArrivalOffsets:[]});
-      findings.push({helper:'allocateOrderedPortPair',id:e.id,node:id,side:state.side,pair:pair?{departure:start+pair.departure,arrival:start+pair.arrival}:null,occupiedOffsets:[...occupied],cell});
+      const pair=allocateOrderedPortPair({sideLength:cell,minInset:(cell-pitch)/2,minSeparation:pitch,direction:POLICY.loopTraversal,placement:'nearest_feasible',occupiedOffsets:occupied.map(o=>o-start),otherArrivalOffsets:[]});
+      findings.push({helper:'allocateOrderedPortPair',id:e.id,node:id,side:state.side,direction:POLICY.loopTraversal,pair:pair?{departure:start+pair.departure,arrival:start+pair.arrival}:null,occupiedOffsets:[...occupied],cell});
       if(!pair) {requests.push(req(owner,n.width,n.width+pitch,'atomic loop pair blocked by reserved ports',[e.id]));continue;}
       const departure=start+pair.departure,arrival=start+pair.arrival;occupied.push(departure,arrival);
       endpoints[e.id]={source:endpoint(n,state.side,departure,marker),target:endpoint(n,state.side,arrival,marker)};

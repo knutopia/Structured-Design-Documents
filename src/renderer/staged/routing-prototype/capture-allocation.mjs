@@ -21,6 +21,10 @@ for(const scenario of Object.keys(CASES)) {
   const repeat=complete(seed,createExperiment(seed,scenario));
   if(JSON.stringify(result)!==JSON.stringify(repeat))throw new Error(`Nondeterminism: ${scenario}`);
   if(Object.keys(LIMITS).some(k=>result.used[k]>LIMITS[k]))throw new Error(`Allowance exceeded: ${scenario}`);
+  if(result.status==='accepted') for(const c of result.current.connectors.filter(c=>c.source.nodeId===c.target.nodeId)) {
+    const horizontal=c.route.points.slice(1).flatMap((to,i)=>Math.abs(to.y-c.route.points[i].y)<0.5&&Math.abs(to.x-c.route.points[i].x)>0.5?[to.x-c.route.points[i].x]:[]);
+    if(c.source.point.x<=c.target.point.x||!horizontal.length||horizontal.some(dx=>dx>=0))throw new Error(`Self-loop must travel left: ${scenario} / ${c.id}`);
+  }
   reports.push({scenario,result});
   console.log(JSON.stringify({scenario,status:result.status,stop:result.stop,used:result.used,violations:result.current?.violations.length,labels:result.current?.labelProblems.length}));
 }
