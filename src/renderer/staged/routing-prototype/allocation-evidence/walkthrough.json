@@ -1,0 +1,482 @@
+{
+  "artifactSha256": "3b09a2bfb85edbcb8d6db0bb0811d2c16bc8d63f28194df04d5af57ebaff209f",
+  "browser": "Local Chromium 1224 / Playwright; file:// with offline context",
+  "errors": [],
+  "externalRequests": [],
+  "records": [
+    {
+      "name": "01-original",
+      "scenario": "original",
+      "status": "accepted",
+      "stop": "accepted",
+      "used": {
+        "candidates": 1,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 0,
+      "labelFindings": 0,
+      "trace": {
+        "validations": 1,
+        "candidates": 0,
+        "repairRevisions": 0,
+        "expansionPasses": 0,
+        "repeatedStates": 0
+      },
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "crowded-initial-deficit",
+      "scenario": "crowded",
+      "status": "trying upper side",
+      "stop": null,
+      "used": {
+        "candidates": 1,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 0,
+      "labelFindings": 12,
+      "trace": null,
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "crowded-verdict",
+      "scenario": "crowded",
+      "status": "accepted",
+      "stop": "accepted",
+      "used": {
+        "candidates": 3,
+        "repairs": 0,
+        "expansions": 1
+      },
+      "revision": 1,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 210,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 285.128,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 210
+      },
+      "routeFindings": 0,
+      "labelFindings": 0,
+      "trace": {
+        "validations": 1,
+        "candidates": 0,
+        "repairRevisions": 0,
+        "expansionPasses": 0,
+        "repeatedStates": 0
+      },
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "expansion-initial-deficit",
+      "scenario": "expansion",
+      "status": "trying upper side",
+      "stop": null,
+      "used": {
+        "candidates": 1,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 28,
+        "top": 16,
+        "bottom": 12,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 2,
+      "labelFindings": 11,
+      "trace": null,
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "expansion-verdict",
+      "scenario": "expansion",
+      "status": "accepted",
+      "stop": "accepted",
+      "used": {
+        "candidates": 3,
+        "repairs": 0,
+        "expansions": 1
+      },
+      "revision": 1,
+      "resources": {
+        "gap": 222.9,
+        "top": 112,
+        "bottom": 110,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 0,
+      "labelFindings": 0,
+      "trace": {
+        "validations": 1,
+        "candidates": 0,
+        "repairRevisions": 0,
+        "expansionPasses": 0,
+        "repeatedStates": 0
+      },
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "north-initial-deficit",
+      "scenario": "north",
+      "status": "trying upper side",
+      "stop": null,
+      "used": {
+        "candidates": 1,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 8,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 1,
+      "labelFindings": 1,
+      "trace": null,
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "north-verdict",
+      "scenario": "north",
+      "status": "accepted",
+      "stop": "accepted",
+      "used": {
+        "candidates": 2,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 8,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 0,
+      "labelFindings": 0,
+      "trace": {
+        "validations": 1,
+        "candidates": 0,
+        "repairRevisions": 0,
+        "expansionPasses": 0,
+        "repeatedStates": 0
+      },
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "branch-verdict",
+      "scenario": "branch",
+      "status": "accepted",
+      "stop": "accepted",
+      "used": {
+        "candidates": 1,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53,
+        "card:branch-c:width": 224,
+        "card:branch-c:height": 53,
+        "card:branch-d:width": 224,
+        "card:branch-d:height": 53
+      },
+      "routeFindings": 0,
+      "labelFindings": 0,
+      "trace": {
+        "validations": 1,
+        "candidates": 0,
+        "repairRevisions": 0,
+        "expansionPasses": 0,
+        "repeatedStates": 0
+      },
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "repair-verdict",
+      "scenario": "repair",
+      "status": "accepted",
+      "stop": "accepted",
+      "used": {
+        "candidates": 4,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 0,
+      "labelFindings": 0,
+      "trace": {
+        "validations": 3,
+        "candidates": 3,
+        "repairRevisions": 0,
+        "expansionPasses": 0,
+        "repeatedStates": 0
+      },
+      "routesChanged": true,
+      "labelsChanged": false
+    },
+    {
+      "name": "labels-verdict",
+      "scenario": "labels",
+      "status": "accepted",
+      "stop": "accepted",
+      "used": {
+        "candidates": 2,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 0,
+      "labelFindings": 0,
+      "trace": {
+        "validations": 1,
+        "candidates": 0,
+        "repairRevisions": 0,
+        "expansionPasses": 0,
+        "repeatedStates": 0
+      },
+      "routesChanged": false,
+      "labelsChanged": true
+    },
+    {
+      "name": "exhaustion-verdict",
+      "scenario": "exhaustion",
+      "status": "failed",
+      "stop": "candidate_exhausted",
+      "used": {
+        "candidates": 4096,
+        "repairs": 61,
+        "expansions": 1
+      },
+      "revision": 1,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 210,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 285.128,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 210
+      },
+      "routeFindings": 6,
+      "labelFindings": 24,
+      "trace": {
+        "validations": 4093,
+        "candidates": 4093,
+        "repairRevisions": 61,
+        "expansionPasses": 0,
+        "repeatedStates": 4817
+      },
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "repeated-initial-deficit",
+      "scenario": "repeated",
+      "status": "trying upper side",
+      "stop": null,
+      "used": {
+        "candidates": 1,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 28,
+        "top": 16,
+        "bottom": 12,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 2,
+      "labelFindings": 11,
+      "trace": null,
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "repeated-verdict",
+      "scenario": "repeated",
+      "status": "failed",
+      "stop": "repeated_state",
+      "used": {
+        "candidates": 2,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 28,
+        "top": 16,
+        "bottom": 12,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 2,
+      "labelFindings": 11,
+      "trace": null,
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "endpoint-verdict",
+      "scenario": "endpoint",
+      "status": "failed",
+      "stop": "invalid_control",
+      "used": {
+        "candidates": 1,
+        "repairs": 0,
+        "expansions": 0
+      },
+      "revision": 0,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 3,
+      "labelFindings": 0,
+      "trace": null,
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "shared-verdict",
+      "scenario": "shared",
+      "status": "failed",
+      "stop": "invalid_control",
+      "used": {
+        "candidates": 3,
+        "repairs": 0,
+        "expansions": 1
+      },
+      "revision": 1,
+      "resources": {
+        "gap": 260,
+        "top": 132,
+        "bottom": 132,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 210,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 285.128,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 210
+      },
+      "routeFindings": 6,
+      "labelFindings": 24,
+      "trace": null,
+      "routesChanged": false,
+      "labelsChanged": false
+    },
+    {
+      "name": "guided-expansion-with-ports",
+      "scenario": "expansion",
+      "status": "accepted",
+      "stop": "accepted",
+      "used": {
+        "candidates": 3,
+        "repairs": 0,
+        "expansions": 1
+      },
+      "revision": 1,
+      "resources": {
+        "gap": 222.9,
+        "top": 112,
+        "bottom": 110,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-001%22%5D:height": 53,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:width": 224,
+        "card:occurrence:%5B%22scope%3AP-360005333058%22%2C%22sequence%22%2C%22scope%3AP-360005333058%3Asequence%3Aprimary%22%2C%22VS-002%22%5D:height": 53
+      },
+      "routeFindings": 0,
+      "labelFindings": 0,
+      "trace": {
+        "validations": 1,
+        "candidates": 0,
+        "repairRevisions": 0,
+        "expansionPasses": 0,
+        "repeatedStates": 0
+      },
+      "routesChanged": false,
+      "labelsChanged": false
+    }
+  ]
+}

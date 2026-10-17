@@ -1,5 +1,7 @@
 # THROWAWAY: UI Contracts routing proof
 
+The second experiment is [allocation and bounded rebuilding](ALLOCATION.md); open its [single offline HTML](allocation-prototype.html). The first prototype and its evidence below remain preserved.
+
 Open **[prototype.html](prototype.html)** directly in a browser. It is a single offline HTML file with embedded fonts, captured production SVGs, the pure routing model, and the real shared route validator. There are no network requests or persistent state.
 
 Rebuild from the repository root with `TMPDIR=/tmp pnpm prototype:routing`. The command compiles the unchanged production renderer, reloads the source document and v0.2 bundle, captures production evidence, measures the candidate inputs, validates the eight demonstration states, and regenerates the HTML. The local `esbuild` already supplied with `tsx` embeds the validator at capture time; opening the result requires no build tools or server.

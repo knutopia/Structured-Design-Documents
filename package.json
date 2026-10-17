@@ -13,6 +13,7 @@
   },
   "scripts": {
     "prototype:routing": "pnpm run build && node src/renderer/staged/routing-prototype/capture.mjs",
+    "prototype:routing:allocation": "pnpm run build && node src/renderer/staged/routing-prototype/capture-allocation.mjs",
     "build": "tsc -p tsconfig.json",
     "test": "pnpm run build && vitest run",
     "check": "pnpm run test",
