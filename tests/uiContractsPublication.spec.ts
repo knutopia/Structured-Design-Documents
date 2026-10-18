@@ -5,10 +5,11 @@ import { resolveUiContractsPresentation } from "../src/bundle/uiContractsPresent
 import { prepareCompiledGraphPreview, renderSourcePreview } from "../src/renderer/previewWorkflow.js";
 import { renderUiContractsStagedPng, renderUiContractsStagedSvg } from "../src/renderer/staged/uiContracts.js";
 import { renderPositionedSceneToPng, renderPositionedSceneToSvg } from "../src/renderer/staged/svgBackend.js";
-import { auditUiContractsScene } from "../src/renderer/staged/uiContractsAcceptance.js";
+import { auditUiContractsScene, uiSceneItems } from "../src/renderer/staged/uiContractsAcceptance.js";
 import { RendererArtifactError } from "../src/renderer/staged/diagnostics.js";
 import type { PositionedScene } from "../src/renderer/staged/contracts.js";
 import { testUiRoutingPolicy } from "./uiContractsRoutingTestSupport.js";
+import { renderSharedNodesStagedSvg } from "../src/renderer/staged/sharedNodeRenderer.js";
 
 const source = {
   path: "/tmp/ui-contracts-publication.sdd",
@@ -37,6 +38,7 @@ const errorDiagnostic = expect.objectContaining({ severity: "error" });
 let enabled: Bundle;
 let fixed: Bundle;
 let accepted: PositionedScene;
+let paintedContent: PositionedScene;
 
 function prepare(bundle: Bundle) {
   const compiled = compileSource(source, bundle);
@@ -73,6 +75,13 @@ describe("enabled UI publication acceptance", () => {
     expect(rendered.diagnostics.filter(diagnostic => diagnostic.severity === "error")).toEqual([]);
     accepted = rendered.positionedScene;
     expect(auditUiContractsScene(accepted)).toEqual([]);
+    const shared = await renderSharedNodesStagedSvg([{ title: "Content card", nodeId: "C-900", nodeType: "Component",
+      decoratorMode: settings.nodeDecoratorMode, attributes: [{ groupId: "owner", label: "owner", value: "Design" }] }], { detailId: "detailed" });
+    paintedContent = shared.positionedScene;
+    paintedContent.uiAcceptancePolicy = structuredClone(testUiRoutingPolicy);
+    paintedContent.root.viewMetadata = { uiContracts: { kind: "sheet", routing: structuredClone(testUiRoutingPolicy),
+      inventory: { occurrences: [], relationships: [], segments: [] } } };
+    expect(auditUiContractsScene(paintedContent)).toEqual([]);
   });
 
   it("publishes an accepted revision through public SVG and PNG entrypoints", async () => {
@@ -133,6 +142,66 @@ describe("enabled UI publication acceptance", () => {
     const scene = structuredClone(accepted);
     scene.edges[0]!.markers!.end = "none";
     await rejectsArtifact(renderPositionedSceneToPng(scene));
+  });
+
+  const contentMutations: Array<[string, (scene: PositionedScene) => { blockId: string; ownerId: string; viewport?: boolean }]> = [
+    ["header outside its owner inside the viewport", scene => {
+      const owner = uiSceneItems(scene.root).find(item => item.kind === "container" && item !== scene.root && item.headerContent.length)!;
+      if (owner.kind !== "container") throw new Error("Expected header");
+      const block = owner.headerContent[0]!;
+      block.x = -2;
+      // This fixture's scope starts at the viewport origin. Add room on its
+      // left so the mutation isolates owner containment from viewport bounds.
+      scene.root.x -= 10; scene.root.width += 10;
+      expect(owner.x + block.x).toBeGreaterThanOrEqual(scene.root.x);
+      return { blockId: block.id, ownerId: owner.id };
+    }],
+    ["header outside the viewport", scene => {
+      const owner = uiSceneItems(scene.root).find(item => item.kind === "container" && item.headerContent.length)!;
+      if (owner.kind !== "container") throw new Error("Expected header");
+      const block = owner.headerContent[0]!;
+      block.x = scene.root.width + 100;
+      return { blockId: block.id, ownerId: owner.id, viewport: true };
+    }],
+    ...(["decorator", "title", "attribute label", "attribute value", "ordinary node"] as const).map(kind => [kind, (scene: PositionedScene) => {
+      const node = uiSceneItems(scene.root).find(item => item.kind === "node" && item.sharedNode?.body.attributeGroups.length)!;
+      if (node.kind !== "node" || !node.sharedNode) throw new Error("Expected shared card attributes");
+      const shared = node.sharedNode;
+      const block = kind === "decorator" ? shared.decorator!.items[0]! : kind === "title" ? shared.body.title
+        : kind === "attribute label" ? shared.body.attributeGroups[0]!.label
+        : kind === "attribute value" ? shared.body.attributeGroups[0]!.values[0]! : node.content[0]!;
+      // Moving the painted shared object must be caught even when node.content
+      // is a separate, stale copy and the card rectangle is unchanged.
+      node.content = structuredClone(node.content);
+      if (kind === "ordinary node") {
+        delete node.sharedNode;
+        node.content[0]!.x = node.width + 2;
+        return { blockId: node.content[0]!.id, ownerId: node.id };
+      }
+      block.x = node.width + 2;
+      return { blockId: block.id, ownerId: node.id };
+    }] as [string, (scene: PositionedScene) => { blockId: string; ownerId: string }])
+  ];
+  it.each(contentMutations)("rejects painted %s at the exact SVG/PNG publication gate", async (_label, mutate) => {
+    const scene = structuredClone(_label.startsWith("header") ? accepted : paintedContent), expected = mutate(scene), before = structuredClone(scene);
+    const findings = auditUiContractsScene(scene);
+    expect(findings).toContainEqual(expect.objectContaining({ code: "renderer.routing.content_owner_bounds", targetId: expected.blockId,
+      message: expect.stringContaining(expected.ownerId), severity: "error" }));
+    if (expected.viewport) expect(findings).toContainEqual(expect.objectContaining({ code: "renderer.routing.content_viewport_bounds", targetId: expected.blockId }));
+    await rejectsArtifact(renderPositionedSceneToSvg(scene));
+    await rejectsArtifact(renderPositionedSceneToPng(scene));
+    const diagnostic = await renderPositionedSceneToSvg(scene, diagnosticOptions);
+    expect(diagnostic.svg).toContain('data-artifact-intent="diagnostic"');
+    expect(diagnostic.diagnostics).toEqual(expect.arrayContaining([errorDiagnostic]));
+    expect(scene).toEqual(before);
+  });
+
+  it.each([NaN, Infinity, -1])("rejects invalid painted content dimensions %s", value => {
+    const scene = structuredClone(accepted);
+    const owner = uiSceneItems(scene.root).find(item => item.kind === "container" && item.headerContent.length)!;
+    if (owner.kind !== "container") throw new Error("Expected header");
+    owner.headerContent[0]!.width = value;
+    expect(auditUiContractsScene(scene)).toContainEqual(expect.objectContaining({ code: "renderer.routing.content_invalid_bounds", severity: "error" }));
   });
 
   it("permits explicit diagnostic serialization of a mutated coherent scene", async () => {

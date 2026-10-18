@@ -21,6 +21,7 @@ import { DEFAULT_ROUTING_POLICY } from "./routingCore/contracts.js";
 import { compareRouteCosts, resolveFacingSideSharedCoordinate, routeCost } from "./routingCore/optimization.js";
 import { positionEdgeLabel } from "./routing.js";
 import { withRoutingQualityBudgetAllowance, type RoutingQualityBudget } from "./routingCore/qualitySelection.js";
+import { allocateUiReturnTracks } from "./uiContractsReturnTracks.js";
 
 export interface UiSearchEvidence {
   candidates: number; repairs: number; expansions: number;
@@ -38,12 +39,36 @@ export interface UiRoutingLimits { candidates?: number; repairs?: number; expans
 const ceil = (value: number) => Math.ceil(value * 1000) / 1000;
 const resourceKey = uiCapacityResourceKey;
 
+/** Complete assignments are lazy: focus-side warmup, source-ordered single-loop
+ * changes, then the remaining combinations. Only assignments actually yielded
+ * are remembered; the Cartesian product is never allocated or reserved. */
+function* loopSideSeeds(loopCount: number, sideCount: number): Generator<number[]> {
+  const initial = Array.from({ length: loopCount }, () => 0), yielded = new Set<string>();
+  const unique = function* (choices: number[]): Generator<number[]> {
+    const key = JSON.stringify(choices);
+    if (!yielded.has(key)) { yielded.add(key); yield choices; }
+  };
+  yield* unique(initial);
+  for (let index = 0; index < loopCount; index++) for (let side = 1; side < sideCount; side++) {
+    const choices = [...initial]; choices[index] = side; yield* unique(choices);
+  }
+  if (!loopCount || sideCount < 2) return;
+  const choices = [...initial];
+  while (true) {
+    let index = choices.length - 1;
+    for (; index >= 0; index--) { choices[index] = choices[index]! + 1; if (choices[index]! < sideCount) break; choices[index] = 0; }
+    if (index < 0) return;
+    yield* unique([...choices]);
+  }
+}
+
 /** Bind before constructing a candidate. No side is recovered from its polyline. */
 function bindEdges(measured: MeasuredScene, positioned: PositionedScene, choices: readonly number[], budget: RoutingQualityBudget, labelAllowance: number): PositionedScene {
   const scene = positionMeasuredEdgesAgainstRoot({ ...measured, edges: measured.edges.filter(edge => !edge.viewMetadata?.uiTransition || edge.viewMetadata.uiTransition.kind === "forward") }, positioned);
   const items = new Map(uiSceneItems(scene.root).map(item => [item.id, item]));
   const theme = resolveRendererTheme(scene.themeId).theme, policy = scene.root.viewMetadata!.uiContracts!.routing!;
   const pitch = readablePortPitch(theme.paint.arrowSize, theme.paint.edgeStrokeWidth), depth = readableRoutingClearance(theme.paint.edgeStrokeWidth);
+  const returnTracks = allocateUiReturnTracks(measured);
   scene.uiRoutingBindings = [];
   const endpoint = (end: PositionedEdge["from"], marker?: string) => {
     const item = items.get(end.itemId), port = item?.ports.find(port => port.id === end.portId);
@@ -166,7 +191,8 @@ function bindEdges(measured: MeasuredScene, positioned: PositionedScene, choices
       // through an earlier arrow or its label on the same side of the card.
       const lowerArrival = !intent.retainRoute && [...scene.uiRoutingBindings.map(binding => binding.target), ...returnArrivals].some(other =>
         other.nodeId === target.nodeId && other.side === target.side && other.point.y < target.point.y - DEFAULT_ROUTING_POLICY.epsilon);
-      const rail = lowerArrival ? sequence.y + sequence.height - (intent.returnTrack ?? 0) : sequence.y + (intent.returnTrack ?? 0),
+      const track = returnTracks.get(edge.id)!;
+      const rail = lowerArrival ? sequence.y + sequence.height - track : sequence.y + track,
         west = intent.retainRoute ? sequence.x - UI_CONTRACTS_SPACING.arrowApproach
         : target.point.x - Math.max(DEFAULT_ROUTING_POLICY.minTerminalLeg, target.minLeg),
         east = intent.retainRoute ? sequence.x + sequence.width + UI_CONTRACTS_SPACING.arrowApproach
@@ -286,46 +312,54 @@ export async function runUiContractsRendererPipeline(model: UiContractsPresentat
   };
   const loopCount = model.scopes.reduce((count, scope) => count + scope.sequences.reduce((n, sequence) => n + sequence.edges.filter(edge => edge.from === edge.to).length, 0), 0);
   type Trial = { choices: number[]; ledger: UiCapacityRequirement[] };
-  const queue: Trial[] = [], visited = new Set<string>(), realized = new Set<string>();
-  const initial = Array.from({ length: loopCount }, () => 0);
-  queue.push({ choices: initial, ledger: [] });
+  const retries: Trial[] = [], visited = new Set<string>(), realized = new Set<string>();
+  const seeds = loopSideSeeds(loopCount, model.routing.self_loop.side_trials.length);
+  let nextSeed = seeds.next().value;
+  const warmupCount = loopCount ? model.routing.self_loop.side_trials.length : 1;
+  let seedAssessments = 0, preferRetry = true, expansionBlocked = false;
   let best: { revision: Revision; cost: number[] } | undefined, diagnosticRevision: Revision | undefined;
   let reason: Extract<UiRoutingOutcome, { status: "failed" }>["reason"] = "no_candidate", unresolved: UiCapacityRequirement[] = [], lastFindings: RendererDiagnostic[] = [];
-  // Lazy mixed-radix enumeration: one complete assignment is generated at a time,
-  // rather than allocating a Cartesian product. Baseline side seeds precede reflow.
-  let nextChoices: number[] | undefined = [...initial];
   const originalHeightFloors = new Map<string, number>();
   const originalNodeExtents = new Map<string, { width: number; height: number }>();
   const baselineResourceExtents = new Map<string, number>();
-  let seedAssessments = 0;
-  const totalSeeds = Math.min(maximum.candidates + 1, model.routing.self_loop.side_trials.length ** loopCount);
   const enqueueRequirements = (trial: Trial, requests: UiCapacityRequirement[]): void => {
     if (requests.length) unresolved = requests;
     const permitted = requests.filter(request => request.resource.kind === "node_extent" ? model.routing!.capacity.node === "port_minimum" : model.routing!.capacity.owner !== "fixed");
     if (permitted.length !== requests.length || !requests.length) return;
     const merged = mergeUiCapacityRequirements(trial.ledger, requests);
     if (JSON.stringify(merged) === JSON.stringify(trial.ledger)) { reason = "repeated_geometry"; return; }
-    queue.push({ choices: trial.choices, ledger: merged });
+    if (evidence.expansions >= maximum.expansions) { expansionBlocked = true; reason = "expansion_budget"; return; }
+    const key = trialKey({ choices: trial.choices, ledger: merged });
+    if (!visited.has(key) && !retries.some(retry => trialKey(retry) === key)) retries.push({ choices: trial.choices, ledger: merged });
   };
-  const enqueueNext = () => {
-    if (!nextChoices || !loopCount) { nextChoices = undefined; return; }
-    const next = [...nextChoices]; let index = next.length - 1;
-    for (; index >= 0; index--) { next[index] = next[index]! + 1; if (next[index]! < model.routing!.self_loop.side_trials.length) break; next[index] = 0; }
-    if (index < 0) { nextChoices = undefined; return; }
-    nextChoices = next; queue.unshift({ choices: next, ledger: [] });
+  const trialKey = (trial: Trial) => JSON.stringify([model.routing, trial.choices,
+    trial.ledger.map(request => [resourceKey(request), request.minimumExtent]).sort()]);
+  // Reserve pending focus warmup and one next eligible trial from each source.
+  // Label and route recovery share only the remainder of this global budget.
+  const recoveryHeadroom = () => {
+    const warmup = Math.max(0, warmupCount - seedAssessments);
+    return Math.min(budget.candidates, warmup + (nextSeed && !warmup ? 1 : 0)
+      + (retries.length && evidence.expansions < maximum.expansions ? 1 : 0));
   };
-  while (queue.length) {
-    const trial = queue.shift()!, key = JSON.stringify([model.routing, trial.choices, trial.ledger.map(request => [resourceKey(request), request.minimumExtent]).sort()]);
+  while (nextSeed || retries.length) {
+    if (retries.length && evidence.expansions >= maximum.expansions) {
+      expansionBlocked = true; reason = "expansion_budget"; retries.length = 0;
+    }
+    if (!nextSeed && !retries.length) break;
+    if (evidence.trials.length && budget.candidates === 0) { reason = "candidate_budget"; break; }
+    const takeSeed = !!nextSeed && (seedAssessments < warmupCount || !retries.length || !preferRetry);
+    let trial: Trial;
+    if (takeSeed) {
+      trial = { choices: nextSeed!, ledger: [] }; nextSeed = seeds.next().value; seedAssessments++;
+      if (seedAssessments > warmupCount) preferRetry = true;
+    } else { trial = retries.shift()!; preferRetry = false; }
+    const key = trialKey(trial);
     if (visited.has(key)) continue;
     visited.add(key);
-    if (!trial.ledger.length) enqueueNext();
-    if (evidence.trials.length && budget.candidates === 0) { reason = "candidate_budget"; break; }
     // Every complete attachment/side assignment costs one proposal; the first seed
     // is still independently audited when no search allowance is available.
     if (budget.candidates > 0) { budget.candidates--; evidence.work.attachments++; }
-    if (!trial.ledger.length) seedAssessments++;
     if (trial.ledger.length) {
-      if (evidence.expansions >= maximum.expansions) { reason = "expansion_budget"; continue; }
       evidence.expansions++;
     }
     const minimumNodeExtents = new Map<string, NodeMinimumExtent>();
@@ -373,8 +407,7 @@ export async function runUiContractsRendererPipeline(model: UiContractsPresentat
       originalHeightFloors.set(item.id, item.height); originalNodeExtents.set(item.id, { width: item.width, height: item.height });
     }
     let positionedScene: PositionedScene;
-    const reservedSeeds = Math.min(budget.candidates, Math.max(0, totalSeeds - seedAssessments));
-    const allowance = Math.max(0, Math.floor((budget.candidates - reservedSeeds) / (2 * Math.max(1, queue.length + 1))));
+    const allowance = Math.max(0, Math.floor((budget.candidates - recoveryHeadroom()) / 2));
     const beforeLabelWork = budget.candidates;
     try { positionedScene = bindEdges(measuredScene, baseline, trial.choices, budget, allowance); }
     catch (error) {
@@ -401,8 +434,7 @@ export async function runUiContractsRendererPipeline(model: UiContractsPresentat
     const context = uiRoutingContext(positionedScene);
     const routeViolations = validateFinalRouteSet(context);
     if (!capacityRequirements(positionedScene).length && routeViolations.some(violation => violation.connectorIds.some(id => context.connectors.some(connector => connector.id === id && !connector.fixed))) && budget.candidates > 0 && budget.repairs > 0) {
-      // Route recovery shares the same seed reservation as label recovery.
-      const allowance = Math.floor(Math.max(0, budget.candidates - reservedSeeds) / Math.max(1, queue.length + 1));
+      const allowance = Math.max(0, budget.candidates - recoveryHeadroom());
       if (allowance > 0) withRoutingQualityBudgetAllowance(budget, allowance, () => {
         const result = runRoutingLifecycle(context, { maxCandidates: budget.candidates, maxRepairRevisions: budget.repairs });
         budget.candidates -= result.trace.candidates; budget.repairs -= result.trace.repairRevisions;
@@ -445,5 +477,6 @@ export async function runUiContractsRendererPipeline(model: UiContractsPresentat
   }
   evidence.candidates = maximum.candidates - budget.candidates; evidence.repairs = maximum.repairs - budget.repairs;
   if (best) return { status: "accepted", revision: best.revision, evidence };
+  if (reason === "no_candidate" && expansionBlocked) reason = "expansion_budget";
   return { status: "failed", reason, violations: lastFindings, unresolved, evidence, diagnosticRevision };
 }

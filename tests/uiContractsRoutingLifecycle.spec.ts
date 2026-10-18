@@ -40,12 +40,12 @@ describe("bounded production UI routing lifecycle", () => {
     model.routing = resolveUiContractsPresentation(view).routing;
     return model;
   }
-  function multipleLoops() {
+  function multipleLoops(count = 2) {
     const bundle = structuredClone(proof.bundle);
     const view = bundle.views.views.find(view => view.id === "ui_contracts")!;
     view.conventions.renderer_defaults!.ui_contracts_presentation!.routing = structuredClone(testUiRoutingPolicy);
     resolveUiContractsPresentation(view);
-    const text = `SDD-TEXT 0.2\n${[1, 2].map(index => `Place P-90${index} "Scope ${index}"\n  route_or_key=/scope${index}\n  access=public\n  CONTAINS VS-90${index} "Ready"\nEND\nViewState VS-90${index} "Ready"\n  place_id=P-90${index}\n  TRANSITIONS_TO VS-90${index} "Ready" [Again${index}]\nEND\n`).join("")}`;
+    const text = `SDD-TEXT 0.2\n${Array.from({ length: count }, (_, i) => i + 1).map(index => `Place P-90${index} "Scope ${index}"\n  route_or_key=/scope${index}\n  access=public\n  CONTAINS VS-90${index} "Ready"\nEND\nViewState VS-90${index} "Ready"\n  place_id=P-90${index}\n  TRANSITIONS_TO VS-90${index} "Ready" [Again${index}]\nEND\n`).join("")}`;
     const compiled = compileSource({ path: "multiple_ui_loops.sdd", text }, bundle);
     expect(compiled.diagnostics).toEqual([]);
     const prepared = prepareCompiledGraphPreview("multiple_ui_loops.sdd", compiled.graph!, bundle, {
@@ -113,8 +113,10 @@ describe("bounded production UI routing lifecycle", () => {
   it("retains an accepted matching revision when later multi-loop exploration exhausts", async () => {
     const model = multipleLoops(), before = structuredClone(model);
     const outcome = await runUiContractsRendererPipeline(model, settings, { candidates: 6, expansions: 1 });
-    expect(outcome.evidence.candidates).toBe(6);
-    expect(outcome.evidence.trials.slice(0, 4).map(trial => trial.choices)).toEqual([[0, 0], [0, 1], [1, 0], [1, 1]]);
+    expect(outcome.evidence.candidates).toBeLessThanOrEqual(6);
+    expect(outcome.evidence.trials.slice(0, 3).map(trial => [trial.choices, trial.requirements.length > 0])).toEqual([
+      [[0, 0], false], [[1, 0], false], [[0, 0], true]
+    ]);
     const accepted = outcome.evidence.trials.find(trial => trial.accepted)!;
     expect(accepted.choices).toEqual([0, 0]);
     expect(new Set(accepted.requirements.map(request => JSON.stringify(request.resource))).size).toBe(2);
@@ -124,12 +126,54 @@ describe("bounded production UI routing lifecycle", () => {
     if (outcome.status === "accepted") expect(outcome.revision.positionedScene.edges).toHaveLength(2);
   });
 
-  it("reserves enough work to assess all four complete baseline assignments for two loops", async () => {
+  it("assesses focused-loop sides, then source-ordered single-loop changes with no eligible retries", async () => {
     const outcome = await runUiContractsRendererPipeline(multipleLoops(), settings, { candidates: 4, repairs: 0, expansions: 0 });
     expect(outcome.status).toBe("failed");
     expect(outcome.evidence.candidates).toBe(4);
     expect(outcome.evidence.expansions).toBe(0);
-    expect(outcome.evidence.trials.map(trial => trial.choices)).toEqual([[0, 0], [0, 1], [1, 0], [1, 1]]);
+    expect(outcome.evidence.trials.map(trial => trial.choices)).toEqual([[0, 0], [1, 0], [0, 1], [1, 1]]);
+    expect(outcome.evidence.work.attachments).toBe(outcome.evidence.trials.length);
+  });
+
+  it.each([[3, 8], [12, 32]])("services capacity before exhaustive side enumeration (%s loops, %s candidates)", async (loops, candidates) => {
+    const model = multipleLoops(loops), before = structuredClone(model);
+    const outcome = await runUiContractsRendererPipeline(model, settings, { candidates, repairs: 0, expansions: 1 });
+    await expectCoherent(outcome);
+    expect(outcome.evidence.candidates).toBeLessThanOrEqual(candidates);
+    expect(outcome.evidence.expansions).toBe(1);
+    expect(outcome.evidence.repairs).toBe(0);
+    const trials = outcome.evidence.trials;
+    expect(trials.slice(0, 2).map(trial => trial.choices)).toEqual([
+      Array(loops).fill(0), [1, ...Array(loops - 1).fill(0)]
+    ]);
+    expect(trials[2]!.accepted).toBe(true);
+    expect(trials[2]!.requirements).toHaveLength(loops);
+    expect(trials[2]!.choices).toEqual(Array(loops).fill(0));
+    const seeds = trials.filter(trial => !trial.requirements.length).map(trial => trial.choices);
+    expect(new Set(seeds.map(choices => JSON.stringify(choices))).size).toBe(seeds.length);
+    expect(model).toEqual(before);
+  });
+
+  it("appends newer capacity retries behind existing branches while alternating new seeds", async () => {
+    const outcome = await runUiContractsRendererPipeline(multipleLoops(3), settings, { candidates: 6, repairs: 0, expansions: 2 });
+    await expectCoherent(outcome);
+    expect(outcome.evidence.trials.slice(0, 5).map(trial => [trial.choices, trial.requirements.length > 0])).toEqual([
+      [[0, 0, 0], false], [[1, 0, 0], false], [[0, 0, 0], true], [[0, 1, 0], false], [[1, 0, 0], true]
+    ]);
+    expect(outcome.evidence).toMatchObject({ candidates: 6, repairs: 0, expansions: 2 });
+  });
+
+  it("audits a no-loop seed without reserving nonexistent side work", async () => {
+    const model = withPolicy(() => {});
+    for (const scope of model.scopes) for (const sequence of scope.sequences)
+      sequence.edges = sequence.edges.filter(edge => edge.from !== edge.to);
+    const ids = new Set(model.scopes.flatMap(scope => scope.sequences.flatMap(sequence => sequence.edges.map(edge => edge.relationshipId))));
+    model.relationships = model.relationships.filter(edge => ids.has(edge.id));
+    const outcome = await runUiContractsRendererPipeline(model, settings, { candidates: 1, repairs: 0, expansions: 0 });
+    await expectCoherent(outcome);
+    expect(outcome.evidence.trials).toHaveLength(1);
+    expect(outcome.evidence).toMatchObject({ candidates: 1, repairs: 0, expansions: 0 });
+    expect(outcome.evidence.trials[0]!.choices).toEqual([]);
   });
 
   it("returns the same complete outcome for identical prepared input and finite limits", async () => {

@@ -29,6 +29,10 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Sun 10-18
+
+- Self-loop solution reviewed & refactored
+
 ## Sat 10-17
 
 - Abandoning 2 prototypes, reframing

@@ -9,6 +9,12 @@ import { auditUiContractsScene, uiRoutingContext, uiSceneItems } from "../src/re
 import { runUiContractsRendererPipeline } from "../src/renderer/staged/uiContractsPipeline.js";
 import { validateFinalRouteSet } from "../src/renderer/staged/routingCore/lifecycle.js";
 import { testUiRoutingPolicy } from "./uiContractsRoutingTestSupport.js";
+import { UiContractsSceneBuilder, UI_CONTRACTS_SPACING } from "../src/renderer/staged/uiContractsPresentationScene.js";
+import { createEdgeLabelMeasurementService, measureRendererScene } from "../src/renderer/staged/microLayout.js";
+import { readableRoutingClearance } from "../src/renderer/staged/routingCore/bounds.js";
+import { getRendererTheme, registerRendererTheme } from "../src/renderer/staged/theme.js";
+import { FIXED_LABEL_DISTANCE } from "../src/renderer/staged/connectorLabelPlacement.js";
+import { allocateUiReturnTracks } from "../src/renderer/staged/uiContractsReturnTracks.js";
 
 const settings = { detailId: "compact", nodeDecoratorMode: { id: "type,id", showNodeType: true, showNodeId: true } };
 function source(edges: readonly (readonly [number, number])[], labelled: boolean) {
@@ -75,7 +81,7 @@ describe("production complete return routes", () => {
     }
     expect(validateFinalRouteSet(uiRoutingContext(scene))).toEqual([]);
     expect(auditUiContractsScene(scene)).toEqual([]);
-    return { scene, model };
+    return { scene, model, outcome };
   }
 
   it.each([false, true])("rebuilds aligned facing endpoints before freezing a three-state cycle (labels=%s)", async labelled => {
@@ -99,5 +105,43 @@ describe("production complete return routes", () => {
     for (const edge of returns) expect(edge.route.points.length).toBeGreaterThanOrEqual(4);
     const starts = returns.map(edge => [edge.from.x, edge.from.y].join(","));
     expect(new Set(starts).size).toBe(2);
+  });
+
+  it.each([false, true])("allocates return lanes from each current measured revision without metric intent (labels=%s)", async labelled => {
+    const { scene, model, outcome } = await render([[0, 1], [1, 2], [2, 0], [2, 1]], labelled);
+    const intent = new UiContractsSceneBuilder(settings.detailId, settings.nodeDecoratorMode, "default").complete(model);
+    const returns = intent.edges.filter(edge => edge.viewMetadata?.uiTransition?.kind === "return");
+    expect(returns).toHaveLength(2);
+    for (const edge of returns) expect(edge.viewMetadata!.uiTransition).not.toHaveProperty("returnTrack");
+    for (const segment of intent.root.viewMetadata!.uiContracts!.inventory!.segments)
+      expect(segment.transition).not.toHaveProperty("returnTrack");
+    const measured = measureRendererScene(intent), before = structuredClone(measured);
+    const measuredReturns = measured.edges.filter(edge => edge.viewMetadata?.uiTransition?.kind === "return");
+    const tracks = allocateUiReturnTracks(measured);
+    const depth = readableRoutingClearance(getRendererTheme(measured.themeId).paint.edgeStrokeWidth);
+    const reservation = measuredReturns[0]!.label ?? createEdgeLabelMeasurementService(measured.themeId, [])({ text: "", textStyleRole: "edge_label" }, returns[0]!.id);
+    expect(tracks.get(returns[0]!.id)).toBe(-UI_CONTRACTS_SPACING.arrowApproach);
+    expect(tracks.get(returns[1]!.id)).toBe(-UI_CONTRACTS_SPACING.arrowApproach - Math.max(depth, reservation.height + FIXED_LABEL_DISTANCE + depth));
+    expect(measured).toEqual(before);
+    measuredReturns[0]!.label = { ...reservation, height: reservation.height + 40 };
+    expect(allocateUiReturnTracks(measured).get(returns[1]!.id)).toBe(tracks.get(returns[1]!.id)! - 40);
+    const reordered = structuredClone(measured);
+    reordered.edges.reverse();
+    expect(allocateUiReturnTracks(reordered)).toEqual(allocateUiReturnTracks(measured));
+    const theme = structuredClone(getRendererTheme(intent.themeId));
+    theme.id = `ui-return-label-remeasurement-${labelled}`;
+    theme.textStyles.edge_label.lineHeight += 10;
+    registerRendererTheme(theme);
+    const remeasured = measureRendererScene({ ...intent, themeId: theme.id });
+    expect(allocateUiReturnTracks(remeasured).get(returns[1]!.id)).toBeLessThan(tracks.get(returns[1]!.id)!);
+    // Production consumes the same allocation for the final measured revision,
+    // including a lower return's approach from below the sequence.
+    const actualTracks = allocateUiReturnTracks(outcome.revision.measuredScene);
+    const items = new Map(uiSceneItems(scene.root).map(item => [item.id, item]));
+    for (const edge of scene.edges.filter(edge => edge.viewMetadata?.uiTransition?.kind === "return")) {
+      const sequence = items.get(edge.viewMetadata!.uiTransition!.sequenceOwnerId!)!;
+      const rail = edge.route.points[2]!.y, offset = actualTracks.get(edge.id)!;
+      expect([sequence.y + offset, sequence.y + sequence.height - offset]).toContain(rail);
+    }
   });
 });

@@ -374,7 +374,7 @@ export interface EdgeViewMetadata {
   sourceEdgeIds?: string[];
   uiJunction?: { groupId: string; sourceSide?: PortSide; targetSide?: PortSide };
   uiTransition?: { kind: "forward" | "return" | "loop"; ownerId: string; sequenceOwnerId?: string;
-    returnTrack?: number; returnLane?: number; retainRoute?: boolean };
+    returnLane?: number; retainRoute?: boolean };
   journeyMap?: JourneyMapEdgeMetadata;
 }
 

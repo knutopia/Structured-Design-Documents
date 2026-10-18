@@ -3,9 +3,6 @@ import type { SceneContainer, SceneEdge, SceneItem } from "./contracts.js";
 import { buildCardinalPorts } from "./sceneBuilders.js";
 import { UI_CONTRACTS_SPACING, uiContractsStack, type UiContractsSceneBuilder } from "./uiContractsPresentationScene.js";
 import { DEFAULT_ROUTING_POLICY } from "./routingCore/contracts.js";
-import { readableRoutingClearance } from "./routingCore/bounds.js";
-import { resolveRendererTheme } from "./theme.js";
-import { FIXED_LABEL_DISTANCE } from "./connectorLabelPlacement.js";
 
 /** Identify semantic return relationships before layout; ordering is never based on coordinates. */
 function returnEdges(sequence: UiContractsSequence): Set<string> {
@@ -79,13 +76,10 @@ function completeTransitionRegion(builder: UiContractsSceneBuilder, sequence: Ui
     edge.ownerContainerId = inner.id;
     edge.viewMetadata = { ...edge.viewMetadata, uiTransition: { kind: "forward", ownerId: frame.id, retainRoute: preservePair } };
   }
-  const clearance = readableRoutingClearance(resolveRendererTheme(builder.scene.themeId).theme.paint.edgeStrokeWidth);
-  let trackOffset = -approach;
   returning.forEach((semantic, index) => {
     builder.add({ ...builder.edge(semantic), ownerContainerId: frame.id,
       viewMetadata: { uiTransition: { kind: "return", ownerId: frame.id, sequenceOwnerId: inner.id,
-        returnTrack: trackOffset, returnLane: index, retainRoute: preservePair } } }, [semantic.relationshipId]);
-    trackOffset -= Math.max(clearance, (labels[index]?.height ?? 0) + FIXED_LABEL_DISTANCE + clearance);
+        returnLane: index, retainRoute: preservePair } } }, [semantic.relationshipId]);
   });
   loops.forEach(semantic => builder.add({ ...builder.edge(semantic), ownerContainerId: frame.id,
     viewMetadata: { uiTransition: { kind: "loop", ownerId: frame.id, retainRoute: true } } }, [semantic.relationshipId]));

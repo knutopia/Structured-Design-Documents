@@ -1,6 +1,39 @@
 # UI Contracts implementation status
 
-2026-10-17. **Production implementation, v0.2 enablement, full proof and repository regression accepted.**
+2026-10-18. **All three review findings corrected and independently checked.**
+
+The corrections are in the working tree based on `239aad6`. They supersede the
+original completion assessment for content containment, return-metric ownership,
+and multi-loop search fairness. Public APIs, bundle policy, default search limits,
+v0.1 and LEGACY behavior remain unchanged.
+
+| Review finding | Correction | Regression evidence |
+| --- | --- | --- |
+| Clipped headers could pass publication | Shared read-only bounds audit checks actual painted headers, ordinary content and shared-node decorator/title/attributes against their owner and viewport | Ten new checks failed before the fix; SVG/PNG rejection, diagnostic output and audit immutability pass afterward |
+| Return rail coordinates persisted in scene intent | Removed `returnTrack`; allocation derives offsets from the current measured revision and declared return order/owners | Two new checks failed before the fix; labelled/unlabelled returns, changed measurements, actual theme remeasurement and production consumption pass |
+| Side combinations starved capacity retries | Focused-side warmup followed by alternating FIFO capacity retries and lazy seeds; only near-term work reserves budget | Three loops with eight candidates and twelve loops with 32 candidates now accept after one expansion; FIFO order, zero limits, no-loop input and accepted-revision retention pass |
+
+Verification: `TMPDIR=/tmp pnpm test` passed **198 files / 2247 tests**, including
+the TypeScript build, in 524.32s. The focused correction run passed 72 tests across
+six files. Logs: `/tmp/ui-review-fixes-full-suite.log` and
+`/tmp/ui-review-fixes-focused.log`; red/green evidence is in
+`/tmp/ui-content-{red,green}.log`, `/tmp/ui-return-{red,green}.log`, and
+`/tmp/ui-scheduler-{red,green}.log`.
+
+Fresh full-sheet and DG-002 CLI SVGs and the production proof driver pass with
+zero final audit findings. Both SVGs are byte-identical to the saved pre-fix
+production baseline; full PNG is byte-identical to its CLI export. The current
+search counts are recorded below. Fresh loop, named-pair, top, containment and
+bottom crops were inspected. Independent probes on the regenerated full scene
+confirm displaced headers and shared-node titles fail both SVG and PNG publication
+without mutating the scene. All three reviewed invariants pass; no blocking issue
+was found in the final correction review. This remains bounded search, not a
+global routing feasibility guarantee. No historical goldens were refreshed.
+
+## Original implementation gates — 2026-10-17
+
+The following gate results record the initial implementation; the review
+corrections and latest regression totals above supersede its completion claim.
 
 Baseline checkout: `codex/prototype-ui-contracts-routing`, `7b49a59`.
 Preserved pre-existing `routing-prototype/ALLOCATION.md` edit and untracked design,
@@ -47,7 +80,7 @@ Artifacts produced from the unchanged actual source, with the shipped bundle:
 
 | Export | Node occurrences | Relationships | Physical connectors | Final audit findings | Candidates / repairs / expansions |
 | --- | ---: | ---: | ---: | ---: | --- |
-| Full | 183 | 130 | 235 | 0 | 3232 / 0 / 2 |
+| Full | 183 | 130 | 235 | 0 | 3781 / 0 / 2 |
 | DG-002 | 134 | 87 | 157 | 0 | 1861 / 0 / 1 |
 
 The full proof has all three intended transitions. The named selection has its
@@ -80,7 +113,7 @@ The loop/label/card/pair/reflow and preserved containment presentation are visua
 acceptable. No cited visual invariant is violated. Historical prototype evidence
 and snapshots/goldens were not regenerated.
 
-## Verification status and limits
+## Original verification history and continuing limits
 
 Build and the focused enabled-bundle integration pass (209 tests across 19 files;
 `/tmp/ui-final-focused.log`). The first full regression pass exposed four packing
@@ -109,4 +142,4 @@ Ownership correction: forward edges retain the inner sequence as layout owner so
 
 Capacity evidence: the transition-owner south demand is 96 units; the historical 80-unit crop demand used the surrounding scope, which already contributed 16 units below the transition. The demand is computed from actual production envelopes, not a renderer constant. Stack and packed-row tests verify 96-unit displacement of following scopes and matching growth of actual ancestors.
 
-Review corrections: route recovery reserves remaining side seeds just as label recovery does. Shared marker groups were initially too broad. UI now grants only margin relief for declared physical path/junction incidence, while actual painted footprints block every other segment. Separate regressions mutate both a sibling branch and a shared stem through an arrow; normal serialization rejects both. Multiple returns use readable port pitch, distinct rails, and a local final approach; shared vertical label search includes obstacle-boundary events. No diagnostics were downgraded and no historical evidence/goldens were refreshed.
+Initial integration corrections: route recovery reserved side-seed work just as label recovery did; the October 18 scheduler correction above replaces its exhaustive reservation. Shared marker groups were initially too broad. UI now grants only margin relief for declared physical path/junction incidence, while actual painted footprints block every other segment. Separate regressions mutate both a sibling branch and a shared stem through an arrow; normal serialization rejects both. Multiple returns use readable port pitch, distinct rails, and a local final approach; shared vertical label search includes obstacle-boundary events. No diagnostics were downgraded and no historical evidence/goldens were refreshed.

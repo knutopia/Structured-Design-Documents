@@ -6,6 +6,7 @@ import { auditPositionedSceneMarkers, buildEndpointMarkerRoutingBlockers } from 
 import { readablePortPitch, readableRoutingClearance } from "./routingCore/bounds.js";
 import { validateFinalRouteSet, type FinalRoutingContext } from "./routingCore/lifecycle.js";
 import { resolveRendererTheme } from "./theme.js";
+import { auditPositionedSceneContentBounds } from "./contentBoundsAudit.js";
 
 export function uiSceneItems(item: PositionedItem): PositionedItem[] {
   return [item, ...(item.kind === "container" ? item.children.flatMap(uiSceneItems) : [])];
@@ -82,7 +83,7 @@ export function auditUiContractsScene(scene: PositionedScene): RendererDiagnosti
   const metadata = scene.root.viewMetadata?.uiContracts;
   const policy = scene.uiAcceptancePolicy ?? metadata?.routing;
   if (!policy) return [];
-  const findings: RendererDiagnostic[] = [];
+  const findings: RendererDiagnostic[] = auditPositionedSceneContentBounds(scene);
   const fail = (kind: string, id: string, message: string) => findings.push(createRoutingDiagnostic(`renderer.routing.ui_contracts_${kind}`, message, id, "error"));
   const inventory = metadata?.inventory;
   if (!inventory) { fail("inventory_missing", scene.root.id, "Enabled UI scene has no prepared relationship inventory."); return findings; }
