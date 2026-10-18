@@ -1,6 +1,6 @@
 import type { RendererScene, SceneContainer, SceneEdge, SceneItem, SceneNode } from "./contracts.js";
-import { createEdgeLabelMeasurementService } from "./microLayout.js";
-import { measureScene } from "./pipeline.js";
+import { createEdgeLabelMeasurementService, measureRendererScene, type NodeMinimumExtent } from "./microLayout.js";
+import { UiPortCapacityError } from "./uiContractsCapacity.js";
 import { DEFAULT_ROUTING_POLICY } from "./routingCore/contracts.js";
 import { resolveRendererTheme } from "./theme.js";
 
@@ -11,17 +11,23 @@ function fanoutStack(id: string, children: SceneItem[], direction: "horizontal" 
 }
 
 /** Accepted single-source contract channels, expressed entirely as scene inputs. */
-export function buildUiContractsFanout(groupId: string, sourceInput: SceneNode, targetsInput: SceneNode[], edgeInputs: SceneEdge[], themeId = "default"): RendererScene {
+export function buildUiContractsFanout(groupId: string, sourceInput: SceneNode, targetsInput: SceneNode[], edgeInputs: SceneEdge[], themeId = "default",
+  options: { minimumNodeExtents?: ReadonlyMap<string, NodeMinimumExtent>; negotiatePortCapacity?: boolean } = {}): RendererScene {
   const source = structuredClone(sourceInput), targets = structuredClone(targetsInput), edges = structuredClone(edgeInputs);
   const scene: RendererScene = { viewId: "ui_contracts", detailId: "detailed", themeId,
     root: fanoutStack("root", [], "vertical"), edges, diagnostics: [] };
-  const measured = measureScene({ ...scene, root: fanoutStack("measurement", [source, ...targets], "vertical"), edges: [] });
+  const measured = measureRendererScene({ ...scene, root: fanoutStack("measurement", [source, ...targets], "vertical"), edges: [] }, options);
   const [measuredSource, ...measuredTargets] = measured.root.children;
   const labelMeasure = createEdgeLabelMeasurementService(scene.themeId, scene.diagnostics);
   const labels = edges.map(edge => edge.label ? labelMeasure(edge.label, edge.id) : { width: 0, height: 0 });
   const { minSeparation, minTerminalLeg } = DEFAULT_ROUTING_POLICY;
   const radius = resolveRendererTheme(scene.themeId).theme.sharedNode.cornerRadius;
   const cornerClearance = Math.max(radius, minTerminalLeg * 2);
+  const minimumWidth = 2 * cornerClearance + Math.max(0, edges.length - 2) * minSeparation;
+  if (options.negotiatePortCapacity && edges.length > 1 && measuredSource.width < minimumWidth) throw new UiPortCapacityError([
+    { resource: { kind: "node_extent", nodeId: source.id, axis: "x" }, minimumExtent: minimumWidth,
+      reason: "port_capacity", connectorIds: edges.map(edge => edge.id) }
+  ], new Map([[source.id, measuredSource.height]]), new Map([[source.id, { width: measuredSource.width, height: measuredSource.height }]]));
   const firstAnchor = Math.min(measuredSource.height, measuredTargets[0]?.height ?? measuredSource.height) / 2;
   const topInset = Math.max(0, (labels[0]?.height ?? 0) + minTerminalLeg - firstAnchor);
   source.ports = [];

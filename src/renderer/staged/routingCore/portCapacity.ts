@@ -1,3 +1,70 @@
+import { ROUTING_METRIC_PRECISION } from "./geometry.js";
+
+export interface PortGroupCapacityDemandInput {
+  sideLength: number;
+  minInset: number;
+  minSeparation: number;
+  /** Rigid, ordered local offsets beginning at zero. */
+  relativeOffsets: readonly number[];
+  /** Existing ports remain fixed throughout this allocation trial. */
+  reservedOffsets: readonly number[];
+  /** Fixed ordering limit on the final group port, independent of side growth. */
+  maximumGroupEnd?: number;
+}
+
+export type PortGroupCapacityDemand =
+  | { status: "fits" | "growth_required"; minimumExtent: number; start: number }
+  | { status: "ordering_exhausted" | "invalid_input" };
+
+/**
+ * Find the minimum side extent for one declared rigid port group. Each reserved
+ * port excludes an open interval of group starts for every relative offset;
+ * exact minimum separation remains admissible. A finite interval sweep handles
+ * fragmented capacity without moving reservations or trying incremental growth.
+ */
+export function minimumPortGroupSideLength(input: PortGroupCapacityDemandInput): PortGroupCapacityDemand {
+  const { sideLength, minInset, minSeparation, relativeOffsets, reservedOffsets, maximumGroupEnd } = input;
+  if (![sideLength, minInset, minSeparation, ...(maximumGroupEnd === undefined ? [] : [maximumGroupEnd])]
+    .every(value => Number.isFinite(value) && value >= 0)
+    || minSeparation <= 0 || !Array.isArray(relativeOffsets) || relativeOffsets.length === 0
+    || relativeOffsets[0] !== 0 || !Array.isArray(reservedOffsets)
+    || [...relativeOffsets].some((offset, index) => !Number.isFinite(offset) || offset < 0
+      || index > 0 && (offset <= relativeOffsets[index - 1]!
+        || offset - relativeOffsets[index - 1]! + Number.EPSILON * Math.max(1, offset, minSeparation) < minSeparation))
+    || [...reservedOffsets].some(offset => !Number.isFinite(offset) || offset < 0)) return { status: "invalid_input" };
+
+  const span = relativeOffsets.at(-1)!;
+  const forbidden: Array<{ min: number; max: number }> = [];
+  for (const reservation of reservedOffsets) for (const offset of relativeOffsets) {
+    const min = reservation - offset - minSeparation, max = reservation - offset + minSeparation;
+    if (!Number.isFinite(min) || !Number.isFinite(max)) return { status: "invalid_input" };
+    forbidden.push({ min, max });
+  }
+  forbidden.sort((a, b) => a.min - b.min || a.max - b.max);
+  const merged: typeof forbidden = [];
+  for (const interval of forbidden) {
+    const previous = merged.at(-1);
+    // Touching open intervals retain a feasible point at their common boundary.
+    if (previous && interval.min < previous.max) previous.max = Math.max(previous.max, interval.max);
+    else merged.push({ ...interval });
+  }
+  let start = minInset;
+  for (const interval of merged) {
+    if (start <= interval.min) break;
+    if (start < interval.max) start = interval.max;
+  }
+  const end = start + span;
+  if (!Number.isFinite(end)) return { status: "invalid_input" };
+  if (maximumGroupEnd !== undefined
+    && end - maximumGroupEnd > Number.EPSILON * Math.max(1, end, maximumGroupEnd)) return { status: "ordering_exhausted" };
+  const required = end + minInset;
+  if (!Number.isFinite(required)) return { status: "invalid_input" };
+  if (required <= sideLength) return { status: "fits", minimumExtent: sideLength, start };
+  const scaled = required * ROUTING_METRIC_PRECISION;
+  const minimumExtent = Number.isFinite(scaled) ? Math.ceil(scaled) / ROUTING_METRIC_PRECISION : required;
+  return { status: "growth_required", minimumExtent, start };
+}
+
 export interface PortOffsetAllocationInput {
   sideLength: number;
   minInset: number;

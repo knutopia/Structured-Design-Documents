@@ -22,6 +22,8 @@ export interface FinalRoutingRunConstraint {
 export interface FinalRoutingConnector {
   id: string;
   route: PositionedRoute;
+  /** Retain exact route and attachments throughout this trial; still validated and occupied. */
+  fixed?: boolean;
   source: FinalRoutingEndpoint;
   target: FinalRoutingEndpoint;
   priority: number;
@@ -128,10 +130,11 @@ function buildCorridorRecovery(
   const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
   const epsilon = policy.epsilon;
   const preserveClearance = context.boxes.some(box => (box.clearance ?? 0) > 0);
-  const implicated = [...new Set(violations.filter(v => !TRAVERSABLE_VIOLATION_KINDS.has(v.kind)).flatMap(v => v.connectorIds))].sort();
+  const byId = new Map(context.connectors.map(c => [c.id, c]));
+  const implicated = [...new Set(violations.filter(v => !TRAVERSABLE_VIOLATION_KINDS.has(v.kind)).flatMap(v => v.connectorIds))]
+    .filter(id => !byId.get(id)?.fixed).sort();
   if (!implicated.length) return undefined;
   const boxes = [...context.boxes, ...(context.blockers ?? [])];
-  const byId = new Map(context.connectors.map(c => [c.id, c]));
   const replacements = new Map<string, Point[]>();
   // When an adapter supplies obstacle envelopes, recovery must find room for
   // their tracks as well as their nodes. Keep already settled routes present:
@@ -208,7 +211,7 @@ function* buildOverlapCorridorAlternatives(
   const implicated = new Set(violations
     .filter(v => v.kind === "collinear_overlap" || v.kind === "track_separation")
     .flatMap(v => v.connectorIds));
-  const ordered = context.connectors.filter(c => implicated.has(c.id))
+  const ordered = context.connectors.filter(c => !c.fixed && implicated.has(c.id))
     .sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id));
   for (const connector of ordered) {
     // The shared generator owns eligibility for topology-bound constraints/sharing.
@@ -319,7 +322,7 @@ function copyForExpansion(context: FinalRoutingContext): FinalRoutingContext {
 
 function canonical(context: FinalRoutingContext): string {
   return JSON.stringify([context.bounds, context.boxes, context.blockers, [...context.connectors].sort((a, b) => a.id.localeCompare(b.id))
-    .map(c => [c.id, c.source, c.target, c.routingBounds, c.route.points])]);
+    .map(c => [c.id, c.fixed === true, c.source, c.target, c.routingBounds, c.route.points])]);
 }
 interface RouteSetState { context: FinalRoutingContext; violations: RoutingViolation[]; score: number[]; key: string }
 function score(context: FinalRoutingContext, baseline: FinalRoutingContext, violations: readonly RoutingViolation[], initialImplicated: ReadonlySet<string>): number[] {
@@ -384,7 +387,7 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
   if (maxCandidates > 1) {
     const assignment = resolveAndReconstructRouteOccupancy(initial.connectors.map(c => {
       const ids = buildLogicalRunIds(c.route);
-      return { connectorId: c.id, route: c.route, priority: c.priority,
+      return { connectorId: c.id, route: c.route, priority: c.priority, fixed: c.fixed,
         // The initial assignment candidate owns implicated connectors only; complete
         // surrounding geometry remains present as fixed claims. Later revisions can
         // widen the affected set if reconstructed spans expose another interaction.
@@ -480,6 +483,9 @@ export function runRoutingLifecycle(initial: FinalRoutingContext, options: Final
     if (expanded.connectors.length !== initial.connectors.length || initial.connectors.some(c => {
       const next = byId.get(c.id);
       return !next || next.source.nodeId !== c.source.nodeId || next.target.nodeId !== c.target.nodeId
+        || (next.fixed === true) !== (c.fixed === true)
+        || c.fixed && (JSON.stringify(next.route) !== JSON.stringify(c.route)
+          || JSON.stringify(next.source) !== JSON.stringify(c.source) || JSON.stringify(next.target) !== JSON.stringify(c.target))
         || (c.routingBounds && (!next.routingBounds || next.routingBounds.ownerId !== c.routingBounds.ownerId))
         || next.priority !== c.priority || next.source.side !== c.source.side || next.target.side !== c.target.side
         || next.source.minLeg < c.source.minLeg || next.target.minLeg < c.target.minLeg

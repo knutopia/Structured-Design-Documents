@@ -7,9 +7,66 @@ const roles = ["component", "place", "primary", "secondary", "support"] as const
 const kinds = ["containment", "composition", "ownership", "transition", "contract"];
 const styles = ["solid", "dashed", "dotted"];
 
+function hasKeys(value: Record<string, unknown>, expected: readonly string[]): boolean {
+  const keys = Object.keys(value);
+  return keys.length === expected.length && keys.every(key => expected.includes(key));
+}
+
+function routingProblems(value: unknown): string[] {
+  if (!isRecord(value)) return ["routing must be an object"];
+  const errors: string[] = [];
+  if (!hasKeys(value, ["scope", "export_clearance", "capacity", "self_loop"])) errors.push("routing must declare only scope, export_clearance, capacity, and self_loop");
+  if (value.scope !== "within_transition_region") errors.push("routing.scope must be within_transition_region");
+  if (value.export_clearance !== "readable_gap") errors.push("routing.export_clearance must be readable_gap");
+  const capacity = value.capacity;
+  if (!isRecord(capacity) || !hasKeys(capacity, ["owner", "node"])
+    || capacity.owner !== "fixed" && capacity.owner !== "padding_and_adjacency_gaps"
+    || capacity.node !== "fixed" && capacity.node !== "port_minimum") {
+    errors.push("routing.capacity must declare owner: fixed | padding_and_adjacency_gaps and node: fixed | port_minimum");
+  }
+  const loop = value.self_loop;
+  if (!isRecord(loop)) return [...errors, "routing.self_loop must be an object"];
+  if (!hasKeys(loop, ["shape", "traversal", "side_trials", "label", "selection"])) errors.push("routing.self_loop must declare only shape, traversal, side_trials, label, and selection");
+  if (loop.shape !== "compact_same_side") errors.push("routing.self_loop.shape must be compact_same_side");
+  if (loop.label !== "external") errors.push("routing.self_loop.label must be external");
+  const traversal = loop.traversal;
+  const validTraversal = isRecord(traversal) && hasKeys(traversal, ["axis", "direction"])
+    && (traversal.axis === "x" || traversal.axis === "y")
+    && (traversal.direction === "positive" || traversal.direction === "negative");
+  if (!validTraversal) errors.push("routing.self_loop.traversal must declare axis: x | y and direction: positive | negative");
+  if (!Array.isArray(loop.side_trials) || loop.side_trials.length === 0) {
+    errors.push("routing.self_loop.side_trials must contain at least one trial");
+  } else {
+    const seen = new Set<string>();
+    for (const [index, trial] of loop.side_trials.entries()) {
+      const path = `routing.self_loop.side_trials[${index}]`;
+      if (!isRecord(trial) || !hasKeys(trial, ["side", "pair_placement"])
+        || typeof trial.side !== "string" || !["north", "east", "south", "west"].includes(trial.side)
+        || trial.pair_placement !== "before_other_arrivals" && trial.pair_placement !== "nearest_feasible") {
+        errors.push(`${path} must declare a supported side and pair_placement`);
+        continue;
+      }
+      if (seen.has(trial.side)) errors.push(`${path}.side must be unique`);
+      seen.add(trial.side);
+      if (validTraversal && ((trial.side === "north" || trial.side === "south") ? "y" : "x") === traversal.axis) {
+        errors.push(`${path}.side must be tangent to traversal`);
+      }
+    }
+  }
+  const selection = ["crossings", "bends", "enlargement", "side_order", "length"];
+  if (!Array.isArray(loop.selection) || loop.selection.length !== selection.length
+    || new Set(loop.selection).size !== selection.length
+    || !loop.selection.every(criterion => typeof criterion === "string" && selection.includes(criterion))) {
+    errors.push("routing.self_loop.selection must contain crossings, bends, enlargement, side_order, and length exactly once in ranking order");
+  }
+  return errors;
+}
+
 export function uiContractsPresentationProblems(value: unknown, policies?: unknown): string[] {
   const errors: string[] = [];
   if (!isRecord(value)) return ["ui_contracts_presentation must be an object"];
+  // A malformed capability is an error; only an absent property selects compatibility.
+  if (Object.prototype.hasOwnProperty.call(value, "routing")) errors.push(...routingProblems(value.routing));
   for (const role of roles) {
     if (!isRecord(value.roles) || !stringArray(value.roles[role])) errors.push(`roles.${role} must contain node types`);
     const content = isRecord(value.content) ? value.content[role] : undefined;

@@ -1,4 +1,4 @@
-import { cloneViewMetadata } from "./contracts.js";
+import { cloneViewMetadata, cloneEdgeViewMetadata } from "./contracts.js";
 import type {
   ChromeSpec,
   EdgeMarkers,
@@ -1473,6 +1473,10 @@ function positionMeasuredEdge(
     id: edge.id,
     role: edge.role,
     classes: [...edge.classes],
+    ...(root.viewMetadata?.uiContracts?.routing ? {
+      ...(edge.ownerContainerId ? { ownerContainerId: edge.ownerContainerId } : {}),
+      ...(edge.viewMetadata ? { viewMetadata: cloneEdgeViewMetadata(edge.viewMetadata) } : {})
+    } : {}),
     from: positionedFrom,
     to: positionedTo,
     route,
@@ -1534,6 +1538,7 @@ export async function positionMeasuredSceneBeforeRouting(
     viewId: measuredScene.viewId,
     detailId: measuredScene.detailId,
     themeId: measuredScene.themeId,
+    ...(measuredScene.root.viewMetadata?.uiContracts?.routing ? { uiAcceptancePolicy: structuredClone(measuredScene.root.viewMetadata.uiContracts.routing) } : {}),
     root: laidOut.root,
     edges: [],
     decorations: [],

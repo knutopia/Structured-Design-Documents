@@ -3,6 +3,9 @@ import type { SceneContainer, SceneEdge, SceneItem } from "./contracts.js";
 import { buildCardinalPorts } from "./sceneBuilders.js";
 import { UI_CONTRACTS_SPACING, uiContractsStack, type UiContractsSceneBuilder } from "./uiContractsPresentationScene.js";
 import { DEFAULT_ROUTING_POLICY } from "./routingCore/contracts.js";
+import { readableRoutingClearance } from "./routingCore/bounds.js";
+import { resolveRendererTheme } from "./theme.js";
+import { FIXED_LABEL_DISTANCE } from "./connectorLabelPlacement.js";
 
 /** Identify semantic return relationships before layout; ordering is never based on coordinates. */
 function returnEdges(sequence: UiContractsSequence): Set<string> {
@@ -57,6 +60,38 @@ function withUpperReturn(builder: UiContractsSceneBuilder, sequence: UiContracts
   return frame;
 }
 
+/** Complete connector intent; the coordinator binds its rail after macro layout. */
+function completeTransitionRegion(builder: UiContractsSceneBuilder, sequence: UiContractsSequence, returns: Set<string>): SceneContainer {
+  const returning = sequence.edges.filter(edge => returns.has(edge.id) && edge.from !== edge.to);
+  const loops = sequence.edges.filter(edge => edge.from === edge.to);
+  const forward = { ...sequence, edges: sequence.edges.filter(edge => !returns.has(edge.id)) };
+  const firstEdge = builder.scene.edges.length;
+  const preservePair = sequence.nodes.length === 2 && forward.edges.length === 1 && returning.length === 1;
+  const inner = builder.layeredSequence(forward);
+  const frame = uiContractsStack(`${sequence.id}:return-region`, [inner]);
+  const labels = returning.map(edge => builder.labelMeasure({ text: edge.label ?? "", textStyleRole: "edge_label" }, edge.id));
+  const topClearance = Math.max(0, ...labels.map(label => label.height)) + DEFAULT_ROUTING_POLICY.minTerminalLeg + UI_CONTRACTS_SPACING.padding;
+  const approach = UI_CONTRACTS_SPACING.arrowApproach;
+  frame.chrome.padding = { top: returning.length ? topClearance + approach : 0, right: approach, bottom: 0, left: approach };
+  for (const edge of builder.scene.edges.slice(firstEdge)) {
+    // The forward sequence owns rank assignment and label-driven layer gaps.
+    // The surrounding transition frame owns only returns and external loops.
+    edge.ownerContainerId = inner.id;
+    edge.viewMetadata = { ...edge.viewMetadata, uiTransition: { kind: "forward", ownerId: frame.id, retainRoute: preservePair } };
+  }
+  const clearance = readableRoutingClearance(resolveRendererTheme(builder.scene.themeId).theme.paint.edgeStrokeWidth);
+  let trackOffset = -approach;
+  returning.forEach((semantic, index) => {
+    builder.add({ ...builder.edge(semantic), ownerContainerId: frame.id,
+      viewMetadata: { uiTransition: { kind: "return", ownerId: frame.id, sequenceOwnerId: inner.id,
+        returnTrack: trackOffset, returnLane: index, retainRoute: preservePair } } }, [semantic.relationshipId]);
+    trackOffset -= Math.max(clearance, (labels[index]?.height ?? 0) + FIXED_LABEL_DISTANCE + clearance);
+  });
+  loops.forEach(semantic => builder.add({ ...builder.edge(semantic), ownerContainerId: frame.id,
+    viewMetadata: { uiTransition: { kind: "loop", ownerId: frame.id, retainRoute: true } } }, [semantic.relationshipId]));
+  return frame;
+}
+
 /** Branch bars are explicit scene segments, each painted once with full provenance. */
 function branchRegion(builder: UiContractsSceneBuilder, sequence: UiContractsSequence): SceneContainer | undefined {
   const incoming = (id: string) => sequence.edges.filter(edge => edge.to === id);
@@ -103,7 +138,11 @@ function branchRegion(builder: UiContractsSceneBuilder, sequence: UiContractsSeq
   const columns: SceneItem[] = [];
   const append = (base: UiContractsVisualEdge, id: string, from: SceneEdge["from"], to: SceneEdge["to"], relations: UiContractsVisualEdge[], label: boolean, arrow: boolean, vertical = false) => builder.add({
     ...builder.edge(base), id, from, to, label: label && base.label ? { text: base.label, textStyleRole: "edge_label" } : undefined,
-    markers: arrow ? { end: "arrow" } : {}, routing: { style: "orthogonal", preferAxis: vertical ? "vertical" : "horizontal" }
+    markers: arrow ? { end: "arrow" } : {}, routing: { style: "orthogonal", preferAxis: vertical ? "vertical" : "horizontal" },
+    ...(builder.scene.root.viewMetadata?.uiContracts?.routing ? { viewMetadata: { uiJunction: { groupId: sequence.id,
+      ...(!builder.occurrenceSemanticIds.has(from.itemId) ? { sourceSide: from.portId as "north" | "south" | "east" | "west" } : {}),
+      ...(!builder.occurrenceSemanticIds.has(to.itemId) ? { targetSide: to.portId as "north" | "south" | "east" | "west" } : {})
+    } } } : {})
   }, relations.map(edge => edge.relationshipId));
   if (hasFork) {
     const source = nodes.get(sources[0].id)!, { column, junctions } = bar("fork"), edges = branches.map(node => incoming(node.id)[0]);
@@ -131,6 +170,7 @@ function branchRegion(builder: UiContractsSceneBuilder, sequence: UiContractsSeq
 
 export function buildUiContractsTransitionRegion(builder: UiContractsSceneBuilder, sequence: UiContractsSequence): SceneContainer | undefined {
   const returns = returnEdges(sequence);
+  if (builder.scene.root.viewMetadata?.uiContracts?.routing && returns.size) return completeTransitionRegion(builder, sequence, returns);
   if (returns.size) return withUpperReturn(builder, sequence, returns);
   return branchRegion(builder, sequence);
 }

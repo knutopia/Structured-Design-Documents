@@ -22,6 +22,30 @@ export interface SharedNodeMeasurementResult {
   height: number;
 }
 
+/** Renderer-owned capacity floor for one rendering occurrence. */
+export interface NodeMinimumExtent {
+  width?: number;
+  height?: number;
+}
+
+export function resolveNodeMinimumExtent(minimum: NodeMinimumExtent): NodeMinimumExtent {
+  for (const value of [minimum.width, minimum.height]) {
+    if (value !== undefined && (!Number.isFinite(value) || value < 0)) {
+      throw new RangeError("Node minimum extents must be finite nonnegative dimensions.");
+    }
+  }
+  const upward = (value: number): number => {
+    const scaled = value * 1000;
+    if (!Number.isFinite(scaled)) return value;
+    const rounded = Math.round(scaled) / 1000;
+    return rounded >= value ? rounded : (Math.round(scaled) + 1) / 1000;
+  };
+  return {
+    ...(minimum.width !== undefined ? { width: upward(minimum.width) } : {}),
+    ...(minimum.height !== undefined ? { height: upward(minimum.height) } : {})
+  };
+}
+
 interface NormalizedAttributeGroup {
   id: string;
   label: string;
@@ -34,6 +58,7 @@ interface MeasureSharedNodeOptions {
   diagnostics: RendererDiagnostic[];
   getTextStyle: (role: string) => TextStyleToken;
   wrapText: (text: string, maxWidth: number, style: TextStyleToken) => WrappedSharedNodeText;
+  minimumExtent?: NodeMinimumExtent;
 }
 
 const ATTRIBUTE_LABEL_MINOR_WORDS = new Set([
@@ -203,11 +228,13 @@ function measureDecorator(
 export function measureSharedNode(options: MeasureSharedNodeOptions): SharedNodeMeasurementResult {
   const { node, theme, diagnostics, getTextStyle, wrapText } = options;
   const nodeTheme = theme.sharedNode;
+  const minimum = options.minimumExtent && resolveNodeMinimumExtent(options.minimumExtent);
+  const width = Math.max(nodeTheme.width, minimum?.width ?? 0);
   const strokeInset = nodeTheme.strokeWidth;
   const containerContentX = roundMetric(strokeInset + nodeTheme.container.padding.left);
   const containerContentY = roundMetric(strokeInset + nodeTheme.container.padding.top);
   const bodyWidth = roundMetric(
-    nodeTheme.width
+    width
     - 2 * strokeInset
     - nodeTheme.container.padding.left
     - nodeTheme.container.padding.right
@@ -298,7 +325,7 @@ export function measureSharedNode(options: MeasureSharedNodeOptions): SharedNode
     + nodeTheme.container.padding.bottom
     + (decorator ? nodeTheme.container.gap : 0)
   );
-  const height = roundMetric(Math.max(nodeTheme.minHeight, naturalHeight));
+  const height = Math.max(roundMetric(Math.max(nodeTheme.minHeight, naturalHeight)), minimum?.height ?? 0);
   const density: MeasuredSharedNodeLayout["density"] = naturalHeight <= nodeTheme.minHeight
     ? "plain"
     : "dense";
@@ -358,7 +385,7 @@ export function measureSharedNode(options: MeasureSharedNodeOptions): SharedNode
   return {
     layout,
     blocks,
-    width: nodeTheme.width,
+    width,
     height
   };
 }

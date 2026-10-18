@@ -36,10 +36,12 @@ import {
   validatePrimitiveContent
 } from "./primitives.js";
 import { resolveGridCells } from "./gridLayout.js";
-import { measureSharedNode, reflowMeasuredSharedNode } from "./sharedNode.js";
+import { measureSharedNode, reflowMeasuredSharedNode, resolveNodeMinimumExtent, type NodeMinimumExtent } from "./sharedNode.js";
 import { reservedStackSlotHeight } from "./stackSlots.js";
 import { createTextMeasurementService, type TextMeasurementService } from "./textMeasurement.js";
 import { resolveRendererTheme, resolveSharedNodeTheme, WIDTH_BAND_ORDER, type RendererTheme, type TextStyleToken } from "./theme.js";
+
+export type { NodeMinimumExtent } from "./sharedNode.js";
 
 const ELLIPSIS = "...";
 
@@ -51,6 +53,13 @@ interface MeasureContext {
   theme: RendererTheme;
   measureText: TextMeasurementService;
   diagnostics: RendererDiagnostic[];
+  minimumNodeExtents?: ReadonlyMap<string, NodeMinimumExtent>;
+  sourceNodes?: ReadonlyMap<string, SceneNode>;
+  nodeMeasurementDiagnostics?: Map<string, ReadonlySet<RendererDiagnostic>>;
+}
+
+export interface MeasureRendererSceneOptions {
+  minimumNodeExtents?: ReadonlyMap<string, NodeMinimumExtent>;
 }
 
 interface WrappedTextResult {
@@ -491,7 +500,8 @@ function measureNodeContentAtBand(
   const usableBlocks = node.content
     .filter((block) => primitiveTheme.textRule.allowedKinds.includes(block.kind))
     .slice(0, primitiveTheme.textRule.maxBlocks ?? Number.POSITIVE_INFINITY);
-  const width = context.theme.widthBands[widthBand];
+  const minimum = context.minimumNodeExtents?.get(node.id);
+  const width = Math.max(context.theme.widthBands[widthBand], minimum?.width ?? 0);
   const availableWidth = Math.max(width - primitiveTheme.padding.left - primitiveTheme.padding.right, 1);
   const measuredBlocks = usableBlocks.map((block) => {
     const region: ContentRegion = block.region
@@ -513,7 +523,7 @@ function measureNodeContentAtBand(
     primitiveTheme.padding,
     primitiveTheme.blockGap,
     primitiveTheme.secondaryGap,
-    primitiveTheme.minHeight,
+    Math.max(primitiveTheme.minHeight, minimum?.height ?? 0),
     width
   );
 
@@ -672,7 +682,7 @@ function applyNodeOverflowPolicy(
         getNodePrimitiveTheme(context.theme, node.primitive).padding,
         getNodePrimitiveTheme(context.theme, node.primitive).blockGap,
         getNodePrimitiveTheme(context.theme, node.primitive).secondaryGap,
-        getNodePrimitiveTheme(context.theme, node.primitive).minHeight,
+        Math.max(getNodePrimitiveTheme(context.theme, node.primitive).minHeight, context.minimumNodeExtents?.get(node.id)?.height ?? 0),
         layout.width
       );
 
@@ -814,6 +824,7 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
       node: item as SceneNode & { sharedNode: NonNullable<SceneNode["sharedNode"]> },
       theme: nodeContext.theme,
       diagnostics: context.diagnostics,
+      minimumExtent: context.minimumNodeExtents?.get(item.id),
       getTextStyle: (role) => getTextStyle(nodeContext, item.id, role),
       wrapText: (text, maxWidth, style) => wrapTextBlock(text, maxWidth, style, context.measureText)
     });
@@ -845,8 +856,9 @@ function measureNode(item: SceneNode, context: MeasureContext): MeasuredNode {
   context.diagnostics.push(...validatePrimitiveContent(item.id, item.primitive, item.content, context.theme));
 
   if (item.fixedSize) {
-    const width = roundMetric(item.fixedSize.width);
-    const height = roundMetric(item.fixedSize.height);
+    const minimum = context.minimumNodeExtents?.get(item.id);
+    const width = Math.max(roundMetric(item.fixedSize.width), minimum?.width ?? 0);
+    const height = Math.max(roundMetric(item.fixedSize.height), minimum?.height ?? 0);
 
     return {
       kind: "node",
@@ -1097,6 +1109,28 @@ function normalizeMeasuredSceneSharedSizes(
   scene: MeasuredScene,
   context: MeasureContext
 ): MeasuredScene {
+  // Resolve capacity-driven shared widths before collecting height and stack-slot
+  // groups. A wider peer must wrap from source content, never stretch stale blocks.
+  // This is opt-in so established no-minimum measurement stays byte-for-byte stable.
+  if (context.minimumNodeExtents?.size) {
+    const widths = new Map<string, number>();
+    const unusedHeights = new Map<string, number>();
+    collectSharedSizeGroups(scene.root, widths, unusedHeights);
+    const remeasure = (item: MeasuredItem): void => {
+      if (item.kind === "container") { item.children.forEach(remeasure); return; }
+      const width = item.sharedWidthGroup && widths.get(item.sharedWidthGroup);
+      const source = context.sourceNodes?.get(item.id);
+      if (!source || !width || width <= item.width) return;
+      const minima = new Map(context.minimumNodeExtents);
+      minima.set(item.id, { ...minima.get(item.id), width });
+      const stale = context.nodeMeasurementDiagnostics?.get(item.id);
+      for (let index = context.diagnostics.length - 1; index >= 0; index--) {
+        if (stale?.has(context.diagnostics[index]!)) context.diagnostics.splice(index, 1);
+      }
+      Object.assign(item, measureNode(source, { ...context, minimumNodeExtents: minima }));
+    };
+    remeasure(scene.root);
+  }
   const slotGroups = new Map<string, number>();
   const slotContainers: MeasuredContainer[] = [];
   function collectSlots(item: MeasuredItem): void {
@@ -1150,7 +1184,10 @@ function measureItem(item: SceneItem, context: MeasureContext): MeasuredItem {
     return measureContainer(item, context);
   }
 
-  return measureNode(item, context);
+  const diagnosticStart = context.diagnostics.length;
+  const measured = measureNode(item, context);
+  context.nodeMeasurementDiagnostics?.set(item.id, new Set(context.diagnostics.slice(diagnosticStart)));
+  return measured;
 }
 
 function measureContainer(container: SceneContainer, context: MeasureContext): MeasuredContainer {
@@ -1268,12 +1305,25 @@ function measureEdge(edge: SceneEdge, context: MeasureContext): MeasuredEdge {
   };
 }
 
-export function measureRendererScene(scene: RendererScene): MeasuredScene {
+export function measureRendererScene(scene: RendererScene, options: MeasureRendererSceneOptions = {}): MeasuredScene {
+  const minimumNodeExtents = options.minimumNodeExtents && new Map([...options.minimumNodeExtents]
+    .map(([id, minimum]) => [id, resolveNodeMinimumExtent(minimum)]));
+  const sourceNodes = new Map<string, SceneNode>();
+  if (minimumNodeExtents?.size) {
+    const collect = (item: SceneItem): void => {
+      if (item.kind === "container") item.children.forEach(collect);
+      else sourceNodes.set(item.id, item);
+    };
+    collect(scene.root);
+  }
   const resolvedTheme = resolveRendererTheme(scene.themeId);
   const context: MeasureContext = {
     theme: resolvedTheme.theme,
     measureText: createTextMeasurementService(resolvedTheme.theme.fontFaces),
-    diagnostics: [...scene.diagnostics, ...resolvedTheme.diagnostics]
+    diagnostics: [...scene.diagnostics, ...resolvedTheme.diagnostics],
+    minimumNodeExtents,
+    sourceNodes,
+    nodeMeasurementDiagnostics: minimumNodeExtents?.size ? new Map() : undefined
   };
 
   const measuredScene: MeasuredScene = {

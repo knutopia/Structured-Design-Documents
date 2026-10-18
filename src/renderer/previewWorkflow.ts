@@ -279,7 +279,8 @@ export async function renderPreparedCompiledGraphPreview(
         projection: prepared.projection,
         detailId,
         nodeDecoratorModeId
-      }
+      },
+      ...(force && !diagramId ? { artifactIntent: "diagnostic" as const } : {})
     });
   }
 

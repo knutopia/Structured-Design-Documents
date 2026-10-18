@@ -167,7 +167,7 @@ export function buildPortCorridorSeed(connector: FinalRoutingConnector, outwardC
       [endpoint.point.x, endpoint.point.y, endpoint.minLeg].every(Number.isFinite) && endpoint.minLeg >= 0)) {
     throw new RangeError("Port corridor seeds require finite endpoints and nonnegative clearance.");
   }
-  if (connector.route.style !== "orthogonal" || connector.source.side !== connector.target.side) return undefined;
+  if (connector.fixed || connector.route.style !== "orthogonal" || connector.source.side !== connector.target.side) return undefined;
   const side = connector.source.side;
   const vertical = side === "north" || side === "south";
   const source = connector.source.point, target = connector.target.point;
@@ -217,7 +217,7 @@ export function* buildPortCorridorCandidates(
   // substitution of a different rendering intent, and it would silently accept a diagonal
   // route that acceptance is required to reject. Only `orthogonal` routes grant the router
   // latitude over their shape, so only those are eligible.
-  if (connector.route.style !== "orthogonal") {
+  if (connector.fixed || connector.route.style !== "orthogonal") {
     return;
   }
   // A fresh topology re-derives logical run IDs from the route, so any run constraint or
@@ -406,6 +406,7 @@ export function* buildTerminalTurnAlternatives(
   const policy = { ...DEFAULT_ROUTING_POLICY, ...context.policy };
   const ordered = [...context.connectors].sort((a, b) => a.priority - b.priority || a.id.localeCompare(b.id));
   for (const c of ordered) {
+    if (c.fixed) continue;
     const relevant = violations.filter(v => v.connectorIds.includes(c.id));
     if (!relevant.length) continue;
     const logicalRunIds = buildLogicalRunIds(c.route);

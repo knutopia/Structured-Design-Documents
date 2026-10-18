@@ -1,10 +1,11 @@
-import type { RendererIaRoutingPreferences } from "../../bundle/types.js";
+import type { RendererIaRoutingPreferences, UiContractsRoutingPolicy } from "../../bundle/types.js";
 import type { RendererDiagnostic } from "./diagnostics.js";
 
 export interface StagedRenderSettings {
   detailId: string;
   themeId?: string;
   nodeDecoratorMode?: NodeDecoratorMode;
+  artifactIntent?: "diagnostic";
 }
 
 export interface NodeDecoratorMode {
@@ -211,6 +212,16 @@ export type JourneyMapItemMetadata =
       branchPath?: number[];
     };
 
+/** Immutable prepared intent, retained independently of candidate geometry. */
+export interface UiContractsRoutingInventory {
+  occurrences: Array<{ id: string; semanticId: string }>;
+  relationships: Array<{ id: string; from: string; to: string; sourceOrder: number; structural: boolean; segmentIds: string[];
+    paths: Array<{ from: string; to: string; segments: Array<{ id: string; reverse: boolean }> }> }>;
+  segments: Array<{ id: string; relationshipIds: string[]; from: SceneEdgeEndpoint; to: SceneEdgeEndpoint;
+    label?: string; markers?: EdgeMarkers; classes: string[]; ownerContainerId?: string;
+    transition?: EdgeViewMetadata["uiTransition"]; junction?: EdgeViewMetadata["uiJunction"] }>;
+}
+
 export interface ViewMetadata {
   diagram?: { id: string; name: string };
   iaPlaceMap?: {
@@ -243,7 +254,8 @@ export interface ViewMetadata {
       ownerContainerId?: string;
     }>;
   };
-  uiContracts?: { kind: "enclosure" | "sheet"; title?: string; tone?: "inset" | "hierarchy" };
+  uiContracts?: { kind: "enclosure" | "sheet"; title?: string; tone?: "inset" | "hierarchy";
+    routing?: UiContractsRoutingPolicy; inventory?: UiContractsRoutingInventory };
   serviceBlueprint?: ServiceBlueprintItemMetadata;
   scenarioFlow?: ScenarioFlowItemMetadata;
   outcomeOpportunity?: OutcomeOpportunityItemMetadata;
@@ -280,7 +292,7 @@ export function cloneViewMetadata(viewMetadata?: ViewMetadata): ViewMetadata | u
         }
       }
       : {}),
-    ...(viewMetadata.uiContracts ? { uiContracts: { ...viewMetadata.uiContracts } } : {}),
+    ...(viewMetadata.uiContracts ? { uiContracts: structuredClone(viewMetadata.uiContracts) } : {}),
     ...(viewMetadata.serviceBlueprint
       ? {
         serviceBlueprint: {
@@ -360,6 +372,9 @@ export interface JourneyMapEdgeMetadata {
 
 export interface EdgeViewMetadata {
   sourceEdgeIds?: string[];
+  uiJunction?: { groupId: string; sourceSide?: PortSide; targetSide?: PortSide };
+  uiTransition?: { kind: "forward" | "return" | "loop"; ownerId: string; sequenceOwnerId?: string;
+    returnTrack?: number; returnLane?: number; retainRoute?: boolean };
   journeyMap?: JourneyMapEdgeMetadata;
 }
 
@@ -370,6 +385,8 @@ export function cloneEdgeViewMetadata(viewMetadata?: EdgeViewMetadata): EdgeView
 
   return {
     ...(viewMetadata.sourceEdgeIds ? { sourceEdgeIds: [...viewMetadata.sourceEdgeIds] } : {}),
+    ...(viewMetadata.uiJunction ? { uiJunction: { ...viewMetadata.uiJunction } } : {}),
+    ...(viewMetadata.uiTransition ? { uiTransition: { ...viewMetadata.uiTransition } } : {}),
     ...(viewMetadata.journeyMap
       ? {
         journeyMap: {
@@ -793,6 +810,8 @@ export interface PositionedEdgeLabel {
 
 export interface PositionedEdge {
   id: string;
+  ownerContainerId?: string;
+  viewMetadata?: EdgeViewMetadata;
   role: string;
   classes: string[];
   from: PositionedEdgeEndpoint;
@@ -874,6 +893,10 @@ export interface RendererForwardRoutingWitness {
 }
 
 export interface PositionedScene {
+  /** Independent allocated attachment contracts, retained for final publication audit. */
+  uiRoutingBindings?: Array<{ id: string; source: { nodeId: string; portId?: string; side: PortSide; point: Point; minLeg: number };
+    target: { nodeId: string; portId?: string; side: PortSide; point: Point; minLeg: number }; fixedRoute?: PositionedRoute }>;
+  uiAcceptancePolicy?: UiContractsRoutingPolicy;
   forwardRoutingWitness?: RendererForwardRoutingWitness;
   iaAcceptancePolicy?: NonNullable<ViewMetadata["iaPlaceMap"]>;
   viewId: string;

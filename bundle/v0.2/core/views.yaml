@@ -4171,6 +4171,18 @@ views:
           secondary_render_mode: inset
           fallback_to_secondary_when_primary_absent: true
         ui_contracts_presentation:
+          routing:
+            scope: within_transition_region
+            export_clearance: readable_gap
+            capacity: { owner: padding_and_adjacency_gaps, node: port_minimum }
+            self_loop:
+              shape: compact_same_side
+              traversal: { axis: x, direction: negative }
+              side_trials:
+                - { side: south, pair_placement: before_other_arrivals }
+                - { side: north, pair_placement: nearest_feasible }
+              label: external
+              selection: [ crossings, bends, enlargement, side_order, length ]
           roles:
             component: [ Component ]
             place: [ Place ]

@@ -37,7 +37,7 @@ export function proposeMovableSourceRoutes(input: MovableSourceInput): {
 } {
   const result = { proposals: [] as MovableSourceProposal[], intervals: [] as (readonly [number, number])[], rejections: [] as string[], exhausted: false };
   const original = input.context.connectors.find(connector => connector.id === input.connectorId);
-  if (!original || original.source.nodeId === original.target.nodeId || original.runConstraints?.size || original.sharedTrackGroupBySegmentIndex?.size) {
+  if (!original || original.fixed || original.source.nodeId === original.target.nodeId || original.runConstraints?.size || original.sharedTrackGroupBySegmentIndex?.size) {
     result.rejections.push("ineligible_connector"); return result;
   }
   const n = normals[input.sourceSide], targetNormal = normals[input.targetSide];
@@ -123,6 +123,13 @@ export function auditMovableSourceAdmission(baseline: FinalRoutingContext, propo
   const ordinary = new Map(baseline.connectors.map(connector => [connector.id, connector]));
   const ids = proposed.connectors.map(connector => connector.id);
   if (new Set(ids).size !== ids.length || ordinary.size !== baseline.connectors.length || ids.length !== ordinary.size || ids.some(id => !ordinary.has(id))) return ["occurrence_inventory_mismatch"];
+  for (const connector of proposed.connectors) {
+    const before = ordinary.get(connector.id)!;
+    if ((before.fixed === true) !== (connector.fixed === true)
+      || before.fixed && (JSON.stringify(before.route) !== JSON.stringify(connector.route)
+        || JSON.stringify(before.source) !== JSON.stringify(connector.source)
+        || JSON.stringify(before.target) !== JSON.stringify(connector.target))) problems.push(`fixed_route_changed:${connector.id}`);
+  }
   const normalize = (context: FinalRoutingContext) => context.connectors.map(connector => ({ ...connector, route: { ...connector.route, points: collapseRoutePoints(connector.route.points) } }));
   const b = normalize(baseline), f = normalize(proposed);
   for (const connector of f) {

@@ -29,11 +29,16 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
-- Slogging through second prototype
+## Sat 10-17
+
+- Abandoning 2 prototypes, reframing
+- Self-loop solution built
 
 ## Fri 10-16
 
 - Horizontal layout detail for ui_contracts built
+- Addressing another ui_contracts failure - self-loop - with AEB example
+- Slogging through second prototype
 
 ## Thu 10-15
 

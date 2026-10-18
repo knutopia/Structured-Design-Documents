@@ -92,7 +92,7 @@ export function swapSouthboundSourceAttachments(
 ): FinalRoutingConnector[] | undefined {
   const left = connectors.find((connector) => connector.id === swap.leftConnectorId);
   const right = connectors.find((connector) => connector.id === swap.rightConnectorId);
-  if (!left || !right || left.id === right.id
+  if (!left || !right || left.fixed || right.fixed || left.id === right.id
     || left.source.side !== "south" || right.source.side !== "south"
     || left.source.nodeId !== right.source.nodeId
     || left.runConstraints?.size || right.runConstraints?.size

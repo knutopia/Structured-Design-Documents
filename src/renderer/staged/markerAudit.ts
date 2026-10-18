@@ -28,6 +28,9 @@ export function buildEndpointMarkerRoutingBlockers(
 }
 
 export interface MarkerAuditOptions {
+  /** Pieces of the marker's declared logical path may approach its footprint;
+   * actual painted intersections remain errors. This grants no sibling sharing. */
+  samePathConnectorIdsByConnectorId?: ReadonlyMap<string, ReadonlySet<string>>;
   unrelatedRouteClearance?: number;
   obstacleClearance?: number;
   markerPairClearance?: number;
@@ -101,7 +104,8 @@ export function auditPositionedSceneMarkers(scene: PositionedScene, options: Mar
         if (edge.id === marker.edgeId && segment.routeSegmentIndex === marker.terminalIndex) continue;
         if (sameGroup(marker, edge.id, segment.routeSegmentIndex)) continue;
         if (labelBoxIntersectsSegment(marker, segment) || (options.unrelatedRouteClearance !== undefined
-          && edge.id !== marker.edgeId && labelBoxDistanceToSegment(marker, segment) < options.unrelatedRouteClearance - epsilon)) fail(marker, "connector", edge.id);
+          && edge.id !== marker.edgeId && !options.samePathConnectorIdsByConnectorId?.get(marker.edgeId)?.has(edge.id)
+          && labelBoxDistanceToSegment(marker, segment) < options.unrelatedRouteClearance - epsilon)) fail(marker, "connector", edge.id);
       }
       if (edge.label && labelBoxesOverlap(marker, edge.label)) fail(marker, "label", edge.id);
     }

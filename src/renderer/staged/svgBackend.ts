@@ -1,5 +1,6 @@
 import { arrowMarkerReferenceX } from "./markerGeometry.js";
 import { auditUiContractsFinalScene } from "./uiContractsLabels.js";
+import { auditUiContractsScene } from "./uiContractsAcceptance.js";
 import { auditIaPlaceMapFinalScene } from "./iaPlaceMapRouting.js";
 import type {
   MeasuredContentBlock,
@@ -43,6 +44,7 @@ export interface StagedPngArtifact extends StagedSvgArtifact {
 
 export interface StagedSvgRasterizationOptions {
   dpi?: number;
+  artifactIntent?: "diagnostic";
 }
 
 interface PaintElementMap {
@@ -921,12 +923,14 @@ async function buildDefs(scene: PositionedScene, theme: RendererTheme): Promise<
   ];
 }
 
-export async function renderPositionedSceneToSvg(scene: PositionedScene): Promise<StagedSvgArtifact> {
+export async function renderPositionedSceneToSvg(scene: PositionedScene, options: { artifactIntent?: "diagnostic" } = {}): Promise<StagedSvgArtifact> {
   const resolvedTheme = resolveRendererTheme(scene.themeId, "backend");
   const theme = resolvedTheme.theme;
   const requiresIaAcceptance = !!(scene.iaAcceptancePolicy || scene.root.viewMetadata?.iaPlaceMap);
+  const requiresUiAcceptance = !!(scene.uiAcceptancePolicy || scene.root.viewMetadata?.uiContracts?.routing);
   const finalAudit = requiresIaAcceptance
     ? auditIaPlaceMapFinalScene(scene)
+    : requiresUiAcceptance ? auditUiContractsScene(scene)
     : scene.viewId === "ui_contracts" ? auditUiContractsFinalScene(scene) : [];
   const diagnostics: RendererDiagnostic[] = [...scene.diagnostics, ...resolvedTheme.diagnostics];
   for (const finding of finalAudit) {
@@ -935,7 +939,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
       diagnostics.push(finding);
     }
   }
-  if (requiresIaAcceptance && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
+  if ((requiresIaAcceptance || requiresUiAcceptance && options.artifactIntent !== "diagnostic") && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
     throw new RendererArtifactError(sortRendererDiagnostics(diagnostics));
   }
   const groups = buildPaintElementMap();
@@ -987,6 +991,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
       `  <title>${escapeXml(scene.root.viewMetadata.diagram.name)}</title>`,
       `  <metadata data-diagram-id="${escapeXml(scene.root.viewMetadata.diagram.id)}"/>`
     ] : []),
+    ...(requiresUiAcceptance && options.artifactIntent === "diagnostic" ? ["  <metadata data-artifact-intent=\"diagnostic\"/>"] : []),
     "  <defs>",
     ...defs.flatMap((entry) => indentLines(entry, 4)),
     "  </defs>"
@@ -1002,7 +1007,7 @@ export async function renderPositionedSceneToSvg(scene: PositionedScene): Promis
 
   lines.push("</svg>");
 
-  if (requiresIaAcceptance && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
+  if ((requiresIaAcceptance || requiresUiAcceptance && options.artifactIntent !== "diagnostic") && diagnostics.some(diagnostic => diagnostic.severity === "error")) {
     throw new RendererArtifactError(sortRendererDiagnostics(diagnostics));
   }
 
@@ -1016,7 +1021,7 @@ export async function renderPositionedSceneToPng(
   scene: PositionedScene,
   options: StagedSvgRasterizationOptions = {}
 ): Promise<StagedPngArtifact> {
-  const rendered = await renderPositionedSceneToSvg(scene);
+  const rendered = await renderPositionedSceneToSvg(scene, options);
   const theme = resolveRendererTheme(scene.themeId, "backend").theme;
   const png = await renderSvgToPng(rendered.svg, {
     dpi: options.dpi ?? theme.dpi,

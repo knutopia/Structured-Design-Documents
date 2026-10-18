@@ -71,6 +71,7 @@ export type PreviewArtifactSource =
   };
 
 export interface RenderPreviewArtifactRequest {
+  artifactIntent?: "diagnostic";
   backendId: PreviewRendererBackendId;
   bundle: Bundle;
   view: ViewSpec;
@@ -159,6 +160,7 @@ function createStagedProjectionPreviewBackend(
         resolveStagedPreviewStyle(request.bundle, request.view)
       );
       const settings: StagedRenderSettings = {
+        ...(request.artifactIntent ? { artifactIntent: request.artifactIntent } : {}),
         detailId: request.source.detailId,
         themeId,
         nodeDecoratorMode: (() => {

@@ -1,14 +1,16 @@
 # THROWAWAY: allocation and bounded rebuilding
 
+**Scope correction — 2026-10-17:** the user excluded the synthetic rectangular-bar treatment from the proposed solution. The `branch` fixture is excluded from forward acceptance evidence; it does not prove production fork/merge preservation. Six other positive mechanism fixtures and four rejected controls remain in scope. Historical captures retain the excluded case. See the [scope correction and sizing assessment](../../../../docs/routing_hardening/ui_contracts_routing_scope_correction.md) for the current interpretation, including concrete limits of the sizing formulas.
+
 Open **[allocation-prototype.html](allocation-prototype.html)** directly in a browser. This is the second experiment, extending the first proof without replacing its captures. All code, fonts, measurements and comparisons are embedded in the one offline file. State is in memory. Rebuild it with `TMPDIR=/tmp pnpm prototype:routing:allocation`.
 
 ## Question and verdict
 
 Can complete-transition routing automatically allocate attachments, grow measured card or surrounding layout capacity, and recover to valid routes with readable labels under one cumulative allowance?
 
-**Yes for the declared fixtures; enough to proceed to a bounded implementation specification, not a production migration.** The experiment demonstrates automatic card growth, actual changes to surrounding spacing and enclosure size, upper-side fallback without growth, preserved fork/merge bars, a small real shared-route search recovery, and shared label relocation. Accepted fixtures retain their complete inventories and full text with zero route, label or coverage findings. Exhaustion and unchanged rebuilding remain explicit failures.
+**The six retained positive fixtures demonstrate the declared mechanisms; production sizing remains an open design requirement.** The experiment demonstrates numerical card enlargement, actual changes to surrounding spacing and enclosure size, upper-side fallback without growth, a small real shared-route search recovery, and shared label relocation. Accepted fixtures retain their complete inventories and full text with zero route, label or coverage findings. Exhaustion and unchanged rebuilding remain explicit failures. The synthetic bar fixture supplies no production fork/merge preservation evidence.
 
-The geometry producer is deliberately limited: a horizontal sequence with forward/return/loop templates, plus one declared branch/merge fixture. It is not a topology discovery algorithm or a general allocator for arbitrary mixed sheets. It cannot justify replacing the current UI renderer yet. No experimental code is promoted into production.
+The geometry producer is deliberately limited to horizontal forward/return/loop templates. The historical capture also contains a declared branch/merge fixture that is now excluded from the proposed solution. This is not a topology discovery algorithm or a general allocator for arbitrary mixed sheets. It cannot justify replacing the current UI renderer yet. No experimental code is promoted into production.
 
 The preserved first capture is commit `f774d5bcb4213941e14d168724985b7e72a7cd68` on `codex/prototype-ui-contracts-routing`, based on production `4ae2de20621dcf0027f31414f59ca9255a54dc77`. The second capture is a later commit on that same throwaway branch. No implementation issue was identified or created.
 
@@ -28,7 +30,7 @@ The [captured proposal and experiment brief](allocation-evidence/experiment-brie
 | Guardrails: [AGENTS.md](../../../../AGENTS.md) | Isolate experimental sizing/rebuilding; keep production stages, existing captures and legacy behavior; no ELK or golden refresh. | Only throwaway files and their task-runner command change. First prototype files and the two unrelated untracked files are preserved. |
 | Visual exemplar: [IA self-loop](../../../../docs/ia_place_map_hardening/manual_review_2_evidence/self-loop.compact.svg) | Explore same-side loops with a legible label; the exemplar is not a general algorithm. | Visual walkthrough of lower and upper U-loops, decorated cards, parallel transitions and explicit junctions. |
 
-All scoped acceptance invariants pass in the accepted fixtures. The negative fixtures intentionally violate acceptance and remain rejected. The output is acceptable as an experimental artifact; a general production routing claim is unproven.
+The capture's positive fixtures pass their declared geometry checks, but the synthetic bar case is excluded from current scope and from evidence of compatibility with production. The negative fixtures intentionally violate acceptance and remain rejected. A general production routing or production sizing claim is unproven.
 
 ## What actually executes
 
@@ -48,7 +50,7 @@ Card growth is an experimental minimum-size overlay on natural production measur
 
 Resources name individual card widths/heights, the between-card gap, and upper/lower padding. Simultaneous requests merge by maximum and later requirements remain absolute. Every layout starts again from the same natural measured inventory and accumulated requirements. One expansion may satisfy several resources. In the crowded fixture both cards grow from 53px to 210px high, and the loop-owning card grows from 224px to 285.128px wide. In the narrow-layout fixture the gap grows from 28px to 222.9px, upper padding from 16px to 112px and lower padding from 12px to 110px; card positions and canvas bounds change. These are owner-computed geometry changes from the starting constraints.
 
-The original return stays one node-to-node connector. Fork and merge are explicit physical bars: seven physical connectors cover five directed logical relationships in the branch fixture. Physical connectors are validated once each; common bars are owned junction geometry, not duplicate overlapping connectors or blanket same-target exemptions.
+The original return stays one node-to-node connector. In the excluded branch fixture, seven connectors attach to manually constructed bar boxes and the identity-based coverage check records five logical paths. The bar spans themselves are not connector segments in routing acceptance. This does not prove preservation of the production fork/merge representation.
 
 ## Captured results
 
@@ -60,7 +62,7 @@ The original return stays one node-to-node connector. Fork and merge are explici
 | Four parallels + return + two loops + support-port reservation | Accept after automatic measured card growth | 3 / 0 / 1 |
 | Narrow gap and shallow enclosure | Accept after both side trials and actual layout expansion | 3 / 0 / 1 |
 | Lower corridor insufficient, upper already fits | Accept on north, no growth | 2 / 0 / 0 |
-| Fork + merge + complete return | Accept; two bars, seven physical connectors, five logical paths | 1 / 0 / 0 |
+| Historical fork + merge + return | Excluded from scope and compatibility evidence; manually constructed bars are not routed spans | Recorded capture: 1 / 0 / 0 |
 | Prepared 4px return terminal | Accept after real shared route search changes points | 4 / 0 / 0 |
 | Label initially inside its source card | Accept after shared label relocation | 2 / 0 / 0 |
 | Coincident parallel ports, shared search enabled | Reject at cumulative candidate ceiling | 4,096 / 61 / 1 |
@@ -81,7 +83,7 @@ Local Chromium opened the artifact directly with `file://` in an offline browser
 Proceed to an implementation specification only with these remaining gates explicit:
 
 - Arbitrary complete-sheet topology, unrelated containment/composition/support connectors, multiple return families and allocation preservation across changes remain unproven.
-- The branch fixture is declared geometry, not a production adapter extraction. Junction provenance and complete-path auditing need a typed production contract.
+- The invented rectangular-bar treatment is excluded. Preserve existing production fork/merge behavior as a compatibility requirement without adopting that fixture's geometry or introducing a new bar feature.
 - A real asynchronous UI layout owner, shared minimum sizing/reflow and the proposed v0.2 bundle preference are not implemented. v0.1 compatibility and bundle mutation behavior remain untested.
 - Cumulative counters are demonstrated across side trials, one simultaneous expansion, shared routing and label placement. Four sequential effective expansions and repair-ceiling exhaustion are not demonstrated; their limits are enforced, not asserted sufficient for arbitrary inputs.
 - The 4,096-candidate failure deliberately has coincident attachment requirements. It demonstrates bounded, honest failure, not incompleteness on a known feasible alternative attachment assignment. Search never revises allocated endpoint requirements.

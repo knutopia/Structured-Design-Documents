@@ -906,6 +906,11 @@ function buildVerticalLabelSearchCandidates(
   const eventCandidates: VerticalLabelPlacementCandidate[] = [];
   if (eventBasedSearch) {
     const topYs = new Set<number>([scene.root.y, scene.root.y + scene.root.height - measuredLabel.height]);
+    const sideBox = buildVerticalLabelBox(stemX, initialTopY, measuredLabel, side);
+    for (const blocker of blockedBoxes) if (spansOverlap(sideBox.x, sideBox.x + sideBox.width, blocker.x, blocker.x + blocker.width)) {
+      topYs.add(blocker.y + blocker.height);
+      topYs.add(blocker.y - measuredLabel.height);
+    }
     for (const [otherId, segments] of connectorSegmentsById) if (otherId !== connectorId) {
       for (const segment of segments) if (segment.orientation === "vertical") {
         topYs.add(Math.max(segment.start.y, segment.end.y) + FIXED_LABEL_CLEARANCE);

@@ -5,7 +5,7 @@ import type {
 } from "./contracts.js";
 import { measureRendererScene } from "./microLayout.js";
 import { positionMeasuredScene, positionMeasuredSceneBeforeRouting } from "./macroLayout.js";
-import { createRoutingDiagnostic, sortRendererDiagnostics } from "./diagnostics.js";
+import { createRoutingDiagnostic, sortRendererDiagnostics, RendererArtifactError } from "./diagnostics.js";
 import {
   repairPositionedSceneRoutesAroundNodes,
   validatePositionedSceneRouting
@@ -32,6 +32,9 @@ export async function positionScene(measuredScene: MeasuredScene): Promise<Posit
 }
 
 export async function runStagedRendererPipeline(scene: RendererScene): Promise<StagedRendererPipelineResult> {
+  if (scene.root.viewMetadata?.uiContracts?.routing) throw new RendererArtifactError([
+    createRoutingDiagnostic("renderer.routing.ui_contracts_coordinator_required", "Enabled UI routing requires the prepared-model coordinator.", scene.root.id, "error")
+  ]);
   const measuredScene = measureScene(scene);
   let positionedScene = await positionScene(measuredScene);
   if (scene.viewId === "ia_place_map" || scene.viewId === "ui_contracts") {

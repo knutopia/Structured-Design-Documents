@@ -70,6 +70,8 @@ export interface RouteOccupancyInput {
   connectorId: string;
   route: PositionedRoute;
   priority: number;
+  /** Fixed routes occupy every segment, including their terminal spans. */
+  fixed?: boolean;
   lockedSegmentKeys?: ReadonlySet<string>;
   sharedTrackGroupBySegmentIndex?: ReadonlyMap<number, string>;
   observationsBySegmentKey?: ReadonlyMap<string, readonly Omit<RoutingObservation, "segmentId">[]>;
@@ -305,7 +307,7 @@ export function resolveRouteSegmentOccupancy(
       sharedTrackGroupBySegmentIndex: input.sharedTrackGroupBySegmentIndex
     });
     for (const segment of segments) {
-      if ((options.includeEndpointSegments ?? true) === false
+      if (!input.fixed && (options.includeEndpointSegments ?? true) === false
         && (segment.endpointRole === "source" || segment.endpointRole === "target")) {
         continue;
       }
@@ -320,11 +322,11 @@ export function resolveRouteSegmentOccupancy(
         nominalCoordinate: segment.coordinate,
         spanStart: segment.spanStart,
         spanEnd: segment.spanEnd,
-        movable: !endpointFixed && !input.lockedSegmentKeys?.has(segmentKey),
+        movable: !input.fixed && !endpointFixed && !input.lockedSegmentKeys?.has(segmentKey),
         priority: input.priority,
         sharedTrackGroupId: segment.sharedTrackGroupId,
         endpointRole: segment.endpointRole,
-        lockReason: endpointFixed ? "endpoint" : input.lockedSegmentKeys?.has(segmentKey) ? "topology" : undefined
+        lockReason: input.fixed ? "topology" : endpointFixed ? "endpoint" : input.lockedSegmentKeys?.has(segmentKey) ? "topology" : undefined
       };
       const observations = input.observationsBySegmentKey?.get(segmentKey) ?? [];
       entries.push(entry, ...observations.map(observation => ({ ...entry, ...observation, movable: entry.movable && observation.movable !== false })));
@@ -356,7 +358,7 @@ export function resolveAndReconstructRouteOccupancy(
     }));
     routeByConnectorId.set(
       input.connectorId,
-      resolution.status === "resolved"
+      resolution.status === "resolved" && !input.fixed
         ? reconstructRouteFromAssignments(input.route, segments, assignments)
         : input.route
     );

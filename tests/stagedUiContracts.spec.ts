@@ -3,12 +3,20 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { compileSource, loadBundle } from "../src/index.js";
 import { projectView } from "../src/projector/projectView.js";
 import { buildUiContractsRendererScene, renderUiContractsStagedSvg, renderUiContractsStagedPng } from "../src/renderer/staged/uiContracts.js";
-import type { PositionedContainer, PositionedItem } from "../src/renderer/staged/contracts.js";
-import { runStagedRendererPipeline } from "../src/renderer/staged/pipeline.js";
+import type { PositionedContainer, PositionedItem, RendererScene } from "../src/renderer/staged/contracts.js";
+import { measureRendererScene } from "../src/renderer/staged/microLayout.js";
+import { positionMeasuredScene } from "../src/renderer/staged/macroLayout.js";
 import { prepareCompiledGraphPreview, renderSourcePreview } from "../src/renderer/previewWorkflow.js";
 import { isBatchApplicable } from "../src/renderer/prepareProjectionForRender.js";
 import { assessUiContractsGeometry } from "./uiContractsB5Acceptance.js";
 import { expectRendererStageSnapshot, expectRendererStageTextSnapshot } from "./rendererStageSnapshotHarness.js";
+
+// These explicit scene lenses test shared packing before any routing policy.
+// Public SVG/PNG acceptance remains exercised through the production coordinator.
+async function layoutPackingScene(scene: RendererScene) {
+  const measuredScene = measureRendererScene(scene);
+  return { rendererScene: scene, measuredScene, positionedScene: await positionMeasuredScene(measuredScene) };
+}
 
 let bundle: Awaited<ReturnType<typeof loadBundle>>;
 beforeAll(async () => { bundle = await loadBundle("bundle/v0.1/manifest.yaml"); });
@@ -56,8 +64,9 @@ describe("public staged UI contracts B5 renderer", () => {
     for (const child of beforeFitScene.root.children) if (child.kind === "container" && child.layout.pack?.fitContent) {
       child.layout.pack.fitContent = false;
     }
-    const beforeFit = await runStagedRendererPipeline(beforeFitScene);
-    for (const child of rendered.positionedScene.root.children) if (child.kind === "container" && child.layout.pack?.fitContent) {
+    const beforeFit = await layoutPackingScene(beforeFitScene);
+    const afterFit = await layoutPackingScene(rendererScene);
+    for (const child of afterFit.positionedScene.root.children) if (child.kind === "container" && child.layout.pack?.fitContent) {
       const previous = section(beforeFit.positionedScene.root.children, child.id);
       expect(child.children).toEqual(previous.children);
       expect(child.height).toBe(previous.height);
@@ -136,7 +145,7 @@ describe("public staged UI contracts B5 renderer", () => {
       // Only this explicit fixture lens removes ordinary scopes; production visibility stays intact.
       synthetic.root.children = synthetic.root.children.filter(child => !child.id.startsWith("scope:"));
       synthetic.root.layout.pack = undefined;
-      const baseline = await runStagedRendererPipeline(synthetic);
+      const baseline = await layoutPackingScene(synthetic);
       expect(assessUiContractsGeometry(baseline.positionedScene)).toEqual([]);
       const group = section(baseline.positionedScene.root.children, "components-without-containment");
       expect(rows(group).map(row => row.length)).toEqual([1, 1, 1, 1, 1, 1]);
@@ -144,7 +153,7 @@ describe("public staged UI contracts B5 renderer", () => {
       const componentScene = synthetic.root.children.find(child => child.id === group.id)!;
       componentScene.viewMetadata!.uiContracts!.title =
         "Components without hierarchy · Help Center search, article delivery, feedback collection, and external service contracts used across all supported regions, including follow-up notifications and asynchronous search indexing";
-      const wide = await runStagedRendererPipeline(synthetic);
+      const wide = await layoutPackingScene(synthetic);
       expect(assessUiContractsGeometry(wide.positionedScene)).toEqual([]);
       const widened = section(wide.positionedScene.root.children, group.id);
       expect(rows(widened)[0].length).toBeGreaterThan(1);

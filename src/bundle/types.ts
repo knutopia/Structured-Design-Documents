@@ -496,6 +496,17 @@ export interface RendererDefaultsConfig {
 
 /** Cardinal renderer attachment policy sides. */
 export type RendererRoutingSide = "north" | "east" | "south" | "west";
+export interface RendererRoutingTraversal {
+  axis: "x" | "y";
+  direction: "positive" | "negative";
+}
+
+/** Ordered same-side attachment trials, shared by renderer presentation policies. */
+export interface RendererSelfLoopRoutingPreferences {
+  traversal: RendererRoutingTraversal;
+  side_trials: Array<{ side: RendererRoutingSide; pair_placement: "before_other_arrivals" | "nearest_feasible" }>;
+}
+
 export interface RendererIaRoutingPreferences {
   forward_shortcut?: {
     scope: "same_owner";
@@ -504,10 +515,7 @@ export interface RendererIaRoutingPreferences {
     source_offset: "nearest_feasible";
     admission: "fewer_scene_bends_without_extra_crossings_or_expansion";
   };
-  self_loop?: {
-    traversal: { axis: "x" | "y"; direction: "positive" | "negative" };
-    side_trials: Array<{ side: RendererRoutingSide; pair_placement: "before_other_arrivals" | "nearest_feasible" }>;
-  };
+  self_loop?: RendererSelfLoopRoutingPreferences;
 }
 
 /** Opt-in occurrence and presentation contract for IA navigation rendering. */
@@ -570,7 +578,25 @@ export interface UiContractsRelationshipConfig {
   field_label?: string;
 }
 
+export type UiContractsRoutingSelectionCriterion = "crossings" | "bends" | "enlargement" | "side_order" | "length";
+
+/** Explicit opt-in policy; omission preserves the compatibility renderer. */
+export interface UiContractsRoutingPolicy {
+  scope: "within_transition_region";
+  export_clearance: "readable_gap";
+  capacity: {
+    owner: "fixed" | "padding_and_adjacency_gaps";
+    node: "fixed" | "port_minimum";
+  };
+  self_loop: RendererSelfLoopRoutingPreferences & {
+    shape: "compact_same_side";
+    label: "external";
+    selection: UiContractsRoutingSelectionCriterion[];
+  };
+}
+
 export interface UiContractsPresentationConfig {
+  routing?: UiContractsRoutingPolicy;
   roles: Record<UiContractsPresentationRole, string[]>;
   relationships: UiContractsRelationshipConfig[];
   content: Record<UiContractsPresentationRole, UiContractsAttributeConfig[]>;

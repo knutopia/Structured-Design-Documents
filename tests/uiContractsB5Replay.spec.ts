@@ -57,6 +57,10 @@ describe("B5 immutable acceptance baseline", () => {
       // predicate. Preserve the historical hash; unchanged default placement
       // tests, B5 replay, and final UI label audits guard existing behavior.
       "src/renderer/staged/connectorLabelPlacement.ts",
+      // Compact-loop architecture §7 authorizes opt-in port-demand minima.
+      // sharedNodeMinimumExtent.spec.ts guards unchanged default measurement;
+      // immutable B5 scene replay below continues to guard historical geometry.
+      "src/renderer/staged/sharedNode.ts",
       // These renderer-core files already differ from the historical B5
       // manifest; the replay and geometry assertions below remain active.
       "src/renderer/staged/routingCore/candidates.ts",

@@ -54,6 +54,11 @@ export interface ConnectorLabelLayoutInput {
   preferredAnchorByConnectorId?: ReadonlyMap<string, RouteSegmentDetail>;
   /** Mutable shared remaining allowance; independent auditing never consumes it. */
   searchBudget?: { candidates: number };
+  /** Opt-in external label anchor: one route run and its outward normal side. */
+  anchorConstraints?: ReadonlyMap<string, { routeSegmentIndex: number; side: -1 | 1 }>;
+  /** Physical pieces of the same declared logical path are not rival labels. */
+  relatedConnectorIdsByConnectorId?: ReadonlyMap<string, ReadonlySet<string>>;
+  rejectOwnRouteOverlap?: boolean;
 }
 export interface ConnectorLabelAssessment {
   labels: ReadonlyMap<string, PositionedEdgeLabel>;
@@ -131,17 +136,28 @@ function buildAudit(input: ConnectorLabelLayoutInput) {
     const ownDistance = Math.min(...(segments.get(id) ?? []).map(segment => labelBoxDistanceToSegment(box, segment)));
     if (!ownAnchors.length || (input.requireAdjacentLabels
       && Math.abs(ownDistance - FIXED_LABEL_DISTANCE) > EPSILON)) add("detached");
+    const constraint = input.anchorConstraints?.get(id);
+    if (constraint) {
+      const anchor = (segments.get(id) ?? []).find(segment => segment.routeSegmentIndex === constraint.routeSegmentIndex);
+      if (!anchor || !labelAssociatedWithSegment(box, anchor)) add("detached");
+      else {
+        const axis = anchor.orientation === "horizontal" ? "y" : "x", extent = axis === "y" ? "height" : "width";
+        const distance = constraint.side === 1 ? box[axis] - anchor.coordinate : anchor.coordinate - box[axis] - box[extent];
+        if (Math.abs(distance - FIXED_LABEL_DISTANCE) > EPSILON) add("detached");
+      }
+    }
     if (input.rejectAmbiguousAssociation && ownAnchors.length) {
       const ownDistance = Math.min(...ownAnchors.map(segment => labelBoxDistanceToSegment(box, segment)));
       for (const [otherId, details] of segments) {
-        if (otherId !== id && details.some(segment => (input.requireAdjacentLabels || labelAssociatedWithSegment(box, segment))
+        if (otherId !== id && !input.relatedConnectorIdsByConnectorId?.get(id)?.has(otherId) && details.some(segment => (input.requireAdjacentLabels || labelAssociatedWithSegment(box, segment))
           && labelBoxDistanceToSegment(box, segment) <= ownDistance + EPSILON)) add("ambiguous", otherId);
       }
     }
     for (const obstacle of obstacles) if (labelBoxesOverlap(box, obstacle)) add(obstacle.kind, obstacle.id);
     for (const [otherId, other] of labels) if (otherId !== id && labelBoxesOverlap(box, inflate(other, FIXED_LABEL_DISTANCE))) add("label", otherId);
-    for (const [otherId, details] of segments) if (otherId !== id && details.some(segment => labelBoxIntersectsSegment(box, segment)
+    for (const [otherId, details] of segments) if (otherId !== id && !input.relatedConnectorIdsByConnectorId?.get(id)?.has(otherId) && details.some(segment => labelBoxIntersectsSegment(box, segment)
       || (input.unrelatedRouteClearance !== undefined && labelBoxDistanceToSegment(box, segment) < input.unrelatedRouteClearance - EPSILON))) add("connector", otherId);
+    if (input.rejectOwnRouteOverlap && (segments.get(id) ?? []).some(segment => labelBoxIntersectsSegment(box, segment))) add("connector", id);
     for (const separator of input.separators ?? []) if (labelBoxIntersectsSegment(box, {
       routeSegmentIndex: 0, orientation: "horizontal", coordinate: separator.coordinate,
       start: { x: separator.spanStart, y: separator.coordinate }, end: { x: separator.spanEnd, y: separator.coordinate }
@@ -198,6 +214,8 @@ function adjacentRowsBlockedAcrossBounds(input: ConnectorLabelLayoutInput, conne
       : { x: adjacent, y: low, width: label.width, height: high-low };
     return spanning.some(segment => labelBoxDistanceToSegment(row, segment) < clearance - EPSILON);
   };
+  const constrainedSide = input.anchorConstraints?.get(connectorId)?.side;
+  if (constrainedSide !== undefined && spansRow(constrainedSide)) return true;
   if (spansRow(-1) && spansRow(1)) return true;
   // A narrow owner can grow around partial runs. Once the label fits its current
   // width, also detect the absence of a label-sized opening between such runs.
@@ -228,7 +246,7 @@ function adjacentRowsBlockedAcrossBounds(input: ConnectorLabelLayoutInput, conne
     return !events.some((event,index) => legal(event)
       || index > 0 && legal((events[index-1]! + event)/2));
   };
-  return blocked(-1) && blocked(1);
+  return constrainedSide === undefined ? blocked(-1) && blocked(1) : blocked(constrainedSide);
 }
 
 /** Retains valid placements; only opting-in adapters use the stronger search. */
@@ -248,8 +266,13 @@ export function assessConnectorLabels(input: ConnectorLabelLayoutInput): Connect
   }
   for (const edge of pending) {
     const measured = input.expectedLabels.get(edge.id)!;
+    const constraint = input.anchorConstraints?.get(edge.id);
     const segments = buildRouteSegmentDetails(edge.route).filter(segment =>
-      Math.hypot(segment.end.x - segment.start.x, segment.end.y - segment.start.y) > EPSILON);
+      Math.hypot(segment.end.x - segment.start.x, segment.end.y - segment.start.y) > EPSILON
+        && (!constraint || segment.routeSegmentIndex === constraint.routeSegmentIndex));
+    const preferred = input.preferredAnchorByConnectorId?.get(edge.id);
+    if (preferred) segments.sort((a, b) => Number(b.routeSegmentIndex === preferred.routeSegmentIndex) - Number(a.routeSegmentIndex === preferred.routeSegmentIndex)
+      || a.routeSegmentIndex - b.routeSegmentIndex);
     const candidates: PositionedEdgeLabel[] = [];
     const scope = input.scopeByConnectorId?.get(edge.id) ?? input.scene.root;
     const impossibleScope = input.requireAdjacentLabels && (scope.width + EPSILON * 2 < measured.width
@@ -293,6 +316,7 @@ export function assessConnectorLabels(input: ConnectorLabelLayoutInput): Connect
       const verticalDistances = new Map<PositionedEdgeLabel, number>();
       for (const segment of segments) {
         if (input.searchBudget && input.searchBudget.candidates <= 0) break;
+        if (constraint && adjacentRowsBlockedAcrossBounds(input, edge.id, segment, measured, scope)) continue;
         const horizontal = segment.orientation === "horizontal";
         const center = horizontal ? scope.x + scope.width / 2 : scope.y + scope.height / 2;
         const centerTop = center - measured.height / 2;
@@ -311,7 +335,7 @@ export function assessConnectorLabels(input: ConnectorLabelLayoutInput): Connect
           if (!horizontal) verticalDistances.set(box, Math.abs(top - centerTop));
           if (top === centerTop) centers.push(box);
         };
-        for (const side of [-1, 1]) probe(side, centerTop);
+        for (const side of constraint ? [constraint.side] : [-1, 1]) probe(side, centerTop);
         if (!horizontal && input.prospectiveOffsetEvents !== false && centers.length === 2
           && !adjacentRowsBlockedAcrossBounds(input, edge.id, segment, measured, scope)
           && centers.every(box => audit.problemsFor(edge.id, box, retained).some(problem => problem.kind !== "bounds"))) {

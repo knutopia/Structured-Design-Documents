@@ -40,6 +40,7 @@ export interface UiContractsScope {
   description?: string;
 }
 export interface UiContractsPresentationModel {
+  routing?: UiContractsPresentationConfig["routing"];
   isolatedComponents: { id: string; title: string; nodes: UiContractsOccurrence[] };
   overview: UiContractsHierarchy[]; scopes: UiContractsScope[];
   register: { id: string; title: string; nodes: UiContractsOccurrence[]; layout: UiContractsPresentationConfig["target_register_layout"] };
@@ -355,7 +356,7 @@ export function buildUiContractsPresentationModel(projection: Projection, graph:
   const localContainmentIds = new Set(scopes.flatMap(scope => scope.containment.map(edge => edge.relationshipId)));
   const representedAfterOmissions = new Set(occurrences.map(node => node.semanticId));
   for (const id of [...visible]) if (!representedAfterOmissions.has(id)) visible.delete(id);
-  return { overview, isolatedComponents, scopes, register, occurrences, relationships,
+  return { ...(config.routing ? { routing: structuredClone(config.routing) } : {}), overview, isolatedComponents, scopes, register, occurrences, relationships,
     structuralRelationshipIds: relationships.filter(edge => edge.kind === "ownership" || overviewContainmentIds.has(edge.id) && !localContainmentIds.has(edge.id)).map(edge => edge.id),
     visibleSemanticNodeIds: order(visible), omittedPlaceIds, simpleScopeIds, packSimpleScopeIds, omissions, notes, diagnostics };
 }

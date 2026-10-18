@@ -232,7 +232,7 @@ export function generateRoutingQualityCandidates(context: FinalRoutingContext, o
     throw new RangeError("Routing proposal budgets must be finite nonnegative integers.");
   }
   if (limit === 0 || width === 0 || alternatives === 0 || options.budget?.candidates === 0) return { candidates: [], evaluatedCandidates: 0, exhausted: limit === 0 || options.budget?.candidates === 0 };
-  const fixed = context.connectors.filter(connector => options.fixedConnectorIds?.has(connector.id)
+  const fixed = context.connectors.filter(connector => connector.fixed || options.fixedConnectorIds?.has(connector.id)
     || connector.runConstraints?.size || connector.sharedTrackGroupBySegmentIndex?.size);
   const ordinary = context.connectors.filter(connector => !fixed.includes(connector)).sort((a, b) => {
     const straightA = a.source.point.x === a.target.point.x || a.source.point.y === a.target.point.y;

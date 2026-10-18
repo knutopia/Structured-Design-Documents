@@ -1,12 +1,15 @@
 import type { UiContractsHierarchy, UiContractsLocalGroup, UiContractsOccurrence, UiContractsPresentationModel, UiContractsScope, UiContractsSequence, UiContractsVisualEdge } from "../uiContractsPresentationModel.js";
 import type { NodeDecoratorMode, PortSpec, RendererScene, SceneContainer, SceneEdge, SceneItem, SceneNode } from "./contracts.js";
 import { buildCardinalPorts, buildPortSpec, buildSharedNode } from "./sceneBuilders.js";
-import { createEdgeLabelMeasurementService } from "./microLayout.js";
-import { measureScene } from "./pipeline.js";
+import { createEdgeLabelMeasurementService, measureRendererScene, type NodeMinimumExtent } from "./microLayout.js";
 import { DEFAULT_ROUTING_POLICY } from "./routingCore/contracts.js";
 import { buildUiContractsFanout } from "./uiContractsFanout.js";
 import { createSceneDiagnostic } from "./diagnostics.js";
 import { buildUiContractsTransitionRegion } from "./uiContractsTransitions.js";
+import { UiPortCapacityError } from "./uiContractsCapacity.js";
+import { allocatePortOffsets } from "./routingCore/portCapacity.js";
+import { readablePortPitch } from "./routingCore/bounds.js";
+import { resolveRendererTheme } from "./theme.js";
 
 export const UI_CONTRACTS_SPACING = { padding: 16, localGap: 16, siblingGap: 24, sectionGap: 28, layerGap: 24, arrowApproach: 18 } as const;
 
@@ -32,7 +35,8 @@ export class UiContractsSceneBuilder {
   readonly relationshipSegments = new Map<string, string[]>();
   readonly occurrenceSemanticIds = new Map<string, string>();
   readonly labelMeasure: ReturnType<typeof createEdgeLabelMeasurementService>;
-  constructor(detailId: string, readonly decorators: NodeDecoratorMode, themeId = "default") {
+  constructor(detailId: string, readonly decorators: NodeDecoratorMode, themeId = "default",
+    readonly minimumNodeExtents: ReadonlyMap<string, NodeMinimumExtent> = new Map()) {
     this.scene = { viewId: "ui_contracts", detailId, themeId, root: uiContractsStack("root", [], "vertical", UI_CONTRACTS_SPACING.sectionGap), edges: [], diagnostics: [] };
     this.scene.root.viewMetadata = { uiContracts: { kind: "sheet" } };
     const p = UI_CONTRACTS_SPACING.padding;
@@ -52,7 +56,7 @@ export class UiContractsSceneBuilder {
     finally { this.emphasizedOccurrenceId = previous; }
   }
   measure(items: SceneItem[]) {
-    const result = measureScene({ ...this.scene, root: uiContractsStack("measurement", items), edges: [] });
+    const result = measureRendererScene({ ...this.scene, root: uiContractsStack("measurement", items), edges: [] }, { minimumNodeExtents: this.minimumNodeExtents });
     this.scene.diagnostics.push(...result.diagnostics);
     return result.root.children;
   }
@@ -66,9 +70,14 @@ export class UiContractsSceneBuilder {
       routing: { style: "orthogonal", preferAxis: fromPort === "south" ? "vertical" : "horizontal" },
       ...(edge.label ? { label: { text: edge.label, textStyleRole: "edge_label" } } : {}), markers: { end: "arrow" } };
   }
-  private branch(id: string, from: string, fromPort: string, to: string, toPort: string, vertical: boolean, arrow: boolean, relationships: string[], label?: string): void {
+  private branch(id: string, from: string, fromPort: string, to: string, toPort: string, vertical: boolean, arrow: boolean, relationships: string[], label?: string, junctionGroupId?: string): void {
     this.add({ id, role: label ? "containment" : "relationship_branch", classes: [], from: { itemId: from, portId: fromPort }, to: { itemId: to, portId: toPort },
       routing: { style: "orthogonal", preferAxis: vertical ? "vertical" : "horizontal" }, markers: arrow ? { end: "arrow" } : {},
+      ...(junctionGroupId && this.scene.root.viewMetadata?.uiContracts?.routing ? { viewMetadata: { uiJunction: {
+        groupId: junctionGroupId,
+        ...(!this.occurrenceSemanticIds.has(from) ? { sourceSide: vertical ? "south" as const : "east" as const } : {}),
+        ...(!this.occurrenceSemanticIds.has(to) ? { targetSide: vertical ? "north" as const : "west" as const } : {})
+      } } } : {}),
       ...(label ? { label: { text: label, textStyleRole: "edge_label" } } : {}) }, relationships);
   }
   neighborhood(scope: UiContractsScope): SceneContainer {
@@ -97,7 +106,7 @@ export class UiContractsSceneBuilder {
         column.layout.crossAlignment = "center";
         if (incoming) column.chrome.padding.top = maxHeight - sizes[index].height;
         const relations = selected.filter(edge => incoming ? edge.from === node.id : edge.to === node.id).map(edge => edge.relationshipId);
-        this.branch(`${id}:leg:${index}`, incoming ? node.id : anchors[index].id, "south", incoming ? anchors[index].id : node.id, "north", true, !incoming, relations);
+        this.branch(`${id}:leg:${index}`, incoming ? node.id : anchors[index].id, "south", incoming ? anchors[index].id : node.id, "north", true, !incoming, relations, undefined, id);
         return column;
       });
       const result = uiContractsStack(id, columns, "horizontal", UI_CONTRACTS_SPACING.siblingGap);
@@ -110,10 +119,10 @@ export class UiContractsSceneBuilder {
           const neighbor = refs.findIndex(ref => ref.id === (incoming ? edge.from : edge.to));
           return right.position <= center ? neighbor <= left.position : neighbor >= right.position;
         }).map(edge => edge.relationshipId);
-        this.branch(`${id}:bar:${index}`, left.id, left.port ?? "east", right.id, right.port ?? "west", false, false, traversing);
+        this.branch(`${id}:bar:${index}`, left.id, left.port ?? "east", right.id, right.port ?? "west", false, false, traversing, undefined, id);
       }
       this.branch(`${id}:stem`, incoming ? middle : focal.id, incoming ? middlePort : "south", incoming ? focal.id : middle,
-        "north", true, incoming, selected.map(edge => edge.relationshipId), selected[0]?.label);
+        "north", true, incoming, selected.map(edge => edge.relationshipId), selected[0]?.label, id);
       return result;
     };
     const parents = row(scope.parents, true), children = row(scope.children, false);
@@ -127,7 +136,9 @@ export class UiContractsSceneBuilder {
     const nodes = sequence.nodes.map(node => this.node(node));
     const sizes = new Map(this.measure(nodes).map(node => [node.id, node]));
     const alignedOffset = Math.min(...[...sizes.values()].map(node => node.height)) / 2;
-    const separation = DEFAULT_ROUTING_POLICY.minSeparation;
+    const theme = resolveRendererTheme(this.scene.themeId).theme;
+    const separation = this.scene.root.viewMetadata?.uiContracts?.routing
+      ? readablePortPitch(theme.paint.arrowSize, theme.paint.edgeStrokeWidth) : DEFAULT_ROUTING_POLICY.minSeparation;
     const heightsDiffer = new Set([...sizes.values()].map(node => node.height)).size > 1;
 
     // Bucket edges by source (outgoing/east) and target (incoming/west).
@@ -148,6 +159,17 @@ export class UiContractsSceneBuilder {
     const orderByTarget = (edges: UiContractsVisualEdge[]): UiContractsVisualEdge[] =>
       [...edges].sort((a, b) => (nodeIndex.get(a.to) ?? 0) - (nodeIndex.get(b.to) ?? 0));
 
+    if (this.scene.root.viewMetadata?.uiContracts?.routing) {
+      const demands = nodes.flatMap(node => {
+        const count = Math.max(outgoingByNode.get(node.id)?.length ?? 0, incomingByNode.get(node.id)?.length ?? 0);
+        const required = 2 * DEFAULT_ROUTING_POLICY.minTerminalLeg + Math.max(0, count - 1) * separation;
+        return count > 1 && sizes.get(node.id)!.height < required ? [{ resource: { kind: "node_extent" as const, nodeId: node.id, axis: "y" as const },
+          minimumExtent: required, reason: "port_capacity" as const,
+          connectorIds: sequence.edges.filter(edge => edge.from === node.id || edge.to === node.id).map(edge => edge.id) }] : [];
+      });
+      if (demands.length) throw new UiPortCapacityError(demands, new Map(), new Map([...sizes].map(([id, node]) => [id, { width: node.width, height: node.height }])));
+    }
+
     // Assign distinct ports per node side, centered on the aligned offset. The default
     // "east"/"west" ports are always retained (return-edge routing and single-connector
     // forward edges rely on them); multi-connector forward edges get additional ports.
@@ -155,13 +177,17 @@ export class UiContractsSceneBuilder {
     for (const node of nodes) {
       const outgoing = orderByTarget(outgoingByNode.get(node.id) ?? []);
       const incoming = incomingByNode.get(node.id) ?? [];
+      const offsetsFor = (edges: UiContractsVisualEdge[]) => this.scene.root.viewMetadata?.uiContracts?.routing
+        ? allocatePortOffsets({ sideLength: sizes.get(node.id)!.height, minInset: DEFAULT_ROUTING_POLICY.minTerminalLeg,
+          minSeparation: separation, requestIds: edges.map(edge => edge.id) }) : undefined;
+      const outgoingOffsets = offsetsFor(outgoing), incomingOffsets = offsetsFor(incoming);
       const northSouth = node.ports.filter(port => port.side === "north" || port.side === "south");
       const defaultOffset = heightsDiffer ? { offset: alignedOffset } : {};
       const eastPorts: PortSpec[] = [
         buildPortSpec("east", "east", "east", defaultOffset),
         ...(outgoing.length > 1
           ? outgoing.map((_, index) => buildPortSpec(`${node.id}:east:${index}`, "east", "east", {
-            offset: alignedOffset + (index - (outgoing.length - 1) / 2) * separation
+            offset: outgoingOffsets?.status === "allocated" ? outgoingOffsets.offsets.get(outgoing[index].id)! : alignedOffset + (index - (outgoing.length - 1) / 2) * separation
           }))
           : [])
       ];
@@ -169,7 +195,7 @@ export class UiContractsSceneBuilder {
         buildPortSpec("west", "west", "west", defaultOffset),
         ...(incoming.length > 1
           ? incoming.map((_, index) => buildPortSpec(`${node.id}:west:${index}`, "west", "west", {
-            offset: alignedOffset + (index - (incoming.length - 1) / 2) * separation
+            offset: incomingOffsets?.status === "allocated" ? incomingOffsets.offsets.get(incoming[index].id)! : alignedOffset + (index - (incoming.length - 1) / 2) * separation
           }))
           : [])
       ];
@@ -214,7 +240,9 @@ export class UiContractsSceneBuilder {
   fanout(group: UiContractsLocalGroup): SceneContainer {
     const source = this.node(group.source), targets = group.targets.map(target => this.node(target));
     const edges = group.edges.map(edge => this.edge(edge));
-    const result = buildUiContractsFanout(group.id, source, targets, edges, this.scene.themeId);
+    const result = buildUiContractsFanout(group.id, source, targets, edges, this.scene.themeId, {
+      minimumNodeExtents: this.minimumNodeExtents, negotiatePortCapacity: !!this.scene.root.viewMetadata?.uiContracts?.routing
+    });
     this.scene.diagnostics.push(...result.diagnostics);
     for (const edge of result.edges) {
       const original = group.edges.find(original => edge.id === original.id || edge.id === `${original.id}:lead`)!;
@@ -264,6 +292,7 @@ export class UiContractsSceneBuilder {
     return enclosure;
   }
   complete(model: UiContractsPresentationModel): RendererScene {
+    if (model.routing) this.scene.root.viewMetadata!.uiContracts!.routing = structuredClone(model.routing);
     this.scene.diagnostics.push(...model.diagnostics);
     if (model.diagnostics.some(d => d.severity === "error")) return this.scene;
     this.scene.root.children = [...model.overview.map(item => this.hierarchy(item)),
@@ -295,6 +324,60 @@ export class UiContractsSceneBuilder {
     const structural = new Set(model.structuralRelationshipIds);
     for (const edge of model.relationships) if (!this.relationshipSegments.has(edge.id) && !structural.has(edge.id)) this.scene.diagnostics.push(createSceneDiagnostic(
       "renderer.scene.ui_contracts_missing_relationship", `Visible relationship '${edge.id}' has no scene representation.`, { targetId: edge.id, severity: "error" }));
+    if (model.routing) {
+      const ancestors = new Map<string, string[]>();
+      const visit = (item: SceneItem, parents: string[]) => {
+        ancestors.set(item.id, parents);
+        if (item.kind === "container") item.children.forEach(child => visit(child, [...parents, item.id]));
+      };
+      visit(this.scene.root, []);
+      for (const edge of this.scene.edges) if (!edge.ownerContainerId) {
+        const source = ancestors.get(edge.from.itemId) ?? [], target = ancestors.get(edge.to.itemId) ?? [];
+        edge.ownerContainerId = this.scene.root.id;
+        for (let index = 0; index < Math.min(source.length, target.length) && source[index] === target[index]; index++) edge.ownerContainerId = source[index];
+      }
+    }
+    if (model.routing) this.scene.root.viewMetadata!.uiContracts!.inventory = {
+      occurrences: [...this.occurrenceSemanticIds].map(([id, semanticId]) => ({ id, semanticId })),
+      relationships: model.relationships.map(edge => ({ id: edge.id, from: edge.from, to: edge.to,
+        sourceOrder: edge.sourceOrder, structural: structural.has(edge.id), segmentIds: [...(this.relationshipSegments.get(edge.id) ?? [])],
+        paths: this.relationshipPaths(edge.id, edge.from, edge.to) })),
+      segments: this.scene.edges.map(edge => ({ id: edge.id,
+        relationshipIds: [...this.relationshipSegments].filter(([, ids]) => ids.includes(edge.id)).map(([id]) => id),
+        from: { ...edge.from }, to: { ...edge.to }, ...(edge.label ? { label: edge.label.text } : {}),
+        ...(edge.markers ? { markers: { ...edge.markers } } : {}), classes: [...edge.classes],
+        ...(edge.viewMetadata?.uiTransition ? { transition: { ...edge.viewMetadata.uiTransition } } : {}),
+        ...(edge.viewMetadata?.uiJunction ? { junction: { ...edge.viewMetadata.uiJunction } } : {}),
+        ...(edge.ownerContainerId ? { ownerContainerId: edge.ownerContainerId } : {}) }))
+    };
     return this.scene;
+  }
+  /** Builders register physical membership explicitly; resolve its declared topology
+   * without interpreting generated edge IDs or inferring it from routed points. */
+  private relationshipPaths(relationshipId: string, from: string, to: string) {
+    const selected = new Set(this.relationshipSegments.get(relationshipId) ?? []);
+    const segments = this.scene.edges.filter(edge => selected.has(edge.id));
+    const sources = [...this.occurrenceSemanticIds].filter(([, id]) => id === from).map(([id]) => id);
+    const paths: Array<{ from: string; to: string; segments: Array<{ id: string; reverse: boolean }> }> = [];
+    for (const source of sources) {
+      const queue = [{ itemId: source, path: [] as Array<{ id: string; reverse: boolean }> }];
+      const visited = new Set<string>();
+      while (queue.length) {
+        const current = queue.shift()!;
+        if (current.path.length && this.occurrenceSemanticIds.get(current.itemId) === to) {
+          paths.push({ from: source, to: current.itemId, segments: current.path }); break;
+        }
+        if (visited.has(current.itemId)) continue;
+        visited.add(current.itemId);
+        // A semantic card cannot serve as an undeclared interior junction.
+        if (current.path.length && this.occurrenceSemanticIds.has(current.itemId)) continue;
+        for (const segment of segments) for (const reverse of [false, true]) {
+          const start = reverse ? segment.to : segment.from, end = reverse ? segment.from : segment.to;
+          if (start.itemId === current.itemId && !current.path.some(ref => ref.id === segment.id))
+            queue.push({ itemId: end.itemId, path: [...current.path, { id: segment.id, reverse }] });
+        }
+      }
+    }
+    return paths;
   }
 }
