@@ -34,7 +34,14 @@ Load only the references that address the task. Each contains usable local guida
 | How to interpret qualitative themes, handoffs across actors, or an analytics feature before choosing charts? | [Supplementary sources](references/supplementary-sources.md) |
 | Where did this knowledge come from, what was actually reviewed, or where does coverage end? | [Provenance](references/provenance.md), then source notes in the relevant module |
 
-For existing-product analysis, start with evidence and the relevant task reference. For product synthesis, start with discovery and IA. Use the AI module only when the product contains AI behavior. Verify current authoritative wording when a decision depends on a standard, platform rule, or other changing external fact; distinguish that fresh check from inherited source notes.
+Choose the starting references by the decision's scope:
+
+- Existing-product claims: evidence and the relevant task reference.
+- Research synthesis: evidence and [SUP-01](references/supplementary-sources.md#sup-01--research-synthesis-that-preserves-differences); add discovery when choosing what to learn or measure next.
+- Proposed product structure: discovery and IA.
+- A focused interaction, content, or critique request: the relevant topic module; broaden into discovery or IA when the decision depends on them.
+
+Use the AI module only when the product contains AI behavior. Verify current authoritative wording when a decision depends on a standard, platform rule, or other changing external fact; distinguish that fresh check from inherited source notes.
 
 ## Exercise judgement
 

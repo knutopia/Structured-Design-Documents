@@ -54,6 +54,8 @@ This is an original worked example, not evidence for a real product. The recogni
 
 Weak rationale: “A split pane is best practice.” Stronger rationale: “A split pane is a candidate because the task requires simultaneous comparison; its small-screen and batch-work costs remain to be tested.”
 
+When changing an existing design, compare retaining it or making a smaller adjustment where viable. Identify useful properties the change should preserve and the cost of switching, including relearning and disruption to established work. A critique can recommend keeping a design; visible complexity alone is not evidence that replacement will improve the task.
+
 ## EV-04 — Let uncertainty determine the next check
 
 | Uncertainty | Useful next check | What it would not prove |

@@ -18,17 +18,7 @@ Describe who needs to accomplish what, in which circumstances, and why it matter
 
 Contextual inquiry combines observation with questions in the setting where activity occurs. It can expose circumstances missed by recall alone, but interpretation still matters and the method does not establish product effectiveness. [Contextual inquiry](https://www.gov.uk/guidance/contextual-inquiry).
 
-For product analysis, record the status of consequential claims in accompanying notes:
-
-| Claim status | Example | Permitted conclusion |
-|---|---|---|
-| Observed | An administrator opens “Team” and sees invitations | This surface exists for this account and state |
-| Reported | A participant says approvals often stall | A reported problem worth investigating |
-| Inferred | The menu may be organised around administrator tasks | A tentative explanation |
-| Proposed | Add an invitation status view | A design hypothesis |
-| Unknown | Invitation expiry was not tested | No conclusion about expiry behavior |
-
-This is a working convention, not a required document schema. Attach account role, environment, date, task, and evidence location where material. A screen recording establishes visible behavior; it cannot establish why all users behave that way. An unavailable state must remain unknown rather than becoming an invented screen or a claim of absence.
+For consequential claims, use the status and provenance convention in [EV-02](evidence-and-decisions.md#ev-02--preserve-provenance-at-the-claim-level), scaled to the decision. A screen recording establishes visible behavior; it cannot establish why all users behave that way. An unavailable state remains unknown rather than becoming an invented screen or a claim of absence.
 
 ## PD-03 — Scope the whole user problem, then choose a deliverable increment
 

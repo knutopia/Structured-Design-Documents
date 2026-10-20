@@ -32,6 +32,7 @@ z
 ## Tue 10-20
 
 - Design-judgement skill
+- Skill edits by Astra
 
 ## Mon 10-19
 
