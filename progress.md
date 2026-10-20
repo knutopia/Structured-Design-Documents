@@ -29,6 +29,11 @@ z
 -a style that shows node type for all nodes
 -a way to clearly differentiate soft-hierarchy vs true-peer for sibling node rendering
 
+## Mon 10-19
+
+- Absurdly bad AEB analysis
+- Exploring place-flow diagram alternative for cleaner illustration
+
 ## Sun 10-18
 
 - Self-loop solution reviewed & refactored

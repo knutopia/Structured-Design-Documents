@@ -1,0 +1,530 @@
+{
+  "diagramId": "DG-026",
+  "width": 1290,
+  "height": 448,
+  "title": "Community: reading and participation",
+  "description": "The exact five Places and four navigations selected by DG-026. Public posts and sign-in are alternative terminal destinations.",
+  "sourcePath": "/home/knut/projects/aeb_sdd/aeb_help_center_de.sdd",
+  "sourceHash": "56e61fd7d53fdd2178ee5e12f44c8b642c328497e765035826b5a7d12b1c6be4",
+  "themeId": "default",
+  "themeRevision": "public-sans-v0.2",
+  "nodes": [
+    {
+      "id": "P-003",
+      "title": "AEB Community",
+      "kind": "Place",
+      "occurrenceId": "P-003",
+      "x": 28,
+      "y": 220.5,
+      "width": 224,
+      "height": 50,
+      "lines": [
+        "AEB Community"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 42,
+        "y": 245.5,
+        "width": 196,
+        "height": 19
+      },
+      "textBoxes": [
+        {
+          "text": "AEB Community",
+          "x": 42,
+          "y": 245.5,
+          "width": 119.256,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 42,
+          "y": 224,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-003",
+          "x": 72.32,
+          "y": 224,
+          "width": 29.085,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-6348376033553",
+      "title": "Meldungen aus Zoll und Exportkontrolle",
+      "kind": "Place",
+      "occurrenceId": "P-6348376033553",
+      "x": 399,
+      "y": 211,
+      "width": 300,
+      "height": 69,
+      "lines": [
+        "Meldungen aus Zoll und",
+        "Exportkontrolle"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 413,
+        "y": 236,
+        "width": 272,
+        "height": 38
+      },
+      "textBoxes": [
+        {
+          "text": "Meldungen aus Zoll und",
+          "x": 413,
+          "y": 236,
+          "width": 173.744,
+          "height": 19
+        },
+        {
+          "text": "Exportkontrolle",
+          "x": 413,
+          "y": 255,
+          "width": 113.728,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 413,
+          "y": 214.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-6348376033553",
+          "x": 443.32,
+          "y": 214.5,
+          "width": 93.5,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-51981098991505",
+      "title": "Importe von Pflanzen in die EU: Risikowarenliste aktualisiert",
+      "kind": "Place",
+      "occurrenceId": "P-51981098991505",
+      "x": 926,
+      "y": 90,
+      "width": 336,
+      "height": 69,
+      "lines": [
+        "Importe von Pflanzen in die EU:",
+        "Risikowarenliste aktualisiert"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 940,
+        "y": 115,
+        "width": 308,
+        "height": 38
+      },
+      "textBoxes": [
+        {
+          "text": "Importe von Pflanzen in die EU:",
+          "x": 940,
+          "y": 115,
+          "width": 223.168,
+          "height": 19
+        },
+        {
+          "text": "Risikowarenliste aktualisiert",
+          "x": 940,
+          "y": 134,
+          "width": 204.96,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 940,
+          "y": 93.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-51981098991505",
+          "x": 970.32,
+          "y": 93.5,
+          "width": 93.715,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-51940955473041",
+      "title": "Größte Sanktionserweiterung gegen Russlands Militärkomplex",
+      "kind": "Place",
+      "occurrenceId": "P-51940955473041",
+      "x": 926,
+      "y": 211,
+      "width": 336,
+      "height": 69,
+      "lines": [
+        "Größte Sanktionserweiterung gegen",
+        "Russlands Militärkomplex"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 940,
+        "y": 236,
+        "width": 308,
+        "height": 38
+      },
+      "textBoxes": [
+        {
+          "text": "Größte Sanktionserweiterung gegen",
+          "x": 940,
+          "y": 236,
+          "width": 264.384,
+          "height": 19
+        },
+        {
+          "text": "Russlands Militärkomplex",
+          "x": 940,
+          "y": 255,
+          "width": 187.944,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 940,
+          "y": 214.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-51940955473041",
+          "x": 970.32,
+          "y": 214.5,
+          "width": 95.345,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-005",
+      "title": "Anmelden",
+      "kind": "Place",
+      "occurrenceId": "P-005",
+      "x": 926,
+      "y": 332,
+      "width": 336,
+      "height": 50,
+      "lines": [
+        "Anmelden"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 940,
+        "y": 357,
+        "width": 308,
+        "height": 19
+      },
+      "textBoxes": [
+        {
+          "text": "Anmelden",
+          "x": 940,
+          "y": 357,
+          "width": 74.68,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 940,
+          "y": 335.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-005",
+          "x": 970.32,
+          "y": 335.5,
+          "width": 29.23,
+          "height": 12
+        }
+      ]
+    }
+  ],
+  "labels": [
+    {
+      "edgeId": "navigation:source-edge-8033be8f44038359fbdafc127a68b0d5b0e058852f791092faa78e44f931aef2-0",
+      "text": "[OpenPublicNews]",
+      "x": 268,
+      "y": 215.5,
+      "width": 115,
+      "height": 22,
+      "lines": [
+        "[OpenPublicNews]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[OpenPublicNews]",
+          "x": 274,
+          "y": 219.5,
+          "width": 102.552,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-8251f9292271a63dbea45c1059db9350f30b1ca3d2dbe28603ff25ee7e2d5f39-0",
+      "text": "[OpenPost]",
+      "x": 828,
+      "y": 94.5,
+      "width": 74,
+      "height": 22,
+      "lines": [
+        "[OpenPost]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[OpenPost]",
+          "x": 834,
+          "y": 98.5,
+          "width": 61.788,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-f9a2849421d3d1cceeb781817b09175b2fd923214de07e8b8c4e399987659e94-0",
+      "text": "[OpenPost]",
+      "x": 828,
+      "y": 215.5,
+      "width": 74,
+      "height": 22,
+      "lines": [
+        "[OpenPost]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[OpenPost]",
+          "x": 834,
+          "y": 219.5,
+          "width": 61.788,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-40dd09c70b291bc26a8d07d3cadbc7dca2cb3e2618e8095327e8fd1852b7c77a-0",
+      "text": "[CreatePostOrFollow]",
+      "x": 771,
+      "y": 327,
+      "width": 131,
+      "height": 22,
+      "lines": [
+        "[CreatePostOrFollow]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[CreatePostOrFollow]",
+          "x": 777,
+          "y": 331,
+          "width": 118.968,
+          "height": 14
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "navigation:source-edge-8033be8f44038359fbdafc127a68b0d5b0e058852f791092faa78e44f931aef2-0",
+      "source": "P-003",
+      "target": "P-6348376033553",
+      "label": "[OpenPublicNews]",
+      "sourceEdgeId": "source-edge-8033be8f44038359fbdafc127a68b0d5b0e058852f791092faa78e44f931aef2-0",
+      "sourceOccurrenceId": "P-003",
+      "targetOccurrenceId": "P-6348376033553",
+      "points": [
+        {
+          "x": 252,
+          "y": 245.5
+        },
+        {
+          "x": 399,
+          "y": 245.5
+        }
+      ],
+      "labelBox": {
+        "x": 268,
+        "y": 215.5,
+        "width": 115,
+        "height": 22
+      },
+      "labelLines": [
+        "[OpenPublicNews]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-8251f9292271a63dbea45c1059db9350f30b1ca3d2dbe28603ff25ee7e2d5f39-0",
+      "source": "P-6348376033553",
+      "target": "P-51981098991505",
+      "label": "[OpenPost]",
+      "sourceEdgeId": "source-edge-8251f9292271a63dbea45c1059db9350f30b1ca3d2dbe28603ff25ee7e2d5f39-0",
+      "sourceOccurrenceId": "P-6348376033553",
+      "targetOccurrenceId": "P-51981098991505",
+      "points": [
+        {
+          "x": 699,
+          "y": 227.5
+        },
+        {
+          "x": 723,
+          "y": 227.5
+        },
+        {
+          "x": 723,
+          "y": 124.5
+        },
+        {
+          "x": 926,
+          "y": 124.5
+        }
+      ],
+      "labelBox": {
+        "x": 828,
+        "y": 94.5,
+        "width": 74,
+        "height": 22
+      },
+      "labelLines": [
+        "[OpenPost]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-f9a2849421d3d1cceeb781817b09175b2fd923214de07e8b8c4e399987659e94-0",
+      "source": "P-6348376033553",
+      "target": "P-51940955473041",
+      "label": "[OpenPost]",
+      "sourceEdgeId": "source-edge-f9a2849421d3d1cceeb781817b09175b2fd923214de07e8b8c4e399987659e94-0",
+      "sourceOccurrenceId": "P-6348376033553",
+      "targetOccurrenceId": "P-51940955473041",
+      "points": [
+        {
+          "x": 699,
+          "y": 245.5
+        },
+        {
+          "x": 926,
+          "y": 245.5
+        }
+      ],
+      "labelBox": {
+        "x": 828,
+        "y": 215.5,
+        "width": 74,
+        "height": 22
+      },
+      "labelLines": [
+        "[OpenPost]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-40dd09c70b291bc26a8d07d3cadbc7dca2cb3e2618e8095327e8fd1852b7c77a-0",
+      "source": "P-6348376033553",
+      "target": "P-005",
+      "label": "[CreatePostOrFollow]",
+      "sourceEdgeId": "source-edge-40dd09c70b291bc26a8d07d3cadbc7dca2cb3e2618e8095327e8fd1852b7c77a-0",
+      "sourceOccurrenceId": "P-6348376033553",
+      "targetOccurrenceId": "P-005",
+      "points": [
+        {
+          "x": 699,
+          "y": 263.5
+        },
+        {
+          "x": 747,
+          "y": 263.5
+        },
+        {
+          "x": 747,
+          "y": 357
+        },
+        {
+          "x": 926,
+          "y": 357
+        }
+      ],
+      "labelBox": {
+        "x": 771,
+        "y": 327,
+        "width": 131,
+        "height": 22
+      },
+      "labelLines": [
+        "[CreatePostOrFollow]"
+      ]
+    }
+  ],
+  "texts": [
+    {
+      "text": "Community: reading and participation",
+      "x": 28,
+      "y": 30,
+      "width": 354.08,
+      "height": 25,
+      "fontSize": 20
+    },
+    {
+      "text": "Community",
+      "x": 28,
+      "y": 65,
+      "width": 65.16,
+      "height": 15,
+      "fontSize": 12
+    },
+    {
+      "text": "Public topic",
+      "x": 399,
+      "y": 65,
+      "width": 66.576,
+      "height": 15,
+      "fontSize": 12
+    },
+    {
+      "text": "Alternative destinations",
+      "x": 926,
+      "y": 65,
+      "width": 134.916,
+      "height": 15,
+      "fontSize": 12
+    },
+    {
+      "text": "The two posts can be read publicly. Creating a post or following leads to sign-in.",
+      "x": 28,
+      "y": 424,
+      "width": 441.684,
+      "height": 15,
+      "fontSize": 12
+    }
+  ]
+}

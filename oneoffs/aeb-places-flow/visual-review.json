@@ -1,0 +1,23 @@
+{
+  "status": "accepted",
+  "reviewer": "Parent agent visual inspection",
+  "artifactHashes": {
+    "figure-02-places-flow.svg": "4381e73a26158629ccfa12e20d6eb5021ef17bdbbfc0ce6e6f9ff30b3ac34028",
+    "figure-02-places-flow.png": "9a154ac8e0320bb291d59e2b45accf78d80a8a1e884d654e924f1eca84399c45",
+    "figure-08-places-flow.svg": "6447b17dda2796eddc2f9a8a89a85030bc07dac5a58947049a585d4a728a9d85",
+    "figure-08-places-flow.png": "11af1ce05145a3135896ded50790da2eb4be3b72a0275aa3ad1b84ec90877960"
+  },
+  "inspectedWidths": {
+    "figure2": 800,
+    "figure8": 1040
+  },
+  "findings": [
+    "Two distinct downward reading routes; no interleaving or reverse progress.",
+    "Three separate Community branches with continuous visible arrows and event labels.",
+    "Full titles fit without clipping or mid-word breaking.",
+    "Type and ID decorators match the original left-aligned SDD convention."
+  ],
+  "violatedCoreInvariants": [],
+  "browserTested": false,
+  "method": "Native exported PNG review plus SVG rasterization at report widths with vendored Public Sans fonts."
+}

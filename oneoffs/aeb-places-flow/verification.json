@@ -1,0 +1,121 @@
+{
+  "source": {
+    "path": "/home/knut/projects/aeb_sdd/aeb_help_center_de.sdd",
+    "sha256": "56e61fd7d53fdd2178ee5e12f44c8b642c328497e765035826b5a7d12b1c6be4",
+    "validationProfile": "simple",
+    "diagnostics": []
+  },
+  "independentVerifier": "verify.mjs imports existing SDD runtime and fontkit; neither editorial painter nor figure modules are imported.",
+  "determinism": {
+    "executions": 2,
+    "svgPngAndGeometryByteIdentical": true
+  },
+  "figures": [
+    {
+      "figure": 2,
+      "diagramId": "DG-011",
+      "uniquePlaces": 8,
+      "displayedPlaceOccurrences": 9,
+      "exactNavigationOccurrences": 7,
+      "viewBox": {
+        "width": 824,
+        "height": 665
+      },
+      "checks": {
+        "exactIdentityTitleAndEventCoverage": true,
+        "whitespaceOnlyWrapping": true,
+        "independentlyMeasuredTextFits": true,
+        "routeCrossings": 0,
+        "collinearOverlaps": 0,
+        "routeNodeIntersections": 0,
+        "crossRouteLabelIntersections": 0,
+        "labelNodeIntersections": 0,
+        "clippedTextBoxes": 0,
+        "exactEndpointAttachmentAndTerminalArrows": true,
+        "pngDerivedFromSvg": true,
+        "embeddedVendoredFonts": true
+      },
+      "artifacts": {
+        "svg": {
+          "file": "figure-02-places-flow.svg",
+          "sha256": "4381e73a26158629ccfa12e20d6eb5021ef17bdbbfc0ce6e6f9ff30b3ac34028"
+        },
+        "png": {
+          "file": "figure-02-places-flow.png",
+          "sha256": "9a154ac8e0320bb291d59e2b45accf78d80a8a1e884d654e924f1eca84399c45"
+        },
+        "geometry.json": {
+          "file": "figure-02-places-flow.geometry.json",
+          "sha256": "711cde1d38d63d3b9184cbddf5b547fbb1853d572d9645b0df5b93e6a903e0a9"
+        }
+      }
+    },
+    {
+      "figure": 8,
+      "diagramId": "DG-026",
+      "uniquePlaces": 5,
+      "displayedPlaceOccurrences": 5,
+      "exactNavigationOccurrences": 4,
+      "viewBox": {
+        "width": 1290,
+        "height": 448
+      },
+      "checks": {
+        "exactIdentityTitleAndEventCoverage": true,
+        "whitespaceOnlyWrapping": true,
+        "independentlyMeasuredTextFits": true,
+        "routeCrossings": 0,
+        "collinearOverlaps": 0,
+        "routeNodeIntersections": 0,
+        "crossRouteLabelIntersections": 0,
+        "labelNodeIntersections": 0,
+        "clippedTextBoxes": 0,
+        "exactEndpointAttachmentAndTerminalArrows": true,
+        "pngDerivedFromSvg": true,
+        "embeddedVendoredFonts": true
+      },
+      "artifacts": {
+        "svg": {
+          "file": "figure-08-places-flow.svg",
+          "sha256": "6447b17dda2796eddc2f9a8a89a85030bc07dac5a58947049a585d4a728a9d85"
+        },
+        "png": {
+          "file": "figure-08-places-flow.png",
+          "sha256": "11af1ce05145a3135896ded50790da2eb4be3b72a0275aa3ad1b84ec90877960"
+        },
+        "geometry.json": {
+          "file": "figure-08-places-flow.geometry.json",
+          "sha256": "381f7bcfe78660f789bc332bcc11e2a07df524f1b02ee32b5f49a3ce90b93517"
+        }
+      }
+    }
+  ],
+  "visualReview": {
+    "status": "accepted",
+    "reviewer": "Parent agent visual inspection",
+    "artifactHashes": {
+      "figure-02-places-flow.svg": "4381e73a26158629ccfa12e20d6eb5021ef17bdbbfc0ce6e6f9ff30b3ac34028",
+      "figure-02-places-flow.png": "9a154ac8e0320bb291d59e2b45accf78d80a8a1e884d654e924f1eca84399c45",
+      "figure-08-places-flow.svg": "6447b17dda2796eddc2f9a8a89a85030bc07dac5a58947049a585d4a728a9d85",
+      "figure-08-places-flow.png": "11af1ce05145a3135896ded50790da2eb4be3b72a0275aa3ad1b84ec90877960"
+    },
+    "inspectedWidths": {
+      "figure2": 800,
+      "figure8": 1040
+    },
+    "findings": [
+      "Two distinct downward reading routes; no interleaving or reverse progress.",
+      "Three separate Community branches with continuous visible arrows and event labels.",
+      "Full titles fit without clipping or mid-word breaking.",
+      "Type and ID decorators match the original left-aligned SDD convention."
+    ],
+    "violatedCoreInvariants": [],
+    "browserTested": false,
+    "method": "Native exported PNG review plus SVG rasterization at report widths with vendored Public Sans fonts."
+  },
+  "reviewPage": {
+    "localImageAndDownloadLinks": true,
+    "responsiveReadability": "800px Figure 2 and1200px Figure 8 maximum widths;650px and1040px minimum image widths with horizontal scrolling",
+    "browserTested": false
+  }
+}
