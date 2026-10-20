@@ -1,4 +1,4 @@
-/** Independent semantic, geometric and artifact verification of two editorial proofs. */
+/** Independent semantic, geometric and artifact verification of three editorial proofs. */
 import assert from 'node:assert/strict';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -11,7 +11,7 @@ const directory = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = process.env.SDD_REPO ?? path.resolve(directory, '../..');
 const sourcePath = process.env.AEB_SDD_SOURCE ?? '/home/knut/projects/aeb_sdd/aeb_help_center_de.sdd';
 const importRuntime = (relative) => import(pathToFileURL(path.join(repoRoot, relative)).href);
-// Deliberately do not import common.mjs or either figure implementation.
+// Deliberately do not import common.mjs or any figure implementation.
 const [runtime, ia, themes] = await Promise.all([
   importRuntime('dist/index.js'), importRuntime('dist/renderer/iaPlaceMapRenderModel.js'),
   importRuntime('dist/renderer/staged/theme.js'),
@@ -111,6 +111,7 @@ assert.equal(segmentInBox({ from: { x: 10, y: -10 }, to: { x: 10, y: 30 } },
   { x: 0, y: 0, width: 20, height: 20 }), true);
 
 const cases = [
+  { number: '02-shared-start', figure: 2, variant: 'shared-start', id: 'DG-011', uniqueNodes: 8, occurrences: 8, edges: 7 },
   { number: '02', id: 'DG-011', uniqueNodes: 8, occurrences: 9, edges: 7 },
   { number: '08', id: 'DG-026', uniqueNodes: 5, occurrences: 5, edges: 4 },
 ];
@@ -141,7 +142,7 @@ const evidence = {
   independentVerifier: 'verify.mjs imports existing SDD runtime and fontkit; neither editorial painter nor figure modules are imported.',
   determinism: { executions: 2, svgPngAndGeometryByteIdentical: true },
   figures: [],
-  visualReview: { status: 'required', limitation: 'Automated geometry checks do not judge balance, reading effort or text appearance. Inspect index.html at report width and both PNGs before visual acceptance.' },
+  visualReview: { status: 'required', limitation: 'Automated geometry checks do not judge balance, reading effort or text appearance. Inspect index.html at report width and all three PNGs before visual acceptance.' },
 };
 for (const item of cases) {
   const basename = `figure-${item.number}-places-flow`;
@@ -249,6 +250,32 @@ for (const item of cases) {
       assert.equal(edge.points.length, 2, 'Figure 2 arrows stay straight');
       assert.ok(close(edge.points[0].x, edge.points[1].x) && edge.points[1].y > edge.points[0].y, 'Figure 2 reads downward');
     }
+  } else if (item.variant === 'shared-start') {
+    const home = geometry.nodes.find((node) => node.id === 'P-001');
+    assert.equal(geometry.nodes.filter((node) => node.id === home.id).length, 1, 'Shared Home appears exactly once');
+    const forks = geometry.edges.filter((edge) => edge.source === home.id);
+    assert.equal(forks.length, 2, 'Two outgoing branches from shared Home');
+    assert.equal(new Set(forks.map((edge) => edge.points[0].x)).size, 2, 'Distinct south-side Home ports');
+    for (const fork of forks) {
+      assert.equal(fork.points.length, 4, 'Short orthogonal fork has two bends');
+      assert.ok(close(fork.points[0].y, home.y + home.height), 'Fork leaves Home south side');
+      assert.ok(fork.points[1].y > fork.points[0].y && close(fork.points[1].y, fork.points[2].y)
+        && fork.points[3].y > fork.points[2].y, 'Fork progresses downward through horizontal branch');
+    }
+    const lanes = [...new Set(geometry.nodes.filter((node) => node !== home).map((node) => node.x + node.width / 2))];
+    assert.equal(lanes.length, 2, 'Two fixed lane centers despite variable card width');
+    assert.ok(close((lanes[0] + lanes[1]) / 2, home.x + home.width / 2), 'Home centered between lanes');
+    assertArrayEqual(lanes.map((center) => geometry.nodes.filter((node) => node !== home && close(node.x + node.width / 2, center)).length), [4, 3], 'Shared-start product and glossary lengths');
+    for (const edge of geometry.edges.filter((edge) => edge.source !== home.id)) {
+      assert.equal(edge.points.length, 2, 'Post-fork arrows stay straight');
+      assert.ok(close(edge.points[0].x, edge.points[1].x) && edge.points[1].y > edge.points[0].y, 'Shared-start lanes read downward');
+    }
+    for (const node of geometry.nodes) {
+      const style = theme.textStyles[theme.sharedNode.titleTextStyleRole];
+      const regularContent = theme.sharedNode.width - theme.sharedNode.body.padding.left - theme.sharedNode.body.padding.right;
+      const needsExpansion = node.title.split(/\s+/u).some((word) => measure(word, style.fontWeight, style.fontSize, style.letterSpacing ?? 0) > regularContent + EPS);
+      assert.equal(node.width, needsExpansion ? theme.widthBands.wide : theme.sharedNode.width, 'Expand only cards whose longest word needs room');
+    }
   } else {
     const topic = geometry.nodes.find((node) => node.id === 'P-6348376033553');
     const branches = geometry.edges.filter((edge) => edge.source === topic.id);
@@ -259,7 +286,7 @@ for (const item of cases) {
     assert.equal(terminals.toSorted((a, b) => a.y - b.y).at(-1).id, 'P-005', 'Sign-in is the final alternative');
     for (const edge of geometry.edges) assert.ok(edge.points.at(-1).x > edge.points[0].x, 'Figure 8 reads left to right');
   }
-  evidence.figures.push({ figure: Number(item.number), diagramId: item.id, uniquePlaces: item.uniqueNodes,
+  evidence.figures.push({ figure: item.figure ?? Number(item.number), ...(item.variant ? { variant: item.variant } : {}), diagramId: item.id, uniquePlaces: item.uniqueNodes,
     displayedPlaceOccurrences: geometry.nodes.length, exactNavigationOccurrences: geometry.edges.length,
     viewBox: { width: geometry.width, height: geometry.height },
     checks: { exactIdentityTitleAndEventCoverage: true, whitespaceOnlyWrapping: true, independentlyMeasuredTextFits: true,
@@ -270,9 +297,9 @@ for (const item of cases) {
 }
 const html = await readFile(path.join(directory, 'index.html'), 'utf8');
 const linkedFiles = [...html.matchAll(/(?:src|href)="([^"]+)"/gu)].map((match) => match[1]);
-assert.equal(linkedFiles.length, 6, 'Review page has two images and four downloads');
+assert.equal(linkedFiles.length, 9, 'Review page has three images and six downloads');
 for (const linked of linkedFiles) {
-  assert.ok(!linked.includes('/') && /^figure-(?:02|08)-places-flow\.(?:svg|png)$/u.test(linked), `Review link must be a local artifact: ${linked}`);
+  assert.ok(!linked.includes('/') && /^figure-(?:02(?:-shared-start)?|08)-places-flow\.(?:svg|png)$/u.test(linked), `Review link must be a local artifact: ${linked}`);
   await readFile(path.join(directory, linked));
 }
 assert.ok(html.includes('.picture{margin:26px auto 20px;text-align:center;overflow:auto}'));
@@ -285,4 +312,4 @@ try {
 } catch (error) { if (error.code !== 'ENOENT') throw error; }
 assert.ok(originalBytes.equals(await readFile(sourcePath)), 'Original source changed during verification');
 await writeFile(path.join(directory, 'verification.json'), `${JSON.stringify(evidence, null, 2)}\n`);
-console.log(`Verified both original projections, semantic fidelity, geometry, font metrics, endpoint arrows, local review links and two deterministic SVG/PNG generations. Visual review: ${evidence.visualReview.status}.`);
+console.log(`Verified three figures against both original projections, semantic fidelity, geometry, font metrics, endpoint arrows, local review links and two deterministic SVG/PNG generations. Visual review: ${evidence.visualReview.status}.`);

@@ -1,0 +1,793 @@
+{
+  "diagramId": "DG-011",
+  "width": 706,
+  "height": 690,
+  "title": "Figure 2 — One shared start, two paths to an article",
+  "description": "The AEB Help Center appears once. Two distinct navigation branches lead to product help and the glossary, then continue downward to their articles. All eight Places and seven full navigation events match DG-011. Cards use the regular SDD width, with only the long German glossary article widened to fit its unbroken word.",
+  "sourcePath": "/home/knut/projects/aeb_sdd/aeb_help_center_de.sdd",
+  "sourceHash": "56e61fd7d53fdd2178ee5e12f44c8b642c328497e765035826b5a7d12b1c6be4",
+  "themeId": "default",
+  "themeRevision": "public-sans-v0.2",
+  "nodes": [
+    {
+      "id": "P-001",
+      "title": "AEB Help Center (Deutsch)",
+      "kind": "Place",
+      "occurrenceId": "P-001",
+      "x": 228,
+      "y": 32,
+      "width": 224,
+      "height": 50,
+      "lines": [
+        "AEB Help Center (Deutsch)"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 242,
+        "y": 57,
+        "width": 196,
+        "height": 19
+      },
+      "textBoxes": [
+        {
+          "text": "AEB Help Center (Deutsch)",
+          "x": 242,
+          "y": 57,
+          "width": 196,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 242,
+          "y": 35.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-001",
+          "x": 272.32,
+          "y": 35.5,
+          "width": 26.825,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-360003451898",
+      "title": "Trade Compliance Management",
+      "kind": "Place",
+      "occurrenceId": "P-360003451898",
+      "x": 48,
+      "y": 166,
+      "width": 224,
+      "height": 69,
+      "lines": [
+        "Trade Compliance",
+        "Management"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 62,
+        "y": 191,
+        "width": 196,
+        "height": 38
+      },
+      "textBoxes": [
+        {
+          "text": "Trade Compliance",
+          "x": 62,
+          "y": 191,
+          "width": 131.592,
+          "height": 19
+        },
+        {
+          "text": "Management",
+          "x": 62,
+          "y": 210,
+          "width": 96.488,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 62,
+          "y": 169.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-360003451898",
+          "x": 92.32,
+          "y": 169.5,
+          "width": 84.795,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-360005279158",
+      "title": "Compliance Screening",
+      "kind": "Place",
+      "occurrenceId": "P-360005279158",
+      "x": 48,
+      "y": 307,
+      "width": 224,
+      "height": 50,
+      "lines": [
+        "Compliance Screening"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 62,
+        "y": 332,
+        "width": 196,
+        "height": 19
+      },
+      "textBoxes": [
+        {
+          "text": "Compliance Screening",
+          "x": 62,
+          "y": 332,
+          "width": 164.168,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 62,
+          "y": 310.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-360005279158",
+          "x": 92.32,
+          "y": 310.5,
+          "width": 84.3,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-360004885357",
+      "title": "Compliance Screening verwenden",
+      "kind": "Place",
+      "occurrenceId": "P-360004885357",
+      "x": 48,
+      "y": 429,
+      "width": 224,
+      "height": 69,
+      "lines": [
+        "Compliance Screening",
+        "verwenden"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 62,
+        "y": 454,
+        "width": 196,
+        "height": 38
+      },
+      "textBoxes": [
+        {
+          "text": "Compliance Screening",
+          "x": 62,
+          "y": 454,
+          "width": 164.168,
+          "height": 19
+        },
+        {
+          "text": "verwenden",
+          "x": 62,
+          "y": 473,
+          "width": 80.264,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 62,
+          "y": 432.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-360004885357",
+          "x": 92.32,
+          "y": 432.5,
+          "width": 87.11,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-33937234420881",
+      "title": "Wie bearbeite ich Adresstreffer in Compliance Screening?",
+      "kind": "Place",
+      "occurrenceId": "P-33937234420881",
+      "x": 48,
+      "y": 570,
+      "width": 224,
+      "height": 88,
+      "lines": [
+        "Wie bearbeite ich",
+        "Adresstreffer in",
+        "Compliance Screening?"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 62,
+        "y": 595,
+        "width": 196,
+        "height": 57
+      },
+      "textBoxes": [
+        {
+          "text": "Wie bearbeite ich",
+          "x": 62,
+          "y": 595,
+          "width": 125.44,
+          "height": 19
+        },
+        {
+          "text": "Adresstreffer in",
+          "x": 62,
+          "y": 614,
+          "width": 115.04,
+          "height": 19
+        },
+        {
+          "text": "Compliance Screening?",
+          "x": 62,
+          "y": 633,
+          "width": 172.304,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 62,
+          "y": 573.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-33937234420881",
+          "x": 92.32,
+          "y": 573.5,
+          "width": 97.16,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-360001444317",
+      "title": "AEB-Lexikon",
+      "kind": "Place",
+      "occurrenceId": "P-360001444317",
+      "x": 408,
+      "y": 166,
+      "width": 224,
+      "height": 50,
+      "lines": [
+        "AEB-Lexikon"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 422,
+        "y": 191,
+        "width": 196,
+        "height": 19
+      },
+      "textBoxes": [
+        {
+          "text": "AEB-Lexikon",
+          "x": 422,
+          "y": 191,
+          "width": 93.576,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 422,
+          "y": 169.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-360001444317",
+          "x": 452.32,
+          "y": 169.5,
+          "width": 82.03,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-360002287698",
+      "title": "A",
+      "kind": "Place",
+      "occurrenceId": "P-360002287698",
+      "x": 408,
+      "y": 288,
+      "width": 224,
+      "height": 50,
+      "lines": [
+        "A"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 422,
+        "y": 313,
+        "width": 196,
+        "height": 19
+      },
+      "textBoxes": [
+        {
+          "text": "A",
+          "x": 422,
+          "y": 313,
+          "width": 11.504,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 422,
+          "y": 291.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-360002287698",
+          "x": 452.32,
+          "y": 291.5,
+          "width": 85.88,
+          "height": 12
+        }
+      ]
+    },
+    {
+      "id": "P-360007723438",
+      "title": "A.TR - Warenverkehrsbescheinigung Türkei",
+      "kind": "Place",
+      "occurrenceId": "P-360007723438",
+      "x": 366,
+      "y": 410,
+      "width": 308,
+      "height": 69,
+      "lines": [
+        "A.TR - Warenverkehrsbescheinigung",
+        "Türkei"
+      ],
+      "titleFontSize": 16,
+      "titleLineHeight": 19,
+      "titleInset": 14,
+      "titleBox": {
+        "x": 380,
+        "y": 435,
+        "width": 280,
+        "height": 38
+      },
+      "textBoxes": [
+        {
+          "text": "A.TR - Warenverkehrsbescheinigung",
+          "x": 380,
+          "y": 435,
+          "width": 259.424,
+          "height": 19
+        },
+        {
+          "text": "Türkei",
+          "x": 380,
+          "y": 454,
+          "width": 45.088,
+          "height": 19
+        }
+      ],
+      "decoratorTextBoxes": [
+        {
+          "text": "Place",
+          "x": 380,
+          "y": 413.5,
+          "width": 26.32,
+          "height": 12
+        },
+        {
+          "text": "P-360007723438",
+          "x": 410.32,
+          "y": 413.5,
+          "width": 86.1,
+          "height": 12
+        }
+      ]
+    }
+  ],
+  "labels": [
+    {
+      "edgeId": "navigation:source-edge-f9e84215264a2d8f955171a85402ee3e8b818a657bf0ca9f29a7d00d9d8d09fe-0",
+      "text": "[ChooseCategory]",
+      "x": 174,
+      "y": 92,
+      "width": 112,
+      "height": 22,
+      "lines": [
+        "[ChooseCategory]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[ChooseCategory]",
+          "x": 180,
+          "y": 96,
+          "width": 99.636,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-0c44c0f35caa3548da878cad4c84418cca21be619b2acee101c49d8fb199353d-0",
+      "text": "[ChooseSection]",
+      "x": 176,
+      "y": 260,
+      "width": 104,
+      "height": 22,
+      "lines": [
+        "[ChooseSection]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[ChooseSection]",
+          "x": 182,
+          "y": 264,
+          "width": 91.284,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-02bda191d2907ca375817ed4830bab380b9aa1caaf40a89a7aedd4e8f7c21dc2-0",
+      "text": "[ChooseSection]",
+      "x": 176,
+      "y": 382,
+      "width": 104,
+      "height": 22,
+      "lines": [
+        "[ChooseSection]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[ChooseSection]",
+          "x": 182,
+          "y": 386,
+          "width": 91.284,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-42bd150f7a61e3236c217205b8bebb03b90afc64aaf4b3f73f42cfa7ab682b86-0",
+      "text": "[OpenArticle]",
+      "x": 176,
+      "y": 523,
+      "width": 86,
+      "height": 22,
+      "lines": [
+        "[OpenArticle]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[OpenArticle]",
+          "x": 182,
+          "y": 527,
+          "width": 73.998,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-e99ab94303b2c4ce134fce93259617a6efeb59117aed5fb59c70243285c11f2b-0",
+      "text": "[ChooseCategory]",
+      "x": 394,
+      "y": 92,
+      "width": 112,
+      "height": 22,
+      "lines": [
+        "[ChooseCategory]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[ChooseCategory]",
+          "x": 400,
+          "y": 96,
+          "width": 99.636,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-c0b13f288292e5750478765646a5c573e58b03c164a0acb1448a16cc6b96f780-0",
+      "text": "[ChooseSection]",
+      "x": 536,
+      "y": 241,
+      "width": 104,
+      "height": 22,
+      "lines": [
+        "[ChooseSection]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[ChooseSection]",
+          "x": 542,
+          "y": 245,
+          "width": 91.284,
+          "height": 14
+        }
+      ]
+    },
+    {
+      "edgeId": "navigation:source-edge-4f0f049f7cf809bb8dba74ddd40f9744e6d209d07c809d2cfde927fea8c459b6-0",
+      "text": "[OpenArticle]",
+      "x": 536,
+      "y": 363,
+      "width": 86,
+      "height": 22,
+      "lines": [
+        "[OpenArticle]"
+      ],
+      "fontSize": 12,
+      "textBoxes": [
+        {
+          "text": "[OpenArticle]",
+          "x": 542,
+          "y": 367,
+          "width": 73.998,
+          "height": 14
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "navigation:source-edge-f9e84215264a2d8f955171a85402ee3e8b818a657bf0ca9f29a7d00d9d8d09fe-0",
+      "source": "P-001",
+      "target": "P-360003451898",
+      "label": "[ChooseCategory]",
+      "sourceEdgeId": "source-edge-f9e84215264a2d8f955171a85402ee3e8b818a657bf0ca9f29a7d00d9d8d09fe-0",
+      "sourceOccurrenceId": "P-001",
+      "targetOccurrenceId": "P-360003451898",
+      "points": [
+        {
+          "x": 300,
+          "y": 82
+        },
+        {
+          "x": 300,
+          "y": 130
+        },
+        {
+          "x": 160,
+          "y": 130
+        },
+        {
+          "x": 160,
+          "y": 166
+        }
+      ],
+      "labelBox": {
+        "x": 174,
+        "y": 92,
+        "width": 112,
+        "height": 22
+      },
+      "labelLines": [
+        "[ChooseCategory]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-0c44c0f35caa3548da878cad4c84418cca21be619b2acee101c49d8fb199353d-0",
+      "source": "P-360003451898",
+      "target": "P-360005279158",
+      "label": "[ChooseSection]",
+      "sourceEdgeId": "source-edge-0c44c0f35caa3548da878cad4c84418cca21be619b2acee101c49d8fb199353d-0",
+      "sourceOccurrenceId": "P-360003451898",
+      "targetOccurrenceId": "P-360005279158",
+      "points": [
+        {
+          "x": 160,
+          "y": 235
+        },
+        {
+          "x": 160,
+          "y": 307
+        }
+      ],
+      "labelBox": {
+        "x": 176,
+        "y": 260,
+        "width": 104,
+        "height": 22
+      },
+      "labelLines": [
+        "[ChooseSection]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-02bda191d2907ca375817ed4830bab380b9aa1caaf40a89a7aedd4e8f7c21dc2-0",
+      "source": "P-360005279158",
+      "target": "P-360004885357",
+      "label": "[ChooseSection]",
+      "sourceEdgeId": "source-edge-02bda191d2907ca375817ed4830bab380b9aa1caaf40a89a7aedd4e8f7c21dc2-0",
+      "sourceOccurrenceId": "P-360005279158",
+      "targetOccurrenceId": "P-360004885357",
+      "points": [
+        {
+          "x": 160,
+          "y": 357
+        },
+        {
+          "x": 160,
+          "y": 429
+        }
+      ],
+      "labelBox": {
+        "x": 176,
+        "y": 382,
+        "width": 104,
+        "height": 22
+      },
+      "labelLines": [
+        "[ChooseSection]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-42bd150f7a61e3236c217205b8bebb03b90afc64aaf4b3f73f42cfa7ab682b86-0",
+      "source": "P-360004885357",
+      "target": "P-33937234420881",
+      "label": "[OpenArticle]",
+      "sourceEdgeId": "source-edge-42bd150f7a61e3236c217205b8bebb03b90afc64aaf4b3f73f42cfa7ab682b86-0",
+      "sourceOccurrenceId": "P-360004885357",
+      "targetOccurrenceId": "P-33937234420881",
+      "points": [
+        {
+          "x": 160,
+          "y": 498
+        },
+        {
+          "x": 160,
+          "y": 570
+        }
+      ],
+      "labelBox": {
+        "x": 176,
+        "y": 523,
+        "width": 86,
+        "height": 22
+      },
+      "labelLines": [
+        "[OpenArticle]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-e99ab94303b2c4ce134fce93259617a6efeb59117aed5fb59c70243285c11f2b-0",
+      "source": "P-001",
+      "target": "P-360001444317",
+      "label": "[ChooseCategory]",
+      "sourceEdgeId": "source-edge-e99ab94303b2c4ce134fce93259617a6efeb59117aed5fb59c70243285c11f2b-0",
+      "sourceOccurrenceId": "P-001",
+      "targetOccurrenceId": "P-360001444317",
+      "points": [
+        {
+          "x": 380,
+          "y": 82
+        },
+        {
+          "x": 380,
+          "y": 130
+        },
+        {
+          "x": 520,
+          "y": 130
+        },
+        {
+          "x": 520,
+          "y": 166
+        }
+      ],
+      "labelBox": {
+        "x": 394,
+        "y": 92,
+        "width": 112,
+        "height": 22
+      },
+      "labelLines": [
+        "[ChooseCategory]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-c0b13f288292e5750478765646a5c573e58b03c164a0acb1448a16cc6b96f780-0",
+      "source": "P-360001444317",
+      "target": "P-360002287698",
+      "label": "[ChooseSection]",
+      "sourceEdgeId": "source-edge-c0b13f288292e5750478765646a5c573e58b03c164a0acb1448a16cc6b96f780-0",
+      "sourceOccurrenceId": "P-360001444317",
+      "targetOccurrenceId": "P-360002287698",
+      "points": [
+        {
+          "x": 520,
+          "y": 216
+        },
+        {
+          "x": 520,
+          "y": 288
+        }
+      ],
+      "labelBox": {
+        "x": 536,
+        "y": 241,
+        "width": 104,
+        "height": 22
+      },
+      "labelLines": [
+        "[ChooseSection]"
+      ]
+    },
+    {
+      "id": "navigation:source-edge-4f0f049f7cf809bb8dba74ddd40f9744e6d209d07c809d2cfde927fea8c459b6-0",
+      "source": "P-360002287698",
+      "target": "P-360007723438",
+      "label": "[OpenArticle]",
+      "sourceEdgeId": "source-edge-4f0f049f7cf809bb8dba74ddd40f9744e6d209d07c809d2cfde927fea8c459b6-0",
+      "sourceOccurrenceId": "P-360002287698",
+      "targetOccurrenceId": "P-360007723438",
+      "points": [
+        {
+          "x": 520,
+          "y": 338
+        },
+        {
+          "x": 520,
+          "y": 410
+        }
+      ],
+      "labelBox": {
+        "x": 536,
+        "y": 363,
+        "width": 86,
+        "height": 22
+      },
+      "labelLines": [
+        "[OpenArticle]"
+      ]
+    }
+  ],
+  "texts": []
+}

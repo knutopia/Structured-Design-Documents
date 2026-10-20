@@ -31,6 +31,10 @@ Figure 8: Community at left, topic at center, three terminal Places stacked at r
 
 ## Implementation seam
 
+### Shared-start Figure 2 comparison
+
+The additional `figure-02-shared-start` variant preserves the earlier Figure 2 unchanged. For this comparison only, acceptance invariant 1 uses eight visual occurrences: the same eight selected Places and seven selected navigation occurrences, with Home drawn once. Home sits above two downward lanes, using distinct south-side ports and disjoint orthogonal connectors to the two category destinations. Each fork retains its own full event capsule; the later connectors stay straight and downward. There are no reverse steps, crossings, overlapping routes, or invented semantic nodes. Use regular 224 px SDD cards wherever every word fits, expanding only the glossary article to the existing 308 px wide band. Keep fixed lane centers when a card expands, with measured whitespace wrapping and the existing theme unchanged. The new variant receives the same independent semantic, geometry, deterministic regeneration and visual review checks.
+
 Load and project the original SDD with existing runtime calls. Reuse the IA render model to obtain resolved titles and navigation labels. Map that immutable selected content into a tiny illustration model. Measure with the vendored Public Sans fonts and theme. Figure-specific functions supply node coordinates, connector points and label boxes. A shared SVG painter applies SDD appearance. Rasterize that SVG with resvg. No existing auto-layout or routing pass runs after manual placement.
 
 Shared utility public surface is to be finalized by the Figure 2 implementation agent and communicated immediately to the Figure 8 implementation agent. Both agents own separate figure files; only the Figure 2 agent owns shared utilities. Renderer source may be imported and read, never edited.

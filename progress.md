@@ -32,7 +32,8 @@ z
 ## Mon 10-19
 
 - Absurdly bad AEB analysis
-- Exploring place-flow diagram alternative for cleaner illustration
+- Exploring place-flow diagram alternative for cleaner illustrations
+- place_flow concept
 
 ## Sun 10-18
 

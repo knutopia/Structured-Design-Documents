@@ -13,6 +13,46 @@
   "figures": [
     {
       "figure": 2,
+      "variant": "shared-start",
+      "diagramId": "DG-011",
+      "uniquePlaces": 8,
+      "displayedPlaceOccurrences": 8,
+      "exactNavigationOccurrences": 7,
+      "viewBox": {
+        "width": 706,
+        "height": 690
+      },
+      "checks": {
+        "exactIdentityTitleAndEventCoverage": true,
+        "whitespaceOnlyWrapping": true,
+        "independentlyMeasuredTextFits": true,
+        "routeCrossings": 0,
+        "collinearOverlaps": 0,
+        "routeNodeIntersections": 0,
+        "crossRouteLabelIntersections": 0,
+        "labelNodeIntersections": 0,
+        "clippedTextBoxes": 0,
+        "exactEndpointAttachmentAndTerminalArrows": true,
+        "pngDerivedFromSvg": true,
+        "embeddedVendoredFonts": true
+      },
+      "artifacts": {
+        "svg": {
+          "file": "figure-02-shared-start-places-flow.svg",
+          "sha256": "ab974748df90d20f67c1c86eba257652d1a0c3bf4a95bf696dfdf9960490d9a8"
+        },
+        "png": {
+          "file": "figure-02-shared-start-places-flow.png",
+          "sha256": "47abd5ad460020bde2909aba5eed9dc7e14179a5d402637faaf10a5b6d64ea22"
+        },
+        "geometry.json": {
+          "file": "figure-02-shared-start-places-flow.geometry.json",
+          "sha256": "d6e8105f7ce992e68f9928ea6725984f1e3ecc8ab53769e6f2e95bae8dc266ac"
+        }
+      }
+    },
+    {
+      "figure": 2,
       "diagramId": "DG-011",
       "uniquePlaces": 8,
       "displayedPlaceOccurrences": 9,
@@ -97,13 +137,17 @@
       "figure-02-places-flow.svg": "4381e73a26158629ccfa12e20d6eb5021ef17bdbbfc0ce6e6f9ff30b3ac34028",
       "figure-02-places-flow.png": "9a154ac8e0320bb291d59e2b45accf78d80a8a1e884d654e924f1eca84399c45",
       "figure-08-places-flow.svg": "6447b17dda2796eddc2f9a8a89a85030bc07dac5a58947049a585d4a728a9d85",
-      "figure-08-places-flow.png": "11af1ce05145a3135896ded50790da2eb4be3b72a0275aa3ad1b84ec90877960"
+      "figure-08-places-flow.png": "11af1ce05145a3135896ded50790da2eb4be3b72a0275aa3ad1b84ec90877960",
+      "figure-02-shared-start-places-flow.svg": "ab974748df90d20f67c1c86eba257652d1a0c3bf4a95bf696dfdf9960490d9a8",
+      "figure-02-shared-start-places-flow.png": "47abd5ad460020bde2909aba5eed9dc7e14179a5d402637faaf10a5b6d64ea22"
     },
     "inspectedWidths": {
       "figure2": 800,
-      "figure8": 1040
+      "figure8": 1040,
+      "figure2SharedStart": 706
     },
     "findings": [
+      "One shared Home branches through two separate labeled connectors into aligned downward lanes; standard cards remain legible at 706 px, with only the long glossary title widened.",
       "Two distinct downward reading routes; no interleaving or reverse progress.",
       "Three separate Community branches with continuous visible arrows and event labels.",
       "Full titles fit without clipping or mid-word breaking.",
