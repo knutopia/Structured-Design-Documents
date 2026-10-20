@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Judgement"
+  short_description: "Ground product analysis and synthesis in design judgement"
+  default_prompt: "Use $design-judgement to assess this product or brief and explain the design choices that matter to people."
